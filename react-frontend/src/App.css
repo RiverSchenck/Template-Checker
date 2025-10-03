@@ -1,0 +1,79 @@
+/*
+ * @NOTE: Prepend a `~` to css file paths that are in your node_modules
+ *        See https://github.com/webpack-contrib/sass-loader#imports
+ */
+ 
+ body {
+  font-family: 'Space Grotesk Frontify', 'Monaco', 'Consolas', 'Courier New', monospace;
+  background-color: #EAEBEB;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+.app-background {
+  width: 100vw;
+  height: 100vh; /* Use 100vh to ensure it takes the full viewport height */
+  display: flex;
+  flex-direction: column;
+}
+
+/*File upload*/
+.ant-message {
+  margin-left: 80px
+}
+
+/*Learn More links*/
+.custom-link {
+  color: #9A7EFE; /* Initial color */
+}
+
+.custom-link:hover {
+  color: #7C57FF; /* Color on hover */
+}
+
+/*Stat Group*/
+.ant-card-small >.ant-card-body {
+  padding-bottom: 5px;
+}
+
+/*Sidebar Menu*/
+.sidebar-menu{
+  overflow: 'auto';
+  height: '100vh';
+  position: 'fixed' as 'fixed';
+  left: 0;
+  background-color: '#6C7070';
+}
+
+.custom-menu{
+  background-color: #6C7070;
+}
+
+.custom-menu .ant-menu-item-selected {
+  background-color: #B39DFD; 
+}
+
+.custom-menu .ant-menu-item {
+  color: white;
+}
+.custom-menu .ant-menu-item:hover {
+  background-color: #CBBBFB;
+}
+
+.custom-menu .ant-menu-submenu-title {
+  color: white; 
+}
+
+.custom-menu .ant-menu-submenu-title:hover {
+  color: black; 
+}
+
+.custom-menu .ant-menu-submenu-selected .ant-menu-submenu-title {
+  color: white; 
+}
+
+.ant-layout {
+  background-color: transparent !important; /* Use 'transparent' or set it to any color you desire */
+}
+

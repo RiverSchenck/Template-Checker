@@ -1,0 +1,11 @@
+__pycache__/
+.DS_Store
+.vscode/
+venv/
+.gitignore
+.DS_Store
+src/data/
+logs/
+/testing
+/pytest.ini
+.pytest_cache/

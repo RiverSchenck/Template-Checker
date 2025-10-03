@@ -1,0 +1,86 @@
+%!Adobe-FontList 1.23
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/Users/riverschenck/Documents/Dev/Scripts-n-Snippets/Useful scripts/Template Checker (GUI)/testing/unit_tests/images_included_check/fail_data/Employer Brand_Pullup Banner_Design 1_ Folder/Document fonts/AdobeFnt23.lst
+FileLength:1977
+FileModTime:717531776
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FuturaEF-DemiBold
+FamilyName:FuturaEF DemiBold
+StyleName:Regular
+MenuName:FuturaEF DemiBold
+StyleBits:2
+WeightClass:700
+WidthClass:5
+AngleClass:0
+FullName:FuturaEF-DemiBold
+WritingScript:Roman
+OutlineFileName:/Users/riverschenck/Documents/Dev/Scripts-n-Snippets/Useful scripts/Template Checker (GUI)/testing/unit_tests/images_included_check/fail_data/Employer Brand_Pullup Banner_Design 1_ Folder/Document fonts/FuturaEF-DemiBold.ttf
+DataFormat:sfntData
+hasSVG:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:23604
+FileModTime:663085356
+NameArray:0,Mac,4,FuturaEF-DemiBold
+NameArray:0,Win,1,FuturaEF DemiBold
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:FuturaEF-Medium
+FamilyName:FuturaEF
+StyleName:Medium
+MenuName:FuturaEF
+StyleBits:0
+WeightClass:500
+WidthClass:5
+AngleClass:0
+FullName:FuturaEF-Medium
+WritingScript:Roman
+OutlineFileName:/Users/riverschenck/Documents/Dev/Scripts-n-Snippets/Useful scripts/Template Checker (GUI)/testing/unit_tests/images_included_check/fail_data/Employer Brand_Pullup Banner_Design 1_ Folder/Document fonts/FuturaEF-Medium.ttf
+DataFormat:sfntData
+hasSVG:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:24504
+FileModTime:663085355
+NameArray:0,Mac,4,FuturaEF-Medium
+NameArray:0,Win,1,FuturaEF
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:MinionPro-Regular
+FamilyName:Minion Pro
+StyleName:Regular
+MenuName:Minion Pro
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Minion Pro
+WritingScript:Roman
+OutlineFileName:/Users/riverschenck/Documents/Dev/Scripts-n-Snippets/Useful scripts/Template Checker (GUI)/testing/unit_tests/images_included_check/fail_data/Employer Brand_Pullup Banner_Design 1_ Folder/Document fonts/MinionPro-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+hasCOLR:no
+VariableFontType:NonVariableFont
+FileLength:218640
+FileModTime:712686018
+DesignSize:110
+NameArray:0,Mac,4,Minion Pro
+NameArray:0,Win,1,Minion Pro
+%EndFont
+
