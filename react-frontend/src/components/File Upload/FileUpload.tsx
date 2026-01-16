@@ -7,11 +7,15 @@ import { useMenu } from '../MenuContext';
 import { ValidationResult } from '../../types';
 import countValidationIssues from '../ValidationCount';
 import SuccessModal from './SuccessModal';
+import FileSizeErrorModal from './FileSizeErrorModal';
 import ConfirmationPopup from './ConfirmationPopup';
 import '../../App.css';
 
 
 const { Dragger } = Upload;
+
+// Maximum file size: 300MB (matching backend limit)
+const MAX_FILE_SIZE = 300 * 1024 * 1024; // 300MB in bytes
 
 interface FileUploadPageProps {
   checkerResponse: (jsonResponse: ValidationResult, setPrevious: boolean) => void;
@@ -28,6 +32,8 @@ interface CustomResponse {
 
 function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete, seeDetails }: FileUploadPageProps) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showFileSizeErrorModal, setShowFileSizeErrorModal] = useState(false);
+  const [fileSizeError, setFileSizeError] = useState<{ fileSizeMB: string; maxSizeMB: number } | null>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const { setMenuKey } = useMenu();
   const [downloadXML, setDownloadXML] = useState(false);
@@ -35,6 +41,11 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);  // Ensure this function truly resets the modal's visibility state
+  };
+
+  const handleCloseFileSizeErrorModal = () => {
+    setShowFileSizeErrorModal(false);
+    setFileSizeError(null);
   };
 
   const handleDownload = async (fileName: string) => {
@@ -86,6 +97,18 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
     }
   };
 
+  const beforeUpload = (file: File) => {
+    // Validate file size before upload
+    if (file.size > MAX_FILE_SIZE) {
+      const maxSizeMB = MAX_FILE_SIZE / (1024 * 1024);
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      setFileSizeError({ fileSizeMB, maxSizeMB });
+      setShowFileSizeErrorModal(true);
+      return Upload.LIST_IGNORE; // Prevent file from being added to the upload list
+    }
+    return true; // Allow upload
+  };
+
   const handleFileChange = (info: UploadChangeParam<UploadFile<any>>) => {
     const { status, response, originFileObj, name: fileName } = info.file;
 
@@ -105,7 +128,7 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
   };
 
 
-  const isDebug = true; 
+  const isDebug = true;
 
   const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
   const uploadEndpoint = downloadXML ? `${baseURL}/run-and-download-xml` : `${baseURL}/run`;
@@ -115,7 +138,21 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
         <ConfirmationPopup onConfirm={() => setIsConfirmed(true)} />
       )}
         <>
-          {showSuccessModal && <SuccessModal onClose={handleCloseModal} seeDetails={seeDetails} />}
+          {showSuccessModal && (
+            <SuccessModal
+              visible={showSuccessModal}
+              onClose={handleCloseModal}
+              seeDetails={seeDetails}
+            />
+          )}
+          {showFileSizeErrorModal && fileSizeError && (
+            <FileSizeErrorModal
+              visible={showFileSizeErrorModal}
+              onClose={handleCloseFileSizeErrorModal}
+              fileSizeMB={fileSizeError.fileSizeMB}
+              maxSizeMB={fileSizeError.maxSizeMB}
+            />
+          )}
           <ConfigProvider
             theme={{
               token: {
@@ -129,6 +166,7 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
             <Dragger
               action={uploadEndpoint}
               onChange={handleFileChange}
+              beforeUpload={beforeUpload}
               multiple={false}
               accept=".zip"
             >

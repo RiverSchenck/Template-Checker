@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Button, Typography, Space } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { triggerConfettiCelebration } from './Confetti';
@@ -7,19 +7,19 @@ import '../../App.css';
 
 
 interface SuccessModalProps {
+  visible: boolean;
   onClose: () => void;
   seeDetails?: (value: Boolean) => void
 }
 
-const SuccessModal = ({onClose, seeDetails}: SuccessModalProps) => {
-  const [isVisible, setIsVisible] = useState(true);  // Control visibility internally
+const SuccessModal = ({ visible, onClose, seeDetails }: SuccessModalProps) => {
   const { setMenuKey } = useMenu();
 
   useEffect(() => {
-    if (isVisible) {
+    if (visible) {
       triggerConfettiCelebration();
     }
-  }, [isVisible]);
+  }, [visible]);
 
   const handleSeeDetails = () => {
     if (seeDetails) {
@@ -32,7 +32,7 @@ const SuccessModal = ({onClose, seeDetails}: SuccessModalProps) => {
   return (
     <Modal
       title="Template Champion!"
-      visible={true}  // Controlled by component's own state
+      open={visible}
       onOk={onClose}
       onCancel={onClose}
       footer={[
