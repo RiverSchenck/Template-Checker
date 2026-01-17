@@ -10,11 +10,13 @@ from src.error_handling.ValidationClassifier import ValidationError, ValidationW
 class ValidationResult():
     def __init__(self):
         self.successes: List[Success] = []
-        self.errors: Dict[str, List[ValidationContext]] = defaultdict(list)
-        self.warnings: Dict[str, List[ValidationContext]] = defaultdict(list)
-        self.infos: Dict[str, List[ValidationContext]] = defaultdict(list)
-        self.categories = defaultdict(lambda: defaultdict(
-            lambda: {'errors': [], 'warnings': [], 'infos': []}))
+        # Store validations directly by category -> identifier -> {errors/warnings/infos} -> [ValidationContext]
+        self.validations: Dict[str, Dict[str, Dict[str, List[ValidationContext]]]] = defaultdict(
+            lambda: defaultdict(lambda: {'errors': [], 'warnings': [], 'infos': []}))
+        # Category counts for metadata
+        self.category_counts: Dict[str, int] = defaultdict(int)
+        # Classifier metadata
+        self.validation_classifiers: Dict[str, dict] = {}
         self.template_name: str = None
         self.idml_output_folder: str = None
         self.stories_parser = None
@@ -25,40 +27,71 @@ class ValidationResult():
         self.text_box_total_count = 0
         self.text_box_data = {}
 
+    # -------------------------------Helper Methods-------------------------------
+    @staticmethod
+    def _category_to_response_key(category: ValidationCategory) -> str:
+        """Convert ValidationCategory enum to response JSON key format."""
+        mapping = {
+            ValidationCategory.PAR_STYLE: 'par_styles',
+            ValidationCategory.CHAR_STYLE: 'char_styles',
+            ValidationCategory.TEXT_BOX: 'text_boxes',
+            ValidationCategory.FONTS: 'fonts',
+            ValidationCategory.IMAGES: 'images',
+            ValidationCategory.GENERAL: 'general'
+        }
+        return mapping.get(category, category.value.lower())
+
     # -------------------------------Validation setters-------------------------------
     def add_success(self, message: str, success_type: Union['ValidationError', 'ValidationWarning']):
         success = Success(message, success_type)
         self.successes.append(success)
 
+    def add_validation(self, validation_type: str, classifier, context: str = '',
+                      page: str = '', identifier: str = 'null',
+                      data_id: str = 'null', page_id: str = ''):
+        """
+        Unified method for adding errors, warnings, and infos.
+        Stores validations directly in category-based structure.
+        """
+        validation = ValidationContext(context, classifier, page, identifier, data_id, page_id)
+
+        # Get category from classifier and convert to response key
+        category = classifier.category
+        category_key = self._category_to_response_key(category)
+
+        # Handle special text_box case for identifier extraction
+        if category == ValidationCategory.TEXT_BOX and identifier not in self.text_box_data and self.stories_parser:
+            self.extract_text_box_content(identifier)
+
+        # Store directly in the category-based structure
+        self.validations[category_key][identifier][validation_type].append(validation)
+
+        # Track classifier metadata
+        classifier_key = classifier.value
+        if classifier_key not in self.validation_classifiers:
+            self.validation_classifiers[classifier_key] = {
+                "label": classifier.label,
+                "message": classifier.message if classifier.message else "",
+                "help_article": classifier.help_article if classifier.help_article else None
+            }
+
     def add_custom_error(self, message: str, error_type: 'ValidationError', page: str = None, page_id: str = ''):
+        """Add custom error with formatted message."""
         if page:
             message += f' [Page {page}]'
-        error = ValidationContext(message, error_type, page if page else '', 'null', 'null', page_id)
-        key = error_type
-
-        if key not in self.errors:
-            self.errors[key] = []
-        self.errors[key].append(error)
+        self.add_validation('errors', error_type, message, page if page else '', 'null', 'null', page_id)
 
     def add_error(self, context: str, error_type: 'ValidationError', page: str = '', identifier='null', data_id='null', page_id: str = ''):
-        error = ValidationContext(
-            context, error_type, page, identifier, data_id, page_id)
-        key = error_type
-
-        self.errors[key].append(error)
+        """Add error validation."""
+        self.add_validation('errors', error_type, context, page, identifier, data_id, page_id)
 
     def add_warning(self, context: str, warning_type: 'ValidationWarning', page: str = '', identifier='null', data_id='null', page_id: str = ''):
-        error = ValidationContext(
-            context, warning_type, page, identifier, data_id, page_id)
-        key = warning_type
-
-        self.warnings[key].append(error)
+        """Add warning validation."""
+        self.add_validation('warnings', warning_type, context, page, identifier, data_id, page_id)
 
     def add_info(self, context: str, info_type: 'ValidationInfo', page: str = '', identifier='null', data_id='null', page_id: str = ''):
-        info = ValidationContext(context, info_type, page, identifier, data_id, page_id)
-        key = info_type
-
-        self.infos[key].append(info)
+        """Add info validation."""
+        self.add_validation('infos', info_type, context, page, identifier, data_id, page_id)
 
     def add_template_name(self, template_name: str):
         self.template_name = template_name
@@ -104,22 +137,40 @@ class ValidationResult():
     # -------------------------------Getters-------------------------------
 
     def get_errors(self) -> List[ValidationContext]:
-        return [error for error_list in self.errors.values() for error in error_list]
+        """Get all errors from all categories."""
+        errors = []
+        for category_data in self.validations.values():
+            for identifier_data in category_data.values():
+                errors.extend(identifier_data['errors'])
+        return errors
 
     def get_warnings(self) -> List[ValidationContext]:
-        return [warning for warning_list in self.warnings.values() for warning in warning_list]
+        """Get all warnings from all categories."""
+        warnings = []
+        for category_data in self.validations.values():
+            for identifier_data in category_data.values():
+                warnings.extend(identifier_data['warnings'])
+        return warnings
 
     def get_infos(self) -> List[ValidationContext]:
-        return [info for info_list in self.infos.values() for info in info_list]
+        """Get all infos from all categories."""
+        infos = []
+        for category_data in self.validations.values():
+            for identifier_data in category_data.values():
+                infos.extend(identifier_data['infos'])
+        return infos
 
     def get_error_types(self) -> List['ValidationError']:
-        return [error.classifier_type for error_list in self.errors.values() for error in error_list]
+        """Get all error types (classifier types) from all errors."""
+        return [error.classifier_type for error in self.get_errors()]
 
     def get_warning_types(self) -> List['ValidationWarning']:
-        return [warning.classifier_type for warning_list in self.warnings.values() for warning in warning_list]
+        """Get all warning types (classifier types) from all warnings."""
+        return [warning.classifier_type for warning in self.get_warnings()]
 
     def get_info_types(self) -> List['ValidationInfo']:
-        return [info.classifier_type for info_list in self.infos.values() for info in info_list]
+        """Get all info types (classifier types) from all infos."""
+        return [info.classifier_type for info in self.get_infos()]
 
     # -------------------------------API-------------------------------
 
@@ -132,76 +183,81 @@ class ValidationResult():
             self.text_box_data[identifier] = {
                 "identifier": identifier, "content": content, "page": page, "page_id": page_id}
 
-    def add_to_category(self, error, category, error_type):
-        # Default identifier if not provided
-        identifier = error.get('identifier', 'None')
-        self.categories[category][identifier][error_type].append(error)
-
-        if category == ValidationCategory.TEXT_BOX.value and identifier not in self.text_box_data and self.stories_parser:
-            self.extract_text_box_content(identifier)
-
-    def format_validation_details(self, validation_dict, error_type):
-        for key, items in validation_dict.items():
-            for item in items:
-                details = {
-                    "validationClassifier": key.value,
-                    "context": item.get_formatted_message(),
-                    "identifier": item.get_identifier(),
-                    "page": item.get_page(),
-                    "page_id": item.get_page_id(),
-                    "data_id": item.get_data_id()
-                }
-                # Use key.category.value to categorize, and details includes the identifier
-                self.add_to_category(details, key.category.value, error_type)
-
-    def extract_classifiers(self, *args):
-        classifiers = {}
-        for validation_dict in args:
-            for key in validation_dict:
-                if key.value not in classifiers:
-                    classifiers[key.value] = {
-                        "label": key.label,
-                        "message": key.message if key.message else "",
-                        "help_article": key.help_article if key.help_article else None
-                    }
-        return classifiers
-
     def get_formatted_results_json(self) -> dict:
-        self.format_validation_details(self.errors, 'errors')
-        self.format_validation_details(self.warnings, 'warnings')
-        self.format_validation_details(self.infos, 'infos')
+        """Build response JSON directly from self.validations structure."""
+        # Build category sections dynamically from stored validations
+        categories_response = {}
 
-        classifiers = self.extract_classifiers(
-            self.errors, self.warnings, self.infos)
+        # Expected categories in response
+        expected_categories = ['par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general']
+
+        for category_key in expected_categories:
+            # Convert stored validations to response format
+            category_validations = self.validations.get(category_key, {})
+            details = {}
+
+            for identifier, type_dict in category_validations.items():
+                details[identifier] = {
+                    'errors': [
+                        {
+                            "validationClassifier": item.classifier_type,
+                            "context": item.get_formatted_message(),
+                            "identifier": item.get_identifier(),
+                            "page": item.get_page(),
+                            "page_id": item.get_page_id(),
+                            "data_id": item.get_data_id()
+                        }
+                        for item in type_dict['errors']
+                    ],
+                    'warnings': [
+                        {
+                            "validationClassifier": item.classifier_type,
+                            "context": item.get_formatted_message(),
+                            "identifier": item.get_identifier(),
+                            "page": item.get_page(),
+                            "page_id": item.get_page_id(),
+                            "data_id": item.get_data_id()
+                        }
+                        for item in type_dict['warnings']
+                    ],
+                    'infos': [
+                        {
+                            "validationClassifier": item.classifier_type,
+                            "context": item.get_formatted_message(),
+                            "identifier": item.get_identifier(),
+                            "page": item.get_page(),
+                            "page_id": item.get_page_id(),
+                            "data_id": item.get_data_id()
+                        }
+                        for item in type_dict['infos']
+                    ]
+                }
+
+            # Get total count for this category
+            total_count = 0
+            if category_key == 'par_styles':
+                total_count = self.par_styles_count
+            elif category_key == 'char_styles':
+                total_count = self.char_styles_count
+            elif category_key == 'text_boxes':
+                total_count = self.text_box_total_count
+            elif category_key == 'fonts':
+                total_count = self.fonts_total_count
+            elif category_key == 'images':
+                total_count = self.images_total_count
+            elif category_key == 'general':
+                total_count = 0
+
+            categories_response[category_key] = {
+                "details": details,
+                "total_count": total_count
+            }
 
         response = {
             "template_name": self.template_name if self.template_name else 'No Name',
             "output_folder": self.idml_output_folder,
-            "par_styles": {
-                "details": dict(self.categories[ValidationCategory.PAR_STYLE.value]),
-                "total_count": self.par_styles_count
-            },
-            "char_styles": {
-                "details": dict(self.categories[ValidationCategory.CHAR_STYLE.value]),
-                "total_count": self.char_styles_count
-            },
-            "text_boxes": {
-                "details": dict(self.categories[ValidationCategory.TEXT_BOX.value]),
-                "total_count": self.text_box_total_count
-            },
-            "fonts": {
-                "details": dict(self.categories[ValidationCategory.FONTS.value]),
-                "total_count": self.fonts_total_count
-            },
-            "images": {
-                "details": dict(self.categories[ValidationCategory.IMAGES.value]),
-                "total_count": self.images_total_count
-            },
-            "general": {
-                "details": dict(self.categories[ValidationCategory.GENERAL.value]),
-                "total_count": 0
-            },
-            "validation_classifiers": classifiers,
+            **categories_response,  # Spread all categories
+            "validation_classifiers": self.validation_classifiers,
             "text_box_data": self.text_box_data
         }
         return response
