@@ -1,5 +1,5 @@
 from xml.etree.ElementTree import Element
-from typing import List
+from typing import List, Dict
 from src.classes.TextFrame import TextFrame
 from src.classes.Link import Link
 
@@ -13,8 +13,10 @@ from src.classes.Link import Link
 # **********************************************************
 class SpreadData:
     def __init__(self, root: Element):
-        self.page_name: str = ''
-        self.page_id: str = ''
+        self.spread_self: str = ''
+        self.page_name: str = ''  # First page Self (for backward compatibility)
+        self.page_id: str = ''  # First page Name (for backward compatibility)
+        self.pages: List[Dict[str, str]] = []  # List of pages with Self and Name
         self.child_stories: List['StoryData'] = []
         self.links_obj_list: List[Link] = []
         self.text_frame_obj_list: List[TextFrame] = []
@@ -25,15 +27,31 @@ class SpreadData:
     # ---------------- Private Setters------------------
     def _extract_spread_data(self, root: Element):
         spread = root.find(".//Spread")
-        page = spread.find("Page")
 
-        # Set Page Name
-        self.page_name = page.get("Self")
+        # Extract Spread Self
+        self.spread_self = spread.get("Self") if spread is not None else ''
 
-        self.page_id = page.get("Name")
+        # Extract all pages (not just the first one)
+        pages = spread.findall("Page") if spread is not None else []
 
-        # Set Geometric bounds
-        self.geometric_bounds = page.get("GeometricBounds")
+        # Store all pages with their Self and Name
+        self.pages = []
+        for page in pages:
+            page_self = page.get("Self")
+            page_name = page.get("Name")
+            if page_self:
+                self.pages.append({
+                    "self": page_self,
+                    "name": page_name if page_name else ""
+                })
+
+        # Set first page for backward compatibility
+        if pages and len(pages) > 0:
+            first_page = pages[0]
+            self.page_name = first_page.get("Self", '')
+            self.page_id = first_page.get("Name", '')
+            # Set Geometric bounds from first page
+            self.geometric_bounds = first_page.get("GeometricBounds", '')
 
         # Extract links and associate them with spread_data
         extracted_links = self._extract_links_data(root)
@@ -126,6 +144,12 @@ class SpreadData:
 
     def get_child_stories(self) -> List['StoryData']:
         return self.child_stories
+
+    def get_spread_self(self) -> str:
+        return self.spread_self
+
+    def get_pages(self) -> List[Dict[str, str]]:
+        return self.pages
 
     # ---------------- Debug Prints ------------------
     def print_links_data(self):

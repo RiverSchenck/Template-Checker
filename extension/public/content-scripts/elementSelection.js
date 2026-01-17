@@ -145,8 +145,43 @@ function watchForSelection() {
   });
 }
 
+// Watch for clicks on <li> elements with data-id=spread_id
+function watchForSpreadClicks() {
+  function handleSpreadClick(event) {
+    // Check if the clicked element or its closest <li> ancestor has a data-id
+    const target = event.target.closest('li[data-id]');
+    if (!target || target.tagName !== 'LI') {
+      return;
+    }
+
+    const spreadId = target.getAttribute('data-id');
+    if (!spreadId) {
+      return;
+    }
+
+    // Prevent the click from triggering other handlers if needed
+    // event.stopPropagation(); // Uncomment if needed
+
+    // Send message to background script
+    if (typeof chrome !== 'undefined' && chrome.runtime?.sendMessage) {
+      chrome.runtime.sendMessage({
+        action: 'spreadSelected',
+        spreadId: spreadId
+      }).catch(() => {});
+    }
+  }
+
+  // Use event delegation to handle clicks on <li> elements
+  // Using capture phase to catch clicks early
+  document.addEventListener('click', handleSpreadClick, true);
+}
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', watchForSelection);
+  document.addEventListener('DOMContentLoaded', () => {
+    watchForSelection();
+    watchForSpreadClicks();
+  });
 } else {
   watchForSelection();
+  watchForSpreadClicks();
 }

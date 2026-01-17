@@ -46,6 +46,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
+  if (message.action === 'spreadSelected') {
+    const spreadId = message.spreadId;
+
+    chrome.runtime.sendMessage({
+      action: 'selectedSpreadChanged',
+      spreadId: spreadId
+    }).then(() => {
+      sendResponse({ success: true });
+    }).catch(() => {
+      sendResponse({ success: true });
+    });
+
+    return true;
+  }
+
   if (message.action === 'frontifyUrlReceived') {
     const url = message.url;
 

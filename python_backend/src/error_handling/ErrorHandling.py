@@ -20,12 +20,15 @@ class ValidationResult():
         self.template_name: str = None
         self.idml_output_folder: str = None
         self.stories_parser = None
+        self.spreads_parser = None
         self.par_styles_count = 0
         self.char_styles_count = 0
         self.fonts_total_count = 0
         self.images_total_count = 0
         self.text_box_total_count = 0
         self.text_box_data = {}
+        self.spread_to_pages: Dict[str, List[str]] = {}
+        self.pages: Dict[str, str] = {}
 
     # -------------------------------Helper Methods-------------------------------
     @staticmethod
@@ -47,13 +50,16 @@ class ValidationResult():
         self.successes.append(success)
 
     def add_validation(self, validation_type: str, classifier, context: str = '',
-                      page: str = '', identifier: str = 'null',
-                      data_id: str = 'null', page_id: str = ''):
+                      page_id: str = '', identifier: str = 'null',
+                      data_id: str = 'null'):
         """
         Unified method for adding errors, warnings, and infos.
         Stores validations directly in category-based structure.
+
+        Args:
+            page_id: page Self (page identifier) - will be mapped to page_name later in JSON generation
         """
-        validation = ValidationContext(context, classifier, page, identifier, data_id, page_id)
+        validation = ValidationContext(context, classifier, page_id, identifier, data_id)
 
         # Get category from classifier and convert to response key
         category = classifier.category
@@ -75,23 +81,27 @@ class ValidationResult():
                 "help_article": classifier.help_article if classifier.help_article else None
             }
 
-    def add_custom_error(self, message: str, error_type: 'ValidationError', page: str = None, page_id: str = ''):
+    def add_custom_error(self, message: str, error_type: 'ValidationError', page_id: str = ''):
         """Add custom error with formatted message."""
-        if page:
-            message += f' [Page {page}]'
-        self.add_validation('errors', error_type, message, page if page else '', 'null', 'null', page_id)
+        # Derive page_name for message if available
+        page_name_for_message = ''
+        if page_id and self.pages and page_id in self.pages:
+            page_name_for_message = self.pages[page_id]
+        if page_name_for_message:
+            message += f' [Page {page_name_for_message}]'
+        self.add_validation('errors', error_type, message, page_id, 'null', 'null')
 
-    def add_error(self, context: str, error_type: 'ValidationError', page: str = '', identifier='null', data_id='null', page_id: str = ''):
+    def add_error(self, context: str, error_type: 'ValidationError', page_id: str = '', identifier='null', data_id='null'):
         """Add error validation."""
-        self.add_validation('errors', error_type, context, page, identifier, data_id, page_id)
+        self.add_validation('errors', error_type, context, page_id, identifier, data_id)
 
-    def add_warning(self, context: str, warning_type: 'ValidationWarning', page: str = '', identifier='null', data_id='null', page_id: str = ''):
+    def add_warning(self, context: str, warning_type: 'ValidationWarning', page_id: str = '', identifier='null', data_id='null'):
         """Add warning validation."""
-        self.add_validation('warnings', warning_type, context, page, identifier, data_id, page_id)
+        self.add_validation('warnings', warning_type, context, page_id, identifier, data_id)
 
-    def add_info(self, context: str, info_type: 'ValidationInfo', page: str = '', identifier='null', data_id='null', page_id: str = ''):
+    def add_info(self, context: str, info_type: 'ValidationInfo', page_id: str = '', identifier='null', data_id='null'):
         """Add info validation."""
-        self.add_validation('infos', info_type, context, page, identifier, data_id, page_id)
+        self.add_validation('infos', info_type, context, page_id, identifier, data_id)
 
     def add_template_name(self, template_name: str):
         self.template_name = template_name
@@ -118,6 +128,11 @@ class ValidationResult():
 
     def set_stories_parser(self, stories_parser):
         self.stories_parser = stories_parser
+
+    def set_spreads_parser(self, spreads_parser):
+        self.spreads_parser = spreads_parser
+        self._build_spread_to_pages_mapping()
+        self._build_pages_mapping()
 
     def set_fonts_total_count(self, count):
         self.fonts_total_count = count
@@ -178,13 +193,47 @@ class ValidationResult():
         story = self.stories_parser.get_story_by_id(identifier)
         if story:
             content = story.get_content()
-            page = story.get_page()
-            page_id = story.get_page_id()
+            page_id = story.get_page()  # page Self
+            # page_name will be mapped later in JSON generation
             self.text_box_data[identifier] = {
-                "identifier": identifier, "content": content, "page": page, "page_id": page_id}
+                "identifier": identifier, "content": content, "page_id": page_id}
+
+    def _build_spread_to_pages_mapping(self):
+        """Build mapping of spread Self to list of page Selfs."""
+        if not self.spreads_parser:
+            return
+
+        self.spread_to_pages = {}
+        for spread_data in self.spreads_parser.get_spreads_obj_list():
+            spread_self = spread_data.get_spread_self()
+            if spread_self:
+                pages = spread_data.get_pages()
+                page_selves = [page["self"] for page in pages if page.get("self")]
+                if page_selves:
+                    self.spread_to_pages[spread_self] = page_selves
+
+    def _build_pages_mapping(self):
+        """Build mapping of page Self to page Name."""
+        if not self.spreads_parser:
+            return
+
+        self.pages = {}
+        for spread_data in self.spreads_parser.get_spreads_obj_list():
+            pages = spread_data.get_pages()
+            for page in pages:
+                page_self = page.get("self")
+                page_name = page.get("name", "")
+                if page_self:
+                    self.pages[page_self] = page_name
 
     def get_formatted_results_json(self) -> dict:
         """Build response JSON directly from self.validations structure."""
+        # Build reverse lookup: page_id -> spread_id for efficient lookups
+        page_to_spread = {}
+        for spread_self, page_selves in self.spread_to_pages.items():
+            for page_self in page_selves:
+                page_to_spread[page_self] = spread_self
+
         # Build category sections dynamically from stored validations
         categories_response = {}
 
@@ -203,8 +252,9 @@ class ValidationResult():
                             "validationClassifier": item.classifier_type,
                             "context": item.get_formatted_message(),
                             "identifier": item.get_identifier(),
-                            "page": item.get_page(),
-                            "page_id": item.get_page_id(),
+                            "page_id": item.get_page_id(),  # page Self (stored directly)
+                            "page_name": self.pages.get(item.get_page_id(), ""),  # mapped from pages
+                            "spread_id": page_to_spread.get(item.get_page_id(), ""),  # mapped from spread_to_pages
                             "data_id": item.get_data_id()
                         }
                         for item in type_dict['errors']
@@ -214,8 +264,9 @@ class ValidationResult():
                             "validationClassifier": item.classifier_type,
                             "context": item.get_formatted_message(),
                             "identifier": item.get_identifier(),
-                            "page": item.get_page(),
-                            "page_id": item.get_page_id(),
+                            "page_id": item.get_page_id(),  # page Self (stored directly)
+                            "page_name": self.pages.get(item.get_page_id(), ""),  # mapped from pages
+                            "spread_id": page_to_spread.get(item.get_page_id(), ""),  # mapped from spread_to_pages
                             "data_id": item.get_data_id()
                         }
                         for item in type_dict['warnings']
@@ -225,8 +276,9 @@ class ValidationResult():
                             "validationClassifier": item.classifier_type,
                             "context": item.get_formatted_message(),
                             "identifier": item.get_identifier(),
-                            "page": item.get_page(),
-                            "page_id": item.get_page_id(),
+                            "page_id": item.get_page_id(),  # page Self (stored directly)
+                            "page_name": self.pages.get(item.get_page_id(), ""),  # mapped from pages
+                            "spread_id": page_to_spread.get(item.get_page_id(), ""),  # mapped from spread_to_pages
                             "data_id": item.get_data_id()
                         }
                         for item in type_dict['infos']
@@ -253,11 +305,25 @@ class ValidationResult():
                 "total_count": total_count
             }
 
+        # Map page_id to page_name in text_box_data
+        mapped_text_box_data = {}
+        for identifier, text_box in self.text_box_data.items():
+            page_id = text_box.get("page_id", "")
+            page_name = self.pages.get(page_id, "")
+            mapped_text_box_data[identifier] = {
+                "identifier": text_box.get("identifier", ""),
+                "content": text_box.get("content", ""),
+                "page_id": page_id,
+                "page_name": page_name
+            }
+
         response = {
             "template_name": self.template_name if self.template_name else 'No Name',
             "output_folder": self.idml_output_folder,
             **categories_response,  # Spread all categories
             "validation_classifiers": self.validation_classifiers,
-            "text_box_data": self.text_box_data
+            "text_box_data": mapped_text_box_data,
+            "spread_to_pages": self.spread_to_pages,
+            "pages": self.pages
         }
         return response

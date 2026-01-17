@@ -3,6 +3,7 @@ import { ValidationType, ClassifierData, ValidationItem, ValidationCategory } fr
 import { List, Alert, Typography } from 'antd'
 import { getValidationTag, renderHelpLink, renderMessageElement } from '../../helpers';
 import { highlightElement } from '../../../utils/messageUtils';
+import { isDebugMode } from '../../../utils/debug';
 
 interface ValidationItemProps {
     validationType: ValidationType;
@@ -21,9 +22,10 @@ interface ValidationListItemProps {
     onItemClick: (item: ValidationItem) => void;
     message: string;
     context: string;
+    showDebug: boolean;
 }
 
-const ValidationListItem = ({ item, isSelected, onItemClick, message, context }: ValidationListItemProps) => {
+const ValidationListItem = ({ item, isSelected, onItemClick, message, context, showDebug }: ValidationListItemProps) => {
     return (
         <List.Item
             style={{
@@ -51,7 +53,25 @@ const ValidationListItem = ({ item, isSelected, onItemClick, message, context }:
                 }
             }}
         >
-            {renderMessageElement(message, context)}
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '4px' }}>
+                {renderMessageElement(message, context)}
+                {showDebug && (
+                    <div style={{
+                        fontSize: '11px',
+                        color: '#888',
+                        fontFamily: 'monospace',
+                        marginTop: '4px',
+                        display: 'flex',
+                        gap: '12px',
+                        flexWrap: 'wrap'
+                    }}>
+                        {item.spread_id && <span>Spread: {item.spread_id}</span>}
+                        {item.page_id && <span>Page: {item.page_id}</span>}
+                        {item.page_name && <span>Page Name: {item.page_name}</span>}
+                        {item.data_id && <span>Data ID: {item.data_id}</span>}
+                    </div>
+                )}
+            </div>
         </List.Item>
     );
 };
@@ -64,6 +84,7 @@ const ValidationStyle = ({ validationType, category, items, classifierData, sele
     };
 
     const alertStatus = statusMapping[validationType] || 'info';
+    const showDebug = isDebugMode();
 
     const handleItemClick = async (item: ValidationItem) => {
         if (item.data_id) {
@@ -94,6 +115,7 @@ const ValidationStyle = ({ validationType, category, items, classifierData, sele
                                     onItemClick={handleItemClick}
                                     message={classifierData?.message || ''}
                                     context={item.context || ''}
+                                    showDebug={showDebug}
                                 />
                             );
                         }}
