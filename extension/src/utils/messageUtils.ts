@@ -105,6 +105,119 @@ export async function highlightElement(dataId: string): Promise<void> {
 }
 
 /**
+ * Highlight filtered issues on the active tab
+ * @param errors - Array of data-ids for errors
+ * @param warnings - Array of data-ids for warnings
+ * @param infos - Array of data-ids for infos
+ */
+export async function highlightFilteredIssues(
+  errors: string[],
+  warnings: string[],
+  infos: string[]
+): Promise<void> {
+  try {
+    if (typeof chrome === 'undefined' || !chrome.tabs) {
+      console.warn('Chrome extension API not available');
+      return;
+    }
+
+    // Get all tabs and find the most recently active web page tab
+    const allTabs = await chrome.tabs.query({});
+
+    // Filter to web pages only (not extension or chrome:// pages)
+    const webPageTabs = allTabs.filter(tab =>
+      tab.url &&
+      !tab.url.startsWith('chrome-extension://') &&
+      !tab.url.startsWith('chrome://') &&
+      !tab.url.startsWith('edge://') &&
+      tab.id
+    );
+
+    if (webPageTabs.length === 0) {
+      console.warn('No web page tabs found to highlight. Make sure you have a web page open.');
+      return;
+    }
+
+    // Find the active web page tab, or use the most recently active one
+    let activeTab = webPageTabs.find(tab => tab.active);
+    if (!activeTab) {
+      activeTab = webPageTabs.sort((a, b) => (b.lastAccessed || 0) - (a.lastAccessed || 0))[0];
+    }
+
+    if (!activeTab?.id) {
+      console.warn('No suitable web page tab found for highlighting.');
+      return;
+    }
+
+    console.log(`Highlighting filtered issues on tab: ${activeTab.url}`);
+
+    try {
+      await chrome.tabs.sendMessage(activeTab.id, {
+        action: 'highlightFilteredIssues',
+        errors: errors,
+        warnings: warnings,
+        infos: infos
+      });
+      console.log(`Highlighted filtered issues: ${errors.length} errors, ${warnings.length} warnings, ${infos.length} infos`);
+    } catch (messageError: any) {
+      console.error('Error sending highlightFilteredIssues message:', messageError);
+      throw messageError;
+    }
+  } catch (error) {
+    console.error('Error highlighting filtered issues:', error);
+  }
+}
+
+/**
+ * Clear filter highlights on the active tab
+ */
+export async function clearFilterHighlights(): Promise<void> {
+  try {
+    if (typeof chrome === 'undefined' || !chrome.tabs) {
+      console.warn('Chrome extension API not available');
+      return;
+    }
+
+    // Get all tabs and find the most recently active web page tab
+    const allTabs = await chrome.tabs.query({});
+
+    const webPageTabs = allTabs.filter(tab =>
+      tab.url &&
+      !tab.url.startsWith('chrome-extension://') &&
+      !tab.url.startsWith('chrome://') &&
+      !tab.url.startsWith('edge://') &&
+      tab.id
+    );
+
+    if (webPageTabs.length === 0) {
+      console.warn('No web page tabs found to clear highlights');
+      return;
+    }
+
+    let activeTab = webPageTabs.find(tab => tab.active);
+    if (!activeTab) {
+      activeTab = webPageTabs.sort((a, b) => (b.lastAccessed || 0) - (a.lastAccessed || 0))[0];
+    }
+
+    if (!activeTab?.id) {
+      console.warn('No suitable web page tab found');
+      return;
+    }
+
+    try {
+      await chrome.tabs.sendMessage(activeTab.id, {
+        action: 'clearFilterHighlights'
+      });
+      console.log('Cleared filter highlights');
+    } catch (messageError: any) {
+      console.error('Error sending clearFilterHighlights message:', messageError);
+    }
+  } catch (error) {
+    console.error('Error clearing filter highlights:', error);
+  }
+}
+
+/**
  * Clear all highlights on the current page
  */
 export async function clearHighlights(): Promise<void> {

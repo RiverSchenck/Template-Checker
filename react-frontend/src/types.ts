@@ -14,8 +14,9 @@ export type ValidationItem = {
   validationClassifier: string;
   context: string;
   identifier: string | null;
-  page: string;
-  page_id: string;
+  page_id: string; // Page Self (was "page")
+  page_name: string; // Page Name (was "page_id")
+  spread_id: string; // Spread Self
   data_id: string;
 };
 
@@ -35,8 +36,8 @@ export type CategoryDetail = {
 export type TextBoxData = {
   identifier: string;
   content: string;
-  page: string;
-  page_id: string;
+  page_id: string; // Page Self (was "page")
+  page_name: string; // Page Name (was "page_id")
 };
 
 export interface ValidationResult {
@@ -50,6 +51,8 @@ export interface ValidationResult {
   general: CategoryDetail;
   validation_classifiers: { [key: string]: ClassifierData };
   text_box_data: { [key: string]: TextBoxData };
+  spread_to_pages: { [spread_self: string]: string[] };
+  pages: { [page_self: string]: string };
 }
 
 export type ClassifierData = {
@@ -61,8 +64,8 @@ export type ClassifierData = {
 export interface TableDataItem {
   key: string;
   identifier: string;
-  page: string;
-  page_id: string;
+  page_id: string; // Page Self (was "page")
+  page_name: string; // Page Name (was "page_id")
   type: string;
   validationType: ValidationType;
   context: string;

@@ -38,7 +38,7 @@ const ValidationCards = ({ identifierData, category, textBoxData, validationClas
     <>
       {Object.entries(identifierData).map(([identifier, entries]) => {
         const textBoxContent = category === ValidationCategory.text_boxes ? textBoxData[identifier]?.content : null;
-        const textBoxPage = category === ValidationCategory.text_boxes ? textBoxData[identifier]?.page : null;
+        const textBoxPage = category === ValidationCategory.text_boxes ? textBoxData[identifier]?.page_name : null;
         const dataIds = getAllDataIds(entries);
         const hasClickableDataIds = dataIds.length > 0;
 

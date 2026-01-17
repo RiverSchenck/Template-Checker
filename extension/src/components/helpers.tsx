@@ -1,33 +1,8 @@
-import { IdentifierGroupedData, ClassifierData, TableDataItem, ValidationType, TextBoxData, ValidationItem } from '../types';
+import { IdentifierGroupedData, ClassifierData, ValidationType, TextBoxData, ValidationItem, ValidationEntries } from '../types';
 import { CloseCircleOutlined, InfoCircleOutlined, WarningOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Tag, Typography, Popover, Button } from 'antd';
 
 const { Text } = Typography;
-
-export function transformDataForTable(identifierData: IdentifierGroupedData, validationClassifiers: { [key: string]: ClassifierData }, textBoxes: { [key: string]: TextBoxData }): TableDataItem[] {
-  const tableData: TableDataItem[] = [];
-  Object.entries(identifierData).forEach(([identifier, entries]) => {
-    (['errors', 'warnings', 'infos'] as ValidationType[]).forEach(type => {
-      entries[type].forEach((issue, index) => {
-        if (validationClassifiers[issue.validationClassifier]) { // Make sure the classifier exists
-          const textBoxData = issue.identifier ? textBoxes[issue.identifier] : undefined;
-          tableData.push({
-            key: `${identifier}-${issue.validationClassifier}-${type}-${index}`,
-            identifier,
-            type: issue.validationClassifier,
-            page: issue.page,
-            page_id: issue.page_id,
-            context: issue.context,
-            validationType: type,
-            textBox: textBoxData,
-            classifier: validationClassifiers[issue.validationClassifier] // Access using dynamic keys
-          });
-        }
-      });
-    });
-  });
-  return tableData;
-}
 
 export const renderHelpLink = (helpArticleUrl: string | null): JSX.Element | string => {
   if (!helpArticleUrl) {
@@ -132,6 +107,68 @@ export const filterByIdentifierDataId = (identifierData: IdentifierGroupedData, 
       warnings: entries.warnings.filter(item => item.data_id === dataId),
       infos: entries.infos.filter(item => item.data_id === dataId)
     };
+
+    // Only include this identifier if it has at least one matching item
+    if (filteredEntries.errors.length > 0 ||
+      filteredEntries.warnings.length > 0 ||
+      filteredEntries.infos.length > 0) {
+      filtered[identifier] = filteredEntries;
+    }
+  });
+
+  return filtered;
+};
+
+// Filter identifier data by spread, page, validation type, and data_id
+export const filterByIdentifierFilters = (
+  identifierData: IdentifierGroupedData,
+  filters: { spreadId: string[] | null; pageId: string[] | null; validationType: ('errors' | 'warnings' | 'infos')[] | null; dataId: string | null }
+): IdentifierGroupedData => {
+  const { spreadId, pageId, validationType, dataId } = filters;
+
+  // If no filters are applied, return all data
+  if ((!spreadId || spreadId.length === 0) && (!pageId || pageId.length === 0) && (!validationType || validationType.length === 0) && !dataId) {
+    return identifierData;
+  }
+
+  const filtered: IdentifierGroupedData = {};
+
+  Object.entries(identifierData).forEach(([identifier, entries]) => {
+    const filterEntries = (items: ValidationItem[]) => {
+      return items.filter(item => {
+        // Filter by spread (check if item's spread is in the selected spreads array)
+        if (spreadId && spreadId.length > 0 && !spreadId.includes(item.spread_id)) {
+          return false;
+        }
+        // Filter by page (check if item's page is in the selected pages array)
+        if (pageId && pageId.length > 0 && !pageId.includes(item.page_id)) {
+          return false;
+        }
+        // Filter by data_id
+        if (dataId && item.data_id !== dataId) {
+          return false;
+        }
+        return true;
+      });
+    };
+
+    let filteredEntries: ValidationEntries;
+
+    if (validationType && validationType.length > 0) {
+      // Filter specific validation types (array)
+      filteredEntries = {
+        errors: validationType.includes('errors') ? filterEntries(entries.errors) : [],
+        warnings: validationType.includes('warnings') ? filterEntries(entries.warnings) : [],
+        infos: validationType.includes('infos') ? filterEntries(entries.infos) : []
+      };
+    } else {
+      // Filter all types
+      filteredEntries = {
+        errors: filterEntries(entries.errors),
+        warnings: filterEntries(entries.warnings),
+        infos: filterEntries(entries.infos)
+      };
+    }
 
     // Only include this identifier if it has at least one matching item
     if (filteredEntries.errors.length > 0 ||

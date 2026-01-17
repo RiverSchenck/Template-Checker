@@ -74,13 +74,13 @@ const ValidationTable = ({ identifierData, category, textBoxData, validationClas
     const pageColumn = (): TableColumnType<TableDataItem> => {
       return {
         title: 'Page',
-        dataIndex: 'page',
-        key: 'page',
-        render: (_, record) => <strong>{record.page}</strong>, // Display the classifier label
-        sorter: (a: TableDataItem, b: TableDataItem) => a.page.localeCompare(b.page),
+        dataIndex: 'page_name',
+        key: 'page_name',
+        render: (_, record) => <strong>{record.page_name}</strong>, // Display the page name
+        sorter: (a: TableDataItem, b: TableDataItem) => a.page_name.localeCompare(b.page_name),
         sortDirections: ['descend', 'ascend'],
         filters: typeFilters,
-        onFilter: (value, record) => record.page === value,
+        onFilter: (value, record) => record.page_name === value,
       };
     };
 
