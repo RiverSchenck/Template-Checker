@@ -63,6 +63,14 @@ class ValidationError(Enum):
                             "Image transformations are not supported.",
                             "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
                             "Image Transformation", ValidationCategory.IMAGES)
+    IMAGE_TRANSFORMATION_IMAGE = (auto(),
+                                  "Image transformations are not supported.",
+                                  "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+                                  "Image Transformation (Image)", ValidationCategory.IMAGES)
+    IMAGE_TRANSFORMATION_CONTAINER = (auto(),
+                                      "Image transformations are not supported.",
+                                      "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+                                      "Image Transformation (Container)", ValidationCategory.IMAGES)
     TABLE = (auto(),
              "Tables are not supported",
              "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
@@ -110,7 +118,7 @@ class ValidationError(Enum):
                  "Text Wrap is not supported.",
                  "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
                  "Text Wrap", ValidationCategory.TEXT_BOX)
-    
+
     FILL_TINT = (auto(),
                  "Fill Tint must be 100. (This may be inaccurate, testing currently)",
                  "https://help.frontify.com",
@@ -143,6 +151,14 @@ class ValidationWarning(Enum):
                             "Element has been rotated. You may see slight discrepencies between export and editing.",
                             "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
                             "Image Transformation", ValidationCategory.IMAGES)
+    IMAGE_TRANSFORMATION_IMAGE = (auto(),
+                                  "Image has been rotated. You may see slight discrepencies between export and editing.",
+                                  "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+                                  "Image Transformation (Image)", ValidationCategory.IMAGES)
+    IMAGE_TRANSFORMATION_CONTAINER = (auto(),
+                                       "Image container has been rotated. You may see slight discrepencies between export and editing.",
+                                       "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+                                       "Image Transformation (Container)", ValidationCategory.IMAGES)
     DOCUMENT_BLEED = (auto(),
                       "InDesign defined bleed is applied.",
                       "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",

@@ -3,6 +3,7 @@ from functools import wraps
 from flask import Blueprint, jsonify, send_file, after_this_request, request, current_app
 from src.classes.FrontifyChecker import FrontifyChecker
 from .utils import upload_file, start_check, checker_cleanup, download_file_from_url
+from .analytics_api import get_analytics_summary, get_runs
 
 main = Blueprint('main', __name__)
 
@@ -56,12 +57,15 @@ def run_checker():
     """Endpoint to run the checker and return results."""
     checker = FrontifyChecker()
     try:
+        # Get source type from header, default to 'api'
+        source_type = request.headers.get('X-Source', 'api')
+
         upload_result = upload_file()
         if upload_result['status'] != 'success':
             return jsonify(upload_result['error']), 400
 
         upload_path = upload_result['path']
-        results, status_code = start_check(checker, upload_path)
+        results, status_code = start_check(checker, upload_path, source_type)
         return results, status_code
     finally:
         checker_cleanup(checker)
@@ -74,12 +78,15 @@ def run_checker_and_download():
     checker = FrontifyChecker()
     zip_file_path = None
     try:
+        # Get source type from header, default to 'api'
+        source_type = request.headers.get('X-Source', 'api')
+
         upload_result = upload_file()
         if upload_result['status'] != 'success':
             return jsonify(upload_result['error']), 400
 
         upload_path = upload_result['path']
-        results, status_code = start_check(checker, upload_path)
+        results, status_code = start_check(checker, upload_path, source_type)
         if status_code != 200:
             return results, status_code
 
@@ -145,6 +152,9 @@ def run_checker_from_url():
     """Endpoint to download a ZIP file from a URL and run the checker on it."""
     checker = FrontifyChecker()
     try:
+        # Get source type from header, default to 'api'
+        source_type = request.headers.get('X-Source', 'api')
+
         # Get downloadUrl from request JSON
         if not request.is_json:
             return jsonify({'error': {'message': 'Request must be JSON with downloadUrl field'}}), 400
@@ -166,7 +176,41 @@ def run_checker_from_url():
         download_path = download_result['path']
 
         # Run the checker on the downloaded file
-        results, status_code = start_check(checker, download_path)
+        results, status_code = start_check(checker, download_path, source_type)
         return results, status_code
     finally:
         checker_cleanup(checker)
+
+
+@main.route('/analytics/summary', methods=['GET'])
+@require_auth
+def analytics_summary():
+    """Endpoint to get analytics summary."""
+    try:
+        days = request.args.get('days', 30, type=int)
+        summary = get_analytics_summary(days=days)
+
+        if 'error' in summary:
+            return jsonify(summary), 500
+
+        return jsonify(summary), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@main.route('/analytics/runs', methods=['GET'])
+@require_auth
+def analytics_runs():
+    """Endpoint to get paginated list of runs."""
+    try:
+        limit = request.args.get('limit', 100, type=int)
+        offset = request.args.get('offset', 0, type=int)
+
+        runs_data = get_runs(limit=limit, offset=offset)
+
+        if 'error' in runs_data:
+            return jsonify(runs_data), 500
+
+        return jsonify(runs_data), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

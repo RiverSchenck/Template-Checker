@@ -9,10 +9,9 @@ import '../../App.css';
 interface SuccessModalProps {
   visible: boolean;
   onClose: () => void;
-  seeDetails?: (value: Boolean) => void
 }
 
-const SuccessModal = ({ visible, onClose, seeDetails }: SuccessModalProps) => {
+const SuccessModal = ({ visible, onClose }: SuccessModalProps) => {
   const { setMenuKey } = useMenu();
 
   useEffect(() => {
@@ -22,11 +21,8 @@ const SuccessModal = ({ visible, onClose, seeDetails }: SuccessModalProps) => {
   }, [visible]);
 
   const handleSeeDetails = () => {
-    if (seeDetails) {
-      seeDetails(true);
-      setMenuKey('results');  // Change the menu key to show results
-      onClose();  // Optionally close the modal
-    }
+    setMenuKey('results');  // Change the menu key to show results
+    onClose();  // Optionally close the modal
   };
 
   return (
@@ -36,11 +32,9 @@ const SuccessModal = ({ visible, onClose, seeDetails }: SuccessModalProps) => {
       onOk={onClose}
       onCancel={onClose}
       footer={[
-        seeDetails && (
-          <Button key="details" type="default" onClick={handleSeeDetails}>
-            See Details
-          </Button>
-        ),
+        <Button key="details" type="default" onClick={handleSeeDetails}>
+          See Details
+        </Button>,
         <Button key="close" type="primary" onClick={onClose}>
           Close
         </Button>

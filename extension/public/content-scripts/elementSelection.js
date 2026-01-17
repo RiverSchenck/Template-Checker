@@ -1,5 +1,22 @@
 // Watch for element selection in Frontify
 
+// Only run on Frontify sites
+async function initializeIfFrontifySite() {
+  // Check if we're on a Frontify site
+  if (typeof window === 'undefined' || !window.waitForFrontifySite) {
+    return; // Detector not loaded yet
+  }
+
+  const isFrontify = await window.waitForFrontifySite(5000);
+  if (!isFrontify) {
+    return; // Not a Frontify site, exit early
+  }
+
+  // Initialize the selection watchers
+  watchForSelection();
+  watchForSpreadClicks();
+}
+
 function watchForSelection() {
   let lastSentDataId = null;
   let debounceTimer = null;
@@ -176,12 +193,9 @@ function watchForSpreadClicks() {
   document.addEventListener('click', handleSpreadClick, true);
 }
 
+// Initialize only if on a Frontify site
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    watchForSelection();
-    watchForSpreadClicks();
-  });
+  document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
 } else {
-  watchForSelection();
-  watchForSpreadClicks();
+  initializeIfFrontifySite();
 }

@@ -1,5 +1,35 @@
 // Watch for Frontify export dropdown and modify "InDesign (with changes)" option
 
+// Helper function to safely get extension URL
+function getExtensionURL(path) {
+  try {
+    if (typeof chrome === 'undefined' || !chrome.runtime || !chrome.runtime.getURL) {
+      return null;
+    }
+    return chrome.runtime.getURL(path);
+  } catch (error) {
+    // Extension context invalidated - extension was reloaded
+    console.warn('Extension context invalidated, cannot get extension URL:', error);
+    return null;
+  }
+}
+
+// Only run on Frontify sites
+async function initializeIfFrontifySite() {
+  // Check if we're on a Frontify site
+  if (typeof window === 'undefined' || !window.waitForFrontifySite) {
+    return; // Detector not loaded yet
+  }
+
+  const isFrontify = await window.waitForFrontifySite(5000);
+  if (!isFrontify) {
+    return; // Not a Frontify site, exit early
+  }
+
+  // Initialize the dropdown watcher
+  watchForExportDropdown();
+}
+
 function watchForExportDropdown() {
   const processedDropdowns = new WeakSet();
 
@@ -29,24 +59,32 @@ function watchForExportDropdown() {
 
     // Replace the icon with extension icon
     const iconSlot = indesignMenuItem.querySelector('[data-name="left"][data-test-id="fondue-dropdown-slot"]');
-    if (iconSlot && typeof chrome !== 'undefined' && chrome.runtime) {
+    if (iconSlot) {
       // Check if we've already replaced it
       const existingImg = iconSlot.querySelector('img[data-extension-icon]');
       if (!existingImg) {
-        // Clear existing SVG
-        const svg = iconSlot.querySelector('svg');
-        if (svg) {
-          svg.remove();
-        }
+        // Try to get extension icon URL safely
+        const iconUrl = getExtensionURL('tech-sol48.png');
+        if (iconUrl) {
+          // Clear existing SVG
+          const svg = iconSlot.querySelector('svg');
+          if (svg) {
+            svg.remove();
+          }
 
-        // Create new img element with extension icon
-        const iconImg = document.createElement('img');
-        iconImg.src = chrome.runtime.getURL('tech-sol48.png');
-        iconImg.setAttribute('data-extension-icon', 'true');
-        iconImg.style.width = '24px';
-        iconImg.style.height = '24px';
-        iconImg.style.objectFit = 'contain';
-        iconSlot.appendChild(iconImg);
+          // Create new img element with extension icon
+          const iconImg = document.createElement('img');
+          iconImg.src = iconUrl;
+          iconImg.setAttribute('data-extension-icon', 'true');
+          iconImg.style.width = '24px';
+          iconImg.style.height = '24px';
+          iconImg.style.objectFit = 'contain';
+          iconImg.onerror = () => {
+            // If image fails to load (e.g., extension context invalidated), remove it
+            iconImg.remove();
+          };
+          iconSlot.appendChild(iconImg);
+        }
       }
     }
 
@@ -108,4 +146,5 @@ function watchForExportDropdown() {
   }
 }
 
-watchForExportDropdown();
+// Initialize only if on a Frontify site
+initializeIfFrontifySite();

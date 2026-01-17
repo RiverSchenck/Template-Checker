@@ -58,12 +58,13 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
   // Get auth token from environment variable
   const getAuthHeaders = (): Record<string, string> => {
     const token = process.env.REACT_APP_AUTH_TOKEN;
+    const headers: Record<string, string> = {
+      'X-Source': 'react-frontend'
+    };
     if (token) {
-      return {
-        'Authorization': `Bearer ${token}`
-      };
+      headers['Authorization'] = `Bearer ${token}`;
     }
-    return {};
+    return headers;
   };
 
   const handleCloseModal = () => {

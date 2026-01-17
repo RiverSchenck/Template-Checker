@@ -18,6 +18,7 @@ export type ValidationItem = {
   page_name: string; // Page Name (was "page_id")
   spread_id: string; // Spread Self
   data_id: string;
+  text_content?: string[]; // Array of text strings where the issue occurs (for PAR_STYLE, CHAR_STYLE, and OVERRIDE)
 };
 
 export type ValidationEntries = {

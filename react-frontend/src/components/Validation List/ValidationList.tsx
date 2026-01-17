@@ -29,14 +29,14 @@ function ValidationList({ jsonResponse, previousJsonResponse, checkerResponse, s
     return defaultKeys.map((key) => {
       const categoryEnum = ValidationCategory[key as keyof typeof ValidationCategory];
       const categoryData = jsonResponse[key as keyof typeof jsonResponse] as CategoryDetail;
-      
+
       if (!categoryData) return null; // Ensure categoryData is defined
 
       const isEmpty = isCategoryEmpty(categoryData.details);
       if (isEmpty) return null; // Skip rendering if the category is empty
 
       return (
-        <Collapse.Panel 
+        <Collapse.Panel
           header={
               <span>{categoryEnum}</span>
           }
@@ -45,18 +45,18 @@ function ValidationList({ jsonResponse, previousJsonResponse, checkerResponse, s
          <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
           <div style={{ width: '95%' }}>
             {viewMode === 'card' ? (
-              <ValidationCards 
-                identifierData={categoryData.details} 
-                category={categoryEnum} 
-                textBoxData={jsonResponse.text_box_data} 
+              <ValidationCards
+                identifierData={categoryData.details}
+                category={categoryEnum}
+                textBoxData={jsonResponse.text_box_data}
                 validationClassifiers={validation_classifiers}
               />
             ) : (
               <ValidationTable
-                identifierData={categoryData.details} 
+                identifierData={categoryData.details}
                 category={categoryEnum}
                 textBoxData={jsonResponse.text_box_data}
-                validationClassifiers={validation_classifiers} 
+                validationClassifiers={validation_classifiers}
               />
             )}
           </div>
@@ -65,7 +65,7 @@ function ValidationList({ jsonResponse, previousJsonResponse, checkerResponse, s
       );
     });
   };
-    
+
   return (
     <div style={{width: '100%', height: '100%'}} >
       <div style={{backgroundColor: "#EAEBEB"}}>

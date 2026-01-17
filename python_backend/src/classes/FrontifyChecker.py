@@ -86,6 +86,8 @@ class FrontifyChecker:
         }
         # Validation Class
         self.results: ValidationResult = ValidationResult()
+        # Cache for data_id to page_id lookups
+        self._data_id_to_page_id_cache: Dict[str, str] = {}
 
     def run_state_machine(self):
         while self.current_state:
@@ -358,19 +360,25 @@ class FrontifyChecker:
         stories_dir = os.path.join(self.idml_output_folder, 'Stories')
         if not os.path.exists(stories_dir):
             self.stories_exist = False
+            # Set stories_parser to None in ValidationResult
+            self.results.set_stories_parser(None)
         else:
             # Initialize the StoriesParser and extract story data
             self.stories_parser = StoriesParser(
                 stories_dir, styles_parser, self.fonts_parser, self.spreads_parser)
+            # Set stories_parser in ValidationResult so it's available when adding validations
+            self.results.set_stories_parser(self.stories_parser)
 
         # Map stories to text frames
-        for spread in self.spreads_parser.spreads_obj_list:
-            for text_frame in spread.get_text_frame_obj_list():
-                story = self.stories_parser.get_story_by_id(
-                    text_frame.parent_story_id)
-                text_frame.add_parent_story_obj(
-                    story)
-                story.add_parent_text_frame_id(text_frame.get_frame_id())
+        if self.stories_parser:
+            for spread in self.spreads_parser.spreads_obj_list:
+                for text_frame in spread.get_text_frame_obj_list():
+                    # Use dictionary lookup for O(1) performance instead of O(n) search
+                    story = self.stories_parser.stories_dict.get(
+                        text_frame.parent_story_id)
+                    if story:
+                        text_frame.add_parent_story_obj(story)
+                        story.add_parent_text_frame_id(text_frame.get_frame_id())
         # Map source images to links
         link_dict = {}
         for spread in self.spreads_parser.spreads_obj_list:
@@ -426,6 +434,10 @@ class FrontifyChecker:
             return States.EXIT
         # Initialize the StylesParser
         self.preferences_parser = PreferencesParser(preferences_xml_path)
+
+        # Build data_id to page_id mapping cache for O(1) lookups
+        self._build_data_id_to_page_id_mapping()
+
         return States.MASTERPAGE_CHECK
 
     def ensure_folder_exists(self, path, folder_name):
@@ -525,6 +537,7 @@ class FrontifyChecker:
             # Need index for content context
             for i, grouped_styles in enumerate(grouped_paragraph_styles):
                 grouped_style_id = grouped_styles[0].get_style_id()
+                normalized_style_id = grouped_styles[0].get_normalized_style_id()
 
                 # Check if default paragraph styles were used
                 if grouped_style_id in self.default_par_styles:
@@ -536,13 +549,16 @@ class FrontifyChecker:
                     context_message = self.generate_context_message(
                         content, grouped_paragraph_styles, i)
                     message = f"{content} {context_message}"
+                    # Add text content so multiple occurrences are merged with text_content arrays combined
+                    text_content = [content] if content else None
 
                     self.results.add_error(
                         context=message,
                         error_type=ValidationError.PARAGRAPH_STYLE,
                         page_id=page_id,
-                        identifier=story_id,
-                        data_id=data_id
+                        identifier=normalized_style_id,
+                        data_id=data_id,
+                        text_content=text_content
                     )
 
         return States.HYPHENATION_CHECK
@@ -580,7 +596,6 @@ class FrontifyChecker:
     # ========================================================================================
 
     def hyphenation_check(self) -> States:
-        processed_styles = set()  # So we dont throw duplicate warnings
         hyphenated_default_styles = set()
 
         if not self.stories_exist:
@@ -599,25 +614,22 @@ class FrontifyChecker:
                     hyphenated_default_styles.add(style_id)
                     continue
 
-                if has_hyphenation and (style_id not in processed_styles):
-
+                if has_hyphenation:
                     # Format message with inheritance
                     par_style_hyph_obj = par_style.get_hyphenation_obj()
                     inherited_from = par_style_hyph_obj.get_inherited_from_value()
-                    # message = f"Kerning is '{par_kerning_val}' for paragraph style: {normalized_style_id}"
                     inherited_message = f'Inherited from: {inherited_from}' if inherited_from else ''
-                    # message += inherited_message
+                    # Add text content so multiple occurrences are merged with text_content arrays combined
+                    text_content = [par_style.get_content()] if par_style.get_content() else None
 
                     self.results.add_warning(
                         context=inherited_message,
                         warning_type=ValidationWarning.HYPHENATION,
                         page_id=page_id,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        text_content=text_content
                     )
-
-                    # Add the style_id to the set
-                    processed_styles.add(style_id)
 
         # if hyphenated_default_styles:
         #     self.results.add_warning(
@@ -646,47 +658,79 @@ class FrontifyChecker:
         for story in self.stories_parser.get_stories_data():
             page_id = story.get_page()  # page Self
             story_id = story.get_story_id()
+            # Normalize story_id to ensure it's not None (convert to 'null' if None)
+            story_id = story_id if story_id is not None else 'null'
             paragraph_styles = story.get_paragraph_styles()
             data_id = story.get_parent_text_frame_id()
-            for i, par_style in enumerate(paragraph_styles):
+            for par_idx, par_style in enumerate(paragraph_styles):
 
                 has_overrides = par_style.has_overrides()
                 style_id = par_style.get_style_id()
                 if (style_id in self.default_par_styles) and has_overrides:
                     overrides_default_par = True
 
-                elif has_overrides:
-                    content = par_style.get_content()
-                    context_message = self.generate_context_message(
-                        content, paragraph_styles, i)
-                    message = f"1. Text where issue is:  {content} {context_message} 2. Overrides: {par_style.get_overrides()}"
-                    # Check if content is empty or just space, we need more context as to where the issue is for end user
-
-                    self.results.add_warning(
-                        context=message,
-                        warning_type=ValidationWarning.OVERRIDE,
-                        page_id=page_id,
-                        identifier=story_id,
-                        data_id=data_id
-                    )
-
-                # Now check character overrides
+                # Check character overrides first to see if there are individual occurrences
                 char_styles = par_style.get_child_char_styles()
-                for i, char_style in enumerate(char_styles):
+                has_char_overrides = False
+                for char_idx, char_style in enumerate(char_styles):
                     if char_style.has_overrides():
+                        has_char_overrides = True
                         content = char_style.get_content()
 
                         context_message = self.generate_context_message(
-                            content, char_styles, i)
+                            content, char_styles, char_idx)
                         message = f"1. Text where issue is: {content} {context_message} 2. Overrides: {char_style.get_overrides()}"
+                        text_content = [content] if content else None
+                        # Use data_id (text frame ID) as identifier to group overrides by text frame
+                        # Also ensure text_box_data is populated with data_id for frontend to find story content
+                        if data_id and data_id != 'null' and data_id not in self.results.text_box_data:
+                            # Extract story content keyed by data_id so frontend can find it
+                            story_content = story.get_content()
+                            story_page_id = story.get_page_id()
+                            self.results.text_box_data[data_id] = {
+                                "identifier": data_id,
+                                "content": story_content,
+                                "page_id": story_page_id if story_page_id is not None else ""
+                            }
 
                         self.results.add_warning(
                             context=message,
                             warning_type=ValidationWarning.OVERRIDE,
                             page_id=page_id,
-                            identifier=story_id,
-                            data_id=data_id
+                            identifier=data_id if data_id and data_id != 'null' else 'null',
+                            data_id=data_id,
+                            text_content=text_content
                         )
+
+                # Only report paragraph-level overrides if there are no character-level overrides
+                # This prevents duplicate warnings (one for full item, then individual areas)
+                if has_overrides and not has_char_overrides:
+                    content = par_style.get_content()
+                    context_message = self.generate_context_message(
+                        content, paragraph_styles, par_idx)
+                    message = f"1. Text where issue is:  {content} {context_message} 2. Overrides: {par_style.get_overrides()}"
+                    # Check if content is empty or just space, we need more context as to where the issue is for end user
+                    text_content = [content] if content else None
+                    # Use data_id (text frame ID) as identifier to group overrides by text frame
+                    # Also ensure text_box_data is populated with data_id for frontend to find story content
+                    if data_id and data_id != 'null' and data_id not in self.results.text_box_data:
+                        # Extract story content keyed by data_id so frontend can find it
+                        story_content = story.get_content()
+                        story_page_id = story.get_page_id()
+                        self.results.text_box_data[data_id] = {
+                            "identifier": data_id,
+                            "content": story_content,
+                            "page_id": story_page_id if story_page_id is not None else ""
+                        }
+
+                    self.results.add_warning(
+                        context=message,
+                        warning_type=ValidationWarning.OVERRIDE,
+                        page_id=page_id,
+                        identifier=data_id if data_id and data_id != 'null' else 'null',
+                        data_id=data_id,
+                        text_content=text_content
+                    )
 
         # if overrides_default_par:
         #     self.results.add_warning(
@@ -721,13 +765,15 @@ class FrontifyChecker:
                     normalized_style_id = par_style.get_normalized_style_id()
                     inherited_from = par_kerning_obj.get_inherited_from_value()
                     inherited_message = f'Inherited from: {inherited_from}' if inherited_from else ''
+                    text_content = [par_style.get_content()] if par_style.get_content() else None
 
                     self.results.add_error(
                         context=inherited_message,
                         error_type=ValidationError.KERNING,
                         page_id=page_id,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        text_content=text_content
                     )
 
                 # Now check character overrides
@@ -740,13 +786,15 @@ class FrontifyChecker:
                         char_normalized_style_id = char_style.get_normalized_style_id()
                         inherited_from = char_kerning_obj.get_inherited_from_value()
                         inherited_message = f'Inherited from: {inherited_from}' if inherited_from else ''
+                        text_content = [char_style.get_content()] if char_style.get_content() else None
 
                         self.results.add_error(
                             context=inherited_message,
                             error_type=ValidationError.KERNING_CHAR,
                             page_id=page_id,
                             identifier=char_normalized_style_id,
-                            data_id=data_id
+                            data_id=data_id,
+                            text_content=text_content
                         )
 
         return States.FONTS_INCLUDED_CHECK
@@ -987,6 +1035,10 @@ class FrontifyChecker:
                     if asset:
                         a, b, c, d, e, f = map(float, asset.split())
                         context = "Image inside Container" if idx == 0 else "Image Container"
+                        # Determine error and warning types based on whether it's the image or container
+                        is_image = (idx == 0)
+                        error_type = ValidationError.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationError.IMAGE_TRANSFORMATION_CONTAINER
+                        warning_type = ValidationWarning.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationWarning.IMAGE_TRANSFORMATION_CONTAINER
                         # Check for rotation
                         rotation_angle = math.atan2(b, a)
                         rotation_angle_degrees = math.degrees(rotation_angle)
@@ -995,7 +1047,7 @@ class FrontifyChecker:
                             message = f"{context} has a horizontal flip transformation."
                             self.results.add_error(
                                 context=message,
-                                error_type=ValidationError.IMAGE_TRANSFORMATION,
+                                error_type=error_type,
                                 page_id=page_id,
                                 identifier=file_name,
                                 data_id=rectangle_id
@@ -1005,7 +1057,7 @@ class FrontifyChecker:
                             message = f"{context} has a vertical flip transformation."
                             self.results.add_error(
                                 context=message,
-                                error_type=ValidationError.IMAGE_TRANSFORMATION,
+                                error_type=error_type,
                                 page_id=page_id,
                                 identifier=file_name,
                                 data_id=rectangle_id
@@ -1015,7 +1067,7 @@ class FrontifyChecker:
                             message = f"{context} has been rotated by {rotation_angle_degrees:.2f} degrees."
                             self.results.add_warning(
                                 context=message,
-                                warning_type=ValidationWarning.IMAGE_TRANSFORMATION,
+                                warning_type=warning_type,
                                 page_id=page_id,
                                 identifier=file_name,
                                 data_id=rectangle_id
@@ -1026,7 +1078,7 @@ class FrontifyChecker:
                             message = f"{context} has skew transformations. Skew factors: b={b}, c={c}"
                             self.results.add_error(
                                 context=message,
-                                error_type=ValidationError.IMAGE_TRANSFORMATION,
+                                error_type=error_type,
                                 page_id=page_id,
                                 identifier=file_name,
                                 data_id=rectangle_id
@@ -1483,33 +1535,42 @@ class FrontifyChecker:
     # ========================================================================================
     # Helper methods
     # ========================================================================================
+    def _build_data_id_to_page_id_mapping(self):
+        """Pre-compute data_id to page_id mapping for O(1) lookups.
+        Maps both link rectangle IDs and text frame IDs to their page IDs.
+        """
+        if not self.spreads_parser:
+            return
+
+        for spread in self.spreads_parser.get_spreads_obj_list():
+            pages = spread.get_pages()
+            if not pages or len(pages) == 0:
+                continue
+            page_id = pages[0].get("self", '')
+
+            # Map link rectangle IDs to page_id
+            for link in spread.get_links_obj_list():
+                link_id = link.get_rectangle_link_id()
+                if link_id:
+                    self._data_id_to_page_id_cache[link_id] = page_id
+
+            # Map text frame IDs to page_id
+            for text_frame in spread.get_text_frame_obj_list():
+                frame_id = text_frame.get_frame_id()
+                if frame_id:
+                    self._data_id_to_page_id_cache[frame_id] = page_id
+
     def find_page_id_from_data_id(self, data_id: str) -> str:
         """
         Find page_id (page Self) from data_id.
         data_id can be either a rectangle_link_id (for images) or a text_frame_id (for text frames).
         Returns the first page's Self from the spread containing the element, or empty string if not found.
+        Uses cached mapping for O(1) lookup.
         """
         if not data_id or data_id == 'null':
             return ''
 
-        # Search through spreads for links with matching rectangle_link_id
-        for spread in self.spreads_parser.get_spreads_obj_list():
-            for link in spread.get_links_obj_list():
-                if link.get_rectangle_link_id() == data_id:
-                    # Return the first page's Self from this spread
-                    pages = spread.get_pages()
-                    if pages and len(pages) > 0:
-                        return pages[0].get("self", '')
-
-            # Search through text frames with matching frame_id
-            for text_frame in spread.get_text_frame_obj_list():
-                if text_frame.get_frame_id() == data_id:
-                    # Return the first page's Self from this spread
-                    pages = spread.get_pages()
-                    if pages and len(pages) > 0:
-                        return pages[0].get("self", '')
-
-        return ''
+        return self._data_id_to_page_id_cache.get(data_id, '')
 
     def calculate_style_total_count(self, style_type='paragraph'):
         """Fetch all styles from documents and count unique instances."""

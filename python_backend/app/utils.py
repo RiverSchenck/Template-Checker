@@ -1,9 +1,11 @@
 import os
 import shutil
+import time
 import urllib.request
 import urllib.error
 from flask import request, current_app, jsonify
 from werkzeug.utils import secure_filename
+from .analytics import log_analytics_to_supabase
 
 
 def upload_file():
@@ -24,13 +26,45 @@ def upload_file():
         return {'status': 'error', 'error': {'message': 'An error occurred during processing.', 'details': str(e)}}
 
 
-def start_check(checker, file_path: str):
+def start_check(checker, file_path: str, source_type: str = 'api'):
     """Run the checker on the uploaded file and return the results."""
     try:
+        # Track start time for duration calculation
+        start_time = time.time()
+
+        # Get file size
+        file_size_bytes = os.path.getsize(file_path) if os.path.exists(file_path) else 0
+
         checker.set_source_file_path(file_path)
         checker.run_state_machine()
 
+        # Calculate duration in milliseconds
+        end_time = time.time()
+        duration_ms = int((end_time - start_time) * 1000)
+
         checker_json = checker.results.get_formatted_results_json()
+
+        # Add analytics data to results
+        checker_json['analytics'] = {
+            'duration_ms': duration_ms,
+            'source_type': source_type,
+            'file_size_bytes': file_size_bytes
+        }
+
+        # Log analytics to Supabase (non-blocking - don't fail validation if this fails)
+        try:
+            template_name = checker_json.get('template_name', 'Unknown')
+            log_analytics_to_supabase(
+                template_name=template_name,
+                source_type=source_type,
+                duration_ms=duration_ms,
+                file_size_bytes=file_size_bytes,
+                results_json=checker_json
+            )
+        except Exception as e:
+            # Log error but don't fail the validation
+            print(f"Warning: Failed to log analytics to Supabase: {e}")
+
         result_json = {
             "type": "data",
             "content": {

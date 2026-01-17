@@ -18,7 +18,7 @@ const ValidationStyle = ({ validationType, category, items, classifierData }: Va
         warnings: 'warning',
         infos: 'info'
       };
-      
+
       const alertStatus = statusMapping[validationType] || 'info';
 
       return (
@@ -41,15 +41,15 @@ const ValidationStyle = ({ validationType, category, items, classifierData }: Va
                             </List.Item>
                         )}
                     />
-                    <Text style={{ whiteSpace: 'nowrap', marginLeft: 'auto', alignSelf: 'flex-start', marginTop: '8px' }}> 
+                    <Text style={{ whiteSpace: 'nowrap', marginLeft: 'auto', alignSelf: 'flex-start', marginTop: '8px' }}>
                         {renderHelpLink(classifierData?.help_article || null)}
                     </Text>
                 </div>
             }
         />
     );
-    
-    
+
+
 };
 
 

@@ -88,7 +88,7 @@ const ValidationStyle = ({ validationType, category, items, classifierData, sele
 
     const handleItemClick = async (item: ValidationItem) => {
         if (item.data_id) {
-            await highlightElement(item.data_id);
+            await highlightElement(item.data_id, item.text_content);
         }
     };
 
