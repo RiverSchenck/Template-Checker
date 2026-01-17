@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button, Statistic, Rate, Progress, Typography, Divider } from 'antd';
-import { UpOutlined, DownOutlined, ArrowUpOutlined, ArrowDownOutlined, SwapOutlined } from '@ant-design/icons';
+import { UpOutlined, DownOutlined } from '@ant-design/icons';
 import { ValidationResult, ValidationCategory, CategoryDetail } from '../../types';
 
 const { Text } = Typography
@@ -8,8 +8,6 @@ const { Text } = Typography
 // Define the types for the props
 interface StatsToggleProps {
   jsonResponse: ValidationResult;
-  previousJsonResponse?: ValidationResult | null;
-  seeDetails?: Boolean;
 }
 
 interface StatisticColumnProps {
@@ -81,22 +79,6 @@ function calculateTotalIssuesFromCategory(categoryData?: CategoryDetail): number
   return 0;
 }
 
-const calculateChange = (current: number, previous: number) => {
-  if (previous === undefined) {
-    return 0;
-  }
-  return (current - previous);
-};
-
-const getChangeDetails = (change: number) => {
-  if (change > 0) {
-    return { color: '#cf1322', icon: <ArrowUpOutlined /> }; // Red, Arrow Up
-  } else if (change < 0) {
-    return { color: '#3f8600', icon: <ArrowDownOutlined /> }; // Green, Arrow Down
-  } else {
-    return { color: '#d9d9d9', icon: <SwapOutlined /> }; // Gray, Swap
-  }
-};
 
 
 const defaultKeys: (keyof ValidationResult)[] = [
@@ -104,14 +86,8 @@ const defaultKeys: (keyof ValidationResult)[] = [
 ];
 
 
-function StatsToggle({ jsonResponse, previousJsonResponse, seeDetails }: StatsToggleProps) {
-  const [showStats, setShowStats] = useState(!!previousJsonResponse || !!seeDetails);
-
-  useEffect(() => {
-    if (previousJsonResponse || seeDetails) {
-      setShowStats(true);
-    }
-  }, [previousJsonResponse, seeDetails]);
+function StatsToggle({ jsonResponse }: StatsToggleProps) {
+  const [showStats, setShowStats] = useState(false);
 
   const generateStatistics = (key: keyof ValidationResult, index: number): JSX.Element => {
     const categoryData = jsonResponse[key] as CategoryDetail;
@@ -130,41 +106,12 @@ function StatsToggle({ jsonResponse, previousJsonResponse, seeDetails }: StatsTo
         position: 'relative'
       }}>
         <StatisticColumn title={title} value={totalIssues} suffix={total_count} />
-        {previousJsonResponse && renderChangeStatistics(key, totalIssues)}
       </Col><Col>
           {index !== defaultKeys.length - 1 && <Divider type="vertical" style={{ height: '100%', position: 'absolute', right: 0, top: 0 }} />}
         </Col></>
     );
   };
 
-  const renderChangeStatistics = (key: keyof ValidationResult, totalIssues: number): JSX.Element | null => {
-    // Use optional chaining to safely access the details
-    const previousCategoryData = previousJsonResponse?.[key] as CategoryDetail | undefined;
-
-    // Check if previousCategoryData exists before proceeding
-    if (previousCategoryData) {
-      const previousTotalIssues = calculateTotalIssuesFromCategory(previousCategoryData);
-      console.log("Previous Total:", previousTotalIssues)
-      console.log("Total:", totalIssues)
-      const difference = calculateChange(totalIssues, previousTotalIssues);
-      const { color, icon } = getChangeDetails(difference);
-
-      return (
-        <div style={{ marginTop: '10px' }}>
-          <Text type='secondary' style={{ fontSize: '11px' }}>Change from Previous:</Text>
-          <Statistic
-            value={Math.abs(difference)}
-            precision={2}
-            valueStyle={{ color, fontSize: '20px' }}
-            prefix={icon}
-            // suffix="%"
-            style={{ textAlign: 'center' }} />
-        </div>
-      );
-    }
-    // Return null or render nothing if there is no previous data
-    return null;
-  };
 
   return (
     <>

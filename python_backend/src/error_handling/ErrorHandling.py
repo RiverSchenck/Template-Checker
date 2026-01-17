@@ -51,35 +51,60 @@ class ValidationResult():
 
     def add_validation(self, validation_type: str, classifier, context: str = '',
                       page_id: str = '', identifier: str = 'null',
-                      data_id: str = 'null'):
+                      data_id: str = 'null', text_content: list = None):
         """
         Unified method for adding errors, warnings, and infos.
         Stores validations directly in category-based structure.
 
         Args:
             page_id: page Self (page identifier) - will be mapped to page_name later in JSON generation
+            text_content: list of text strings where the issue occurs (for PAR_STYLE, CHAR_STYLE, and OVERRIDE)
         """
-        validation = ValidationContext(context, classifier, page_id, identifier, data_id)
-
         # Get category from classifier and convert to response key
         category = classifier.category
         category_key = self._category_to_response_key(category)
 
-        # Handle special text_box case for identifier extraction
-        if category == ValidationCategory.TEXT_BOX and identifier not in self.text_box_data and self.stories_parser:
-            self.extract_text_box_content(identifier)
+        # Check if validation with same key already exists for merging text_content
+        # Skip merging for OVERRIDE validations - they should be reported as separate warnings
+        from src.error_handling.ValidationClassifier import ValidationWarning
+        is_override = (classifier.category == ValidationCategory.TEXT_BOX and
+                      classifier.value == ValidationWarning.OVERRIDE.value)
 
-        # Store directly in the category-based structure
-        self.validations[category_key][identifier][validation_type].append(validation)
+        existing_validation = None
+        if text_content and len(text_content) > 0 and not is_override:
+            existing_validations = self.validations[category_key][identifier][validation_type]
+            for existing in existing_validations:
+                if (existing.get_page_id() == page_id and
+                    existing.get_data_id() == data_id and
+                    existing.classifier_type == classifier.value):
+                    existing_validation = existing
+                    break
 
-        # Track classifier metadata
-        classifier_key = classifier.value
-        if classifier_key not in self.validation_classifiers:
-            self.validation_classifiers[classifier_key] = {
-                "label": classifier.label,
-                "message": classifier.message if classifier.message else "",
-                "help_article": classifier.help_article if classifier.help_article else None
-            }
+        if existing_validation:
+            # Merge text_content arrays
+            existing_text_content = existing_validation.get_text_content()
+            merged_text_content = list(set(existing_text_content + text_content))  # Remove duplicates
+            existing_validation.text_content = merged_text_content
+        else:
+            # Create new validation
+            validation = ValidationContext(context, classifier, page_id, identifier, data_id, text_content)
+            self.validations[category_key][identifier][validation_type].append(validation)
+
+            # Handle special text_box case for identifier extraction
+            # Identifiers for TEXT_BOX category are story_id
+            if category == ValidationCategory.TEXT_BOX and self.stories_parser:
+                story_id = identifier
+                if story_id not in self.text_box_data:
+                    self.extract_text_box_content(story_id)
+
+            # Track classifier metadata
+            classifier_key = classifier.value
+            if classifier_key not in self.validation_classifiers:
+                self.validation_classifiers[classifier_key] = {
+                    "label": classifier.label,
+                    "message": classifier.message if classifier.message else "",
+                    "help_article": classifier.help_article if classifier.help_article else None
+                }
 
     def add_custom_error(self, message: str, error_type: 'ValidationError', page_id: str = ''):
         """Add custom error with formatted message."""
@@ -91,17 +116,17 @@ class ValidationResult():
             message += f' [Page {page_name_for_message}]'
         self.add_validation('errors', error_type, message, page_id, 'null', 'null')
 
-    def add_error(self, context: str, error_type: 'ValidationError', page_id: str = '', identifier='null', data_id='null'):
+    def add_error(self, context: str, error_type: 'ValidationError', page_id: str = '', identifier='null', data_id='null', text_content: list = None):
         """Add error validation."""
-        self.add_validation('errors', error_type, context, page_id, identifier, data_id)
+        self.add_validation('errors', error_type, context, page_id, identifier, data_id, text_content)
 
-    def add_warning(self, context: str, warning_type: 'ValidationWarning', page_id: str = '', identifier='null', data_id='null'):
+    def add_warning(self, context: str, warning_type: 'ValidationWarning', page_id: str = '', identifier='null', data_id='null', text_content: list = None):
         """Add warning validation."""
-        self.add_validation('warnings', warning_type, context, page_id, identifier, data_id)
+        self.add_validation('warnings', warning_type, context, page_id, identifier, data_id, text_content)
 
-    def add_info(self, context: str, info_type: 'ValidationInfo', page_id: str = '', identifier='null', data_id='null'):
+    def add_info(self, context: str, info_type: 'ValidationInfo', page_id: str = '', identifier='null', data_id='null', text_content: list = None):
         """Add info validation."""
-        self.add_validation('infos', info_type, context, page_id, identifier, data_id)
+        self.add_validation('infos', info_type, context, page_id, identifier, data_id, text_content)
 
     def add_template_name(self, template_name: str):
         self.template_name = template_name
@@ -192,8 +217,10 @@ class ValidationResult():
     def extract_text_box_content(self, identifier):
         story = self.stories_parser.get_story_by_id(identifier)
         if story:
-            content = story.get_content()
-            page_id = story.get_page()  # page Self
+            content = story.get_content()  # Get full story content
+            page_id = story.get_page_id()  # Get page_id (page Self) for mapping to page_name later
+            # Ensure page_id is not None - convert to empty string if needed
+            page_id = page_id if page_id is not None else ""
             # page_name will be mapped later in JSON generation
             self.text_box_data[identifier] = {
                 "identifier": identifier, "content": content, "page_id": page_id}
@@ -206,9 +233,10 @@ class ValidationResult():
         self.spread_to_pages = {}
         for spread_data in self.spreads_parser.get_spreads_obj_list():
             spread_self = spread_data.get_spread_self()
-            if spread_self:
+            if spread_self:  # Ensure spread_self is not None or empty
                 pages = spread_data.get_pages()
-                page_selves = [page["self"] for page in pages if page.get("self")]
+                # Filter out None values explicitly
+                page_selves = [page["self"] for page in pages if page.get("self") is not None and page.get("self")]
                 if page_selves:
                     self.spread_to_pages[spread_self] = page_selves
 
@@ -226,13 +254,46 @@ class ValidationResult():
                 if page_self:
                     self.pages[page_self] = page_name
 
+    def _build_validation_item_json(self, item: ValidationContext, category_key: str, page_to_spread: dict) -> dict:
+        """Build JSON representation of a validation item, including text_content when applicable."""
+        from src.error_handling.ValidationClassifier import ValidationWarning
+
+        # Ensure page_id is not None for dictionary lookups
+        page_id = item.get_page_id() if item.get_page_id() is not None else ""
+
+        base_item = {
+            "validationClassifier": item.classifier_type,
+            "context": item.get_formatted_message(),
+            "identifier": item.get_identifier(),
+            "page_id": page_id,  # page Self (stored directly)
+            "page_name": self.pages.get(page_id, "") if page_id else "",  # mapped from pages
+            "spread_id": page_to_spread.get(page_id, "") if page_id else "",  # mapped from spread_to_pages
+            "data_id": item.get_data_id()
+        }
+
+        # Include text_content for PAR_STYLE, CHAR_STYLE, and OVERRIDE (TEXT_BOX category)
+        should_include_text_content = (
+            category_key == 'par_styles' or
+            category_key == 'char_styles' or
+            (category_key == 'text_boxes' and item.classifier_type == ValidationWarning.OVERRIDE.value)
+        )
+
+        if should_include_text_content:
+            text_content = item.get_text_content()
+            if text_content and len(text_content) > 0:
+                base_item["text_content"] = text_content
+
+        return base_item
+
     def get_formatted_results_json(self) -> dict:
         """Build response JSON directly from self.validations structure."""
         # Build reverse lookup: page_id -> spread_id for efficient lookups
         page_to_spread = {}
         for spread_self, page_selves in self.spread_to_pages.items():
-            for page_self in page_selves:
-                page_to_spread[page_self] = spread_self
+            if spread_self:  # Ensure spread_self is not None
+                for page_self in page_selves:
+                    if page_self:  # Ensure page_self is not None
+                        page_to_spread[page_self] = spread_self
 
         # Build category sections dynamically from stored validations
         categories_response = {}
@@ -246,41 +307,19 @@ class ValidationResult():
             details = {}
 
             for identifier, type_dict in category_validations.items():
-                details[identifier] = {
+                # Ensure identifier is not None - convert to string if needed
+                safe_identifier = identifier if identifier is not None else 'null'
+                details[safe_identifier] = {
                     'errors': [
-                        {
-                            "validationClassifier": item.classifier_type,
-                            "context": item.get_formatted_message(),
-                            "identifier": item.get_identifier(),
-                            "page_id": item.get_page_id(),  # page Self (stored directly)
-                            "page_name": self.pages.get(item.get_page_id(), ""),  # mapped from pages
-                            "spread_id": page_to_spread.get(item.get_page_id(), ""),  # mapped from spread_to_pages
-                            "data_id": item.get_data_id()
-                        }
+                        self._build_validation_item_json(item, category_key, page_to_spread)
                         for item in type_dict['errors']
                     ],
                     'warnings': [
-                        {
-                            "validationClassifier": item.classifier_type,
-                            "context": item.get_formatted_message(),
-                            "identifier": item.get_identifier(),
-                            "page_id": item.get_page_id(),  # page Self (stored directly)
-                            "page_name": self.pages.get(item.get_page_id(), ""),  # mapped from pages
-                            "spread_id": page_to_spread.get(item.get_page_id(), ""),  # mapped from spread_to_pages
-                            "data_id": item.get_data_id()
-                        }
+                        self._build_validation_item_json(item, category_key, page_to_spread)
                         for item in type_dict['warnings']
                     ],
                     'infos': [
-                        {
-                            "validationClassifier": item.classifier_type,
-                            "context": item.get_formatted_message(),
-                            "identifier": item.get_identifier(),
-                            "page_id": item.get_page_id(),  # page Self (stored directly)
-                            "page_name": self.pages.get(item.get_page_id(), ""),  # mapped from pages
-                            "spread_id": page_to_spread.get(item.get_page_id(), ""),  # mapped from spread_to_pages
-                            "data_id": item.get_data_id()
-                        }
+                        self._build_validation_item_json(item, category_key, page_to_spread)
                         for item in type_dict['infos']
                     ]
                 }
@@ -309,8 +348,12 @@ class ValidationResult():
         mapped_text_box_data = {}
         for identifier, text_box in self.text_box_data.items():
             page_id = text_box.get("page_id", "")
-            page_name = self.pages.get(page_id, "")
-            mapped_text_box_data[identifier] = {
+            # Ensure page_id is not None for dictionary lookup
+            page_id = page_id if page_id is not None else ""
+            page_name = self.pages.get(page_id, "") if page_id else ""
+            # Ensure identifier is not None
+            safe_identifier = identifier if identifier is not None else 'null'
+            mapped_text_box_data[safe_identifier] = {
                 "identifier": text_box.get("identifier", ""),
                 "content": text_box.get("content", ""),
                 "page_id": page_id,

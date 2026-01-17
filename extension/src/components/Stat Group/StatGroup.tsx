@@ -4,18 +4,15 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ValidationResult } from '../../types';
 import countValidationIssues from '../ValidationCount'
 import StatsToggle from './StatDetails';
-import ReuploadButton from './ReuploadButton';
 
 const { Title } = Typography;
 
 type ValidationStatsProps = {
   jsonResponse: ValidationResult;
   checkerResponse: (jsonResponse: ValidationResult) => void;
-  previousJsonResponse?: ValidationResult | null;
-  seeDetails?: Boolean;
 };
 
-function ValidationStats({ jsonResponse, checkerResponse, previousJsonResponse, seeDetails }: ValidationStatsProps) {
+function ValidationStats({ jsonResponse, checkerResponse }: ValidationStatsProps) {
   const templateName = jsonResponse.template_name;
   const { totalErrors, totalWarnings, totalInfos } = countValidationIssues(jsonResponse)
 
@@ -23,10 +20,7 @@ function ValidationStats({ jsonResponse, checkerResponse, previousJsonResponse, 
   return (
     <Card
       title={
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-          <Title level={5} style={{ textAlign: 'left', marginBottom: 0 }}>{templateName}</Title>
-          <ReuploadButton checkerResponse={checkerResponse} />
-        </div>
+        <Title level={5} style={{ textAlign: 'left', marginBottom: 0 }}>{templateName}</Title>
       }
       bordered
       style={{
@@ -39,7 +33,7 @@ function ValidationStats({ jsonResponse, checkerResponse, previousJsonResponse, 
         flexDirection: 'column',
         height: '100%',
         marginTop: 0,
-        marginBottom: '30px',
+        marginBottom: 0,
       }}
       size="small"
     >
@@ -69,7 +63,7 @@ function ValidationStats({ jsonResponse, checkerResponse, previousJsonResponse, 
             />
           </Col>
         </Row>
-        <StatsToggle jsonResponse={jsonResponse} previousJsonResponse={previousJsonResponse} seeDetails={seeDetails} />
+        <StatsToggle jsonResponse={jsonResponse} />
       </div>
     </Card>
   );

@@ -11,25 +11,12 @@ const { Content } = Layout;
 
 export default function App() {
   const [checkerResults, setCheckerResults] = useState<ValidationResult | null>(null);
-  const [seeDetails, setSeeDetails] = useState<Boolean>(false);
-  const [previousCheckerResults, setPreviousCheckerResults] = useState<ValidationResult | null>(null);
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const { menuKey } = useMenu();
 
-  const checkerResponse = (jsonResponse: ValidationResult, setPrevious: boolean = false) => {
-    if (setPrevious && checkerResults) {
-      setPreviousCheckerResults(checkerResults);
-    }
-    else {
-      setPreviousCheckerResults(null)
-    }
-    setSeeDetails(false)
+  const checkerResponse = (jsonResponse: ValidationResult) => {
     setCheckerResults(jsonResponse);
   };
-
-  const handleSeeDetails = (value: Boolean) => {
-    setSeeDetails(value);
-  }
 
 
   const componentsSwitch = (key: string) => {
@@ -38,7 +25,7 @@ export default function App() {
       case 'upload-template':
         return <FileUploadPage checkerResponse={checkerResponse} />;
       case 'results':
-        return checkerResults ? <ValidationList jsonResponse={checkerResults} checkerResponse={checkerResponse} previousJsonResponse={previousCheckerResults || null} seeDetails={seeDetails} /> : null;
+        return checkerResults ? <ValidationList jsonResponse={checkerResults} checkerResponse={checkerResponse} /> : null;
       default:
         return <div>Uh oh, something went wrong.</div>;
     }

@@ -37,8 +37,14 @@ const ValidationCards = ({ identifierData, category, textBoxData, validationClas
   return (
     <>
       {Object.entries(identifierData).map(([identifier, entries]) => {
-        const textBoxContent = category === ValidationCategory.text_boxes ? textBoxData[identifier]?.content : null;
-        const textBoxPage = category === ValidationCategory.text_boxes ? textBoxData[identifier]?.page_name : null;
+        // For text_boxes category, extract story_id from identifier (handles formats like "u2efb_par_0" or "u2efb")
+        let storyId = identifier;
+        if (category === ValidationCategory.text_boxes && identifier.includes("_par_")) {
+          storyId = identifier.split("_par_")[0];
+        }
+        const textBoxContent = category === ValidationCategory.text_boxes ? textBoxData[storyId]?.content : null;
+        const textBoxPage = category === ValidationCategory.text_boxes ? textBoxData[storyId]?.page_name : null;
+
         const dataIds = getAllDataIds(entries);
         const hasClickableDataIds = dataIds.length > 0;
 
@@ -60,8 +66,20 @@ const ValidationCards = ({ identifierData, category, textBoxData, validationClas
         // Check if this card should be highlighted (contains selected data_id)
         const shouldHighlight = selectedDataId && dataIds.includes(selectedDataId);
 
+        // Determine card title - use text frame content (truncated to 500 chars) for text_boxes category, identifier for others
+        const truncateText = (text: string | null | undefined, maxLength: number): string | undefined => {
+          if (!text) return undefined;
+          const trimmed = text.trim();
+          if (trimmed.length === 0) return undefined;
+          return trimmed.length > maxLength ? trimmed.substring(0, maxLength) + '...' : trimmed;
+        };
+        const cardTitle = category === ValidationCategory.text_boxes
+          ? truncateText(textBoxContent, 500) || '[Frame is empty]'
+          : (identifier !== 'null' ? identifier : undefined);
+
         return (
           <Card
+            title={cardTitle}
             size='small'
             style={{
               backgroundColor: shouldHighlight ? '#FFF9E6' : '#FAFAFA',
@@ -87,14 +105,8 @@ const ValidationCards = ({ identifierData, category, textBoxData, validationClas
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {textBoxContent && (
-                <Text>Text Box: <span>{textBoxContent}</span></Text>
-              )}
               {textBoxPage && (
                 <Text>Page: <span>{textBoxPage}</span></Text>
-              )}
-              {!textBoxContent && identifier !== 'null' && (
-                <Text>{identifier}</Text>
               )}
               <Divider type='horizontal' style={{ marginTop: '0px', marginBottom: '5px' }} />
               {renderValidationItems(entries.errors, 'errors')}

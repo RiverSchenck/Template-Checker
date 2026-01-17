@@ -3,8 +3,9 @@
 /**
  * Highlight elements on the active tab by data-id attribute
  * @param dataId - The data-id attribute value to match on the page
+ * @param textContent - Optional array of text strings to highlight within the element
  */
-export async function highlightElement(dataId: string): Promise<void> {
+export async function highlightElement(dataId: string, textContent?: string[]): Promise<void> {
   try {
     if (typeof chrome === 'undefined' || !chrome.tabs) {
       console.warn('Chrome extension API not available');
@@ -50,9 +51,10 @@ export async function highlightElement(dataId: string): Promise<void> {
     try {
       await chrome.tabs.sendMessage(activeTab.id, {
         action: 'highlight',
-        dataId: dataId
+        dataId: dataId,
+        textContent: textContent
       });
-      console.log(`Highlighted elements with data-id: ${dataId}`);
+      console.log(`Highlighted elements with data-id: ${dataId}`, textContent ? `with ${textContent.length} text items` : '');
     } catch (messageError: any) {
       // If message fails (content script might not be loaded), fall back to script injection
       if (messageError.message?.includes('Could not establish connection') ||
@@ -62,7 +64,7 @@ export async function highlightElement(dataId: string): Promise<void> {
         if (chrome.scripting) {
           await chrome.scripting.executeScript({
             target: { tabId: activeTab.id },
-            func: (dataId: string) => {
+            func: (dataId: string, textContent: string[] | null) => {
               // Clear previous highlights
               const previousHighlights = document.querySelectorAll('[data-highlighted-by-extension]');
               previousHighlights.forEach(el => {
@@ -71,17 +73,23 @@ export async function highlightElement(dataId: string): Promise<void> {
                 (el as HTMLElement).style.backgroundColor = '';
               });
 
-              // Find and highlight elements
-              const selector = `[data-id="${dataId}"]`;
+              // Find and highlight elements - only elements with both data-id and o-canvas__item--selectable class
+              const selector = `[data-id="${dataId}"].o-canvas__item--selectable`;
               const elements = document.querySelectorAll(selector);
 
               if (elements.length === 0) {
-                console.warn(`No elements found with data-id="${dataId}"`);
+                console.warn(`No elements found with data-id="${dataId}" and class o-canvas__item--selectable`);
                 return;
               }
 
               elements.forEach((element: Element) => {
                 const htmlEl = element as HTMLElement;
+
+                // If textContent is provided and highlightTextWithinElement is available, use it
+                if (textContent && textContent.length > 0 && (window as any).highlightTextWithinElement) {
+                  (window as any).highlightTextWithinElement(htmlEl, textContent);
+                }
+
                 htmlEl.setAttribute('data-highlighted-by-extension', 'true');
                 htmlEl.style.outline = '3px solid #B39DFD';
                 htmlEl.style.outlineOffset = '2px';
@@ -92,7 +100,7 @@ export async function highlightElement(dataId: string): Promise<void> {
 
               console.log(`Highlighted ${elements.length} element(s) with data-id="${dataId}"`);
             },
-            args: [dataId]
+            args: [dataId, textContent || null]
           });
         }
       } else {

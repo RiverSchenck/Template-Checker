@@ -35,6 +35,7 @@
         "<all_urls>"
       ],
       "js": [
+        "content-scripts/frontifyDetector.js",
         "content-scripts/highlighting.js",
         "content-scripts/elementSelection.js",
         "content-scripts/frontifyProgressBar.js",

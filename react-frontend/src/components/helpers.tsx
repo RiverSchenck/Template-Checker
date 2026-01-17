@@ -60,16 +60,12 @@ export function transformDataForTable(identifierData: IdentifierGroupedData, val
         padding: '5px 10px',
         borderRadius: '4px',
         lineHeight: 'normal',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
         display: 'flex',
         alignItems: 'center',
-        maxWidth: '190px',
-        flex: 1,
+        maxWidth: card ? '100%' : '190px',
       };
 
-      const style = card ?  { ...baseStyle, width: '185px' } : baseStyle ;
+      const style = card ? { ...baseStyle } : baseStyle;
 
     const getColor = (type: ValidationType) => {
       switch (type) {
@@ -82,9 +78,9 @@ export function transformDataForTable(identifierData: IdentifierGroupedData, val
 
     const getIcon = (type: ValidationType) => {
       switch (type) {
-        case 'errors': return <CloseCircleOutlined style={{ color: 'red', fontSize: '20px',paddingRight:'5px' }} />;
-        case 'warnings': return <WarningOutlined style={{ color: 'orange',fontSize: '20px', paddingRight:'5px' }} />;
-        case 'infos': return <InfoCircleOutlined style={{ color: 'blue',fontSize: '20px', paddingRight:'5px' }} />;
+        case 'errors': return <CloseCircleOutlined style={{ color: 'red', fontSize: '20px', paddingRight: '5px', flexShrink: 0 }} />;
+        case 'warnings': return <WarningOutlined style={{ color: 'orange', fontSize: '20px', paddingRight: '5px', flexShrink: 0 }} />;
+        case 'infos': return <InfoCircleOutlined style={{ color: 'blue', fontSize: '20px', paddingRight: '5px', flexShrink: 0 }} />;
         default: return null;
       }
     };
@@ -92,7 +88,7 @@ export function transformDataForTable(identifierData: IdentifierGroupedData, val
     return (
       <Tag color={getColor(type)} style={style}>
         {getIcon(type)}
-        <div style={{ flex: 1, textAlign: 'center', marginRight: '5px' }}>
+        <div style={{ flex: 1, textAlign: 'center', marginRight: '5px', wordBreak: 'break-word' }}>
           {label}
         </div>
       </Tag>

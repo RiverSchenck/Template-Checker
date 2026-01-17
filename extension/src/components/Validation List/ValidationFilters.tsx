@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Space, Typography, Switch, Button } from 'antd';
+import { Select, Space, Typography, Switch } from 'antd';
 
 const { Text } = Typography;
 const { Option } = Select;

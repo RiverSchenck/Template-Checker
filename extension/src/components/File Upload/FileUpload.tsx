@@ -5,8 +5,7 @@ import { ValidationResult } from '../../types';
 import '../../App.css';
 
 interface FileUploadPageProps {
-  checkerResponse: (jsonResponse: ValidationResult, setPrevious: boolean) => void;
-  setPrevious?: boolean;
+  checkerResponse: (jsonResponse: ValidationResult) => void;
   onUploadComplete?: () => void;
 }
 
@@ -16,7 +15,7 @@ interface CustomResponse {
   };
 }
 
-function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete }: FileUploadPageProps) {
+function FileUploadPage({ checkerResponse, onUploadComplete }: FileUploadPageProps) {
   const [url, setUrl] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,15 +28,18 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
 
   const getAuthHeaders = (): Record<string, string> => {
     const token = process.env.REACT_APP_AUTH_TOKEN;
+    const headers: Record<string, string> = {
+      'X-Source': 'extension'
+    };
     if (token) {
-      return { 'Authorization': `Bearer ${token}` };
+      headers['Authorization'] = `Bearer ${token}`;
     }
-    return {};
+    return headers;
   };
 
   const handleUploadResults = (response: CustomResponse) => {
     const results: ValidationResult = response?.content?.results;
-    checkerResponse(results, setPrevious);
+    checkerResponse(results);
     if (onUploadComplete) {
       onUploadComplete();
     }

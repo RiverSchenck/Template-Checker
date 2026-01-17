@@ -12,13 +12,11 @@ const { Text } = Typography;
 
 type ValidationListProps = {
   jsonResponse: ValidationResult;
-  previousJsonResponse?: ValidationResult | null;
   checkerResponse: (jsonResponse: ValidationResult) => void;
-  seeDetails?: Boolean;
 };
 
 
-function ValidationList({ jsonResponse, previousJsonResponse, checkerResponse, seeDetails }: ValidationListProps) {
+function ValidationList({ jsonResponse, checkerResponse }: ValidationListProps) {
   const [filters, setFilters] = useState<FilterState>({
     spreadId: null,
     pageId: null,
@@ -418,9 +416,9 @@ function ValidationList({ jsonResponse, previousJsonResponse, checkerResponse, s
     <div style={{ width: '100%', height: '100%' }} >
       <div style={{ backgroundColor: "#EAEBEB", display: 'flex', flexDirection: 'column', minHeight: 0 }}>
         <div style={{ flexShrink: 0, position: 'relative', zIndex: 1 }}>
-          <ValidationStats jsonResponse={jsonResponse} checkerResponse={checkerResponse} previousJsonResponse={previousJsonResponse} seeDetails={seeDetails} />
+          <ValidationStats jsonResponse={jsonResponse} checkerResponse={checkerResponse} />
         </div>
-        <div style={{ flexShrink: 0, marginTop: 0, paddingTop: '20px', position: 'relative', zIndex: 1 }}>
+        <div style={{ flexShrink: 0, marginTop: '0', paddingTop: '0', position: 'relative', zIndex: 1 }}>
           <ValidationFilters
             filters={filters}
             onFiltersChange={setFilters}
