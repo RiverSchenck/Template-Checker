@@ -30,32 +30,32 @@ class ValidationResult():
         success = Success(message, success_type)
         self.successes.append(success)
 
-    def add_custom_error(self, message: str, error_type: 'ValidationError', page: str = None):
+    def add_custom_error(self, message: str, error_type: 'ValidationError', page: str = None, page_id: str = ''):
         if page:
             message += f' [Page {page}]'
-        error = ValidationContext(message, error_type, page)
+        error = ValidationContext(message, error_type, page if page else '', 'null', 'null', page_id)
         key = error_type
 
         if key not in self.errors:
             self.errors[key] = []
         self.errors[key].append(error)
 
-    def add_error(self, context: str, error_type: 'ValidationError', page: str = '', identifier='null', data_id='null'):
+    def add_error(self, context: str, error_type: 'ValidationError', page: str = '', identifier='null', data_id='null', page_id: str = ''):
         error = ValidationContext(
-            context, error_type, page, identifier, data_id)
+            context, error_type, page, identifier, data_id, page_id)
         key = error_type
 
         self.errors[key].append(error)
 
-    def add_warning(self, context: str, warning_type: 'ValidationWarning', page: str = '', identifier='null', data_id='null'):
+    def add_warning(self, context: str, warning_type: 'ValidationWarning', page: str = '', identifier='null', data_id='null', page_id: str = ''):
         error = ValidationContext(
-            context, warning_type, page, identifier, data_id)
+            context, warning_type, page, identifier, data_id, page_id)
         key = warning_type
 
         self.warnings[key].append(error)
 
-    def add_info(self, context: str, info_type: 'ValidationInfo', page: str = '', identifier='null', data_id='null'):
-        info = ValidationContext(context, info_type, page, identifier, data_id)
+    def add_info(self, context: str, info_type: 'ValidationInfo', page: str = '', identifier='null', data_id='null', page_id: str = ''):
+        info = ValidationContext(context, info_type, page, identifier, data_id, page_id)
         key = info_type
 
         self.infos[key].append(info)
@@ -128,8 +128,9 @@ class ValidationResult():
         if story:
             content = story.get_content()
             page = story.get_page()
+            page_id = story.get_page_id()
             self.text_box_data[identifier] = {
-                "identifier": identifier, "content": content, "page": page}
+                "identifier": identifier, "content": content, "page": page, "page_id": page_id}
 
     def add_to_category(self, error, category, error_type):
         # Default identifier if not provided
@@ -147,6 +148,7 @@ class ValidationResult():
                     "context": item.get_formatted_message(),
                     "identifier": item.get_identifier(),
                     "page": item.get_page(),
+                    "page_id": item.get_page_id(),
                     "data_id": item.get_data_id()
                 }
                 # Use key.category.value to categorize, and details includes the identifier

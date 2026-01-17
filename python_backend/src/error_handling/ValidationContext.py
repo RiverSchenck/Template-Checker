@@ -1,7 +1,8 @@
 class ValidationContext:
-    def __init__(self, context: str, classifier_type, page: str = '', identifier: str = 'null', data_id: str = 'null'):
+    def __init__(self, context: str, classifier_type, page: str = '', identifier: str = 'null', data_id: str = 'null', page_id: str = ''):
         self.classifier_type = classifier_type.value
         self.page = page if page is not None else ''
+        self.page_id = page_id if page_id is not None else ''
         self.context = context if context is not None else ''
         self.identifier = identifier if identifier is not None else 'null'
         self.help_article = None
@@ -21,3 +22,6 @@ class ValidationContext:
 
     def get_data_id(self):
         return self.data_id
+
+    def get_page_id(self):
+        return self.page_id

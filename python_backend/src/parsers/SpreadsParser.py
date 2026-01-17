@@ -42,6 +42,12 @@ class SpreadsParser:
                 return spread_data.page_name
         return None
 
+    def get_page_id_by_story_id(self, story_id: str):
+        for spread_data in self.spreads_obj_list:
+            if story_id in spread_data.get_child_stories():
+                return spread_data.page_id
+        return None
+
     # ----------------Debug Prints------------------
     def print_spreads_obj_list(self):
         for spread_data in self.spreads_obj_list:

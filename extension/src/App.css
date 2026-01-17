@@ -1,0 +1,102 @@
+/*
+ * @NOTE: Prepend a `~` to css file paths that are in your node_modules
+ *        See https://github.com/webpack-contrib/sass-loader#imports
+ */
+
+body {
+  font-family: 'Space Grotesk Frontify', 'Monaco', 'Consolas', 'Courier New', monospace;
+  background-color: #EAEBEB;
+  min-height: 600px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.app-background {
+  width: 100%;
+  min-height: 600px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/*File upload*/
+.ant-message {
+  margin-left: 80px
+}
+
+/*Learn More links*/
+.custom-link {
+  color: #9A7EFE;
+  /* Initial color */
+}
+
+.custom-link:hover {
+  color: #7C57FF;
+  /* Color on hover */
+}
+
+/*Stat Group*/
+.ant-card-small>.ant-card-body {
+  padding-bottom: 5px;
+}
+
+/*Validation List - Remove default spacing from Collapse when showing "No Issues"*/
+.ant-collapse {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.ant-collapse-item {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-bottom: none !important;
+}
+
+.ant-collapse-item:first-child {
+  margin-top: 0 !important;
+}
+
+/*Sidebar Menu*/
+.sidebar-menu {
+  overflow: 'auto';
+  height: '100vh';
+  position: 'fixed' as 'fixed';
+  left: 0;
+  background-color: '#6C7070';
+}
+
+.custom-menu {
+  background-color: #6C7070;
+}
+
+.custom-menu .ant-menu-item-selected {
+  background-color: #B39DFD;
+}
+
+.custom-menu .ant-menu-item {
+  color: white;
+}
+
+.custom-menu .ant-menu-item:hover {
+  background-color: #CBBBFB;
+}
+
+.custom-menu .ant-menu-submenu-title {
+  color: white;
+}
+
+.custom-menu .ant-menu-submenu-title:hover {
+  color: black;
+}
+
+.custom-menu .ant-menu-submenu-selected .ant-menu-submenu-title {
+  color: white;
+}
+
+.ant-layout {
+  background-color: transparent !important;
+  /* Use 'transparent' or set it to any color you desire */
+}

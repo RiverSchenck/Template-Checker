@@ -14,6 +14,7 @@ from src.classes.Link import Link
 class SpreadData:
     def __init__(self, root: Element):
         self.page_name: str = ''
+        self.page_id: str = ''
         self.child_stories: List['StoryData'] = []
         self.links_obj_list: List[Link] = []
         self.text_frame_obj_list: List[TextFrame] = []
@@ -27,7 +28,9 @@ class SpreadData:
         page = spread.find("Page")
 
         # Set Page Name
-        self.page_name = page.get("Name")
+        self.page_name = page.get("Self")
+
+        self.page_id = page.get("Name")
 
         # Set Geometric bounds
         self.geometric_bounds = page.get("GeometricBounds")
@@ -105,6 +108,9 @@ class SpreadData:
 
     def get_page_name(self) -> str:
         return self.page_name
+
+    def get_page_id(self) -> str:
+        return self.page_id
 
     def get_geographic_bounds(self) -> str:
         return self.geometric_bounds
