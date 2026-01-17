@@ -17,26 +17,56 @@ interface StatisticColumnProps {
     value: number;
     suffix: number;
   }
-  
-  
+
+
   function StatisticColumn({ title, value, suffix }: StatisticColumnProps) {
     value = Math.max(0, suffix - value); //Don't be less than 0. Unused images etc can make it negative
     const percentage = suffix > 0 ? ((value / suffix) * 100) : 0;
     const textColor = percentage === 100 ? '#9A7EFE': 'rgba(0, 0, 0, 0.45)';
     return (
-        <Col style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-            <Text type='secondary' style={{marginBottom: '5px', fontSize: '14px'}}>{`Correct ${title}'s`}</Text>
-            <Progress
-                type="circle"
-                percent={Math.round(percentage)}
-                format={() => <Text type='secondary' style={{color: textColor}}>{`${value} / ${suffix}`}</Text>}  // Show fraction instead of percentage
-                strokeColor={'#9A7EFE'}
-                size={'small'}
-            />
-            {/* <Rate 
-                disabled 
-                allowHalf 
-                value={rateValue} 
+        <Col style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          width: '100%',
+          minHeight: '140px'
+        }}>
+            <Text
+              type='secondary'
+              style={{
+                marginBottom: '8px',
+                fontSize: '14px',
+                textAlign: 'center',
+                lineHeight: '1.4',
+                minHeight: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                whiteSpace: 'normal',
+                wordBreak: 'break-word'
+              }}
+            >
+              {`Correct ${title}'s`}
+            </Text>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+              <Progress
+                  type="circle"
+                  percent={Math.round(percentage)}
+                  format={() => (
+                    <Text type='secondary' style={{color: textColor, fontSize: '12px'}}>
+                      {`${value} / ${suffix}`}
+                    </Text>
+                  )}
+                  strokeColor={'#9A7EFE'}
+                  size={'small'}
+                  strokeWidth={8}
+              />
+            </div>
+            {/* <Rate
+                disabled
+                allowHalf
+                value={rateValue}
                 style={{ fontSize: 13, width: '100%', justifyContent: 'center', textAlign: 'center', marginTop:'3px' }}
             /> */}
         </Col>
@@ -53,7 +83,7 @@ interface StatisticColumnProps {
 
     const calculateChange = (current: number, previous: number) => {
         if (previous === undefined) {
-          return 0; 
+          return 0;
         }
         return ( current - previous);
       };
@@ -67,8 +97,8 @@ interface StatisticColumnProps {
           return { color: '#d9d9d9', icon: <SwapOutlined /> }; // Gray, Swap
         }
       };
-      
-      
+
+
   const defaultKeys: (keyof ValidationResult)[] = [
     'par_styles', 'char_styles', 'text_boxes', 'fonts', 'images'
   ];
@@ -89,9 +119,16 @@ function StatsToggle({ jsonResponse, previousJsonResponse, seeDetails }: StatsTo
         const totalIssues = calculateTotalIssuesFromCategory(categoryData);
         const total_count = categoryData ? categoryData.total_count : 0;
         const title = categoryEnum || 'Unknown Category';
-      
+
         return (
-            <><Col key={`${title}-${index}`} xs={24} sm={12} md={8} lg={6} xl={4} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <><Col key={`${title}-${index}`} xs={24} sm={12} md={8} lg={6} xl={4} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              minHeight: '140px',
+              position: 'relative'
+            }}>
             <StatisticColumn title={title} value={totalIssues} suffix={total_count} />
             {previousJsonResponse && renderChangeStatistics(key, totalIssues)}
           </Col><Col>
@@ -99,11 +136,11 @@ function StatsToggle({ jsonResponse, previousJsonResponse, seeDetails }: StatsTo
             </Col></>
         );
       };
-    
+
       const renderChangeStatistics = (key: keyof ValidationResult, totalIssues: number): JSX.Element | null => {
         // Use optional chaining to safely access the details
         const previousCategoryData = previousJsonResponse?.[key] as CategoryDetail | undefined;
-      
+
         // Check if previousCategoryData exists before proceeding
         if (previousCategoryData) {
           const previousTotalIssues = calculateTotalIssuesFromCategory(previousCategoryData);
@@ -111,7 +148,7 @@ function StatsToggle({ jsonResponse, previousJsonResponse, seeDetails }: StatsTo
           console.log("Total:",totalIssues)
           const difference = calculateChange(totalIssues, previousTotalIssues);
           const { color, icon } = getChangeDetails(difference);
-      
+
           return (
             <div style={{marginTop: '10px'}}>
                 <Text type='secondary' style={{fontSize: '11px'}}>Change from Previous:</Text>
@@ -159,6 +196,6 @@ function StatsToggle({ jsonResponse, previousJsonResponse, seeDetails }: StatsTo
         </>
     );
     }
-    
+
     export default StatsToggle;
 

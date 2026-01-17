@@ -16,6 +16,7 @@ export function transformDataForTable(identifierData: IdentifierGroupedData, val
               identifier,
               type: issue.validationClassifier,
               page: issue.page,
+              page_id: issue.page_id,
               context: issue.context,
               validationType: type,
               textBox: textBoxData,
@@ -32,7 +33,7 @@ export function transformDataForTable(identifierData: IdentifierGroupedData, val
     if (!helpArticleUrl) {
       return '';
     }
-  
+
     return (
       <a className="custom-link" href={helpArticleUrl} target="_blank" rel="noopener noreferrer">
         Help Center
@@ -62,14 +63,14 @@ export function transformDataForTable(identifierData: IdentifierGroupedData, val
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        display: 'flex',  
+        display: 'flex',
         alignItems: 'center',
         maxWidth: '190px',
         flex: 1,
       };
 
       const style = card ?  { ...baseStyle, width: '185px' } : baseStyle ;
-  
+
     const getColor = (type: ValidationType) => {
       switch (type) {
         case 'errors': return 'red';
@@ -78,7 +79,7 @@ export function transformDataForTable(identifierData: IdentifierGroupedData, val
         default: return 'gray';
       }
     };
-  
+
     const getIcon = (type: ValidationType) => {
       switch (type) {
         case 'errors': return <CloseCircleOutlined style={{ color: 'red', fontSize: '20px',paddingRight:'5px' }} />;
@@ -87,7 +88,7 @@ export function transformDataForTable(identifierData: IdentifierGroupedData, val
         default: return null;
       }
     };
-  
+
     return (
       <Tag color={getColor(type)} style={style}>
         {getIcon(type)}
@@ -99,9 +100,9 @@ export function transformDataForTable(identifierData: IdentifierGroupedData, val
   };
 
   export const isCategoryEmpty = (data: IdentifierGroupedData): boolean => {
-    return Object.values(data).every(entries => 
-      entries.errors.length === 0 && 
-      entries.warnings.length === 0 && 
+    return Object.values(data).every(entries =>
+      entries.errors.length === 0 &&
+      entries.warnings.length === 0 &&
       entries.infos.length === 0
     );
   };

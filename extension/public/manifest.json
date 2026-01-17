@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "Frontify Template Checker",
+  "short_name": "Template Checker",
+  "version": "1.0.0",
+  "description": "Template Checker extension for validating Frontify templates",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "windows",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "https://template-checker-test.fly.dev/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": {
+      "16": "tech-sol48.png",
+      "48": "tech-sol48.png",
+      "128": "tech-sol192.png"
+    }
+  },
+  "icons": {
+    "16": "tech-sol48.png",
+    "48": "tech-sol48.png",
+    "128": "tech-sol192.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content-scripts/highlighting.js",
+        "content-scripts/elementSelection.js",
+        "content-scripts/frontifyProgressBar.js",
+        "content-scripts/frontifyExportDropdown.js",
+        "content-scripts/highlight.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "tech-sol48.png",
+        "tech-sol192.png",
+        "tech-sol512.png"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, message, ConfigProvider } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { Checkbox } from 'antd';
@@ -34,10 +34,37 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showFileSizeErrorModal, setShowFileSizeErrorModal] = useState(false);
   const [fileSizeError, setFileSizeError] = useState<{ fileSizeMB: string; maxSizeMB: number } | null>(null);
-  const [isConfirmed, setIsConfirmed] = useState(false);
+
+  // Initialize isConfirmed from localStorage to prevent popup flash
+  const [isConfirmed, setIsConfirmed] = useState(() => {
+    const lastConfirmed = localStorage.getItem('confirmationTimestamp');
+    if (lastConfirmed) {
+      const now = new Date().getTime();
+      const reconfDays = 2;
+      const dayCount = 24 * 60 * 60 * 1000 * reconfDays;
+      return (now - parseInt(lastConfirmed)) < dayCount;
+    }
+    return false;
+  });
+
   const { setMenuKey } = useMenu();
   const [downloadXML, setDownloadXML] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+
+  // Use production URL when NODE_ENV is 'production', otherwise use localhost for development
+  const isDebug = true;
+  const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
+
+  // Get auth token from environment variable
+  const getAuthHeaders = (): Record<string, string> => {
+    const token = process.env.REACT_APP_AUTH_TOKEN;
+    if (token) {
+      return {
+        'Authorization': `Bearer ${token}`
+      };
+    }
+    return {};
+  };
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);  // Ensure this function truly resets the modal's visibility state
@@ -49,7 +76,6 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
   };
 
   const handleDownload = async (fileName: string) => {
-    const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
     const downloadEndpoint = `${baseURL}/run-and-download-xml`;
 
     if (file) {
@@ -59,6 +85,7 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
       try {
         const response = await fetch(downloadEndpoint, {
           method: 'POST',
+          headers: getAuthHeaders(),
           body: formData,
         });
 
@@ -117,72 +144,124 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
       setFile(originFileObj as File);
       if (response) {
         if (downloadXML) {
-          handleDownload(fileName);
+          // When downloadXML is true, response should be a blob from customRequest
+          if (response instanceof Blob) {
+            const downloadUrl = window.URL.createObjectURL(response);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = `${fileName.split('.')[0]}_output_XML.zip`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(downloadUrl);
+          } else {
+            // Fallback: if somehow we got JSON, make the download request
+            handleDownload(fileName);
+          }
         } else {
           handleUploadResults(response);
         }
       }
     } else if (status === 'error') {
-      message.error(`${fileName} file upload failed. ${info.file.error.message}`);
+      message.error(`${fileName} file upload failed. ${info.file.error?.message || 'Unknown error'}`);
     }
   };
 
-
-  const isDebug = true;
-
-  const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
   const uploadEndpoint = downloadXML ? `${baseURL}/run-and-download-xml` : `${baseURL}/run`;
+
+  // Custom request handler to properly handle authentication headers and both JSON/blob responses
+  const customRequest = async (options: any) => {
+    const { onSuccess, onError, file } = options;
+
+    const formData = new FormData();
+    formData.append('file', file as File);
+
+    try {
+      const response = await fetch(uploadEndpoint, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorMessage = 'Upload failed';
+        try {
+          const errorJson = JSON.parse(errorText);
+          errorMessage = errorJson.error?.message || errorJson.error || errorMessage;
+        } catch {
+          errorMessage = errorText || errorMessage;
+        }
+        onError(new Error(errorMessage));
+        return;
+      }
+
+      if (downloadXML) {
+        // For download, get the blob and pass it to onSuccess
+        const blob = await response.blob();
+        onSuccess(blob, response);
+      } else {
+        // For regular upload, get JSON
+        const json = await response.json();
+        onSuccess(json, response);
+      }
+    } catch (error: any) {
+      onError(error);
+    }
+  };
+
   return (
     <div style={{ width: '50%', height: '25%' }}>
       {!isConfirmed && (
         <ConfirmationPopup onConfirm={() => setIsConfirmed(true)} />
       )}
-        <>
-          {showSuccessModal && (
-            <SuccessModal
-              visible={showSuccessModal}
-              onClose={handleCloseModal}
-              seeDetails={seeDetails}
-            />
-          )}
-          {showFileSizeErrorModal && fileSizeError && (
-            <FileSizeErrorModal
-              visible={showFileSizeErrorModal}
-              onClose={handleCloseFileSizeErrorModal}
-              fileSizeMB={fileSizeError.fileSizeMB}
-              maxSizeMB={fileSizeError.maxSizeMB}
-            />
-          )}
-          <ConfigProvider
-            theme={{
-              token: {
-                fontFamily: 'Space Grotesk Frontify',
-                colorPrimaryHover: '#9A7EFE',
-                colorFillAlter: '#EAEBEB',
-                colorBorder: "#CBBBFB",
-              },
-            }}
+      <>
+        {showSuccessModal && (
+          <SuccessModal
+            visible={showSuccessModal}
+            onClose={handleCloseModal}
+            seeDetails={seeDetails}
+          />
+        )}
+        {showFileSizeErrorModal && fileSizeError && (
+          <FileSizeErrorModal
+            visible={showFileSizeErrorModal}
+            onClose={handleCloseFileSizeErrorModal}
+            fileSizeMB={fileSizeError.fileSizeMB}
+            maxSizeMB={fileSizeError.maxSizeMB}
+          />
+        )}
+        <ConfigProvider
+          theme={{
+            token: {
+              fontFamily: 'Space Grotesk Frontify',
+              colorPrimaryHover: '#9A7EFE',
+              colorFillAlter: '#EAEBEB',
+              colorBorder: "#CBBBFB",
+            },
+          }}
+        >
+          <Dragger
+            action={undefined}
+            customRequest={customRequest}
+            onChange={handleFileChange}
+            beforeUpload={beforeUpload}
+            multiple={false}
+            accept=".zip"
           >
-            <Dragger
-              action={uploadEndpoint}
-              onChange={handleFileChange}
-              beforeUpload={beforeUpload}
-              multiple={false}
-              accept=".zip"
-            >
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined style={{ color: '#7C57FF' }} />
-              </p>
-              <p className="ant-upload-text">Click or drag template to this area to upload</p>
-            </Dragger>
-            <Checkbox
-              checked={downloadXML}
-              onChange={(e) => setDownloadXML(e.target.checked)}
-            >
-              Download XML?
-            </Checkbox>
-          </ConfigProvider>
-        </>
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined style={{ color: '#7C57FF' }} />
+            </p>
+            <p className="ant-upload-text">Click or drag template to this area to upload</p>
+          </Dragger>
+          <Checkbox
+            checked={downloadXML}
+            onChange={(e) => setDownloadXML(e.target.checked)}
+          >
+            Download XML?
+          </Checkbox>
+        </ConfigProvider>
+      </>
     </div>
   );
 }

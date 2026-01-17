@@ -110,7 +110,7 @@ class FrontifyChecker:
             return True
         else:
             self.results.add_error(
-                "File uploaded is not ZIP", ValidationError.ZIP)
+                "File uploaded is not ZIP", ValidationError.ZIP, page='', identifier='null', data_id='null', page_id='')
             return False
 
     # ========================================================================================
@@ -255,11 +255,11 @@ class FrontifyChecker:
 
         if len(idml_files) == 0:
             self.results.add_error(
-                "No .idml file found in the provided package.", ValidationError.IDML)
+                "No .idml file found in the provided package.", ValidationError.IDML, page='', identifier='null', data_id='null', page_id='')
             return False
         elif len(idml_files) > 1:
             self.results.add_error(
-                "Multiple .idml files found in the provided package. Please ensure there's only one .idml file.", ValidationError.IDML)
+                "Multiple .idml files found in the provided package. Please ensure there's only one .idml file.", ValidationError.IDML, page='', identifier='null', data_id='null', page_id='')
             return False
         return idml_files[0]
 
@@ -391,7 +391,7 @@ class FrontifyChecker:
             self.idml_output_folder, 'MasterSpreads')
         if not os.path.exists(masterspreads_dir):
             self.results.add_warning(
-                "MasterSpreads directory does not exist", ValidationWarning.WARNING)
+                "MasterSpreads directory does not exist", ValidationWarning.WARNING, page='', identifier='null', data_id='null', page_id='')
         else:
             # Initialize the StoriesParser and extract story data
             self.masterspreads_parser = MasterPageParser(masterspreads_dir)
@@ -466,7 +466,9 @@ class FrontifyChecker:
                 context=message,
                 error_type=ValidationError.MASTERPAGE,
                 page=None,
-                identifier=None
+                identifier=None,
+                data_id='null',
+                page_id=''
             )
 
         return States.PAR_CHECK
@@ -490,6 +492,7 @@ class FrontifyChecker:
 
         for story in self.stories_parser.get_stories_data():
             page_name = story.get_page()
+            page_id = story.get_page_id()
             story_content = story.get_story_text_content()
             story_id = story.get_story_id()
             data_id = story.get_parent_text_frame_id()
@@ -499,7 +502,8 @@ class FrontifyChecker:
                     info_type=ValidationInfo.EMPTY_TEXT_FRAME,
                     page=page_name,
                     identifier=story_id,
-                    data_id=data_id
+                    data_id=data_id,
+                    page_id=page_id
                 )
                 continue
             grouped_paragraph_styles = story.get_grouped_paragraph_styles()
@@ -515,7 +519,8 @@ class FrontifyChecker:
                     error_type=ValidationError.PARAGRAPH_STYLE_TEXT_BOX,
                     page=page_name,
                     identifier=story_id,
-                    data_id=data_id
+                    data_id=data_id,
+                    page_id=page_id
                 )
                 continue
 
@@ -539,7 +544,8 @@ class FrontifyChecker:
                         error_type=ValidationError.PARAGRAPH_STYLE,
                         page=page_name,
                         identifier=story_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
         return States.HYPHENATION_CHECK
@@ -583,6 +589,7 @@ class FrontifyChecker:
         if not self.stories_exist:
             return States.OVERRIDES_CHECK
         for story in self.stories_parser.get_stories_data():
+            page_id = story.get_page_id()
             data_id = story.get_parent_text_frame_id()
             for par_style in story.get_paragraph_styles():
 
@@ -609,7 +616,8 @@ class FrontifyChecker:
                         warning_type=ValidationWarning.HYPHENATION,
                         page=None,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
                     # Add the style_id to the set
@@ -641,6 +649,7 @@ class FrontifyChecker:
         # Need index for content context
         for story in self.stories_parser.get_stories_data():
             page_name = story.get_page()
+            page_id = story.get_page_id()
             story_id = story.get_story_id()
             paragraph_styles = story.get_paragraph_styles()
             data_id = story.get_parent_text_frame_id()
@@ -663,7 +672,8 @@ class FrontifyChecker:
                         warning_type=ValidationWarning.OVERRIDE,
                         page=page_name,
                         identifier=story_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
                 # Now check character overrides
@@ -681,7 +691,8 @@ class FrontifyChecker:
                             warning_type=ValidationWarning.OVERRIDE,
                             page=page_name,
                             identifier=story_id,
-                            data_id=data_id
+                            data_id=data_id,
+                            page_id=page_id
                         )
 
         # if overrides_default_par:
@@ -707,6 +718,7 @@ class FrontifyChecker:
         # Need index for content context
         for story in self.stories_parser.get_stories_data():
             page_name = story.get_page()
+            page_id = story.get_page_id()
             paragraph_styles = story.get_paragraph_styles()
             data_id = story.get_parent_text_frame_id()
             for i, par_style in enumerate(paragraph_styles):
@@ -723,7 +735,8 @@ class FrontifyChecker:
                         error_type=ValidationError.KERNING,
                         page=page_name,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
                 # Now check character overrides
@@ -742,7 +755,8 @@ class FrontifyChecker:
                             error_type=ValidationError.KERNING_CHAR,
                             page=page_name,
                             identifier=char_normalized_style_id,
-                            data_id=data_id
+                            data_id=data_id,
+                            page_id=page_id
                         )
 
         return States.FONTS_INCLUDED_CHECK
@@ -774,7 +788,9 @@ class FrontifyChecker:
                     context=None,
                     error_type=ValidationError.FONTS_INCLUDED,
                     page=None,
-                    identifier=used_font
+                    identifier=used_font,
+                    data_id='null',
+                    page_id=''
                 )
 
         return States.OTF_TTF_FONT_CHECK
@@ -798,7 +814,9 @@ class FrontifyChecker:
                     context=message,
                     error_type=ValidationError.OTF_TTF_FONT,
                     page=None,
-                    identifier=font_family)
+                    identifier=font_family,
+                    data_id='null',
+                    page_id='')
 
         return States.VARIABLE_FONT_CHECK
 
@@ -817,7 +835,9 @@ class FrontifyChecker:
                     context=None,
                     error_type=ValidationError.VARIABLE_FONT,
                     page=None,
-                    identifier=font_family)
+                    identifier=font_family,
+                    data_id='null',
+                    page_id='')
 
         return States.IMAGES_INCLUDED_CHECK
 
@@ -879,7 +899,8 @@ class FrontifyChecker:
                     page=None,
                     # Using the image name for the identifier since link ID is None for master spreads
                     identifier=missing_image,
-                    data_id=missing_link_id
+                    data_id=missing_link_id,
+                    page_id=''
                 )
 
         # Check if there are any image names not used in links.
@@ -893,6 +914,8 @@ class FrontifyChecker:
                     warning_type=ValidationWarning.UNUSED_IMAGE,
                     page=None,
                     identifier=unused_image,
+                    data_id='null',
+                    page_id=''
                 )
 
         return States.LARGE_IMAGE_CHECK
@@ -917,6 +940,7 @@ class FrontifyChecker:
                     page=None,
                     identifier=image_name,
                     data_id=data_id,
+                    page_id=''
                 )
         return States.EMBEDDED_IMAGE_CHECK
 
@@ -930,6 +954,7 @@ class FrontifyChecker:
     def embedded_image_check(self) -> States:
         for spread in self.spreads_parser.get_spreads_obj_list():
             page = spread.get_page_name()
+            page_id = spread.get_page_id()
             for link in spread.get_links_obj_list():
                 if link.get_stored_state() == 'Embedded':
                     link_id = link.get_rectangle_link_id()
@@ -939,7 +964,8 @@ class FrontifyChecker:
                         error_type=ValidationError.EMBEDDED_IMAGE,
                         page=page,
                         identifier=image_name,
-                        data_id=link_id
+                        data_id=link_id,
+                        page_id=page_id
                     )
 
         return States.IMAGE_TRANSFORMATION_CHECK
@@ -958,11 +984,12 @@ class FrontifyChecker:
     # ========================================================================================
     def image_transformation_check(self) -> States:
         for spread in self.spreads_parser.get_spreads_obj_list():
+            page_name = spread.get_page_name()
+            page_id = spread.get_page_id()
             for link in spread.get_links_obj_list():
                 item_transform = link.get_item_transform()
                 container_transform = link.get_container_item_transform()
                 file_name = link.get_image_name()
-                page_name = spread.get_page_name()
                 rectangle_id = link.get_rectangle_link_id()
                 for idx, asset in enumerate([item_transform, container_transform]):
                     if asset:
@@ -979,7 +1006,8 @@ class FrontifyChecker:
                                 error_type=ValidationError.IMAGE_TRANSFORMATION,
                                 page=page_name,
                                 identifier=file_name,
-                                data_id=rectangle_id
+                                data_id=rectangle_id,
+                                page_id=page_id
                             )
                         # Check for vertical flip
                         elif a > 0 and d < 0 and abs(rotation_angle_degrees) != 180:
@@ -989,7 +1017,8 @@ class FrontifyChecker:
                                 error_type=ValidationError.IMAGE_TRANSFORMATION,
                                 page=page_name,
                                 identifier=file_name,
-                                data_id=rectangle_id
+                                data_id=rectangle_id,
+                                page_id=page_id
                             )
                         # Warning for only rotation and only flip
                         elif abs(rotation_angle_degrees) > 0.01:
@@ -999,7 +1028,8 @@ class FrontifyChecker:
                                 warning_type=ValidationWarning.IMAGE_TRANSFORMATION,
                                 page=page_name,
                                 identifier=file_name,
-                                data_id=rectangle_id
+                                data_id=rectangle_id,
+                                page_id=page_id
                             )
                         # Check for skews
                             # or not is_rectangle
@@ -1010,7 +1040,8 @@ class FrontifyChecker:
                                 error_type=ValidationError.IMAGE_TRANSFORMATION,
                                 page=page_name,
                                 identifier=file_name,
-                                data_id=rectangle_id
+                                data_id=rectangle_id,
+                                page_id=page_id
                             )
 
         return States.TABLE_CHECK
@@ -1030,12 +1061,14 @@ class FrontifyChecker:
                     data_id = story.get_parent_text_frame_id()
                     story_id = story.get_story_id()
                     page_name = story.get_page()
+                    page_id = story.get_page_id()
                     self.results.add_error(
                         context=None,
                         error_type=ValidationError.TABLE,
                         page=page_name,
                         identifier=story_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
         return States.PASTED_GRAPHICS_CHECK
@@ -1053,12 +1086,14 @@ class FrontifyChecker:
             if num_pasted_graphics > 0:
                 for _ in range(num_pasted_graphics):
                     page = spread.get_page_name()
+                    page_id = spread.get_page_id()
                     message = f"{spread.get_pasted_graphics_num()} pasted graphics found."
                     self.results.add_error(
                         context=message,
                         error_type=ValidationError.PASTED_GRAPHICS,
                         page=page,
-                        identifier=None
+                        identifier=None,
+                        page_id=page_id
                     )
                     break
 
@@ -1083,7 +1118,9 @@ class FrontifyChecker:
                         context=message,
                         warning_type=ValidationWarning.DOCUMENT_BLEED,
                         page=None,
-                        identifier=None
+                        identifier=None,
+                        data_id='null',
+                        page_id=''
                     )
                     # Only need one warning
                     break
@@ -1114,6 +1151,7 @@ class FrontifyChecker:
                     story = text_frame.get_parent_story_obj()
                     story_page = story.get_page()
                     story_id = story.get_story_id()
+                    page_id = story.get_page_id()
                     data_id = text_frame.get_frame_id()
                     use_line_breaks = text_frame.get_use_no_line_breaks()
                     if text_frame.get_auto_sizing_type() == 'HeightOnly':
@@ -1124,13 +1162,19 @@ class FrontifyChecker:
                                 error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
                                 page=story_page,
                                 identifier=story_id,
-                                data_id=data_id
+                                data_id=data_id,
+                                page_id=page_id
                             )
                     elif text_frame.get_auto_sizing_type() == 'WidthOnly':
                         if not use_line_breaks or use_line_breaks == 'false':
                             message = "'No Line Breaks' must be checked."
                             self.results.add_error(
-                                message, ValidationError.AUTO_SIZE_TEXT_BOX, story_page, story_id)
+                                context=message,
+                                error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
+                                page=story_page,
+                                identifier=story_id,
+                                data_id=data_id,
+                                page_id=page_id)
                             # InDesign has weird behavior, and changes the reference point if 'No Line Breaks' is not checked. So we will just break here.
                             continue
                         if text_frame.get_auto_sizing_reference_point() not in ['LeftCenterPoint', 'RightCenterPoint']:
@@ -1140,7 +1184,8 @@ class FrontifyChecker:
                                 error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
                                 page=story_page,
                                 identifier=story_id,
-                                data_id=data_id
+                                data_id=data_id,
+                                page_id=page_id
                             )
                     elif text_frame.get_auto_sizing_type() == 'HeightAndWidth':
                         if not use_line_breaks or use_line_breaks == 'false':
@@ -1150,7 +1195,8 @@ class FrontifyChecker:
                                 error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
                                 page=story_page,
                                 identifier=story_id,
-                                data_id=data_id
+                                data_id=data_id,
+                                page_id=page_id
                             )
                             # InDesign has weird behavior, and changes the reference point if 'No Line Breaks' is not checked. So we will just break here.
                             continue
@@ -1161,7 +1207,8 @@ class FrontifyChecker:
                                 error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
                                 page=story_page,
                                 identifier=story_id,
-                                data_id=data_id)
+                                data_id=data_id,
+                                page_id=page_id)
                     else:
                         message = "Only width, height, and WidthAndHeight are supported."
                         self.results.add_error(
@@ -1169,7 +1216,8 @@ class FrontifyChecker:
                             error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
                             page=story_page,
                             identifier=story_id,
-                            data_id=data_id
+                            data_id=data_id,
+                            page_id=page_id
                         )
 
         return States.TEXT_COLUMNS_CHECK
@@ -1192,13 +1240,15 @@ class FrontifyChecker:
                     story = text_frame.get_parent_story_obj()
                     story_id = story.get_story_id()
                     story_page = story.get_page()
+                    page_id = story.get_page_id()
                     data_id = text_frame.get_frame_id()
                     self.results.add_error(
                         context=None,
                         error_type=ValidationError.TEXT_COLUMNS,
                         page=story_page,
                         identifier=story_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
         return States.TEXT_WRAP_CHECK
@@ -1221,6 +1271,7 @@ class FrontifyChecker:
                     story = text_frame.get_parent_story_obj()
                     story_id = story.get_story_id()
                     story_page = story.get_page()
+                    page_id = story.get_page_id()
                     data_id = text_frame.get_frame_id()
                     message = f"Text box wrap is '{text_wrap_mode}' not None."
                     self.results.add_error(
@@ -1228,7 +1279,8 @@ class FrontifyChecker:
                         error_type=ValidationError.TEXT_WRAP,
                         page=story_page,
                         identifier=story_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
         return States.LINKED_TEXT_FRAME_CHECK
@@ -1252,13 +1304,15 @@ class FrontifyChecker:
                     story_id = story.get_story_id()
                     story_content = story.get_story_text_content()
                     story_page = story.get_page()
+                    page_id = story.get_page_id()
                     data_id = text_frame.get_frame_id()
                     self.results.add_error(
                         context=None,
                         error_type=ValidationError.LINKED_TEXT_FRAME,
                         page=story_page,
                         identifier=story_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
         return States.OBJECT_STYLE_CHECK
@@ -1280,17 +1334,20 @@ class FrontifyChecker:
                 if text_frame.get_applied_object_style() not in self.default_object_styles:
                     story = text_frame.get_parent_story_obj()
                     story_page = story.get_page()
+                    page_id = story.get_page_id()
                     data_id = text_frame.get_frame_id()
                     self.results.add_error(
                         context=None,
                         error_type=ValidationError.OBJECT_STYLE_TEXT,
                         page=story_page,
                         identifier=None,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
         for spread in self.spreads_parser.get_spreads_obj_list():
             page = spread.get_page_name()
+            page_id = spread.get_page_id()
             for link in spread.get_links_obj_list():
                 rectangle_id = link.get_rectangle_link_id()
                 if link.get_image_object_style() not in self.default_object_styles:
@@ -1300,7 +1357,8 @@ class FrontifyChecker:
                         error_type=ValidationError.OBJECT_STYLE_IMAGE,
                         page=page,
                         identifier=image_name,
-                        data_id=rectangle_id
+                        data_id=rectangle_id,
+                        page_id=page_id
                     )
                 if link.get_container_object_style() not in self.default_object_styles:
                     image_name = link.get_image_name()
@@ -1309,7 +1367,8 @@ class FrontifyChecker:
                         error_type=ValidationError.OBJECT_STYLE_IMAGE,
                         page=page,
                         identifier=image_name,
-                        data_id=rectangle_id
+                        data_id=rectangle_id,
+                        page_id=page_id
                     )
 
         return States.GRID_ALIGNMENT_CHECK
@@ -1326,6 +1385,7 @@ class FrontifyChecker:
             return States.COMPOSER_CHECK
         styles_with_errors = set()  # Only throw 1 error for a paragraph style
         for story in self.stories_parser.get_stories_data():
+            page_id = story.get_page_id()
             for par_style in story.get_paragraph_styles():
                 grid_alignment = par_style.get_grid_alignment()
                 normalized_style_id = par_style.get_normalized_style_id()
@@ -1342,7 +1402,8 @@ class FrontifyChecker:
                         error_type=ValidationError.GRID_ALIGNMENT,
                         page=None,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
         return States.COMPOSER_CHECK
@@ -1359,6 +1420,7 @@ class FrontifyChecker:
             return States.OTHER_CHECKS
         styles_with_errors = set()  # Only throw 1 error for a paragraph style
         for story in self.stories_parser.get_stories_data():
+            page_id = story.get_page_id()
             for par_style in story.get_paragraph_styles():
                 composer = par_style.get_composer()
                 normalized_style_id = par_style.get_normalized_style_id()
@@ -1375,22 +1437,24 @@ class FrontifyChecker:
                         warning_type=ValidationWarning.COMPOSER,
                         page=None,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
         return States.OTHER_CHECKS
-    
+
     # ========================================================================================
     # State: OTHER_CHECKS
     # ========================================================================================
     def other_checks(self) -> States:
 
         # FILLTINT CHECK
-        
+
         if not self.stories_exist:
             return States.RESULTS
         styles_with_errors = set()  # Only throw 1 error for a paragraph style
         for story in self.stories_parser.get_stories_data():
+            page_id = story.get_page_id()
             for par_style in story.get_paragraph_styles():
                 filltint = par_style.get_filltint()
                 filltintobj = par_style.get_filltint_obj()
@@ -1411,7 +1475,8 @@ class FrontifyChecker:
                         error_type=ValidationError.FILL_TINT,
                         page=None,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        page_id=page_id
                     )
 
         return States.RESULTS
@@ -1515,9 +1580,13 @@ class FrontifyChecker:
 
     def zip_idml_output_folder(self):
         try:
+            import tempfile
+            import time
             zip_file_name = "xml_output.zip"
-            zip_file_path = os.path.join(os.path.dirname(
-                self.unzipped_folder_path), zip_file_name)
+
+            # Create ZIP in temp directory (outside of unzipped_root_path) to avoid cleanup conflicts
+            temp_dir = tempfile.gettempdir()
+            zip_file_path = os.path.join(temp_dir, f"{uuid.uuid4()}_{zip_file_name}")
 
             # Ensure the output folder exists
             if not os.path.exists(self.idml_output_folder):
@@ -1525,16 +1594,33 @@ class FrontifyChecker:
                     f"IDML output folder does not exist: {self.idml_output_folder}")
 
             # Create a zip file containing all the files in the specified folder
-            shutil.make_archive(zip_file_path.replace(
-                '.zip', ''), 'zip', self.idml_output_folder)
+            # make_archive creates file with .zip extension automatically
+            archive_base = zip_file_path.replace('.zip', '')
+            shutil.make_archive(archive_base, 'zip', self.idml_output_folder)
 
-            # Verify the ZIP file is created
+            # Verify the ZIP file is created and has content
+            max_retries = 5
+            retry_count = 0
+            while retry_count < max_retries:
+                if os.path.isfile(zip_file_path) and os.path.getsize(zip_file_path) > 0:
+                    break
+                time.sleep(0.1)  # Small delay to allow file system to catch up
+                retry_count += 1
+
             if not os.path.isfile(zip_file_path):
                 raise FileNotFoundError(
                     f"ZIP file was not created: {zip_file_path}")
 
+            if os.path.getsize(zip_file_path) == 0:
+                raise FileNotFoundError(
+                    f"ZIP file is empty: {zip_file_path}")
+
+            print(f"ZIP created successfully: {zip_file_path}, Size: {os.path.getsize(zip_file_path)} bytes")
             # Return the path to the created zip file
             return zip_file_path
         except Exception as e:
             # Log the error
+            print(f"Error creating ZIP file: {e}")
+            import traceback
+            traceback.print_exc()
             return None
