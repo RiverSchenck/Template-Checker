@@ -52,7 +52,7 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
   const [file, setFile] = useState<File | null>(null);
 
   // Use production URL when NODE_ENV is 'production', otherwise use localhost for development
-  const isDebug = true;
+  const isDebug = process.env.NODE_ENV !== 'production';
   const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
 
   // Get auth token from environment variable

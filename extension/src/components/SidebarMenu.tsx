@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd';
 import {
   CloudUploadOutlined,
   FileDoneOutlined,
+  BarChartOutlined,
 } from '@ant-design/icons';
 import { ValidationResult } from '../types';
 import FrontifyLogo from '../assets/frontifyLogo.svg';
@@ -72,6 +73,9 @@ function SidebarMenu({
               Results
             </Menu.Item>
           )}
+          <Menu.Item key="analytics" icon={<BarChartOutlined />}>
+            Analytics
+          </Menu.Item>
         </Menu>
       </Sider>
     </div>

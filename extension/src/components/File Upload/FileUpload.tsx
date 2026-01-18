@@ -23,7 +23,8 @@ function FileUploadPage({ checkerResponse, onUploadComplete }: FileUploadPagePro
 
   const { setMenuKey } = useMenu();
 
-  const isDebug = true;
+  // Use production URL when NODE_ENV is 'production', otherwise use localhost for development
+  const isDebug = process.env.NODE_ENV !== 'production';
   const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
 
   const getAuthHeaders = (): Record<string, string> => {

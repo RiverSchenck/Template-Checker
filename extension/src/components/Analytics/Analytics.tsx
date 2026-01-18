@@ -60,13 +60,14 @@ interface AnalyticsSummary {
   recent_runs: Array<any>;
 }
 
+// Use production URL when NODE_ENV is 'production', otherwise use localhost for development
 const isDebug = process.env.NODE_ENV !== 'production';
 const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
 
 const getAuthHeaders = (): Record<string, string> => {
   const token = process.env.REACT_APP_AUTH_TOKEN;
   const headers: Record<string, string> = {
-    'X-Source': 'react-frontend'
+    'X-Source': 'extension'
   };
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;

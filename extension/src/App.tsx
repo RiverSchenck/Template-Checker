@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Layout, ConfigProvider } from 'antd';
 import FileUploadPage from './components/File Upload/FileUpload';
 import ValidationList from './components/Validation List/ValidationList'
+import Analytics from './components/Analytics/Analytics';
 import SidebarMenu from './components/SidebarMenu';
 import { useMenu } from './components/MenuContext';
 import { ValidationResult } from './types';
@@ -26,6 +27,8 @@ export default function App() {
         return <FileUploadPage checkerResponse={checkerResponse} />;
       case 'results':
         return checkerResults ? <ValidationList jsonResponse={checkerResults} checkerResponse={checkerResponse} /> : null;
+      case 'analytics':
+        return <Analytics />;
       default:
         return <div>Uh oh, something went wrong.</div>;
     }
@@ -49,7 +52,7 @@ export default function App() {
             checkerResults={checkerResults}
           />
           <Content style={{ flex: 1, marginLeft: collapsed ? 80 : 200, }}>
-            <div style={{ minHeight: '600px', width: '100%', display: 'flex', alignItems: menuKey === 'results' ? 'flex-start' : 'center', justifyContent: 'center' }}>
+            <div style={{ minHeight: '600px', width: '100%', display: 'flex', alignItems: (menuKey === 'results' || menuKey === 'analytics') ? 'flex-start' : 'center', justifyContent: 'center' }}>
               {componentsSwitch(menuKey)}
             </div>
           </Content>

@@ -3,10 +3,49 @@ API functions for fetching analytics data from Supabase.
 """
 import os
 import logging
+import re
 from typing import Dict, Any, Optional
 from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
+
+
+def parse_timestamp(timestamp_str: str) -> datetime:
+    """
+    Parse ISO timestamp string with variable-length microseconds.
+    Handles formats like:
+    - '2026-01-18T13:41:18.6297+00:00' (4 digits)
+    - '2026-01-18T13:41:18.629700+00:00' (6 digits)
+    - '2026-01-18T13:41:18Z' (no microseconds)
+    """
+    if not timestamp_str:
+        raise ValueError("Empty timestamp string")
+
+    # Normalize Z timezone to +00:00
+    timestamp_str = timestamp_str.replace('Z', '+00:00')
+
+    # Check if there are microseconds (pattern: .[digits] before timezone or end)
+    # Match microseconds and timezone separately
+    match = re.match(r'^(.+?)\.(\d+)([\+\-]\d{2}:\d{2}|$)', timestamp_str)
+    if match:
+        base_part = match.group(1)  # Everything before the microseconds
+        microseconds_str = match.group(2)  # The microseconds digits
+        tz_part = match.group(3) or ''  # Timezone or empty
+
+        # Pad or truncate microseconds to exactly 6 digits
+        if len(microseconds_str) < 6:
+            microseconds_str = microseconds_str.ljust(6, '0')
+        elif len(microseconds_str) > 6:
+            microseconds_str = microseconds_str[:6]
+
+        # Reconstruct the timestamp with normalized microseconds
+        timestamp_str = f"{base_part}.{microseconds_str}{tz_part}"
+
+    try:
+        return datetime.fromisoformat(timestamp_str)
+    except ValueError as e:
+        logger.error(f"Failed to parse timestamp '{timestamp_str}': {e}")
+        raise
 
 
 def get_supabase_client():
@@ -124,7 +163,7 @@ def get_analytics_summary(days: int = 30) -> Dict[str, Any]:
         # Prepare time series data for runs over time (group by day)
         runs_by_day = {}
         for run in runs:
-            run_date = datetime.fromisoformat(run.get('timestamp', '').replace('Z', '+00:00'))
+            run_date = parse_timestamp(run.get('timestamp', ''))
             day_key = run_date.strftime('%Y-%m-%d')
             if day_key not in runs_by_day:
                 runs_by_day[day_key] = {
