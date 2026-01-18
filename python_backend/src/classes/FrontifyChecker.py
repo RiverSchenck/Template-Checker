@@ -1487,7 +1487,7 @@ class FrontifyChecker:
                     # Format message with inheritance
                     par_style_filltint_obj = par_style.get_filltint_obj()
                     inherited_from = par_style_filltint_obj.get_inherited_from_value()
-                    inherited_message = f'Fill Tint is: {filltint}'
+                    # inherited_message = f'Fill Tint is: {filltint}'
                     if inherited_from:
                         inherited_message += f'; Inherited from: {inherited_from}'
 
