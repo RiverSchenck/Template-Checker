@@ -8,7 +8,6 @@ import { ValidationResult } from '../../types';
 import countValidationIssues from '../ValidationCount';
 import SuccessModal from './SuccessModal';
 import FileSizeErrorModal from './FileSizeErrorModal';
-import ConfirmationPopup from './ConfirmationPopup';
 import '../../App.css';
 
 
@@ -34,18 +33,6 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showFileSizeErrorModal, setShowFileSizeErrorModal] = useState(false);
   const [fileSizeError, setFileSizeError] = useState<{ fileSizeMB: string; maxSizeMB: number } | null>(null);
-
-  // Initialize isConfirmed from localStorage to prevent popup flash
-  const [isConfirmed, setIsConfirmed] = useState(() => {
-    const lastConfirmed = localStorage.getItem('confirmationTimestamp');
-    if (lastConfirmed) {
-      const now = new Date().getTime();
-      const reconfDays = 2;
-      const dayCount = 24 * 60 * 60 * 1000 * reconfDays;
-      return (now - parseInt(lastConfirmed)) < dayCount;
-    }
-    return false;
-  });
 
   const { setMenuKey } = useMenu();
   const [downloadXML, setDownloadXML] = useState(false);
@@ -213,9 +200,6 @@ function FileUploadPage({ checkerResponse, setPrevious = false, onUploadComplete
 
   return (
     <div style={{ width: '50%', height: '25%' }}>
-      {!isConfirmed && (
-        <ConfirmationPopup onConfirm={() => setIsConfirmed(true)} />
-      )}
       <>
         {showSuccessModal && (
           <SuccessModal

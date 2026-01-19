@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Statistic, Table, Tag, Space, Select, Spin, Alert, Row, Col } from 'antd';
+import { ensureAuthenticated } from '../../utils/auth';
 import {
   FileDoneOutlined,
   ExclamationCircleOutlined,
@@ -61,19 +62,9 @@ interface AnalyticsSummary {
 }
 
 // Use production URL when NODE_ENV is 'production', otherwise use localhost for development
-const isDebug = process.env.NODE_ENV !== 'production';
+//const isDebug = process.env.NODE_ENV !== 'production';
+const isDebug = true;
 const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
-
-const getAuthHeaders = (): Record<string, string> => {
-  const token = process.env.REACT_APP_AUTH_TOKEN;
-  const headers: Record<string, string> = {
-    'X-Source': 'extension'
-  };
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-  return headers;
-};
 
 function Analytics() {
   const [loading, setLoading] = useState(true);
@@ -83,15 +74,24 @@ function Analytics() {
 
   useEffect(() => {
     fetchAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [days]);
 
   const fetchAnalytics = async () => {
     setLoading(true);
     setError(null);
     try {
+      // Ensure authenticated before making request
+      const token = await ensureAuthenticated();
+
+      const headers: Record<string, string> = {
+        'X-Source': 'extension',
+        'Authorization': `Bearer ${token}`,
+      };
+
       const response = await fetch(`${baseURL}/analytics/summary?days=${days}`, {
         method: 'GET',
-        headers: getAuthHeaders(),
+        headers,
       });
 
       if (!response.ok) {

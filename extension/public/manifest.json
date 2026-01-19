@@ -1,5 +1,6 @@
 {
   "manifest_version": 3,
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnCpXvN2irlAd5B5rnR3xN7Pk5MzkGIeTGqJN1/l9gM/yaqd0ex4bgbyPRdGbRBkhiruoBsRCJsE5wDiY8StuOc/fcqWmnn7HjJjdk90CT/Sd8OZ8Wk+djOp6eASbaP3dPNNukYe9L10mzEAVbofSuaIcQO+HjyOWNkp9pkibqhw18IH5vyK8ZMkK4ManxMddZWN3ZICiygf0ziYbY7/s9Iziq6AqV+slDZQ5NDYYJEpSFKZtQLq0n/zhT/gxDsajFDhue5CwYAQXitn1yGEO37owQOdr2JGWKcUPIPaIzQjFYhhZnOju+sfY2mRGbYVtNUrruZ0KaaGXgsPL7DArUwIDAQAB",
   "name": "Frontify Template Checker",
   "short_name": "Template Checker",
   "version": "1.0.0",
@@ -11,7 +12,8 @@
     "storage"
   ],
   "host_permissions": [
-    "https://template-checker-test.fly.dev/*"
+    "https://template-checker-test.fly.dev/*",
+    "https://template-checker.fly.dev/*"
   ],
   "background": {
     "service_worker": "background.js"

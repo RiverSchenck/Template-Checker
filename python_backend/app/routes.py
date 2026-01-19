@@ -214,3 +214,20 @@ def analytics_runs():
         return jsonify(runs_data), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@main.route('/api/extension-token', methods=['GET'])
+def get_extension_token():
+    """Get AUTH_TOKEN for extension use."""
+    auth_token = os.getenv('AUTH_TOKEN')
+
+    if auth_token:
+        return jsonify({
+            'access_token': auth_token,
+            'token_type': 'Bearer'
+        })
+
+    return jsonify({
+        'error': 'No token available',
+        'message': 'Please log in to the web app first'
+    }), 401

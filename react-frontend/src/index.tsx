@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './App.css';
 import Fonts from './styles/fonts';
 import App from './App';
+import { AuthProvider } from './components/AuthContext';
 import { MenuProvider } from './components/MenuContext';
 
 const root = ReactDOM.createRoot(
@@ -11,8 +12,10 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
       <Fonts />
-      <MenuProvider>
-        <App />
-      </MenuProvider>
+      <AuthProvider>
+        <MenuProvider>
+          <App />
+        </MenuProvider>
+      </AuthProvider>
     </React.StrictMode>
 );
