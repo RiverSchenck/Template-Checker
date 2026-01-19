@@ -10,6 +10,12 @@ interface ChromeTab {
 interface ChromeTabs {
   query(queryInfo?: { active?: boolean; currentWindow?: boolean }): Promise<ChromeTab[]>;
   sendMessage(tabId: number, message: any): Promise<any>;
+  create(createProperties: { url?: string; active?: boolean }): Promise<ChromeTab>;
+  remove(tabId: number): Promise<void>;
+  onUpdated: {
+    addListener(callback: (tabId: number, changeInfo: any, tab: ChromeTab) => void): void;
+    removeListener(callback: (tabId: number, changeInfo: any, tab: ChromeTab) => void): void;
+  };
 }
 
 interface ChromeRuntime {
@@ -41,11 +47,22 @@ interface ChromeScripting {
   }): Promise<any[]>;
 }
 
+interface ChromeWindows {
+  create(createData: {
+    url?: string;
+    type?: 'normal' | 'popup' | 'panel' | 'app';
+    width?: number;
+    height?: number;
+    focused?: boolean;
+  }): Promise<any>;
+}
+
 interface ChromeAPI {
   tabs: ChromeTabs;
   runtime: ChromeRuntime;
   scripting: ChromeScripting;
   storage: ChromeStorage;
+  windows: ChromeWindows;
 }
 
 declare const chrome: ChromeAPI;

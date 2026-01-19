@@ -1,21 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout, ConfigProvider } from 'antd';
 import FileUploadPage from './components/File Upload/FileUpload';
 import ValidationList from './components/Validation List/ValidationList'
 import SidebarMenu from './components/SidebarMenu';
 import Analytics from './components/Analytics/Analytics';
+import Login from './components/Login/Login';
+import AuthCallback from './components/AuthCallback';
 import { useMenu } from './components/MenuContext';
+import { useAuth } from './components/AuthContext';
 import { ValidationResult } from './types';
 import './App.css';
 
 const { Content } = Layout;
 
-export default function App() {
+function AppContent() {
   const [checkerResults, setCheckerResults] = useState<ValidationResult | null>(null);
   const [seeDetails, setSeeDetails] = useState<Boolean>(false);
   const [previousCheckerResults, setPreviousCheckerResults] = useState<ValidationResult | null>(null);
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const { menuKey } = useMenu();
+  const { user, loading } = useAuth();
+
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
+      }}>
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+  // Show login if not authenticated
+  if (!user) {
+    return <Login />;
+  }
 
   const checkerResponse = (jsonResponse: ValidationResult, setPrevious: boolean = false) => {
     if (setPrevious && checkerResults) {
@@ -78,5 +102,16 @@ export default function App() {
           </Layout>
         </div>
         </ConfigProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/*" element={<AppContent />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

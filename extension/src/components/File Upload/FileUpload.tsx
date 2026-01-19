@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { message, ConfigProvider, Progress, Alert, Spin } from 'antd';
 import { useMenu } from '../MenuContext';
 import { ValidationResult } from '../../types';
+import { ensureAuthenticated } from '../../utils/auth';
 import '../../App.css';
 
 interface FileUploadPageProps {
@@ -24,19 +25,9 @@ function FileUploadPage({ checkerResponse, onUploadComplete }: FileUploadPagePro
   const { setMenuKey } = useMenu();
 
   // Use production URL when NODE_ENV is 'production', otherwise use localhost for development
-  const isDebug = process.env.NODE_ENV !== 'production';
+  //const isDebug = process.env.NODE_ENV !== 'production';
+  const isDebug = true;
   const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
-
-  const getAuthHeaders = (): Record<string, string> => {
-    const token = process.env.REACT_APP_AUTH_TOKEN;
-    const headers: Record<string, string> = {
-      'X-Source': 'extension'
-    };
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-    return headers;
-  };
 
   const handleUploadResults = (response: CustomResponse) => {
     const results: ValidationResult = response?.content?.results;
@@ -69,9 +60,13 @@ function FileUploadPage({ checkerResponse, onUploadComplete }: FileUploadPagePro
     const urlEndpoint = `${baseURL}/run-from-url`;
 
     try {
+      // Ensure authenticated before making request
+      const token = await ensureAuthenticated();
+
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
-        ...getAuthHeaders(),
+        'X-Source': 'extension',
+        'Authorization': `Bearer ${token}`,
       };
 
       const response = await fetch(urlEndpoint, {
@@ -107,7 +102,7 @@ function FileUploadPage({ checkerResponse, onUploadComplete }: FileUploadPagePro
       console.error(error);
       setLoading(false);
     }
-  }, [handleUploadResults, setMenuKey, loading, url, baseURL, getAuthHeaders]);
+  }, [handleUploadResults, setMenuKey, loading, url, baseURL]);
 
   const processUrl = useCallback((receivedUrl: string) => {
     if (receivedUrl) {
