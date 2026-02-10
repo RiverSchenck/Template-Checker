@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Statistic, Table, Tag, Space, Select, Spin, Alert, Row, Col } from 'antd';
-import { ensureAuthenticated } from '../../utils/auth';
+import { ensureAuthenticated, getFrontendUrl } from '../../utils/auth';
 import {
   FileDoneOutlined,
   ExclamationCircleOutlined,
@@ -61,10 +61,12 @@ interface AnalyticsSummary {
   recent_runs: Array<any>;
 }
 
-// Use production URL when NODE_ENV is 'production', otherwise use localhost for development
-//const isDebug = process.env.NODE_ENV !== 'production';
-const isDebug = true;
-const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
+// Get backend URL from environment variable, with fallback
+const baseURL = process.env.REACT_APP_BACKEND_URL ||
+  (process.env.NODE_ENV === 'production'
+    ? 'https://template-checker-test.fly.dev'
+    : 'http://localhost:8000');
+const frontendUrl = getFrontendUrl();
 
 function Analytics() {
   const [loading, setLoading] = useState(true);
@@ -80,10 +82,15 @@ function Analytics() {
   const fetchAnalytics = async () => {
     setLoading(true);
     setError(null);
+    let token: string;
     try {
-      // Ensure authenticated before making request
-      const token = await ensureAuthenticated();
-
+      token = await ensureAuthenticated(frontendUrl);
+    } catch {
+      setLoading(false);
+      setError('Please sign in to view analytics.');
+      return;
+    }
+    try {
       const headers: Record<string, string> = {
         'X-Source': 'extension',
         'Authorization': `Bearer ${token}`,
@@ -180,7 +187,7 @@ function Analytics() {
       key: 'type',
       filters: data?.all_validations
         ? Array.from(new Set(data.all_validations.map((v: any) => v.type)))
-            .map((type: string) => ({ text: type, value: type }))
+          .map((type: string) => ({ text: type, value: type }))
         : [],
       onFilter: (value: any, record: any) => record.type === value,
       filterSearch: true,

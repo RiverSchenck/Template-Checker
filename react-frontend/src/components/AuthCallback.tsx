@@ -56,7 +56,27 @@ export default function AuthCallback() {
           return;
         }
 
-        // Exchange the code for a session
+        // Exchange the OAuth code for a session (persists to localStorage)
+        const code = searchParams.get('code');
+        if (code) {
+          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          if (exchangeError) {
+            console.error('Error exchanging code for session:', exchangeError);
+            const errorMsg = exchangeError.message || '';
+            const isNotAllowed = isNotAllowedError(errorMsg);
+            setErrorType(isNotAllowed ? 'not_allowed' : 'general');
+            setError(
+              isNotAllowed
+                ? 'Your email domain or address is not authorized. Please contact river if you need access.'
+                : errorMsg || 'Failed to complete authentication. Please try again.'
+            );
+            setLoading(false);
+            setTimeout(() => navigate('/'), isNotAllowed ? 5000 : 3000);
+            return;
+          }
+        }
+
+        // Get the session (now stored after code exchange)
         const { data, error: sessionError } = await supabase.auth.getSession();
 
         if (sessionError) {
@@ -79,7 +99,28 @@ export default function AuthCallback() {
         }
 
         if (data.session) {
-          // Successfully authenticated - navigate to main app
+          const isExtensionRequest = searchParams.get('extension') === 'true' ||
+            window.location.search.includes('extension=true');
+
+          if (isExtensionRequest) {
+            const u = data.session.user;
+            const user = {
+              email: u.email ?? null,
+              name: u.user_metadata?.full_name ?? u.user_metadata?.name ?? u.email ?? null,
+              avatarUrl: u.user_metadata?.avatar_url ?? u.user_metadata?.picture ?? null,
+            };
+            window.postMessage({
+              action: 'extensionAuthToken',
+              accessToken: data.session.access_token,
+              refreshToken: data.session.refresh_token,
+              user,
+            }, window.location.origin);
+            setLoading(false);
+            setTimeout(() => window.close(), 1500);
+            return;
+          }
+
+          setLoading(false);
           navigate('/');
         } else {
           // No session - likely rejected by database trigger

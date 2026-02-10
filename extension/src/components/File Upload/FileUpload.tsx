@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { message, ConfigProvider, Progress, Alert, Spin } from 'antd';
 import { useMenu } from '../MenuContext';
 import { ValidationResult } from '../../types';
-import { ensureAuthenticated } from '../../utils/auth';
+import { ensureAuthenticated, getFrontendUrl } from '../../utils/auth';
 import '../../App.css';
 
 interface FileUploadPageProps {
@@ -24,10 +24,12 @@ function FileUploadPage({ checkerResponse, onUploadComplete }: FileUploadPagePro
 
   const { setMenuKey } = useMenu();
 
-  // Use production URL when NODE_ENV is 'production', otherwise use localhost for development
-  //const isDebug = process.env.NODE_ENV !== 'production';
-  const isDebug = true;
-  const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
+  // Get backend URL from environment variable, with fallback
+  const baseURL = process.env.REACT_APP_BACKEND_URL ||
+    (process.env.NODE_ENV === 'production'
+      ? 'https://template-checker-test.fly.dev'
+      : 'http://localhost:8000');
+  const frontendUrl = getFrontendUrl();
 
   const handleUploadResults = (response: CustomResponse) => {
     const results: ValidationResult = response?.content?.results;
@@ -57,12 +59,18 @@ function FileUploadPage({ checkerResponse, onUploadComplete }: FileUploadPagePro
 
     setLoading(true);
     setError(null);
-    const urlEndpoint = `${baseURL}/run-from-url`;
 
+    let token: string;
     try {
-      // Ensure authenticated before making request
-      const token = await ensureAuthenticated();
+      token = await ensureAuthenticated(frontendUrl);
+    } catch {
+      setLoading(false);
+      message.warning('Please sign in to continue.');
+      return;
+    }
 
+    const urlEndpoint = `${baseURL}/run-from-url`;
+    try {
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'X-Source': 'extension',
@@ -102,7 +110,7 @@ function FileUploadPage({ checkerResponse, onUploadComplete }: FileUploadPagePro
       console.error(error);
       setLoading(false);
     }
-  }, [handleUploadResults, setMenuKey, loading, url, baseURL]);
+  }, [handleUploadResults, setMenuKey, loading, url, baseURL, frontendUrl]);
 
   const processUrl = useCallback((receivedUrl: string) => {
     if (receivedUrl) {

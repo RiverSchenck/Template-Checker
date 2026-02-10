@@ -4,6 +4,7 @@ import './App.css';
 import Fonts from './styles/fonts';
 import App from './App';
 import { MenuProvider } from './components/MenuContext';
+import { AuthProvider } from './components/AuthContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,8 +12,10 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
       <Fonts />
-      <MenuProvider>
-        <App />
-      </MenuProvider>
+      <AuthProvider>
+        <MenuProvider>
+          <App />
+        </MenuProvider>
+      </AuthProvider>
     </React.StrictMode>
 );

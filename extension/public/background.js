@@ -1,18 +1,20 @@
 function openOrFocusExtensionWindow() {
   chrome.windows.getAll({ populate: true }, (windows) => {
-    const extensionWindow = windows.find(window =>
-      window.tabs?.some(t => t.url?.includes(chrome.runtime.getURL('index.html')))
+    const extensionWindow = windows.find((window) =>
+      window.tabs?.some((t) =>
+        t.url?.includes(chrome.runtime.getURL("index.html")),
+      ),
     );
 
     if (extensionWindow?.id) {
       chrome.windows.update(extensionWindow.id, { focused: true });
     } else {
       chrome.windows.create({
-        url: chrome.runtime.getURL('index.html'),
-        type: 'normal',
+        url: chrome.runtime.getURL("index.html"),
+        type: "normal",
         width: 850,
         height: 650,
-        focused: true
+        focused: true,
       });
     }
   });
@@ -23,45 +25,78 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'elementSelected') {
+  if (message.action === "extensionAuthToken") {
+    var payload = {
+      supabaseAccessToken: message.accessToken,
+      supabaseRefreshToken: message.refreshToken,
+    };
+    if (message.user) {
+      payload.supabaseUser = message.user;
+    }
+    var loginTabId = sender.tab && sender.tab.id;
+    chrome.storage.local.set(payload).then(function () {
+      openOrFocusExtensionWindow();
+      if (loginTabId) {
+        chrome.tabs.remove(loginTabId);
+      }
+    });
+    sendResponse({ success: true });
+    return true;
+  }
+
+  if (message.action === "openLoginTab") {
+    var url = message.url || "http://localhost:3000/?extension=true";
+    chrome.tabs.create({ url: url });
+    sendResponse({ success: true });
+    return true;
+  }
+
+  if (message.action === "elementSelected") {
     const dataId = message.dataId;
 
     if (dataId !== null && dataId !== undefined) {
-      const isValidDataId = /^[a-zA-Z][a-zA-Z0-9]+$/.test(dataId) && dataId.length >= 3;
+      const isValidDataId =
+        /^[a-zA-Z][a-zA-Z0-9]+$/.test(dataId) && dataId.length >= 3;
       if (!isValidDataId) {
-        sendResponse({ success: false, error: 'Invalid data-id' });
+        sendResponse({ success: false, error: "Invalid data-id" });
         return false;
       }
     }
 
-    chrome.runtime.sendMessage({
-      action: 'selectedDataIdChanged',
-      dataId: dataId
-    }).then(() => {
-      sendResponse({ success: true });
-    }).catch(() => {
-      sendResponse({ success: true });
-    });
+    chrome.runtime
+      .sendMessage({
+        action: "selectedDataIdChanged",
+        dataId: dataId,
+      })
+      .then(() => {
+        sendResponse({ success: true });
+      })
+      .catch(() => {
+        sendResponse({ success: true });
+      });
 
     return true;
   }
 
-  if (message.action === 'spreadSelected') {
+  if (message.action === "spreadSelected") {
     const spreadId = message.spreadId;
 
-    chrome.runtime.sendMessage({
-      action: 'selectedSpreadChanged',
-      spreadId: spreadId
-    }).then(() => {
-      sendResponse({ success: true });
-    }).catch(() => {
-      sendResponse({ success: true });
-    });
+    chrome.runtime
+      .sendMessage({
+        action: "selectedSpreadChanged",
+        spreadId: spreadId,
+      })
+      .then(() => {
+        sendResponse({ success: true });
+      })
+      .catch(() => {
+        sendResponse({ success: true });
+      });
 
     return true;
   }
 
-  if (message.action === 'frontifyUrlReceived') {
+  if (message.action === "frontifyUrlReceived") {
     const url = message.url;
 
     chrome.storage.local.set({ pendingFrontifyUrl: url });
@@ -72,18 +107,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const initialDelay = 200;
 
     const trySendMessage = () => {
-      chrome.runtime.sendMessage({
-        action: 'frontifyUrlReceived',
-        url: url
-      }).then(() => {
-        chrome.storage.local.remove('pendingFrontifyUrl');
-      }).catch(() => {
-        if (retryCount < maxRetries) {
-          retryCount++;
-          const delay = initialDelay + (retryCount * 100);
-          setTimeout(trySendMessage, delay);
-        }
-      });
+      chrome.runtime
+        .sendMessage({
+          action: "frontifyUrlReceived",
+          url: url,
+        })
+        .then(() => {
+          chrome.storage.local.remove("pendingFrontifyUrl");
+        })
+        .catch(() => {
+          if (retryCount < maxRetries) {
+            retryCount++;
+            const delay = initialDelay + retryCount * 100;
+            setTimeout(trySendMessage, delay);
+          }
+        });
     };
 
     setTimeout(trySendMessage, initialDelay);

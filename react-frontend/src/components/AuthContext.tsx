@@ -39,27 +39,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    let cancelled = false;
 
-    // Listen for auth changes
+    const initSession = async () => {
+      // Code exchange is done only in AuthCallback to avoid double exchange and "PKCE code verifier not found"
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!cancelled) {
+        setSession(session);
+        setUser(session?.user ?? null);
+      }
+      if (!cancelled) setLoading(false);
+    };
+
+    initSession();
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
+      if (!cancelled) {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signInWithGoogle = async () => {
-    const redirectTo = `${window.location.origin}/auth/callback`;
+    const urlParams = new URLSearchParams(window.location.search);
+    const isExtensionRequest = urlParams.get('extension') === 'true';
+    const redirectTo = isExtensionRequest
+      ? `${window.location.origin}/auth/callback?extension=true`
+      : `${window.location.origin}/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

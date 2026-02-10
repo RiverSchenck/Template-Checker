@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Layout, ConfigProvider } from 'antd';
+import { Layout, ConfigProvider, Spin } from 'antd';
 import FileUploadPage from './components/File Upload/FileUpload';
-import ValidationList from './components/Validation List/ValidationList'
+import ValidationList from './components/Validation List/ValidationList';
 import Analytics from './components/Analytics/Analytics';
 import SidebarMenu from './components/SidebarMenu';
+import Login from './components/Login/Login';
 import { useMenu } from './components/MenuContext';
+import { useAuth } from './components/AuthContext';
 import { ValidationResult } from './types';
 import './App.css';
 
@@ -14,14 +16,13 @@ export default function App() {
   const [checkerResults, setCheckerResults] = useState<ValidationResult | null>(null);
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const { menuKey } = useMenu();
+  const { hasToken, loading } = useAuth();
 
   const checkerResponse = (jsonResponse: ValidationResult) => {
     setCheckerResults(jsonResponse);
   };
 
-
   const componentsSwitch = (key: string) => {
-    console.log('componentswitch', key)
     switch (key) {
       case 'upload-template':
         return <FileUploadPage checkerResponse={checkerResponse} />;
@@ -33,6 +34,20 @@ export default function App() {
         return <div>Uh oh, something went wrong.</div>;
     }
   };
+
+  if (loading) {
+    return (
+      <ConfigProvider theme={{ token: { fontFamily: 'Space Grotesk Frontify', colorPrimary: '#B39DFD' } }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: 'linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #16213e 100%)' }}>
+          <Spin size="large" />
+        </div>
+      </ConfigProvider>
+    );
+  }
+
+  if (!hasToken) {
+    return <Login />;
+  }
 
   return (
     <ConfigProvider
