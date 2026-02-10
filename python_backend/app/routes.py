@@ -1,4 +1,5 @@
 import os
+import jwt
 from functools import wraps
 from flask import Blueprint, jsonify, send_file, after_this_request, request, current_app, Response
 from src.classes.FrontifyChecker import FrontifyChecker
@@ -8,16 +9,34 @@ from .analytics_api import get_analytics_summary, get_runs
 main = Blueprint('main', __name__)
 
 
+def verify_supabase_token(token):
+    """Verify a Supabase JWT token."""
+    try:
+        supabase_jwt_secret = os.getenv('SUPABASE_JWT_SECRET')
+        if not supabase_jwt_secret:
+            return None
+
+        # Decode and verify the JWT token
+        decoded = jwt.decode(
+            token,
+            supabase_jwt_secret,
+            algorithms=['HS256'],
+            options={"verify_signature": True, "verify_exp": True, "verify_iat": True}
+        )
+        return decoded
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+    except Exception:
+        return None
+
+
 def require_auth(f):
-    """Decorator to require authentication token for endpoints."""
+    """Decorator to require authentication token for endpoints.
+    Supports both Supabase JWT tokens and static AUTH_TOKEN for backward compatibility."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # Check if auth token is configured
-        auth_token = current_app.config.get('AUTH_TOKEN')
-        if not auth_token:
-            # If no token is configured, allow access (for development/testing)
-            return f(*args, **kwargs)
-
         # Get token from Authorization header or query parameter
         provided_token = None
 
@@ -32,8 +51,15 @@ def require_auth(f):
         if not provided_token:
             provided_token = request.args.get('token')
 
-        # Verify token
-        if not provided_token or provided_token != auth_token:
+        if not provided_token:
+            # Check if auth is required (either AUTH_TOKEN or SUPABASE_JWT_SECRET configured)
+            auth_token = current_app.config.get('AUTH_TOKEN')
+            supabase_jwt_secret = os.getenv('SUPABASE_JWT_SECRET')
+
+            if not auth_token and not supabase_jwt_secret:
+                # If no auth is configured, allow access (for development/testing)
+                return f(*args, **kwargs)
+
             return jsonify({
                 'error': {
                     'message': 'Authentication required',
@@ -41,7 +67,29 @@ def require_auth(f):
                 }
             }), 401
 
-        return f(*args, **kwargs)
+        # First, try to verify as Supabase JWT token
+        supabase_payload = verify_supabase_token(provided_token)
+        if supabase_payload:
+            # Valid Supabase token
+            return f(*args, **kwargs)
+
+        # Fallback to static AUTH_TOKEN for backward compatibility
+        auth_token = current_app.config.get('AUTH_TOKEN')
+        if auth_token and provided_token == auth_token:
+            return f(*args, **kwargs)
+
+        # If no auth is configured, allow access (for development/testing)
+        if not auth_token and not os.getenv('SUPABASE_JWT_SECRET'):
+            return f(*args, **kwargs)
+
+        # Token validation failed
+        return jsonify({
+            'error': {
+                'message': 'Authentication required',
+                'details': 'Invalid or missing authentication token'
+            }
+        }), 401
+
     return decorated_function
 
 

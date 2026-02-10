@@ -60,6 +60,7 @@ interface AnalyticsSummary {
   recent_runs: Array<any>;
 }
 
+// Use production URL when NODE_ENV is 'production', otherwise use localhost for development
 const isDebug = process.env.NODE_ENV !== 'production';
 const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
 
@@ -179,7 +180,7 @@ function Analytics() {
       key: 'type',
       filters: data?.all_validations
         ? Array.from(new Set(data.all_validations.map((v: any) => v.type)))
-            .map((type: string) => ({ text: type, value: type }))
+          .map((type: string) => ({ text: type, value: type }))
         : [],
       onFilter: (value: any, record: any) => record.type === value,
       filterSearch: true,

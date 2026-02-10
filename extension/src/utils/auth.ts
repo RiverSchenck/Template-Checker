@@ -1,81 +1,54 @@
-/**
- * Simple authentication for the extension.
- * Just uses the token if available, otherwise fails.
- */
+import type { StoredUserProfile } from '../types';
 
-// Use backend URL (same as API calls)
-const isDebug = true; // Match your FileUpload/Analytics setting
-const BACKEND_URL = isDebug
-  ? "http://localhost:8000"
-  : "https://template-checker-test.fly.dev";
+const STORAGE_KEY = 'supabaseAccessToken';
+const STORAGE_USER_KEY = 'supabaseUser';
 
-/**
- * Get stored authentication token.
- */
-export async function getAuthToken(): Promise<string | null> {
-  if (typeof chrome === "undefined" || !chrome.storage) {
-    return null;
+/** Production frontend URL so login flow stays on same origin and token returns to extension. */
+const DEFAULT_FRONTEND_URL = 'https://template-checker.fly.dev';
+
+export function getStoredToken(): Promise<string | null> {
+  if (typeof chrome === 'undefined' || !chrome.storage?.local) {
+    return Promise.resolve(null);
   }
-
-  const result = await chrome.storage.local.get(["authToken"]);
-  return result.authToken || null;
+  return chrome.storage.local.get([STORAGE_KEY]).then(
+    (result: { [key: string]: string }) => result[STORAGE_KEY] || null
+  );
 }
 
-/**
- * Store authentication token.
- */
-export async function setAuthToken(token: string): Promise<void> {
-  if (typeof chrome === "undefined" || !chrome.storage) {
-    throw new Error("Chrome extension API not available");
+export function getStoredUser(): Promise<StoredUserProfile | null> {
+  if (typeof chrome === 'undefined' || !chrome.storage?.local) {
+    return Promise.resolve(null);
   }
-
-  await chrome.storage.local.set({ authToken: token });
+  return chrome.storage.local.get([STORAGE_USER_KEY]).then(
+    (result: { [key: string]: StoredUserProfile | undefined }) => result[STORAGE_USER_KEY] || null
+  );
 }
 
-/**
- * Get token from backend API.
- * Backend returns AUTH_TOKEN or null.
- */
-async function getTokenFromBackend(): Promise<string | null> {
-  try {
-    const response = await fetch(`${BACKEND_URL}/api/extension-token`, {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const data = await response.json();
-    return data.access_token || null;
-  } catch (error) {
-    console.error("Error getting token from backend:", error);
-    return null;
+export function logout(): Promise<void> {
+  if (typeof chrome === 'undefined' || !chrome.storage?.local) {
+    return Promise.resolve();
   }
+  return chrome.storage.local.remove([STORAGE_KEY, STORAGE_USER_KEY, 'supabaseRefreshToken']);
 }
 
-/**
- * Ensure we have a valid auth token.
- * Just checks storage and backend. If no token, throws error.
- */
-export async function ensureAuthenticated(): Promise<string> {
-  // First check stored token
-  let token = await getAuthToken();
+export function getFrontendUrl(): string {
+  const env = typeof process !== 'undefined' && process.env?.REACT_APP_FRONTEND_URL;
+  if (env && (env as string).trim() !== '') return (env as string).trim();
+  return DEFAULT_FRONTEND_URL;
+}
 
-  // If no stored token, try backend
+export function openLoginTab(frontendUrl?: string): void {
+  if (typeof chrome === 'undefined' || !chrome.runtime?.sendMessage) return;
+  const base = (frontendUrl || getFrontendUrl()).replace(/\/$/, '');
+  const loginUrl = base + '/?extension=true';
+  chrome.runtime.sendMessage({ action: 'openLoginTab', url: loginUrl });
+}
+
+export async function ensureAuthenticated(frontendUrl?: string): Promise<string> {
+  const token = await getStoredToken();
   if (!token) {
-    token = await getTokenFromBackend();
-    if (token) {
-      await setAuthToken(token);
-    }
+    openLoginTab(frontendUrl);
+    throw new Error('Please sign in');
   }
-
-  // If still no token, fail
-  if (!token) {
-    throw new Error(
-      "Authentication required. Please log in to the web app first."
-    );
-  }
-
   return token;
 }

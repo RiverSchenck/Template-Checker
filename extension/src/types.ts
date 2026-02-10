@@ -1,4 +1,10 @@
 // Adjust or add to your types.ts file
+export interface StoredUserProfile {
+  email?: string | null;
+  name?: string | null;
+  avatarUrl?: string | null;
+}
+
 export enum ValidationCategory {
   par_styles = "Paragraph Style",
   char_styles = "Character Style",
