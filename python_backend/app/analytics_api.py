@@ -171,15 +171,92 @@ def get_analytics_summary(days: int = 30) -> Dict[str, Any]:
                     'runs': 0,
                     'errors': 0,
                     'warnings': 0,
-                    'infos': 0
+                    'infos': 0,
+                    'react_frontend': 0,
+                    'extension': 0,
+                    'api': 0,
+                    'react_frontend_errors': 0,
+                    'react_frontend_warnings': 0,
+                    'react_frontend_infos': 0,
+                    'extension_errors': 0,
+                    'extension_warnings': 0,
+                    'extension_infos': 0,
+                    'api_errors': 0,
+                    'api_warnings': 0,
+                    'api_infos': 0,
+                    'errors_0': 0,
+                    'errors_1_5': 0,
+                    'errors_6_10': 0,
+                    'errors_11_15': 0,
+                    'errors_16_plus': 0,
+                    'warnings_0': 0,
+                    'warnings_1_5': 0,
+                    'warnings_6_10': 0,
+                    'warnings_11_15': 0,
+                    'warnings_16_plus': 0,
+                    'infos_0': 0,
+                    'infos_1_5': 0,
+                    'infos_6_10': 0,
+                    'infos_11_15': 0,
+                    'infos_16_plus': 0,
                 }
             runs_by_day[day_key]['runs'] += 1
             runs_by_day[day_key]['errors'] += run.get('total_errors', 0)
             runs_by_day[day_key]['warnings'] += run.get('total_warnings', 0)
             runs_by_day[day_key]['infos'] += run.get('total_infos', 0)
+            # Per-source run counts and issues
+            source = run.get('source_type', 'unknown')
+            re = run.get('total_errors', 0)
+            rw = run.get('total_warnings', 0)
+            ri = run.get('total_infos', 0)
+            if source == 'react-frontend':
+                runs_by_day[day_key]['react_frontend'] += 1
+                runs_by_day[day_key]['react_frontend_errors'] += re
+                runs_by_day[day_key]['react_frontend_warnings'] += rw
+                runs_by_day[day_key]['react_frontend_infos'] += ri
+            elif source == 'extension':
+                runs_by_day[day_key]['extension'] += 1
+                runs_by_day[day_key]['extension_errors'] += re
+                runs_by_day[day_key]['extension_warnings'] += rw
+                runs_by_day[day_key]['extension_infos'] += ri
+            elif source == 'api':
+                runs_by_day[day_key]['api'] += 1
+                runs_by_day[day_key]['api_errors'] += re
+                runs_by_day[day_key]['api_warnings'] += rw
+                runs_by_day[day_key]['api_infos'] += ri
+            # Per-run histogram buckets (errors, warnings, infos): 0, 1-5, 6-10, 11-15, 16+
+            def bucket_suffix(val):
+                if val == 0:
+                    return '_0'
+                if 1 <= val <= 5:
+                    return '_1_5'
+                if 6 <= val <= 10:
+                    return '_6_10'
+                if 11 <= val <= 15:
+                    return '_11_15'
+                return '_16_plus'
+            e = run.get('total_errors', 0)
+            runs_by_day[day_key]['errors' + bucket_suffix(e)] += 1
+            w = run.get('total_warnings', 0)
+            runs_by_day[day_key]['warnings' + bucket_suffix(w)] += 1
+            i = run.get('total_infos', 0)
+            runs_by_day[day_key]['infos' + bucket_suffix(i)] += 1
 
         # Sort by date
         runs_over_time = sorted(runs_by_day.values(), key=lambda x: x['date'])
+        bucket_keys = ('_0', '_1_5', '_6_10', '_11_15', '_16_plus')
+        errors_per_run_by_day = [
+            {'date': row['date'], **{f'errors{k}': row[f'errors{k}'] for k in bucket_keys}}
+            for row in runs_over_time
+        ]
+        warnings_per_run_by_day = [
+            {'date': row['date'], **{f'warnings{k}': row[f'warnings{k}'] for k in bucket_keys}}
+            for row in runs_over_time
+        ]
+        infos_per_run_by_day = [
+            {'date': row['date'], **{f'infos{k}': row[f'infos{k}'] for k in bucket_keys}}
+            for row in runs_over_time
+        ]
 
         return {
             'summary': {
@@ -194,6 +271,9 @@ def get_analytics_summary(days: int = 30) -> Dict[str, Any]:
             'source_types': source_types,
             'all_validations': [{'type': k[0], 'severity': k[1], 'count': v} for k, v in all_validations],
             'runs_over_time': runs_over_time,
+            'errors_per_run_by_day': errors_per_run_by_day,
+            'warnings_per_run_by_day': warnings_per_run_by_day,
+            'infos_per_run_by_day': infos_per_run_by_day,
             'recent_runs': runs[:50]  # Last 50 runs
         }
 

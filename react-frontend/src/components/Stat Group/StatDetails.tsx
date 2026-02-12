@@ -1,201 +1,159 @@
-import React, {useState, useEffect} from 'react';
-import { Row, Col, Button, Statistic, Rate, Progress, Typography, Divider } from 'antd';
-import { UpOutlined, DownOutlined, ArrowUpOutlined, ArrowDownOutlined, SwapOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, ChevronUp, ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { ValidationResult, ValidationCategory, CategoryDetail } from '../../types';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
+import { Card, CardContent } from '../ui/card';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '../ui/collapsible';
+import { CircularProgress } from './CircularProgress';
+import { cn } from '../../lib/utils';
 
-const { Text } = Typography
-
-// Define the types for the props
 interface StatsToggleProps {
   jsonResponse: ValidationResult;
   previousJsonResponse?: ValidationResult | null;
-  seeDetails?: Boolean;
+  seeDetails?: boolean;
 }
 
-interface StatisticColumnProps {
-    title: string;
-    value: number;
-    suffix: number;
+const defaultKeys: (keyof ValidationResult)[] = [
+  'par_styles',
+  'char_styles',
+  'text_boxes',
+  'fonts',
+  'images',
+];
+
+function calculateTotalIssuesFromCategory(categoryData?: CategoryDetail): number {
+  if (categoryData?.details) {
+    return Object.keys(categoryData.details).length;
   }
+  return 0;
+}
 
+function calculateChange(current: number, previous: number): number {
+  if (previous === undefined) return 0;
+  return current - previous;
+}
 
-  function StatisticColumn({ title, value, suffix }: StatisticColumnProps) {
-    value = Math.max(0, suffix - value); //Don't be less than 0. Unused images etc can make it negative
-    const percentage = suffix > 0 ? ((value / suffix) * 100) : 0;
-    const textColor = percentage === 100 ? '#9A7EFE': 'rgba(0, 0, 0, 0.45)';
-    return (
-        <Col style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          width: '100%',
-          minHeight: '140px'
-        }}>
-            <Text
-              type='secondary'
-              style={{
-                marginBottom: '8px',
-                fontSize: '14px',
-                textAlign: 'center',
-                lineHeight: '1.4',
-                minHeight: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                whiteSpace: 'normal',
-                wordBreak: 'break-word'
-              }}
-            >
-              {`Correct ${title}'s`}
-            </Text>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-              <Progress
-                  type="circle"
-                  percent={Math.round(percentage)}
-                  format={() => (
-                    <Text type='secondary' style={{color: textColor, fontSize: '12px'}}>
-                      {`${value} / ${suffix}`}
-                    </Text>
-                  )}
-                  strokeColor={'#9A7EFE'}
-                  size={'small'}
-                  strokeWidth={8}
-              />
-            </div>
-            {/* <Rate
-                disabled
-                allowHalf
-                value={rateValue}
-                style={{ fontSize: 13, width: '100%', justifyContent: 'center', textAlign: 'center', marginTop:'3px' }}
-            /> */}
-        </Col>
-    );
-  }
+interface CategoryBlockProps {
+  title: string;
+  totalIssues: number;
+  totalCount: number;
+  changeFromPrevious?: number | null;
+}
 
-    function calculateTotalIssuesFromCategory(categoryData?: CategoryDetail): number {
-        if (categoryData && categoryData.details) {
-            // Return the number of keys in the details object
-            return Object.keys(categoryData.details).length;
-        }
-        return 0;
-    }
+function CategoryBlock({ title, totalIssues, totalCount, changeFromPrevious }: CategoryBlockProps) {
+  const correct = Math.max(0, totalCount - totalIssues);
+  const pct = totalCount > 0 ? (correct / totalCount) * 100 : 0;
+  const isComplete = pct >= 100;
 
-    const calculateChange = (current: number, previous: number) => {
-        if (previous === undefined) {
-          return 0;
-        }
-        return ( current - previous);
-      };
-
-      const getChangeDetails = (change: number) => {
-        if (change > 0) {
-          return { color: '#cf1322', icon: <ArrowUpOutlined /> }; // Red, Arrow Up
-        } else if (change < 0) {
-          return { color: '#3f8600', icon: <ArrowDownOutlined /> }; // Green, Arrow Down
-        } else {
-          return { color: '#d9d9d9', icon: <SwapOutlined /> }; // Gray, Swap
-        }
-      };
-
-
-  const defaultKeys: (keyof ValidationResult)[] = [
-    'par_styles', 'char_styles', 'text_boxes', 'fonts', 'images'
-  ];
-
+  return (
+    <Card
+      className={cn(
+        'relative flex min-h-[152px] flex-col overflow-hidden rounded-xl border border-border/60 bg-card/80 shadow-sm transition-shadow hover:shadow-md',
+        isComplete && 'ring-1 ring-[#9a7efe]/20',
+      )}
+    >
+      {/* Top accent when 100% */}
+      {isComplete && (
+        <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-transparent via-[#9a7efe]/60 to-transparent" aria-hidden />
+      )}
+      <CardContent className="flex flex-1 flex-col items-center justify-center gap-3 px-4 py-5">
+        <span className="text-center text-sm font-medium text-foreground">
+          {title}
+        </span>
+        <CircularProgress correct={correct} total={totalCount} className="shrink-0" />
+        {changeFromPrevious !== undefined && changeFromPrevious !== null && (
+          <Badge
+            variant="outline"
+            className={cn(
+              'shrink-0 gap-1 border font-medium',
+              changeFromPrevious > 0 && 'border-destructive/50 bg-destructive/10 text-destructive',
+              changeFromPrevious < 0 && 'border-green-600/50 bg-green-600/10 text-green-600 dark:border-green-400/50 dark:bg-green-400/10 dark:text-green-400',
+              changeFromPrevious === 0 && 'border-muted-foreground/30 bg-muted/50 text-muted-foreground',
+            )}
+          >
+            {changeFromPrevious > 0 ? (
+              <><ArrowUp className="h-3 w-3" />+{changeFromPrevious}</>
+            ) : changeFromPrevious < 0 ? (
+              <><ArrowDown className="h-3 w-3" />{changeFromPrevious}</>
+            ) : (
+              <><Minus className="h-3 w-3" />—</>
+            )}
+          </Badge>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
 
 function StatsToggle({ jsonResponse, previousJsonResponse, seeDetails }: StatsToggleProps) {
-    const [showStats, setShowStats] = useState(!!previousJsonResponse || !!seeDetails);
+  const [open, setOpen] = useState(!!previousJsonResponse || !!seeDetails);
 
-    useEffect(() => {
-        if (previousJsonResponse || seeDetails) {
-            setShowStats(true);
-        }
-    }, [previousJsonResponse, seeDetails]);
-
-    const generateStatistics = (key: keyof ValidationResult, index: number): JSX.Element => {
-        const categoryData = jsonResponse[key] as CategoryDetail;
-        const categoryEnum = ValidationCategory[key as keyof typeof ValidationCategory];
-        const totalIssues = calculateTotalIssuesFromCategory(categoryData);
-        const total_count = categoryData ? categoryData.total_count : 0;
-        const title = categoryEnum || 'Unknown Category';
-
-        return (
-            <><Col key={`${title}-${index}`} xs={24} sm={12} md={8} lg={6} xl={4} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              minHeight: '140px',
-              position: 'relative'
-            }}>
-            <StatisticColumn title={title} value={totalIssues} suffix={total_count} />
-            {previousJsonResponse && renderChangeStatistics(key, totalIssues)}
-          </Col><Col>
-              {index !== defaultKeys.length - 1 && <Divider type="vertical" style={{ height: '100%', position: 'absolute', right: 0, top: 0 }} />}
-            </Col></>
-        );
-      };
-
-      const renderChangeStatistics = (key: keyof ValidationResult, totalIssues: number): JSX.Element | null => {
-        // Use optional chaining to safely access the details
-        const previousCategoryData = previousJsonResponse?.[key] as CategoryDetail | undefined;
-
-        // Check if previousCategoryData exists before proceeding
-        if (previousCategoryData) {
-          const previousTotalIssues = calculateTotalIssuesFromCategory(previousCategoryData);
-          console.log("Previous Total:",previousTotalIssues)
-          console.log("Total:",totalIssues)
-          const difference = calculateChange(totalIssues, previousTotalIssues);
-          const { color, icon } = getChangeDetails(difference);
-
-          return (
-            <div style={{marginTop: '10px'}}>
-                <Text type='secondary' style={{fontSize: '11px'}}>Change from Previous:</Text>
-                <Statistic
-                    value={Math.abs(difference)}
-                    precision={2}
-                    valueStyle={{ color, fontSize: '20px' }}
-                    prefix={icon}
-                    // suffix="%"
-                    style={{ textAlign: 'center' }} />
-            </div>
-          );
-        }
-        // Return null or render nothing if there is no previous data
-        return null;
-      };
-
-      return (
-        <>
-            {showStats &&
-              <Row gutter={[16, 16]} style={{ width: '100%', display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <div style={{ marginBottom: 16, width: '100%', backgroundColor: '#FAFAFA', marginTop: '10px' }}>
-                    <Row gutter={[16, 16]} style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
-                        {defaultKeys.map(generateStatistics)}
-                    </Row>
-                </div>
-              </Row>
-            }
-            <Button
-                onClick={() => setShowStats(!showStats)}
-                style={{
-                    fontSize: '10px',
-                    padding: '2px 8px',
-                    paddingBottom: '0px',
-                    height: '20px',
-                    lineHeight: 'normal',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '50px',
-                }}
-            >
-                {showStats ? <UpOutlined style={{ fontSize: '9px'}} /> : <DownOutlined style={{ fontSize: '9px'}} />}
-            </Button>
-        </>
-    );
+  useEffect(() => {
+    if (previousJsonResponse || seeDetails) {
+      setOpen(true);
     }
+  }, [previousJsonResponse, seeDetails]);
 
-    export default StatsToggle;
+  return (
+    <Collapsible open={open} onOpenChange={setOpen} className="w-full">
+      <div className="mt-2 flex w-full flex-col items-center">
+        <CollapsibleContent className="w-full data-[state=closed]:hidden">
+          <div className="w-full rounded-xl bg-muted/20 px-3 py-2">
+            <div className="grid w-full grid-cols-2 justify-center gap-4 sm:grid-cols-3 lg:grid-cols-5">
+              {defaultKeys.map((key, index) => {
+                const categoryData = jsonResponse[key] as CategoryDetail;
+                const categoryLabel = ValidationCategory[key as keyof typeof ValidationCategory] ?? 'Unknown';
+                const totalIssues = calculateTotalIssuesFromCategory(categoryData);
+                const totalCount = categoryData?.total_count ?? 0;
 
+                let changeFromPrevious: number | null = null;
+                if (previousJsonResponse) {
+                  const prevCategory = previousJsonResponse[key] as CategoryDetail | undefined;
+                  const prevIssues = calculateTotalIssuesFromCategory(prevCategory);
+                  changeFromPrevious = calculateChange(totalIssues, prevIssues);
+                }
+
+                return (
+                  <CategoryBlock
+                    key={`${categoryLabel}-${index}`}
+                    title={categoryLabel}
+                    totalIssues={totalIssues}
+                    totalCount={totalCount}
+                    changeFromPrevious={changeFromPrevious}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </CollapsibleContent>
+        <CollapsibleTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mt-1.5 h-7 gap-1 px-1.5 text-[11px] text-muted-foreground"
+            aria-expanded={open}
+          >
+            {open ? (
+              <>
+                <ChevronUp className="h-3 w-3" />
+                Hide details
+              </>
+            ) : (
+              <>
+                <ChevronDown className="h-3 w-3" />
+                Show details
+              </>
+            )}
+          </Button>
+        </CollapsibleTrigger>
+      </div>
+    </Collapsible>
+  );
+}
+
+export default StatsToggle;
