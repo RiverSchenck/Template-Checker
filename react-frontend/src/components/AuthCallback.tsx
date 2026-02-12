@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { supabase } from '../utils/supabase';
-import { Alert, Spin } from 'antd';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 // Helper function to check if error is "not allowed" vs general auth error
 const isNotAllowedError = (errorMessage: string): boolean => {
@@ -160,24 +161,23 @@ export default function AuthCallback() {
   }, [navigate, searchParams]);
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      padding: '20px'
-    }}>
+    <div className="flex min-h-screen flex-col items-center justify-center p-5">
       {error ? (
-        <Alert
-          message={errorType === 'not_allowed' ? 'Access Denied' : 'Authentication Failed'}
-          description={error}
-          type="error"
-          showIcon
-          style={{ maxWidth: '500px' }}
-        />
+        <Card className="w-full max-w-[500px] border-destructive/50 bg-destructive/5">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg text-destructive">
+              {errorType === 'not_allowed' ? 'Access Denied' : 'Authentication Failed'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            {error}
+          </CardContent>
+        </Card>
       ) : (
-        <Spin size="large" tip="Completing authentication..." />
+        <div className="flex flex-col items-center gap-3 text-muted-foreground">
+          <Loader2 className="h-8 w-8 animate-spin" aria-hidden />
+          <span className="text-sm">Completing authentication...</span>
+        </div>
       )}
     </div>
   );

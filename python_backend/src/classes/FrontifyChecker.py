@@ -563,6 +563,13 @@ class FrontifyChecker:
 
         return States.HYPHENATION_CHECK
 
+    @staticmethod
+    def _format_overrides(overrides: Dict[str, str]) -> str:
+        """Format overrides dict for display, e.g. 'LeftIndent: 18, FirstLineIndent: -18'."""
+        if not overrides:
+            return ""
+        return ", ".join(f"{k}: {v}" for k, v in overrides.items())
+
     def generate_context_message(self, content: str, items: Union[List[List['StoryParagraphData']], List[List['StoryCharacterData']]], index: int):
         def get_content_from_item(item):
             # Extract content from a single item or a group of items
@@ -679,7 +686,9 @@ class FrontifyChecker:
 
                         context_message = self.generate_context_message(
                             content, char_styles, char_idx)
-                        message = f"1. Text where issue is: {content} {context_message} 2. Overrides: {char_style.get_overrides()}"
+                        overrides_str = self._format_overrides(char_style.get_overrides())
+                        text_part = f"Text: {content} {context_message}".strip()
+                        message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
                         text_content = [content] if content else None
                         # Use data_id (text frame ID) as identifier to group overrides by text frame
                         # Also ensure text_box_data is populated with data_id for frontend to find story content
@@ -708,7 +717,9 @@ class FrontifyChecker:
                     content = par_style.get_content()
                     context_message = self.generate_context_message(
                         content, paragraph_styles, par_idx)
-                    message = f"1. Text where issue is:  {content} {context_message} 2. Overrides: {par_style.get_overrides()}"
+                    overrides_str = self._format_overrides(par_style.get_overrides())
+                    text_part = f"Text: {content} {context_message}".strip()
+                    message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
                     # Check if content is empty or just space, we need more context as to where the issue is for end user
                     text_content = [content] if content else None
                     # Use data_id (text frame ID) as identifier to group overrides by text frame
