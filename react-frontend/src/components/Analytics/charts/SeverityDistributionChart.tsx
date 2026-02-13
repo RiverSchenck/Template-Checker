@@ -40,6 +40,9 @@ export function SeverityDistributionChart({ data }: SeverityDistributionChartPro
               paddingAngle={3}
               stroke="var(--card)"
               strokeWidth={2}
+              isAnimationActive
+              animationBegin={200}
+              animationDuration={800}
             >
               {severityPieData.map((_, index) => (
                 <Cell key={index} fill={severityPieColors[index]} />

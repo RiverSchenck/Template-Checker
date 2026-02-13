@@ -95,6 +95,9 @@ export function RunsOverTimeChart({ data, activeCategory, onCategoryChange }: Ru
             stroke={`var(--color-${runsChartDataKey})`}
             strokeWidth={2}
             dot={false}
+            isAnimationActive
+            animationBegin={200}
+            animationDuration={800}
           />
         </LineChart>
       </ChartContainer>

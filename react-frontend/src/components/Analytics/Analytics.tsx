@@ -29,10 +29,11 @@ function Analytics() {
   const [activeIssuesPerRunCategory, setActiveIssuesPerRunCategory] = useState<IssuesPerRunCategory>('errors');
   const [recentRunsPage, setRecentRunsPage] = useState(0);
 
-  // Reset to first page when time range or data changes
+  // Reset to first page when time range changes (not when data first loads, to avoid
+  // re-render that interrupts chart entrance animations)
   useEffect(() => {
     setRecentRunsPage(0);
-  }, [data, days]);
+  }, [days]);
 
   if (loading) {
     return (

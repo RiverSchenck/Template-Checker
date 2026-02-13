@@ -59,6 +59,9 @@ export function SourceTypeDistributionChart({ data }: SourceTypeDistributionChar
                 paddingAngle={3}
                 stroke="var(--card)"
                 strokeWidth={2}
+                isAnimationActive
+                animationBegin={200}
+                animationDuration={800}
               >
                 {sourcePieData.map((_, index) => (
                   <Cell key={index} fill={sourcePieColors[index % sourcePieColors.length]} />

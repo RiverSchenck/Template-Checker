@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import type { AnalyticsSummary } from './types';
 import { baseURL, getAuthHeaders } from './api';
 import { MAX_ANALYTICS_DAYS } from './constants';
+import { useAuth } from '../AuthContext';
 
 export function useAnalytics(): {
   loading: boolean;
@@ -10,6 +11,7 @@ export function useAnalytics(): {
   days: number;
   setDays: (d: number) => void;
 } {
+  const { session } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [fullData, setFullData] = useState<AnalyticsSummary | null>(null);
@@ -22,7 +24,7 @@ export function useAnalytics(): {
       try {
         const response = await fetch(
           `${baseURL}/analytics/summary?days=${MAX_ANALYTICS_DAYS}`,
-          { method: 'GET', headers: getAuthHeaders() }
+          { method: 'GET', headers: getAuthHeaders(session?.access_token) }
         );
         if (!response.ok) throw new Error('Failed to fetch analytics');
         const result = await response.json();
@@ -35,7 +37,7 @@ export function useAnalytics(): {
       }
     };
     fetchAnalytics();
-  }, []);
+  }, [session?.access_token]);
 
   const data = useMemo(() => {
     if (!fullData) return null;
