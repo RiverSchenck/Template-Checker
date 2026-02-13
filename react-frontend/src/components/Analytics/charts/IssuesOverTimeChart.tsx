@@ -2,15 +2,9 @@ import React, { useMemo } from 'react';
 import { Area, AreaChart, XAxis, CartesianGrid } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../ui/chart';
 import { ChartCardWithTabs } from '../ChartCardWithTabs';
-import { runsChartConfig, issuesChartConfig } from '../constants';
+import { issuesChartConfig } from '../constants';
 import type { RunsCategory } from '../types';
 import type { AnalyticsSummary } from '../types';
-
-interface IssuesOverTimeChartProps {
-  data: AnalyticsSummary | null;
-  activeCategory: RunsCategory;
-  onCategoryChange: (category: RunsCategory) => void;
-}
 
 const ISSUES_OVER_TIME_KEYS: Record<RunsCategory, { errors: string; warnings: string; infos: string }> = {
   total: { errors: 'errors', warnings: 'warnings', infos: 'infos' },
@@ -19,55 +13,39 @@ const ISSUES_OVER_TIME_KEYS: Record<RunsCategory, { errors: string; warnings: st
   api: { errors: 'api_errors', warnings: 'api_warnings', infos: 'api_infos' },
 };
 
-const RUNS_TABS: { id: RunsCategory; configKey: 'runs' | 'react_frontend' | 'extension' | 'api' }[] = [
-  { id: 'total', configKey: 'runs' },
-  { id: 'web', configKey: 'react_frontend' },
-  { id: 'extension', configKey: 'extension' },
-  { id: 'api', configKey: 'api' },
-];
+interface IssuesOverTimeChartProps {
+  data: AnalyticsSummary | null;
+  activeCategory: RunsCategory;
+  onCategoryChange: (category: RunsCategory) => void;
+}
 
 export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: IssuesOverTimeChartProps) {
+  const keys = ISSUES_OVER_TIME_KEYS[activeCategory];
   const runsOverTime = data?.runs_over_time ?? [];
   const issuesOverTimeData = useMemo(() => {
-    const keys = ISSUES_OVER_TIME_KEYS[activeCategory];
     return runsOverTime.map((row: Record<string, unknown>) => ({
+      ...row,
       date: row.date,
       errors: Number(row[keys.errors] ?? 0),
       warnings: Number(row[keys.warnings] ?? 0),
       infos: Number(row[keys.infos] ?? 0),
     }));
-  }, [runsOverTime, activeCategory]);
-  const issuesOverTimeTotals = useMemo(
-    () => ({
-      total:
-        (data?.summary?.total_errors ?? 0) +
-        (data?.summary?.total_warnings ?? 0) +
-        (data?.summary?.total_infos ?? 0),
-      web:
-        (data?.source_types?.['react-frontend']?.total_errors ?? 0) +
-        (data?.source_types?.['react-frontend']?.total_warnings ?? 0) +
-        (data?.source_types?.['react-frontend']?.total_infos ?? 0),
-      extension:
-        (data?.source_types?.extension?.total_errors ?? 0) +
-        (data?.source_types?.extension?.total_warnings ?? 0) +
-        (data?.source_types?.extension?.total_infos ?? 0),
-      api:
-        (data?.source_types?.api?.total_errors ?? 0) +
-        (data?.source_types?.api?.total_warnings ?? 0) +
-        (data?.source_types?.api?.total_infos ?? 0),
-    }),
-    [data?.summary, data?.source_types]
-  );
+  }, [runsOverTime, keys]);
 
-  const tabs = useMemo(
-    () =>
-      RUNS_TABS.map(({ id, configKey }) => ({
-        id,
-        label: runsChartConfig[configKey].label as string,
-        value: issuesOverTimeTotals[id],
-      })),
-    [issuesOverTimeTotals]
-  );
+  const tabs = useMemo(() => {
+    const totalErrors = issuesOverTimeData.reduce((a, d) => a + d.errors, 0);
+    const totalWarnings = issuesOverTimeData.reduce((a, d) => a + d.warnings, 0);
+    const totalInfos = issuesOverTimeData.reduce((a, d) => a + d.infos, 0);
+    const rf = data?.source_types?.['react-frontend'];
+    const ext = data?.source_types?.extension;
+    const apiTypes = data?.source_types?.api;
+    return [
+      { id: 'total' as RunsCategory, label: 'Total', value: totalErrors + totalWarnings + totalInfos },
+      { id: 'web' as RunsCategory, label: 'Web', value: (rf?.total_errors ?? 0) + (rf?.total_warnings ?? 0) + (rf?.total_infos ?? 0) },
+      { id: 'extension' as RunsCategory, label: 'Extension', value: (ext?.total_errors ?? 0) + (ext?.total_warnings ?? 0) + (ext?.total_infos ?? 0) },
+      { id: 'api' as RunsCategory, label: 'API', value: (apiTypes?.total_errors ?? 0) + (apiTypes?.total_warnings ?? 0) + (apiTypes?.total_infos ?? 0) },
+    ];
+  }, [issuesOverTimeData, data?.source_types]);
 
   return (
     <ChartCardWithTabs
@@ -123,6 +101,9 @@ export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: 
             fill="url(#issuesFillInfos)"
             stroke="var(--color-infos)"
             strokeWidth={2}
+            isAnimationActive
+            animationBegin={200}
+            animationDuration={800}
           />
           <Area
             dataKey="warnings"
@@ -130,6 +111,9 @@ export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: 
             fill="url(#issuesFillWarnings)"
             stroke="var(--color-warnings)"
             strokeWidth={2}
+            isAnimationActive
+            animationBegin={200}
+            animationDuration={800}
           />
           <Area
             dataKey="errors"
@@ -137,6 +121,9 @@ export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: 
             fill="url(#issuesFillErrors)"
             stroke="var(--color-errors)"
             strokeWidth={2}
+            isAnimationActive
+            animationBegin={200}
+            animationDuration={800}
           />
         </AreaChart>
       </ChartContainer>

@@ -10,32 +10,25 @@ interface AllValidationsChartProps {
 }
 
 export function AllValidationsChart({ data }: AllValidationsChartProps) {
-  const sortedValidations = useMemo(() => {
-    if (!data?.all_validations) return [];
-    return [...data.all_validations].sort((a, b) => b.count - a.count);
+  const allValidationsBarData = useMemo(() => {
+    const validations = data?.all_validations ?? [];
+    return validations.map((v) => ({
+      ...v,
+      fullName: v.type,
+      name: v.type.length > 24 ? v.type.slice(0, 21) + '...' : v.type,
+    }));
   }, [data?.all_validations]);
 
-  const allValidationsBarData = useMemo(
-    () =>
-      sortedValidations.map((v) => ({
-        name: v.type.length > 20 ? v.type.substring(0, 20) + '...' : v.type,
-        count: v.count,
-        fullName: v.type,
-        severity: v.severity,
-      })),
-    [sortedValidations]
-  );
-
   return (
-    <Card className="mb-6">
+    <Card>
       <CardHeader>
-        <CardTitle>All Validation Types</CardTitle>
-        <CardDescription>Validation type and count by severity</CardDescription>
+        <CardTitle>All Validations</CardTitle>
+        <CardDescription>Count by validation type</CardDescription>
       </CardHeader>
       <CardContent>
-        {sortedValidations.length === 0 ? (
-          <div className="flex h-[200px] items-center justify-center text-muted-foreground">
-            No validations
+        {allValidationsBarData.length === 0 ? (
+          <div className="flex h-[300px] items-center justify-center text-muted-foreground">
+            No validation data
           </div>
         ) : (
           <ChartContainer
@@ -62,7 +55,13 @@ export function AllValidationsChart({ data }: AllValidationsChartProps) {
                   />
                 }
               />
-              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+              <Bar
+                dataKey="count"
+                radius={[0, 4, 4, 0]}
+                isAnimationActive
+                animationBegin={200}
+                animationDuration={800}
+              >
                 {allValidationsBarData.map((entry, index) => (
                   <Cell
                     key={index}

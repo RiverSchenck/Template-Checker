@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   CloudUpload,
   FileCheck,
   BarChart3,
+  Users,
   LogOut,
   MoreVertical,
 } from 'lucide-react';
@@ -42,13 +44,14 @@ function pathnameToItemId(pathname: string): string {
   if (pathname === '/' || pathname === '') return 'upload-template';
   if (pathname.startsWith('/results')) return 'results';
   if (pathname.startsWith('/analytics')) return 'analytics';
+  if (pathname.startsWith('/admin/users')) return 'admin-users';
   return 'upload-template';
 }
 
 export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAdmin, loadingRole } = useAuth();
   const { state: sidebarState } = useSidebar();
   const activeId = pathnameToItemId(location.pathname);
 
@@ -58,6 +61,11 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
     user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture;
   const avatarLetter = (displayName || '?').charAt(0).toUpperCase();
   const isCollapsed = sidebarState === 'collapsed';
+
+  const [avatarError, setAvatarError] = useState(false);
+  useEffect(() => {
+    setAvatarError(false);
+  }, [avatarUrl]);
 
   return (
     <Sidebar collapsible="offcanvas" variant="inset">
@@ -122,6 +130,20 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                   <span>Analytics</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              {(loadingRole || isAdmin) && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    tooltip={loadingRole ? 'Loading...' : 'User management'}
+                    isActive={!loadingRole && activeId === 'admin-users'}
+                    onClick={() => !loadingRole && isAdmin && navigate('/admin/users')}
+                    disabled={loadingRole}
+                    className={loadingRole ? 'opacity-60 pointer-events-none' : undefined}
+                  >
+                    <Users className="h-4 w-4" />
+                    <span>User management</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -137,8 +159,15 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground focus-visible:ring-neutral-600 focus-visible:ring-offset-0 data-[state=open]:ring-neutral-600 data-[state=open]:ring-offset-0"
                   >
                     <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage src={avatarUrl} alt={displayName} />
-                      <AvatarFallback className="rounded-lg">
+                      {avatarUrl && !avatarError && (
+                        <AvatarImage
+                          src={avatarUrl}
+                          alt={displayName}
+                          referrerPolicy="no-referrer"
+                          onError={() => setAvatarError(true)}
+                        />
+                      )}
+                      <AvatarFallback className="rounded-lg" delayMs={0}>
                         {avatarLetter}
                       </AvatarFallback>
                     </Avatar>

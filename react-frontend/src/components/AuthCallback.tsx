@@ -29,19 +29,17 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Check for error in URL parameters or hash
+        // Check for error in URL parameters or hash (implicit flow returns errors in hash)
         const errorDescription = searchParams.get('error_description');
         const errorCode = searchParams.get('error');
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const hashParams = new URLSearchParams(window.location.hash?.substring(1) || '');
         const hashError = hashParams.get('error_description') || hashParams.get('error');
 
-        // Combine all error sources
         const allErrors = [errorDescription, errorCode, hashError].filter(Boolean);
         const errorMessage = allErrors[0] || '';
 
         if (errorCode || errorDescription || hashError) {
           console.error('OAuth error:', errorCode, errorDescription || hashError);
-
           const isNotAllowed = isNotAllowedError(errorMessage);
           setErrorType(isNotAllowed ? 'not_allowed' : 'general');
           setError(
@@ -50,39 +48,15 @@ export default function AuthCallback() {
               : errorMessage || 'Authentication failed. Please try again.'
           );
           setLoading(false);
-
-          setTimeout(() => {
-            navigate('/');
-          }, isNotAllowed ? 5000 : 3000);
+          setTimeout(() => navigate('/'), isNotAllowed ? 5000 : 3000);
           return;
         }
 
-        // Exchange the OAuth code for a session (persists to localStorage)
-        const code = searchParams.get('code');
-        if (code) {
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-          if (exchangeError) {
-            console.error('Error exchanging code for session:', exchangeError);
-            const errorMsg = exchangeError.message || '';
-            const isNotAllowed = isNotAllowedError(errorMsg);
-            setErrorType(isNotAllowed ? 'not_allowed' : 'general');
-            setError(
-              isNotAllowed
-                ? 'Your email domain or address is not authorized. Please contact river if you need access.'
-                : errorMsg || 'Failed to complete authentication. Please try again.'
-            );
-            setLoading(false);
-            setTimeout(() => navigate('/'), isNotAllowed ? 5000 : 3000);
-            return;
-          }
-        }
-
-        // Get the session (now stored after code exchange)
+        // Implicit flow: tokens are in the URL hash; Supabase parses them when detectSessionInUrl is true
         const { data, error: sessionError } = await supabase.auth.getSession();
 
         if (sessionError) {
           console.error('Error getting session:', sessionError);
-
           const errorMsg = sessionError.message || '';
           const isNotAllowed = isNotAllowedError(errorMsg);
           setErrorType(isNotAllowed ? 'not_allowed' : 'general');
@@ -92,68 +66,38 @@ export default function AuthCallback() {
               : errorMsg || 'Failed to complete authentication. Please try again.'
           );
           setLoading(false);
-
-          setTimeout(() => {
-            navigate('/');
-          }, isNotAllowed ? 5000 : 3000);
+          setTimeout(() => navigate('/'), isNotAllowed ? 5000 : 3000);
           return;
         }
 
         if (data.session) {
-          const isExtensionRequest = searchParams.get('extension') === 'true' ||
-            window.location.search.includes('extension=true');
-
-          if (isExtensionRequest) {
-            const u = data.session.user;
-            const user = {
-              email: u.email ?? null,
-              name: u.user_metadata?.full_name ?? u.user_metadata?.name ?? u.email ?? null,
-              avatarUrl: u.user_metadata?.avatar_url ?? u.user_metadata?.picture ?? null,
-            };
-            window.postMessage({
-              action: 'extensionAuthToken',
-              accessToken: data.session.access_token,
-              refreshToken: data.session.refresh_token,
-              user,
-            }, window.location.origin);
-            setLoading(false);
-            setTimeout(() => window.close(), 1500);
-            return;
-          }
-
           setLoading(false);
           navigate('/');
         } else {
-          // No session - likely rejected by database trigger
-          // Try to get more info by checking the hash or waiting a bit
-          setTimeout(async () => {
-            // Check one more time after a delay
-            const { data: retryData } = await supabase.auth.getSession();
-            if (!retryData.session) {
-              setErrorType('not_allowed');
-              setError('Your email domain or address is not authorized. Please contact river if you need access.');
-              setLoading(false);
-
-              setTimeout(() => {
-                navigate('/');
-              }, 5000);
-            }
-          }, 1000);
+          // No session yet (hash may not be processed); retry once
+          const { data: retryData } = await supabase.auth.getSession();
+          if (retryData.session) {
+            setLoading(false);
+            navigate('/');
+          } else {
+            setErrorType('general');
+            setError('No session received. Please try signing in again.');
+            setLoading(false);
+            setTimeout(() => navigate('/'), 3000);
+          }
         }
-      } catch (error: any) {
-        console.error('Auth callback error:', error);
-        const errorMsg = error?.message || 'An unexpected error occurred during authentication.';
+      } catch (err: unknown) {
+        console.error('Auth callback error:', err);
+        const errorMsg = err instanceof Error ? err.message : 'An unexpected error occurred during authentication.';
         const isNotAllowed = isNotAllowedError(errorMsg);
         setErrorType(isNotAllowed ? 'not_allowed' : 'general');
-        setError(isNotAllowed
-          ? 'Your email domain or address is not authorized. Please contact river if you need access.'
-          : errorMsg
+        setError(
+          isNotAllowed
+            ? 'Your email domain or address is not authorized. Please contact river if you need access.'
+            : errorMsg
         );
         setLoading(false);
-
-        setTimeout(() => {
-          navigate('/');
-        }, isNotAllowed ? 5000 : 3000);
+        setTimeout(() => navigate('/'), isNotAllowed ? 5000 : 3000);
       }
     };
 
@@ -169,8 +113,15 @@ export default function AuthCallback() {
               {errorType === 'not_allowed' ? 'Access Denied' : 'Authentication Failed'}
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            {error}
+          <CardContent className="space-y-4 text-sm text-muted-foreground">
+            <p>{error}</p>
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="text-primary underline underline-offset-2 hover:no-underline"
+            >
+              Go back to sign in
+            </button>
           </CardContent>
         </Card>
       ) : (

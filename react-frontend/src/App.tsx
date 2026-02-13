@@ -1,11 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, useOutletContext } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useOutletContext, Navigate } from 'react-router-dom';
 import { Toaster } from './components/ui/sonner';
 import FileUploadPage from './components/File Upload/FileUpload';
 import ValidationList from './components/Validation List/ValidationList';
 import { Analytics } from './components/Analytics';
 import AuthCallback from './components/AuthCallback';
 import ProtectedLayout, { type ProtectedLayoutOutletContext } from './components/ProtectedLayout';
+import { UserManagement } from './components/Admin/UserManagement';
+import { useAuth } from './components/AuthContext';
 
 function FileUploadWrapper() {
   const ctx = useOutletContext<ProtectedLayoutOutletContext>();
@@ -17,6 +19,13 @@ function FileUploadWrapper() {
       navigateToResults={ctx.navigateToResults}
     />
   );
+}
+
+function AdminGuard({ children }: { children: React.ReactNode }) {
+  const { isAdmin, loadingRole } = useAuth();
+  if (loadingRole) return <div className="p-6">Loading...</div>;
+  if (!isAdmin) return <Navigate to="/" replace />;
+  return <>{children}</>;
 }
 
 function ValidationListWrapper() {
@@ -48,6 +57,7 @@ export default function App() {
           <Route index element={<FileUploadWrapper />} />
           <Route path="results" element={<ValidationListWrapper />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="admin/users" element={<AdminGuard><UserManagement /></AdminGuard>} />
         </Route>
       </Routes>
     </BrowserRouter>
