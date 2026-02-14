@@ -43,6 +43,7 @@ function ValidationListWrapper() {
       previousJsonResponse={ctx.previousCheckerResults ?? null}
       checkerResponse={ctx.checkerResponse}
       seeDetails={ctx.seeDetails}
+      fromExtension={ctx.fromExtension}
     />
   );
 }

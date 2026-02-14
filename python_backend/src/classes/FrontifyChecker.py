@@ -635,7 +635,8 @@ class FrontifyChecker:
                         page_id=page_id,
                         identifier=normalized_style_id,
                         data_id=data_id,
-                        text_content=text_content
+                        text_content=text_content,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
         # if hyphenated_default_styles:
@@ -708,7 +709,8 @@ class FrontifyChecker:
                             page_id=page_id,
                             identifier=data_id if data_id and data_id != 'null' else 'null',
                             data_id=data_id,
-                            text_content=text_content
+                            text_content=text_content,
+                            context_details={"text": content or "", "overrides": char_style.get_overrides()}
                         )
 
                 # Only report paragraph-level overrides if there are no character-level overrides
@@ -740,7 +742,8 @@ class FrontifyChecker:
                         page_id=page_id,
                         identifier=data_id if data_id and data_id != 'null' else 'null',
                         data_id=data_id,
-                        text_content=text_content
+                        text_content=text_content,
+                        context_details={"text": content or "", "overrides": par_style.get_overrides()}
                     )
 
         # if overrides_default_par:
@@ -784,7 +787,8 @@ class FrontifyChecker:
                         page_id=page_id,
                         identifier=normalized_style_id,
                         data_id=data_id,
-                        text_content=text_content
+                        text_content=text_content,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
                 # Now check character overrides
@@ -805,7 +809,8 @@ class FrontifyChecker:
                             page_id=page_id,
                             identifier=char_normalized_style_id,
                             data_id=data_id,
-                            text_content=text_content
+                            text_content=text_content,
+                            context_details={"inheritedFrom": inherited_from} if inherited_from else None
                         )
 
         return States.FONTS_INCLUDED_CHECK
@@ -1436,7 +1441,8 @@ class FrontifyChecker:
                         error_type=ValidationError.GRID_ALIGNMENT,
                         page_id=page_id,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
         return States.COMPOSER_CHECK
@@ -1470,7 +1476,8 @@ class FrontifyChecker:
                         warning_type=ValidationWarning.COMPOSER,
                         page_id=page_id,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
         return States.OTHER_CHECKS
@@ -1507,7 +1514,8 @@ class FrontifyChecker:
                         error_type=ValidationError.FILL_TINT,
                         page_id=page_id,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
         return States.RESULTS

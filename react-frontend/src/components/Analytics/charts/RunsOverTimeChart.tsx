@@ -3,6 +3,7 @@ import { Line, LineChart, XAxis, CartesianGrid } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../ui/chart';
 import { ChartCardWithTabs } from '../ChartCardWithTabs';
 import { runsChartConfig } from '../constants';
+import { formatChartDate } from '../utils';
 import type { RunsCategory } from '../types';
 import type { AnalyticsSummary } from '../types';
 
@@ -70,16 +71,14 @@ export function RunsOverTimeChart({ data, activeCategory, onCategoryChange }: Ru
             axisLine={false}
             tickMargin={8}
             minTickGap={32}
-            tickFormatter={(value) =>
-              new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-            }
+            tickFormatter={(value) => formatChartDate(String(value))}
           />
           <ChartTooltip
             content={
               <ChartTooltipContent
                 className="w-[150px]"
                 labelFormatter={(value) =>
-                  new Date(value).toLocaleDateString('en-US', {
+                  formatChartDate(String(value), {
                     month: 'short',
                     day: 'numeric',
                     year: 'numeric',

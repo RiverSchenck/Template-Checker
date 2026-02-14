@@ -165,6 +165,11 @@ function watchForSelection() {
 // Watch for clicks on <li> elements with data-id=spread_id
 function watchForSpreadClicks() {
   function handleSpreadClick(event) {
+    // Only filter the checker app when the user actually clicks a spread in Frontify, not when we programmatically click to navigate for highlight
+    if (!event.isTrusted) {
+      return;
+    }
+
     // Check if the clicked element or its closest <li> ancestor has a data-id
     const target = event.target.closest('li[data-id]');
     if (!target || target.tagName !== 'LI') {

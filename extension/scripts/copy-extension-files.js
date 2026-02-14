@@ -1,26 +1,30 @@
 const fs = require("fs");
 const path = require("path");
 
-const buildDir = path.join(__dirname, "..", "build");
+const buildDir = path.join(__dirname, "..", "dist");
 const publicDir = path.join(__dirname, "..", "public");
 
-// Ensure build directory exists
+// Create dist directory if it does not exist
 if (!fs.existsSync(buildDir)) {
-  console.error('Build directory does not exist. Run "npm run build" first.');
-  process.exit(1);
+  fs.mkdirSync(buildDir, { recursive: true });
+  console.log("✓ Created dist/");
 }
 
 // Copy manifest.json from public to build
 const manifestSource = path.join(publicDir, "manifest.json");
 const manifestDest = path.join(buildDir, "manifest.json");
 
-// Copy background.js from public to build
+// Copy background.js from public to build, injecting web app URL
 const backgroundSource = path.join(publicDir, "background.js");
 const backgroundDest = path.join(buildDir, "background.js");
 
 if (fs.existsSync(backgroundSource)) {
-  fs.copyFileSync(backgroundSource, backgroundDest);
-  console.log("✓ Copied background.js");
+  let content = fs.readFileSync(backgroundSource, "utf8");
+  const webAppUrl =
+    process.env.VITE_FRONTEND_URL || process.env.FRONTEND_URL || "https://template-checker.fly.dev";
+  content = content.replace(/__WEB_APP_URL__/g, webAppUrl);
+  fs.writeFileSync(backgroundDest, content);
+  console.log("✓ Copied background.js (web app URL: " + webAppUrl + ")");
 }
 
 if (fs.existsSync(manifestSource)) {

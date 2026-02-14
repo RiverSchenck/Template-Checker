@@ -10,9 +10,18 @@ export enum ValidationCategory {
 
 export type ValidationType = "errors" | "warnings" | "infos";
 
+/** Optional structured context (e.g. text, overrides, inheritedFrom) when present from the backend. */
+export type ContextDetails = {
+  text?: string;
+  overrides?: Record<string, string>;
+  inheritedFrom?: string;
+  [key: string]: unknown;
+};
+
 export type ValidationItem = {
   validationClassifier: string;
   context: string;
+  context_details?: ContextDetails | null;
   identifier: string | null;
   page_id: string; // Page Self (was "page")
   page_name: string; // Page Name (was "page_id")
@@ -66,9 +75,12 @@ export interface TableDataItem {
   identifier: string;
   page_id: string; // Page Self (was "page")
   page_name: string; // Page Name (was "page_id")
+  spread_id?: string;
   type: string;
   validationType: ValidationType;
   context: string;
+  context_details?: ContextDetails | null;
+  data_id: string;
   textBox?: TextBoxData;
   classifier: ClassifierData;
 }
