@@ -34,11 +34,43 @@ function setupMessageListener() {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('[Content Script] Received message:', message.action);
   if (message.action === 'highlight') {
-    if (message.dataId && typeof window !== 'undefined' && window.highlightElements) {
-      window.highlightElements(message.dataId, message.textContent || null);
-      sendResponse({ success: true });
-    } else {
+    if (!message.dataId) {
       sendResponse({ success: false, error: 'No dataId provided' });
+      return true;
+    }
+    const dataId = message.dataId;
+    const textContent = message.textContent || null;
+    const spreadId = message.spreadId || null;
+
+    function doHighlight() {
+      if (typeof window !== 'undefined' && window.highlightElements) {
+        window.highlightElements(dataId, textContent);
+        sendResponse({ success: true });
+      } else {
+        sendResponse({ success: false, error: 'highlightElements not available' });
+      }
+    }
+
+    if (spreadId) {
+      const spreadEl = document.querySelector('li[data-id="' + CSS.escape(spreadId) + '"]');
+      if (spreadEl) {
+        const alreadySelected =
+          spreadEl.getAttribute('aria-selected') === 'true' ||
+          spreadEl.classList.contains('selected') ||
+          spreadEl.classList.contains('active') ||
+          spreadEl.classList.contains('current') ||
+          spreadEl.classList.contains('state-selected');
+        if (alreadySelected) {
+          doHighlight();
+        } else {
+          spreadEl.click();
+          setTimeout(doHighlight, 400);
+        }
+      } else {
+        doHighlight();
+      }
+    } else {
+      doHighlight();
     }
     return true;
   }

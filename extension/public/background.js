@@ -1,56 +1,17 @@
-function openOrFocusExtensionWindow() {
-  chrome.windows.getAll({ populate: true }, (windows) => {
-    const extensionWindow = windows.find((window) =>
-      window.tabs?.some((t) =>
-        t.url?.includes(chrome.runtime.getURL("index.html")),
-      ),
-    );
+// Injected at build time by copy-extension-files.js
+const WEB_APP_BASE = "__WEB_APP_URL__";
 
-    if (extensionWindow?.id) {
-      chrome.windows.update(extensionWindow.id, { focused: true });
-    } else {
-      chrome.windows.create({
-        url: chrome.runtime.getURL("index.html"),
-        type: "normal",
-        width: 850,
-        height: 650,
-        focused: true,
-      });
-    }
-  });
+function openWebAppTab(urlSuffix = "") {
+  const base = WEB_APP_BASE.replace(/\/$/, "");
+  const url = urlSuffix ? base + urlSuffix : base;
+  chrome.tabs.create({ url: url });
 }
 
-chrome.action.onClicked.addListener((tab) => {
-  openOrFocusExtensionWindow();
+chrome.action.onClicked.addListener(() => {
+  openWebAppTab();
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === "extensionAuthToken") {
-    var payload = {
-      supabaseAccessToken: message.accessToken,
-      supabaseRefreshToken: message.refreshToken,
-    };
-    if (message.user) {
-      payload.supabaseUser = message.user;
-    }
-    var loginTabId = sender.tab && sender.tab.id;
-    chrome.storage.local.set(payload).then(function () {
-      openOrFocusExtensionWindow();
-      if (loginTabId) {
-        chrome.tabs.remove(loginTabId);
-      }
-    });
-    sendResponse({ success: true });
-    return true;
-  }
-
-  if (message.action === "openLoginTab") {
-    var url = message.url || "http://localhost:3000/?extension=true";
-    chrome.tabs.create({ url: url });
-    sendResponse({ success: true });
-    return true;
-  }
-
   if (message.action === "elementSelected") {
     const dataId = message.dataId;
 
@@ -75,57 +36,197 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse({ success: true });
       });
 
+    // Tell the template checker web app tab to filter to this data id
+    chrome.tabs.query({}, (tabs) => {
+      const checkerTab = tabs.find(
+        (t) =>
+          t.id != null &&
+          t.url &&
+          !t.url.startsWith("chrome-") &&
+          !t.url.startsWith("edge://") &&
+          (t.url.includes("template-checker.fly.dev") ||
+            t.url.includes("template-checker-test.fly.dev") ||
+            t.url.startsWith("http://localhost:3000")),
+      );
+      if (checkerTab?.id) {
+        chrome.tabs
+          .sendMessage(checkerTab.id, {
+            action: "setDataIdFilter",
+            dataId: dataId,
+          })
+          .catch(() => {});
+      }
+    });
+
     return true;
   }
 
   if (message.action === "spreadSelected") {
     const spreadId = message.spreadId;
 
+    chrome.storage.session.set({ selectedSpreadIdForFilter: spreadId });
+
     chrome.runtime
       .sendMessage({
         action: "selectedSpreadChanged",
         spreadId: spreadId,
       })
-      .then(() => {
-        sendResponse({ success: true });
-      })
-      .catch(() => {
-        sendResponse({ success: true });
-      });
+      .then(() => {})
+      .catch(() => {});
 
+    // Tell the template checker web app tab to filter by this spread (same pattern as highlightOnFrontify)
+    chrome.tabs.query({}, (tabs) => {
+      const checkerTab = tabs.find(
+        (t) =>
+          t.id != null &&
+          t.url &&
+          !t.url.startsWith("chrome-") &&
+          !t.url.startsWith("edge://") &&
+          (t.url.includes("template-checker.fly.dev") ||
+            t.url.includes("template-checker-test.fly.dev") ||
+            t.url.startsWith("http://localhost:3000")),
+      );
+      if (checkerTab?.id) {
+        chrome.tabs
+          .sendMessage(checkerTab.id, {
+            action: "setSpreadFilter",
+            spreadId: spreadId,
+          })
+          .catch(() => {});
+      }
+    });
+
+    sendResponse({ success: true });
     return true;
   }
 
   if (message.action === "frontifyUrlReceived") {
     const url = message.url;
+    const frontifyTabId = sender.tab?.id;
+    const webAppUrl =
+      WEB_APP_BASE.replace(/\/$/, "") + "/?checkUrl=" + encodeURIComponent(url);
+    chrome.tabs.create({ url: webAppUrl });
+    if (frontifyTabId != null) {
+      chrome.storage.session.set({ frontifySourceTabId: frontifyTabId });
+    }
+    sendResponse({ success: true });
+    return true;
+  }
 
-    chrome.storage.local.set({ pendingFrontifyUrl: url });
-    openOrFocusExtensionWindow();
-
-    let retryCount = 0;
-    const maxRetries = 15;
-    const initialDelay = 200;
-
-    const trySendMessage = () => {
-      chrome.runtime
-        .sendMessage({
-          action: "frontifyUrlReceived",
-          url: url,
+  if (message.action === "highlightOnFrontify") {
+    const { dataId, textContent, spreadId } = message;
+    if (!dataId) {
+      sendResponse({ success: false, error: "No dataId" });
+      return false;
+    }
+    const isValidDataId =
+      /^[a-zA-Z][a-zA-Z0-9]+$/.test(dataId) && dataId.length >= 3;
+    if (!isValidDataId) {
+      sendResponse({ success: false, error: "Invalid dataId" });
+      return false;
+    }
+    function tryHighlight(targetTabId) {
+      return chrome.tabs
+        .sendMessage(targetTabId, {
+          action: "highlight",
+          dataId: dataId,
+          textContent: textContent || null,
+          spreadId: spreadId || null,
         })
         .then(() => {
-          chrome.storage.local.remove("pendingFrontifyUrl");
+          sendResponse({ success: true });
         })
-        .catch(() => {
-          if (retryCount < maxRetries) {
-            retryCount++;
-            const delay = initialDelay + retryCount * 100;
-            setTimeout(trySendMessage, delay);
+        .catch((err) => {
+          if (targetTabId != null) {
+            chrome.storage.session.remove("frontifySourceTabId");
+          }
+          sendResponse({ success: false, error: err.message });
+        });
+    }
+    chrome.storage.session
+      .get(["frontifySourceTabId"])
+      .then(({ frontifySourceTabId }) => {
+        if (frontifySourceTabId != null) {
+          tryHighlight(frontifySourceTabId);
+          return;
+        }
+        chrome.tabs.query({}).then((tabs) => {
+          const frontifyTab = tabs.find(
+            (t) =>
+              t.url &&
+              t.id &&
+              !t.url.startsWith("chrome-extension://") &&
+              !t.url.startsWith("chrome://") &&
+              !t.url.startsWith("edge://") &&
+              (t.url.includes("frontify") || t.url.includes("frontify.com")),
+          );
+          if (frontifyTab?.id) {
+            tryHighlight(frontifyTab.id);
+          } else {
+            sendResponse({ success: false, error: "No Frontify tab found" });
           }
         });
-    };
+      });
+    return true;
+  }
 
-    setTimeout(trySendMessage, initialDelay);
+  function sendToFrontifyTab(payload) {
+    chrome.storage.session
+      .get(["frontifySourceTabId"])
+      .then(({ frontifySourceTabId }) => {
+        if (frontifySourceTabId != null) {
+          chrome.tabs.sendMessage(frontifySourceTabId, payload).catch(() => {
+            chrome.storage.session.remove("frontifySourceTabId");
+            chrome.tabs.query({}).then((tabs) => {
+              const frontifyTab = tabs.find(
+                (t) =>
+                  t.url &&
+                  t.id &&
+                  !t.url.startsWith("chrome-extension://") &&
+                  !t.url.startsWith("chrome://") &&
+                  !t.url.startsWith("edge://") &&
+                  (t.url.includes("frontify") ||
+                    t.url.includes("frontify.com")),
+              );
+              if (frontifyTab?.id) {
+                chrome.tabs
+                  .sendMessage(frontifyTab.id, payload)
+                  .catch(() => {});
+              }
+            });
+          });
+          return;
+        }
+        chrome.tabs.query({}).then((tabs) => {
+          const frontifyTab = tabs.find(
+            (t) =>
+              t.url &&
+              t.id &&
+              !t.url.startsWith("chrome-extension://") &&
+              !t.url.startsWith("chrome://") &&
+              !t.url.startsWith("edge://") &&
+              (t.url.includes("frontify") || t.url.includes("frontify.com")),
+          );
+          if (frontifyTab?.id) {
+            chrome.tabs.sendMessage(frontifyTab.id, payload).catch(() => {});
+          }
+        });
+      });
+  }
 
+  if (message.action === "highlightFilteredIssuesOnFrontify") {
+    sendToFrontifyTab({
+      action: "highlightFilteredIssues",
+      errors: message.errors || [],
+      warnings: message.warnings || [],
+      infos: message.infos || [],
+    });
+    sendResponse({ success: true });
+    return true;
+  }
+
+  if (message.action === "clearFilterHighlightsOnFrontify") {
+    sendToFrontifyTab({ action: "clearFilterHighlights" });
     sendResponse({ success: true });
     return true;
   }

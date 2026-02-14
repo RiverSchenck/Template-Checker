@@ -22,3 +22,41 @@ body {
   color: #7C57FF;
 }
 
+/* Extension check loading: indeterminate progress bar */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(200%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Extension check: gradient ring loader — one segment travels smoothly around the circle */
+@keyframes loader-dash {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 264;
+  }
+}
+
+.animate-loader-dash {
+  animation: loader-dash 1.2s linear infinite;
+}
+
+/* Gradient text shift */
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+

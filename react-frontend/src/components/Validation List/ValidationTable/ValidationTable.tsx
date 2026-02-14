@@ -20,7 +20,9 @@ import {
   getValidationTag,
   renderMessageWithContextForTable,
 } from '../../helpers';
-import { ArrowDown, ArrowUpDown } from 'lucide-react';
+import { notifyExtensionToHighlight } from '../../../utils/extensionHighlight';
+import { ArrowDown, ArrowUpDown, LocateFixed } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '../../ui/tooltip';
 import { cn } from '../../../lib/utils';
 
 type ValidationTableProps = {
@@ -28,6 +30,7 @@ type ValidationTableProps = {
   category: ValidationCategory;
   textBoxData: { [key: string]: TextBoxData };
   validationClassifiers: { [key: string]: ClassifierData };
+  fromExtension?: boolean;
 };
 
 type SortKey =
@@ -152,7 +155,8 @@ function getCellContent(
   if (key === 'message') {
     return helpers.renderMessageWithContextForTable(
       record.classifier.message,
-      record.context
+      record.context,
+      record.context_details
     );
   }
   if (key === 'help') {
@@ -160,6 +164,24 @@ function getCellContent(
       <div className="flex justify-end">
         {helpers.renderHelpLink(record.classifier.help_article)}
       </div>
+    );
+  }
+  if (key === 'locate') {
+    const hasValidDataId = record.data_id && record.data_id !== 'null';
+    if (!hasValidDataId) return <span className="text-muted-foreground/30">—</span>;
+    return (
+      <TooltipProvider delayDuration={200}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="inline-flex items-center justify-center text-muted-foreground group-hover:text-primary">
+              <LocateFixed className="h-4 w-4" aria-hidden />
+            </span>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="max-w-xs">
+            Click row to highlight on Frontify page
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     );
   }
   return null;
@@ -170,6 +192,7 @@ const ValidationTable = ({
   category,
   textBoxData,
   validationClassifiers,
+  fromExtension = false,
 }: ValidationTableProps) => {
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>('asc');
@@ -236,6 +259,11 @@ const ValidationTable = ({
         Help
       </TableHead>
     );
+    const locateCol = () => (
+      <TableHead key="locate" className="w-[48px] text-center text-muted-foreground" title="Show on Frontify page">
+        <LocateFixed className="h-4 w-4 inline-block" aria-hidden />
+      </TableHead>
+    );
     const pageCol = () => (
       <SortableHead
         key="page"
@@ -247,78 +275,98 @@ const ValidationTable = ({
       />
     );
 
+    const withLocate = (cols: React.ReactNode[]) =>
+      fromExtension ? [...cols, locateCol()] : cols;
     switch (category) {
       case ValidationCategory.text_boxes:
-        return [
+        return withLocate([
           idCol('Text Box Content', 'textBoxContent'),
           pageCol(),
           typeCol(),
           messageCol(),
           helpCol(),
-        ];
+        ]);
       case ValidationCategory.fonts:
-        return [
+        return withLocate([
           idCol('Font Name', 'identifier'),
           typeCol(),
           messageCol(),
           helpCol(),
-        ];
+        ]);
       case ValidationCategory.images:
-        return [
+        return withLocate([
           idCol('Image Name', 'identifier'),
           typeCol(),
           messageCol(),
           helpCol(),
-        ];
+        ]);
       case ValidationCategory.par_styles:
       case ValidationCategory.char_styles:
-        return [
+        return withLocate([
           idCol('Style', 'identifier'),
           typeCol(),
           messageCol(),
           helpCol(),
-        ];
+        ]);
       case ValidationCategory.general:
-        return [typeCol(), messageCol(), helpCol()];
+        return withLocate([typeCol(), messageCol(), helpCol()]);
       default:
-        return [typeCol(), messageCol(), helpCol()];
+        return withLocate([typeCol(), messageCol(), helpCol()]);
     }
-  }, [category, sortKey, sortDir]);
+  }, [category, sortKey, sortDir, fromExtension]);
 
   const headerKeys = useMemo(() => {
-    switch (category) {
-      case ValidationCategory.text_boxes:
-        return ['identifier', 'page', 'type', 'message', 'help'];
-      case ValidationCategory.fonts:
-      case ValidationCategory.images:
-      case ValidationCategory.par_styles:
-      case ValidationCategory.char_styles:
-        return ['identifier', 'type', 'message', 'help'];
-      default:
-        return ['type', 'message', 'help'];
-    }
-  }, [category]);
+    const base: string[] =
+      category === ValidationCategory.text_boxes
+        ? ['identifier', 'page', 'type', 'message', 'help']
+        : category === ValidationCategory.general
+          ? ['type', 'message', 'help']
+          : ['identifier', 'type', 'message', 'help'];
+    return fromExtension ? [...base, 'locate'] : base;
+  }, [category, fromExtension]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border/60 bg-card">
-      <Table>
+    <TooltipProvider delayDuration={200}>
+      <div className="overflow-hidden rounded-xl border border-border/60 bg-card">
+        <Table>
         <TableHeader>
           <TableRow className="border-border/60 bg-muted/40 hover:bg-muted/40">
             {columns}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedData.map((record) => (
+          {sortedData.map((record) => {
+            const hasValidDataId = record.data_id && record.data_id !== 'null';
+            const isClickable = fromExtension && hasValidDataId;
+            return (
             <TableRow
               key={record.key}
-              className="border-border/40 transition-colors hover:bg-muted/30"
+              className={cn(
+                'border-border/40 transition-colors group',
+                isClickable
+                  ? 'cursor-pointer hover:bg-primary/5 hover:ring-1 hover:ring-inset hover:ring-primary/20'
+                  : 'hover:bg-muted/30'
+              )}
+              onClick={() =>
+                isClickable &&
+                notifyExtensionToHighlight(
+                  record.data_id,
+                  record.context_details?.text != null
+                    ? [record.context_details.text]
+                    : record.context
+                      ? [record.context]
+                      : undefined,
+                  record.spread_id
+                )
+              }
             >
               {headerKeys.map((k) => (
                 <TableCell
                   key={k}
                   className={cn(
                     'py-3 text-sm',
-                    k === 'help' && 'text-right'
+                    k === 'help' && 'text-right',
+                    k === 'locate' && 'text-center'
                   )}
                 >
                   {getCellContent(record, k, category, {
@@ -329,10 +377,12 @@ const ValidationTable = ({
                 </TableCell>
               ))}
             </TableRow>
-          ))}
+            );
+          })}
         </TableBody>
       </Table>
     </div>
+    </TooltipProvider>
   );
 };
 

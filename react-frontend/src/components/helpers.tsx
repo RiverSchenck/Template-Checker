@@ -3,6 +3,7 @@ import { AlertCircle, AlertTriangle, Info, HelpCircle } from 'lucide-react';
 import {
   IdentifierGroupedData,
   ClassifierData,
+  ContextDetails,
   TableDataItem,
   ValidationType,
   TextBoxData,
@@ -35,7 +36,10 @@ export function transformDataForTable(
             type: issue.validationClassifier,
             page_id: issue.page_id,
             page_name: issue.page_name,
+            spread_id: issue.spread_id,
             context: issue.context,
+            context_details: issue.context_details ?? undefined,
+            data_id: issue.data_id,
             validationType: type,
             textBox: textBoxData,
             classifier: validationClassifiers[issue.validationClassifier],
@@ -79,17 +83,64 @@ export function renderMessageElement(classifierMessage: string, context: string)
   );
 }
 
+const CONTEXT_TEXT_TRUNCATE = 200;
+
+/** Render structured context when context_details is present; otherwise fall back to context string. */
+export function renderContextContent(
+  context: string,
+  context_details?: ContextDetails | null
+): React.ReactNode {
+  const details = context_details;
+  const hasOverrides =
+    details?.text !== undefined ||
+    (details?.overrides && Object.keys(details.overrides).length > 0);
+  if (hasOverrides) {
+    const text = details?.text;
+    const overrides = details?.overrides;
+    return (
+      <div className="flex min-w-0 flex-col gap-1.5 text-sm">
+        {text !== undefined && text !== '' && (
+          <span className="text-foreground">
+            Text: {text.length > CONTEXT_TEXT_TRUNCATE ? text.slice(0, CONTEXT_TEXT_TRUNCATE) + '…' : text}
+          </span>
+        )}
+        {overrides && Object.keys(overrides).length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {Object.entries(overrides).map(([k, v]) => (
+              <Badge key={k} variant="secondary" className="text-[10px] font-normal">
+                {k}: {v}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (details?.inheritedFrom) {
+    return (
+      <span className="text-muted-foreground text-xs">
+        Inherited from: <span className="text-foreground">{details.inheritedFrom}</span>
+      </span>
+    );
+  }
+  return context ? <span className="text-sm">{context}</span> : null;
+}
+
 /** Message + context for table: message on first line, context inline below in muted text. */
 export function renderMessageWithContextForTable(
   classifierMessage: string,
-  context: string
+  context: string,
+  context_details?: ContextDetails | null
 ): React.ReactNode {
+  const contextNode = context_details != null
+    ? renderContextContent(context, context_details)
+    : context ? (
+        <span className="text-xs leading-relaxed text-muted-foreground">{context}</span>
+      ) : null;
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
       <span className="text-sm text-foreground">{classifierMessage}</span>
-      {context ? (
-        <span className="text-xs leading-relaxed text-muted-foreground">{context}</span>
-      ) : null}
+      {contextNode}
     </div>
   );
 }
@@ -136,6 +187,62 @@ export function groupItemsByClassifier(
     acc[validationClassifier].push(item);
     return acc;
   }, {} as Record<string, ValidationItem[]>);
+}
+
+/** Group validation entries by data_id so issues for the same element can be shown together in the UI. */
+export function groupEntriesByDataId(
+  entries: ValidationEntries
+): Array<{ dataId: string; entries: ValidationEntries }> {
+  const byDataId = new Map<
+    string,
+    { errors: ValidationItem[]; warnings: ValidationItem[]; infos: ValidationItem[] }
+  >();
+  const add = (item: ValidationItem, type: keyof ValidationEntries) => {
+    const id = item.data_id ?? 'null';
+    if (!byDataId.has(id)) {
+      byDataId.set(id, { errors: [], warnings: [], infos: [] });
+    }
+    byDataId.get(id)![type].push(item);
+  };
+  entries.errors.forEach((i) => add(i, 'errors'));
+  entries.warnings.forEach((i) => add(i, 'warnings'));
+  entries.infos.forEach((i) => add(i, 'infos'));
+  return Array.from(byDataId.entries()).map(([dataId, entriesForId]) => ({
+    dataId,
+    entries: entriesForId,
+  }));
+}
+
+/**
+ * Merge identifier-grouped data into one entry per data_id so that all issues
+ * for the same element (same data_id) appear in a single card.
+ */
+export function groupIdentifierDataByDataId(
+  identifierData: IdentifierGroupedData
+): Array<{ dataId: string; entries: ValidationEntries; identifiers: string[] }> {
+  const byDataId = new Map<
+    string,
+    { errors: ValidationItem[]; warnings: ValidationItem[]; infos: ValidationItem[]; identifiers: Set<string> }
+  >();
+  const add = (item: ValidationItem, type: keyof ValidationEntries, identifier: string) => {
+    const id = item.data_id ?? 'null';
+    if (!byDataId.has(id)) {
+      byDataId.set(id, { errors: [], warnings: [], infos: [], identifiers: new Set() });
+    }
+    const bucket = byDataId.get(id)!;
+    bucket[type].push(item);
+    bucket.identifiers.add(identifier);
+  };
+  Object.entries(identifierData).forEach(([identifier, entries]) => {
+    entries.errors.forEach((i) => add(i, 'errors', identifier));
+    entries.warnings.forEach((i) => add(i, 'warnings', identifier));
+    entries.infos.forEach((i) => add(i, 'infos', identifier));
+  });
+  return Array.from(byDataId.entries()).map(([dataId, bucket]) => ({
+    dataId,
+    entries: { errors: bucket.errors, warnings: bucket.warnings, infos: bucket.infos },
+    identifiers: Array.from(bucket.identifiers),
+  }));
 }
 
 export type ValidationFilterState = {

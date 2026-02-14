@@ -15,13 +15,14 @@ import {
   ClassifierData,
 } from '../../../types';
 import ValidationStyle from './ValidationStyle';
-import { groupItemsByClassifier } from '../../helpers';
+import { groupItemsByClassifier, groupIdentifierDataByDataId } from '../../helpers';
 
 type ValidationCardProps = {
   identifierData: IdentifierGroupedData;
   category: ValidationCategory;
   textBoxData: { [key: string]: TextBoxData };
   validationClassifiers: { [key: string]: ClassifierData };
+  fromExtension?: boolean;
 };
 
 function truncateText(text: string | null | undefined, maxLength: number): string | undefined {
@@ -36,42 +37,45 @@ const ValidationCards = ({
   category,
   textBoxData,
   validationClassifiers,
+  fromExtension = false,
 }: ValidationCardProps) => {
+  const renderValidationItems = (items: ValidationItem[], type: ValidationType) => {
+    const groupedItems = groupItemsByClassifier(items);
+    return Object.entries(groupedItems).map(([classifier, items], index) => (
+      <ValidationStyle
+        key={`${classifier}-${index}`}
+        validationType={type}
+        category={category}
+        items={items}
+        classifierData={validationClassifiers[classifier]}
+        fromExtension={fromExtension}
+      />
+    ));
+  };
+
+  const byDataId = groupIdentifierDataByDataId(identifierData);
+
   return (
     <>
-      {Object.entries(identifierData).map(([identifier, entries]) => {
-        let storyId = identifier;
-        if (category === ValidationCategory.text_boxes && identifier.includes('_par_')) {
-          storyId = identifier.split('_par_')[0];
+      {byDataId.map(({ dataId, entries, identifiers }) => {
+        const firstIdentifier = identifiers[0] ?? 'null';
+        let storyId = firstIdentifier;
+        if (category === ValidationCategory.text_boxes && firstIdentifier.includes('_par_')) {
+          storyId = firstIdentifier.split('_par_')[0];
         }
         const textBoxContent =
           category === ValidationCategory.text_boxes ? textBoxData[storyId]?.content : null;
-        const textBoxPage =
-          category === ValidationCategory.text_boxes ? textBoxData[storyId]?.page_name : null;
 
         const cardTitle =
           category === ValidationCategory.text_boxes
             ? truncateText(textBoxContent, 500) || '[Frame is empty]'
-            : identifier !== 'null'
-              ? identifier
+            : firstIdentifier !== 'null'
+              ? firstIdentifier
               : undefined;
-
-        const renderValidationItems = (items: ValidationItem[], type: ValidationType) => {
-          const groupedItems = groupItemsByClassifier(items);
-          return Object.entries(groupedItems).map(([classifier, items], index) => (
-            <ValidationStyle
-              key={`${classifier}-${index}`}
-              validationType={type}
-              category={category}
-              items={items}
-              classifierData={validationClassifiers[classifier]}
-            />
-          ));
-        };
 
         return (
           <Card
-            key={identifier}
+            key={dataId}
             className="mt-3 overflow-hidden rounded-xl border border-border/40 bg-card shadow-none"
           >
             {cardTitle != null && (
@@ -82,17 +86,14 @@ const ValidationCards = ({
               </CardHeader>
             )}
             <CardContent className="flex flex-col gap-2.5 pb-4 pt-0">
-              {textBoxPage && (
-                <p className="text-sm text-muted-foreground">
-                  Page: <span className="text-foreground">{textBoxPage}</span>
-                </p>
-              )}
-              {(cardTitle != null || textBoxPage) && (
+              {cardTitle != null && (
                 <Separator className="my-0.5" />
               )}
-              {renderValidationItems(entries.errors, 'errors')}
-              {renderValidationItems(entries.warnings, 'warnings')}
-              {renderValidationItems(entries.infos, 'infos')}
+              <div className="flex flex-col gap-2.5">
+                {renderValidationItems(entries.errors, 'errors')}
+                {renderValidationItems(entries.warnings, 'warnings')}
+                {renderValidationItems(entries.infos, 'infos')}
+              </div>
             </CardContent>
           </Card>
         );

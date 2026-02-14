@@ -12,12 +12,26 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '../ui/accordion';
+import { Card, CardContent } from '../ui/card';
+import { Switch } from '../ui/switch';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip';
+import { CircleCheck } from 'lucide-react';
+import {
+  notifyExtensionToHighlightFiltered,
+  notifyExtensionToClearFilterHighlights,
+} from '../../utils/extensionHighlight';
 
 type ValidationListProps = {
   jsonResponse: ValidationResult;
   previousJsonResponse?: ValidationResult | null;
   checkerResponse: (jsonResponse: ValidationResult) => void;
   seeDetails?: boolean;
+  fromExtension?: boolean;
 };
 
 const defaultKeys: (keyof ValidationResult)[] = [
@@ -34,8 +48,10 @@ function ValidationList({
   previousJsonResponse,
   checkerResponse,
   seeDetails,
+  fromExtension = false,
 }: ValidationListProps) {
   const [viewMode, setViewMode] = useState<'table' | 'card'>('card');
+  const [highlightIssuesOn, setHighlightIssuesOn] = useState(false);
   const [filters, setFilters] = useState<ValidationFilterState>({
     spreadId: null,
     pageId: null,
@@ -57,6 +73,36 @@ function ValidationList({
       setFilters((prev) => ({ ...prev, pageId: validPageIds.length ? validPageIds : null }));
     }
   }, [filters.spreadId, filters.pageId, spread_to_pages]);
+
+  // When extension user selects a spread in Frontify, filter the UI to that spread
+  useEffect(() => {
+    if (!fromExtension) return;
+    const handler = (event: MessageEvent) => {
+      if (event.data?.type !== 'TEMPLATE_CHECKER_SPREAD_FILTER') return;
+      const spreadId = event.data.spreadId;
+      setFilters((prev) => ({
+        ...prev,
+        spreadId: spreadId && Object.prototype.hasOwnProperty.call(spread_to_pages, spreadId) ? [spreadId] : null,
+      }));
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [fromExtension, spread_to_pages]);
+
+  // When extension user selects an element in Frontify (by data-id), filter the UI to that data id
+  useEffect(() => {
+    if (!fromExtension) return;
+    const handler = (event: MessageEvent) => {
+      if (event.data?.type !== 'TEMPLATE_CHECKER_DATA_ID_FILTER') return;
+      const dataId = event.data.dataId;
+      setFilters((prev) => ({
+        ...prev,
+        dataId: dataId && typeof dataId === 'string' ? dataId : null,
+      }));
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [fromExtension]);
 
   // Build filter options so each dropdown only shows values that still have results
   // when combined with the other current selections (no option that would yield zero items).
@@ -152,7 +198,8 @@ function ValidationList({
       const valid = next.pageId.filter((id) => pageValues.has(id));
       if (valid.length !== next.pageId.length) next = { ...next, pageId: valid.length ? valid : null };
     }
-    if (next.dataId && !dataIdValues.has(next.dataId)) next = { ...next, dataId: null };
+    // When from extension, keep dataId even if not in options (e.g. selected element has no issues — we show empty state)
+    if (next.dataId && !dataIdValues.has(next.dataId) && !fromExtension) next = { ...next, dataId: null };
     if (next.validationType?.length) {
       const valid = next.validationType.filter((t) => typeValues.has(t));
       if (valid.length !== next.validationType.length) {
@@ -167,7 +214,74 @@ function ValidationList({
     ) {
       setFilters(next);
     }
-  }, [filters, filterOptions.spreadOptions, filterOptions.pageOptions, filterOptions.dataIdOptions, filterOptions.validationTypeOptions]);
+  }, [filters, filterOptions.spreadOptions, filterOptions.pageOptions, filterOptions.dataIdOptions, filterOptions.validationTypeOptions, fromExtension]);
+
+  // When a data ID is selected (e.g. from Frontify) but has no issues, we have no categories to show
+  const hasAnyFilteredItems = useMemo(() => {
+    let count = 0;
+    defaultKeys.forEach((key) => {
+      const categoryData = jsonResponse[key as keyof typeof jsonResponse] as CategoryDetail;
+      if (!categoryData?.details) return;
+      const filteredDetails = filterByIdentifierFilters(categoryData.details, filters);
+      Object.values(filteredDetails).forEach((entries) => {
+        count += entries.errors.length + entries.warnings.length + entries.infos.length;
+      });
+    });
+    return count > 0;
+  }, [jsonResponse, filters]);
+
+  const dataIdSelectedWithNoIssues = Boolean(fromExtension && filters.dataId && !hasAnyFilteredItems);
+
+  // Data IDs for current filtered items, by type (for extension bulk highlight)
+  const filteredHighlightDataIds = useMemo(() => {
+    const errorIds = new Set<string>();
+    const warningIds = new Set<string>();
+    const infoIds = new Set<string>();
+    defaultKeys.forEach((key) => {
+      const categoryData = jsonResponse[key as keyof typeof jsonResponse] as CategoryDetail;
+      if (!categoryData?.details) return;
+      const filteredDetails = filterByIdentifierFilters(categoryData.details, filters);
+      Object.values(filteredDetails).forEach((entries) => {
+        entries.errors.forEach((item) => {
+          if (item.data_id && item.data_id !== 'null') errorIds.add(item.data_id);
+        });
+        entries.warnings.forEach((item) => {
+          if (item.data_id && item.data_id !== 'null') warningIds.add(item.data_id);
+        });
+        entries.infos.forEach((item) => {
+          if (item.data_id && item.data_id !== 'null') infoIds.add(item.data_id);
+        });
+      });
+    });
+    return {
+      errorDataIds: Array.from(errorIds),
+      warningDataIds: Array.from(warningIds),
+      infoDataIds: Array.from(infoIds),
+    };
+  }, [jsonResponse, filters]);
+
+  const hasActiveFilters =
+    (filters.spreadId?.length ?? 0) > 0 ||
+    (filters.pageId?.length ?? 0) > 0 ||
+    !!filters.dataId ||
+    (filters.validationType?.length ?? 0) > 0;
+
+  // Apply or clear bulk highlights when toggle or filters change
+  useEffect(() => {
+    if (!fromExtension) return;
+    if (highlightIssuesOn) {
+      notifyExtensionToHighlightFiltered(
+        filteredHighlightDataIds.errorDataIds,
+        filteredHighlightDataIds.warningDataIds,
+        filteredHighlightDataIds.infoDataIds
+      );
+    } else {
+      notifyExtensionToClearFilterHighlights();
+    }
+    return () => {
+      notifyExtensionToClearFilterHighlights();
+    };
+  }, [fromExtension, highlightIssuesOn, filteredHighlightDataIds]);
 
   return (
     <div className="h-full w-full min-w-0 overflow-x-hidden">
@@ -187,8 +301,48 @@ function ValidationList({
             validationTypeOptions={filterOptions.validationTypeOptions}
             dataIdOptions={filterOptions.dataIdOptions}
           />
-          <ViewButtons viewMode={viewMode} setViewMode={setViewMode} />
+          <div className="flex flex-wrap items-center gap-3">
+            {fromExtension && (
+              <TooltipProvider delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex cursor-pointer items-center gap-2 rounded-md border border-border/60 bg-background px-2.5 py-1.5 shadow-sm">
+                      <label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                        <Switch
+                          checked={highlightIssuesOn}
+                          onCheckedChange={(checked) => setHighlightIssuesOn(checked === true)}
+                          aria-describedby={hasActiveFilters ? 'highlight-filtered-desc' : undefined}
+                        />
+                        <span id={hasActiveFilters ? 'highlight-filtered-desc' : undefined}>
+                          {hasActiveFilters ? 'Highlight filtered issues' : 'Highlight issues'}
+                        </span>
+                      </label>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="max-w-xs">
+                    {hasActiveFilters
+                      ? 'Highlight the currently filtered issues on the Frontify page (not all issues).'
+                      : 'Highlight all issues on the Frontify page.'}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+            <ViewButtons viewMode={viewMode} setViewMode={setViewMode} />
+          </div>
         </div>
+        {dataIdSelectedWithNoIssues ? (
+          <Card className="border-l-4 border-l-emerald-500 bg-muted/20">
+            <CardContent className="flex flex-col items-center justify-center gap-3 py-10">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
+                <CircleCheck className="h-7 w-7 text-emerald-600 dark:text-emerald-400" aria-hidden />
+              </div>
+              <div className="text-center space-y-1">
+                <p className="text-base font-semibold text-foreground">No validation issues</p>
+                <p className="text-sm text-muted-foreground">Element <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{filters.dataId}</code> passed all checks.</p>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
         <Accordion
           type="multiple"
           defaultValue={defaultKeys}
@@ -216,6 +370,7 @@ function ValidationList({
                           category={categoryEnum}
                           textBoxData={jsonResponse.text_box_data}
                           validationClassifiers={validation_classifiers}
+                          fromExtension={fromExtension}
                         />
                       ) : (
                         <ValidationTable
@@ -223,6 +378,7 @@ function ValidationList({
                           category={categoryEnum}
                           textBoxData={jsonResponse.text_box_data}
                           validationClassifiers={validation_classifiers}
+                          fromExtension={fromExtension}
                         />
                       )}
                     </div>
@@ -232,6 +388,7 @@ function ValidationList({
             );
           })}
         </Accordion>
+        )}
       </div>
     </div>
   );

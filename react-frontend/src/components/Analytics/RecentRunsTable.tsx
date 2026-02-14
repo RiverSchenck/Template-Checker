@@ -55,23 +55,23 @@ export function RecentRunsTable({
       <CardContent className="overflow-hidden">
         <div className="min-w-0 rounded-md border bg-card">
           <div className="min-w-0 overflow-x-auto">
-            <Table className="w-full table-fixed">
+            <Table className="w-full table-auto">
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
-                  <TableHead className="bg-muted/60 w-[20%] font-semibold">Template</TableHead>
-                  <TableHead className="bg-muted/60 w-[10%] font-semibold">Source</TableHead>
-                  <TableHead className="bg-muted/60 w-[8%] text-right font-semibold">E</TableHead>
-                  <TableHead className="bg-muted/60 w-[8%] text-right font-semibold">W</TableHead>
-                  <TableHead className="bg-muted/60 w-[8%] text-right font-semibold">I</TableHead>
-                  <TableHead className="bg-muted/60 w-[12%] font-semibold">Duration</TableHead>
-                  <TableHead className="bg-muted/60 w-[12%] font-semibold">Size</TableHead>
-                  <TableHead className="bg-muted/60 w-[22%] font-semibold">Time</TableHead>
+                  <TableHead className="bg-muted/60 w-auto min-w-[100px] px-2 font-semibold">Template</TableHead>
+                  <TableHead className="bg-muted/60 w-24 shrink-0 px-2 font-semibold whitespace-nowrap">Source</TableHead>
+                  <TableHead className="bg-muted/60 w-12 shrink-0 px-2 text-right font-semibold">E</TableHead>
+                  <TableHead className="bg-muted/60 w-12 shrink-0 px-2 text-right font-semibold">W</TableHead>
+                  <TableHead className="bg-muted/60 w-12 shrink-0 px-2 text-right font-semibold">I</TableHead>
+                  <TableHead className="bg-muted/60 w-24 shrink-0 px-2 font-semibold whitespace-nowrap">Duration</TableHead>
+                  <TableHead className="bg-muted/60 w-24 shrink-0 px-2 font-semibold whitespace-nowrap">Size</TableHead>
+                  <TableHead className="bg-muted/60 w-auto min-w-[120px] px-2 font-semibold">Time</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {runs.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
+                    <TableCell colSpan={8} className="h-24 px-2 text-center text-muted-foreground">
                       No recent runs
                     </TableCell>
                   </TableRow>
@@ -82,35 +82,35 @@ export function RecentRunsTable({
                       className={idx % 2 === 1 ? 'bg-muted/20' : undefined}
                     >
                       <TableCell
-                        className="max-w-0 truncate py-3 font-medium"
+                        className="max-w-0 truncate px-2 py-2 font-medium"
                         title={run.template_name ?? ''}
                       >
                         {run.template_name ?? '—'}
                       </TableCell>
-                      <TableCell className="truncate py-3 text-muted-foreground">
+                      <TableCell className="shrink-0 truncate px-2 py-2 text-muted-foreground whitespace-nowrap">
                         {getSourceTypeLabel(run.source_type || '')}
                       </TableCell>
                       <TableCell
-                        className={`py-3 text-right tabular-nums ${(run.total_errors ?? 0) > 0 ? 'text-destructive font-medium' : 'text-muted-foreground'}`}
+                        className={`shrink-0 px-2 py-2 text-right tabular-nums whitespace-nowrap ${(run.total_errors ?? 0) > 0 ? 'text-destructive font-medium' : 'text-muted-foreground'}`}
                       >
                         {run.total_errors ?? 0}
                       </TableCell>
                       <TableCell
-                        className={`py-3 text-right tabular-nums ${(run.total_warnings ?? 0) > 0 ? 'text-warning font-medium' : 'text-muted-foreground'}`}
+                        className={`shrink-0 px-2 py-2 text-right tabular-nums whitespace-nowrap ${(run.total_warnings ?? 0) > 0 ? 'text-warning font-medium' : 'text-muted-foreground'}`}
                       >
                         {run.total_warnings ?? 0}
                       </TableCell>
-                      <TableCell className="py-3 text-right tabular-nums text-muted-foreground">
+                      <TableCell className="shrink-0 px-2 py-2 text-right tabular-nums text-muted-foreground whitespace-nowrap">
                         {run.total_infos ?? 0}
                       </TableCell>
-                      <TableCell className="truncate py-3 tabular-nums text-muted-foreground">
+                      <TableCell className="shrink-0 truncate px-2 py-2 tabular-nums text-muted-foreground whitespace-nowrap">
                         {formatDuration(run.duration_ms ?? 0)}
                       </TableCell>
-                      <TableCell className="truncate py-3 tabular-nums text-muted-foreground">
+                      <TableCell className="shrink-0 truncate px-2 py-2 tabular-nums text-muted-foreground whitespace-nowrap">
                         {formatFileSize(run.file_size_bytes ?? 0)}
                       </TableCell>
                       <TableCell
-                        className="max-w-0 truncate py-3 text-muted-foreground text-sm"
+                        className="max-w-0 truncate px-2 py-2 text-muted-foreground text-sm"
                         title={run.timestamp ? new Date(run.timestamp).toLocaleString() : ''}
                       >
                         {run.timestamp ? new Date(run.timestamp).toLocaleString() : '—'}

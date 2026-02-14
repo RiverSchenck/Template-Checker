@@ -3,6 +3,7 @@ import { Area, AreaChart, XAxis, CartesianGrid } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../ui/chart';
 import { ChartCardWithTabs } from '../ChartCardWithTabs';
 import { issuesChartConfig } from '../constants';
+import { formatChartDate } from '../utils';
 import type { RunsCategory } from '../types';
 import type { AnalyticsSummary } from '../types';
 
@@ -33,19 +34,22 @@ export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: 
   }, [runsOverTime, keys]);
 
   const tabs = useMemo(() => {
-    const totalErrors = issuesOverTimeData.reduce((a, d) => a + d.errors, 0);
-    const totalWarnings = issuesOverTimeData.reduce((a, d) => a + d.warnings, 0);
-    const totalInfos = issuesOverTimeData.reduce((a, d) => a + d.infos, 0);
+    const runsOverTime = data?.runs_over_time ?? [];
+    const totalValue = runsOverTime.reduce(
+      (sum, row: Record<string, unknown>) =>
+        sum + Number(row.errors ?? 0) + Number(row.warnings ?? 0) + Number(row.infos ?? 0),
+      0
+    );
     const rf = data?.source_types?.['react-frontend'];
     const ext = data?.source_types?.extension;
     const apiTypes = data?.source_types?.api;
     return [
-      { id: 'total' as RunsCategory, label: 'Total', value: totalErrors + totalWarnings + totalInfos },
+      { id: 'total' as RunsCategory, label: 'Total', value: totalValue },
       { id: 'web' as RunsCategory, label: 'Web', value: (rf?.total_errors ?? 0) + (rf?.total_warnings ?? 0) + (rf?.total_infos ?? 0) },
       { id: 'extension' as RunsCategory, label: 'Extension', value: (ext?.total_errors ?? 0) + (ext?.total_warnings ?? 0) + (ext?.total_infos ?? 0) },
       { id: 'api' as RunsCategory, label: 'API', value: (apiTypes?.total_errors ?? 0) + (apiTypes?.total_warnings ?? 0) + (apiTypes?.total_infos ?? 0) },
     ];
-  }, [issuesOverTimeData, data?.source_types]);
+  }, [data?.runs_over_time, data?.source_types]);
 
   return (
     <ChartCardWithTabs
@@ -77,19 +81,14 @@ export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: 
             tickLine={false}
             axisLine={false}
             tickMargin={8}
-            tickFormatter={(value) =>
-              new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-            }
+            tickFormatter={(value) => formatChartDate(String(value))}
           />
           <ChartTooltip
             cursor={false}
             content={
               <ChartTooltipContent
                 labelFormatter={(value) =>
-                  new Date(value).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  })
+                  formatChartDate(String(value), { month: 'short', day: 'numeric' })
                 }
                 indicator="dot"
               />
