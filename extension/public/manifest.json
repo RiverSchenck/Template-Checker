@@ -13,7 +13,8 @@
   ],
   "host_permissions": [
     "https://template-checker-test.fly.dev/*",
-    "https://template-checker.fly.dev/*"
+    "https://template-checker.fly.dev/*",
+    "http://localhost:3000/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -44,6 +45,17 @@
         "content-scripts/highlight.js"
       ],
       "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://template-checker.fly.dev/*",
+        "https://template-checker-test.fly.dev/*",
+        "http://localhost:3000/*"
+      ],
+      "js": [
+        "content-scripts/authBridge.js"
+      ],
+      "run_at": "document_start"
     }
   ],
   "content_security_policy": {

@@ -16,7 +16,7 @@ class ValidationCategory(Enum):
 
 class ValidationError(Enum):
     ERROR = (auto(),
-             "error (Check tooltip for context)",
+             "Error",
              None, 'Error', ValidationCategory.GENERAL)
     FOLDER = (auto(),
               "Folder error",

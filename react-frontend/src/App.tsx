@@ -1,116 +1,65 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Layout, ConfigProvider } from 'antd';
+import React from 'react';
+import { BrowserRouter, Routes, Route, useOutletContext, Navigate } from 'react-router-dom';
+import { Toaster } from './components/ui/sonner';
 import FileUploadPage from './components/File Upload/FileUpload';
-import ValidationList from './components/Validation List/ValidationList'
-import SidebarMenu from './components/SidebarMenu';
-import Analytics from './components/Analytics/Analytics';
-import Login from './components/Login/Login';
+import ValidationList from './components/Validation List/ValidationList';
+import { Analytics } from './components/Analytics';
 import AuthCallback from './components/AuthCallback';
-import { useMenu } from './components/MenuContext';
+import ProtectedLayout, { type ProtectedLayoutOutletContext } from './components/ProtectedLayout';
+import { UserManagement } from './components/Admin/UserManagement';
 import { useAuth } from './components/AuthContext';
-import { ValidationResult } from './types';
-import './App.css';
 
-const { Content } = Layout;
+function FileUploadWrapper() {
+  const ctx = useOutletContext<ProtectedLayoutOutletContext>();
+  const seeDetails = (value: boolean) => ctx.setSeeDetails(!!value);
+  return (
+    <FileUploadPage
+      checkerResponse={ctx.checkerResponse}
+      seeDetails={seeDetails}
+      navigateToResults={ctx.navigateToResults}
+    />
+  );
+}
 
-function AppContent() {
-  const [checkerResults, setCheckerResults] = useState<ValidationResult | null>(null);
-  const [seeDetails, setSeeDetails] = useState<Boolean>(false);
-  const [previousCheckerResults, setPreviousCheckerResults] = useState<ValidationResult | null>(null);
-  const [collapsed, setCollapsed] = useState<boolean>(false);
-  const { menuKey } = useMenu();
-  const { user, loading } = useAuth();
+function AdminGuard({ children }: { children: React.ReactNode }) {
+  const { isAdmin, loadingRole } = useAuth();
+  if (loadingRole) return <div className="p-6">Loading...</div>;
+  if (!isAdmin) return <Navigate to="/" replace />;
+  return <>{children}</>;
+}
 
-  // Show loading state while checking authentication
-  if (loading) {
+function ValidationListWrapper() {
+  const ctx = useOutletContext<ProtectedLayoutOutletContext>();
+  if (!ctx.checkerResults) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh'
-      }}>
-        <div>Loading...</div>
+      <div style={{ padding: 24, textAlign: 'center', color: '#666' }}>
+        Run a check first to see results, or go back to Check Template.
       </div>
     );
   }
-
-  // Show login if not authenticated
-  if (!user) {
-    return <Login />;
-  }
-
-  const checkerResponse = (jsonResponse: ValidationResult, setPrevious: boolean = false) => {
-    if (setPrevious && checkerResults) {
-      setPreviousCheckerResults(checkerResults);
-    }
-    else{
-      setPreviousCheckerResults(null)
-    }
-    setSeeDetails(false)
-    setCheckerResults(jsonResponse);
-  };
-
-  const handleSeeDetails = (value: Boolean) => {
-    setSeeDetails(value);
-  }
-
-
-  const componentsSwitch = (key: string) => {
-    console.log('componentswitch', key)
-    switch (key) {
-      case 'upload-template':
-        return <FileUploadPage checkerResponse={checkerResponse} seeDetails={handleSeeDetails}/>;
-      case 'results':
-        return checkerResults ? <ValidationList jsonResponse={checkerResults} checkerResponse={checkerResponse} previousJsonResponse={previousCheckerResults || null} seeDetails={seeDetails}/> : null;
-      case 'analytics':
-        return <Analytics />;
-      default:
-        return <div>Uh oh, something went wrong.</div>;
-     }
-  };
-
   return (
-        <ConfigProvider
-            theme={{
-                token: {
-                    fontFamily: 'Space Grotesk Frontify',
-                    colorPrimary: '#B39DFD',
-                    colorLink: '#9A7EFE'
-                },
-            }}
-        >
-        <div className="app-background">
-          <Layout style={{ minHeight: '100vh' }}>
-          <SidebarMenu
-            collapsed={collapsed}
-            setCollapsed={setCollapsed}
-            checkerResults={checkerResults}
-          />
-            <Content style={{ flex: 1, marginLeft: collapsed ? 80 : 200, overflow: 'auto' }}>
-              <div style={{
-                height: menuKey === 'analytics' ? 'auto' : '100vh',
-                width: '100%',
-                display: 'flex',
-                alignItems: menuKey === 'analytics' ? 'flex-start' : 'center',
-                justifyContent: 'center'
-              }}>
-                {componentsSwitch(menuKey)}
-              </div>
-            </Content>
-          </Layout>
-        </div>
-        </ConfigProvider>
+    <ValidationList
+      jsonResponse={ctx.checkerResults}
+      previousJsonResponse={ctx.previousCheckerResults ?? null}
+      checkerResponse={ctx.checkerResponse}
+      seeDetails={ctx.seeDetails}
+      fromExtension={ctx.fromExtension}
+    />
   );
 }
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-center" />
       <Routes>
         <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="/*" element={<AppContent />} />
+        <Route path="/" element={<ProtectedLayout />}>
+          <Route index element={<FileUploadWrapper />} />
+          <Route path="results" element={<ValidationListWrapper />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="admin/users" element={<AdminGuard><UserManagement /></AdminGuard>} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

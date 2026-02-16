@@ -1,32 +1,26 @@
-import { Button } from 'antd';
+import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
+import { LayoutGrid, Table2 } from 'lucide-react';
 
 interface ButtonGroupViewProps {
-  viewMode: 'card' | 'table'; // Assuming viewMode can only be 'card' or 'table'
-  setViewMode: (mode: 'card' | 'table') => void; // Function that accepts a 'card' or 'table' string
+  viewMode: 'card' | 'table';
+  setViewMode: (mode: 'card' | 'table') => void;
 }
 
 function ViewButtons({ viewMode, setViewMode }: ButtonGroupViewProps) {
-  
   return (
-    <Button.Group>
-      <Button
-        type={viewMode === 'card' ? 'primary' : 'default'}
-        onClick={() => setViewMode('card')}
-        style={{ fontSize: '12px', padding: '0px 8px',}}
-      >
-        Card View
-      </Button>
-      <Button
-        type={viewMode === 'table' ? 'primary' : 'default'}
-        onClick={() => setViewMode('table')}
-        style={{ fontSize: '12px', padding: '0px 8px',}}
-      >
-        Table View
-      </Button>
-    </Button.Group>
+    <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as 'card' | 'table')}>
+      <TabsList className="h-8 rounded-lg border border-input bg-muted/80 p-0.5">
+        <TabsTrigger value="card" className="gap-1.5 rounded-md px-2.5 py-1.5 text-xs data-[state=active]:shadow-sm">
+          <LayoutGrid className="h-3.5 w-3.5" aria-hidden />
+          Card
+        </TabsTrigger>
+        <TabsTrigger value="table" className="gap-1.5 rounded-md px-2.5 py-1.5 text-xs data-[state=active]:shadow-sm">
+          <Table2 className="h-3.5 w-3.5" aria-hidden />
+          Table
+        </TabsTrigger>
+      </TabsList>
+    </Tabs>
   );
-};
-
-
+}
 
 export default ViewButtons;

@@ -51,7 +51,7 @@ class ValidationResult():
 
     def add_validation(self, validation_type: str, classifier, context: str = '',
                       page_id: str = '', identifier: str = 'null',
-                      data_id: str = 'null', text_content: list = None):
+                      data_id: str = 'null', text_content: list = None, context_details: dict = None):
         """
         Unified method for adding errors, warnings, and infos.
         Stores validations directly in category-based structure.
@@ -59,6 +59,7 @@ class ValidationResult():
         Args:
             page_id: page Self (page identifier) - will be mapped to page_name later in JSON generation
             text_content: list of text strings where the issue occurs (for PAR_STYLE, CHAR_STYLE, and OVERRIDE)
+            context_details: optional structured data (e.g. text, overrides, inheritedFrom) for the frontend
         """
         # Get category from classifier and convert to response key
         category = classifier.category
@@ -87,7 +88,7 @@ class ValidationResult():
             existing_validation.text_content = merged_text_content
         else:
             # Create new validation
-            validation = ValidationContext(context, classifier, page_id, identifier, data_id, text_content)
+            validation = ValidationContext(context, classifier, page_id, identifier, data_id, text_content, context_details)
             self.validations[category_key][identifier][validation_type].append(validation)
 
             # Handle special text_box case for identifier extraction
@@ -116,17 +117,17 @@ class ValidationResult():
             message += f' [Page {page_name_for_message}]'
         self.add_validation('errors', error_type, message, page_id, 'null', 'null')
 
-    def add_error(self, context: str, error_type: 'ValidationError', page_id: str = '', identifier='null', data_id='null', text_content: list = None):
+    def add_error(self, context: str, error_type: 'ValidationError', page_id: str = '', identifier='null', data_id='null', text_content: list = None, context_details: dict = None):
         """Add error validation."""
-        self.add_validation('errors', error_type, context, page_id, identifier, data_id, text_content)
+        self.add_validation('errors', error_type, context, page_id, identifier, data_id, text_content, context_details)
 
-    def add_warning(self, context: str, warning_type: 'ValidationWarning', page_id: str = '', identifier='null', data_id='null', text_content: list = None):
+    def add_warning(self, context: str, warning_type: 'ValidationWarning', page_id: str = '', identifier='null', data_id='null', text_content: list = None, context_details: dict = None):
         """Add warning validation."""
-        self.add_validation('warnings', warning_type, context, page_id, identifier, data_id, text_content)
+        self.add_validation('warnings', warning_type, context, page_id, identifier, data_id, text_content, context_details)
 
-    def add_info(self, context: str, info_type: 'ValidationInfo', page_id: str = '', identifier='null', data_id='null', text_content: list = None):
+    def add_info(self, context: str, info_type: 'ValidationInfo', page_id: str = '', identifier='null', data_id='null', text_content: list = None, context_details: dict = None):
         """Add info validation."""
-        self.add_validation('infos', info_type, context, page_id, identifier, data_id, text_content)
+        self.add_validation('infos', info_type, context, page_id, identifier, data_id, text_content, context_details)
 
     def add_template_name(self, template_name: str):
         self.template_name = template_name
@@ -270,6 +271,10 @@ class ValidationResult():
             "spread_id": page_to_spread.get(page_id, "") if page_id else "",  # mapped from spread_to_pages
             "data_id": item.get_data_id()
         }
+
+        context_details = item.get_context_details()
+        if context_details is not None:
+            base_item["context_details"] = context_details
 
         # Include text_content for PAR_STYLE, CHAR_STYLE, and OVERRIDE (TEXT_BOX category)
         should_include_text_content = (

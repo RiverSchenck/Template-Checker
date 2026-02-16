@@ -563,6 +563,13 @@ class FrontifyChecker:
 
         return States.HYPHENATION_CHECK
 
+    @staticmethod
+    def _format_overrides(overrides: Dict[str, str]) -> str:
+        """Format overrides dict for display, e.g. 'LeftIndent: 18, FirstLineIndent: -18'."""
+        if not overrides:
+            return ""
+        return ", ".join(f"{k}: {v}" for k, v in overrides.items())
+
     def generate_context_message(self, content: str, items: Union[List[List['StoryParagraphData']], List[List['StoryCharacterData']]], index: int):
         def get_content_from_item(item):
             # Extract content from a single item or a group of items
@@ -628,7 +635,8 @@ class FrontifyChecker:
                         page_id=page_id,
                         identifier=normalized_style_id,
                         data_id=data_id,
-                        text_content=text_content
+                        text_content=text_content,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
         # if hyphenated_default_styles:
@@ -679,7 +687,9 @@ class FrontifyChecker:
 
                         context_message = self.generate_context_message(
                             content, char_styles, char_idx)
-                        message = f"1. Text where issue is: {content} {context_message} 2. Overrides: {char_style.get_overrides()}"
+                        overrides_str = self._format_overrides(char_style.get_overrides())
+                        text_part = f"Text: {content} {context_message}".strip()
+                        message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
                         text_content = [content] if content else None
                         # Use data_id (text frame ID) as identifier to group overrides by text frame
                         # Also ensure text_box_data is populated with data_id for frontend to find story content
@@ -699,7 +709,8 @@ class FrontifyChecker:
                             page_id=page_id,
                             identifier=data_id if data_id and data_id != 'null' else 'null',
                             data_id=data_id,
-                            text_content=text_content
+                            text_content=text_content,
+                            context_details={"text": content or "", "overrides": char_style.get_overrides()}
                         )
 
                 # Only report paragraph-level overrides if there are no character-level overrides
@@ -708,7 +719,9 @@ class FrontifyChecker:
                     content = par_style.get_content()
                     context_message = self.generate_context_message(
                         content, paragraph_styles, par_idx)
-                    message = f"1. Text where issue is:  {content} {context_message} 2. Overrides: {par_style.get_overrides()}"
+                    overrides_str = self._format_overrides(par_style.get_overrides())
+                    text_part = f"Text: {content} {context_message}".strip()
+                    message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
                     # Check if content is empty or just space, we need more context as to where the issue is for end user
                     text_content = [content] if content else None
                     # Use data_id (text frame ID) as identifier to group overrides by text frame
@@ -729,7 +742,8 @@ class FrontifyChecker:
                         page_id=page_id,
                         identifier=data_id if data_id and data_id != 'null' else 'null',
                         data_id=data_id,
-                        text_content=text_content
+                        text_content=text_content,
+                        context_details={"text": content or "", "overrides": par_style.get_overrides()}
                     )
 
         # if overrides_default_par:
@@ -773,7 +787,8 @@ class FrontifyChecker:
                         page_id=page_id,
                         identifier=normalized_style_id,
                         data_id=data_id,
-                        text_content=text_content
+                        text_content=text_content,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
                 # Now check character overrides
@@ -794,7 +809,8 @@ class FrontifyChecker:
                             page_id=page_id,
                             identifier=char_normalized_style_id,
                             data_id=data_id,
-                            text_content=text_content
+                            text_content=text_content,
+                            context_details={"inheritedFrom": inherited_from} if inherited_from else None
                         )
 
         return States.FONTS_INCLUDED_CHECK
@@ -1425,7 +1441,8 @@ class FrontifyChecker:
                         error_type=ValidationError.GRID_ALIGNMENT,
                         page_id=page_id,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
         return States.COMPOSER_CHECK
@@ -1459,7 +1476,8 @@ class FrontifyChecker:
                         warning_type=ValidationWarning.COMPOSER,
                         page_id=page_id,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
         return States.OTHER_CHECKS
@@ -1496,7 +1514,8 @@ class FrontifyChecker:
                         error_type=ValidationError.FILL_TINT,
                         page_id=page_id,
                         identifier=normalized_style_id,
-                        data_id=data_id
+                        data_id=data_id,
+                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
                     )
 
         return States.RESULTS
