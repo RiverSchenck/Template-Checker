@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import {
   Select,
@@ -28,12 +28,29 @@ function Analytics() {
   const [activeIssuesOverTimeCategory, setActiveIssuesOverTimeCategory] = useState<RunsCategory>('total');
   const [activeIssuesPerRunCategory, setActiveIssuesPerRunCategory] = useState<IssuesPerRunCategory>('errors');
   const [recentRunsPage, setRecentRunsPage] = useState(0);
+  const [chartsReady, setChartsReady] = useState(false);
+  const rafIdRef = useRef<number | null>(null);
 
-  // Reset to first page when time range changes (not when data first loads, to avoid
-  // re-render that interrupts chart entrance animations)
   useEffect(() => {
     setRecentRunsPage(0);
   }, [days]);
+
+  const dataReady = Boolean(data && !loading);
+  useEffect(() => {
+    if (!dataReady) {
+      setChartsReady(false);
+      return;
+    }
+    rafIdRef.current = requestAnimationFrame(() => {
+      rafIdRef.current = requestAnimationFrame(() => {
+        setChartsReady(true);
+        rafIdRef.current = null;
+      });
+    });
+    return () => {
+      if (rafIdRef.current != null) cancelAnimationFrame(rafIdRef.current);
+    };
+  }, [dataReady]);
 
   if (loading) {
     return (
@@ -70,7 +87,6 @@ function Analytics() {
 
   return (
     <div className="min-w-0 w-full max-w-[1400px] overflow-x-hidden px-4 pb-8 pt-12">
-      {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-guise m-0 text-2xl font-semibold">Analytics</h1>
         <Select value={String(days)} onValueChange={(v) => setDays(Number(v))}>
@@ -89,28 +105,43 @@ function Analytics() {
 
       <SummaryCards summary={data.summary} />
 
-      <RunsOverTimeChart
-        data={data}
-        activeCategory={activeRunsCategory}
-        onCategoryChange={setActiveRunsCategory}
-      />
-      <IssuesOverTimeChart
-        data={data}
-        activeCategory={activeIssuesOverTimeCategory}
-        onCategoryChange={setActiveIssuesOverTimeCategory}
-      />
-      <IssuesPerRunChart
-        data={data}
-        activeCategory={activeIssuesPerRunCategory}
-        onCategoryChange={setActiveIssuesPerRunCategory}
-      />
+      {chartsReady ? (
+        <>
+          <RunsOverTimeChart
+            data={data}
+            activeCategory={activeRunsCategory}
+            onCategoryChange={setActiveRunsCategory}
+          />
+          <IssuesOverTimeChart
+            data={data}
+            activeCategory={activeIssuesOverTimeCategory}
+            onCategoryChange={setActiveIssuesOverTimeCategory}
+          />
+          <IssuesPerRunChart
+            data={data}
+            activeCategory={activeIssuesPerRunCategory}
+            onCategoryChange={setActiveIssuesPerRunCategory}
+          />
 
-      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <SourceTypeDistributionChart data={data} />
-        <SeverityDistributionChart data={data} />
-      </div>
+          <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <SourceTypeDistributionChart data={data} />
+            <SeverityDistributionChart data={data} />
+          </div>
 
-      <AllValidationsChart data={data} />
+          <AllValidationsChart data={data} />
+        </>
+      ) : (
+        <>
+          <Skeleton className="h-[320px] w-full rounded-lg" />
+          <Skeleton className="h-[320px] w-full rounded-lg" />
+          <Skeleton className="h-[360px] w-full rounded-lg" />
+          <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <Skeleton className="h-[400px] w-full rounded-lg" />
+            <Skeleton className="h-[400px] w-full rounded-lg" />
+          </div>
+          <Skeleton className="h-[300px] w-full rounded-lg" />
+        </>
+      )}
 
       <RecentRunsTable
         runs={data.recent_runs || []}

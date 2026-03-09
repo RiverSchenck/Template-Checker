@@ -64,7 +64,7 @@ export function IssuesPerRunChart({ data, activeCategory, onCategoryChange }: Is
             dataKey="count"
             radius={[0, 4, 4, 0]}
             isAnimationActive
-            animationBegin={200}
+            animationBegin={0}
             animationDuration={800}
           >
             {issuesPerRunBarData.map((entry, index) => (

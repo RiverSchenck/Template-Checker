@@ -60,7 +60,7 @@ export function SourceTypeDistributionChart({ data }: SourceTypeDistributionChar
                 stroke="var(--card)"
                 strokeWidth={2}
                 isAnimationActive
-                animationBegin={200}
+                animationBegin={0}
                 animationDuration={800}
               >
                 {sourcePieData.map((_, index) => (

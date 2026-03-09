@@ -5,6 +5,7 @@ import {
   FileCheck,
   BarChart3,
   Users,
+  Inbox,
   LogOut,
   MoreVertical,
 } from 'lucide-react';
@@ -17,6 +18,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenuSub,
   SidebarMenuSubItem,
@@ -35,25 +37,50 @@ import { ValidationResult } from '../../types';
 import FrontifyLogo from '../../assets/frontifyLogo.svg';
 import FrontifyNook from '../../assets/frontifyNook.svg';
 import { useAuth } from '../AuthContext';
+import { baseURL, getAuthHeaders } from '../Analytics/api';
 
 export interface SidebarMenuProps {
   checkerResults: ValidationResult | null;
 }
 
-function pathnameToItemId(pathname: string): string {
+function pathnameToItemId(pathname: string, hash: string): string {
   if (pathname === '/' || pathname === '') return 'upload-template';
   if (pathname.startsWith('/results')) return 'results';
   if (pathname.startsWith('/analytics')) return 'analytics';
-  if (pathname.startsWith('/admin/users')) return 'admin-users';
+  if (pathname.startsWith('/admin/access-requests')) return 'admin-access-requests';
+  if (pathname.startsWith('/admin/users')) return hash === '#access-requests' ? 'admin-access-requests' : 'admin-users';
   return 'upload-template';
 }
 
 export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser, signOut, isAdmin, loadingRole } = useAuth();
+  const { currentUser, signOut, isAdmin, loadingRole, session } = useAuth();
   const { state: sidebarState } = useSidebar();
-  const activeId = pathnameToItemId(location.pathname);
+  const activeId = pathnameToItemId(location.pathname, location.hash || '');
+  const [accessRequestCount, setAccessRequestCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (!isAdmin || !session?.access_token) {
+      setAccessRequestCount(0);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${baseURL}/admin/access-requests?status=pending`, {
+          headers: getAuthHeaders(session.access_token),
+        });
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : [];
+        if (!cancelled) setAccessRequestCount(list.length);
+      } catch {
+        if (!cancelled) setAccessRequestCount(0);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isAdmin, session?.access_token]);
 
   const displayName =
     currentUser?.display_name ?? currentUser?.email ?? '';
@@ -87,10 +114,13 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent className="flex flex-col gap-1">
+        {/* Template Checker section */}
+        <SidebarGroup className="pt-1">
+          <SidebarGroupLabel className="h-auto min-h-0 px-2 pb-1.5 pt-0 text-[13px] font-medium text-sidebar-foreground/60">
+            Template Checker
+          </SidebarGroupLabel>
+          <SidebarGroupContent className="flex flex-col gap-0.5">
             <SidebarMenu>
-              {/* Check Template (parent) with Results as sub-item */}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   tooltip="Check Template"
@@ -118,7 +148,6 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                   </SidebarMenuSub>
                 )}
               </SidebarMenuItem>
-              {/* Analytics */}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   tooltip="Analytics"
@@ -129,23 +158,51 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                   <span>Analytics</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              {(loadingRole || isAdmin) && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    tooltip={loadingRole ? 'Loading...' : 'User management'}
-                    isActive={!loadingRole && activeId === 'admin-users'}
-                    onClick={() => !loadingRole && isAdmin && navigate('/admin/users')}
-                    disabled={loadingRole}
-                    className={loadingRole ? 'opacity-60 pointer-events-none' : undefined}
-                  >
-                    <Users className="h-4 w-4" />
-                    <span>User management</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* User management section (admin only) */}
+        {(loadingRole || isAdmin) && (
+          <SidebarGroup className="mt-3">
+            <SidebarGroupLabel className="h-auto min-h-0 px-2 pb-1.5 pt-0 text-[13px] font-medium text-sidebar-foreground/60">
+              User management
+            </SidebarGroupLabel>
+            <SidebarGroupContent className="flex flex-col gap-0.5">
+              <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      tooltip={loadingRole ? 'Loading...' : 'Users'}
+                      isActive={!loadingRole && activeId === 'admin-users'}
+                      onClick={() => !loadingRole && isAdmin && navigate('/admin/users')}
+                      disabled={loadingRole}
+                      className={loadingRole ? 'opacity-60 pointer-events-none' : undefined}
+                    >
+                      <Users className="h-4 w-4" />
+                      <span>Users</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      tooltip={loadingRole ? 'Loading...' : 'Access requests'}
+                      isActive={!loadingRole && activeId === 'admin-access-requests'}
+                      onClick={() => !loadingRole && isAdmin && navigate('/admin/users#access-requests')}
+                      disabled={loadingRole}
+                      className={loadingRole ? 'opacity-60 pointer-events-none' : undefined}
+                    >
+                      <Inbox className="h-4 w-4" />
+                      <span>Access requests</span>
+                      {!loadingRole && accessRequestCount > 0 && (
+                        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-sidebar-accent px-1.5 text-xs font-medium text-sidebar-accent-foreground">
+                          {accessRequestCount > 99 ? '99+' : accessRequestCount}
+                        </span>
+                      )}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
       <SidebarFooter>
         {currentUser && (

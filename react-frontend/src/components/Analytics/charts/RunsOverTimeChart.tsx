@@ -95,7 +95,7 @@ export function RunsOverTimeChart({ data, activeCategory, onCategoryChange }: Ru
             strokeWidth={2}
             dot={false}
             isAnimationActive
-            animationBegin={200}
+            animationBegin={0}
             animationDuration={800}
           />
         </LineChart>

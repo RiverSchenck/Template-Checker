@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 import { useAuth } from '../AuthContext';
@@ -30,7 +30,17 @@ import {
 } from '../ui/dialog';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
-import { Trash2, UserPlus } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip';
+import { Trash2, User, UserPlus, Users, Inbox, Mail, Shield, ShieldCheck, ArrowDown, ArrowUpDown, Filter, XCircle } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { cn } from '../../lib/utils';
 
 export interface AdminUser {
   id: string;
@@ -54,9 +64,51 @@ export interface AccessRequest {
   decided_by?: string | null;
 }
 
+type AccessRequestSortKey = 'email' | 'name' | 'requested';
+type UserSortKey = 'email' | 'display_name' | 'role' | 'joined';
+type SortDir = 'asc' | 'desc';
+
+function SortableHead({
+  label,
+  sortKey,
+  currentSortKey,
+  sortDir,
+  onSort,
+  className,
+}: {
+  label: string;
+  sortKey: AccessRequestSortKey | UserSortKey;
+  currentSortKey: AccessRequestSortKey | UserSortKey | null;
+  sortDir: SortDir;
+  onSort: (key: AccessRequestSortKey | UserSortKey) => void;
+  className?: string;
+}) {
+  const isActive = currentSortKey === sortKey;
+  return (
+    <TableHead className={cn('text-muted-foreground', className)}>
+      <button
+        type="button"
+        onClick={() => onSort(sortKey)}
+        className="flex w-full items-center gap-1.5 rounded-sm px-1 py-0.5 text-left text-sm font-medium transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      >
+        {label}
+        {isActive ? (
+          <ArrowDown
+            className={cn('h-3.5 w-3.5 shrink-0', sortDir === 'desc' && 'rotate-180')}
+            aria-hidden
+          />
+        ) : (
+          <ArrowUpDown className="h-3.5 w-3.5 shrink-0 opacity-50" aria-hidden />
+        )}
+      </button>
+    </TableHead>
+  );
+}
+
 export function UserManagement() {
   const { session, currentUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
@@ -68,6 +120,12 @@ export function UserManagement() {
   const [accessRequests, setAccessRequests] = useState<AccessRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
   const [updatingRequestId, setUpdatingRequestId] = useState<string | null>(null);
+  const [updatingAction, setUpdatingAction] = useState<'approved' | 'rejected' | null>(null);
+  const [accessRequestSortKey, setAccessRequestSortKey] = useState<AccessRequestSortKey | null>(null);
+  const [accessRequestSortDir, setAccessRequestSortDir] = useState<SortDir>('asc');
+  const [userSortKey, setUserSortKey] = useState<UserSortKey | null>(null);
+  const [userSortDir, setUserSortDir] = useState<SortDir>('asc');
+  const [roleFilter, setRoleFilter] = useState<'all' | 'user' | 'admin'>('all');
 
   const token = session?.access_token;
   const currentUserEmail = currentUser?.email ?? null;
@@ -122,6 +180,8 @@ export function UserManagement() {
     fetchAccessRequests();
   }, [token]);
 
+  const isAccessRequestsView = location.hash === '#access-requests';
+
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
     const email = inviteEmail.trim().toLowerCase();
@@ -153,6 +213,7 @@ export function UserManagement() {
   const handleAccessRequestDecision = async (requestId: string, status: 'approved' | 'rejected') => {
     if (!token) return;
     setUpdatingRequestId(requestId);
+    setUpdatingAction(status);
     try {
       const res = await fetch(`${baseURL}/admin/access-requests/${requestId}`, {
         method: 'PATCH',
@@ -174,6 +235,7 @@ export function UserManagement() {
       toast.error('Request failed');
     } finally {
       setUpdatingRequestId(null);
+      setUpdatingAction(null);
     }
   };
 
@@ -237,250 +299,679 @@ export function UserManagement() {
     }
   };
 
-  if (loading) {
+  const formatDateRelative = (iso: string | null) => {
+    if (!iso) return null;
+    try {
+      const d = new Date(iso);
+      const now = new Date();
+      const diffMs = now.getTime() - d.getTime();
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      if (diffDays === 0) return 'Today';
+      if (diffDays === 1) return 'Yesterday';
+      if (diffDays < 7) return `${diffDays} days ago`;
+      if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+      return d.toLocaleDateString();
+    } catch {
+      return null;
+    }
+  };
+
+  const handleAccessRequestSort = (key: AccessRequestSortKey) => {
+    if (accessRequestSortKey === key) {
+      setAccessRequestSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setAccessRequestSortKey(key);
+      setAccessRequestSortDir('asc');
+    }
+  };
+
+  const handleUserSort = (key: UserSortKey) => {
+    if (userSortKey === key) {
+      setUserSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setUserSortKey(key);
+      setUserSortDir('asc');
+    }
+  };
+
+  const sortedAccessRequests = useMemo(() => {
+    if (!accessRequestSortKey) return accessRequests;
+    return [...accessRequests].sort((a, b) => {
+      let cmp = 0;
+      switch (accessRequestSortKey) {
+        case 'email':
+          cmp = (a.email ?? '').toLowerCase().localeCompare((b.email ?? '').toLowerCase());
+          break;
+        case 'name':
+          cmp = (a.display_name ?? '').toLowerCase().localeCompare((b.display_name ?? '').toLowerCase());
+          break;
+        case 'requested': {
+          const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
+          const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
+          cmp = aTime - bTime;
+          break;
+        }
+        default:
+          return 0;
+      }
+      return accessRequestSortDir === 'asc' ? cmp : -cmp;
+    });
+  }, [accessRequests, accessRequestSortKey, accessRequestSortDir]);
+
+  const filteredAndSortedUsers = useMemo(() => {
+    let list = users;
+    if (roleFilter !== 'all') {
+      list = list.filter((u) => u.role === roleFilter);
+    }
+    if (!userSortKey) return list;
+    return [...list].sort((a, b) => {
+      let cmp = 0;
+      switch (userSortKey) {
+        case 'email':
+          cmp = (a.email ?? '').toLowerCase().localeCompare((b.email ?? '').toLowerCase());
+          break;
+        case 'display_name':
+          cmp = (a.display_name ?? '').toLowerCase().localeCompare((b.display_name ?? '').toLowerCase());
+          break;
+        case 'role':
+          cmp = (a.role ?? '').localeCompare(b.role ?? '');
+          break;
+        case 'joined': {
+          const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
+          const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
+          cmp = aTime - bTime;
+          break;
+        }
+        default:
+          return 0;
+      }
+      return userSortDir === 'asc' ? cmp : -cmp;
+    });
+  }, [users, roleFilter, userSortKey, userSortDir]);
+
+  if (loading && location.hash !== '#access-requests') {
     return (
       <div className="flex min-w-0 flex-1 flex-col p-6">
-        <div className="mb-6">
-          <Skeleton className="mb-2 h-8 w-48" />
-          <Skeleton className="h-4 w-72" />
+        <div className="mx-auto w-full max-w-5xl min-w-[min(100%,64rem)] overflow-hidden">
+        <div className="mb-8">
+          <Skeleton className="mb-2 h-8 w-56" />
+          <Skeleton className="h-4 w-80" />
         </div>
-        <div className="rounded-md border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Email</TableHead>
-                <TableHead>Display name</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Created</TableHead>
-                <TableHead className="w-[100px]">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {[1, 2, 3, 4, 5].map((i) => (
-                <TableRow key={i}>
-                  <TableCell><Skeleton className="h-5 w-40" /></TableCell>
-                  <TableCell><Skeleton className="h-5 w-28" /></TableCell>
-                  <TableCell><Skeleton className="h-9 w-[120px]" /></TableCell>
-                  <TableCell><Skeleton className="h-5 w-32" /></TableCell>
-                  <TableCell><Skeleton className="h-8 w-8 rounded" /></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+        <div className="mb-8">
+          <Skeleton className="mb-4 h-6 w-48" />
+          <Card>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[50px]" />
+                    <TableHead>Email</TableHead>
+                    <TableHead>Display name</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Joined</TableHead>
+                    <TableHead className="w-[100px]" />
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <TableRow key={i}>
+                      <TableCell><Skeleton className="h-8 w-8 rounded-full" /></TableCell>
+                      <TableCell><Skeleton className="h-5 w-40" /></TableCell>
+                      <TableCell><Skeleton className="h-5 w-28" /></TableCell>
+                      <TableCell><Skeleton className="h-9 w-[100px]" /></TableCell>
+                      <TableCell><Skeleton className="h-5 w-32" /></TableCell>
+                      <TableCell><Skeleton className="h-8 w-8 rounded" /></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
+        </div>
+      </div>
+    );
+  }
+  if (loadingRequests && location.hash === '#access-requests') {
+    return (
+      <div className="flex min-w-0 flex-1 flex-col p-6">
+        <div className="mx-auto w-full max-w-5xl min-w-[min(100%,64rem)] overflow-hidden">
+        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
+              <Inbox className="h-6 w-6 text-muted-foreground" />
+              Access requests
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Approve or reject people waiting to join. Invite by email to add someone directly.
+            </p>
+          </div>
+          <Button
+            onClick={() => { setInviteOpen(true); setInviteError(null); setInviteEmail(''); }}
+            className="shrink-0"
+          >
+            <UserPlus className="mr-2 h-4 w-4" />
+            Invite by email
+          </Button>
+        </div>
+        <Card className="mb-8">
+          <CardHeader className="pb-3">
+            <Skeleton className="h-6 w-48" />
+            <Skeleton className="mt-1 h-4 w-64" />
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="border-t px-6 py-8">
+              <Skeleton className="h-20 w-full rounded-md" />
+            </div>
+          </CardContent>
+        </Card>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-w-0 flex-1 flex-col p-6">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold">User management</h1>
-          <p className="text-muted-foreground text-sm">
-            View users, change roles, and remove access.
-          </p>
+    <TooltipProvider>
+      <div className="flex min-w-0 flex-1 flex-col p-6">
+        <div className="mx-auto w-full max-w-5xl min-w-[min(100%,64rem)] overflow-hidden">
+        {/* Page header: same on both views, with Invite by email */}
+        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
+              {isAccessRequestsView ? (
+                <>
+                  <Inbox className="h-6 w-6 text-muted-foreground" />
+                  Access requests
+                </>
+              ) : (
+                <>
+                  <Users className="h-6 w-6 text-muted-foreground" />
+                  Users
+                </>
+              )}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {isAccessRequestsView
+                ? 'Approve or reject people waiting to join. Invite by email to add someone directly.'
+                : 'Invite users and manage roles.'}
+            </p>
+          </div>
+          <Button
+            onClick={() => { setInviteOpen(true); setInviteError(null); setInviteEmail(''); }}
+            className="shrink-0"
+          >
+            <UserPlus className="mr-2 h-4 w-4" />
+            Invite by email
+          </Button>
         </div>
-        <Button onClick={() => { setInviteOpen(true); setInviteError(null); setInviteEmail(''); }}>
-          <UserPlus className="mr-2 h-4 w-4" />
-          Invite by email
-        </Button>
-      </div>
 
-      <div className="mb-8">
-        <h2 className="mb-3 text-lg font-medium">Pending access requests</h2>
-        {loadingRequests ? (
-          <Skeleton className="h-20 w-full rounded-md" />
-        ) : accessRequests.length === 0 ? (
-          <p className="text-muted-foreground text-sm">No pending requests.</p>
-        ) : (
-          <div className="rounded-md border bg-card">
-            <Table>
+        {/* Access requests view: only the Pending access requests table */}
+        {isAccessRequestsView && (
+        <Card id="access-requests" className="mb-8 scroll-mt-6">
+          <CardHeader className="pb-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-lg font-medium">Pending access requests</CardTitle>
+                {!loadingRequests && accessRequests.length > 0 && (
+                  <Badge variant="secondary" className="font-normal">
+                    {accessRequests.length}
+                  </Badge>
+                )}
+              </div>
+              <CardDescription className="text-left sm:text-right">
+                Approve or reject people waiting to join.
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            {loadingRequests ? (
+              <div className="border-t px-6 py-8">
+                <Skeleton className="h-20 w-full rounded-md" />
+              </div>
+            ) : accessRequests.length === 0 ? (
+              <div className="flex flex-col items-center justify-center border-t px-6 py-14 text-center">
+                <div className="rounded-full bg-muted/60 p-4">
+                  <Inbox className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <p className="mt-4 text-sm font-medium text-foreground">No pending requests</p>
+                <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
+                  When someone requests access, they’ll appear here for you to approve or reject.
+                </p>
+              </div>
+            ) : (
+              <Table className="table-fixed">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[52px] pr-0" />
+                    <SortableHead
+                      label="Email"
+                      sortKey="email"
+                      currentSortKey={accessRequestSortKey}
+                      sortDir={accessRequestSortDir}
+                      onSort={handleAccessRequestSort}
+                      className="w-[200px] min-w-[180px]"
+                    />
+                    <SortableHead
+                      label="Name"
+                      sortKey="name"
+                      currentSortKey={accessRequestSortKey}
+                      sortDir={accessRequestSortDir}
+                      onSort={handleAccessRequestSort}
+                      className="w-[140px] min-w-[120px]"
+                    />
+                    <SortableHead
+                      label="Requested"
+                      sortKey="requested"
+                      currentSortKey={accessRequestSortKey}
+                      sortDir={accessRequestSortDir}
+                      onSort={handleAccessRequestSort}
+                      className="w-[120px]"
+                    />
+                    <TableHead className="w-[200px] text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sortedAccessRequests.map((r) => (
+                    <TableRow key={r.id}>
+                      <TableCell className="w-[52px] py-3 pr-0">
+                        <Avatar className="h-8 w-8">
+                          {r.avatar_url ? (
+                            <AvatarImage src={r.avatar_url} alt="" />
+                          ) : null}
+                          <AvatarFallback className="bg-muted text-xs">
+                            {(r.display_name || r.email || '?').charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                      </TableCell>
+                      <TableCell className="py-3 font-medium">{r.email}</TableCell>
+                      <TableCell className="py-3 text-muted-foreground text-sm">
+                        {r.display_name ?? '—'}
+                      </TableCell>
+                      <TableCell className="py-3 text-muted-foreground text-sm">
+                        <span title={formatDate(r.created_at)}>
+                          {formatDateRelative(r.created_at) ?? formatDate(r.created_at)}
+                        </span>
+                      </TableCell>
+                      <TableCell className="py-3 text-right">
+                        <div className="flex justify-end gap-2">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="default"
+                                className="min-w-[88px] text-xs bg-emerald-600 hover:bg-emerald-700 text-white border-0 shadow-sm"
+                                disabled={updatingRequestId === r.id}
+                                onClick={() => handleAccessRequestDecision(r.id, 'approved')}
+                              >
+                                {updatingRequestId === r.id && updatingAction === 'approved' ? (
+                                  <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden />
+                                ) : (
+                                  <ShieldCheck className="h-3.5 w-3.5" />
+                                )}
+                                {updatingRequestId === r.id && updatingAction === 'approved' ? 'Updating…' : 'Approve'}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="left">Grant this user access</TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="min-w-[88px] text-xs border-input text-destructive hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50"
+                                disabled={updatingRequestId === r.id}
+                                onClick={() => handleAccessRequestDecision(r.id, 'rejected')}
+                              >
+                                {updatingRequestId === r.id && updatingAction === 'rejected' ? (
+                                  <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden />
+                                ) : (
+                                  <XCircle className="h-3.5 w-3.5" />
+                                )}
+                                {updatingRequestId === r.id && updatingAction === 'rejected' ? 'Updating…' : 'Reject'}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="left">Decline this request</TooltipContent>
+                          </Tooltip>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+        )}
+
+        {/* Users view: only the Approved users table */}
+        {!isAccessRequestsView && (
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <CardTitle className="text-lg font-medium">Approved users</CardTitle>
+              <CardDescription>
+                {roleFilter === 'all'
+                  ? `${users.length} ${users.length === 1 ? 'user' : 'users'} with access.`
+                  : `${filteredAndSortedUsers.length} ${filteredAndSortedUsers.length === 1 ? 'user' : 'users'}.`}{' '}
+                Change roles or remove access.
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            <Table className="table-fixed">
               <TableHeader>
                 <TableRow>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Requested</TableHead>
-                  <TableHead className="w-[180px]">Actions</TableHead>
+                  <TableHead className="w-[52px] pr-0" />
+                  <SortableHead
+                    label="Email"
+                    sortKey="email"
+                    currentSortKey={userSortKey}
+                    sortDir={userSortDir}
+                    onSort={handleUserSort}
+                  />
+                  <SortableHead
+                    label="Display name"
+                    sortKey="display_name"
+                    currentSortKey={userSortKey}
+                    sortDir={userSortDir}
+                    onSort={handleUserSort}
+                  />
+                  <TableHead className="w-[200px] min-w-[200px] whitespace-nowrap text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleUserSort('role')}
+                        className="flex cursor-pointer select-none items-center gap-1.5 rounded-sm py-0.5 text-left text-sm font-medium transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      >
+                        Role
+                        {userSortKey === 'role' ? (
+                          <ArrowDown
+                            className={cn('h-3.5 w-3.5 shrink-0', userSortDir === 'desc' && 'rotate-180')}
+                            aria-hidden
+                          />
+                        ) : (
+                          <ArrowUpDown className="h-3.5 w-3.5 shrink-0 opacity-50" aria-hidden />
+                        )}
+                      </button>
+                      <span className="h-4 w-px shrink-0 bg-border" aria-hidden />
+                      <Select
+                        value={roleFilter}
+                        onValueChange={(v) => setRoleFilter(v as 'all' | 'user' | 'admin')}
+                      >
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <SelectTrigger
+                              className={cn(
+                                'h-8 w-9 shrink-0 border-dashed px-0 font-normal',
+                                roleFilter === 'all'
+                                  ? 'text-muted-foreground hover:text-foreground'
+                                  : 'border-primary/30 bg-primary/5 text-foreground'
+                              )}
+                              onClick={(e) => e.stopPropagation()}
+                              aria-label={
+                                roleFilter === 'all'
+                                  ? 'Filter by role'
+                                  : roleFilter === 'user'
+                                    ? 'Showing users only'
+                                    : 'Showing admins only'
+                              }
+                            >
+                              <span className="flex flex-1 items-center justify-center pl-1 [&:not(:only-child)]:mr-0">
+                                {roleFilter === 'all' && <Filter className="h-4 w-4" />}
+                                {roleFilter === 'user' && <User className="h-4 w-4" />}
+                                {roleFilter === 'admin' && <Shield className="h-4 w-4" />}
+                              </span>
+                            </SelectTrigger>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="font-normal">
+                            {roleFilter === 'all' && 'Filter by role'}
+                            {roleFilter === 'user' && 'Showing users only'}
+                            {roleFilter === 'admin' && 'Showing admins only'}
+                          </TooltipContent>
+                        </Tooltip>
+                        <SelectContent>
+                          <SelectItem value="all">
+                            <span className="flex items-center gap-2">
+                              <Filter className="h-4 w-4 text-muted-foreground" />
+                              All roles
+                            </span>
+                          </SelectItem>
+                          <SelectItem value="user">
+                            <span className="flex items-center gap-2">
+                              <User className="h-4 w-4 text-muted-foreground" />
+                              User
+                            </span>
+                          </SelectItem>
+                          <SelectItem value="admin">
+                            <span className="flex items-center gap-2">
+                              <Shield className="h-4 w-4 text-muted-foreground" />
+                              Admin
+                            </span>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </TableHead>
+                  <SortableHead
+                    label="Joined"
+                    sortKey="joined"
+                    currentSortKey={userSortKey}
+                    sortDir={userSortDir}
+                    onSort={handleUserSort}
+                  />
+                  <TableHead className="w-[80px]" />
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {accessRequests.map((r) => (
-                  <TableRow key={r.id}>
-                    <TableCell className="font-medium">{r.email}</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">
-                      {r.display_name ?? '—'}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground text-sm">
-                      {formatDate(r.created_at)}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
+                {filteredAndSortedUsers.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="h-48">
+                      <div className="flex flex-col items-center justify-center py-12 text-center">
+                        <div className="rounded-full bg-muted/60 p-4">
+                          <Users className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                        <p className="mt-4 text-sm font-medium text-foreground">
+                          {roleFilter !== 'all' ? 'No users with this role' : 'No users yet'}
+                        </p>
+                        <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
+                          Invite someone by email to give them access. They’ll sign in with Google.
+                        </p>
                         <Button
-                          size="sm"
-                          variant="default"
-                          disabled={updatingRequestId === r.id}
-                          onClick={() => handleAccessRequestDecision(r.id, 'approved')}
-                        >
-                          {updatingRequestId === r.id ? '…' : 'Approve'}
-                        </Button>
-                        <Button
-                          size="sm"
                           variant="outline"
-                          disabled={updatingRequestId === r.id}
-                          onClick={() => handleAccessRequestDecision(r.id, 'rejected')}
+                          size="sm"
+                          className="mt-5"
+                          onClick={() => {
+                            if (roleFilter !== 'all') setRoleFilter('all');
+                            else {
+                              setInviteOpen(true);
+                              setInviteError(null);
+                              setInviteEmail('');
+                            }
+                          }}
                         >
-                          Reject
+                          <Mail className="mr-2 h-4 w-4" />
+                          {roleFilter !== 'all' ? 'Show all roles' : 'Invite by email'}
                         </Button>
                       </div>
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  filteredAndSortedUsers.map((u) => {
+                    const isCurrentUser = currentUserEmail != null && u.email === currentUserEmail;
+                    return (
+                      <TableRow key={u.id}>
+                        <TableCell className="w-[52px] py-3 pr-0">
+                          <Avatar className="h-8 w-8">
+                            {u.avatar_url ? (
+                              <AvatarImage src={u.avatar_url} alt="" />
+                            ) : null}
+                            <AvatarFallback className="bg-muted text-xs">
+                              {(u.display_name || u.email || '?').charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                        </TableCell>
+                        <TableCell className="py-3 font-medium">
+                          <div className="flex min-w-0 flex-nowrap items-center gap-2">
+                            <span className="min-w-0 truncate">{u.email ?? '—'}</span>
+                            {isCurrentUser && (
+                              <Badge variant="secondary" className="shrink-0 text-xs font-normal">
+                                You
+                              </Badge>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="py-3 text-muted-foreground text-sm">
+                          {u.display_name ?? '—'}
+                        </TableCell>
+                        <TableCell className="py-3">
+                          <Select
+                            value={u.role}
+                            onValueChange={(value) =>
+                              handleRoleChange(u.id, value as 'user' | 'admin')
+                            }
+                          >
+                            <SelectTrigger className="h-8 w-[120px] border-dashed">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="user">
+                                <span className="flex items-center gap-1.5">
+                                  <User className="h-3.5 w-3.5 text-muted-foreground" />
+                                  User
+                                </span>
+                              </SelectItem>
+                              <SelectItem value="admin">
+                                <span className="flex items-center gap-1.5">
+                                  <Shield className="h-3.5 w-3.5 text-muted-foreground" />
+                                  Admin
+                                </span>
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell className="py-3 text-muted-foreground text-sm">
+                          <span title={formatDate(u.created_at)}>
+                            {formatDateRelative(u.created_at) ?? formatDate(u.created_at)}
+                          </span>
+                        </TableCell>
+                        <TableCell className="py-3">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                                  disabled={isCurrentUser}
+                                  onClick={() => setDeleteTarget(u)}
+                                  aria-label={isCurrentUser ? 'You cannot remove yourself' : 'Remove access'}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              {isCurrentUser ? 'You cannot remove yourself' : 'Remove access'}
+                            </TooltipContent>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
               </TableBody>
             </Table>
-          </div>
+          </CardContent>
+        </Card>
         )}
-      </div>
 
-      <h2 className="mb-3 text-lg font-medium">Approved users</h2>
-      <div className="rounded-md border bg-card">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Email</TableHead>
-              <TableHead>Display name</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground">
-                  No users found.
-                </TableCell>
-              </TableRow>
-            ) : (
-              users.map((u) => (
-                <TableRow key={u.id}>
-                  <TableCell className="font-medium">{u.email ?? '—'}</TableCell>
-                  <TableCell>{u.display_name ?? '—'}</TableCell>
-                  <TableCell>
-                    <Select
-                      value={u.role}
-                      onValueChange={(value) =>
-                        handleRoleChange(u.id, value as 'user' | 'admin')
-                      }
-                    >
-                      <SelectTrigger className="w-[120px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="user">User</SelectItem>
-                        <SelectItem value="admin">Admin</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground text-sm">
-                    {formatDate(u.created_at)}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      disabled={currentUserEmail != null && u.email === currentUserEmail}
-                      onClick={() => setDeleteTarget(u)}
-                      title={
-                        currentUserEmail != null && u.email === currentUserEmail
-                          ? 'You cannot remove yourself'
-                          : 'Remove access'
-                      }
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Remove user</DialogTitle>
-            <DialogDescription>
-              Remove this user? They will not be able to sign in again.
-              {deleteTarget && (
-                <span className="mt-2 block font-medium text-foreground">
-                  {deleteTarget.email ?? deleteTarget.id}
-                </span>
-              )}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setDeleteTarget(null)}
-              disabled={deleting}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDeleteConfirm}
-              disabled={deleting}
-            >
-              {deleting ? 'Removing…' : 'Remove user'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Invite by email</DialogTitle>
-            <DialogDescription>
-              Add an email to the allowed list. They can then sign in with Google.
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleInvite}>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="invite-email">Email</Label>
-                <Input
-                  id="invite-email"
-                  type="email"
-                  placeholder="colleague@example.com"
-                  value={inviteEmail}
-                  onChange={(e) => setInviteEmail(e.target.value)}
-                  disabled={inviteSubmitting}
-                />
-                {inviteError && (
-                  <p className="text-sm text-destructive">{inviteError}</p>
-                )}
-              </div>
-            </div>
-            <DialogFooter>
+        </div>
+        {/* Remove user dialog */}
+        <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Remove user</DialogTitle>
+              <DialogDescription asChild>
+                <div>
+                  <p>
+                    This user will lose access and won’t be able to sign in again. This action cannot be undone.
+                  </p>
+                  {deleteTarget && (
+                    <p className="mt-3 rounded-md bg-muted px-3 py-2 font-medium text-foreground">
+                      {deleteTarget.email ?? deleteTarget.display_name ?? deleteTarget.id}
+                    </p>
+                  )}
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2 sm:gap-0">
               <Button
-                type="button"
                 variant="outline"
-                onClick={() => setInviteOpen(false)}
-                disabled={inviteSubmitting}
+                onClick={() => setDeleteTarget(null)}
+                disabled={deleting}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={inviteSubmitting}>
-                {inviteSubmitting ? 'Sending…' : 'Invite'}
+              <Button
+                variant="destructive"
+                onClick={handleDeleteConfirm}
+                disabled={deleting}
+              >
+                {deleting ? 'Removing…' : 'Remove user'}
               </Button>
             </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Invite dialog */}
+        <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Mail className="h-5 w-5" />
+                Invite by email
+              </DialogTitle>
+              <DialogDescription>
+                Add an email to the allowed list. They’ll receive no automated email—they can sign in with Google once added.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleInvite}>
+              <div className="grid gap-4 py-2">
+                <div className="grid gap-2">
+                  <Label htmlFor="invite-email">Email address</Label>
+                  <Input
+                    id="invite-email"
+                    type="email"
+                    placeholder="colleague@example.com"
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    disabled={inviteSubmitting}
+                    autoFocus
+                    autoComplete="email"
+                    className="h-10"
+                  />
+                  {inviteError && (
+                    <p className="text-sm text-destructive">{inviteError}</p>
+                  )}
+                </div>
+              </div>
+              <DialogFooter className="gap-2 sm:gap-0">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setInviteOpen(false)}
+                  disabled={inviteSubmitting}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={inviteSubmitting}>
+                  {inviteSubmitting ? 'Sending…' : 'Send invite'}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </TooltipProvider>
   );
 }

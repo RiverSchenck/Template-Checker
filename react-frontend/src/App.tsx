@@ -59,6 +59,7 @@ export default function App() {
           <Route path="results" element={<ValidationListWrapper />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="admin/users" element={<AdminGuard><UserManagement /></AdminGuard>} />
+          <Route path="admin/access-requests" element={<Navigate to="/admin/users#access-requests" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -41,7 +41,7 @@ export function SeverityDistributionChart({ data }: SeverityDistributionChartPro
               stroke="var(--card)"
               strokeWidth={2}
               isAnimationActive
-              animationBegin={200}
+              animationBegin={0}
               animationDuration={800}
             >
               {severityPieData.map((_, index) => (

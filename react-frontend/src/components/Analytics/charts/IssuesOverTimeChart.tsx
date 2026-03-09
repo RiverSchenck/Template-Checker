@@ -101,7 +101,7 @@ export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: 
             stroke="var(--color-infos)"
             strokeWidth={2}
             isAnimationActive
-            animationBegin={200}
+            animationBegin={0}
             animationDuration={800}
           />
           <Area
@@ -111,7 +111,7 @@ export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: 
             stroke="var(--color-warnings)"
             strokeWidth={2}
             isAnimationActive
-            animationBegin={200}
+            animationBegin={0}
             animationDuration={800}
           />
           <Area
@@ -121,7 +121,7 @@ export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: 
             stroke="var(--color-errors)"
             strokeWidth={2}
             isAnimationActive
-            animationBegin={200}
+            animationBegin={0}
             animationDuration={800}
           />
         </AreaChart>

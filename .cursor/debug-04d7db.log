@@ -1,0 +1,381 @@
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089007075}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089007075}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089007483}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089007484}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":true,"loading":false,"dataReady":true},"hypothesisId":"A,D","timestamp":1773089007490}
+{"sessionId":"04d7db","location":"Analytics.tsx:firstRAF","message":"first rAF ran","data":{},"hypothesisId":"A","timestamp":1773089007498}
+{"sessionId":"04d7db","location":"Analytics.tsx:secondRAF","message":"second rAF setChartsReady true","data":{},"hypothesisId":"A","timestamp":1773089007519}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089007519}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089007520}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":1},"hypothesisId":"E","timestamp":1773089007523}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":2},"hypothesisId":"E","timestamp":1773089007524}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:setPaintReady","message":"setPaintReady true (count>=2)","data":{"count":2},"hypothesisId":"E","timestamp":1773089007533}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089007539}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089007540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089007541}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089007600}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089007600}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089007600}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089007600}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089007600}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089007600}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089007799}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089007800}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089010998}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089010999}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089011368}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089011368}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":true,"loading":false,"dataReady":true},"hypothesisId":"A,D","timestamp":1773089011373}
+{"sessionId":"04d7db","location":"Analytics.tsx:firstRAF","message":"first rAF ran","data":{},"hypothesisId":"A","timestamp":1773089011383}
+{"sessionId":"04d7db","location":"Analytics.tsx:secondRAF","message":"second rAF setChartsReady true","data":{},"hypothesisId":"A","timestamp":1773089011400}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089011401}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089011401}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":1},"hypothesisId":"E","timestamp":1773089011403}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":2},"hypothesisId":"E","timestamp":1773089011403}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:setPaintReady","message":"setPaintReady true (count>=2)","data":{"count":2},"hypothesisId":"E","timestamp":1773089011417}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089011420}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089011421}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089011461}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089011461}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089011461}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089011461}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089011461}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089011461}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089011697}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089011698}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089034013}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089034013}
+{"sessionId":"04d7db","location":"Analytics.tsx:effectCleanup","message":"effect cleanup","data":{"rafCancelled":false},"hypothesisId":"A,E","timestamp":1773089037482}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089037483}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089088292}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089088293}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089088770}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089088771}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":true,"loading":false,"dataReady":true},"hypothesisId":"A,D","timestamp":1773089088775}
+{"sessionId":"04d7db","location":"Analytics.tsx:firstRAF","message":"first rAF ran","data":{},"hypothesisId":"A","timestamp":1773089088784}
+{"sessionId":"04d7db","location":"Analytics.tsx:secondRAF","message":"second rAF setChartsReady true","data":{},"hypothesisId":"A","timestamp":1773089088793}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089088795}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089088795}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":1},"hypothesisId":"E","timestamp":1773089088798}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":2},"hypothesisId":"E","timestamp":1773089088799}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:setPaintReady","message":"setPaintReady true (count>=2)","data":{"count":2},"hypothesisId":"E","timestamp":1773089088809}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089088815}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089088815}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089088815}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089088815}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089088815}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089088815}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089088815}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089088816}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089088816}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089088816}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089088816}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089088816}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089088816}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089088816}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089088816}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089088843}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089088844}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089088844}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089088844}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089088844}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089088844}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089089114}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089089114}
+{"sessionId":"04d7db","location":"Analytics.tsx:effectCleanup","message":"effect cleanup","data":{"rafCancelled":false},"hypothesisId":"A,E","timestamp":1773089091422}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089091423}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089092183}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089092184}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089092600}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089092600}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":true,"loading":false,"dataReady":true},"hypothesisId":"A,D","timestamp":1773089092604}
+{"sessionId":"04d7db","location":"Analytics.tsx:firstRAF","message":"first rAF ran","data":{},"hypothesisId":"A","timestamp":1773089092612}
+{"sessionId":"04d7db","location":"Analytics.tsx:secondRAF","message":"second rAF setChartsReady true","data":{},"hypothesisId":"A","timestamp":1773089092627}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089092628}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089092628}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":1},"hypothesisId":"E","timestamp":1773089092631}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":2},"hypothesisId":"E","timestamp":1773089092631}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:setPaintReady","message":"setPaintReady true (count>=2)","data":{"count":2},"hypothesisId":"E","timestamp":1773089092645}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089092649}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089092650}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089092650}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089092650}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089092650}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089092670}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089092670}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089092671}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089092671}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089092671}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089092671}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089092951}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089092952}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089146244}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089146244}
+{"sessionId":"04d7db","location":"Analytics.tsx:effectCleanup","message":"effect cleanup","data":{"rafCancelled":false},"hypothesisId":"A,E","timestamp":1773089162498}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089162498}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089164182}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089164183}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089164713}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089164714}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":true,"loading":false,"dataReady":true},"hypothesisId":"A,D","timestamp":1773089164722}
+{"sessionId":"04d7db","location":"Analytics.tsx:firstRAF","message":"first rAF ran","data":{},"hypothesisId":"A","timestamp":1773089164728}
+{"sessionId":"04d7db","location":"Analytics.tsx:secondRAF","message":"second rAF setChartsReady true","data":{},"hypothesisId":"A","timestamp":1773089164736}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089164737}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089164738}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":1},"hypothesisId":"E","timestamp":1773089164741}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":2},"hypothesisId":"E","timestamp":1773089164741}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:setPaintReady","message":"setPaintReady true (count>=2)","data":{"count":2},"hypothesisId":"E","timestamp":1773089164753}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089164758}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089164758}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089164758}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089164758}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089164759}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089164784}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089164784}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089164784}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089164784}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089164784}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089164785}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089165089}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089165089}
+{"sessionId":"04d7db","location":"Analytics.tsx:effectCleanup","message":"effect cleanup","data":{"rafCancelled":false},"hypothesisId":"A,E","timestamp":1773089166429}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089166430}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089166903}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089166903}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089167361}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089167362}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":true,"loading":false,"dataReady":true},"hypothesisId":"A,D","timestamp":1773089167368}
+{"sessionId":"04d7db","location":"Analytics.tsx:firstRAF","message":"first rAF ran","data":{},"hypothesisId":"A","timestamp":1773089167379}
+{"sessionId":"04d7db","location":"Analytics.tsx:secondRAF","message":"second rAF setChartsReady true","data":{},"hypothesisId":"A","timestamp":1773089167385}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089167386}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089167387}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":1},"hypothesisId":"E","timestamp":1773089167389}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":2},"hypothesisId":"E","timestamp":1773089167389}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:setPaintReady","message":"setPaintReady true (count>=2)","data":{"count":2},"hypothesisId":"E","timestamp":1773089167401}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089167404}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089167405}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089167425}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089167425}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089167425}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089167425}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089167425}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089167425}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089167707}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089167707}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089335541}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089335541}
+{"sessionId":"04d7db","location":"Analytics.tsx:effectCleanup","message":"effect cleanup","data":{"rafCancelled":false},"hypothesisId":"A,E","timestamp":1773089346864}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089346864}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089347812}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089347813}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089348484}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089348484}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":true,"loading":false,"dataReady":true},"hypothesisId":"A,D","timestamp":1773089348488}
+{"sessionId":"04d7db","location":"Analytics.tsx:firstRAF","message":"first rAF ran","data":{},"hypothesisId":"A","timestamp":1773089348502}
+{"sessionId":"04d7db","location":"Analytics.tsx:secondRAF","message":"second rAF setChartsReady true","data":{},"hypothesisId":"A","timestamp":1773089348516}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089348517}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089348517}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":1},"hypothesisId":"E","timestamp":1773089348521}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":2},"hypothesisId":"E","timestamp":1773089348522}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:setPaintReady","message":"setPaintReady true (count>=2)","data":{"count":2},"hypothesisId":"E","timestamp":1773089348533}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089348538}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089348539}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089348540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089348540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089348540}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089348565}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089348565}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089348565}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089348565}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089348565}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089348565}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089348806}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089348806}
+{"sessionId":"04d7db","location":"Analytics.tsx:effectCleanup","message":"effect cleanup","data":{"rafCancelled":false},"hypothesisId":"A,E","timestamp":1773089350188}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089350188}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089350668}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089350668}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089351071}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089351071}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":true,"loading":false,"dataReady":true},"hypothesisId":"A,D","timestamp":1773089351075}
+{"sessionId":"04d7db","location":"Analytics.tsx:firstRAF","message":"first rAF ran","data":{},"hypothesisId":"A","timestamp":1773089351086}
+{"sessionId":"04d7db","location":"Analytics.tsx:secondRAF","message":"second rAF setChartsReady true","data":{},"hypothesisId":"A","timestamp":1773089351100}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089351100}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089351101}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":1},"hypothesisId":"E","timestamp":1773089351104}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":2},"hypothesisId":"E","timestamp":1773089351104}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:setPaintReady","message":"setPaintReady true (count>=2)","data":{"count":2},"hypothesisId":"E","timestamp":1773089351118}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089351122}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089351123}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089351124}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089351146}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089351146}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089351147}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089351147}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089351147}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089351147}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089351383}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089351384}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089353763}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089353764}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089355105}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089355106}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089356153}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089356154}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089357299}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089357300}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089357744}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089357744}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089358421}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089358421}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089359169}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089359170}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089359918}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089359919}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089360775}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089360776}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089362082}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089362082}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089363373}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089363373}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089364161}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089364161}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089365760}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089365760}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089366572}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089366573}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089366968}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089366968}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089367268}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089367269}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089368569}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089368569}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089370025}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089370025}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089370970}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089370970}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089371726}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089371726}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089372384}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089372385}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089372997}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089372997}
+{"sessionId":"04d7db","location":"Analytics.tsx:effectCleanup","message":"effect cleanup","data":{"rafCancelled":false},"hypothesisId":"A,E","timestamp":1773089376059}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089376060}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089412073}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":false,"loading":true,"dataReady":false},"hypothesisId":"A,D","timestamp":1773089412073}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089412562}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":false,"chartsReady":false},"hypothesisId":"A","timestamp":1773089412562}
+{"sessionId":"04d7db","location":"Analytics.tsx:effect","message":"defer effect entry","data":{"hasData":true,"loading":false,"dataReady":true},"hypothesisId":"A,D","timestamp":1773089412564}
+{"sessionId":"04d7db","location":"Analytics.tsx:firstRAF","message":"first rAF ran","data":{},"hypothesisId":"A","timestamp":1773089412571}
+{"sessionId":"04d7db","location":"Analytics.tsx:secondRAF","message":"second rAF setChartsReady true","data":{},"hypothesisId":"A","timestamp":1773089412584}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089412584}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089412585}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":1},"hypothesisId":"E","timestamp":1773089412587}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:mount","message":"DeferredCharts effect ran","data":{"countAfterMount":2},"hypothesisId":"E","timestamp":1773089412587}
+{"sessionId":"04d7db","location":"Analytics.tsx:DeferredCharts:setPaintReady","message":"setPaintReady true (count>=2)","data":{"count":2},"hypothesisId":"E","timestamp":1773089412601}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089412604}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089412604}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089412604}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089412604}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089412604}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:mount","message":"RunsOverTimeChart mounted","data":{"dataPoints":9},"hypothesisId":"B,C","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:mount","message":"container dimensions on mount","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089412605}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089412625}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":250},"hypothesisId":"C","timestamp":1773089412625}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":300},"hypothesisId":"C","timestamp":1773089412625}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089412625}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":380,"height":320},"hypothesisId":"C","timestamp":1773089412625}
+{"sessionId":"04d7db","location":"chart.tsx:ChartContainer:afterRAF","message":"container dimensions after rAF","data":{"width":914,"height":600},"hypothesisId":"C","timestamp":1773089412626}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089412943}
+{"sessionId":"04d7db","location":"Analytics.tsx:render","message":"render with data","data":{"showCharts":true,"chartsReady":true},"hypothesisId":"A","timestamp":1773089412944}
+{"sessionId":"04d7db","location":"Analytics.tsx:effectCleanup","message":"effect cleanup","data":{"rafCancelled":false},"hypothesisId":"A,E","timestamp":1773089451347}
+{"sessionId":"04d7db","location":"RunsOverTimeChart.tsx:unmount","message":"RunsOverTimeChart unmounted","data":{},"hypothesisId":"E","timestamp":1773089451347}
