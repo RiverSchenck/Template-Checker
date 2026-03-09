@@ -51,14 +51,13 @@ function pathnameToItemId(pathname: string): string {
 export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut, isAdmin, loadingRole } = useAuth();
+  const { currentUser, signOut, isAdmin, loadingRole } = useAuth();
   const { state: sidebarState } = useSidebar();
   const activeId = pathnameToItemId(location.pathname);
 
   const displayName =
-    user?.user_metadata?.name ?? user?.email ?? '';
-  const avatarUrl =
-    user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture;
+    currentUser?.display_name ?? currentUser?.email ?? '';
+  const avatarUrl = currentUser?.avatar_url ?? null;
   const avatarLetter = (displayName || '?').charAt(0).toUpperCase();
   const isCollapsed = sidebarState === 'collapsed';
 
@@ -149,7 +148,7 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        {user && (
+        {currentUser && (
           <SidebarMenu>
             <SidebarMenuItem>
               <DropdownMenu>

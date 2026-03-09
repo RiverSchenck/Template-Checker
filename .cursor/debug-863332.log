@@ -1,0 +1,9 @@
+{"sessionId":"863332","hypothesisId":"H3","location":"AuthContext.tsx:fetchMe_before","message":"Calling /me","data":{"baseURL":"http://localhost:8000","hasToken":true,"tokenLength":1440},"timestamp":1773086711917}
+{"sessionId": "863332", "hypothesisId": "H1", "location": "routes.py:require_auth", "message": "require_auth token check", "data": {"has_token": true, "token_prefix": "eyJhbGciOiJFUzI1NiIs..."}, "timestamp": 1773086711957}
+{"sessionId": "863332", "hypothesisId": "H1", "location": "routes.py:require_auth_verify", "message": "Supabase token verification result", "data": {"verified": true}, "timestamp": 1773086712087}
+{"sessionId": "863332", "hypothesisId": "H2_H4", "location": "routes.py:me", "message": "/me user lookup", "data": {"email": "river.schenck@frontify.com", "user_found": true, "user_id_from_jwt": "2b92607e-953f-4e89-afc4-41a8c0ad1967"}, "timestamp": 1773086712918}
+{"sessionId":"863332","hypothesisId":"H1_H2_H3","location":"AuthContext.tsx:fetchMe_after","message":"/me response","data":{"status":200,"ok":true},"timestamp":1773086713341}
+{"sessionId":"863332","hypothesisId":"H3","location":"AuthContext.tsx:fetchMe_before","message":"Calling /me","data":{"baseURL":"http://localhost:8000","hasToken":true,"tokenLength":1379},"timestamp":1773086752370}
+{"sessionId":"863332","hypothesisId":"H1_H2_H3","location":"AuthContext.tsx:fetchMe_after","message":"/me response","data":{"status":403,"ok":false},"timestamp":1773086753498}
+{"sessionId":"863332","hypothesisId":"H3","location":"AuthContext.tsx:fetchMe_before","message":"Calling /me","data":{"baseURL":"http://localhost:8000","hasToken":true,"tokenLength":1440},"timestamp":1773086754687}
+{"sessionId":"863332","hypothesisId":"H1_H2_H3","location":"AuthContext.tsx:fetchMe_after","message":"/me response","data":{"status":200,"ok":true},"timestamp":1773086755263}

@@ -10,7 +10,7 @@ import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
 
-const MAX_FILE_SIZE = 300 * 1024 * 1024; // 300MB
+const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200MB
 
 interface FileUploadPageProps {
   checkerResponse: (jsonResponse: ValidationResult, setPrevious?: boolean) => void;
@@ -207,7 +207,7 @@ export default function FileUploadPage({
         <CardHeader className="pb-2">
           <CardTitle className="text-lg">Check template</CardTitle>
           <CardDescription>
-            Upload a .zip template to validate. Max size 300 MB.
+            Upload a .zip template to validate. Max size 200 MB.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

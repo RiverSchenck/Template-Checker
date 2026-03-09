@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { supabase } from '../utils/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { useAuth } from './AuthContext';
 
 // Helper function to check if error is "not allowed" vs general auth error
 const isNotAllowedError = (errorMessage: string): boolean => {
@@ -21,10 +22,13 @@ const isNotAllowedError = (errorMessage: string): boolean => {
 
 export default function AuthCallback() {
   const navigate = useNavigate();
+  const { session } = useAuth();
   const [searchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [errorType, setErrorType] = useState<'not_allowed' | 'general' | null>(null);
   const [loading, setLoading] = useState(true);
+  /** Set when getSession() returns a session; we wait for context to have session before navigating. */
+  const [sessionReceived, setSessionReceived] = useState(false);
 
   useEffect(() => {
     const handleAuthCallback = async () => {
@@ -44,7 +48,7 @@ export default function AuthCallback() {
           setErrorType(isNotAllowed ? 'not_allowed' : 'general');
           setError(
             isNotAllowed
-              ? 'Your email domain or address is not authorized. Please contact river if you need access.'
+              ? "Your email domain or address isn't authorized yet. You'll be redirected to the sign-in page where you can submit an access request for an admin to review. If you need help, contact River."
               : errorMessage || 'Authentication failed. Please try again.'
           );
           setLoading(false);
@@ -62,7 +66,7 @@ export default function AuthCallback() {
           setErrorType(isNotAllowed ? 'not_allowed' : 'general');
           setError(
             isNotAllowed
-              ? 'Your email domain or address is not authorized. Please contact river if you need access.'
+              ? "Your email domain or address isn't authorized yet. You'll be redirected to the sign-in page where you can submit an access request for an admin to review. If you need help, contact River."
               : errorMsg || 'Failed to complete authentication. Please try again.'
           );
           setLoading(false);
@@ -72,13 +76,13 @@ export default function AuthCallback() {
 
         if (data.session) {
           setLoading(false);
-          navigate('/');
+          setSessionReceived(true);
         } else {
           // No session yet (hash may not be processed); retry once
           const { data: retryData } = await supabase.auth.getSession();
           if (retryData.session) {
             setLoading(false);
-            navigate('/');
+            setSessionReceived(true);
           } else {
             setErrorType('general');
             setError('No session received. Please try signing in again.');
@@ -93,7 +97,7 @@ export default function AuthCallback() {
         setErrorType(isNotAllowed ? 'not_allowed' : 'general');
         setError(
           isNotAllowed
-            ? 'Your email domain or address is not authorized. Please contact river if you need access.'
+            ? "Your email domain or address isn't authorized yet. You'll be redirected to the sign-in page where you can submit an access request for an admin to review. If you need help, contact River."
             : errorMsg
         );
         setLoading(false);
@@ -103,6 +107,14 @@ export default function AuthCallback() {
 
     handleAuthCallback();
   }, [navigate, searchParams]);
+
+  // Only navigate after AuthProvider has the session (from onAuthStateChange). This prevents
+  // ProtectedLayout from rendering once with session=null and briefly showing the login page.
+  useEffect(() => {
+    if (sessionReceived && session) {
+      navigate('/', { replace: true });
+    }
+  }, [sessionReceived, session, navigate]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-5">
@@ -120,7 +132,7 @@ export default function AuthCallback() {
               onClick={() => navigate('/')}
               className="text-primary underline underline-offset-2 hover:no-underline"
             >
-              Go back to sign in
+              {errorType === 'not_allowed' ? 'Go to sign in and request access' : 'Go back to sign in'}
             </button>
           </CardContent>
         </Card>

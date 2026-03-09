@@ -1,8 +1,47 @@
-# Supabase Database Schema for Analytics
+# Supabase Database Schema for Analytics and Access
 
-This document describes the database schema needed for analytics tracking.
+This document describes the database schema for analytics tracking and for **invite-only access** (users and access requests).
 
 ## Tables
+
+### `users` table (approved users and roles)
+
+Single source of truth for who can sign in and their role. Replaces the previous use of `profiles` and `allowed_users` for access control.
+
+| Column          | Type        | Description |
+|-----------------|-------------|-------------|
+| `id`            | uuid        | Primary key (used in admin API for PATCH/DELETE). |
+| `email`         | text        | UNIQUE NOT NULL, lowercase. Used to match on sign-in (JWT email). |
+| `role`          | text        | NOT NULL DEFAULT 'user', CHECK (role IN ('user', 'admin')). |
+| `display_name`  | text        | Optional. Synced from Auth user_metadata on sign-in. |
+| `avatar_url`    | text        | Optional. Synced from Auth user_metadata on sign-in. |
+| `auth_user_id`  | uuid        | Nullable, FK → auth.users(id) ON DELETE SET NULL. Set when user first signs in; null for invited but not yet signed in. |
+| `approved_by`   | uuid        | Nullable, FK → users(id) ON DELETE SET NULL. Admin who approved/invited this user. |
+| `created_at`    | timestamptz | DEFAULT now(). |
+| `updated_at`    | timestamptz | DEFAULT now(). |
+
+**Bootstrap first admin**: Run `INSERT INTO users (email, role) VALUES ('your-email@example.com', 'admin');` once. That user can then sign in with Google and manage invites/access requests.
+
+**RLS**: Enabled. No policies for anon/authenticated—only the service role (backend) can access. Frontend does not query this table.
+
+### `access_requests` table (request access flow)
+
+Stores people who requested access but are not yet approved. When an admin approves, a row is added to `users` and the request status is updated.
+
+| Column       | Type        | Description |
+|-------------|-------------|-------------|
+| `id`        | uuid        | Primary key. |
+| `email`     | text        | NOT NULL. |
+| `status`    | text        | NOT NULL, CHECK (status IN ('pending', 'approved', 'rejected')). |
+| `created_at`| timestamptz | DEFAULT now(). |
+| `updated_at`| timestamptz | DEFAULT now(). |
+| `decided_by`| uuid        | Nullable, FK → auth.users(id). Admin who approved/rejected. |
+
+**RLS**: Enabled. No policies for anon/authenticated—only the service role (backend) can access.
+
+### `profiles` table (legacy, not used for access)
+
+This table is **no longer used** for access or role. The app uses the `users` table instead. You can leave the table in place or drop it in a future migration.
 
 ### `runs` table
 
@@ -36,38 +75,9 @@ Stores each individual error, warning, or info found during validation. This all
 | `identifier`      | `text`                               | Identifier (e.g., story_id, font name, style name)                                            |
 | `created_at`      | `timestamptz`                        | When the validation was recorded (defaults to NOW())                                          |
 
-### `profiles` table (user roles)
-
-Stores role and optional display info per auth user. Used for admin checks and user management.
-
-| Column         | Type                                 | Description                                    |
-| -------------- | ------------------------------------ | ---------------------------------------------- |
-| `id`           | `uuid` (primary key, FK → auth.users) | User id from Supabase Auth                     |
-| `email`        | `text`                               | Denormalized email for listing                 |
-| `display_name` | `text`                               | Optional display name                          |
-| `role`         | `text`                               | `'user'` or `'admin'`                          |
-| `created_at`   | `timestamptz`                        | When the profile was created                   |
-| `updated_at`   | `timestamptz`                        | When the profile was last updated              |
-
-**First admin**: Set env `ALLOWED_ADMIN_EMAILS=you@example.com` in the backend; the first time that user hits `/me`, they are treated as admin and a profile row is created with `role = 'admin'`. Alternatively run a one-off SQL insert into `profiles` for your user id.
-
-**RLS**: Not required. The app reads/writes `profiles` only from the backend using the Supabase **service role** key, which bypasses RLS. You can leave RLS disabled. If you enable RLS and add no policies, only the service role (your backend) can access the table. If the frontend ever reads `profiles` via the Supabase client, add a policy so users can `SELECT` only their own row (`auth.uid() = id`).
-
 ## SQL to Create Tables
 
-```sql
--- Create profiles table (user roles for admin/user management)
-CREATE TABLE IF NOT EXISTS profiles (
-    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    email TEXT,
-    display_name TEXT,
-    role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_profiles_role ON profiles(role);
-
--- Create runs table
+For `users` and `access_requests`, use the migration file `migrations/001_users_and_access_requests.sql`. Below: runs, validations, and legacy profiles (optional).
 CREATE TABLE runs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -78,7 +88,8 @@ CREATE TABLE runs (
     total_errors INTEGER NOT NULL DEFAULT 0,
     total_warnings INTEGER NOT NULL DEFAULT 0,
     total_infos INTEGER NOT NULL DEFAULT 0,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL
 );
 
 -- Create validations table
@@ -96,6 +107,7 @@ CREATE TABLE validations (
 CREATE INDEX idx_runs_timestamp ON runs(timestamp);
 CREATE INDEX idx_runs_template_name ON runs(template_name);
 CREATE INDEX idx_runs_source_type ON runs(source_type);
+CREATE INDEX idx_runs_user_id ON runs(user_id);
 CREATE INDEX idx_validations_run_id ON validations(run_id);
 CREATE INDEX idx_validations_validation_type ON validations(validation_type);
 CREATE INDEX idx_validations_severity ON validations(severity);
@@ -110,7 +122,8 @@ Set these environment variables in your deployment:
 - `SUPABASE_URL`: Your Supabase project URL (e.g., `https://xxxxx.supabase.co`). Used for API access and for JWT verification via the JWKS endpoint (no secret needed when using Supabase’s JWT Signing keys).
 - `SUPABASE_KEY`: Your Supabase service role key (for backend access)
 - `SUPABASE_JWT_SECRET`: (optional) Legacy JWT secret for verifying user tokens. Not needed if your project uses the new JWT Signing keys—the backend verifies tokens using the public JWKS from `SUPABASE_URL/auth/v1/.well-known/jwks.json`.
-- `ALLOWED_ADMIN_EMAILS`: (optional) Comma-separated emails that are always treated as admin; used to bootstrap the first admin without manual SQL
+
+Access control is handled by the `users` table. Bootstrap the first admin with: `INSERT INTO users (email, role) VALUES ('your-email@example.com', 'admin');`
 
 ## Example Queries
 

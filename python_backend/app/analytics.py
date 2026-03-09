@@ -140,7 +140,8 @@ def log_analytics_to_supabase(
     source_type: str,
     duration_ms: int,
     file_size_bytes: int,
-    results_json: Dict[str, Any]
+    results_json: Dict[str, Any],
+    user_id: Optional[str] = None
 ) -> bool:
     """
     Log analytics data to Supabase.
@@ -151,6 +152,7 @@ def log_analytics_to_supabase(
         duration_ms: Duration of validation in milliseconds
         file_size_bytes: Size of uploaded file in bytes
         results_json: Full validation results JSON
+        user_id: Optional UUID of the user who ran the validation (users.id). None for unauthenticated runs.
 
     Returns:
         True if successful, False otherwise
@@ -174,6 +176,8 @@ def log_analytics_to_supabase(
             'total_warnings': counts['total_warnings'],
             'total_infos': counts['total_infos'],
         }
+        if user_id is not None:
+            run_data['user_id'] = user_id
 
         # Insert run record
         run_response = supabase.table('runs').insert(run_data).execute()

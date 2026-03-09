@@ -3,6 +3,7 @@ import shutil
 import time
 import urllib.request
 import urllib.error
+from typing import Optional
 from flask import request, current_app, jsonify
 from werkzeug.utils import secure_filename
 from .analytics import log_analytics_to_supabase
@@ -26,7 +27,7 @@ def upload_file():
         return {'status': 'error', 'error': {'message': 'An error occurred during processing.', 'details': str(e)}}
 
 
-def start_check(checker, file_path: str, source_type: str = 'api'):
+def start_check(checker, file_path: str, source_type: str = 'api', user_id: Optional[str] = None):
     """Run the checker on the uploaded file and return the results."""
     try:
         # Track start time for duration calculation
@@ -59,7 +60,8 @@ def start_check(checker, file_path: str, source_type: str = 'api'):
                 source_type=source_type,
                 duration_ms=duration_ms,
                 file_size_bytes=file_size_bytes,
-                results_json=checker_json
+                results_json=checker_json,
+                user_id=user_id
             )
         except Exception as e:
             # Log error but don't fail the validation
@@ -76,13 +78,13 @@ def start_check(checker, file_path: str, source_type: str = 'api'):
         return jsonify({'error': 'An error occurred during the check.', 'details': str(e)}), 500
 
 
-def download_file_from_url(download_url: str, max_size_bytes: int = 300 * 1024 * 1024) -> dict:
+def download_file_from_url(download_url: str, max_size_bytes: int = 200 * 1024 * 1024) -> dict:
     """
     Download a file from a URL with size limit checking.
 
     Args:
         download_url: URL to download from
-        max_size_bytes: Maximum file size in bytes (default: 300MB)
+        max_size_bytes: Maximum file size in bytes (default: 200MB)
 
     Returns:
         dict with 'status' ('success' or 'error') and either 'path' or 'error'

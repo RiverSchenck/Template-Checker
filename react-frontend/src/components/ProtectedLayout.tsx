@@ -9,6 +9,7 @@ import { baseURL, getAuthHeaders } from './Analytics/api';
 import { ValidationResult } from '../types';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { Skeleton } from './ui/skeleton';
 import '../App.css';
 
 export type ProtectedLayoutOutletContext = {
@@ -25,7 +26,7 @@ export default function ProtectedLayout() {
   const [checkerResults, setCheckerResults] = useState<ValidationResult | null>(null);
   const [seeDetails, setSeeDetails] = useState<boolean>(false);
   const [previousCheckerResults, setPreviousCheckerResults] = useState<ValidationResult | null>(null);
-  const { user, session, loading } = useAuth();
+  const { session, loading, loadingRole, currentUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -95,7 +96,39 @@ export default function ProtectedLayout() {
     );
   }
 
-  if (!user) {
+  if (!session) {
+    return <Login />;
+  }
+
+  // Don't show the app (avatar, sidebar, content) until we've verified access with /me.
+  if (loadingRole) {
+    return (
+      <div className="app-background flex min-h-screen items-center justify-center p-4">
+        <motion.div
+          className="w-full max-w-sm overflow-hidden rounded-2xl border border-white/10 bg-card/80 px-8 py-10 shadow-xl backdrop-blur-sm dark:border-white/5 dark:bg-card/50"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+        >
+          <div className="flex flex-col items-center gap-6">
+            <Skeleton className="h-14 w-14 rounded-full" />
+            <div className="flex w-full flex-col items-center gap-2">
+              <Skeleton className="h-5 w-40" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <div className="flex gap-2">
+              <Skeleton className="h-2 w-2 rounded-full" />
+              <Skeleton className="h-2 w-2 rounded-full" />
+              <Skeleton className="h-2 w-2 rounded-full" />
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Backend is the single source of truth: only show app when we have currentUser from /me.
+  if (!currentUser) {
     return <Login />;
   }
 

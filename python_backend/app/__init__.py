@@ -31,9 +31,9 @@ def create_app():
     UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-    # Set maximum file upload size to 300MB (for large template files)
-    # Value is in bytes: 300 * 1024 * 1024 = 314572800
-    app.config['MAX_CONTENT_LENGTH'] = 300 * 1024 * 1024  # 300MB
+    # Set maximum file upload size to 200MB (safe for 256MB Fly machine; unzip needs ~2x disk)
+    # Value is in bytes: 200 * 1024 * 1024 = 209715200
+    app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200MB
 
     # Authentication token (set via environment variable)
     # If not set, authentication is disabled

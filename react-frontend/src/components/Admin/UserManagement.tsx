@@ -28,26 +28,49 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../ui/dialog';
-import { Trash2 } from 'lucide-react';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import { Trash2, UserPlus } from 'lucide-react';
 
 export interface AdminUser {
   id: string;
   email: string | null;
   display_name: string | null;
+  avatar_url?: string | null;
+  auth_user_id?: string | null;
   role: 'user' | 'admin';
   created_at: string | null;
+  updated_at?: string | null;
+}
+
+export interface AccessRequest {
+  id: string;
+  email: string;
+  status: string;
+  display_name?: string | null;
+  avatar_url?: string | null;
+  created_at: string | null;
+  updated_at?: string | null;
+  decided_by?: string | null;
 }
 
 export function UserManagement() {
-  const { session, user } = useAuth();
+  const { session, currentUser } = useAuth();
   const navigate = useNavigate();
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteSubmitting, setInviteSubmitting] = useState(false);
+  const [inviteError, setInviteError] = useState<string | null>(null);
+  const [accessRequests, setAccessRequests] = useState<AccessRequest[]>([]);
+  const [loadingRequests, setLoadingRequests] = useState(true);
+  const [updatingRequestId, setUpdatingRequestId] = useState<string | null>(null);
 
   const token = session?.access_token;
-  const currentUserId = user?.id ?? null;
+  const currentUserEmail = currentUser?.email ?? null;
 
   const fetchUsers = async () => {
     if (!token) return;
@@ -76,6 +99,83 @@ export function UserManagement() {
   useEffect(() => {
     fetchUsers();
   }, [token]);
+
+  const fetchAccessRequests = async () => {
+    if (!token) return;
+    setLoadingRequests(true);
+    try {
+      const res = await fetch(`${baseURL}/admin/access-requests?status=pending`, {
+        headers: getAuthHeaders(token),
+      });
+      if (res.status === 403) return;
+      if (!res.ok) return;
+      const data = await res.json();
+      setAccessRequests(Array.isArray(data) ? data : []);
+    } catch {
+      // ignore
+    } finally {
+      setLoadingRequests(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAccessRequests();
+  }, [token]);
+
+  const handleInvite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = inviteEmail.trim().toLowerCase();
+    if (!email || !email.includes('@') || !token) return;
+    setInviteError(null);
+    setInviteSubmitting(true);
+    try {
+      const res = await fetch(`${baseURL}/admin/invites`, {
+        method: 'POST',
+        headers: { ...getAuthHeaders(token), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setInviteError(data?.error?.message || 'Failed to invite.');
+        return;
+      }
+      setInviteOpen(false);
+      setInviteEmail('');
+      fetchUsers();
+      toast.success('Invite sent. They can sign in with Google.');
+    } catch {
+      setInviteError('Failed to invite.');
+    } finally {
+      setInviteSubmitting(false);
+    }
+  };
+
+  const handleAccessRequestDecision = async (requestId: string, status: 'approved' | 'rejected') => {
+    if (!token) return;
+    setUpdatingRequestId(requestId);
+    try {
+      const res = await fetch(`${baseURL}/admin/access-requests/${requestId}`, {
+        method: 'PATCH',
+        headers: { ...getAuthHeaders(token), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) {
+        toast.error(status === 'approved' ? 'Failed to approve' : 'Failed to reject');
+        return;
+      }
+      setAccessRequests((prev) => prev.filter((r) => r.id !== requestId));
+      if (status === 'approved') {
+        fetchUsers();
+        toast.success('Access approved. They can now sign in.');
+      } else {
+        toast.success('Request rejected.');
+      }
+    } catch {
+      toast.error('Request failed');
+    } finally {
+      setUpdatingRequestId(null);
+    }
+  };
 
   const handleRoleChange = async (userId: string, role: 'user' | 'admin') => {
     if (!token) return;
@@ -174,12 +274,75 @@ export function UserManagement() {
 
   return (
     <div className="flex min-w-0 flex-1 flex-col p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold">User management</h1>
-        <p className="text-muted-foreground text-sm">
-          View users, change roles, and remove access.
-        </p>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold">User management</h1>
+          <p className="text-muted-foreground text-sm">
+            View users, change roles, and remove access.
+          </p>
+        </div>
+        <Button onClick={() => { setInviteOpen(true); setInviteError(null); setInviteEmail(''); }}>
+          <UserPlus className="mr-2 h-4 w-4" />
+          Invite by email
+        </Button>
       </div>
+
+      <div className="mb-8">
+        <h2 className="mb-3 text-lg font-medium">Pending access requests</h2>
+        {loadingRequests ? (
+          <Skeleton className="h-20 w-full rounded-md" />
+        ) : accessRequests.length === 0 ? (
+          <p className="text-muted-foreground text-sm">No pending requests.</p>
+        ) : (
+          <div className="rounded-md border bg-card">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Requested</TableHead>
+                  <TableHead className="w-[180px]">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {accessRequests.map((r) => (
+                  <TableRow key={r.id}>
+                    <TableCell className="font-medium">{r.email}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">
+                      {r.display_name ?? '—'}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">
+                      {formatDate(r.created_at)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="default"
+                          disabled={updatingRequestId === r.id}
+                          onClick={() => handleAccessRequestDecision(r.id, 'approved')}
+                        >
+                          {updatingRequestId === r.id ? '…' : 'Approve'}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled={updatingRequestId === r.id}
+                          onClick={() => handleAccessRequestDecision(r.id, 'rejected')}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </div>
+
+      <h2 className="mb-3 text-lg font-medium">Approved users</h2>
       <div className="rounded-md border bg-card">
         <Table>
           <TableHeader>
@@ -227,12 +390,12 @@ export function UserManagement() {
                       variant="ghost"
                       size="icon"
                       className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      disabled={u.id === currentUserId}
+                      disabled={currentUserEmail != null && u.email === currentUserEmail}
                       onClick={() => setDeleteTarget(u)}
                       title={
-                        u.id === currentUserId
-                          ? 'You cannot delete yourself'
-                          : 'Remove user'
+                        currentUserEmail != null && u.email === currentUserEmail
+                          ? 'You cannot remove yourself'
+                          : 'Remove access'
                       }
                     >
                       <Trash2 className="h-4 w-4" />
@@ -274,6 +437,48 @@ export function UserManagement() {
               {deleting ? 'Removing…' : 'Remove user'}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Invite by email</DialogTitle>
+            <DialogDescription>
+              Add an email to the allowed list. They can then sign in with Google.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleInvite}>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="invite-email">Email</Label>
+                <Input
+                  id="invite-email"
+                  type="email"
+                  placeholder="colleague@example.com"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                  disabled={inviteSubmitting}
+                />
+                {inviteError && (
+                  <p className="text-sm text-destructive">{inviteError}</p>
+                )}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setInviteOpen(false)}
+                disabled={inviteSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={inviteSubmitting}>
+                {inviteSubmitting ? 'Sending…' : 'Invite'}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

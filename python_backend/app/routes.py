@@ -3,12 +3,13 @@ import json
 import time
 import jwt
 import urllib.request
+from datetime import datetime, timezone
 from functools import wraps
 from flask import Blueprint, jsonify, send_file, after_this_request, request, current_app, g
 from src.classes.FrontifyChecker import FrontifyChecker
 from .utils import upload_file, start_check, checker_cleanup, download_file_from_url
 from .analytics_api import get_analytics_summary, get_runs, get_supabase_client
-from . import profiles as profile_helpers
+from . import users as user_helpers
 
 main = Blueprint('main', __name__)
 
@@ -193,7 +194,7 @@ def require_admin(f):
             }), 401
         user_id = g.supabase_jwt.get('sub')
         email = g.supabase_jwt.get('email') or ''
-        if not profile_helpers.is_admin(user_id, email=email):
+        if not user_helpers.is_admin(email=email, auth_user_id=user_id):
             return jsonify({
                 'error': {'message': 'Forbidden', 'details': 'Admin role required'}
             }), 403
@@ -204,24 +205,39 @@ def require_admin(f):
 @main.route('/me', methods=['GET'])
 @require_auth
 def me():
-    """Return current user and role (from profiles). Creates profile if missing."""
+    """Return current user and role from users table. 403 if not approved."""
     user_id = _current_user_id()
     if not user_id:
         return jsonify({
             'error': {'message': 'Authentication required', 'details': 'Valid Supabase JWT required'}
         }), 401
-    email = _current_user_email() or ''
+    email = (_current_user_email() or '').strip().lower()
+    if not email:
+        return jsonify({
+            'error': {'message': 'Authentication required', 'details': 'Email required'}
+        }), 401
+    user_row = user_helpers.get_user_by_email(email)
+    if not user_row:
+        return jsonify({
+            'error': {'message': 'Access not authorized', 'code': 'access_denied'},
+            'allowed': False,
+        }), 403
     user_metadata = g.supabase_jwt.get('user_metadata') or {}
     display_name = user_metadata.get('full_name') or user_metadata.get('name') or user_metadata.get('email') or email
-    role = profile_helpers.ensure_profile_and_get_role(user_id, email=email, display_name=display_name)
-    profile = profile_helpers.get_profile(user_id)
-    if profile:
-        display_name = profile.get('display_name') or display_name
+    avatar_url = user_metadata.get('avatar_url') or user_metadata.get('picture')
+    updated = user_helpers.upsert_user_on_signin(
+        auth_user_id=user_id,
+        email=email,
+        display_name=display_name,
+        avatar_url=avatar_url,
+    )
+    row = updated if updated else user_row
     return jsonify({
-        'id': user_id,
-        'email': email,
-        'display_name': display_name,
-        'role': role,
+        'id': str(row.get('id')),
+        'email': row.get('email') or email,
+        'display_name': row.get('display_name') or display_name,
+        'avatar_url': row.get('avatar_url'),
+        'role': row.get('role', 'user'),
     }), 200
 
 
@@ -229,46 +245,25 @@ def me():
 @require_auth
 @require_admin
 def admin_list_users():
-    """List all users with their roles (admin only)."""
+    """List approved users from users table (admin only)."""
     supabase = get_supabase_client()
     if not supabase:
         return jsonify({'error': {'message': 'Supabase not configured'}}), 500
     try:
-        r = supabase.auth.admin.list_users()
-        # Response shape: may be r.users or r with .users attribute
-        users_list = getattr(r, 'users', None) or getattr(r, 'data', None) or (r if isinstance(r, list) else [])
-        if not isinstance(users_list, list):
-            users_list = []
-        profiles_by_id = {}
-        try:
-            profiles_r = supabase.table('profiles').select('id, role, display_name, email').execute()
-            if profiles_r.data:
-                for row in profiles_r.data:
-                    profiles_by_id[str(row['id'])] = row
-        except Exception:
-            pass
+        r = supabase.table('users').select('id, email, role, display_name, avatar_url, auth_user_id, approved_by, created_at, updated_at').order('created_at', desc=True).execute()
+        rows = r.data if r.data else []
         result = []
-        for u in users_list:
-            uid = u.get('id') if isinstance(u, dict) else getattr(u, 'id', None)
-            if not uid:
-                continue
-            uid_str = str(uid)
-            profile = profiles_by_id.get(uid_str) or profile_helpers.get_profile(uid_str)
-            email = u.get('email') if isinstance(u, dict) else getattr(u, 'email', None) or ''
-            um = u.get('user_metadata') if isinstance(u, dict) else getattr(u, 'user_metadata', None) or {}
-            created = u.get('created_at') if isinstance(u, dict) else getattr(u, 'created_at', None)
-            display_name = (um.get('full_name') or um.get('name') or um.get('email') or email) if um else email
-            if profile:
-                display_name = profile.get('display_name') or display_name
-                role = profile.get('role', 'user')
-            else:
-                role = 'admin' if (email and email.lower() in profile_helpers.get_allowed_admin_emails()) else 'user'
+        for row in rows:
             result.append({
-                'id': uid_str,
-                'email': email,
-                'display_name': display_name or email,
-                'role': role,
-                'created_at': created,
+                'id': str(row['id']),
+                'email': row.get('email') or '',
+                'display_name': row.get('display_name'),
+                'avatar_url': row.get('avatar_url'),
+                'auth_user_id': str(row['auth_user_id']) if row.get('auth_user_id') else None,
+                'approved_by': str(row['approved_by']) if row.get('approved_by') else None,
+                'role': row.get('role', 'user'),
+                'created_at': row.get('created_at'),
+                'updated_at': row.get('updated_at'),
             })
         return jsonify(result), 200
     except Exception as e:
@@ -279,7 +274,7 @@ def admin_list_users():
 @require_auth
 @require_admin
 def admin_update_user_role(user_id):
-    """Update a user's role (admin only)."""
+    """Update a user's role (admin only). user_id is users.id from our table."""
     if not user_id:
         return jsonify({'error': {'message': 'user_id required'}}), 400
     data = request.get_json(silent=True) or {}
@@ -290,26 +285,26 @@ def admin_update_user_role(user_id):
     if not supabase:
         return jsonify({'error': {'message': 'Supabase not configured'}}), 500
     try:
-        profile = profile_helpers.get_profile(user_id)
-        email = (profile or {}).get('email') if profile else None
-        display_name = (profile or {}).get('display_name') if profile else None
-        try:
-            ur = supabase.auth.admin.get_user_by_id(user_id)
-            u = getattr(ur, 'user', None) or (getattr(ur, 'users', None) or [None])[0] if getattr(ur, 'users', None) else getattr(ur, 'user', None)
-            if u:
-                email = u.get('email') if isinstance(u, dict) else getattr(u, 'email', None) or email
-                um = u.get('user_metadata') if isinstance(u, dict) else getattr(u, 'user_metadata', None) or {}
-                if um:
-                    display_name = (um.get('full_name') or um.get('name') or um.get('email')) if isinstance(um, dict) else display_name
-        except Exception:
-            pass
-        profile_helpers.upsert_profile(user_id, email=email, display_name=display_name, role=new_role)
-        try:
-            supabase.auth.admin.update_user_by_id(user_id, {'app_metadata': {'role': new_role}})
-        except Exception:
-            pass
-        updated = profile_helpers.get_profile(user_id)
-        return jsonify(updated or {'id': user_id, 'role': new_role}), 200
+        now = datetime.now(timezone.utc).isoformat()
+        r = supabase.table('users').update({'role': new_role, 'updated_at': now}).eq('id', user_id).execute()
+        if not r.data or len(r.data) == 0:
+            return jsonify({'error': {'message': 'User not found'}}), 404
+        row = dict(r.data[0])
+        auth_user_id = row.get('auth_user_id')
+        if auth_user_id:
+            try:
+                supabase.auth.admin.update_user_by_id(str(auth_user_id), {'app_metadata': {'role': new_role}})
+            except Exception:
+                pass
+        return jsonify({
+            'id': str(row['id']),
+            'email': row.get('email'),
+            'display_name': row.get('display_name'),
+            'avatar_url': row.get('avatar_url'),
+            'role': row.get('role'),
+            'created_at': row.get('created_at'),
+            'updated_at': row.get('updated_at'),
+        }), 200
     except Exception as e:
         return jsonify({'error': {'message': str(e)}}), 500
 
@@ -318,24 +313,237 @@ def admin_update_user_role(user_id):
 @require_auth
 @require_admin
 def admin_delete_user(user_id):
-    """Delete a user (admin only). Cannot delete self."""
-    current_id = _current_user_id()
-    if current_id and str(user_id) == str(current_id):
-        return jsonify({'error': {'message': 'Cannot delete your own account'}}), 403
+    """Remove user access (admin only). user_id is users.id. Cannot delete self. Does not delete from Auth."""
     if not user_id:
         return jsonify({'error': {'message': 'user_id required'}}), 400
+    email = _current_user_email() or ''
+    current_user_row = user_helpers.get_user_by_email(email)
+    if current_user_row and str(current_user_row.get('id')) == str(user_id):
+        return jsonify({'error': {'message': 'Cannot delete your own account'}}), 403
     supabase = get_supabase_client()
     if not supabase:
         return jsonify({'error': {'message': 'Supabase not configured'}}), 500
     try:
-        supabase.auth.admin.delete_user(user_id)
+        supabase.table('users').delete().eq('id', user_id).execute()
     except Exception as e:
         return jsonify({'error': {'message': str(e)}}), 500
-    try:
-        supabase.table('profiles').delete().eq('id', user_id).execute()
-    except Exception:
-        pass
     return '', 204
+
+
+def _validate_email(email):
+    """Validate email format. Returns (normalized_email, error_message)."""
+    if not email or not isinstance(email, str):
+        return None, 'Email is required'
+    email = email.strip().lower()
+    if not email:
+        return None, 'Email is required'
+    if '@' not in email or '.' not in email.split('@')[-1]:
+        return None, 'Invalid email format'
+    return email, None
+
+
+@main.route('/access-requests', methods=['POST'])
+def post_access_request():
+    """Submit an access request. With valid JWT: use email (and name/avatar) from token, idempotent. Without: body { \"email\": \"...\" }."""
+    supabase = get_supabase_client()
+    if not supabase:
+        return jsonify({'error': {'message': 'Service unavailable'}}), 503
+
+    # Try JWT from Authorization header
+    auth_header = request.headers.get('Authorization', '')
+    token = None
+    if auth_header.startswith('Bearer '):
+        token = auth_header[7:].strip()
+    elif auth_header:
+        token = auth_header.strip()
+    if token:
+        payload = verify_supabase_token(token)
+        if payload:
+            email = (payload.get('email') or '').strip().lower()
+            if not email or '@' not in email:
+                return jsonify({'error': {'message': 'Invalid email in token'}}), 400
+            user_metadata = payload.get('user_metadata') or {}
+            display_name = user_metadata.get('full_name') or user_metadata.get('name') or user_metadata.get('email')
+            avatar_url = user_metadata.get('avatar_url') or user_metadata.get('picture')
+            # Idempotent: if pending request exists for this email, return it
+            try:
+                existing = supabase.table('access_requests').select('id, email, status, display_name, avatar_url, created_at').eq('status', 'pending').eq('email', email).limit(1).execute()
+                if existing.data and len(existing.data) > 0:
+                    row = dict(existing.data[0])
+                    return jsonify({
+                        'id': str(row['id']),
+                        'email': row['email'],
+                        'status': row['status'],
+                        'display_name': row.get('display_name'),
+                        'avatar_url': row.get('avatar_url'),
+                    }), 200
+            except Exception:
+                pass
+            # Insert new request (include display_name, avatar_url if columns exist)
+            insert_row = {'email': email, 'status': 'pending'}
+            if display_name is not None:
+                insert_row['display_name'] = display_name
+            if avatar_url is not None:
+                insert_row['avatar_url'] = avatar_url
+            try:
+                r = supabase.table('access_requests').insert(insert_row).execute()
+            except Exception as e:
+                if 'display_name' in str(e) or 'avatar_url' in str(e) or 'column' in str(e).lower():
+                    insert_row = {'email': email, 'status': 'pending'}
+                    r = supabase.table('access_requests').insert(insert_row).execute()
+                else:
+                    return jsonify({'error': {'message': str(e)}}), 500
+            if not r.data or len(r.data) == 0:
+                return jsonify({'error': {'message': 'Failed to create request'}}), 500
+            row = dict(r.data[0])
+            return jsonify({
+                'id': str(row['id']),
+                'email': row['email'],
+                'status': row['status'],
+                'display_name': row.get('display_name'),
+                'avatar_url': row.get('avatar_url'),
+            }), 201
+
+    # No valid JWT: require JSON body with email
+    if not request.is_json:
+        return jsonify({'error': {'message': 'Request must be JSON with email field or provide Authorization'}}), 400
+    data = request.get_json() or {}
+    email, err = _validate_email(data.get('email'))
+    if err:
+        return jsonify({'error': {'message': err}}), 400
+    try:
+        r = supabase.table('access_requests').insert({
+            'email': email,
+            'status': 'pending',
+        }).execute()
+        if not r.data or len(r.data) == 0:
+            return jsonify({'error': {'message': 'Failed to create request'}}), 500
+        row = dict(r.data[0])
+        return jsonify({
+            'id': str(row['id']),
+            'email': row['email'],
+            'status': row['status'],
+        }), 201
+    except Exception as e:
+        return jsonify({'error': {'message': str(e)}}), 500
+
+
+@main.route('/admin/access-requests', methods=['GET'])
+@require_auth
+@require_admin
+def admin_list_access_requests():
+    """List access requests (admin only). Default: pending only. ?status=all for all."""
+    status_filter = request.args.get('status', 'pending')
+    supabase = get_supabase_client()
+    if not supabase:
+        return jsonify({'error': {'message': 'Supabase not configured'}}), 500
+    try:
+        q = supabase.table('access_requests').select('id, email, status, display_name, avatar_url, created_at, updated_at, decided_by').order('created_at', desc=True)
+        if status_filter != 'all':
+            q = q.eq('status', status_filter)
+        r = q.execute()
+        rows = r.data if r.data else []
+        result = [{'id': str(x['id']), 'email': x['email'], 'status': x['status'], 'display_name': x.get('display_name'), 'avatar_url': x.get('avatar_url'), 'created_at': x.get('created_at'), 'updated_at': x.get('updated_at'), 'decided_by': str(x['decided_by']) if x.get('decided_by') else None} for x in rows]
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': {'message': str(e)}}), 500
+
+
+@main.route('/admin/access-requests/<request_id>', methods=['PATCH'])
+@require_auth
+@require_admin
+def admin_update_access_request(request_id):
+    """Approve or reject an access request (admin only). Body: { "status": "approved" | "rejected" }."""
+    if not request_id:
+        return jsonify({'error': {'message': 'request_id required'}}), 400
+    data = request.get_json(silent=True) or {}
+    new_status = data.get('status')
+    if new_status not in ('approved', 'rejected'):
+        return jsonify({'error': {'message': 'status must be "approved" or "rejected"'}}), 400
+    supabase = get_supabase_client()
+    if not supabase:
+        return jsonify({'error': {'message': 'Supabase not configured'}}), 500
+    current_user_id = _current_user_id()
+    try:
+        r = supabase.table('access_requests').select('*').eq('id', request_id).limit(1).execute()
+        if not r.data or len(r.data) == 0:
+            return jsonify({'error': {'message': 'Request not found'}}), 404
+        req = dict(r.data[0])
+        if req['status'] != 'pending':
+            return jsonify({'error': {'message': 'Request already decided'}}), 400
+        now = datetime.now(timezone.utc).isoformat()
+        if new_status == 'approved':
+            email = (req.get('email') or '').strip().lower()
+            if not email:
+                return jsonify({'error': {'message': 'Invalid request email'}}), 400
+            admin_row = user_helpers.get_user_by_auth_id(current_user_id) if current_user_id else None
+            approved_by_id = str(admin_row['id']) if admin_row and admin_row.get('id') else None
+            user_insert = {
+                'email': email,
+                'role': 'user',
+            }
+            if approved_by_id:
+                user_insert['approved_by'] = approved_by_id
+            try:
+                supabase.table('users').insert(user_insert).execute()
+            except Exception as insert_err:
+                if 'duplicate' in str(insert_err).lower() or 'unique' in str(insert_err).lower():
+                    pass
+                else:
+                    return jsonify({'error': {'message': str(insert_err)}}), 500
+        supabase.table('access_requests').update({
+            'status': new_status,
+            'updated_at': now,
+            'decided_by': current_user_id,
+        }).eq('id', request_id).execute()
+        r2 = supabase.table('access_requests').select('*').eq('id', request_id).limit(1).execute()
+        row = dict(r2.data[0]) if r2.data and len(r2.data) > 0 else req
+        return jsonify({
+            'id': str(row['id']),
+            'email': row['email'],
+            'status': row['status'],
+            'created_at': row.get('created_at'),
+            'updated_at': row.get('updated_at'),
+            'decided_by': str(row['decided_by']) if row.get('decided_by') else None,
+        }), 200
+    except Exception as e:
+        return jsonify({'error': {'message': str(e)}}), 500
+
+
+@main.route('/admin/invites', methods=['POST'])
+@require_auth
+@require_admin
+def admin_invite():
+    """Invite a user by email (admin only). Body: { "email": "..." }."""
+    if not request.is_json:
+        return jsonify({'error': {'message': 'Request must be JSON with email field'}}), 400
+    data = request.get_json() or {}
+    email, err = _validate_email(data.get('email'))
+    if err:
+        return jsonify({'error': {'message': err}}), 400
+    supabase = get_supabase_client()
+    if not supabase:
+        return jsonify({'error': {'message': 'Supabase not configured'}}), 503
+    admin_row = user_helpers.get_user_by_auth_id(_current_user_id()) if _current_user_id() else None
+    approved_by_id = str(admin_row['id']) if admin_row and admin_row.get('id') else None
+    user_insert = {'email': email, 'role': 'user'}
+    if approved_by_id:
+        user_insert['approved_by'] = approved_by_id
+    try:
+        r = supabase.table('users').insert(user_insert).execute()
+        if not r.data or len(r.data) == 0:
+            return jsonify({'error': {'message': 'Failed to create invite'}}), 500
+        row = dict(r.data[0])
+        return jsonify({
+            'id': str(row['id']),
+            'email': row['email'],
+            'role': row.get('role', 'user'),
+            'created_at': row.get('created_at'),
+        }), 201
+    except Exception as e:
+        if 'duplicate' in str(e).lower() or 'unique' in str(e).lower():
+            return jsonify({'error': {'message': 'User already invited or approved'}}), 409
+        return jsonify({'error': {'message': str(e)}}), 500
 
 
 @main.route('/test')
@@ -379,7 +587,10 @@ def run_checker_and_download():
             return jsonify(upload_result['error']), 400
 
         upload_path = upload_result['path']
-        results, status_code = start_check(checker, upload_path, source_type)
+        auth_uid = _current_user_id()
+        user_row = user_helpers.get_user_by_auth_id(auth_uid) if auth_uid else None
+        run_user_id = str(user_row['id']) if user_row and user_row.get('id') else None
+        results, status_code = start_check(checker, upload_path, source_type, user_id=run_user_id)
         if status_code != 200:
             return results, status_code
 
@@ -458,8 +669,8 @@ def run_checker_from_url():
 
         download_url = data['downloadUrl']
 
-        # Fixed max size of 300MB (matching upload limit and preventing abuse)
-        max_size_bytes = 300 * 1024 * 1024  # 300MB
+        # Fixed max size of 200MB (matching upload limit; safe for 256MB Fly machine)
+        max_size_bytes = 200 * 1024 * 1024  # 200MB
 
         # Download the file from URL
         download_result = download_file_from_url(download_url, max_size_bytes)
@@ -469,7 +680,10 @@ def run_checker_from_url():
         download_path = download_result['path']
 
         # Run the checker on the downloaded file
-        results, status_code = start_check(checker, download_path, source_type)
+        auth_uid = _current_user_id()
+        user_row = user_helpers.get_user_by_auth_id(auth_uid) if auth_uid else None
+        run_user_id = str(user_row['id']) if user_row and user_row.get('id') else None
+        results, status_code = start_check(checker, download_path, source_type, user_id=run_user_id)
         return results, status_code
     finally:
         checker_cleanup(checker)
