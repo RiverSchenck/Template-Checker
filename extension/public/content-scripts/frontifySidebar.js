@@ -7,6 +7,8 @@ const SIDEBAR_SELECTOR =
 const TOGGLE_BTN_ID = "extension-sidebar-toggle-btn";
 const PARENT_COLLAPSED_CLASS = "template-checker-sidebar-collapsed";
 
+let sidebarMutationObserver = null;
+
 function getExtensionIconUrl(size = 16) {
   const name =
     size <= 16 ? "tech-sol16.png" : size <= 48 ? "tech-sol48.png" : "tech-sol192.png";
@@ -227,6 +229,7 @@ async function initializeIfFrontifySite() {
   const observer = new MutationObserver(() => {
     findAndSetupSidebar();
   });
+  sidebarMutationObserver = observer;
 
   if (document.body) {
     observer.observe(document.body, { childList: true, subtree: true });
@@ -242,4 +245,26 @@ async function initializeIfFrontifySite() {
   }
 }
 
-initializeIfFrontifySite();
+function teardownSidebar() {
+  if (sidebarMutationObserver) {
+    sidebarMutationObserver.disconnect();
+    sidebarMutationObserver = null;
+  }
+  const btn = document.getElementById(TOGGLE_BTN_ID);
+  if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
+  const styleEl = document.getElementById("template-checker-sidebar-styles");
+  if (styleEl && styleEl.parentNode) styleEl.parentNode.removeChild(styleEl);
+  const wrapper = document.querySelector('[data-test-id="terrific-block-wrapper"].' + PARENT_COLLAPSED_CLASS);
+  if (wrapper) wrapper.classList.remove(PARENT_COLLAPSED_CLASS);
+}
+
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeIfFrontifySite();
+    });
+  } else {
+    initializeIfFrontifySite();
+  }
+  window.addEventListener('template-checker-hide', teardownSidebar);
+}

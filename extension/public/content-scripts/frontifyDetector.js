@@ -1,6 +1,17 @@
 // Utility function to detect if we're on a Frontify site
 // This allows the extension to work with different Frontify client domains
 
+// Path pattern: /brands/<id>/template-libraries/<id>/templates (template editor page only)
+const TEMPLATE_PAGE_PATH_REGEX = /\/brands\/[^/]+\/template-libraries\/[^/]+\/templates/;
+
+function isTemplatePage() {
+  try {
+    return TEMPLATE_PAGE_PATH_REGEX.test(location.pathname || "");
+  } catch {
+    return false;
+  }
+}
+
 function isFrontifySite() {
   // Check for Frontify-specific classes and elements that indicate this is a Frontify site
   const frontifyIndicators = [
@@ -111,8 +122,26 @@ function waitForFrontifySite(timeout = 5000) {
   });
 }
 
+function runUrlCheck() {
+  if (isTemplatePage()) return;
+  window.dispatchEvent(new CustomEvent("template-checker-hide", { detail: { match: false } }));
+}
+
+function startUrlWatcher() {
+  let lastPathname = location.pathname;
+  setInterval(() => {
+    const current = location.pathname;
+    if (current !== lastPathname) {
+      lastPathname = current;
+      runUrlCheck();
+    }
+  }, 400);
+}
+
 // Export for use in other scripts
 if (typeof window !== 'undefined') {
+  window.isTemplatePage = isTemplatePage;
   window.isFrontifySite = isFrontifySite;
   window.waitForFrontifySite = waitForFrontifySite;
+  startUrlWatcher();
 }

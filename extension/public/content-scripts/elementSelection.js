@@ -1,18 +1,42 @@
 // Watch for element selection in Frontify
 
-// Only run on Frontify sites
-async function initializeIfFrontifySite() {
-  // Check if we're on a Frontify site
-  if (typeof window === 'undefined' || !window.waitForFrontifySite) {
-    return; // Detector not loaded yet
+let selectionCheckInterval = null;
+let selectionObserver = null;
+let spreadClickHandler = null;
+let elementSelectionActive = false;
+
+function teardownElementSelection() {
+  if (!elementSelectionActive) return;
+  elementSelectionActive = false;
+
+  if (selectionCheckInterval != null) {
+    clearInterval(selectionCheckInterval);
+    selectionCheckInterval = null;
   }
+  if (selectionObserver) {
+    selectionObserver.disconnect();
+    selectionObserver = null;
+  }
+  if (spreadClickHandler) {
+    document.removeEventListener('click', spreadClickHandler, true);
+    spreadClickHandler = null;
+  }
+}
+
+// Only run on Frontify sites (we only inject on template page URL; teardown when leaving it)
+async function initializeIfFrontifySite() {
+  if (typeof window === 'undefined' || !window.waitForFrontifySite) {
+    return;
+  }
+  if (elementSelectionActive) return;
+  elementSelectionActive = true;
 
   const isFrontify = await window.waitForFrontifySite(5000);
   if (!isFrontify) {
-    return; // Not a Frontify site, exit early
+    elementSelectionActive = false;
+    return;
   }
 
-  // Initialize the selection watchers
   watchForSelection();
   watchForSpreadClicks();
 }
@@ -100,6 +124,7 @@ function watchForSelection() {
   }
 
   const checkInterval = setInterval(checkForSelectedElements, 500);
+  selectionCheckInterval = checkInterval;
 
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
@@ -154,17 +179,18 @@ function watchForSelection() {
     subtree: true,
     childList: true
   });
+  selectionObserver = observer;
 
   checkForSelectedElements();
 
   window.addEventListener('beforeunload', () => {
-    clearInterval(checkInterval);
+    if (selectionCheckInterval != null) clearInterval(selectionCheckInterval);
   });
 }
 
 // Watch for clicks on <li> elements with data-id=spread_id
 function watchForSpreadClicks() {
-  function handleSpreadClick(event) {
+  spreadClickHandler = function handleSpreadClick(event) {
     // Only filter the checker app when the user actually clicks a spread in Frontify, not when we programmatically click to navigate for highlight
     if (!event.isTrusted) {
       return;
@@ -193,14 +219,14 @@ function watchForSpreadClicks() {
     }
   }
 
-  // Use event delegation to handle clicks on <li> elements
-  // Using capture phase to catch clicks early
-  document.addEventListener('click', handleSpreadClick, true);
+  document.addEventListener('click', spreadClickHandler, true);
 }
 
-// Initialize only if on a Frontify site
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
-} else {
-  initializeIfFrontifySite();
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
+  } else {
+    initializeIfFrontifySite();
+  }
+  window.addEventListener('template-checker-hide', teardownElementSelection);
 }

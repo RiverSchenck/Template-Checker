@@ -1,5 +1,8 @@
 // Watch for Frontify export dropdown and modify "InDesign (with changes)" option
 
+let exportDropdownObserver = null;
+let exportDropdownInterval = null;
+
 // Helper function to safely get extension URL
 function getExtensionURL(path) {
   try {
@@ -14,7 +17,7 @@ function getExtensionURL(path) {
   }
 }
 
-// Only run on Frontify sites
+// Only run on Frontify sites (we only inject on template page; teardown when leaving it)
 async function initializeIfFrontifySite() {
   // Check if we're on a Frontify site
   if (typeof window === 'undefined' || !window.waitForFrontifySite) {
@@ -125,6 +128,7 @@ function watchForExportDropdown() {
 
     checkAndInject();
   });
+  exportDropdownObserver = observer;
 
   if (document.body) {
     observer.observe(document.body, {
@@ -135,7 +139,7 @@ function watchForExportDropdown() {
     });
 
     setTimeout(checkAndInject, 500);
-    setInterval(checkAndInject, 500);
+    exportDropdownInterval = setInterval(checkAndInject, 500);
   } else {
     document.addEventListener('DOMContentLoaded', () => {
       observer.observe(document.body, {
@@ -146,5 +150,22 @@ function watchForExportDropdown() {
   }
 }
 
-// Initialize only if on a Frontify site
-initializeIfFrontifySite();
+function teardownExportDropdown() {
+  if (exportDropdownObserver) {
+    exportDropdownObserver.disconnect();
+    exportDropdownObserver = null;
+  }
+  if (exportDropdownInterval != null) {
+    clearInterval(exportDropdownInterval);
+    exportDropdownInterval = null;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
+  } else {
+    initializeIfFrontifySite();
+  }
+  window.addEventListener('template-checker-hide', teardownExportDropdown);
+}

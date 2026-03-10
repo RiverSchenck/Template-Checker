@@ -1,6 +1,8 @@
 // Watch for Frontify download progress bar and inject "Checker" button
 
-// Only run on Frontify sites
+let progressBarObserver = null;
+
+// Only run on Frontify sites (we only inject on template page; teardown when leaving it)
 async function initializeIfFrontifySite() {
   // Check if we're on a Frontify site
   if (typeof window === "undefined" || !window.waitForFrontifySite) {
@@ -156,6 +158,7 @@ function watchForFrontifyProgressBar() {
         }
       });
   });
+  progressBarObserver = observer;
 
   if (document.body) {
     observer.observe(document.body, {
@@ -186,5 +189,18 @@ function watchForFrontifyProgressBar() {
   }
 }
 
-// Initialize only if on a Frontify site
-initializeIfFrontifySite();
+function teardownProgressBar() {
+  if (progressBarObserver) {
+    progressBarObserver.disconnect();
+    progressBarObserver = null;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
+  } else {
+    initializeIfFrontifySite();
+  }
+  window.addEventListener('template-checker-hide', teardownProgressBar);
+}

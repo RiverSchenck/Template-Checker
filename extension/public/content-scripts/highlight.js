@@ -1,6 +1,16 @@
 // Main content script entry point
 
-// Only initialize on Frontify sites
+let tornDown = false;
+
+function teardownHighlight() {
+  tornDown = true;
+  if (typeof window !== 'undefined') {
+    if (window.clearHighlights) window.clearHighlights();
+    if (window.clearFilterHighlights) window.clearFilterHighlights();
+  }
+}
+
+// Only initialize on Frontify sites (we only inject on template page; teardown when leaving it)
 async function initializeIfFrontifySite() {
   // Check if we're on a Frontify site
   if (typeof window === 'undefined' || !window.waitForFrontifySite) {
@@ -32,6 +42,7 @@ async function initializeIfFrontifySite() {
 function setupMessageListener() {
   // Handle messages from the extension
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (tornDown) return false;
   console.log('[Content Script] Received message:', message.action);
   if (message.action === 'highlight') {
     if (!message.dataId) {
@@ -137,9 +148,11 @@ function setupMessageListener() {
   });
 }
 
-// Initialize only if on a Frontify site
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
-} else {
-  initializeIfFrontifySite();
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
+  } else {
+    initializeIfFrontifySite();
+  }
+  window.addEventListener('template-checker-hide', teardownHighlight);
 }
