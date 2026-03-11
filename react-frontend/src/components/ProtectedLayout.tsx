@@ -20,9 +20,11 @@ import { SiteHeader } from './site-header';
 import Login from './Login/Login';
 import { useAuth } from './AuthContext';
 import { baseURL, getAuthHeaders } from './Analytics/api';
+import { LATEST_EXTENSION_VERSION, isExtensionOutOfDate } from '../constants/extension';
 import { ValidationResult } from '../types';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import ExtensionUpdateModal from './ExtensionUpdateModal';
 import '../App.css';
 
 export type ProtectedLayoutOutletContext = {
@@ -46,8 +48,14 @@ export default function ProtectedLayout() {
   const checkUrlProcessedRef = useRef(false);
   const [fromExtension, setFromExtension] = useState(false);
   const [checkFromUrlInProgress, setCheckFromUrlInProgress] = useState(false);
+  // When set, show the "extension out of date" modal (more obvious than a toast).
+  const [extensionUpdateModal, setExtensionUpdateModal] = useState<{
+    installedVersion: string;
+    latestVersion: string;
+  } | null>(null);
 
   // Auto-run check from ?checkUrl= param (e.g. from extension). Template is fetched by the backend only — no local download.
+  // The extension also sends ?extVersion=1.0.0 so we can prompt the user to update if their extension is older than LATEST_EXTENSION_VERSION.
   useEffect(() => {
     const checkUrl = searchParams.get('checkUrl');
     if (!checkUrl || !session?.access_token || checkUrlProcessedRef.current) return;
@@ -57,8 +65,15 @@ export default function ProtectedLayout() {
     setCheckFromUrlInProgress(true);
     const clearParam = () => {
       searchParams.delete('checkUrl');
+      searchParams.delete('extVersion'); // Remove version param after we've read it (used for "extension out of date" check)
       setSearchParams(searchParams, { replace: true });
     };
+
+    // Some older extension builds may not send extVersion at all.
+    // Treat missing/blank values as out of date so users are still prompted to update.
+    const extVersion = searchParams.get('extVersion')?.trim() ?? '';
+    const installedExtensionVersion = extVersion || 'unknown';
+    const showOutOfDateToast = !extVersion || isExtensionOutOfDate(extVersion, LATEST_EXTENSION_VERSION);
 
     const run = async () => {
       try {
@@ -82,6 +97,13 @@ export default function ProtectedLayout() {
         clearParam();
         navigate('/results');
         toast.success('Template checked');
+        // Show a modal so the update prompt is impossible to miss (toasts can be easy to overlook).
+        if (showOutOfDateToast) {
+          setExtensionUpdateModal({
+            installedVersion: installedExtensionVersion,
+            latestVersion: LATEST_EXTENSION_VERSION,
+          });
+        }
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Check failed';
         toast.error(msg);
@@ -277,6 +299,13 @@ export default function ProtectedLayout() {
           </div>
         </SidebarInset>
       </SidebarProvider>
+      <ExtensionUpdateModal
+        open={extensionUpdateModal !== null}
+        onClose={() => setExtensionUpdateModal(null)}
+        installedVersion={extensionUpdateModal?.installedVersion ?? ''}
+        latestVersion={extensionUpdateModal?.latestVersion ?? ''}
+        onGoToExtension={() => navigate('/extension')}
+      />
     </div>
   );
 }

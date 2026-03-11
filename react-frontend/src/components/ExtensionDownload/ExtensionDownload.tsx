@@ -2,9 +2,7 @@ import React from 'react';
 import { Badge } from '../ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Download, Wrench, BookOpen, AlertCircle, Zap, AlertTriangle } from 'lucide-react';
-
-const EXTENSION_DOWNLOAD_URL =
-  'https://github.com/RiverSchenck/Template-Checker/releases/download/v1.0.0/frontify-template-checker-extension.zip';
+import { LATEST_EXTENSION_VERSION, EXTENSION_DOWNLOAD_URL } from '../../constants/extension';
 
 const INSTALL_STEPS = [
   'Download the ZIP file using the button above.',
@@ -63,7 +61,7 @@ function ExtensionDownload() {
               Download extension (ZIP)
             </a>
             <p className="mt-3 text-xs text-muted-foreground">
-              v1.0.0 · Unzip and load unpacked in Chrome, Arc, or any Chromium-based browser
+              v{LATEST_EXTENSION_VERSION} · Unzip and load unpacked in Chrome, Arc, or any Chromium-based browser
             </p>
           </CardContent>
         </Card>

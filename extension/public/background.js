@@ -187,8 +187,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "frontifyUrlReceived") {
     const url = message.url;
     const frontifyTabId = sender.tab?.id;
+    // Include extension version so the web app can prompt users to update if they're on an older build.
+    // Update manifest.json "version" when you release; the web app compares extVersion to its LATEST_EXTENSION_VERSION.
+    const extVersion = chrome.runtime.getManifest().version;
     const webAppUrl =
-      WEB_APP_BASE.replace(/\/$/, "") + "/?checkUrl=" + encodeURIComponent(url);
+      WEB_APP_BASE.replace(/\/$/, "") +
+      "/?checkUrl=" + encodeURIComponent(url) +
+      "&extVersion=" + encodeURIComponent(extVersion);
     chrome.tabs.create({ url: webAppUrl });
     if (frontifyTabId != null) {
       chrome.storage.session.set({ frontifySourceTabId: frontifyTabId });
