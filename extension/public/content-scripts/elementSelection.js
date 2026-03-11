@@ -1,9 +1,22 @@
-// Watch for element selection in Frontify
+(() => {
+const ELEMENT_SELECTION_KEY = "__templateCheckerElementSelectionInstalled";
+
+if (typeof window !== "undefined" && !window[ELEMENT_SELECTION_KEY]) {
+window[ELEMENT_SELECTION_KEY] = true;
 
 let selectionCheckInterval = null;
 let selectionObserver = null;
 let spreadClickHandler = null;
 let elementSelectionActive = false;
+
+function safeSendMessage(message) {
+  try {
+    if (typeof chrome === "undefined" || !chrome.runtime?.sendMessage) return;
+    chrome.runtime.sendMessage(message).catch(() => {});
+  } catch (_e) {
+    // Extension context invalidated (e.g. extension reloaded/disabled) - ignore
+  }
+}
 
 function teardownElementSelection() {
   if (!elementSelectionActive) return;
@@ -32,7 +45,7 @@ async function initializeIfFrontifySite() {
   elementSelectionActive = true;
 
   const isFrontify = await window.waitForFrontifySite(5000);
-  if (!isFrontify) {
+  if (!isFrontify || !window.isTemplateCheckerTemplatePageActive?.()) {
     elementSelectionActive = false;
     return;
   }
@@ -95,13 +108,11 @@ function watchForSelection() {
         return;
       }
 
-      if (typeof chrome !== 'undefined' && chrome.runtime?.sendMessage) {
-        lastSentDataId = dataId;
-        chrome.runtime.sendMessage({
-          action: 'elementSelected',
-          dataId: dataId
-        }).catch(() => {});
-      }
+      lastSentDataId = dataId;
+      safeSendMessage({
+        action: "elementSelected",
+        dataId: dataId,
+      });
     }, 250);
   }
 
@@ -207,26 +218,31 @@ function watchForSpreadClicks() {
       return;
     }
 
-    // Prevent the click from triggering other handlers if needed
-    // event.stopPropagation(); // Uncomment if needed
+    // Uncomment event.stopPropagation() below if the spread click causes unwanted navigation or other side effects.
+    // event.stopPropagation();
 
-    // Send message to background script
-    if (typeof chrome !== 'undefined' && chrome.runtime?.sendMessage) {
-      chrome.runtime.sendMessage({
-        action: 'spreadSelected',
-        spreadId: spreadId
-      }).catch(() => {});
-    }
+    safeSendMessage({
+      action: "spreadSelected",
+      spreadId: spreadId,
+    });
   }
 
   document.addEventListener('click', spreadClickHandler, true);
 }
 
-if (typeof window !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
-  } else {
-    initializeIfFrontifySite();
-  }
-  window.addEventListener('template-checker-hide', teardownElementSelection);
+function handleTemplateCheckerShow() {
+  initializeIfFrontifySite();
 }
+
+window.addEventListener('template-checker-show', handleTemplateCheckerShow);
+window.addEventListener('template-checker-hide', teardownElementSelection);
+
+if (window.isTemplateCheckerTemplatePageActive?.()) {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', handleTemplateCheckerShow, { once: true });
+  } else {
+    handleTemplateCheckerShow();
+  }
+}
+}
+})();

@@ -1,3 +1,4 @@
+(() => {
 // Highlighting functionality for elements by data-id
 
 let highlightState = {
@@ -265,7 +266,7 @@ function highlightTextWithinElement(
                 searchIndex = fuzzyIndex + 1;
                 continue;
               } catch (e) {
-                console.warn("Error creating range for normalized match:", e);
+                console.warn("Template Checker: Error creating range for normalized match:", e);
               }
             }
           }
@@ -279,7 +280,7 @@ function highlightTextWithinElement(
           range.setEnd(node, exactIndex + searchText.length);
           rangesToHighlight.push(range.cloneRange());
         } catch (e) {
-          console.warn("Error creating range for exact match:", e);
+          console.warn("Template Checker: Error creating range for exact match:", e);
         }
 
         searchIndex = exactIndex + 1;
@@ -313,7 +314,7 @@ function highlightTextWithinElement(
 
         textHighlightState.highlightedSpans.push(highlightSpan);
       } catch (e) {
-        console.warn("Error highlighting range:", e);
+        console.warn("Template Checker: Error highlighting range:", e);
       }
     });
   });
@@ -368,12 +369,5 @@ if (typeof window !== "undefined") {
   window.clearFilterHighlights = clearFilterHighlights;
   window.highlightTextWithinElement = highlightTextWithinElement;
   window.clearTextHighlights = clearTextHighlights;
-  console.log("[Content Script] Highlighting functions exported to window:", {
-    highlightElements: typeof window.highlightElements,
-    clearHighlights: typeof window.clearHighlights,
-    highlightFilteredIssues: typeof window.highlightFilteredIssues,
-    clearFilterHighlights: typeof window.clearFilterHighlights,
-    highlightTextWithinElement: typeof window.highlightTextWithinElement,
-    clearTextHighlights: typeof window.clearTextHighlights,
-  });
 }
+})();

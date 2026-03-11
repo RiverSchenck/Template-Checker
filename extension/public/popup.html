@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Template Checker</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-width: 220px;
+        background: #f6f4ff;
+        color: #201547;
+      }
+
+      .popup {
+        padding: 14px;
+      }
+
+      .title {
+        margin: 0 0 10px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .actions {
+        display: grid;
+        gap: 8px;
+      }
+
+      .options-card {
+        display: grid;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 12px;
+        background: #ede7ff;
+      }
+
+      .section-label {
+        margin: 0;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #5b4a93;
+      }
+
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background: #f6f4ff;
+        color: #33206f;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .toggle-row input {
+        width: 16px;
+        height: 16px;
+        accent-color: #7c57ff;
+      }
+
+      .toggle-copy {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .toggle-title {
+        font-size: 12px;
+        font-weight: 600;
+        color: #33206f;
+      }
+
+      .tooltip {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .tooltip-trigger {
+        width: 16px;
+        height: 16px;
+        border: none;
+        border-radius: 999px;
+        padding: 0;
+        background: #d8ceff;
+        color: #4d3797;
+        cursor: help;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .tooltip-help {
+        display: none;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: #f6f4ff;
+        color: #4d3797;
+        font-size: 11px;
+        line-height: 1.4;
+        border: 1px solid #ddd3ff;
+      }
+
+      .tooltip-help.is-open {
+        display: block;
+      }
+
+      .action-btn {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: #7c57ff;
+        color: #fff;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: left;
+      }
+
+      .action-btn.secondary {
+        background: #ede7ff;
+        color: #33206f;
+      }
+
+      .action-btn:disabled {
+        opacity: 0.7;
+        cursor: wait;
+      }
+
+      .status {
+        min-height: 16px;
+        margin-top: 10px;
+        font-size: 12px;
+        color: #5b4a93;
+      }
+
+      .status.error {
+        color: #a32638;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="popup">
+      <h1 class="title">Template Checker</h1>
+      <div class="actions">
+        <div class="options-card">
+          <p class="section-label">Options</p>
+          <label class="toggle-row" for="remove-sidebar-toggle">
+            <span class="toggle-copy">
+              <span class="toggle-title">Remove Sidebar</span>
+              <span class="tooltip">
+                <button
+                  id="remove-sidebar-info"
+                  class="tooltip-trigger"
+                  type="button"
+                  aria-label="Remove Sidebar info"
+                  aria-expanded="false"
+                  aria-controls="remove-sidebar-help"
+                >i</button>
+              </span>
+            </span>
+            <input id="remove-sidebar-toggle" type="checkbox">
+          </label>
+          <div id="remove-sidebar-help" class="tooltip-help">
+            Removes the Settings sidebar to improve visibility of the template content area.
+          </div>
+        </div>
+        <button id="run-btn" class="action-btn" type="button">Run</button>
+      </div>
+      <div id="status" class="status" aria-live="polite"></div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

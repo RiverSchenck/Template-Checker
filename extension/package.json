@@ -5,6 +5,7 @@
   "description": "Chrome extension middle-man for Frontify Template Checker",
   "scripts": {
     "build": "node scripts/copy-extension-files.js",
+    "build:zip": "npm run build && node scripts/zip-extension.js",
     "build:local": "cross-env VITE_FRONTEND_URL=http://localhost:3000 node scripts/copy-extension-files.js",
     "build:extension:local": "npm run build:local",
     "build:production": "cross-env VITE_FRONTEND_URL=https://template-checker.fly.dev node scripts/copy-extension-files.js"

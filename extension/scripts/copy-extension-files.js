@@ -13,6 +13,10 @@ if (!fs.existsSync(buildDir)) {
 // Copy manifest.json from public to build
 const manifestSource = path.join(publicDir, "manifest.json");
 const manifestDest = path.join(buildDir, "manifest.json");
+const popupSource = path.join(publicDir, "popup.html");
+const popupDest = path.join(buildDir, "popup.html");
+const popupScriptSource = path.join(publicDir, "popup.js");
+const popupScriptDest = path.join(buildDir, "popup.js");
 
 // Copy background.js from public to build, injecting web app URL
 const backgroundSource = path.join(publicDir, "background.js");
@@ -33,6 +37,16 @@ if (fs.existsSync(manifestSource)) {
 } else {
   console.error("manifest.json not found in public directory");
   process.exit(1);
+}
+
+if (fs.existsSync(popupSource)) {
+  fs.copyFileSync(popupSource, popupDest);
+  console.log("✓ Copied popup.html");
+}
+
+if (fs.existsSync(popupScriptSource)) {
+  fs.copyFileSync(popupScriptSource, popupScriptDest);
+  console.log("✓ Copied popup.js");
 }
 
 // Copy icon files

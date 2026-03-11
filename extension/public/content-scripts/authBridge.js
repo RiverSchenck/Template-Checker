@@ -1,4 +1,13 @@
 // Runs on frontend origins; forwards messages from the page to the extension.
+function safeSendMessage(msg) {
+  try {
+    if (typeof chrome === "undefined" || !chrome.runtime?.sendMessage) return;
+    chrome.runtime.sendMessage(msg).catch(function () {});
+  } catch (_e) {
+    // Extension context invalidated (e.g. extension reloaded/disabled) - ignore
+  }
+}
+
 window.addEventListener("message", function (event) {
   if (event.source !== window) return;
   var data = event.data;
@@ -8,7 +17,7 @@ window.addEventListener("message", function (event) {
     var textContent = data.textContent;
     var spreadId = data.spreadId;
     if (dataId) {
-      chrome.runtime.sendMessage({
+      safeSendMessage({
         action: "highlightOnFrontify",
         dataId: dataId,
         textContent: textContent || undefined,
@@ -17,7 +26,7 @@ window.addEventListener("message", function (event) {
     }
   }
   if (data?.action === "highlightFilteredIssuesOnFrontify") {
-    chrome.runtime.sendMessage({
+    safeSendMessage({
       action: "highlightFilteredIssuesOnFrontify",
       errors: data.errors || [],
       warnings: data.warnings || [],
@@ -25,7 +34,7 @@ window.addEventListener("message", function (event) {
     });
   }
   if (data?.action === "clearFilterHighlightsOnFrontify") {
-    chrome.runtime.sendMessage({ action: "clearFilterHighlightsOnFrontify" });
+    safeSendMessage({ action: "clearFilterHighlightsOnFrontify" });
   }
 });
 

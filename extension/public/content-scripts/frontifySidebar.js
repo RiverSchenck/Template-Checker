@@ -1,21 +1,18 @@
+(() => {
+const SIDEBAR_KEY = "__templateCheckerSidebarInstalled";
+
+if (typeof window !== "undefined" && !window[SIDEBAR_KEY]) {
+window[SIDEBAR_KEY] = true;
+
 // Toggle Frontify editor sidebar by collapsing its grid column to 0.
 // Sidebar stays in the DOM so we never lose it; preview gets full width.
 
 const SIDEBAR_STORAGE_KEY = "template-checker-sidebar-collapsed";
 const SIDEBAR_SELECTOR =
   ".mod-editor-sidebar.o-editorsidebar, .mod.mod-editor-sidebar.o-editorsidebar";
-const TOGGLE_BTN_ID = "extension-sidebar-toggle-btn";
 const PARENT_COLLAPSED_CLASS = "template-checker-sidebar-collapsed";
 
 let sidebarMutationObserver = null;
-
-function getExtensionIconUrl(size = 16) {
-  const name =
-    size <= 16 ? "tech-sol16.png" : size <= 48 ? "tech-sol48.png" : "tech-sol192.png";
-  return typeof chrome !== "undefined" && chrome.runtime?.getURL
-    ? chrome.runtime.getURL(name)
-    : "";
-}
 
 function isSidebarCollapsed() {
   try {
@@ -29,18 +26,6 @@ function setSidebarCollapsed(collapsed) {
   try {
     sessionStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed));
   } catch {}
-}
-
-function createIconImg(size = 16, alt = "") {
-  const img = document.createElement("img");
-  img.src = getExtensionIconUrl(size);
-  img.alt = alt || "Template Checker";
-  img.setAttribute("data-extension-icon", "true");
-  img.style.width = size + "px";
-  img.style.height = size + "px";
-  img.style.flexShrink = "0";
-  img.style.display = "block";
-  return img;
 }
 
 function getSidebar() {
@@ -65,6 +50,29 @@ function injectLayoutStyles() {
       min-width: 0 !important;
       width: 100% !important;
       max-width: 100% !important;
+      justify-self: stretch !important;
+    }
+    /* Let the preview column grow, but keep Frontify's internal viewer sizing logic intact. */
+    [data-test-id="terrific-block-wrapper"].${PARENT_COLLAPSED_CLASS} .o-editor-publishing,
+    [data-test-id="terrific-block-wrapper"].${PARENT_COLLAPSED_CLASS} .o-editor-publishing__container {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+    }
+    [data-test-id="terrific-block-wrapper"].${PARENT_COLLAPSED_CLASS} .o-editor-publishing {
+      display: flex !important;
+      justify-content: center !important;
+    }
+    [data-test-id="terrific-block-wrapper"].${PARENT_COLLAPSED_CLASS} .o-editor-publishing__container {
+      display: flex !important;
+      justify-content: center !important;
+      overflow: auto !important;
+    }
+    [data-test-id="terrific-block-wrapper"].${PARENT_COLLAPSED_CLASS} .o-asset-viewer {
+      left: 0 !important;
+      right: 0 !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
     }
     /* Second column (sidebar) takes no space */
     [data-test-id="terrific-block-wrapper"].${PARENT_COLLAPSED_CLASS} > *:last-child {
@@ -81,6 +89,16 @@ function injectLayoutStyles() {
   (document.head || document.documentElement).appendChild(style);
 }
 
+function requestFrontifyLayoutRefresh() {
+  const dispatchResize = () => {
+    window.dispatchEvent(new Event("resize"));
+  };
+
+  dispatchResize();
+  requestAnimationFrame(dispatchResize);
+  [100, 250, 500, 1000].forEach((ms) => setTimeout(dispatchResize, ms));
+}
+
 function setSidebarCollapsedState(sidebar, collapsed) {
   const parent = sidebar?.parentElement;
   if (!parent) return;
@@ -91,6 +109,7 @@ function setSidebarCollapsedState(sidebar, collapsed) {
     parent.classList.remove(PARENT_COLLAPSED_CLASS);
   }
   setSidebarCollapsed(collapsed);
+  requestFrontifyLayoutRefresh();
 }
 
 /** Re-sync DOM with our collapsed state (in case Frontify re-rendered and replaced the grid node). */
@@ -104,76 +123,12 @@ function syncSidebarStateToDom() {
   if (collapsed && !hasClass) {
     parent.classList.add(PARENT_COLLAPSED_CLASS);
     parent.offsetHeight; // force reflow so layout updates
+    requestFrontifyLayoutRefresh();
   } else if (!collapsed && hasClass) {
     parent.classList.remove(PARENT_COLLAPSED_CLASS);
     parent.offsetHeight; // force reflow
+    requestFrontifyLayoutRefresh();
   }
-}
-
-function isSidebarCurrentlyCollapsed() {
-  const sidebar = getSidebar();
-  if (!sidebar?.parentElement) return false;
-  return sidebar.parentElement.classList.contains(PARENT_COLLAPSED_CLASS);
-}
-
-function ensureToggleButton() {
-  let btn = document.getElementById(TOGGLE_BTN_ID);
-  if (btn) return btn;
-
-  btn = document.createElement("button");
-  btn.id = TOGGLE_BTN_ID;
-  btn.type = "button";
-  btn.setAttribute("aria-label", "Toggle sidebar (Template Checker)");
-  btn.setAttribute("data-test-id", "extension-sidebar-toggle");
-  btn.title = "Toggle sidebar";
-  btn.style.cssText = [
-    "position: fixed",
-    "top: 50%",
-    "right: 0",
-    "transform: translateY(-50%)",
-    "z-index: 2147483646",
-    "width: 28px",
-    "height: 48px",
-    "padding: 0",
-    "border: none",
-    "border-radius: 6px 0 0 6px",
-    "background: #7C57FF",
-    "color: #fff",
-    "cursor: pointer",
-    "display: flex",
-    "align-items: center",
-    "justify-content: center",
-    "box-shadow: -2px 0 8px rgba(0,0,0,0.15)",
-    "transition: background 0.15s",
-  ].join(";");
-
-  btn.appendChild(createIconImg(16, "Template Checker"));
-
-  btn.addEventListener("mouseenter", () => {
-    btn.style.background = "#9A7EFE";
-  });
-  btn.addEventListener("mouseleave", () => {
-    btn.style.background = "#7C57FF";
-  });
-
-  btn.addEventListener("click", () => {
-    const sidebar = getSidebar();
-    if (!sidebar) return;
-    const collapsed = isSidebarCurrentlyCollapsed();
-    setSidebarCollapsedState(sidebar, !collapsed);
-    const nowCollapsed = !collapsed;
-    btn.title = nowCollapsed ? "Show sidebar" : "Hide sidebar";
-    btn.setAttribute(
-      "aria-label",
-      nowCollapsed ? "Show sidebar (Template Checker)" : "Hide sidebar (Template Checker)",
-    );
-    // Re-sync after frame and delays (Frontify may re-render and replace the grid node)
-    requestAnimationFrame(syncSidebarStateToDom);
-    [100, 300, 500].forEach((ms) => setTimeout(syncSidebarStateToDom, ms));
-  });
-
-  document.body.appendChild(btn);
-  return btn;
 }
 
 function setupSidebarToggle(sidebar) {
@@ -184,13 +139,6 @@ function setupSidebarToggle(sidebar) {
 
   const collapsed = isSidebarCollapsed();
   setSidebarCollapsedState(sidebar, collapsed);
-
-  const btn = ensureToggleButton();
-  btn.title = collapsed ? "Show sidebar" : "Hide sidebar";
-  btn.setAttribute(
-    "aria-label",
-    collapsed ? "Show sidebar (Template Checker)" : "Hide sidebar (Template Checker)",
-  );
 }
 
 function findAndSetupSidebar() {
@@ -213,12 +161,8 @@ async function initializeIfFrontifySite() {
     return;
   }
   const isFrontify = await window.waitForFrontifySite(5000);
-  if (!isFrontify) {
+  if (!isFrontify || !window.isTemplateCheckerTemplatePageActive?.()) {
     return;
-  }
-
-  if (document.body) {
-    ensureToggleButton();
   }
 
   function run() {
@@ -238,7 +182,6 @@ async function initializeIfFrontifySite() {
     setTimeout(run, 5000);
   } else {
     document.addEventListener("DOMContentLoaded", () => {
-      ensureToggleButton();
       observer.observe(document.body, { childList: true, subtree: true });
       run();
     });
@@ -250,21 +193,53 @@ function teardownSidebar() {
     sidebarMutationObserver.disconnect();
     sidebarMutationObserver = null;
   }
-  const btn = document.getElementById(TOGGLE_BTN_ID);
-  if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
   const styleEl = document.getElementById("template-checker-sidebar-styles");
   if (styleEl && styleEl.parentNode) styleEl.parentNode.removeChild(styleEl);
   const wrapper = document.querySelector('[data-test-id="terrific-block-wrapper"].' + PARENT_COLLAPSED_CLASS);
   if (wrapper) wrapper.classList.remove(PARENT_COLLAPSED_CLASS);
 }
 
-if (typeof window !== 'undefined') {
+if (typeof chrome !== "undefined" && chrome.runtime?.onMessage) {
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action !== "templateCheckerSetSidebarCollapsed") {
+      return false;
+    }
+
+    let handled = false;
+    const applyCollapsedState = () => {
+      if (handled) {
+        return;
+      }
+
+      const sidebar = getSidebar();
+      if (!sidebar) {
+        handled = true;
+        sendResponse({ success: false, error: "Sidebar not found" });
+        return;
+      }
+
+      setupSidebarToggle(sidebar);
+      setSidebarCollapsedState(sidebar, Boolean(message.collapsed));
+      syncSidebarStateToDom();
+      handled = true;
+      sendResponse({ success: true });
+    };
+
+    requestAnimationFrame(applyCollapsedState);
+    setTimeout(applyCollapsedState, 150);
+    return true;
+  });
+}
+
+window.addEventListener('template-checker-show', initializeIfFrontifySite);
+window.addEventListener('template-checker-hide', teardownSidebar);
+
+if (window.isTemplateCheckerTemplatePageActive?.()) {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      initializeIfFrontifySite();
-    });
+    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite, { once: true });
   } else {
     initializeIfFrontifySite();
   }
-  window.addEventListener('template-checker-hide', teardownSidebar);
 }
+}
+})();

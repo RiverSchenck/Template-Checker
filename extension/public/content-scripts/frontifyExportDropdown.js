@@ -1,21 +1,28 @@
+(() => {
+const EXPORT_DROPDOWN_KEY = "__templateCheckerExportDropdownInstalled";
+
+if (typeof window !== "undefined" && !window[EXPORT_DROPDOWN_KEY]) {
+window[EXPORT_DROPDOWN_KEY] = true;
+
 // Watch for Frontify export dropdown and modify "InDesign (with changes)" option
 
 let exportDropdownObserver = null;
 let exportDropdownInterval = null;
+let exportPulseDismissed = false;
+let formatTriggerPulseDismissed = false;
+let checkerMenuItemPulseDismissed = false;
+let downloadButtonPulseDismissed = false;
 
-// Helper function to safely get extension URL
-function getExtensionURL(path) {
-  try {
-    if (typeof chrome === 'undefined' || !chrome.runtime || !chrome.runtime.getURL) {
-      return null;
-    }
-    return chrome.runtime.getURL(path);
-  } catch (error) {
-    // Extension context invalidated - extension was reloaded
-    console.warn('Extension context invalidated, cannot get extension URL:', error);
-    return null;
-  }
-}
+const EXPORT_BUTTON_SELECTOR =
+  '[data-test-id="navigation-topbar-item-export-flyout"]';
+const EXPORT_FORMAT_TRIGGER_SELECTOR =
+  '[data-test-id="export-formats-dropdown-trigger"]';
+const EXPORT_MENU_ITEM_SELECTOR =
+  '[data-test-id="export-formats-dropdown-menu-item"]';
+const EXPORT_DOWNLOAD_BUTTON_SELECTOR =
+  '[data-test-id="export-flyout-form-footer"]';
+const EXPORT_PULSE_STYLE_ID = "template-checker-export-pulse-styles";
+const EXPORT_PULSE_CLASS = "template-checker-export-pulse";
 
 // Only run on Frontify sites (we only inject on template page; teardown when leaving it)
 async function initializeIfFrontifySite() {
@@ -25,7 +32,7 @@ async function initializeIfFrontifySite() {
   }
 
   const isFrontify = await window.waitForFrontifySite(5000);
-  if (!isFrontify) {
+  if (!isFrontify || !window.isTemplateCheckerTemplatePageActive?.()) {
     return; // Not a Frontify site, exit early
   }
 
@@ -34,75 +41,226 @@ async function initializeIfFrontifySite() {
 }
 
 function watchForExportDropdown() {
-  const processedDropdowns = new WeakSet();
-
-  function injectCustomMenuItem(dropdownContent) {
-    if (processedDropdowns.has(dropdownContent)) {
+  function ensurePulseStyles() {
+    if (document.getElementById(EXPORT_PULSE_STYLE_ID)) {
       return;
     }
 
-    const menuItems = dropdownContent.querySelectorAll('[role="menuitem"][data-test-id="export-formats-dropdown-menu-item"]');
-    if (menuItems.length === 0) {
-      return;
-    }
-
-    const indesignMenuItem = Array.from(menuItems).find(item => {
-      const text = item.textContent?.trim();
-      return text === 'InDesign (with changes)' || text === 'InDesign (with changes) + Checker';
-    });
-
-    if (!indesignMenuItem) {
-      return;
-    }
-
-    const spanElement = indesignMenuItem.querySelector('span');
-    if (spanElement && spanElement.textContent.trim() === 'InDesign (with changes)') {
-      spanElement.textContent = 'InDesign (with changes) + Checker';
-    }
-
-    // Replace the icon with extension icon
-    const iconSlot = indesignMenuItem.querySelector('[data-name="left"][data-test-id="fondue-dropdown-slot"]');
-    if (iconSlot) {
-      // Check if we've already replaced it
-      const existingImg = iconSlot.querySelector('img[data-extension-icon]');
-      if (!existingImg) {
-        // Try to get extension icon URL safely
-        const iconUrl = getExtensionURL('tech-sol48.png');
-        if (iconUrl) {
-          // Clear existing SVG
-          const svg = iconSlot.querySelector('svg');
-          if (svg) {
-            svg.remove();
-          }
-
-          // Create new img element with extension icon
-          const iconImg = document.createElement('img');
-          iconImg.src = iconUrl;
-          iconImg.setAttribute('data-extension-icon', 'true');
-          iconImg.style.width = '24px';
-          iconImg.style.height = '24px';
-          iconImg.style.objectFit = 'contain';
-          iconImg.onerror = () => {
-            // If image fails to load (e.g., extension context invalidated), remove it
-            iconImg.remove();
-          };
-          iconSlot.appendChild(iconImg);
+    const style = document.createElement("style");
+    style.id = EXPORT_PULSE_STYLE_ID;
+    style.textContent = `
+      @keyframes template-checker-export-pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(124, 87, 255, 0.55);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(124, 87, 255, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(124, 87, 255, 0);
         }
       }
+
+      .${EXPORT_PULSE_CLASS} {
+        position: relative;
+        border-radius: 10px !important;
+        animation: template-checker-export-pulse 1.6s ease-out infinite;
+      }
+    `;
+    (document.head || document.documentElement).appendChild(style);
+  }
+
+  function clearExportPulse() {
+    const exportButton = document.querySelector(EXPORT_BUTTON_SELECTOR);
+    exportButton?.classList.remove(EXPORT_PULSE_CLASS);
+  }
+
+  function clearFormatTriggerPulse() {
+    const formatTrigger = document.querySelector(EXPORT_FORMAT_TRIGGER_SELECTOR);
+    formatTrigger?.classList.remove(EXPORT_PULSE_CLASS);
+  }
+
+  function clearCheckerMenuItemPulse() {
+    document.querySelectorAll(EXPORT_MENU_ITEM_SELECTOR).forEach((item) => {
+      if (item.textContent?.trim() === "InDesign (with changes)") {
+        item.classList.remove(EXPORT_PULSE_CLASS);
+      }
+    });
+  }
+
+  function clearDownloadButtonPulse() {
+    const downloadButton = document.querySelector(EXPORT_DOWNLOAD_BUTTON_SELECTOR);
+    downloadButton?.classList.remove(EXPORT_PULSE_CLASS);
+  }
+
+  function markPulseDismissed() {
+    exportPulseDismissed = true;
+    clearExportPulse();
+  }
+
+  function markFormatTriggerPulseDismissed() {
+    formatTriggerPulseDismissed = true;
+    clearFormatTriggerPulse();
+  }
+
+  function markCheckerMenuItemPulseDismissed() {
+    checkerMenuItemPulseDismissed = true;
+    clearCheckerMenuItemPulse();
+  }
+
+  function markDownloadButtonPulseDismissed() {
+    downloadButtonPulseDismissed = true;
+    clearDownloadButtonPulse();
+  }
+
+  function ensureExportPulse() {
+    if (exportPulseDismissed) {
+      clearExportPulse();
+      return;
     }
 
-    processedDropdowns.add(dropdownContent);
+    const exportButton = document.querySelector(EXPORT_BUTTON_SELECTOR);
+    if (!exportButton) {
+      return;
+    }
+
+    ensurePulseStyles();
+    exportButton.classList.add(EXPORT_PULSE_CLASS);
+
+    if (exportButton.dataset.templateCheckerPulseBound === "true") {
+      return;
+    }
+
+    exportButton.dataset.templateCheckerPulseBound = "true";
+    exportButton.addEventListener("click", markPulseDismissed, {
+      capture: true,
+      once: true,
+    });
+  }
+
+  function ensureFormatTriggerPulse() {
+    if (formatTriggerPulseDismissed) {
+      clearFormatTriggerPulse();
+      return;
+    }
+
+    const formatTrigger = document.querySelector(EXPORT_FORMAT_TRIGGER_SELECTOR);
+    if (!formatTrigger) {
+      return;
+    }
+
+    ensurePulseStyles();
+    formatTrigger.classList.add(EXPORT_PULSE_CLASS);
+  }
+
+  function getCheckerMenuItem() {
+    return Array.from(document.querySelectorAll(EXPORT_MENU_ITEM_SELECTOR)).find(
+      (item) => item.textContent?.trim() === "InDesign (with changes)",
+    );
+  }
+
+  function isFormatTriggerOnInDesign() {
+    const formatTrigger = document.querySelector(EXPORT_FORMAT_TRIGGER_SELECTOR);
+    if (!formatTrigger) {
+      return false;
+    }
+
+    return formatTrigger.textContent?.includes("InDesign (with changes)") || false;
+  }
+
+  function isFormatTriggerDropdownOpen() {
+    const formatTrigger = document.querySelector(EXPORT_FORMAT_TRIGGER_SELECTOR);
+    if (!formatTrigger) {
+      return false;
+    }
+
+    return (
+      formatTrigger.getAttribute("data-state") === "open" ||
+      formatTrigger.getAttribute("aria-expanded") === "true"
+    );
+  }
+
+  function ensureCheckerMenuItemPulse() {
+    if (checkerMenuItemPulseDismissed) {
+      clearCheckerMenuItemPulse();
+      return;
+    }
+
+    const menuItem = getCheckerMenuItem();
+    if (!menuItem) {
+      return;
+    }
+
+    ensurePulseStyles();
+    menuItem.classList.add(EXPORT_PULSE_CLASS);
+
+    if (menuItem.dataset.templateCheckerPulseBound === "true") {
+      return;
+    }
+
+    menuItem.dataset.templateCheckerPulseBound = "true";
+    menuItem.addEventListener("click", markCheckerMenuItemPulseDismissed, {
+      capture: true,
+      once: true,
+    });
+  }
+
+  function ensureDownloadButtonPulse() {
+    if (downloadButtonPulseDismissed) {
+      clearDownloadButtonPulse();
+      return;
+    }
+
+    const downloadButton = document.querySelector(EXPORT_DOWNLOAD_BUTTON_SELECTOR);
+    if (!downloadButton) {
+      return;
+    }
+
+    ensurePulseStyles();
+    downloadButton.classList.add(EXPORT_PULSE_CLASS);
+
+    if (downloadButton.dataset.templateCheckerPulseBound === "true") {
+      return;
+    }
+
+    downloadButton.dataset.templateCheckerPulseBound = "true";
+    downloadButton.addEventListener("click", markDownloadButtonPulseDismissed, {
+      capture: true,
+      once: true,
+    });
   }
 
   function checkAndInject() {
+    ensureExportPulse();
+
     const dropdownContent = document.querySelector('[data-test-id="fondue-dropdown-content"][role="menu"][data-state="open"]') ||
                             document.querySelector('[data-test-id="fondue-dropdown-content"][role="menu"]');
+    const formatTrigger = document.querySelector(EXPORT_FORMAT_TRIGGER_SELECTOR);
+    const formatTriggerDropdownOpen = isFormatTriggerDropdownOpen();
+
+    if (isFormatTriggerOnInDesign()) {
+      markFormatTriggerPulseDismissed();
+      ensureDownloadButtonPulse();
+    } else {
+      clearDownloadButtonPulse();
+    }
+
+    if (formatTrigger) {
+      markPulseDismissed();
+      if (formatTriggerDropdownOpen) {
+        clearFormatTriggerPulse();
+      } else if (!formatTriggerPulseDismissed) {
+        ensureFormatTriggerPulse();
+      }
+    }
 
     if (dropdownContent) {
       const hasMenuItems = dropdownContent.querySelector('[data-test-id="export-formats-dropdown-menu-item"]');
       if (hasMenuItems) {
-        injectCustomMenuItem(dropdownContent);
+        ensureCheckerMenuItemPulse();
       }
+    } else if (formatTrigger?.getAttribute("data-state") === "open") {
+      markFormatTriggerPulseDismissed();
     }
   }
 
@@ -159,13 +317,23 @@ function teardownExportDropdown() {
     clearInterval(exportDropdownInterval);
     exportDropdownInterval = null;
   }
+  const exportButton = document.querySelector(EXPORT_BUTTON_SELECTOR);
+  exportButton?.classList.remove(EXPORT_PULSE_CLASS);
+  const formatTrigger = document.querySelector(EXPORT_FORMAT_TRIGGER_SELECTOR);
+  formatTrigger?.classList.remove(EXPORT_PULSE_CLASS);
+  clearCheckerMenuItemPulse();
+  clearDownloadButtonPulse();
 }
 
-if (typeof window !== 'undefined') {
+window.addEventListener('template-checker-show', initializeIfFrontifySite);
+window.addEventListener('template-checker-hide', teardownExportDropdown);
+
+if (window.isTemplateCheckerTemplatePageActive?.()) {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
+    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite, { once: true });
   } else {
     initializeIfFrontifySite();
   }
-  window.addEventListener('template-checker-hide', teardownExportDropdown);
 }
+}
+})();

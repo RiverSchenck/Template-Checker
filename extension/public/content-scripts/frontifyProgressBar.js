@@ -1,6 +1,30 @@
+(() => {
+const PROGRESS_BAR_KEY = "__templateCheckerProgressBarInstalled";
+
+if (typeof window !== "undefined" && !window[PROGRESS_BAR_KEY]) {
+window[PROGRESS_BAR_KEY] = true;
+
 // Watch for Frontify download progress bar and inject "Checker" button
 
 let progressBarObserver = null;
+const PROGRESS_BUTTON_SELECTOR = '[data-test-id="extension-check-url-button"]';
+const PROGRESS_PULSE_STYLE_ID = "template-checker-progress-pulse-styles";
+const PROGRESS_PULSE_CLASS = "template-checker-progress-pulse";
+
+function safeSendMessage(message) {
+  try {
+    if (typeof chrome === "undefined" || !chrome.runtime?.sendMessage) return Promise.reject();
+    return chrome.runtime.sendMessage(message);
+  } catch (_e) {
+    return Promise.reject();
+  }
+}
+
+function clearCheckerButtonPulse(scope = document) {
+  scope.querySelectorAll(PROGRESS_BUTTON_SELECTOR).forEach((button) => {
+    button.classList.remove(PROGRESS_PULSE_CLASS);
+  });
+}
 
 // Only run on Frontify sites (we only inject on template page; teardown when leaving it)
 async function initializeIfFrontifySite() {
@@ -10,7 +34,7 @@ async function initializeIfFrontifySite() {
   }
 
   const isFrontify = await window.waitForFrontifySite(5000);
-  if (!isFrontify) {
+  if (!isFrontify || !window.isTemplateCheckerTemplatePageActive?.()) {
     return; // Not a Frontify site, exit early
   }
 
@@ -20,6 +44,34 @@ async function initializeIfFrontifySite() {
 
 function watchForFrontifyProgressBar() {
   const processedBars = new WeakSet();
+
+  function ensurePulseStyles() {
+    if (document.getElementById(PROGRESS_PULSE_STYLE_ID)) {
+      return;
+    }
+
+    const style = document.createElement("style");
+    style.id = PROGRESS_PULSE_STYLE_ID;
+    style.textContent = `
+      @keyframes template-checker-progress-pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(124, 87, 255, 0.55);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(124, 87, 255, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(124, 87, 255, 0);
+        }
+      }
+
+      .${PROGRESS_PULSE_CLASS} {
+        border-radius: 10px !important;
+        animation: template-checker-progress-pulse 1.6s ease-out infinite;
+      }
+    `;
+    (document.head || document.documentElement).appendChild(style);
+  }
 
   function injectExtensionButton(progressBar) {
     if (processedBars.has(progressBar)) {
@@ -103,6 +155,8 @@ function watchForFrontifyProgressBar() {
 
     extensionButton.style.backgroundColor = "#7C57FF";
     extensionButton.style.color = "white";
+    ensurePulseStyles();
+    extensionButton.classList.add(PROGRESS_PULSE_CLASS);
     extensionButton.addEventListener("mouseenter", () => {
       extensionButton.style.backgroundColor = "#9A7EFE";
     });
@@ -116,21 +170,19 @@ function watchForFrontifyProgressBar() {
     extensionButton.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
+      extensionButton.classList.remove(PROGRESS_PULSE_CLASS);
 
-      if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
-        chrome.runtime
-          .sendMessage({
-            action: "frontifyUrlReceived",
-            url: downloadUrl,
-          })
-          .then(() => {
-            extensionButton.textContent = "✓ Sent!";
-            setTimeout(() => {
-              extensionButton.textContent = buttonText;
-            }, 2000);
-          })
-          .catch(() => {});
-      }
+      safeSendMessage({
+        action: "frontifyUrlReceived",
+        url: downloadUrl,
+      })
+        .then(() => {
+          extensionButton.textContent = "✓ Sent!";
+          setTimeout(() => {
+            extensionButton.textContent = buttonText;
+          }, 2000);
+        })
+        .catch(() => {});
     });
 
     const closeButton = buttonContainer.querySelector(
@@ -194,13 +246,18 @@ function teardownProgressBar() {
     progressBarObserver.disconnect();
     progressBarObserver = null;
   }
+  clearCheckerButtonPulse();
 }
 
-if (typeof window !== 'undefined') {
+window.addEventListener('template-checker-show', initializeIfFrontifySite);
+window.addEventListener('template-checker-hide', teardownProgressBar);
+
+if (window.isTemplateCheckerTemplatePageActive?.()) {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
+    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite, { once: true });
   } else {
     initializeIfFrontifySite();
   }
-  window.addEventListener('template-checker-hide', teardownProgressBar);
 }
+}
+})();

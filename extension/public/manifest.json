@@ -4,7 +4,7 @@
   "name": "Frontify Template Checker",
   "short_name": "Template Checker",
   "version": "1.0.0",
-  "description": "Validate and check Frontify templates directly from your browser. Upload template ZIP files or process Frontify URLs to identify errors, warnings, and issues in your templates.",
+  "description": "Validate and check Frontify templates directly from your browser. Process Frontify URLs to identify errors, warnings, and issues in your templates.",
   "permissions": [
     "activeTab",
     "scripting",
@@ -20,6 +20,7 @@
     "service_worker": "background.js"
   },
   "action": {
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "tech-sol16.png",
       "48": "tech-sol48.png",
@@ -32,21 +33,6 @@
     "128": "tech-sol192.png"
   },
   "content_scripts": [
-    {
-      "matches": [
-        "*://*/brands/*/template-libraries/*/templates*"
-      ],
-      "js": [
-        "content-scripts/frontifyDetector.js",
-        "content-scripts/highlighting.js",
-        "content-scripts/elementSelection.js",
-        "content-scripts/frontifyProgressBar.js",
-        "content-scripts/frontifyExportDropdown.js",
-        "content-scripts/frontifySidebar.js",
-        "content-scripts/highlight.js"
-      ],
-      "run_at": "document_idle"
-    },
     {
       "matches": [
         "https://template-checker.fly.dev/*",

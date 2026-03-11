@@ -1,16 +1,21 @@
-// Utility function to detect if we're on a Frontify site
-// This allows the extension to work with different Frontify client domains
-
-// Path pattern: /brands/<id>/template-libraries/<id>/templates (template editor page only)
+(() => {
+const BOOTSTRAP_KEY = "__templateCheckerFrontifyDetectorInstalled";
 const TEMPLATE_PAGE_PATH_REGEX = /\/brands\/[^/]+\/template-libraries\/[^/]+\/templates/;
 
-function isTemplatePage() {
-  try {
-    return TEMPLATE_PAGE_PATH_REGEX.test(location.pathname || "");
-  } catch {
-    return false;
+if (typeof window !== "undefined" && !window[BOOTSTRAP_KEY]) {
+  window[BOOTSTRAP_KEY] = true;
+
+  let isTemplateRouteActive = false;
+  let featuresInjected = false;
+  let injectPromise = null;
+
+  function isTemplatePage() {
+    try {
+      return TEMPLATE_PAGE_PATH_REGEX.test(location.pathname || "");
+    } catch {
+      return false;
+    }
   }
-}
 
 function isFrontifySite() {
   // Check for Frontify-specific classes and elements that indicate this is a Frontify site
@@ -122,26 +127,95 @@ function waitForFrontifySite(timeout = 5000) {
   });
 }
 
-function runUrlCheck() {
-  if (isTemplatePage()) return;
-  window.dispatchEvent(new CustomEvent("template-checker-hide", { detail: { match: false } }));
-}
+  function dispatchRouteEvent(match) {
+    window.dispatchEvent(
+      new CustomEvent(match ? "template-checker-show" : "template-checker-hide", {
+        detail: { match },
+      }),
+    );
+  }
 
-function startUrlWatcher() {
-  let lastPathname = location.pathname;
-  setInterval(() => {
-    const current = location.pathname;
-    if (current !== lastPathname) {
-      lastPathname = current;
-      runUrlCheck();
+  function isTemplateCheckerTemplatePageActive() {
+    return isTemplateRouteActive;
+  }
+
+  async function ensureFeatureScriptsInjected() {
+    if (featuresInjected) return true;
+    try {
+      if (!chrome.runtime?.sendMessage) return false;
+    } catch (_e) {
+      return false;
     }
-  }, 400);
-}
+    if (!injectPromise) {
+      injectPromise = (function () {
+        try {
+          return chrome.runtime.sendMessage({ action: "ensureFrontifyFeatureScripts" });
+        } catch (_e) {
+          return Promise.reject(_e);
+        }
+      })()
+        .then((response) => {
+          if (!response?.success) {
+            throw new Error(response?.error || "Injection failed");
+          }
+          featuresInjected = true;
+          return true;
+        })
+        .catch((error) => {
+          console.warn("Template Checker: Failed to inject Frontify feature scripts:", error);
+          return false;
+        })
+        .finally(() => {
+          injectPromise = null;
+        });
+    }
+    return injectPromise;
+  }
 
-// Export for use in other scripts
-if (typeof window !== 'undefined') {
+  async function syncRouteState() {
+    const match = isTemplatePage();
+    if (match === isTemplateRouteActive) return;
+
+    isTemplateRouteActive = match;
+
+    if (match) {
+      await ensureFeatureScriptsInjected();
+      dispatchRouteEvent(true);
+      return;
+    }
+
+    dispatchRouteEvent(false);
+  }
+
+  function installHistoryWatcher() {
+    const wrap = (methodName) => {
+      const original = history[methodName];
+      if (typeof original !== "function") return;
+      history[methodName] = function wrappedHistoryMethod(...args) {
+        const result = original.apply(this, args);
+        queueMicrotask(syncRouteState);
+        return result;
+      };
+    };
+
+    wrap("pushState");
+    wrap("replaceState");
+    window.addEventListener("popstate", syncRouteState);
+
+    let lastHref = location.href;
+    setInterval(() => {
+      if (location.href === lastHref) return;
+      lastHref = location.href;
+      syncRouteState();
+    }, 500);
+  }
+
   window.isTemplatePage = isTemplatePage;
   window.isFrontifySite = isFrontifySite;
   window.waitForFrontifySite = waitForFrontifySite;
-  startUrlWatcher();
+  window.isTemplateCheckerTemplatePageActive = isTemplateCheckerTemplatePageActive;
+
+  installHistoryWatcher();
+  syncRouteState();
 }
+})();

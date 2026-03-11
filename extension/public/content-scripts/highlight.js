@@ -1,9 +1,16 @@
+(() => {
+const HIGHLIGHT_SCRIPT_KEY = "__templateCheckerHighlightScriptInstalled";
+
+if (typeof window !== "undefined" && !window[HIGHLIGHT_SCRIPT_KEY]) {
+window[HIGHLIGHT_SCRIPT_KEY] = true;
+
 // Main content script entry point
 
-let tornDown = false;
+let highlightActive = false;
+let messageListenerRegistered = false;
 
 function teardownHighlight() {
-  tornDown = true;
+  highlightActive = false;
   if (typeof window !== 'undefined') {
     if (window.clearHighlights) window.clearHighlights();
     if (window.clearFilterHighlights) window.clearFilterHighlights();
@@ -21,29 +28,31 @@ async function initializeIfFrontifySite() {
 
   const isFrontify = await window.waitForFrontifySite(5000);
   if (!isFrontify) {
-    // Not a Frontify site, but we still need to listen for messages
-    // (highlighting might be triggered from extension popup)
     setupMessageListener();
     return;
   }
 
-  // Check if highlighting functions are available
-  console.log('[Content Script] highlight.js loaded on Frontify site');
-  console.log('[Content Script] Window highlighting functions available:', {
-    highlightElements: typeof window !== 'undefined' && typeof window.highlightElements !== 'undefined',
-    clearHighlights: typeof window !== 'undefined' && typeof window.clearHighlights !== 'undefined',
-    highlightFilteredIssues: typeof window !== 'undefined' && typeof window.highlightFilteredIssues !== 'undefined',
-    clearFilterHighlights: typeof window !== 'undefined' && typeof window.clearFilterHighlights !== 'undefined'
-  });
+  if (!window.isTemplateCheckerTemplatePageActive?.()) {
+    return;
+  }
+
+  highlightActive = true;
 
   setupMessageListener();
 }
 
 function setupMessageListener() {
+  if (messageListenerRegistered) {
+    return;
+  }
+  messageListenerRegistered = true;
+
   // Handle messages from the extension
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (tornDown) return false;
-  console.log('[Content Script] Received message:', message.action);
+  if (!highlightActive && message.action !== 'clear' && message.action !== 'clearFilterHighlights') {
+    sendResponse({ success: false, error: 'Template page not active' });
+    return true;
+  }
   if (message.action === 'highlight') {
     if (!message.dataId) {
       sendResponse({ success: false, error: 'No dataId provided' });
@@ -97,41 +106,32 @@ function setupMessageListener() {
   }
 
   if (message.action === 'highlightFilteredIssues') {
-    console.log('[Content Script] Received highlightFilteredIssues:', {
-      errors: message.errors?.length || 0,
-      warnings: message.warnings?.length || 0,
-      infos: message.infos?.length || 0
-    });
-
     if (typeof window !== 'undefined' && window.highlightFilteredIssues) {
       try {
         window.highlightFilteredIssues(message.errors || [], message.warnings || [], message.infos || []);
-        console.log('[Content Script] highlightFilteredIssues executed successfully');
         sendResponse({ success: true });
       } catch (error) {
-        console.error('[Content Script] Error executing highlightFilteredIssues:', error);
+        console.error("Template Checker: Error executing highlightFilteredIssues:", error);
         sendResponse({ success: false, error: error.message });
       }
     } else {
-      console.error('[Content Script] highlightFilteredIssues function not available on window');
+      console.error("Template Checker: highlightFilteredIssues function not available on window");
       sendResponse({ success: false, error: 'highlightFilteredIssues function not available' });
     }
     return true;
   }
 
   if (message.action === 'clearFilterHighlights') {
-    console.log('[Content Script] Received clearFilterHighlights');
     if (typeof window !== 'undefined' && window.clearFilterHighlights) {
       try {
         window.clearFilterHighlights();
-        console.log('[Content Script] clearFilterHighlights executed successfully');
         sendResponse({ success: true });
       } catch (error) {
-        console.error('[Content Script] Error executing clearFilterHighlights:', error);
+        console.error("Template Checker: Error executing clearFilterHighlights:", error);
         sendResponse({ success: false, error: error.message });
       }
     } else {
-      console.warn('[Content Script] clearFilterHighlights function not available');
+      console.warn("Template Checker: clearFilterHighlights function not available");
       sendResponse({ success: true });
     }
     return true;
@@ -148,11 +148,15 @@ function setupMessageListener() {
   });
 }
 
-if (typeof window !== 'undefined') {
+window.addEventListener('template-checker-show', initializeIfFrontifySite);
+window.addEventListener('template-checker-hide', teardownHighlight);
+
+if (window.isTemplateCheckerTemplatePageActive?.()) {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite);
+    document.addEventListener('DOMContentLoaded', initializeIfFrontifySite, { once: true });
   } else {
     initializeIfFrontifySite();
   }
-  window.addEventListener('template-checker-hide', teardownHighlight);
 }
+}
+})();

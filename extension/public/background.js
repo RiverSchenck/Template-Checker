@@ -7,11 +7,113 @@ function openWebAppTab(urlSuffix = "") {
   chrome.tabs.create({ url: url });
 }
 
-chrome.action.onClicked.addListener(() => {
-  openWebAppTab();
-});
+function isInjectableUrl(url) {
+  return typeof url === "string" && /^(https?:\/\/)/.test(url);
+}
+
+function isCheckerTab(tab) {
+  if (!tab?.id || !tab?.url) return false;
+  if (tab.url.startsWith("chrome-") || tab.url.startsWith("edge://")) return false;
+  return (
+    tab.url.includes("template-checker.fly.dev") ||
+    tab.url.includes("template-checker-test.fly.dev") ||
+    tab.url.startsWith("http://localhost:3000")
+  );
+}
+
+function findCheckerTab(tabs) {
+  return tabs.find(isCheckerTab) ?? null;
+}
+
+async function ensureFrontifyBootstrapScript(tabId) {
+  await chrome.scripting.executeScript({
+    target: { tabId },
+    files: ["content-scripts/frontifyDetector.js"],
+  });
+}
+
+async function ensureFrontifyFeatureScripts(tabId) {
+  await chrome.scripting.executeScript({
+    target: { tabId },
+    files: [
+      "content-scripts/highlighting.js",
+      "content-scripts/elementSelection.js",
+      "content-scripts/frontifyProgressBar.js",
+      "content-scripts/frontifyExportDropdown.js",
+      "content-scripts/frontifySidebar.js",
+      "content-scripts/highlight.js",
+    ],
+  });
+}
+
+async function runExtensionOnTab(tab) {
+  const tabId = tab?.id;
+  if (tabId == null || !isInjectableUrl(tab?.url)) {
+    throw new Error("Open a regular webpage first.");
+  }
+
+  try {
+    await ensureFrontifyBootstrapScript(tabId);
+    await ensureFrontifyFeatureScripts(tabId);
+  } catch (error) {
+    console.warn("Template Checker: Failed to inject Frontify bootstrap script:", error);
+    throw error;
+  }
+}
+
+async function collapseSidebarOnTab(tab) {
+  const tabId = tab?.id;
+  if (tabId == null || !isInjectableUrl(tab?.url)) {
+    throw new Error("Open a regular webpage first.");
+  }
+
+  await ensureFrontifyBootstrapScript(tabId);
+  await chrome.scripting.executeScript({
+    target: { tabId },
+    files: ["content-scripts/frontifySidebar.js"],
+  });
+  await chrome.tabs.sendMessage(tabId, {
+    action: "templateCheckerSetSidebarCollapsed",
+    collapsed: true,
+  });
+}
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "toolbarRun") {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true })
+      .then(async (tabs) => {
+        const activeTab = tabs[0];
+        await runExtensionOnTab(activeTab);
+        if (message.removeSidebar) {
+          await collapseSidebarOnTab(activeTab);
+        }
+        sendResponse({ success: true });
+      })
+      .catch((error) => {
+        sendResponse({ success: false, error: error?.message || "Action failed" });
+      });
+
+    return true;
+  }
+
+  if (message.action === "ensureFrontifyFeatureScripts") {
+    const tabId = sender.tab?.id;
+    if (tabId == null) {
+      sendResponse({ success: false, error: "No sender tab" });
+      return false;
+    }
+
+    ensureFrontifyFeatureScripts(tabId)
+      .then(() => {
+        sendResponse({ success: true });
+      })
+      .catch((error) => {
+        sendResponse({ success: false, error: error?.message || "Injection failed" });
+      });
+
+    return true;
+  }
+
   if (message.action === "elementSelected") {
     const dataId = message.dataId;
 
@@ -38,16 +140,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     // Tell the template checker web app tab to filter to this data id
     chrome.tabs.query({}, (tabs) => {
-      const checkerTab = tabs.find(
-        (t) =>
-          t.id != null &&
-          t.url &&
-          !t.url.startsWith("chrome-") &&
-          !t.url.startsWith("edge://") &&
-          (t.url.includes("template-checker.fly.dev") ||
-            t.url.includes("template-checker-test.fly.dev") ||
-            t.url.startsWith("http://localhost:3000")),
-      );
+      const checkerTab = findCheckerTab(tabs);
       if (checkerTab?.id) {
         chrome.tabs
           .sendMessage(checkerTab.id, {
@@ -76,16 +169,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     // Tell the template checker web app tab to filter by this spread (same pattern as highlightOnFrontify)
     chrome.tabs.query({}, (tabs) => {
-      const checkerTab = tabs.find(
-        (t) =>
-          t.id != null &&
-          t.url &&
-          !t.url.startsWith("chrome-") &&
-          !t.url.startsWith("edge://") &&
-          (t.url.includes("template-checker.fly.dev") ||
-            t.url.includes("template-checker-test.fly.dev") ||
-            t.url.startsWith("http://localhost:3000")),
-      );
+      const checkerTab = findCheckerTab(tabs);
       if (checkerTab?.id) {
         chrome.tabs
           .sendMessage(checkerTab.id, {
