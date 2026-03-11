@@ -13,7 +13,7 @@
  */
 
 /** Current extension version we consider "latest". Update this when you publish a new release. */
-export const LATEST_EXTENSION_VERSION = "1.0.1";
+export const LATEST_EXTENSION_VERSION = "1.0.0";
 
 /** Download URL for the extension ZIP. Update the version segment when you release a new version. */
 export const EXTENSION_DOWNLOAD_URL = `https://github.com/RiverSchenck/Template-Checker/releases/download/v${LATEST_EXTENSION_VERSION}/frontify-template-checker-extension.zip`;
