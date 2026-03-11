@@ -250,7 +250,7 @@ def admin_list_users():
     if not supabase:
         return jsonify({'error': {'message': 'Supabase not configured'}}), 500
     try:
-        r = supabase.table('users').select('id, email, role, display_name, avatar_url, auth_user_id, approved_by, created_at, updated_at').order('created_at', desc=True).execute()
+        r = supabase.table('users').select('id, email, role, display_name, avatar_url, auth_user_id, approved_by, created_at, updated_at, last_seen_at').order('created_at', desc=True).execute()
         rows = r.data if r.data else []
         result = []
         for row in rows:
@@ -264,6 +264,7 @@ def admin_list_users():
                 'role': row.get('role', 'user'),
                 'created_at': row.get('created_at'),
                 'updated_at': row.get('updated_at'),
+                'last_seen_at': row.get('last_seen_at'),
             })
         return jsonify(result), 200
     except Exception as e:
@@ -367,32 +368,24 @@ def post_access_request():
             avatar_url = user_metadata.get('avatar_url') or user_metadata.get('picture')
             # Idempotent: if pending request exists for this email, return it
             try:
-                existing = supabase.table('access_requests').select('id, email, status, display_name, avatar_url, created_at').eq('status', 'pending').eq('email', email).limit(1).execute()
+                existing = supabase.table('access_requests').select('id, email, status, created_at').eq('status', 'pending').eq('email', email).limit(1).execute()
                 if existing.data and len(existing.data) > 0:
                     row = dict(existing.data[0])
                     return jsonify({
                         'id': str(row['id']),
                         'email': row['email'],
                         'status': row['status'],
-                        'display_name': row.get('display_name'),
-                        'avatar_url': row.get('avatar_url'),
                     }), 200
             except Exception:
                 pass
-            # Insert new request (include display_name, avatar_url if columns exist)
-            insert_row = {'email': email, 'status': 'pending'}
-            if display_name is not None:
-                insert_row['display_name'] = display_name
-            if avatar_url is not None:
-                insert_row['avatar_url'] = avatar_url
+            # Insert new request (schema: email, status, optional why_need_access from JWT path)
             try:
-                r = supabase.table('access_requests').insert(insert_row).execute()
+                body_why = (request.get_json(silent=True) or {}).get('why_need_access') if request.is_json else None
+                why_need_access = (body_why or '').strip() or None
+                r = supabase.table('access_requests').insert({'email': email, 'status': 'pending', 'why_need_access': why_need_access}).execute()
             except Exception as e:
-                if 'display_name' in str(e) or 'avatar_url' in str(e) or 'column' in str(e).lower():
-                    insert_row = {'email': email, 'status': 'pending'}
-                    r = supabase.table('access_requests').insert(insert_row).execute()
-                else:
-                    return jsonify({'error': {'message': str(e)}}), 500
+                current_app.logger.exception('access_requests insert failed')
+                return jsonify({'error': {'message': str(e)}}), 500
             if not r.data or len(r.data) == 0:
                 return jsonify({'error': {'message': 'Failed to create request'}}), 500
             row = dict(r.data[0])
@@ -400,21 +393,23 @@ def post_access_request():
                 'id': str(row['id']),
                 'email': row['email'],
                 'status': row['status'],
-                'display_name': row.get('display_name'),
-                'avatar_url': row.get('avatar_url'),
             }), 201
 
-    # No valid JWT: require JSON body with email
+    # No valid JWT: require JSON body with email and why_need_access
     if not request.is_json:
-        return jsonify({'error': {'message': 'Request must be JSON with email field or provide Authorization'}}), 400
+        return jsonify({'error': {'message': 'Request must be JSON with email and why_need_access or provide Authorization'}}), 400
     data = request.get_json() or {}
     email, err = _validate_email(data.get('email'))
     if err:
         return jsonify({'error': {'message': err}}), 400
+    why = (data.get('why_need_access') or '').strip()
+    if not why:
+        return jsonify({'error': {'message': 'Please tell us why you need access.'}}), 400
     try:
         r = supabase.table('access_requests').insert({
             'email': email,
             'status': 'pending',
+            'why_need_access': why,
         }).execute()
         if not r.data or len(r.data) == 0:
             return jsonify({'error': {'message': 'Failed to create request'}}), 500
@@ -438,12 +433,12 @@ def admin_list_access_requests():
     if not supabase:
         return jsonify({'error': {'message': 'Supabase not configured'}}), 500
     try:
-        q = supabase.table('access_requests').select('id, email, status, display_name, avatar_url, created_at, updated_at, decided_by').order('created_at', desc=True)
+        q = supabase.table('access_requests').select('id, email, why_need_access, status, created_at, updated_at, decided_by').order('created_at', desc=True)
         if status_filter != 'all':
             q = q.eq('status', status_filter)
         r = q.execute()
         rows = r.data if r.data else []
-        result = [{'id': str(x['id']), 'email': x['email'], 'status': x['status'], 'display_name': x.get('display_name'), 'avatar_url': x.get('avatar_url'), 'created_at': x.get('created_at'), 'updated_at': x.get('updated_at'), 'decided_by': str(x['decided_by']) if x.get('decided_by') else None} for x in rows]
+        result = [{'id': str(x['id']), 'email': x['email'], 'why_need_access': x.get('why_need_access'), 'status': x['status'], 'created_at': x.get('created_at'), 'updated_at': x.get('updated_at'), 'decided_by': str(x['decided_by']) if x.get('decided_by') else None} for x in rows]
         return jsonify(result), 200
     except Exception as e:
         return jsonify({'error': {'message': str(e)}}), 500
@@ -469,8 +464,13 @@ def admin_update_access_request(request_id):
         if not r.data or len(r.data) == 0:
             return jsonify({'error': {'message': 'Request not found'}}), 404
         req = dict(r.data[0])
-        if req['status'] != 'pending':
-            return jsonify({'error': {'message': 'Request already decided'}}), 400
+        # Allow approving pending or rejected; allow rejecting only pending
+        if new_status == 'approved':
+            if req['status'] not in ('pending', 'rejected'):
+                return jsonify({'error': {'message': 'Request already approved'}}), 400
+        else:  # rejected
+            if req['status'] != 'pending':
+                return jsonify({'error': {'message': 'Only pending requests can be rejected'}}), 400
         now = datetime.now(timezone.utc).isoformat()
         if new_status == 'approved':
             email = (req.get('email') or '').strip().lower()
@@ -501,6 +501,7 @@ def admin_update_access_request(request_id):
         return jsonify({
             'id': str(row['id']),
             'email': row['email'],
+            'why_need_access': row.get('why_need_access'),
             'status': row['status'],
             'created_at': row.get('created_at'),
             'updated_at': row.get('updated_at'),

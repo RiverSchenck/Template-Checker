@@ -19,6 +19,7 @@ Single source of truth for who can sign in and their role. Replaces the previous
 | `approved_by`   | uuid        | Nullable, FK → users(id) ON DELETE SET NULL. Admin who approved/invited this user. |
 | `created_at`    | timestamptz | DEFAULT now(). |
 | `updated_at`    | timestamptz | DEFAULT now(). |
+| `last_seen_at`  | timestamptz | Nullable. Set on each authenticated request (/me). See migration `003_users_last_seen_at.sql`. |
 
 **Bootstrap first admin**: Run `INSERT INTO users (email, role) VALUES ('your-email@example.com', 'admin');` once. That user can then sign in with Google and manage invites/access requests.
 
@@ -32,6 +33,7 @@ Stores people who requested access but are not yet approved. When an admin appro
 |-------------|-------------|-------------|
 | `id`        | uuid        | Primary key. |
 | `email`     | text        | NOT NULL. |
+| `why_need_access` | text    | Optional. Reason provided when requesting access (required when submitting from login form). |
 | `status`    | text        | NOT NULL, CHECK (status IN ('pending', 'approved', 'rejected')). |
 | `created_at`| timestamptz | DEFAULT now(). |
 | `updated_at`| timestamptz | DEFAULT now(). |

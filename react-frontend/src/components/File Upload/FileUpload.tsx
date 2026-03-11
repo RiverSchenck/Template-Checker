@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
+import { baseURL } from '../Analytics/api';
 
 const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200MB
 
@@ -42,8 +43,6 @@ export default function FileUploadPage({
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const isDebug = import.meta.env.DEV;
-  const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
 
   const getAuthHeaders = (): Record<string, string> => {
     const token = import.meta.env.VITE_AUTH_TOKEN;

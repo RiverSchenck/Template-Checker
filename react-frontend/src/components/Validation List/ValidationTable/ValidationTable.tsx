@@ -255,7 +255,7 @@ const ValidationTable = ({
       />
     );
     const helpCol = () => (
-      <TableHead key="help" className="w-[100px] text-right text-muted-foreground">
+      <TableHead key="help" className="w-9 text-right text-muted-foreground text-xs">
         Help
       </TableHead>
     );

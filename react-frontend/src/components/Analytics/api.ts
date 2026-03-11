@@ -1,6 +1,9 @@
 const isDebug = import.meta.env.DEV;
 
-export const baseURL = isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev';
+/** Backend API URL. Set VITE_API_URL in .env for production (e.g. https://template-checker.fly.dev). */
+export const baseURL =
+  import.meta.env.VITE_API_URL ||
+  (isDebug ? 'http://localhost:8000' : 'https://template-checker-test.fly.dev');
 
 /**
  * Auth headers for backend. Prefer passing the Supabase session access_token when available.

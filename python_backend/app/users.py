@@ -83,6 +83,7 @@ def upsert_user_on_signin(
     now = datetime.now(timezone.utc).isoformat()
     updates = {
         'updated_at': now,
+        'last_seen_at': now,
         'display_name': display_name if display_name is not None else row.get('display_name'),
         'avatar_url': avatar_url if avatar_url is not None else row.get('avatar_url'),
     }

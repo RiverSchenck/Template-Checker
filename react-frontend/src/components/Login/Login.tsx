@@ -15,6 +15,8 @@ import { Checkbox } from '../ui/checkbox';
 import { Input } from '../ui/input';
 
 const REQUEST_SUBMITTED_STORAGE_KEY = 'requestSubmittedEmail';
+/** Set by AuthContext when user gets 403 so we can pre-fill email and show the request form. */
+const ACCESS_DENIED_EMAIL_KEY = 'template-checker-accessDeniedEmail';
 
 /** Supabase OAuth errors often land on / with ?error=...&error_description=... */
 function getAuthErrorFromUrl(searchParams: URLSearchParams): string | null {
@@ -68,6 +70,7 @@ export default function Login() {
   const [checked3, setChecked3] = useState(false);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [requestEmail, setRequestEmail] = useState('');
+  const [requestWhy, setRequestWhy] = useState('');
   const [requestSubmitting, setRequestSubmitting] = useState(false);
   const [requestError, setRequestError] = useState<string | null>(null);
   const [requestSubmittedEmail, setRequestSubmittedEmail] = useState<string | null>(null);
@@ -79,6 +82,12 @@ export default function Login() {
       if (stored) {
         setRequestSubmittedEmail(stored);
         sessionStorage.removeItem(REQUEST_SUBMITTED_STORAGE_KEY);
+      }
+      const accessDeniedEmail = sessionStorage.getItem(ACCESS_DENIED_EMAIL_KEY);
+      if (accessDeniedEmail) {
+        sessionStorage.removeItem(ACCESS_DENIED_EMAIL_KEY);
+        setRequestEmail(accessDeniedEmail.trim());
+        setShowRequestForm(true);
       }
     } catch {
       // ignore
@@ -110,18 +119,24 @@ export default function Login() {
       setRequestError('Please enter a valid email address.');
       return;
     }
+    const why = requestWhy.trim();
+    if (!why) {
+      setRequestError('Please tell us why you need access.');
+      return;
+    }
     setRequestError(null);
     setRequestSubmitting(true);
     try {
       const res = await fetch(`${baseURL}/access-requests`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Source': 'react-frontend' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, why_need_access: why }),
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setRequestSubmittedEmail(email);
         setRequestEmail('');
+        setRequestWhy('');
         setShowRequestForm(false);
       } else {
         setRequestError(data?.error?.message || 'Failed to submit request. Please try again.');
@@ -261,7 +276,7 @@ export default function Login() {
               <div className="flex items-start gap-3">
                 <AlertCircle className="h-5 w-5 shrink-0 text-amber-400/90 mt-0.5" aria-hidden />
                 <p className="text-sm leading-relaxed text-zinc-300">
-                  Your account isn&apos;t authorized yet. Enter your email below to request access.
+                  Your account isn&apos;t authorized yet. Enter your email and tell us why you need access below.
                 </p>
               </div>
             ) : null}
@@ -275,6 +290,15 @@ export default function Login() {
                   disabled={requestSubmitting}
                   className="h-10 bg-zinc-800/50 border-zinc-600 text-zinc-100 placeholder:text-zinc-500"
                   autoFocus
+                />
+                <textarea
+                  placeholder="Why do you need access?"
+                  value={requestWhy}
+                  onChange={(e) => { setRequestWhy(e.target.value); setRequestError(null); }}
+                  disabled={requestSubmitting}
+                  rows={3}
+                  className="w-full rounded-md border border-zinc-600 bg-zinc-800/50 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-0 focus:ring-offset-zinc-900 disabled:opacity-50"
+                  aria-label="Why you need access"
                 />
                 {requestError && (
                   <p className="text-xs text-amber-400">{requestError}</p>
@@ -290,7 +314,7 @@ export default function Login() {
                   <Button
                     type="button"
                     variant="ghost"
-                    onClick={() => { setShowRequestForm(false); setRequestError(null); }}
+                    onClick={() => { setShowRequestForm(false); setRequestError(null); setRequestWhy(''); }}
                     disabled={requestSubmitting}
                     className="text-zinc-400 hover:text-zinc-200"
                   >

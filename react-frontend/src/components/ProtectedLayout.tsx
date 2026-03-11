@@ -1,7 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { SidebarProvider, SidebarInset } from './ui/sidebar';
-import { SidebarMenu } from './sidebar';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+  SidebarProvider,
+} from './ui/sidebar';
+import { SidebarMenu as SidebarMenuComponent } from './sidebar';
+import { Skeleton } from './ui/skeleton';
 import { SiteHeader } from './site-header';
 import Login from './Login/Login';
 import { useAuth } from './AuthContext';
@@ -9,7 +23,6 @@ import { baseURL, getAuthHeaders } from './Analytics/api';
 import { ValidationResult } from '../types';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { Skeleton } from './ui/skeleton';
 import '../App.css';
 
 export type ProtectedLayoutOutletContext = {
@@ -101,28 +114,61 @@ export default function ProtectedLayout() {
   }
 
   // Don't show the app (avatar, sidebar, content) until we've verified access with /me.
+  // Show full layout skeleton so the shell appears to load in.
   if (loadingRole) {
     return (
-      <div className="app-background flex min-h-screen items-center justify-center p-4">
-        <motion.div
-          className="w-full max-w-sm overflow-hidden rounded-2xl border border-white/10 bg-card/80 px-8 py-10 shadow-xl backdrop-blur-sm dark:border-white/5 dark:bg-card/50"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-        >
-          <div className="flex flex-col items-center gap-6">
-            <Skeleton className="h-14 w-14 rounded-full" />
-            <div className="flex w-full flex-col items-center gap-2">
-              <Skeleton className="h-5 w-40" />
+      <div className="app-background">
+        <SidebarProvider>
+          <Sidebar collapsible="offcanvas" variant="inset">
+            <SidebarHeader>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <div className="px-2 py-1.5">
+                    <Skeleton className="h-8 w-[140px] rounded" />
+                  </div>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarHeader>
+            <SidebarContent>
+              <SidebarGroup className="pt-1">
+                <SidebarGroupLabel className="h-auto min-h-0 px-2 pb-1.5 pt-0">
+                  <Skeleton className="h-4 w-28" />
+                </SidebarGroupLabel>
+                <SidebarGroupContent className="px-2">
+                  <SidebarMenuSkeleton showIcon className="mb-1" />
+                  <SidebarMenuSkeleton showIcon className="mb-1" />
+                  <SidebarMenuSkeleton showIcon className="mb-1" />
+                </SidebarGroupContent>
+              </SidebarGroup>
+              <SidebarGroup>
+                <SidebarGroupLabel className="h-auto min-h-0 px-2 pb-1.5 pt-0">
+                  <Skeleton className="h-4 w-20" />
+                </SidebarGroupLabel>
+                <SidebarGroupContent className="px-2">
+                  <SidebarMenuSkeleton showIcon className="mb-1" />
+                  <SidebarMenuSkeleton showIcon className="mb-1" />
+                </SidebarGroupContent>
+              </SidebarGroup>
+            </SidebarContent>
+            <SidebarFooter>
+              <div className="flex items-center gap-2 p-2">
+                <Skeleton className="h-8 w-8 shrink-0 rounded-full" />
+                <Skeleton className="h-4 w-24 flex-1" />
+              </div>
+            </SidebarFooter>
+          </Sidebar>
+          <SidebarInset className="min-w-0">
+            <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4 lg:px-6">
+              <Skeleton className="h-6 w-6 shrink-0 rounded" />
               <Skeleton className="h-4 w-32" />
+            </header>
+            <div className="flex min-w-0 flex-1 flex-col p-6">
+              <Skeleton className="mb-2 h-8 w-56" />
+              <Skeleton className="mb-6 h-4 w-full max-w-md" />
+              <Skeleton className="h-48 w-full rounded-lg" />
             </div>
-            <div className="flex gap-2">
-              <Skeleton className="h-2 w-2 rounded-full" />
-              <Skeleton className="h-2 w-2 rounded-full" />
-              <Skeleton className="h-2 w-2 rounded-full" />
-            </div>
-          </div>
-        </motion.div>
+          </SidebarInset>
+        </SidebarProvider>
       </div>
     );
   }
@@ -166,7 +212,7 @@ export default function ProtectedLayout() {
   return (
     <div className="app-background">
       <SidebarProvider>
-        <SidebarMenu checkerResults={checkerResults} />
+        <SidebarMenuComponent checkerResults={checkerResults} />
         <SidebarInset className="min-w-0">
           <SiteHeader
             templateName={checkerResults?.template_name}

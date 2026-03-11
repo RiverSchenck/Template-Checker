@@ -31,6 +31,7 @@ import {
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from '../ui/badge';
 import {
   Tooltip,
@@ -51,12 +52,14 @@ export interface AdminUser {
   role: 'user' | 'admin';
   created_at: string | null;
   updated_at?: string | null;
+  last_seen_at?: string | null;
 }
 
 export interface AccessRequest {
   id: string;
   email: string;
   status: string;
+  why_need_access?: string | null;
   display_name?: string | null;
   avatar_url?: string | null;
   created_at: string | null;
@@ -65,7 +68,7 @@ export interface AccessRequest {
 }
 
 type AccessRequestSortKey = 'email' | 'name' | 'requested';
-type UserSortKey = 'email' | 'display_name' | 'role' | 'joined';
+type UserSortKey = 'email' | 'display_name' | 'role' | 'joined' | 'last_seen';
 type SortDir = 'asc' | 'desc';
 
 function SortableHead({
@@ -123,6 +126,8 @@ export function UserManagement() {
   const [updatingAction, setUpdatingAction] = useState<'approved' | 'rejected' | null>(null);
   const [accessRequestSortKey, setAccessRequestSortKey] = useState<AccessRequestSortKey | null>(null);
   const [accessRequestSortDir, setAccessRequestSortDir] = useState<SortDir>('asc');
+  const [accessRequestStatusFilter, setAccessRequestStatusFilter] = useState<'pending' | 'rejected'>('pending');
+  const [confirmApproveRejected, setConfirmApproveRejected] = useState<AccessRequest | null>(null);
   const [userSortKey, setUserSortKey] = useState<UserSortKey | null>(null);
   const [userSortDir, setUserSortDir] = useState<SortDir>('asc');
   const [roleFilter, setRoleFilter] = useState<'all' | 'user' | 'admin'>('all');
@@ -162,7 +167,7 @@ export function UserManagement() {
     if (!token) return;
     setLoadingRequests(true);
     try {
-      const res = await fetch(`${baseURL}/admin/access-requests?status=pending`, {
+      const res = await fetch(`${baseURL}/admin/access-requests?status=${accessRequestStatusFilter}`, {
         headers: getAuthHeaders(token),
       });
       if (res.status === 403) return;
@@ -178,7 +183,7 @@ export function UserManagement() {
 
   useEffect(() => {
     fetchAccessRequests();
-  }, [token]);
+  }, [token, accessRequestStatusFilter]);
 
   const isAccessRequestsView = location.hash === '#access-requests';
 
@@ -210,8 +215,8 @@ export function UserManagement() {
     }
   };
 
-  const handleAccessRequestDecision = async (requestId: string, status: 'approved' | 'rejected') => {
-    if (!token) return;
+  const handleAccessRequestDecision = async (requestId: string, status: 'approved' | 'rejected'): Promise<boolean> => {
+    if (!token) return false;
     setUpdatingRequestId(requestId);
     setUpdatingAction(status);
     try {
@@ -222,7 +227,7 @@ export function UserManagement() {
       });
       if (!res.ok) {
         toast.error(status === 'approved' ? 'Failed to approve' : 'Failed to reject');
-        return;
+        return false;
       }
       setAccessRequests((prev) => prev.filter((r) => r.id !== requestId));
       if (status === 'approved') {
@@ -231,8 +236,10 @@ export function UserManagement() {
       } else {
         toast.success('Request rejected.');
       }
+      return true;
     } catch {
       toast.error('Request failed');
+      return false;
     } finally {
       setUpdatingRequestId(null);
       setUpdatingAction(null);
@@ -316,6 +323,27 @@ export function UserManagement() {
     }
   };
 
+  /** Format date and time for display (e.g. "Today at 2:30 PM", "Yesterday at 3:05 PM", "Mar 8, 2025, 10:00 AM"). */
+  const formatDateTimeDisplay = (iso: string | null) => {
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      const now = new Date();
+      // Use calendar-day boundaries (local midnight) so "Yesterday" means the previous calendar day
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const startOfYesterday = startOfToday - 24 * 60 * 60 * 1000;
+      const t = d.getTime();
+      const timeStr = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      if (t >= startOfToday) return `Today at ${timeStr}`;
+      if (t >= startOfYesterday) return `Yesterday at ${timeStr}`;
+      const daysAgo = Math.floor((startOfToday - t) / (24 * 60 * 60 * 1000));
+      if (daysAgo < 7) return `${daysAgo} days ago at ${timeStr}`;
+      return d.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+    } catch {
+      return iso;
+    }
+  };
+
   const handleAccessRequestSort = (key: AccessRequestSortKey) => {
     if (accessRequestSortKey === key) {
       setAccessRequestSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -379,6 +407,12 @@ export function UserManagement() {
         case 'joined': {
           const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
           const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
+          cmp = aTime - bTime;
+          break;
+        }
+        case 'last_seen': {
+          const aTime = a.last_seen_at ? new Date(a.last_seen_at).getTime() : 0;
+          const bTime = b.last_seen_at ? new Date(b.last_seen_at).getTime() : 0;
           cmp = aTime - bTime;
           break;
         }
@@ -505,41 +539,66 @@ export function UserManagement() {
           </Button>
         </div>
 
-        {/* Access requests view: only the Pending access requests table */}
+        {/* Access requests view: Pending and Rejected tabs */}
         {isAccessRequestsView && (
         <Card id="access-requests" className="mb-8 scroll-mt-6">
-          <CardHeader className="pb-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <CardTitle className="text-lg font-medium">Pending access requests</CardTitle>
-                {!loadingRequests && accessRequests.length > 0 && (
-                  <Badge variant="secondary" className="font-normal">
-                    {accessRequests.length}
-                  </Badge>
-                )}
+          <CardHeader className="p-0 pb-0">
+            <Tabs value={accessRequestStatusFilter} onValueChange={(v) => setAccessRequestStatusFilter(v as 'pending' | 'rejected')}>
+              {/* Underline-style tab bar: primary navigation for the card */}
+              <div className="flex flex-col border-b border-border px-6 pt-4">
+                <TabsList className="min-h-10 w-full justify-start gap-0 rounded-none border-0 bg-transparent p-0 pb-0 shadow-none">
+                  <TabsTrigger
+                    value="pending"
+                    className="gap-2 rounded-none border-b-2 border-transparent bg-transparent px-0 pb-3 pt-0 text-sm font-medium text-muted-foreground shadow-none outline-none transition-colors hover:text-foreground data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                  >
+                    Pending
+                    {!loadingRequests && accessRequestStatusFilter === 'pending' && accessRequests.length > 0 && (
+                      <Badge variant="secondary" className="h-5 min-w-5 px-1.5 font-normal tabular-nums">
+                        {accessRequests.length}
+                      </Badge>
+                    )}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="rejected"
+                    className="gap-2 rounded-none border-b-2 border-transparent bg-transparent px-0 pb-3 pt-0 text-sm font-medium text-muted-foreground shadow-none outline-none transition-colors ltr:ml-6 rtl:mr-6 hover:text-foreground data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                  >
+                    Rejected
+                    {!loadingRequests && accessRequestStatusFilter === 'rejected' && accessRequests.length > 0 && (
+                      <Badge variant="secondary" className="h-5 min-w-5 px-1.5 font-normal tabular-nums">
+                        {accessRequests.length}
+                      </Badge>
+                    )}
+                  </TabsTrigger>
+                </TabsList>
+                <p className="pb-4 text-sm text-muted-foreground">
+                  {accessRequestStatusFilter === 'pending'
+                    ? 'Approve or reject people waiting to join.'
+                    : 'Previously rejected requests. You can approve them to grant access.'}
+                </p>
               </div>
-              <CardDescription className="text-left sm:text-right">
-                Approve or reject people waiting to join.
-              </CardDescription>
-            </div>
+            </Tabs>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="w-full min-w-0 p-0">
             {loadingRequests ? (
-              <div className="border-t px-6 py-8">
+              <div className="w-full min-w-0 px-6 py-8">
                 <Skeleton className="h-20 w-full rounded-md" />
               </div>
             ) : accessRequests.length === 0 ? (
-              <div className="flex flex-col items-center justify-center border-t px-6 py-14 text-center">
+              <div className="flex w-full min-w-0 flex-col items-center justify-center px-6 py-14 text-center">
                 <div className="rounded-full bg-muted/60 p-4">
                   <Inbox className="h-6 w-6 text-muted-foreground" />
                 </div>
-                <p className="mt-4 text-sm font-medium text-foreground">No pending requests</p>
+                <p className="mt-4 text-sm font-medium text-foreground">
+                  {accessRequestStatusFilter === 'pending' ? 'No pending requests' : 'No rejected requests'}
+                </p>
                 <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
-                  When someone requests access, they’ll appear here for you to approve or reject.
+                  {accessRequestStatusFilter === 'pending'
+                    ? "When someone requests access, they'll appear here for you to approve or reject."
+                    : 'Requests you reject will appear here. You can approve them later to grant access.'}
                 </p>
               </div>
             ) : (
-              <Table className="table-fixed">
+              <Table className="table-fixed w-full">
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[52px] pr-0" />
@@ -567,6 +626,7 @@ export function UserManagement() {
                       onSort={handleAccessRequestSort}
                       className="w-[120px]"
                     />
+                    <TableHead className="min-w-[180px]">Why they need access</TableHead>
                     <TableHead className="w-[200px] text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -589,8 +649,17 @@ export function UserManagement() {
                       </TableCell>
                       <TableCell className="py-3 text-muted-foreground text-sm">
                         <span title={formatDate(r.created_at)}>
-                          {formatDateRelative(r.created_at) ?? formatDate(r.created_at)}
+                          {formatDateTimeDisplay(r.created_at)}
                         </span>
+                      </TableCell>
+                      <TableCell className="py-3 text-muted-foreground text-sm max-w-[280px]">
+                        {r.why_need_access ? (
+                          <span className="line-clamp-2" title={r.why_need_access}>
+                            {r.why_need_access}
+                          </span>
+                        ) : (
+                          '—'
+                        )}
                       </TableCell>
                       <TableCell className="py-3 text-right">
                         <div className="flex justify-end gap-2">
@@ -601,7 +670,11 @@ export function UserManagement() {
                                 variant="default"
                                 className="min-w-[88px] text-xs bg-emerald-600 hover:bg-emerald-700 text-white border-0 shadow-sm"
                                 disabled={updatingRequestId === r.id}
-                                onClick={() => handleAccessRequestDecision(r.id, 'approved')}
+                                onClick={() =>
+                                  accessRequestStatusFilter === 'rejected'
+                                    ? setConfirmApproveRejected(r)
+                                    : handleAccessRequestDecision(r.id, 'approved')
+                                }
                               >
                                 {updatingRequestId === r.id && updatingAction === 'approved' ? (
                                   <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden />
@@ -611,8 +684,13 @@ export function UserManagement() {
                                 {updatingRequestId === r.id && updatingAction === 'approved' ? 'Updating…' : 'Approve'}
                               </Button>
                             </TooltipTrigger>
-                            <TooltipContent side="left">Grant this user access</TooltipContent>
+                            <TooltipContent side="left">
+                              {accessRequestStatusFilter === 'rejected'
+                                ? 'Grant access (opens confirmation)'
+                                : 'Grant this user access'}
+                            </TooltipContent>
                           </Tooltip>
+                          {accessRequestStatusFilter === 'pending' && (
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button
@@ -632,6 +710,7 @@ export function UserManagement() {
                             </TooltipTrigger>
                             <TooltipContent side="left">Decline this request</TooltipContent>
                           </Tooltip>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -759,13 +838,21 @@ export function UserManagement() {
                     sortDir={userSortDir}
                     onSort={handleUserSort}
                   />
+                  <SortableHead
+                    label="Last seen"
+                    sortKey="last_seen"
+                    currentSortKey={userSortKey}
+                    sortDir={userSortDir}
+                    onSort={handleUserSort}
+                    className="w-[120px]"
+                  />
                   <TableHead className="w-[80px]" />
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredAndSortedUsers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="h-48">
+                    <TableCell colSpan={7} className="h-48">
                       <div className="flex flex-col items-center justify-center py-12 text-center">
                         <div className="rounded-full bg-muted/60 p-4">
                           <Users className="h-6 w-6 text-muted-foreground" />
@@ -854,6 +941,15 @@ export function UserManagement() {
                             {formatDateRelative(u.created_at) ?? formatDate(u.created_at)}
                           </span>
                         </TableCell>
+                        <TableCell className="py-3 text-muted-foreground text-sm">
+                          {u.last_seen_at ? (
+                            <span title={formatDate(u.last_seen_at)}>
+                              {formatDateTimeDisplay(u.last_seen_at)}
+                            </span>
+                          ) : (
+                            '—'
+                          )}
+                        </TableCell>
                         <TableCell className="py-3">
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -918,6 +1014,49 @@ export function UserManagement() {
                 disabled={deleting}
               >
                 {deleting ? 'Removing…' : 'Remove user'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Confirm approve previously rejected request */}
+        <Dialog open={!!confirmApproveRejected} onOpenChange={(open) => !open && setConfirmApproveRejected(null)}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Approve previously rejected request?</DialogTitle>
+              <DialogDescription asChild>
+                <div>
+                  <p>
+                    This request was previously rejected. Approving will grant them access and they will be able to sign in.
+                  </p>
+                  {confirmApproveRejected && (
+                    <p className="mt-3 rounded-md bg-muted px-3 py-2 font-medium text-foreground">
+                      {confirmApproveRejected.email}
+                    </p>
+                  )}
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2 sm:gap-0">
+              <Button
+                variant="outline"
+                onClick={() => setConfirmApproveRejected(null)}
+                disabled={updatingRequestId === confirmApproveRejected?.id}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="bg-emerald-600 hover:bg-emerald-700 text-white border-0"
+                onClick={async () => {
+                  if (!confirmApproveRejected) return;
+                  const ok = await handleAccessRequestDecision(confirmApproveRejected.id, 'approved');
+                  if (ok) setConfirmApproveRejected(null);
+                }}
+                disabled={updatingRequestId === confirmApproveRejected?.id}
+              >
+                {updatingRequestId === confirmApproveRejected?.id && updatingAction === 'approved'
+                  ? 'Approving…'
+                  : 'Approve access'}
               </Button>
             </DialogFooter>
           </DialogContent>

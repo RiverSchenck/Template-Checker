@@ -23,6 +23,9 @@ export interface CurrentUser {
 
 const ROLE_CACHE_KEY_PREFIX = 'template-checker-role-';
 
+/** When user gets 403, we store their email here so Login can pre-fill the request form (they must still submit with "why"). */
+const ACCESS_DENIED_EMAIL_KEY = 'template-checker-accessDeniedEmail';
+
 function getCachedRole(userId: string): Role | null {
   try {
     const cached = localStorage.getItem(ROLE_CACHE_KEY_PREFIX + userId);
@@ -193,17 +196,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const data = await res.json().catch(() => ({}));
           if (data.allowed === false || data.error?.code === 'access_denied') {
             const emailToShow = session.user?.email ?? '';
-            try {
-              const reqRes = await fetch(`${baseURL}/access-requests`, {
-                method: 'POST',
-                headers: getAuthHeaders(session.access_token),
-                body: JSON.stringify({}),
-              });
-              if (reqRes.ok && !cancelled) {
-                setRequestSubmittedForEmail(emailToShow);
+            if (emailToShow) {
+              try {
+                sessionStorage.setItem(ACCESS_DENIED_EMAIL_KEY, emailToShow);
+              } catch {
+                // ignore
               }
-            } catch {
-              // ignore; user will still see accessDenied
             }
             setAccessDenied(true);
             setCurrentUser(null);

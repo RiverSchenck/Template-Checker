@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertCircle, AlertTriangle, Info, HelpCircle } from 'lucide-react';
+import { AlertCircle, AlertTriangle, Info, HelpCircle, ExternalLink } from 'lucide-react';
 import {
   IdentifierGroupedData,
   ClassifierData,
@@ -17,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from './ui/popover';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { cn } from '../lib/utils';
 
 export function transformDataForTable(
@@ -54,12 +55,20 @@ export function transformDataForTable(
 export function renderHelpLink(helpArticleUrl: string | null): React.ReactNode {
   if (!helpArticleUrl) return null;
   return (
-    <Button variant="outline" size="sm" className="gap-1.5 shrink-0" asChild>
-      <a href={helpArticleUrl} target="_blank" rel="noopener noreferrer">
-        <HelpCircle className="h-3.5 w-3.5" />
-        Help
-      </a>
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <a
+          href={helpArticleUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex shrink-0 rounded p-0.5 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring underline-offset-2 hover:underline"
+          aria-label="Open help article"
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+        </a>
+      </TooltipTrigger>
+      <TooltipContent side="top">Help article</TooltipContent>
+    </Tooltip>
   );
 }
 

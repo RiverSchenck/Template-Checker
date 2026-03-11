@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronUp, ArrowUp, ArrowDown, Minus } from 'lucide-react';
+import { ChevronDown, ArrowUp, ArrowDown, Minus } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { ValidationResult, ValidationCategory, CategoryDetail } from '../../types';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -102,34 +103,48 @@ function StatsToggle({ jsonResponse, previousJsonResponse, seeDetails }: StatsTo
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="w-full">
       <div className="mt-2 flex w-full flex-col items-center">
-        <CollapsibleContent className="w-full data-[state=closed]:hidden">
-          <div className="w-full rounded-xl bg-muted/20 px-3 py-2">
-            <div className="grid w-full grid-cols-2 justify-center gap-4 sm:grid-cols-3 lg:grid-cols-5">
-              {defaultKeys.map((key, index) => {
-                const categoryData = jsonResponse[key] as CategoryDetail;
-                const categoryLabel = ValidationCategory[key as keyof typeof ValidationCategory] ?? 'Unknown';
-                const totalIssues = calculateTotalIssuesFromCategory(categoryData);
-                const totalCount = categoryData?.total_count ?? 0;
+        <CollapsibleContent forceMount className="w-full overflow-hidden">
+          <motion.div
+            className="w-full"
+            initial={false}
+            animate={{
+              height: open ? 'auto' : 0,
+              opacity: open ? 1 : 0,
+            }}
+            transition={{
+              duration: 0.3,
+              ease: [0.32, 0.72, 0, 1],
+            }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div className="w-full rounded-xl bg-muted/20 px-3 py-2">
+              <div className="grid w-full grid-cols-2 justify-center gap-4 sm:grid-cols-3 lg:grid-cols-5">
+                {defaultKeys.map((key, index) => {
+                  const categoryData = jsonResponse[key] as CategoryDetail;
+                  const categoryLabel = ValidationCategory[key as keyof typeof ValidationCategory] ?? 'Unknown';
+                  const totalIssues = calculateTotalIssuesFromCategory(categoryData);
+                  const totalCount = categoryData?.total_count ?? 0;
 
-                let changeFromPrevious: number | null = null;
-                if (previousJsonResponse) {
-                  const prevCategory = previousJsonResponse[key] as CategoryDetail | undefined;
-                  const prevIssues = calculateTotalIssuesFromCategory(prevCategory);
-                  changeFromPrevious = calculateChange(totalIssues, prevIssues);
-                }
+                  let changeFromPrevious: number | null = null;
+                  if (previousJsonResponse) {
+                    const prevCategory = previousJsonResponse[key] as CategoryDetail | undefined;
+                    const prevIssues = calculateTotalIssuesFromCategory(prevCategory);
+                    changeFromPrevious = calculateChange(totalIssues, prevIssues);
+                  }
 
-                return (
-                  <CategoryBlock
-                    key={`${categoryLabel}-${index}`}
-                    title={categoryLabel}
-                    totalIssues={totalIssues}
-                    totalCount={totalCount}
-                    changeFromPrevious={changeFromPrevious}
-                  />
-                );
-              })}
+                  return (
+                    <CategoryBlock
+                      key={`${categoryLabel}-${index}`}
+                      title={categoryLabel}
+                      totalIssues={totalIssues}
+                      totalCount={totalCount}
+                      changeFromPrevious={changeFromPrevious}
+                    />
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          </motion.div>
         </CollapsibleContent>
         <CollapsibleTrigger asChild>
           <Button
@@ -138,17 +153,15 @@ function StatsToggle({ jsonResponse, previousJsonResponse, seeDetails }: StatsTo
             className="mt-1.5 h-7 gap-1 px-1.5 text-[11px] text-muted-foreground"
             aria-expanded={open}
           >
-            {open ? (
-              <>
-                <ChevronUp className="h-3 w-3" />
-                Hide details
-              </>
-            ) : (
-              <>
-                <ChevronDown className="h-3 w-3" />
-                Show details
-              </>
-            )}
+            <motion.span
+              className="inline-flex items-center gap-1"
+              initial={false}
+              animate={{ rotate: open ? 180 : 0 }}
+              transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
+            >
+              <ChevronDown className="h-3 w-3" />
+            </motion.span>
+            {open ? 'Hide details' : 'Show details'}
           </Button>
         </CollapsibleTrigger>
       </div>
