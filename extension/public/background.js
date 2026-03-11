@@ -61,7 +61,7 @@ async function runExtensionOnTab(tab) {
   }
 }
 
-async function collapseSidebarOnTab(tab) {
+async function setSidebarCollapsedOnTab(tab, collapsed) {
   const tabId = tab?.id;
   if (tabId == null || !isInjectableUrl(tab?.url)) {
     throw new Error("Open a regular webpage first.");
@@ -74,7 +74,7 @@ async function collapseSidebarOnTab(tab) {
   });
   await chrome.tabs.sendMessage(tabId, {
     action: "templateCheckerSetSidebarCollapsed",
-    collapsed: true,
+    collapsed: Boolean(collapsed),
   });
 }
 
@@ -84,9 +84,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       .then(async (tabs) => {
         const activeTab = tabs[0];
         await runExtensionOnTab(activeTab);
-        if (message.removeSidebar) {
-          await collapseSidebarOnTab(activeTab);
-        }
+        await setSidebarCollapsedOnTab(activeTab, Boolean(message.removeSidebar));
         sendResponse({ success: true });
       })
       .catch((error) => {

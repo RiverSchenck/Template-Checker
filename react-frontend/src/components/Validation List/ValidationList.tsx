@@ -20,7 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip';
-import { CircleCheck } from 'lucide-react';
+import { CircleCheck, Sparkles } from 'lucide-react';
 import {
   notifyExtensionToHighlightFiltered,
   notifyExtensionToClearFilterHighlights,
@@ -32,6 +32,7 @@ type ValidationListProps = {
   checkerResponse: (jsonResponse: ValidationResult) => void;
   seeDetails?: boolean;
   fromExtension?: boolean;
+  extensionVersion?: string | null;
 };
 
 const defaultKeys: (keyof ValidationResult)[] = [
@@ -49,6 +50,7 @@ function ValidationList({
   checkerResponse,
   seeDetails,
   fromExtension = false,
+  extensionVersion = null,
 }: ValidationListProps) {
   const [viewMode, setViewMode] = useState<'table' | 'card'>('card');
   const [highlightIssuesOn, setHighlightIssuesOn] = useState(false);
@@ -265,6 +267,7 @@ function ValidationList({
     (filters.pageId?.length ?? 0) > 0 ||
     !!filters.dataId ||
     (filters.validationType?.length ?? 0) > 0;
+  const highlightLabel = hasActiveFilters ? 'Highlight filtered issues' : 'Highlight issues';
 
   // Apply or clear bulk highlights when toggle or filters change
   useEffect(() => {
@@ -292,29 +295,46 @@ function ValidationList({
           previousJsonResponse={previousJsonResponse}
           seeDetails={seeDetails}
         />
-        <div className="mt-2 flex flex-wrap items-center justify-between gap-2 pb-1.5">
-          <ValidationFilters
-            filters={filters}
-            onFiltersChange={setFilters}
-            spreadOptions={filterOptions.spreadOptions}
-            pageOptions={filterOptions.pageOptions}
-            validationTypeOptions={filterOptions.validationTypeOptions}
-            dataIdOptions={filterOptions.dataIdOptions}
-          />
-          <div className="flex flex-wrap items-center gap-3">
+        <div className="mt-2 flex flex-wrap items-start justify-between gap-2 pb-1.5">
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+            <ValidationFilters
+              filters={filters}
+              onFiltersChange={setFilters}
+              spreadOptions={filterOptions.spreadOptions}
+              pageOptions={filterOptions.pageOptions}
+              validationTypeOptions={filterOptions.validationTypeOptions}
+              dataIdOptions={filterOptions.dataIdOptions}
+            />
             {fromExtension && (
               <TooltipProvider delayDuration={200}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex cursor-pointer items-center gap-2 rounded-md border border-border/60 bg-background px-2.5 py-1.5 shadow-sm">
-                      <label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                    <div
+                      className={`flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 shadow-sm transition-colors ${
+                        highlightIssuesOn
+                          ? 'border-violet-500/60 bg-violet-500/10 ring-1 ring-violet-500/30'
+                          : 'border-violet-400/60 bg-violet-500/5 ring-1 ring-violet-400/20'
+                      }`}
+                    >
+                      <label
+                        className={`flex cursor-pointer items-center gap-2 text-sm ${
+                          highlightIssuesOn ? 'text-violet-700 dark:text-violet-300' : 'text-violet-700/90 dark:text-violet-300/90'
+                        }`}
+                      >
+                        <Sparkles
+                          className={`h-4 w-4 ${
+                            highlightIssuesOn
+                              ? 'text-violet-600 dark:text-violet-300'
+                              : 'text-violet-500 dark:text-violet-400'
+                          }`}
+                        />
                         <Switch
                           checked={highlightIssuesOn}
                           onCheckedChange={(checked) => setHighlightIssuesOn(checked === true)}
                           aria-describedby={hasActiveFilters ? 'highlight-filtered-desc' : undefined}
                         />
                         <span id={hasActiveFilters ? 'highlight-filtered-desc' : undefined}>
-                          {hasActiveFilters ? 'Highlight filtered issues' : 'Highlight issues'}
+                          {highlightLabel}
                         </span>
                       </label>
                     </div>
@@ -327,7 +347,17 @@ function ValidationList({
                 </Tooltip>
               </TooltipProvider>
             )}
+          </div>
+          <div className="ml-auto shrink-0 self-start text-right">
             <ViewButtons viewMode={viewMode} setViewMode={setViewMode} />
+            {fromExtension && (
+              <div className="mt-1 inline-flex items-center gap-2 rounded-full border border-violet-400/40 bg-violet-500/10 px-2.5 py-1 text-[11px]">
+                <span className="font-medium text-violet-700 dark:text-violet-300">Extension</span>
+                <span className="font-mono text-violet-800 dark:text-violet-200">
+                  {extensionVersion ? `v${extensionVersion}` : 'unknown'}
+                </span>
+              </div>
+            )}
           </div>
         </div>
         {dataIdSelectedWithNoIssues ? (

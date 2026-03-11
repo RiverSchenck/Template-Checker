@@ -45,6 +45,7 @@ function ValidationListWrapper() {
       checkerResponse={ctx.checkerResponse}
       seeDetails={ctx.seeDetails}
       fromExtension={ctx.fromExtension}
+      extensionVersion={ctx.extensionVersion}
     />
   );
 }

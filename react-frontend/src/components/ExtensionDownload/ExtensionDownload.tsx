@@ -1,8 +1,13 @@
 import React from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { Badge } from '../ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Download, Wrench, BookOpen, AlertCircle, Zap, AlertTriangle } from 'lucide-react';
-import { LATEST_EXTENSION_VERSION, EXTENSION_DOWNLOAD_URL } from '../../constants/extension';
+import type { ProtectedLayoutOutletContext } from '../ProtectedLayout';
+import {
+  LATEST_EXTENSION_VERSION,
+  EXTENSION_DOWNLOAD_URL,
+} from '../../constants/extension';
 
 const INSTALL_STEPS = [
   'Download the ZIP file using the button above.',
@@ -14,6 +19,7 @@ const INSTALL_STEPS = [
 ];
 
 function ExtensionDownload() {
+  const { extensionVersion } = useOutletContext<ProtectedLayoutOutletContext>();
   return (
     <div className="min-w-0 w-full max-w-[720px] mx-auto overflow-x-hidden px-4 pb-16 pt-10 sm:px-6">
       {/* Hero: title + experimental badge + disclaimer */}
@@ -63,6 +69,21 @@ function ExtensionDownload() {
             <p className="mt-3 text-xs text-muted-foreground">
               v{LATEST_EXTENSION_VERSION} · Unzip and load unpacked in Chrome, Arc, or any Chromium-based browser
             </p>
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              <Badge variant="secondary" className="text-[11px]">
+                Latest v{LATEST_EXTENSION_VERSION}
+              </Badge>
+              <Badge
+                variant="secondary"
+                className={`text-[11px] ${
+                  extensionVersion
+                    ? 'border-violet-400/40 bg-violet-500/10 text-violet-700 dark:text-violet-300'
+                    : 'text-muted-foreground'
+                }`}
+              >
+                Your extension: {extensionVersion ? `v${extensionVersion}` : 'unknown'}
+              </Badge>
+            </div>
           </CardContent>
         </Card>
       </section>

@@ -13,10 +13,18 @@
  */
 
 /** Current extension version we consider "latest". Update this when you publish a new release. */
-export const LATEST_EXTENSION_VERSION = "1.0.0";
+export const LATEST_EXTENSION_VERSION = "1.0.1";
 
 /** Download URL for the extension ZIP. Update the version segment when you release a new version. */
-export const EXTENSION_DOWNLOAD_URL = `https://github.com/RiverSchenck/Template-Checker/releases/download/v${LATEST_EXTENSION_VERSION}/frontify-template-checker-extension.zip`;
+export const EXTENSION_DOWNLOAD_URL =
+  "https://github.com/RiverSchenck/Template-Checker/releases/download/v1.0.1/frontify-template-checker-extension-v1.0.1.zip";
+
+/**
+ * "New" badge window for the Checker Extension nav item.
+ * Set this to the launch date/time, then the badge auto-hides after 30 days.
+ */
+export const EXTENSION_NEW_BADGE_START_AT = "2026-03-11T00:00:00Z";
+export const EXTENSION_NEW_BADGE_DURATION_DAYS = 30;
 
 /**
  * Returns true if `installed` is strictly older than `latest` (e.g. 1.0.0 < 1.1.0).
@@ -37,4 +45,14 @@ export function isExtensionOutOfDate(
     if (ai > bi) return false;
   }
   return false; // same version
+}
+
+/** Returns true while the extension "New" badge should be visible. */
+export function shouldShowExtensionNewBadge(now: Date = new Date()): boolean {
+  const start = new Date(EXTENSION_NEW_BADGE_START_AT);
+  if (Number.isNaN(start.getTime())) return false;
+  const end = new Date(
+    start.getTime() + EXTENSION_NEW_BADGE_DURATION_DAYS * 24 * 60 * 60 * 1000,
+  );
+  return now >= start && now < end;
 }
