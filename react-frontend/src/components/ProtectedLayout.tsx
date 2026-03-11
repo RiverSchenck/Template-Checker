@@ -195,7 +195,8 @@ export default function ProtectedLayout() {
   };
 
   const isAnalytics = location.pathname === '/analytics' || location.pathname.startsWith('/analytics');
-  const contentWrapperClass = isAnalytics
+  const isExtension = location.pathname === '/extension' || location.pathname.startsWith('/extension');
+  const contentWrapperClass = (isAnalytics || isExtension)
     ? 'flex min-w-0 w-full flex-1 flex-col items-stretch justify-center overflow-x-hidden'
     : 'flex w-full flex-1 flex-col items-center justify-center min-h-[100vh]';
 

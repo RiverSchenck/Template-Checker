@@ -4,6 +4,7 @@ import { Toaster } from './components/ui/sonner';
 import FileUploadPage from './components/File Upload/FileUpload';
 import ValidationList from './components/Validation List/ValidationList';
 import { Analytics } from './components/Analytics';
+import { ExtensionDownload } from './components/ExtensionDownload';
 import AuthCallback from './components/AuthCallback';
 import ProtectedLayout, { type ProtectedLayoutOutletContext } from './components/ProtectedLayout';
 import { UserManagement } from './components/Admin/UserManagement';
@@ -58,6 +59,7 @@ export default function App() {
           <Route index element={<FileUploadWrapper />} />
           <Route path="results" element={<ValidationListWrapper />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="extension" element={<ExtensionDownload />} />
           <Route path="admin/users" element={<AdminGuard><UserManagement /></AdminGuard>} />
           <Route path="admin/access-requests" element={<Navigate to="/admin/users#access-requests" replace />} />
         </Route>

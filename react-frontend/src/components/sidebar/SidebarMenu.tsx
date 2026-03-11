@@ -8,6 +8,7 @@ import {
   Inbox,
   LogOut,
   MoreVertical,
+  Puzzle,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -47,6 +48,7 @@ function pathnameToItemId(pathname: string, hash: string): string {
   if (pathname === '/' || pathname === '') return 'upload-template';
   if (pathname.startsWith('/results')) return 'results';
   if (pathname.startsWith('/analytics')) return 'analytics';
+  if (pathname.startsWith('/extension')) return 'extension';
   if (pathname.startsWith('/admin/access-requests')) return 'admin-access-requests';
   if (pathname.startsWith('/admin/users')) return hash === '#access-requests' ? 'admin-access-requests' : 'admin-users';
   return 'upload-template';
@@ -156,6 +158,16 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                 >
                   <BarChart3 className="h-4 w-4" />
                   <span>Analytics</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip="Checker Extension"
+                  isActive={activeId === 'extension'}
+                  onClick={() => navigate('/extension')}
+                >
+                  <Puzzle className="h-4 w-4" />
+                  <span>Checker Extension</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

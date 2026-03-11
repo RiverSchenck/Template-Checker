@@ -21,6 +21,7 @@ function getPageTitle(pathname: string, templateName?: string | null): React.Rea
     return 'Results';
   }
   if (pathname.startsWith('/analytics')) return 'Analytics';
+  if (pathname.startsWith('/extension')) return 'Checker Extension';
   return 'Template Checker';
 }
 
