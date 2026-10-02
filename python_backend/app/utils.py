@@ -22,7 +22,8 @@ def upload_file():
 
         return {'status': 'success', 'path': save_path}
     except Exception as e:
-        return {'status': 'error', 'error': {'message': 'An error occurred during processing.', 'details': str(e)}}
+        current_app.logger.exception('File upload failed')
+        return {'status': 'error', 'error': {'message': 'An error occurred during processing.'}}
 
 
 def start_check(checker, file_path: str, source_type: str = 'api', user_id: Optional[str] = None):
@@ -73,7 +74,8 @@ def start_check(checker, file_path: str, source_type: str = 'api', user_id: Opti
         }
         return jsonify(result_json), 200
     except Exception as e:
-        return jsonify({'error': 'An error occurred during the check.', 'details': str(e)}), 500
+        current_app.logger.exception('Template check failed')
+        return jsonify({'error': 'An error occurred during the check.'}), 500
 
 
 def checker_cleanup(checker):
