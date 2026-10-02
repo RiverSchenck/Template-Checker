@@ -1,8 +1,9 @@
 import os
 import shutil
 import time
+import uuid
 from typing import Optional
-from flask import request, current_app, jsonify
+from flask import request, current_app, jsonify, g
 from werkzeug.utils import secure_filename
 from .analytics import log_analytics_to_supabase
 
@@ -16,8 +17,12 @@ def upload_file():
         if file.filename == '':
             return {'status': 'error', 'error': {'message': 'No selected file'}}
 
-        filename = secure_filename(file.filename)
-        save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        filename = secure_filename(file.filename) or 'upload.zip'
+        # Each upload gets its own folder so concurrent checks never overwrite or delete each other's files
+        upload_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], uuid.uuid4().hex)
+        os.makedirs(upload_dir)
+        g.upload_dir = upload_dir
+        save_path = os.path.join(upload_dir, filename)
         file.save(save_path)
 
         return {'status': 'success', 'path': save_path}
@@ -79,14 +84,8 @@ def start_check(checker, file_path: str, source_type: str = 'api', user_id: Opti
 
 
 def checker_cleanup(checker):
-    """Cleanup the checker and remove uploaded files."""
+    """Cleanup the checker and remove this request's uploaded files (only this request's folder)."""
     checker.delete_unzipped_root_path()
-    for file in os.listdir(current_app.config['UPLOAD_FOLDER']):
-        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], file)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print(f'Failed to delete {file_path}. Reason: {e}')
+    upload_dir = g.pop('upload_dir', None)
+    if upload_dir:
+        shutil.rmtree(upload_dir, ignore_errors=True)
