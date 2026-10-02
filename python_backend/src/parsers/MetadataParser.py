@@ -1,10 +1,7 @@
 from lxml import etree as ET
 import os
 import base64
-from PIL import Image, ImageTk, ImageDraw
-import tkinter as tk
 from typing import List
-import sys
 from src.classes.Preview import Preview
 
 
@@ -87,68 +84,6 @@ class MetadataParser:
             if preview.page == page_number:
                 return preview
         return None
-
-    def display_preview_by_page(self, page_number):
-        preview = self.get_preview_by_page(page_number)
-        preview.display_preview_for_page()
-        return
-
-    def display_all_previews(self):
-        if not self.previews_objs_list[0]:
-            return
-        width = self.previews_objs_list[0].get_width()
-        height = self.previews_objs_list[0].get_height()
-        # Create a new window
-        top = tk.Toplevel()
-        top.title("Image Previews")
-        top.geometry(f"{width}x{height}")
-
-        # Create a canvas for the images and a scrollbar
-        canvas = tk.Canvas(top)
-        scrollbar = tk.Scrollbar(top, command=canvas.yview)
-        canvas.config(yscrollcommand=scrollbar.set)
-
-        # Frame to hold the images
-        frame = tk.Frame(canvas)
-        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        # anchor set to 'n' for centering
-        canvas.create_window((0, 0), window=frame, anchor='n')
-
-        # Add each image to the frame
-        for preview in self.previews_objs_list:
-            # Assuming the Preview object has a method to return an Image object
-            image = Image.open(preview.get_image_path())
-            photo = ImageTk.PhotoImage(image)
-            label = tk.Label(frame, image=photo)
-            label.photo = photo  # keep a reference
-            # center the images with anchor
-            label.pack(pady=10, anchor='center')
-
-        # Update the scroll region after UI has been set up
-        frame.bind('<Configure>', lambda e: canvas.configure(
-            scrollregion=canvas.bbox('all')))
-
-        def _on_mousewheel(event):
-            if sys.platform == "win32":
-                canvas.yview_scroll(-1 * (event.delta // 120), "units")
-            elif sys.platform == "darwin":  # macOS
-                if event.num == 4:
-                    canvas.yview_scroll(1, "units")
-                elif event.num == 5:
-                    canvas.yview_scroll(-1, "units")
-            else:
-                if event.num == 4:
-                    canvas.yview_scroll(-1, "units")
-                elif event.num == 5:
-                    canvas.yview_scroll(1, "units")
-
-        # Bind the scrolling event to the top Toplevel window.
-        top.bind("<MouseWheel>", _on_mousewheel)  # For Windows
-        top.bind("<Button-4>", _on_mousewheel)    # For Linux/MacOS
-        top.bind("<Button-5>", _on_mousewheel)    # For Linux/MacOS
-
-        top.mainloop()
 
     # ----------------Debug Prints------------------
     def print_all_previews(self):
