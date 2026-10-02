@@ -244,7 +244,8 @@ def admin_list_users():
     if not supabase:
         return jsonify({'error': {'message': 'Supabase not configured'}}), 500
     try:
-        r = supabase.table('users').select('id, email, role, display_name, avatar_url, auth_user_id, approved_by, created_at, updated_at, last_seen_at').order('created_at', desc=True).execute()
+        # Use * so missing optional columns (e.g. added_via before migration) do not break the query.
+        r = supabase.table('users').select('*').order('created_at', desc=True).execute()
         rows = r.data if r.data else []
         result = []
         for row in rows:
@@ -255,6 +256,7 @@ def admin_list_users():
                 'avatar_url': row.get('avatar_url'),
                 'auth_user_id': str(row['auth_user_id']) if row.get('auth_user_id') else None,
                 'approved_by': str(row['approved_by']) if row.get('approved_by') else None,
+                'added_via': row.get('added_via'),
                 'role': row.get('role', 'user'),
                 'created_at': row.get('created_at'),
                 'updated_at': row.get('updated_at'),
@@ -297,6 +299,7 @@ def admin_update_user_role(user_id):
             'display_name': row.get('display_name'),
             'avatar_url': row.get('avatar_url'),
             'role': row.get('role'),
+            'added_via': row.get('added_via'),
             'created_at': row.get('created_at'),
             'updated_at': row.get('updated_at'),
         }), 200
@@ -475,6 +478,7 @@ def admin_update_access_request(request_id):
             user_insert = {
                 'email': email,
                 'role': 'user',
+                'added_via': 'access_request',
             }
             if approved_by_id:
                 user_insert['approved_by'] = approved_by_id
@@ -521,7 +525,7 @@ def admin_invite():
         return jsonify({'error': {'message': 'Supabase not configured'}}), 503
     admin_row = user_helpers.get_user_by_auth_id(_current_user_id()) if _current_user_id() else None
     approved_by_id = str(admin_row['id']) if admin_row and admin_row.get('id') else None
-    user_insert = {'email': email, 'role': 'user'}
+    user_insert = {'email': email, 'role': 'user', 'added_via': 'invite'}
     if approved_by_id:
         user_insert['approved_by'] = approved_by_id
     try:
@@ -533,6 +537,7 @@ def admin_invite():
             'id': str(row['id']),
             'email': row['email'],
             'role': row.get('role', 'user'),
+            'added_via': row.get('added_via'),
             'created_at': row.get('created_at'),
         }), 201
     except Exception as e:

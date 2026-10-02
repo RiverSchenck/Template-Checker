@@ -39,7 +39,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip';
-import { Trash2, User, UserPlus, Users, Inbox, Mail, Shield, ShieldCheck, ArrowDown, ArrowUpDown, Filter, XCircle } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { Trash2, User, UserPlus, Users, Inbox, Mail, Shield, ShieldCheck, ArrowDown, ArrowUpDown, Filter, XCircle, MoreHorizontal } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { cn } from '../../lib/utils';
 
@@ -50,9 +57,44 @@ export interface AdminUser {
   avatar_url?: string | null;
   auth_user_id?: string | null;
   role: 'user' | 'admin';
+  /** Set on insert: admin email invite vs approved access request. Omitted/null for legacy rows. */
+  added_via?: 'invite' | 'access_request' | null;
+  /** `users.id` of the admin who invited or approved this row; resolve against the user list for display. */
+  approved_by?: string | null;
   created_at: string | null;
   updated_at?: string | null;
   last_seen_at?: string | null;
+}
+
+function addedViaLabel(v: AdminUser['added_via']): string {
+  if (v === 'invite') return 'Email invite';
+  if (v === 'access_request') return 'Access request';
+  return 'Unknown';
+}
+
+function buildApproverLabelLookup(allUsers: AdminUser[]): (approverId: string | null | undefined) => string {
+  const byId = new Map<string, AdminUser>();
+  for (const row of allUsers) {
+    byId.set(row.id, row);
+  }
+  return (approverId) => {
+    if (!approverId) return '—';
+    const approver = byId.get(approverId);
+    if (!approver) return 'Unknown admin';
+    const name = approver.display_name?.trim();
+    if (name) return name;
+    if (approver.email) return approver.email;
+    return 'Unknown admin';
+  };
+}
+
+function UserMoreDetailRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="grid grid-cols-[5.5rem_1fr] gap-x-2 gap-y-0.5 text-sm leading-snug">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="min-w-0 break-words text-foreground">{value}</span>
+    </div>
+  );
 }
 
 export interface AccessRequest {
@@ -423,9 +465,11 @@ export function UserManagement() {
     });
   }, [users, roleFilter, userSortKey, userSortDir]);
 
+  const approverLabel = useMemo(() => buildApproverLabelLookup(users), [users]);
+
   if (loading && location.hash !== '#access-requests') {
     return (
-      <div className="flex min-w-0 flex-1 flex-col p-6">
+      <div className="flex w-full min-w-0 flex-1 flex-col p-6">
         <div className="mx-auto w-full max-w-5xl min-w-[min(100%,64rem)] overflow-hidden">
         <div className="mb-8">
           <Skeleton className="mb-2 h-8 w-56" />
@@ -468,7 +512,7 @@ export function UserManagement() {
   }
   if (loadingRequests && location.hash === '#access-requests') {
     return (
-      <div className="flex min-w-0 flex-1 flex-col p-6">
+      <div className="flex w-full min-w-0 flex-1 flex-col p-6">
         <div className="mx-auto w-full max-w-5xl min-w-[min(100%,64rem)] overflow-hidden">
         <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
           <div>
@@ -488,7 +532,7 @@ export function UserManagement() {
             Invite by email
           </Button>
         </div>
-        <Card className="mb-8">
+        <Card className="mb-8 w-full min-w-0">
           <CardHeader className="pb-3">
             <Skeleton className="h-6 w-48" />
             <Skeleton className="mt-1 h-4 w-64" />
@@ -506,7 +550,7 @@ export function UserManagement() {
 
   return (
     <TooltipProvider>
-      <div className="flex min-w-0 flex-1 flex-col p-6">
+      <div className="flex w-full min-w-0 flex-1 flex-col p-6">
         <div className="mx-auto w-full max-w-5xl min-w-[min(100%,64rem)] overflow-hidden">
         {/* Page header: same on both views, with Invite by email */}
         <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
@@ -541,9 +585,13 @@ export function UserManagement() {
 
         {/* Access requests view: Pending and Rejected tabs */}
         {isAccessRequestsView && (
-        <Card id="access-requests" className="mb-8 scroll-mt-6">
-          <CardHeader className="p-0 pb-0">
-            <Tabs value={accessRequestStatusFilter} onValueChange={(v) => setAccessRequestStatusFilter(v as 'pending' | 'rejected')}>
+        <Card id="access-requests" className="mb-8 w-full min-w-0 scroll-mt-6">
+          <CardHeader className="w-full min-w-0 p-0 pb-0">
+            <Tabs
+              value={accessRequestStatusFilter}
+              onValueChange={(v) => setAccessRequestStatusFilter(v as 'pending' | 'rejected')}
+              className="w-full min-w-0"
+            >
               {/* Underline-style tab bar: primary navigation for the card */}
               <div className="flex flex-col border-b border-border px-6 pt-4">
                 <TabsList className="min-h-10 w-full justify-start gap-0 rounded-none border-0 bg-transparent p-0 pb-0 shadow-none">
@@ -724,7 +772,7 @@ export function UserManagement() {
 
         {/* Users view: only the Approved users table */}
         {!isAccessRequestsView && (
-        <Card>
+        <Card className="w-full min-w-0">
           <CardHeader className="pb-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <CardTitle className="text-lg font-medium">Approved users</CardTitle>
@@ -950,26 +998,108 @@ export function UserManagement() {
                             '—'
                           )}
                         </TableCell>
-                        <TableCell className="py-3">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <span>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                        <TableCell className="py-3 text-right">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 shrink-0 text-muted-foreground hover:bg-muted data-[state=open]:bg-muted"
+                                aria-label={`More options for ${u.email ?? 'user'}`}
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                              align="end"
+                              sideOffset={8}
+                              className="w-[20rem] overflow-hidden rounded-lg border bg-popover p-0 shadow-lg"
+                            >
+                              <div className="border-b border-border/80 bg-gradient-to-b from-muted/50 to-muted/20 px-3 py-3">
+                                <div className="flex items-start gap-3">
+                                  <Avatar className="h-10 w-10 shrink-0 border border-border/60 bg-background shadow-sm">
+                                    {u.avatar_url ? (
+                                      <AvatarImage src={u.avatar_url} alt="" />
+                                    ) : null}
+                                    <AvatarFallback className="bg-muted text-sm font-medium">
+                                      {(u.display_name || u.email || '?').charAt(0).toUpperCase()}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className="min-w-0 flex-1 space-y-1">
+                                    <p className="truncate text-sm font-semibold leading-tight text-foreground">
+                                      {u.display_name?.trim() || u.email || 'User'}
+                                    </p>
+                                    {u.display_name?.trim() && u.email ? (
+                                      <p className="truncate text-xs text-muted-foreground">{u.email}</p>
+                                    ) : null}
+                                    <Badge
+                                      variant="secondary"
+                                      className="mt-1 text-[10px] font-medium uppercase tracking-wide"
+                                    >
+                                      {u.role === 'admin' ? 'Admin' : 'User'}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="max-h-[min(60vh,22rem)] overflow-y-auto px-3 py-3">
+                                <div>
+                                  <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                                    Account
+                                  </p>
+                                  <div className="mt-2 space-y-2">
+                                    <UserMoreDetailRow label="Email" value={u.email ?? '—'} />
+                                    <UserMoreDetailRow label="Name" value={u.display_name ?? '—'} />
+                                    <UserMoreDetailRow
+                                      label="Role"
+                                      value={u.role === 'admin' ? 'Admin' : 'User'}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="mt-3 border-t border-border/60 pt-3">
+                                  <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                                    Access
+                                  </p>
+                                  <div className="mt-2 space-y-2">
+                                    <UserMoreDetailRow label="Added via" value={addedViaLabel(u.added_via)} />
+                                    <UserMoreDetailRow label="Added by" value={approverLabel(u.approved_by)} />
+                                  </div>
+                                </div>
+                                <div className="mt-3 border-t border-border/60 pt-3">
+                                  <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                                    Activity
+                                  </p>
+                                  <div className="mt-2 space-y-2">
+                                    <UserMoreDetailRow label="Joined" value={formatDate(u.created_at)} />
+                                    <UserMoreDetailRow
+                                      label="Last seen"
+                                      value={
+                                        u.last_seen_at ? formatDateTimeDisplay(u.last_seen_at) : '—'
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <DropdownMenuSeparator className="my-0" />
+                              <div className="p-1.5">
+                                <DropdownMenuItem
                                   disabled={isCurrentUser}
-                                  onClick={() => setDeleteTarget(u)}
-                                  aria-label={isCurrentUser ? 'You cannot remove yourself' : 'Remove access'}
+                                  onSelect={() => {
+                                    if (!isCurrentUser) setDeleteTarget(u);
+                                  }}
+                                  className={cn(
+                                    'flex h-auto min-h-8 w-full cursor-pointer items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-destructive transition-colors duration-150',
+                                    'bg-transparent focus:bg-transparent focus:text-destructive',
+                                    'data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive',
+                                    'data-[disabled]:cursor-not-allowed data-[disabled]:bg-transparent data-[disabled]:text-muted-foreground'
+                                  )}
                                 >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </span>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              {isCurrentUser ? 'You cannot remove yourself' : 'Remove access'}
-                            </TooltipContent>
-                          </Tooltip>
+                                  <Trash2 className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                                  Remove access
+                                </DropdownMenuItem>
+                              </div>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </TableCell>
                       </TableRow>
                     );

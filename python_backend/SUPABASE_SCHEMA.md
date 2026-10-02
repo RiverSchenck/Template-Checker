@@ -17,6 +17,7 @@ Single source of truth for who can sign in and their role. Replaces the previous
 | `avatar_url`    | text        | Optional. Synced from Auth user_metadata on sign-in. |
 | `auth_user_id`  | uuid        | Nullable, FK → auth.users(id) ON DELETE SET NULL. Set when user first signs in; null for invited but not yet signed in. |
 | `approved_by`   | uuid        | Nullable, FK → users(id) ON DELETE SET NULL. Admin who approved/invited this user. |
+| `added_via`     | text        | Nullable, CHECK: `NULL`, `'invite'`, or `'access_request'`. Set on insert: `'invite'` for admin email invite, `'access_request'` when an access request is approved. `NULL` for legacy rows or manual bootstrap. See migration `004_users_added_via.sql`. |
 | `created_at`    | timestamptz | DEFAULT now(). |
 | `updated_at`    | timestamptz | DEFAULT now(). |
 | `last_seen_at`  | timestamptz | Nullable. Set on each authenticated request (/me). See migration `003_users_last_seen_at.sql`. |
