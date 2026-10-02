@@ -32,10 +32,6 @@ def create_app():
     # Value is in bytes: 200 * 1024 * 1024 = 209715200
     app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200MB
 
-    # Authentication token (set via environment variable)
-    # If not set, authentication is disabled
-    app.config['AUTH_TOKEN'] = os.getenv('AUTH_TOKEN', None)
-
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
     app.register_blueprint(main_blueprint)
