@@ -9,3 +9,6 @@ logs/
 /testing
 /pytest.ini
 .pytest_cache/
+# Secrets come from Fly secrets, never bake local env files into the image
+.env
+.env.*
