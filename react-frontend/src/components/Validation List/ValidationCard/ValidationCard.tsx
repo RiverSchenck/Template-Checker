@@ -22,7 +22,6 @@ type ValidationCardProps = {
   category: ValidationCategory;
   textBoxData: { [key: string]: TextBoxData };
   validationClassifiers: { [key: string]: ClassifierData };
-  fromExtension?: boolean;
 };
 
 function truncateText(text: string | null | undefined, maxLength: number): string | undefined {
@@ -37,7 +36,6 @@ const ValidationCards = ({
   category,
   textBoxData,
   validationClassifiers,
-  fromExtension = false,
 }: ValidationCardProps) => {
   const renderValidationItems = (items: ValidationItem[], type: ValidationType) => {
     const groupedItems = groupItemsByClassifier(items);
@@ -48,7 +46,6 @@ const ValidationCards = ({
         category={category}
         items={items}
         classifierData={validationClassifiers[classifier]}
-        fromExtension={fromExtension}
       />
     ));
   };

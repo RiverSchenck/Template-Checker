@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from functools import wraps
 from flask import Blueprint, jsonify, send_file, after_this_request, request, current_app, g
 from src.classes.FrontifyChecker import FrontifyChecker
-from .utils import upload_file, start_check, checker_cleanup, download_file_from_url
+from .utils import upload_file, start_check, checker_cleanup
 from .analytics_api import get_analytics_summary, get_runs, get_supabase_client
 from . import users as user_helpers
 
@@ -648,45 +648,6 @@ def run_checker_and_download():
         # 1. @after_this_request handles cleanup after successful file send
         # 2. Exception handler handles cleanup if send_file fails
         # 3. If we delete here, it happens BEFORE send_file finishes streaming, causing failures
-
-
-@main.route('/run-from-url', methods=['POST'])
-@require_auth
-def run_checker_from_url():
-    """Endpoint to download a ZIP file from a URL and run the checker on it."""
-    checker = FrontifyChecker()
-    try:
-        # Get source type from header, default to 'api'
-        source_type = request.headers.get('X-Source', 'api')
-
-        # Get downloadUrl from request JSON
-        if not request.is_json:
-            return jsonify({'error': {'message': 'Request must be JSON with downloadUrl field'}}), 400
-
-        data = request.get_json()
-        if not data or 'downloadUrl' not in data:
-            return jsonify({'error': {'message': 'downloadUrl is required'}}), 400
-
-        download_url = data['downloadUrl']
-
-        # Fixed max size of 200MB (matching upload limit; safe for 256MB Fly machine)
-        max_size_bytes = 200 * 1024 * 1024  # 200MB
-
-        # Download the file from URL
-        download_result = download_file_from_url(download_url, max_size_bytes)
-        if download_result['status'] != 'success':
-            return jsonify(download_result['error']), 400
-
-        download_path = download_result['path']
-
-        # Run the checker on the downloaded file
-        auth_uid = _current_user_id()
-        user_row = user_helpers.get_user_by_auth_id(auth_uid) if auth_uid else None
-        run_user_id = str(user_row['id']) if user_row and user_row.get('id') else None
-        results, status_code = start_check(checker, download_path, source_type, user_id=run_user_id)
-        return results, status_code
-    finally:
-        checker_cleanup(checker)
 
 
 @main.route('/analytics/summary', methods=['GET'])

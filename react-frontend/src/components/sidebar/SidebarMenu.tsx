@@ -47,7 +47,6 @@ function pathnameToItemId(pathname: string, hash: string): string {
   if (pathname === '/' || pathname === '') return 'upload-template';
   if (pathname.startsWith('/results')) return 'results';
   if (pathname.startsWith('/analytics')) return 'analytics';
-  if (pathname.startsWith('/extension')) return 'extension';
   if (pathname.startsWith('/admin/access-requests')) return 'admin-access-requests';
   if (pathname.startsWith('/admin/users')) return hash === '#access-requests' ? 'admin-access-requests' : 'admin-users';
   return 'upload-template';

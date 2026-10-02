@@ -8,10 +8,8 @@ from .routes import main as main_blueprint
 def create_app():
     app = Flask(__name__)
 
-    # Configure CORS to allow requests from frontend and Chrome extensions
+    # Configure CORS to allow requests from the frontend
     # In production: allow specific origins, in development: allow localhost
-    # Chrome extensions have chrome-extension:// origins (unique per extension)
-    # Using regex pattern for chrome-extension:// origins
     # Get frontend URL from environment variable, with fallback
     frontend_url = os.getenv('FRONTEND_URL', 'https://template-checker.fly.dev')
 
@@ -20,7 +18,6 @@ def create_app():
         'https://template-checker.fly.dev',  # Production frontend (fallback)
         'http://localhost:3000',  # React development server
         'http://localhost:8000',  # Local Flask server (for testing)
-        r'chrome-extension://.*',  # All Chrome extension origins (regex pattern)
     ]
 
     CORS(app,
