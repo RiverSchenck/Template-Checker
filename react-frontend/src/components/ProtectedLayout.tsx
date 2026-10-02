@@ -20,10 +20,7 @@ import { SiteHeader } from './site-header';
 import Login from './Login/Login';
 import { useAuth } from './AuthContext';
 import { baseURL, getAuthHeaders } from './Analytics/api';
-import {
-  LATEST_EXTENSION_VERSION,
-  isExtensionOutOfDate,
-} from '../constants/extension';
+import { LATEST_EXTENSION_VERSION, isExtensionOutOfDate } from '../constants/extension';
 import { ValidationResult } from '../types';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -38,7 +35,6 @@ export type ProtectedLayoutOutletContext = {
   setSeeDetails: (value: boolean) => void;
   navigateToResults: () => void;
   fromExtension: boolean;
-  extensionVersion: string | null;
 };
 
 export default function ProtectedLayout() {
@@ -51,7 +47,6 @@ export default function ProtectedLayout() {
   const [searchParams, setSearchParams] = useSearchParams();
   const checkUrlProcessedRef = useRef(false);
   const [fromExtension, setFromExtension] = useState(false);
-  const [extensionVersion, setExtensionVersion] = useState<string | null>(null);
   const [checkFromUrlInProgress, setCheckFromUrlInProgress] = useState(false);
   // When set, show the "extension out of date" modal (more obvious than a toast).
   const [extensionUpdateModal, setExtensionUpdateModal] = useState<{
@@ -77,7 +72,6 @@ export default function ProtectedLayout() {
     // Some older extension builds may not send extVersion at all.
     // Treat missing/blank values as out of date so users are still prompted to update.
     const extVersion = searchParams.get('extVersion')?.trim() ?? '';
-    if (extVersion) setExtensionVersion(extVersion);
     const installedExtensionVersion = extVersion || 'unknown';
     const showOutOfDateToast = !extVersion || isExtensionOutOfDate(extVersion, LATEST_EXTENSION_VERSION);
 
@@ -236,7 +230,6 @@ export default function ProtectedLayout() {
     setSeeDetails: handleSeeDetails,
     navigateToResults: () => navigate('/results'),
     fromExtension,
-    extensionVersion,
   };
 
   return (

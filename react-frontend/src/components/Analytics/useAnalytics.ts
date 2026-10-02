@@ -54,28 +54,71 @@ export function useAnalytics(): {
       total_infos: runsOverTimeFiltered.reduce((a: number, d: { infos: number }) => a + d.infos, 0),
       days,
     };
-    type RunRow = { date: string; runs: number; errors: number; warnings: number; infos: number; react_frontend?: number; extension?: number; api?: number };
-    const rf = (runsOverTimeFiltered as RunRow[]).reduce((a, d) => a + (d.react_frontend ?? 0), 0);
-    const ext = (runsOverTimeFiltered as RunRow[]).reduce((a, d) => a + (d.extension ?? 0), 0);
-    const apiCount = (runsOverTimeFiltered as RunRow[]).reduce((a, d) => a + (d.api ?? 0), 0);
+    type RunRow = {
+      date: string;
+      runs: number;
+      errors: number;
+      warnings: number;
+      infos: number;
+      react_frontend?: number;
+      extension?: number;
+      api?: number;
+      react_frontend_errors?: number;
+      react_frontend_warnings?: number;
+      react_frontend_infos?: number;
+      extension_errors?: number;
+      extension_warnings?: number;
+      extension_infos?: number;
+      api_errors?: number;
+      api_warnings?: number;
+      api_infos?: number;
+    };
+    const rows = runsOverTimeFiltered as RunRow[];
+    const rf = rows.reduce((a, d) => a + (d.react_frontend ?? 0), 0);
+    const ext = rows.reduce((a, d) => a + (d.extension ?? 0), 0);
+    const apiCount = rows.reduce((a, d) => a + (d.api ?? 0), 0);
+    const rfIssues = rows.reduce(
+      (a, d) => ({
+        e: a.e + (d.react_frontend_errors ?? 0),
+        w: a.w + (d.react_frontend_warnings ?? 0),
+        i: a.i + (d.react_frontend_infos ?? 0),
+      }),
+      { e: 0, w: 0, i: 0 }
+    );
+    const extIssues = rows.reduce(
+      (a, d) => ({
+        e: a.e + (d.extension_errors ?? 0),
+        w: a.w + (d.extension_warnings ?? 0),
+        i: a.i + (d.extension_infos ?? 0),
+      }),
+      { e: 0, w: 0, i: 0 }
+    );
+    const apiIssues = rows.reduce(
+      (a, d) => ({
+        e: a.e + (d.api_errors ?? 0),
+        w: a.w + (d.api_warnings ?? 0),
+        i: a.i + (d.api_infos ?? 0),
+      }),
+      { e: 0, w: 0, i: 0 }
+    );
     const sourceTypes: AnalyticsSummary['source_types'] = {
       'react-frontend': {
         count: rf,
-        total_errors: fullData.source_types?.['react-frontend']?.total_errors ?? 0,
-        total_warnings: fullData.source_types?.['react-frontend']?.total_warnings ?? 0,
-        total_infos: fullData.source_types?.['react-frontend']?.total_infos ?? 0,
+        total_errors: rfIssues.e,
+        total_warnings: rfIssues.w,
+        total_infos: rfIssues.i,
       },
       extension: {
         count: ext,
-        total_errors: fullData.source_types?.extension?.total_errors ?? 0,
-        total_warnings: fullData.source_types?.extension?.total_warnings ?? 0,
-        total_infos: fullData.source_types?.extension?.total_infos ?? 0,
+        total_errors: extIssues.e,
+        total_warnings: extIssues.w,
+        total_infos: extIssues.i,
       },
       api: {
         count: apiCount,
-        total_errors: fullData.source_types?.api?.total_errors ?? 0,
-        total_warnings: fullData.source_types?.api?.total_warnings ?? 0,
-        total_infos: fullData.source_types?.api?.total_infos ?? 0,
+        total_errors: apiIssues.e,
+        total_warnings: apiIssues.w,
+        total_infos: apiIssues.i,
       },
     };
     const recentRuns = (fullData.recent_runs || []).filter((r: { timestamp?: string }) => {
