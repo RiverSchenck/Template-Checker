@@ -42,12 +42,6 @@ def _fetch_jwks():
 
 def _verify_supabase_token_jwks(token):
     """Verify Supabase JWT using public keys from JWKS (works with new Signing keys; no secret)."""
-    try:
-        from jose import jwk as jose_jwk
-        from jose import jwt as jose_jwt
-    except ImportError:
-        current_app.logger.warning("JWT verification: python-jose not installed")
-        return None
     jwks = _fetch_jwks()
     if not jwks or "keys" not in jwks:
         return None
@@ -68,8 +62,8 @@ def _verify_supabase_token_jwks(token):
     for key_dict in jwks["keys"]:
         if key_dict.get("kid") == kid:
             try:
-                key = jose_jwk.construct(key_dict)
-                payload = jose_jwt.decode(
+                key = jwt.PyJWK(key_dict).key
+                payload = jwt.decode(
                     token,
                     key,
                     algorithms=["ES256", "RS256"],
