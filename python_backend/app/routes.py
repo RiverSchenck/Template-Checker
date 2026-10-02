@@ -13,6 +13,12 @@ from . import users as user_helpers
 
 main = Blueprint('main', __name__)
 
+
+def _internal_error(message='Something went wrong. Please try again.'):
+    """Log the active exception server-side and return a generic 500 (never leak exception text to clients)."""
+    current_app.logger.exception(message)
+    return jsonify({'error': {'message': message}}), 500
+
 # Cache JWKS for 10 minutes so we don't hit the discovery endpoint on every request
 _jwks_cache = {"data": None, "expires": 0}
 JWKS_CACHE_TTL = 600
@@ -264,7 +270,7 @@ def admin_list_users():
             })
         return jsonify(result), 200
     except Exception as e:
-        return jsonify({'error': {'message': str(e)}}), 500
+        return _internal_error()
 
 
 @main.route('/admin/users/<user_id>', methods=['PATCH'])
@@ -304,7 +310,7 @@ def admin_update_user_role(user_id):
             'updated_at': row.get('updated_at'),
         }), 200
     except Exception as e:
-        return jsonify({'error': {'message': str(e)}}), 500
+        return _internal_error()
 
 
 @main.route('/admin/users/<user_id>', methods=['DELETE'])
@@ -324,7 +330,7 @@ def admin_delete_user(user_id):
     try:
         supabase.table('users').delete().eq('id', user_id).execute()
     except Exception as e:
-        return jsonify({'error': {'message': str(e)}}), 500
+        return _internal_error()
     return '', 204
 
 
@@ -382,7 +388,7 @@ def post_access_request():
                 r = supabase.table('access_requests').insert({'email': email, 'status': 'pending', 'why_need_access': why_need_access}).execute()
             except Exception as e:
                 current_app.logger.exception('access_requests insert failed')
-                return jsonify({'error': {'message': str(e)}}), 500
+                return _internal_error()
             if not r.data or len(r.data) == 0:
                 return jsonify({'error': {'message': 'Failed to create request'}}), 500
             row = dict(r.data[0])
@@ -417,7 +423,7 @@ def post_access_request():
             'status': row['status'],
         }), 201
     except Exception as e:
-        return jsonify({'error': {'message': str(e)}}), 500
+        return _internal_error()
 
 
 @main.route('/admin/access-requests', methods=['GET'])
@@ -438,7 +444,7 @@ def admin_list_access_requests():
         result = [{'id': str(x['id']), 'email': x['email'], 'why_need_access': x.get('why_need_access'), 'status': x['status'], 'created_at': x.get('created_at'), 'updated_at': x.get('updated_at'), 'decided_by': str(x['decided_by']) if x.get('decided_by') else None} for x in rows]
         return jsonify(result), 200
     except Exception as e:
-        return jsonify({'error': {'message': str(e)}}), 500
+        return _internal_error()
 
 
 @main.route('/admin/access-requests/<request_id>', methods=['PATCH'])
@@ -488,7 +494,7 @@ def admin_update_access_request(request_id):
                 if 'duplicate' in str(insert_err).lower() or 'unique' in str(insert_err).lower():
                     pass
                 else:
-                    return jsonify({'error': {'message': str(insert_err)}}), 500
+                    return _internal_error('Failed to create user for this request.')
         supabase.table('access_requests').update({
             'status': new_status,
             'updated_at': now,
@@ -506,7 +512,7 @@ def admin_update_access_request(request_id):
             'decided_by': str(row['decided_by']) if row.get('decided_by') else None,
         }), 200
     except Exception as e:
-        return jsonify({'error': {'message': str(e)}}), 500
+        return _internal_error()
 
 
 @main.route('/admin/invites', methods=['POST'])
@@ -543,7 +549,7 @@ def admin_invite():
     except Exception as e:
         if 'duplicate' in str(e).lower() or 'unique' in str(e).lower():
             return jsonify({'error': {'message': 'User already invited or approved'}}), 409
-        return jsonify({'error': {'message': str(e)}}), 500
+        return _internal_error()
 
 
 @main.route('/test')
@@ -639,7 +645,8 @@ def run_checker_and_download():
                     print(f"Cleaned up ZIP file in exception handler: {zip_file_path}")
                 except Exception as e2:
                     print(f'Failed to delete ZIP file in exception handler: {e2}')
-            return jsonify({'error': 'Failed to send the ZIP file', 'details': str(e)}), 500
+            current_app.logger.exception('Failed to send the ZIP file')
+            return jsonify({'error': 'Failed to send the ZIP file'}), 500
     finally:
         # Always cleanup checker resources (unzipped files, uploaded files)
         # This handles early returns where @after_this_request never runs
@@ -663,7 +670,8 @@ def analytics_summary():
 
         return jsonify(summary), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        current_app.logger.exception('Analytics request failed')
+        return jsonify({'error': 'Failed to load analytics'}), 500
 
 
 @main.route('/analytics/runs', methods=['GET'])
@@ -681,7 +689,8 @@ def analytics_runs():
 
         return jsonify(runs_data), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        current_app.logger.exception('Analytics request failed')
+        return jsonify({'error': 'Failed to load analytics'}), 500
 
 
 @main.route('/api/extension-token', methods=['GET'])

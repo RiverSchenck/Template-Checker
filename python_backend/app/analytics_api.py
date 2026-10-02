@@ -280,7 +280,7 @@ def get_analytics_summary(days: int = 30) -> Dict[str, Any]:
 
     except Exception as e:
         logger.error(f"Error fetching analytics: {e}", exc_info=True)
-        return {'error': str(e)}
+        return {'error': 'Failed to load analytics'}
 
 
 def get_runs(limit: int = 100, offset: int = 0) -> Dict[str, Any]:
@@ -317,4 +317,4 @@ def get_runs(limit: int = 100, offset: int = 0) -> Dict[str, Any]:
 
     except Exception as e:
         logger.error(f"Error fetching runs: {e}", exc_info=True)
-        return {'error': str(e)}
+        return {'error': 'Failed to load runs'}
