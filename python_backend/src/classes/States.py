@@ -25,6 +25,7 @@ class States(Enum):
     LARGE_IMAGE_CHECK = auto()
     EMBEDDED_IMAGE_CHECK = auto()
     IMAGE_TRANSFORMATION_CHECK = auto()
+    PAGE_ITEM_TRANSFORMATION_CHECK = auto()
     TABLE_CHECK = auto()
     AUTO_SIZE_TEXT_BOX_CHECK = auto()
     PASTED_GRAPHICS_CHECK = auto()

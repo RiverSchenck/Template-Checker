@@ -129,6 +129,7 @@ def get_analytics_summary(days: int = 30) -> Dict[str, Any]:
             warning_types = [
                 'HYPHENATION', 'OVERRIDE', 'UNUSED_IMAGE', 'IMAGE_TRANSFORMATION',
                 'IMAGE_TRANSFORMATION_IMAGE', 'IMAGE_TRANSFORMATION_CONTAINER',
+                'PAGE_ITEM_TRANSFORMATION',
                 'DOCUMENT_BLEED', 'COMPOSER'
             ]
             info_types = ['EMPTY_TEXT_FRAME', 'LARGE_IMAGE']

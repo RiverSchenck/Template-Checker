@@ -36,6 +36,7 @@ def determine_severity(validation_type: str) -> str:
     warning_types = [
         'HYPHENATION', 'OVERRIDE', 'UNUSED_IMAGE', 'IMAGE_TRANSFORMATION',
         'IMAGE_TRANSFORMATION_IMAGE', 'IMAGE_TRANSFORMATION_CONTAINER',
+        'PAGE_ITEM_TRANSFORMATION',
         'DOCUMENT_BLEED', 'COMPOSER'
     ]
 

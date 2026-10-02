@@ -492,6 +492,7 @@ EXPECTED_OUTCOMES = {
             f"{ValidationWarning.COMPOSER.value}",
             f"{ValidationWarning.COMPOSER.value}",
             f"{ValidationWarning.COMPOSER.value}",
+            f"{ValidationWarning.PAGE_ITEM_TRANSFORMATION.value}",
         ]
     },
     "Flyer-Sales_Bad.zip": {
@@ -552,6 +553,7 @@ EXPECTED_OUTCOMES = {
             # f"{ValidationWarning.HYPHENATION.value}",
             f"{ValidationWarning.COMPOSER.value}",
             f"{ValidationWarning.DOCUMENT_BLEED.value}",
+            f"{ValidationWarning.PAGE_ITEM_TRANSFORMATION.value}",
         ]
     },
     "All_err_and_warn.zip": {
@@ -588,6 +590,17 @@ EXPECTED_OUTCOMES = {
             f"{ValidationInfo.LARGE_IMAGE.value}",
         ]
     },
+}
+
+# Expected warnings for pass fixtures (default: none). Page-item rotation can appear on
+# otherwise "good" templates without affecting other assertions.
+PASS_EXPECTED_WARNINGS = {
+    "Fact-Sheet-Images_Good.zip": [
+        f"{ValidationWarning.PAGE_ITEM_TRANSFORMATION.value}",
+    ],
+    "Lookbook_Good.zip": [
+        f"{ValidationWarning.PAGE_ITEM_TRANSFORMATION.value}",
+    ],
 }
 
 
@@ -704,9 +717,12 @@ def test_zip_check_pass(testcase_zip):
     actual_warnings = checker.get_warning_types()
     actual_infos = checker.get_info_types()
 
+    filename = os.path.basename(testcase_zip)
+    expected_warnings = PASS_EXPECTED_WARNINGS.get(filename, [])
+
     # Assert
     assert not actual_errors
 
-    assert not actual_warnings
+    assert Counter(actual_warnings) == Counter(expected_warnings)
 
     assert not actual_infos
