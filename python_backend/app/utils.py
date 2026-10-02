@@ -1,5 +1,7 @@
+import ipaddress
 import os
 import shutil
+import socket
 import time
 import urllib.request
 import urllib.error
@@ -78,6 +80,42 @@ def start_check(checker, file_path: str, source_type: str = 'api', user_id: Opti
         return jsonify({'error': 'An error occurred during the check.', 'details': str(e)}), 500
 
 
+class UnsafeURLError(ValueError):
+    """Raised when a URL points somewhere the server must not fetch (SSRF protection)."""
+
+
+def assert_public_url(url: str) -> None:
+    """Allow only http(s) URLs whose host resolves exclusively to public internet addresses.
+
+    Blocks loopback, private, link-local (cloud metadata) and Fly.io internal (fdaa::/16) ranges.
+    """
+    parsed = urllib.request.urlparse(url)
+    if parsed.scheme not in ('http', 'https') or not parsed.hostname:
+        raise UnsafeURLError('URL must start with http:// or https://')
+    port = parsed.port or (443 if parsed.scheme == 'https' else 80)
+    try:
+        infos = socket.getaddrinfo(parsed.hostname, port, proto=socket.IPPROTO_TCP)
+    except socket.gaierror:
+        raise UnsafeURLError('Could not resolve the download URL host')
+    for info in infos:
+        ip = ipaddress.ip_address(info[4][0].split('%')[0])
+        if ip.version == 6 and ip.ipv4_mapped:
+            ip = ip.ipv4_mapped
+        if not ip.is_global:
+            raise UnsafeURLError('URL points to a private or internal address')
+
+
+class _SafeRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Re-check every redirect target so a public URL can't bounce to an internal one."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        assert_public_url(newurl)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+_safe_opener = urllib.request.build_opener(_SafeRedirectHandler())
+
+
 def download_file_from_url(download_url: str, max_size_bytes: int = 200 * 1024 * 1024) -> dict:
     """
     Download a file from a URL with size limit checking.
@@ -94,16 +132,18 @@ def download_file_from_url(download_url: str, max_size_bytes: int = 200 * 1024 *
         if not download_url or not isinstance(download_url, str):
             return {'status': 'error', 'error': {'message': 'Invalid URL provided'}}
 
-        # Check if URL starts with http:// or https://
-        if not (download_url.startswith('http://') or download_url.startswith('https://')):
-            return {'status': 'error', 'error': {'message': 'URL must start with http:// or https://'}}
+        # Only allow public http(s) hosts (blocks SSRF to internal services)
+        try:
+            assert_public_url(download_url)
+        except UnsafeURLError as e:
+            return {'status': 'error', 'error': {'message': str(e)}}
 
         # Create request with headers to support streaming
         req = urllib.request.Request(download_url)
         req.add_header('User-Agent', 'TemplateChecker/1.0')
 
         # Open connection and check content-length if available
-        with urllib.request.urlopen(req, timeout=30) as response:
+        with _safe_opener.open(req, timeout=30) as response:
             # Check Content-Length header if available
             content_length = response.headers.get('Content-Length')
             if content_length:
@@ -191,6 +231,8 @@ def download_file_from_url(download_url: str, max_size_bytes: int = 200 * 1024 *
 
             return {'status': 'success', 'path': save_path}
 
+    except UnsafeURLError as e:
+        return {'status': 'error', 'error': {'message': str(e)}}
     except urllib.error.HTTPError as e:
         return {
             'status': 'error',

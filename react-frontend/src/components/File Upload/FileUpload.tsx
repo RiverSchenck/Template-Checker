@@ -9,7 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
-import { baseURL } from '../Analytics/api';
+import { baseURL, getAuthHeaders } from '../Analytics/api';
+import { useAuth } from '../AuthContext';
 
 const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200MB
 
@@ -44,12 +45,7 @@ export default function FileUploadPage({
   const [isDragging, setIsDragging] = useState(false);
 
 
-  const getAuthHeaders = (): Record<string, string> => {
-    const token = import.meta.env.VITE_AUTH_TOKEN;
-    const headers: Record<string, string> = { 'X-Source': 'react-frontend' };
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-    return headers;
-  };
+  const { session } = useAuth();
 
   const uploadEndpoint = downloadXML ? `${baseURL}/run-and-download-xml` : `${baseURL}/run`;
 
@@ -72,7 +68,7 @@ export default function FileUploadPage({
         const result = await new Promise<{ ok: boolean; body: Blob | string }>(
           (resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            const headers = getAuthHeaders();
+            const headers = getAuthHeaders(session?.access_token);
 
             xhr.upload.addEventListener('progress', (e) => {
               if (e.lengthComputable) {
@@ -146,7 +142,7 @@ export default function FileUploadPage({
         setUploadProgress(null);
       }
     },
-    [checkerResponse, setPrevious, onUploadComplete, navigateToResults, uploadEndpoint]
+    [checkerResponse, setPrevious, onUploadComplete, navigateToResults, uploadEndpoint, session?.access_token]
   );
 
   const onDrop = useCallback(
