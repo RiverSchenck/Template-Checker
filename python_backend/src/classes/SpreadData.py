@@ -1,7 +1,17 @@
 from xml.etree.ElementTree import Element
-from typing import List, Dict
+from typing import List, Dict, Any
 from src.classes.TextFrame import TextFrame
 from src.classes.Link import Link
+
+
+def _xml_local_tag(tag: str) -> str:
+    if tag and '}' in tag:
+        return tag.split('}', 1)[-1]
+    return tag or ''
+
+
+_PAGE_ITEM_TRANSFORM_TAGS = frozenset(
+    {'TextFrame', 'Rectangle', 'Oval', 'Polygon', 'Group'})
 
 
 # **********************************************************
@@ -22,6 +32,7 @@ class SpreadData:
         self.text_frame_obj_list: List[TextFrame] = []
         self.pasted_graphics_num: int = 0
         self.geometric_bounds: str = ''
+        self.page_item_transform_candidates: List[Dict[str, Any]] = []
         self._extract_spread_data(root)
 
     # ---------------- Private Setters------------------
@@ -69,6 +80,31 @@ class SpreadData:
 
         # Extract Text Frames
         self.text_frame_obj_list = self._extract_text_frames(root)
+
+        self.page_item_transform_candidates = self._extract_page_item_transform_candidates(
+            root)
+
+    def _extract_page_item_transform_candidates(self, root: Element) -> List[Dict[str, Any]]:
+        spread = root.find(".//Spread")
+        if spread is None:
+            return []
+        out: List[Dict[str, Any]] = []
+        for el in spread.iter():
+            tag = _xml_local_tag(el.tag)
+            if tag not in _PAGE_ITEM_TRANSFORM_TAGS:
+                continue
+            if tag == 'Rectangle' and el.find('.//Link') is not None:
+                continue
+            item_transform = el.get('ItemTransform')
+            if not item_transform or not str(item_transform).strip():
+                continue
+            self_id = el.get('Self') or ''
+            out.append({
+                'tag': tag,
+                'self_id': self_id,
+                'item_transform': item_transform,
+            })
+        return out
 
     def _extract_pasted_graphics_data(self, root: Element) -> int:
         pasted_graphics_num = 0
@@ -150,6 +186,9 @@ class SpreadData:
 
     def get_pages(self) -> List[Dict[str, str]]:
         return self.pages
+
+    def get_page_item_transform_candidates(self) -> List[Dict[str, Any]]:
+        return self.page_item_transform_candidates
 
     # ---------------- Debug Prints ------------------
     def print_links_data(self):

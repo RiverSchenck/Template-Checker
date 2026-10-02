@@ -15,6 +15,11 @@ from src.parsers.StylesParser import StylesParser
 from src.parsers.StoriesParser import StoriesParser
 from src.parsers.PreferencesParser import PreferencesParser
 from src.classes.States import States
+from src.helpers.page_item_transform import (
+    parse_item_transform,
+    classify_page_item_transform,
+    TransformKind,
+)
 
 
 # *****************************************************************************************
@@ -70,6 +75,7 @@ class FrontifyChecker:
             States.LARGE_IMAGE_CHECK: self.large_image_check,
             States.EMBEDDED_IMAGE_CHECK: self.embedded_image_check,
             States.IMAGE_TRANSFORMATION_CHECK: self.image_transformation_check,
+            States.PAGE_ITEM_TRANSFORMATION_CHECK: self.page_item_transformation_check,
             States.TABLE_CHECK: self.table_check,
             States.AUTO_SIZE_TEXT_BOX_CHECK: self.auto_size_text_box_check,
             States.PASTED_GRAPHICS_CHECK: self.pasted_graphics_check,
@@ -1025,7 +1031,7 @@ class FrontifyChecker:
 
     # ========================================================================================
     # State: IMAGE_TRANSFORMATION_CHECK
-    # PASS Next State Transition: RESULTS
+    # PASS Next State Transition: PAGE_ITEM_TRANSFORMATION_CHECK
     # FAIL States Transition: NA
     # Description:
     # This method examines each image link within the document's spreads to identify any transformations applied. It checks for:
@@ -1099,6 +1105,53 @@ class FrontifyChecker:
                                 identifier=file_name,
                                 data_id=rectangle_id
                             )
+
+        return States.PAGE_ITEM_TRANSFORMATION_CHECK
+
+    # ========================================================================================
+    # State: PAGE_ITEM_TRANSFORMATION_CHECK
+    # PASS Next State Transition: TABLE_CHECK
+    # Description: Checks TextFrame, Rectangle (without Link), Oval, Polygon, and Group for
+    # ItemTransform flip/skew (error) and rotation (warning), separate from image link logic.
+    # ========================================================================================
+    def page_item_transformation_check(self) -> States:
+        for spread in self.spreads_parser.get_spreads_obj_list():
+            pages = spread.get_pages()
+            spread_page_id = pages[0].get("self", '') if pages and len(pages) > 0 else ''
+            for cand in spread.get_page_item_transform_candidates():
+                tag = cand.get('tag') or 'Item'
+                self_id = cand.get('self_id') or ''
+                raw = cand.get('item_transform') or ''
+                parsed = parse_item_transform(raw)
+                if parsed is None:
+                    continue
+                a, b, c, d, _e, _f = parsed
+                page_id = self.find_page_id_from_data_id(self_id) if self_id else spread_page_id
+                classification = classify_page_item_transform(a, b, c, d)
+                if classification.kind == TransformKind.NONE:
+                    continue
+                identifier = f"{tag}:{self_id}" if self_id else tag
+                message = f"{tag} {classification.message}"
+                if classification.kind in (
+                    TransformKind.FLIP_HORIZONTAL,
+                    TransformKind.FLIP_VERTICAL,
+                    TransformKind.SKEW,
+                ):
+                    self.results.add_error(
+                        context=message,
+                        error_type=ValidationError.PAGE_ITEM_TRANSFORMATION,
+                        page_id=page_id,
+                        identifier=identifier,
+                        data_id=self_id or 'null',
+                    )
+                elif classification.kind == TransformKind.ROTATION:
+                    self.results.add_warning(
+                        context=message,
+                        warning_type=ValidationWarning.PAGE_ITEM_TRANSFORMATION,
+                        page_id=page_id,
+                        identifier=identifier,
+                        data_id=self_id or 'null',
+                    )
 
         return States.TABLE_CHECK
 
@@ -1496,21 +1549,18 @@ class FrontifyChecker:
             page_id = story.get_page()  # page Self
             for par_style in story.get_paragraph_styles():
                 filltint = par_style.get_filltint()
-                filltintobj = par_style.get_filltint_obj()
-                print(filltintobj)
                 normalized_style_id = par_style.get_normalized_style_id()
                 if filltint not in [None, '-1', '100'] and normalized_style_id not in styles_with_errors:
                     styles_with_errors.add(normalized_style_id)
                     data_id = story.get_parent_text_frame_id()
-                    # Format message with inheritance
                     par_style_filltint_obj = par_style.get_filltint_obj()
                     inherited_from = par_style_filltint_obj.get_inherited_from_value()
-                    # inherited_message = f'Fill Tint is: {filltint}'
+                    context_message = f'Fill Tint is: {filltint}'
                     if inherited_from:
-                        inherited_message += f'; Inherited from: {inherited_from}'
+                        context_message = f'{context_message}; Inherited from: {inherited_from}'
 
                     self.results.add_error(
-                        context=inherited_message,
+                        context=context_message,
                         error_type=ValidationError.FILL_TINT,
                         page_id=page_id,
                         identifier=normalized_style_id,
@@ -1556,7 +1606,7 @@ class FrontifyChecker:
     # ========================================================================================
     def _build_data_id_to_page_id_mapping(self):
         """Pre-compute data_id to page_id mapping for O(1) lookups.
-        Maps both link rectangle IDs and text frame IDs to their page IDs.
+        Maps link rectangle IDs, text frame IDs, and page-item Self IDs (transform check) to page IDs.
         """
         if not self.spreads_parser:
             return
@@ -1579,10 +1629,15 @@ class FrontifyChecker:
                 if frame_id:
                     self._data_id_to_page_id_cache[frame_id] = page_id
 
+            for cand in spread.get_page_item_transform_candidates():
+                cid = cand.get('self_id') or ''
+                if cid:
+                    self._data_id_to_page_id_cache[cid] = page_id
+
     def find_page_id_from_data_id(self, data_id: str) -> str:
         """
         Find page_id (page Self) from data_id.
-        data_id can be either a rectangle_link_id (for images) or a text_frame_id (for text frames).
+        data_id can be a rectangle_link_id (images), text_frame_id, or page-item Self (transform check).
         Returns the first page's Self from the spread containing the element, or empty string if not found.
         Uses cached mapping for O(1) lookup.
         """

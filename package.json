@@ -1,0 +1,12 @@
+{
+  "name": "template-checker-gui",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "cd python_backend && PYTHONUNBUFFERED=1 ./venv/bin/python run.py",
+    "dev:web": "cd react-frontend && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

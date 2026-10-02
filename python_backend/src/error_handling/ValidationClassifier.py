@@ -71,6 +71,10 @@ class ValidationError(Enum):
                                       "Image transformations are not supported.",
                                       "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
                                       "Image Transformation (Container)", ValidationCategory.IMAGES)
+    PAGE_ITEM_TRANSFORMATION = (auto(),
+                                "Page item transformations (flip/skew) are not supported.",
+                                "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+                                "Page Item Transformation", ValidationCategory.GENERAL)
     TABLE = (auto(),
              "Tables are not supported",
              "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
@@ -159,6 +163,10 @@ class ValidationWarning(Enum):
                                        "Image container has been rotated. You may see slight discrepencies between export and editing.",
                                        "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
                                        "Image Transformation (Container)", ValidationCategory.IMAGES)
+    PAGE_ITEM_TRANSFORMATION = (auto(),
+                                "Page item has been rotated. You may see slight discrepencies between export and editing.",
+                                "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+                                "Page Item Transformation", ValidationCategory.GENERAL)
     DOCUMENT_BLEED = (auto(),
                       "InDesign defined bleed is applied.",
                       "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",

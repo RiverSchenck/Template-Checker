@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from functools import wraps
 from flask import Blueprint, jsonify, send_file, after_this_request, request, current_app, g
 from src.classes.FrontifyChecker import FrontifyChecker
-from .utils import upload_file, start_check, checker_cleanup, download_file_from_url
+from .utils import upload_file, start_check, checker_cleanup
 from .analytics_api import get_analytics_summary, get_runs, get_supabase_client
 from . import users as user_helpers
 
@@ -244,7 +244,8 @@ def admin_list_users():
     if not supabase:
         return jsonify({'error': {'message': 'Supabase not configured'}}), 500
     try:
-        r = supabase.table('users').select('id, email, role, display_name, avatar_url, auth_user_id, approved_by, created_at, updated_at, last_seen_at').order('created_at', desc=True).execute()
+        # Use * so missing optional columns (e.g. added_via before migration) do not break the query.
+        r = supabase.table('users').select('*').order('created_at', desc=True).execute()
         rows = r.data if r.data else []
         result = []
         for row in rows:
@@ -255,6 +256,7 @@ def admin_list_users():
                 'avatar_url': row.get('avatar_url'),
                 'auth_user_id': str(row['auth_user_id']) if row.get('auth_user_id') else None,
                 'approved_by': str(row['approved_by']) if row.get('approved_by') else None,
+                'added_via': row.get('added_via'),
                 'role': row.get('role', 'user'),
                 'created_at': row.get('created_at'),
                 'updated_at': row.get('updated_at'),
@@ -297,6 +299,7 @@ def admin_update_user_role(user_id):
             'display_name': row.get('display_name'),
             'avatar_url': row.get('avatar_url'),
             'role': row.get('role'),
+            'added_via': row.get('added_via'),
             'created_at': row.get('created_at'),
             'updated_at': row.get('updated_at'),
         }), 200
@@ -475,6 +478,7 @@ def admin_update_access_request(request_id):
             user_insert = {
                 'email': email,
                 'role': 'user',
+                'added_via': 'access_request',
             }
             if approved_by_id:
                 user_insert['approved_by'] = approved_by_id
@@ -521,7 +525,7 @@ def admin_invite():
         return jsonify({'error': {'message': 'Supabase not configured'}}), 503
     admin_row = user_helpers.get_user_by_auth_id(_current_user_id()) if _current_user_id() else None
     approved_by_id = str(admin_row['id']) if admin_row and admin_row.get('id') else None
-    user_insert = {'email': email, 'role': 'user'}
+    user_insert = {'email': email, 'role': 'user', 'added_via': 'invite'}
     if approved_by_id:
         user_insert['approved_by'] = approved_by_id
     try:
@@ -533,6 +537,7 @@ def admin_invite():
             'id': str(row['id']),
             'email': row['email'],
             'role': row.get('role', 'user'),
+            'added_via': row.get('added_via'),
             'created_at': row.get('created_at'),
         }), 201
     except Exception as e:
@@ -643,45 +648,6 @@ def run_checker_and_download():
         # 1. @after_this_request handles cleanup after successful file send
         # 2. Exception handler handles cleanup if send_file fails
         # 3. If we delete here, it happens BEFORE send_file finishes streaming, causing failures
-
-
-@main.route('/run-from-url', methods=['POST'])
-@require_auth
-def run_checker_from_url():
-    """Endpoint to download a ZIP file from a URL and run the checker on it."""
-    checker = FrontifyChecker()
-    try:
-        # Get source type from header, default to 'api'
-        source_type = request.headers.get('X-Source', 'api')
-
-        # Get downloadUrl from request JSON
-        if not request.is_json:
-            return jsonify({'error': {'message': 'Request must be JSON with downloadUrl field'}}), 400
-
-        data = request.get_json()
-        if not data or 'downloadUrl' not in data:
-            return jsonify({'error': {'message': 'downloadUrl is required'}}), 400
-
-        download_url = data['downloadUrl']
-
-        # Fixed max size of 200MB (matching upload limit; safe for 256MB Fly machine)
-        max_size_bytes = 200 * 1024 * 1024  # 200MB
-
-        # Download the file from URL
-        download_result = download_file_from_url(download_url, max_size_bytes)
-        if download_result['status'] != 'success':
-            return jsonify(download_result['error']), 400
-
-        download_path = download_result['path']
-
-        # Run the checker on the downloaded file
-        auth_uid = _current_user_id()
-        user_row = user_helpers.get_user_by_auth_id(auth_uid) if auth_uid else None
-        run_user_id = str(user_row['id']) if user_row and user_row.get('id') else None
-        results, status_code = start_check(checker, download_path, source_type, user_id=run_user_id)
-        return results, status_code
-    finally:
-        checker_cleanup(checker)
 
 
 @main.route('/analytics/summary', methods=['GET'])

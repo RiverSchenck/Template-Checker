@@ -8,7 +8,6 @@ import {
   Inbox,
   LogOut,
   MoreVertical,
-  Puzzle,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -39,7 +38,6 @@ import FrontifyLogo from '../../assets/frontifyLogo.svg';
 import FrontifyNook from '../../assets/frontifyNook.svg';
 import { useAuth } from '../AuthContext';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
-import { shouldShowExtensionNewBadge } from '../../constants/extension';
 
 export interface SidebarMenuProps {
   checkerResults: ValidationResult | null;
@@ -49,7 +47,6 @@ function pathnameToItemId(pathname: string, hash: string): string {
   if (pathname === '/' || pathname === '') return 'upload-template';
   if (pathname.startsWith('/results')) return 'results';
   if (pathname.startsWith('/analytics')) return 'analytics';
-  if (pathname.startsWith('/extension')) return 'extension';
   if (pathname.startsWith('/admin/access-requests')) return 'admin-access-requests';
   if (pathname.startsWith('/admin/users')) return hash === '#access-requests' ? 'admin-access-requests' : 'admin-users';
   return 'upload-template';
@@ -90,7 +87,6 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
   const avatarUrl = currentUser?.avatar_url ?? null;
   const avatarLetter = (displayName || '?').charAt(0).toUpperCase();
   const isCollapsed = sidebarState === 'collapsed';
-  const showExtensionNewBadge = shouldShowExtensionNewBadge();
 
   const [avatarError, setAvatarError] = useState(false);
   useEffect(() => {
@@ -160,21 +156,6 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                 >
                   <BarChart3 className="h-4 w-4" />
                   <span>Analytics</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  tooltip="Checker Extension"
-                  isActive={activeId === 'extension'}
-                  onClick={() => navigate('/extension')}
-                >
-                  <Puzzle className="h-4 w-4" />
-                  <span>Checker Extension</span>
-                  {!isCollapsed && showExtensionNewBadge && (
-                    <span className="ml-auto rounded-full bg-violet-600 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
-                      New
-                    </span>
-                  )}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
