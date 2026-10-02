@@ -26,7 +26,6 @@ These are **required** so the backend can run and talk to Supabase:
 
 | Secret         | What to set                                                                    |
 | -------------- | ------------------------------------------------------------------------------ |
-| `AUTH_TOKEN`   | Same value you use in the frontend for API auth (e.g. from your local `.env`). |
 | `SUPABASE_URL` | Your Supabase project URL, e.g. `https://xxxxx.supabase.co`                    |
 | `SUPABASE_KEY` | Your Supabase **service role** (secret) key from Project Settings → API. **Not** the anon/publishable key—the backend needs the service role to write to `users` and `access_requests` (RLS blocks anon). |
 
@@ -34,7 +33,7 @@ Set them from the backend directory (use your real values):
 
 ```bash
 cd python_backend
-fly secrets set AUTH_TOKEN="your-token" SUPABASE_URL="https://your-project.supabase.co" SUPABASE_KEY="your-service-role-key"
+fly secrets set SUPABASE_URL="https://your-project.supabase.co" SUPABASE_KEY="your-service-role-key"
 ```
 
 **Optional:** Only if your frontend is **not** at `https://template-checker.fly.dev`:
@@ -44,6 +43,8 @@ fly secrets set FRONTEND_URL="https://your-actual-frontend-url.fly.dev"
 ```
 
 After changing secrets, Fly restarts the app automatically.
+
+The API only accepts signed-in Supabase users who are approved (have a row in `users`). There is no static API token: never add one as a `VITE_*` variable, because everything in `VITE_*` ends up in the public JavaScript bundle.
 
 ---
 
@@ -58,7 +59,6 @@ The frontend is static: all `VITE_*` variables are **baked in at build time**. S
    ```env
    VITE_SUPABASE_URL=https://your-project.supabase.co
    VITE_SUPABASE_ANON_KEY=your-anon-key
-   VITE_AUTH_TOKEN=your-auth-token
    VITE_API_URL=https://template-checker-test.fly.dev
    ```
 
@@ -82,7 +82,7 @@ If you build in GitHub Actions (or similar), store the same vars as repo/organiz
 ## 4. Quick checklist
 
 - [ ] Backend: `cd python_backend && fly deploy`
-- [ ] Backend: `fly secrets set AUTH_TOKEN=... SUPABASE_URL=... SUPABASE_KEY=...` (from `python_backend`)
+- [ ] Backend: `fly secrets set SUPABASE_URL=... SUPABASE_KEY=...` (from `python_backend`)
 - [ ] Frontend: Set `VITE_API_URL=https://template-checker-test.fly.dev` (and other `VITE_*`) in `react-frontend/.env`
 - [ ] Frontend: `cd react-frontend && fly deploy`
 - [ ] Open https://template-checker.fly.dev and test

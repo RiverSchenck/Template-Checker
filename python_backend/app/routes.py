@@ -54,7 +54,7 @@ def _verify_supabase_token_jwks(token):
     try:
         unverified = jwt.get_unverified_header(token)
     except Exception as e:
-        # Not a JWT (e.g. static AUTH_TOKEN or empty) — skip JWKS without logging
+        # Not a JWT (e.g. empty or malformed) — skip JWKS without logging
         if "segments" not in str(e).lower():
             current_app.logger.warning("JWT verification: invalid token header: %s", e)
         return None
@@ -109,63 +109,34 @@ def verify_supabase_token(token):
 
 
 def require_auth(f):
-    """Decorator to require authentication token for endpoints.
-    Supports both Supabase JWT tokens and static AUTH_TOKEN for backward compatibility."""
+    """Require a valid Supabase JWT belonging to an approved user (a row in the users table).
+
+    Fails closed: no static tokens, no query-string tokens, and no open access when auth is unconfigured.
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # Get token from Authorization header or query parameter
-        provided_token = None
-
-        # Try Authorization header first (format: "Bearer <token>" or just "<token>")
         auth_header = request.headers.get('Authorization', '')
-        if auth_header.startswith('Bearer '):
-            provided_token = auth_header[7:]
-        elif auth_header:
-            provided_token = auth_header
+        token = auth_header[7:] if auth_header.startswith('Bearer ') else auth_header
 
-        # Fallback to query parameter
-        if not provided_token:
-            provided_token = request.args.get('token')
-
-        if not provided_token:
-            # Auth required if any of: AUTH_TOKEN, legacy SUPABASE_JWT_SECRET, or SUPABASE_URL (for JWKS)
-            auth_token = current_app.config.get('AUTH_TOKEN')
-            supabase_jwt_secret = os.getenv('SUPABASE_JWT_SECRET')
-            supabase_url = os.getenv('SUPABASE_URL')
-
-            if not auth_token and not supabase_jwt_secret and not supabase_url:
-                # If no auth is configured, allow access (for development/testing)
-                return f(*args, **kwargs)
-
+        payload = verify_supabase_token(token) if token else None
+        if not payload:
             return jsonify({
                 'error': {
                     'message': 'Authentication required',
                     'details': 'Invalid or missing authentication token'
                 }
             }), 401
+        g.supabase_jwt = payload
 
-        # First, try to verify as Supabase JWT token
-        supabase_payload = verify_supabase_token(provided_token)
-        if supabase_payload:
-            g.supabase_jwt = supabase_payload
-            return f(*args, **kwargs)
+        # A Supabase login alone is not enough: anyone can sign in with Google. Only approved users may call the API.
+        email = (payload.get('email') or '').strip().lower()
+        if not email or not user_helpers.get_user_by_email(email):
+            return jsonify({
+                'error': {'message': 'Access not authorized', 'code': 'access_denied'},
+                'allowed': False,
+            }), 403
 
-        # Fallback to static AUTH_TOKEN for backward compatibility
-        auth_token = current_app.config.get('AUTH_TOKEN')
-        if auth_token and provided_token == auth_token:
-            return f(*args, **kwargs)
-
-        # If no auth is configured, allow access (for development/testing)
-        if not auth_token and not os.getenv('SUPABASE_JWT_SECRET') and not os.getenv('SUPABASE_URL'):
-            return f(*args, **kwargs)
-
-        # Token validation failed
-        return jsonify({
-            'error': {
-                'message': 'Authentication required',
-                'details': 'Invalid or missing authentication token'
-            }
-        }), 401
+        return f(*args, **kwargs)
 
     return decorated_function
 
@@ -691,20 +662,3 @@ def analytics_runs():
     except Exception as e:
         current_app.logger.exception('Analytics request failed')
         return jsonify({'error': 'Failed to load analytics'}), 500
-
-
-@main.route('/api/extension-token', methods=['GET'])
-def get_extension_token():
-    """Get AUTH_TOKEN for extension use."""
-    auth_token = os.getenv('AUTH_TOKEN')
-
-    if auth_token:
-        return jsonify({
-            'access_token': auth_token,
-            'token_type': 'Bearer'
-        })
-
-    return jsonify({
-        'error': 'No token available',
-        'message': 'Please log in to the web app first'
-    }), 401
