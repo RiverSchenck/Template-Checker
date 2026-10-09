@@ -102,6 +102,12 @@ curl -H "Authorization: Bearer tc_..." -F "file=@package.zip" https://template-c
 - Removing a user deletes their keys. Admins can list and revoke anyone's keys via `GET`/`DELETE /admin/api-keys`.
 - Runs made with a key are recorded in analytics as source `api` and attributed to the key's owner.
 
+### Rate limits
+
+- **Checks:** each user can run one check at a time and 50 per rolling hour, counting web and API-key runs together. Over the limit the API returns `429` with `code` set to `check_in_progress` or `rate_limited`; the hourly limit also sends a `Retry-After` header (seconds).
+- **Access requests:** 5 per hour per client IP (`Fly-Client-IP` on Fly).
+- Limits are stored on the machine (`RATE_LIMIT_DIR`, default `/tmp/template-checker-rate-limit`) and shared by all gunicorn workers. They are per machine and reset on restart; if you run more than one machine, move them to Redis.
+
 ---
 
 ## Useful commands

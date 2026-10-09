@@ -11,6 +11,7 @@ from .utils import upload_file, start_check, checker_cleanup
 from .analytics_api import get_analytics_summary, get_runs, get_supabase_client
 from . import users as user_helpers
 from . import api_keys
+from . import rate_limit
 
 main = Blueprint('main', __name__)
 
@@ -203,6 +204,65 @@ def require_admin(f):
     return decorated_function
 
 
+CHECKS_PER_HOUR = 50
+ACCESS_REQUESTS_PER_HOUR_PER_IP = 5
+
+
+def _rate_limited(message, code, retry_after=None):
+    response = jsonify({'error': {'message': message, 'code': code}})
+    response.status_code = 429
+    if retry_after:
+        response.headers['Retry-After'] = str(retry_after)
+    return response
+
+
+def _client_ip():
+    # On Fly the proxy sets Fly-Client-IP to the real client address; remote_addr is the proxy's.
+    if os.getenv('FLY_APP_NAME'):
+        return request.headers.get('Fly-Client-IP') or request.remote_addr
+    return request.remote_addr
+
+
+def limit_checks(f):
+    """Per user: one check at a time, and at most CHECKS_PER_HOUR per rolling hour (use after require_auth).
+
+    Limits cover browser and API-key calls together. If the limiter's own storage fails we log and let the
+    request through, so a broken limiter can't take the checker down.
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user_row = _current_users_row()
+        bucket = f"checks:user:{user_row['id']}" if user_row else f'checks:ip:{_client_ip()}'
+        try:
+            lock = rate_limit.acquire(bucket)
+        except Exception:
+            current_app.logger.exception('Rate limiter unavailable; allowing request')
+            return f(*args, **kwargs)
+        if lock is None:
+            return _rate_limited(
+                'You already have a check running. Wait for it to finish, then try again.',
+                'check_in_progress',
+            )
+        try:
+            try:
+                allowed, retry_after = rate_limit.hit(bucket, CHECKS_PER_HOUR, 3600)
+            except Exception:
+                current_app.logger.exception('Rate limiter unavailable; allowing request')
+                allowed, retry_after = True, 0
+            if not allowed:
+                minutes = max(1, round(retry_after / 60))
+                return _rate_limited(
+                    f'Limit of {CHECKS_PER_HOUR} checks per hour reached. Try again in about {minutes} min.',
+                    'rate_limited',
+                    retry_after,
+                )
+            return f(*args, **kwargs)
+        finally:
+            rate_limit.release(lock)
+
+    return decorated_function
+
+
 @main.route('/me', methods=['GET'])
 @require_auth
 def me():
@@ -350,6 +410,16 @@ def _validate_email(email):
 @main.route('/access-requests', methods=['POST'])
 def post_access_request():
     """Submit an access request. With valid JWT: use email (and name/avatar) from token, idempotent. Without: body { \"email\": \"...\" }."""
+    # Unauthenticated endpoint: cap per client IP so the request list can't be flooded.
+    try:
+        allowed, retry_after = rate_limit.hit(
+            f'access-requests:ip:{_client_ip()}', ACCESS_REQUESTS_PER_HOUR_PER_IP, 3600
+        )
+    except Exception:
+        current_app.logger.exception('Rate limiter unavailable; allowing request')
+        allowed, retry_after = True, 0
+    if not allowed:
+        return _rate_limited('Too many access requests. Please try again later.', 'rate_limited', retry_after)
     supabase = get_supabase_client()
     if not supabase:
         return jsonify({'error': {'message': 'Service unavailable'}}), 503
@@ -672,6 +742,7 @@ def test_cors():
 
 @main.route('/run', methods=['POST'])
 @require_auth(allow_api_key=True)
+@limit_checks
 def run_checker():
     """Endpoint to run the checker and return results."""
     checker = FrontifyChecker()
@@ -691,6 +762,7 @@ def run_checker():
 
 @main.route('/run-and-download-xml', methods=['POST'])
 @require_auth(allow_api_key=True)
+@limit_checks
 def run_checker_and_download():
     """Endpoint to run the checker and download the resulting ZIP file."""
     checker = FrontifyChecker()
