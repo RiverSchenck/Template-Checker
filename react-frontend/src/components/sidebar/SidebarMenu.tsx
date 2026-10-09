@@ -6,6 +6,7 @@ import {
   BarChart3,
   Users,
   Inbox,
+  KeyRound,
   LogOut,
   MoreVertical,
 } from 'lucide-react';
@@ -234,6 +235,10 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent side="top" align="end" sideOffset={4} className="border-neutral-700">
+                  <DropdownMenuItem onClick={() => navigate('/api-keys')} className="focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-neutral-600">
+                    <KeyRound className="mr-2 h-4 w-4" />
+                    API keys
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => signOut()} className="focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-neutral-600">
                     <LogOut className="mr-2 h-4 w-4" />
                     Log out

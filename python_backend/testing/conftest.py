@@ -17,3 +17,10 @@ def cleanup_unzipped_test_data():
         path = os.path.join(DATA_FOLDER, name)
         if os.path.isdir(path):
             shutil.rmtree(path, ignore_errors=True)
+
+
+@pytest.fixture(autouse=True)
+def isolated_rate_limit_state(tmp_path, monkeypatch):
+    """Give every test its own rate-limit state so counts and locks never leak between tests."""
+    import app.rate_limit as rate_limit
+    monkeypatch.setattr(rate_limit, 'STATE_DIR', str(tmp_path / 'rate-limit'))
