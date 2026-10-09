@@ -4,6 +4,7 @@ Keys look like `tc_<43 url-safe chars>`. Only a SHA-256 hash is stored; the plai
 Keys are long and random, so a plain (unsalted) hash is enough and allows an indexed lookup.
 """
 import hashlib
+import re
 import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -12,6 +13,8 @@ from typing import Any, Optional
 from .analytics_api import get_supabase_client, parse_timestamp
 
 KEY_PREFIX = 'tc_'
+# token_urlsafe(32) always yields 43 url-safe characters.
+KEY_PATTERN = re.compile(r'^tc_[A-Za-z0-9_-]{43}$')
 DISPLAY_PREFIX_LEN = 10
 DEFAULT_EXPIRY_DAYS = 90
 MAX_EXPIRY_DAYS = 365
@@ -96,7 +99,8 @@ def revoke_key(key_id: str) -> None:
 
 def resolve_key(key: str) -> Optional[dict[str, Any]]:
     """Return the owning users row for a valid, unrevoked, unexpired key; otherwise None. Updates last_used_at."""
-    if not looks_like_api_key(key):
+    # Reject malformed keys before touching the database, so junk tokens can't drive unauthenticated queries.
+    if not KEY_PATTERN.fullmatch(key):
         return None
     supabase = get_supabase_client()
     if not supabase:

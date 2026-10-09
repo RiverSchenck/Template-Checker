@@ -222,6 +222,16 @@ def test_key_of_deleted_user_is_rejected(client, fake_db):
     assert client.post('/run', headers=bearer(key)).status_code == 401
 
 
+@pytest.mark.parametrize('token', ['tc_', 'tc_short', 'tc_' + 'a' * 44, 'tc_' + 'a' * 42 + '!'])
+def test_malformed_key_is_rejected_without_db_lookup(client, fake_db, monkeypatch, token):
+    monkeypatch.setattr(fake_db, 'table', lambda name: pytest.fail('malformed key reached the database'))
+    assert client.post('/run', headers=bearer(token)).status_code == 401
+
+
+def test_generated_keys_match_expected_format(client):
+    assert api_keys.KEY_PATTERN.fullmatch(create_key(client)['key'])
+
+
 def test_unknown_key_is_rejected(client):
     assert client.post('/run', headers=bearer('tc_' + 'a' * 43)).status_code == 401
 
