@@ -1,25 +1,29 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
+import {
+  ArrowDown,
+  ArrowRight,
+  ArrowUpDown,
+  Ban,
+  Check,
+  Inbox,
+  Mail,
+  MoreHorizontal,
+  Shield,
+  ShieldCheck,
+  Trash2,
+  User,
+  UserCheck,
+  UserMinus,
+  UserPlus,
+  Users,
+  X,
+} from 'lucide-react';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 import { useAuth } from '../AuthContext';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../ui/table';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Button } from '../ui/button';
-import { Skeleton } from '../ui/skeleton';
 import {
   Dialog,
   DialogContent,
@@ -30,15 +34,7 @@ import {
 } from '../ui/dialog';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { Badge } from '../ui/badge';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '../ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,9 +42,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { Trash2, User, UserPlus, Users, Inbox, Mail, Shield, ShieldCheck, ArrowDown, ArrowUpDown, Filter, XCircle, MoreHorizontal } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { cn } from '../../lib/utils';
+import {
+  DAY_MS,
+  DialogIcon,
+  DialogSubject,
+  EmptyState,
+  Notice,
+  PageHeader,
+  PageShell,
+  Panel,
+  PersonAvatar,
+  PersonCell,
+  RowSkeleton,
+  SearchField,
+  Segmented,
+  Spinner,
+  StatusDot,
+  StatusPill,
+  approveActionClass,
+  formatAbsolute,
+  formatRelative,
+  formatRelativeInline,
+  isWithin,
+  primaryActionClass,
+  secondaryActionClass,
+} from '../layout/page-kit';
 
 export interface AdminUser {
   id: string;
@@ -65,6 +84,26 @@ export interface AdminUser {
   updated_at?: string | null;
   last_seen_at?: string | null;
 }
+
+export interface AccessRequest {
+  id: string;
+  email: string;
+  status: string;
+  why_need_access?: string | null;
+  display_name?: string | null;
+  avatar_url?: string | null;
+  created_at: string | null;
+  updated_at?: string | null;
+  decided_by?: string | null;
+}
+
+type RequestStatus = 'pending' | 'rejected';
+type RequestSort = 'newest' | 'oldest' | 'name' | 'email';
+type UserSortKey = 'name' | 'role' | 'joined' | 'last_seen';
+type SortDir = 'asc' | 'desc';
+type RoleFilter = 'all' | 'admin' | 'user';
+
+const USER_GRID = 'sm:grid-cols-[minmax(0,1fr)_8.5rem_6.5rem_8rem_2.25rem]';
 
 function addedViaLabel(v: AdminUser['added_via']): string {
   if (v === 'invite') return 'Email invite';
@@ -88,65 +127,81 @@ function buildApproverLabelLookup(allUsers: AdminUser[]): (approverId: string | 
   };
 }
 
-function UserMoreDetailRow({ label, value }: { label: string; value: React.ReactNode }) {
+function matches(query: string, ...fields: (string | null | undefined)[]): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  return fields.some((f) => f?.toLowerCase().includes(q));
+}
+
+function time(iso: string | null | undefined): number {
+  if (!iso) return 0;
+  const t = new Date(iso).getTime();
+  return Number.isNaN(t) ? 0 : t;
+}
+
+function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-[5.5rem_1fr] gap-x-2 gap-y-0.5 text-sm leading-snug">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="min-w-0 break-words text-foreground">{value}</span>
+    <div className="flex items-baseline justify-between gap-4 py-1 text-[13px]">
+      <span className="shrink-0 text-muted-foreground">{label}</span>
+      <span className="min-w-0 truncate text-right font-medium text-foreground">{value}</span>
     </div>
   );
 }
 
-export interface AccessRequest {
-  id: string;
-  email: string;
-  status: string;
-  why_need_access?: string | null;
-  display_name?: string | null;
-  avatar_url?: string | null;
-  created_at: string | null;
-  updated_at?: string | null;
-  decided_by?: string | null;
-}
-
-type AccessRequestSortKey = 'email' | 'name' | 'requested';
-type UserSortKey = 'email' | 'display_name' | 'role' | 'joined' | 'last_seen';
-type SortDir = 'asc' | 'desc';
-
-function SortableHead({
+function SortHeader({
   label,
   sortKey,
-  currentSortKey,
-  sortDir,
+  current,
+  dir,
   onSort,
-  className,
 }: {
   label: string;
-  sortKey: AccessRequestSortKey | UserSortKey;
-  currentSortKey: AccessRequestSortKey | UserSortKey | null;
-  sortDir: SortDir;
-  onSort: (key: AccessRequestSortKey | UserSortKey) => void;
-  className?: string;
+  sortKey: UserSortKey;
+  current: UserSortKey | null;
+  dir: SortDir;
+  onSort: (k: UserSortKey) => void;
 }) {
-  const isActive = currentSortKey === sortKey;
+  const active = current === sortKey;
   return (
-    <TableHead className={cn('text-muted-foreground', className)}>
-      <button
-        type="button"
-        onClick={() => onSort(sortKey)}
-        className="flex w-full items-center gap-1.5 rounded-sm px-1 py-0.5 text-left text-sm font-medium transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-      >
-        {label}
-        {isActive ? (
-          <ArrowDown
-            className={cn('h-3.5 w-3.5 shrink-0', sortDir === 'desc' && 'rotate-180')}
-            aria-hidden
-          />
-        ) : (
-          <ArrowUpDown className="h-3.5 w-3.5 shrink-0 opacity-50" aria-hidden />
+    <button
+      type="button"
+      onClick={() => onSort(sortKey)}
+      className={cn(
+        'group inline-flex items-center gap-1 text-left text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+      )}
+    >
+      {label}
+      {active ? (
+        <ArrowDown className={cn('h-3 w-3 transition-transform', dir === 'desc' && 'rotate-180')} aria-hidden />
+      ) : (
+        <ArrowUpDown className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-60" aria-hidden />
+      )}
+    </button>
+  );
+}
+
+function RoleSelect({ value, onChange }: { value: AdminUser['role']; onChange: (r: AdminUser['role']) => void }) {
+  const isAdmin = value === 'admin';
+  return (
+    <Select value={value} onValueChange={(v) => onChange(v as AdminUser['role'])}>
+      <SelectTrigger
+        className={cn(
+          'h-7 w-auto justify-start gap-1.5 rounded-full border-0 px-2.5 text-xs font-medium shadow-none ring-1 ring-inset focus:ring-2 focus:ring-offset-0 [&>svg:last-child]:h-3 [&>svg:last-child]:w-3',
+          isAdmin
+            ? 'bg-violet-50 text-violet-700 ring-violet-200 hover:bg-violet-100 dark:bg-violet-500/10 dark:text-violet-300 dark:ring-violet-500/30'
+            : 'bg-neutral-100 text-neutral-700 ring-neutral-200 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:ring-neutral-700'
         )}
-      </button>
-    </TableHead>
+        aria-label="Change role"
+      >
+        {isAdmin ? <ShieldCheck className="h-3.5 w-3.5 shrink-0" /> : <User className="h-3.5 w-3.5 shrink-0" />}
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent align="start">
+        <SelectItem value="user">User</SelectItem>
+        <SelectItem value="admin">Admin</SelectItem>
+      </SelectContent>
+    </Select>
   );
 }
 
@@ -162,20 +217,25 @@ export function UserManagement() {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteSubmitting, setInviteSubmitting] = useState(false);
   const [inviteError, setInviteError] = useState<string | null>(null);
-  const [accessRequests, setAccessRequests] = useState<AccessRequest[]>([]);
+  const [requests, setRequests] = useState<Record<RequestStatus, AccessRequest[]>>({ pending: [], rejected: [] });
   const [loadingRequests, setLoadingRequests] = useState(true);
   const [updatingRequestId, setUpdatingRequestId] = useState<string | null>(null);
   const [updatingAction, setUpdatingAction] = useState<'approved' | 'rejected' | null>(null);
-  const [accessRequestSortKey, setAccessRequestSortKey] = useState<AccessRequestSortKey | null>(null);
-  const [accessRequestSortDir, setAccessRequestSortDir] = useState<SortDir>('asc');
-  const [accessRequestStatusFilter, setAccessRequestStatusFilter] = useState<'pending' | 'rejected'>('pending');
+  const [requestStatus, setRequestStatus] = useState<RequestStatus>('pending');
+  const [requestSort, setRequestSort] = useState<RequestSort>('newest');
   const [confirmApproveRejected, setConfirmApproveRejected] = useState<AccessRequest | null>(null);
   const [userSortKey, setUserSortKey] = useState<UserSortKey | null>(null);
   const [userSortDir, setUserSortDir] = useState<SortDir>('asc');
-  const [roleFilter, setRoleFilter] = useState<'all' | 'user' | 'admin'>('all');
+  const [roleFilter, setRoleFilter] = useState<RoleFilter>('all');
+  const [query, setQuery] = useState('');
 
   const token = session?.access_token;
   const currentUserEmail = currentUser?.email ?? null;
+  const isAccessRequestsView = location.hash === '#access-requests';
+
+  useEffect(() => {
+    setQuery('');
+  }, [isAccessRequestsView]);
 
   const fetchUsers = async () => {
     if (!token) return;
@@ -203,31 +263,41 @@ export function UserManagement() {
 
   useEffect(() => {
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
+
+  const fetchRequestList = async (status: RequestStatus): Promise<AccessRequest[] | null> => {
+    if (!token) return null;
+    try {
+      const res = await fetch(`${baseURL}/admin/access-requests?status=${status}`, {
+        headers: getAuthHeaders(token),
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return null;
+    }
+  };
 
   const fetchAccessRequests = async () => {
     if (!token) return;
     setLoadingRequests(true);
-    try {
-      const res = await fetch(`${baseURL}/admin/access-requests?status=${accessRequestStatusFilter}`, {
-        headers: getAuthHeaders(token),
-      });
-      if (res.status === 403) return;
-      if (!res.ok) return;
-      const data = await res.json();
-      setAccessRequests(Array.isArray(data) ? data : []);
-    } catch {
-      // ignore
-    } finally {
-      setLoadingRequests(false);
-    }
+    const [pending, rejected] = await Promise.all([fetchRequestList('pending'), fetchRequestList('rejected')]);
+    setRequests((prev) => ({ pending: pending ?? prev.pending, rejected: rejected ?? prev.rejected }));
+    setLoadingRequests(false);
   };
 
   useEffect(() => {
     fetchAccessRequests();
-  }, [token, accessRequestStatusFilter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
-  const isAccessRequestsView = location.hash === '#access-requests';
+  const openInvite = () => {
+    setInviteOpen(true);
+    setInviteError(null);
+    setInviteEmail('');
+  };
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -249,7 +319,7 @@ export function UserManagement() {
       setInviteOpen(false);
       setInviteEmail('');
       fetchUsers();
-      toast.success('Invite sent. They can sign in with Google.');
+      toast.success(`${email} can now sign in with Google.`);
     } catch {
       setInviteError('Failed to invite.');
     } finally {
@@ -257,12 +327,12 @@ export function UserManagement() {
     }
   };
 
-  const handleAccessRequestDecision = async (requestId: string, status: 'approved' | 'rejected'): Promise<boolean> => {
+  const handleAccessRequestDecision = async (request: AccessRequest, status: 'approved' | 'rejected'): Promise<boolean> => {
     if (!token) return false;
-    setUpdatingRequestId(requestId);
+    setUpdatingRequestId(request.id);
     setUpdatingAction(status);
     try {
-      const res = await fetch(`${baseURL}/admin/access-requests/${requestId}`, {
+      const res = await fetch(`${baseURL}/admin/access-requests/${request.id}`, {
         method: 'PATCH',
         headers: { ...getAuthHeaders(token), 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
@@ -271,7 +341,13 @@ export function UserManagement() {
         toast.error(status === 'approved' ? 'Failed to approve' : 'Failed to reject');
         return false;
       }
-      setAccessRequests((prev) => prev.filter((r) => r.id !== requestId));
+      setRequests((prev) => ({
+        pending: prev.pending.filter((r) => r.id !== request.id),
+        rejected:
+          status === 'rejected'
+            ? [{ ...request, status: 'rejected' }, ...prev.rejected]
+            : prev.rejected.filter((r) => r.id !== request.id),
+      }));
       if (status === 'approved') {
         fetchUsers();
         toast.success('Access approved. They can now sign in.');
@@ -303,9 +379,7 @@ export function UserManagement() {
         toast.error('Failed to update role');
         return;
       }
-      setUsers((prev) =>
-        prev.map((u) => (u.id === userId ? { ...u, role } : u))
-      );
+      setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role } : u)));
       toast.success('Role updated');
     } catch {
       toast.error('Failed to update role');
@@ -339,746 +413,401 @@ export function UserManagement() {
     }
   };
 
-  const formatDate = (iso: string | null) => {
-    if (!iso) return '—';
-    try {
-      return new Date(iso).toLocaleString();
-    } catch {
-      return iso;
-    }
-  };
-
-  const formatDateRelative = (iso: string | null) => {
-    if (!iso) return null;
-    try {
-      const d = new Date(iso);
-      const now = new Date();
-      const diffMs = now.getTime() - d.getTime();
-      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      if (diffDays === 0) return 'Today';
-      if (diffDays === 1) return 'Yesterday';
-      if (diffDays < 7) return `${diffDays} days ago`;
-      if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-      return d.toLocaleDateString();
-    } catch {
-      return null;
-    }
-  };
-
-  /** Format date and time for display (e.g. "Today at 2:30 PM", "Yesterday at 3:05 PM", "Mar 8, 2025, 10:00 AM"). */
-  const formatDateTimeDisplay = (iso: string | null) => {
-    if (!iso) return '—';
-    try {
-      const d = new Date(iso);
-      const now = new Date();
-      // Use calendar-day boundaries (local midnight) so "Yesterday" means the previous calendar day
-      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-      const startOfYesterday = startOfToday - 24 * 60 * 60 * 1000;
-      const t = d.getTime();
-      const timeStr = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-      if (t >= startOfToday) return `Today at ${timeStr}`;
-      if (t >= startOfYesterday) return `Yesterday at ${timeStr}`;
-      const daysAgo = Math.floor((startOfToday - t) / (24 * 60 * 60 * 1000));
-      if (daysAgo < 7) return `${daysAgo} days ago at ${timeStr}`;
-      return d.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
-    } catch {
-      return iso;
-    }
-  };
-
-  const handleAccessRequestSort = (key: AccessRequestSortKey) => {
-    if (accessRequestSortKey === key) {
-      setAccessRequestSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setAccessRequestSortKey(key);
-      setAccessRequestSortDir('asc');
-    }
-  };
-
   const handleUserSort = (key: UserSortKey) => {
     if (userSortKey === key) {
       setUserSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
     } else {
       setUserSortKey(key);
-      setUserSortDir('asc');
+      setUserSortDir(key === 'joined' || key === 'last_seen' ? 'desc' : 'asc');
     }
   };
 
-  const sortedAccessRequests = useMemo(() => {
-    if (!accessRequestSortKey) return accessRequests;
-    return [...accessRequests].sort((a, b) => {
-      let cmp = 0;
-      switch (accessRequestSortKey) {
-        case 'email':
-          cmp = (a.email ?? '').toLowerCase().localeCompare((b.email ?? '').toLowerCase());
-          break;
+  const visibleRequests = useMemo(() => {
+    const list = requests[requestStatus].filter((r) => matches(query, r.email, r.display_name, r.why_need_access));
+    return [...list].sort((a, b) => {
+      switch (requestSort) {
+        case 'oldest':
+          return time(a.created_at) - time(b.created_at);
         case 'name':
-          cmp = (a.display_name ?? '').toLowerCase().localeCompare((b.display_name ?? '').toLowerCase());
-          break;
-        case 'requested': {
-          const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
-          const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
-          cmp = aTime - bTime;
-          break;
-        }
+          return (a.display_name || a.email).toLowerCase().localeCompare((b.display_name || b.email).toLowerCase());
+        case 'email':
+          return a.email.toLowerCase().localeCompare(b.email.toLowerCase());
         default:
-          return 0;
+          return time(b.created_at) - time(a.created_at);
       }
-      return accessRequestSortDir === 'asc' ? cmp : -cmp;
     });
-  }, [accessRequests, accessRequestSortKey, accessRequestSortDir]);
+  }, [requests, requestStatus, requestSort, query]);
 
-  const filteredAndSortedUsers = useMemo(() => {
-    let list = users;
-    if (roleFilter !== 'all') {
-      list = list.filter((u) => u.role === roleFilter);
-    }
+  const visibleUsers = useMemo(() => {
+    let list = users.filter((u) => matches(query, u.email, u.display_name));
+    if (roleFilter !== 'all') list = list.filter((u) => u.role === roleFilter);
     if (!userSortKey) return list;
     return [...list].sort((a, b) => {
       let cmp = 0;
       switch (userSortKey) {
-        case 'email':
-          cmp = (a.email ?? '').toLowerCase().localeCompare((b.email ?? '').toLowerCase());
-          break;
-        case 'display_name':
-          cmp = (a.display_name ?? '').toLowerCase().localeCompare((b.display_name ?? '').toLowerCase());
+        case 'name':
+          cmp = (a.display_name || a.email || '').toLowerCase().localeCompare((b.display_name || b.email || '').toLowerCase());
           break;
         case 'role':
           cmp = (a.role ?? '').localeCompare(b.role ?? '');
           break;
-        case 'joined': {
-          const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
-          const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
-          cmp = aTime - bTime;
+        case 'joined':
+          cmp = time(a.created_at) - time(b.created_at);
           break;
-        }
-        case 'last_seen': {
-          const aTime = a.last_seen_at ? new Date(a.last_seen_at).getTime() : 0;
-          const bTime = b.last_seen_at ? new Date(b.last_seen_at).getTime() : 0;
-          cmp = aTime - bTime;
+        case 'last_seen':
+          cmp = time(a.last_seen_at) - time(b.last_seen_at);
           break;
-        }
-        default:
-          return 0;
       }
       return userSortDir === 'asc' ? cmp : -cmp;
     });
-  }, [users, roleFilter, userSortKey, userSortDir]);
+  }, [users, roleFilter, userSortKey, userSortDir, query]);
 
   const approverLabel = useMemo(() => buildApproverLabelLookup(users), [users]);
+  const adminCount = useMemo(() => users.filter((u) => u.role === 'admin').length, [users]);
+  const pendingCount = requests.pending.length;
 
-  if (loading && location.hash !== '#access-requests') {
-    return (
-      <div className="flex w-full min-w-0 flex-1 flex-col p-6">
-        <div className="mx-auto w-full max-w-5xl min-w-[min(100%,64rem)] overflow-hidden">
-        <div className="mb-8">
-          <Skeleton className="mb-2 h-8 w-56" />
-          <Skeleton className="h-4 w-80" />
-        </div>
-        <div className="mb-8">
-          <Skeleton className="mb-4 h-6 w-48" />
-          <Card>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[50px]" />
-                    <TableHead>Email</TableHead>
-                    <TableHead>Display name</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Joined</TableHead>
-                    <TableHead className="w-[100px]" />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <TableRow key={i}>
-                      <TableCell><Skeleton className="h-8 w-8 rounded-full" /></TableCell>
-                      <TableCell><Skeleton className="h-5 w-40" /></TableCell>
-                      <TableCell><Skeleton className="h-5 w-28" /></TableCell>
-                      <TableCell><Skeleton className="h-9 w-[100px]" /></TableCell>
-                      <TableCell><Skeleton className="h-5 w-32" /></TableCell>
-                      <TableCell><Skeleton className="h-8 w-8 rounded" /></TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </div>
-        </div>
-      </div>
-    );
-  }
-  if (loadingRequests && location.hash === '#access-requests') {
-    return (
-      <div className="flex w-full min-w-0 flex-1 flex-col p-6">
-        <div className="mx-auto w-full max-w-5xl min-w-[min(100%,64rem)] overflow-hidden">
-        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
-              <Inbox className="h-6 w-6 text-muted-foreground" />
-              Access requests
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Approve or reject people waiting to join. Invite by email to add someone directly.
-            </p>
-          </div>
-          <Button
-            onClick={() => { setInviteOpen(true); setInviteError(null); setInviteEmail(''); }}
-            className="shrink-0"
-          >
-            <UserPlus className="mr-2 h-4 w-4" />
-            Invite by email
-          </Button>
-        </div>
-        <Card className="mb-8 w-full min-w-0">
-          <CardHeader className="pb-3">
-            <Skeleton className="h-6 w-48" />
-            <Skeleton className="mt-1 h-4 w-64" />
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="border-t px-6 py-8">
-              <Skeleton className="h-20 w-full rounded-md" />
-            </div>
-          </CardContent>
-        </Card>
-        </div>
-      </div>
-    );
-  }
+  const inviteButton = (
+    <Button onClick={openInvite} className={primaryActionClass}>
+      <UserPlus className="h-4 w-4" />
+      Invite by email
+    </Button>
+  );
 
   return (
-    <TooltipProvider>
-      <div className="flex w-full min-w-0 flex-1 flex-col p-6">
-        <div className="mx-auto w-full max-w-5xl min-w-[min(100%,64rem)] overflow-hidden">
-        {/* Page header: same on both views, with Invite by email */}
-        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
-              {isAccessRequestsView ? (
-                <>
-                  <Inbox className="h-6 w-6 text-muted-foreground" />
-                  Access requests
-                </>
-              ) : (
-                <>
-                  <Users className="h-6 w-6 text-muted-foreground" />
-                  Users
-                </>
-              )}
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {isAccessRequestsView
-                ? 'Approve or reject people waiting to join. Invite by email to add someone directly.'
-                : 'Invite users and manage roles.'}
-            </p>
-          </div>
-          <Button
-            onClick={() => { setInviteOpen(true); setInviteError(null); setInviteEmail(''); }}
-            className="shrink-0"
-          >
-            <UserPlus className="mr-2 h-4 w-4" />
-            Invite by email
-          </Button>
-        </div>
+    <TooltipProvider delayDuration={200}>
+      <PageShell>
+        {isAccessRequestsView ? (
+          <>
+            <PageHeader
+              icon={Inbox}
+              eyebrow="Admin"
+              title="Access requests"
+              description="Review requests to join from the sign-in page, or invite someone directly by email."
+              actions={inviteButton}
+            />
 
-        {/* Access requests view: Pending and Rejected tabs */}
-        {isAccessRequestsView && (
-        <Card id="access-requests" className="mb-8 w-full min-w-0 scroll-mt-6">
-          <CardHeader className="w-full min-w-0 p-0 pb-0">
-            <Tabs
-              value={accessRequestStatusFilter}
-              onValueChange={(v) => setAccessRequestStatusFilter(v as 'pending' | 'rejected')}
-              className="w-full min-w-0"
+            <Panel
+              toolbar={
+                <>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Segmented<RequestStatus>
+                      ariaLabel="Request status"
+                      value={requestStatus}
+                      onChange={setRequestStatus}
+                      options={[
+                        { value: 'pending', label: 'Pending', count: loadingRequests ? undefined : pendingCount },
+                        { value: 'rejected', label: 'Rejected', count: loadingRequests ? undefined : requests.rejected.length },
+                      ]}
+                    />
+                    <Select value={requestSort} onValueChange={(v) => setRequestSort(v as RequestSort)}>
+                      <SelectTrigger className="h-9 w-[9.5rem] rounded-lg text-xs shadow-sm" aria-label="Sort requests">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="newest">Newest first</SelectItem>
+                        <SelectItem value="oldest">Oldest first</SelectItem>
+                        <SelectItem value="name">Name A–Z</SelectItem>
+                        <SelectItem value="email">Email A–Z</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <SearchField value={query} onChange={setQuery} placeholder="Search requests" />
+                </>
+              }
             >
-              {/* Underline-style tab bar: primary navigation for the card */}
-              <div className="flex flex-col border-b border-border px-6 pt-4">
-                <TabsList className="min-h-10 w-full justify-start gap-0 rounded-none border-0 bg-transparent p-0 pb-0 shadow-none">
-                  <TabsTrigger
-                    value="pending"
-                    className="gap-2 rounded-none border-b-2 border-transparent bg-transparent px-0 pb-3 pt-0 text-sm font-medium text-muted-foreground shadow-none outline-none transition-colors hover:text-foreground data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
-                  >
-                    Pending
-                    {!loadingRequests && accessRequestStatusFilter === 'pending' && accessRequests.length > 0 && (
-                      <Badge variant="secondary" className="h-5 min-w-5 px-1.5 font-normal tabular-nums">
-                        {accessRequests.length}
-                      </Badge>
-                    )}
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="rejected"
-                    className="gap-2 rounded-none border-b-2 border-transparent bg-transparent px-0 pb-3 pt-0 text-sm font-medium text-muted-foreground shadow-none outline-none transition-colors ltr:ml-6 rtl:mr-6 hover:text-foreground data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
-                  >
-                    Rejected
-                    {!loadingRequests && accessRequestStatusFilter === 'rejected' && accessRequests.length > 0 && (
-                      <Badge variant="secondary" className="h-5 min-w-5 px-1.5 font-normal tabular-nums">
-                        {accessRequests.length}
-                      </Badge>
-                    )}
-                  </TabsTrigger>
-                </TabsList>
-                <p className="pb-4 text-sm text-muted-foreground">
-                  {accessRequestStatusFilter === 'pending'
-                    ? 'Approve or reject people waiting to join.'
-                    : 'Previously rejected requests. You can approve them to grant access.'}
-                </p>
-              </div>
-            </Tabs>
-          </CardHeader>
-          <CardContent className="w-full min-w-0 p-0">
-            {loadingRequests ? (
-              <div className="w-full min-w-0 px-6 py-8">
-                <Skeleton className="h-20 w-full rounded-md" />
-              </div>
-            ) : accessRequests.length === 0 ? (
-              <div className="flex w-full min-w-0 flex-col items-center justify-center px-6 py-14 text-center">
-                <div className="rounded-full bg-muted/60 p-4">
-                  <Inbox className="h-6 w-6 text-muted-foreground" />
-                </div>
-                <p className="mt-4 text-sm font-medium text-foreground">
-                  {accessRequestStatusFilter === 'pending' ? 'No pending requests' : 'No rejected requests'}
-                </p>
-                <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
-                  {accessRequestStatusFilter === 'pending'
-                    ? "When someone requests access, they'll appear here for you to approve or reject."
-                    : 'Requests you reject will appear here. You can approve them later to grant access.'}
-                </p>
-              </div>
-            ) : (
-              <Table className="table-fixed w-full">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[52px] pr-0" />
-                    <SortableHead
-                      label="Email"
-                      sortKey="email"
-                      currentSortKey={accessRequestSortKey}
-                      sortDir={accessRequestSortDir}
-                      onSort={handleAccessRequestSort}
-                      className="w-[200px] min-w-[180px]"
-                    />
-                    <SortableHead
-                      label="Name"
-                      sortKey="name"
-                      currentSortKey={accessRequestSortKey}
-                      sortDir={accessRequestSortDir}
-                      onSort={handleAccessRequestSort}
-                      className="w-[140px] min-w-[120px]"
-                    />
-                    <SortableHead
-                      label="Requested"
-                      sortKey="requested"
-                      currentSortKey={accessRequestSortKey}
-                      sortDir={accessRequestSortDir}
-                      onSort={handleAccessRequestSort}
-                      className="w-[120px]"
-                    />
-                    <TableHead className="min-w-[180px]">Why they need access</TableHead>
-                    <TableHead className="w-[200px] text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {sortedAccessRequests.map((r) => (
-                    <TableRow key={r.id}>
-                      <TableCell className="w-[52px] py-3 pr-0">
-                        <Avatar className="h-8 w-8">
-                          {r.avatar_url ? (
-                            <AvatarImage src={r.avatar_url} alt="" />
-                          ) : null}
-                          <AvatarFallback className="bg-muted text-xs">
-                            {(r.display_name || r.email || '?').charAt(0).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                      </TableCell>
-                      <TableCell className="py-3 font-medium">{r.email}</TableCell>
-                      <TableCell className="py-3 text-muted-foreground text-sm">
-                        {r.display_name ?? '—'}
-                      </TableCell>
-                      <TableCell className="py-3 text-muted-foreground text-sm">
-                        <span title={formatDate(r.created_at)}>
-                          {formatDateTimeDisplay(r.created_at)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="py-3 text-muted-foreground text-sm max-w-[280px]">
-                        {r.why_need_access ? (
-                          <span className="line-clamp-2" title={r.why_need_access}>
-                            {r.why_need_access}
-                          </span>
-                        ) : (
-                          '—'
-                        )}
-                      </TableCell>
-                      <TableCell className="py-3 text-right">
-                        <div className="flex justify-end gap-2">
+              {loadingRequests ? (
+                <RowSkeleton rows={3} />
+              ) : visibleRequests.length === 0 ? (
+                query ? (
+                  <EmptyState
+                    icon={Inbox}
+                    title="No matching requests"
+                    description={`No ${requestStatus} requests match “${query.trim()}”.`}
+                    action={
+                      <Button variant="outline" size="sm" className={secondaryActionClass} onClick={() => setQuery('')}>
+                        Clear search
+                      </Button>
+                    }
+                  />
+                ) : requestStatus === 'pending' ? (
+                  <EmptyState
+                    icon={Inbox}
+                    title="No pending requests"
+                    description="New access requests from the sign-in page will appear here."
+                  />
+                ) : (
+                  <EmptyState
+                    icon={Ban}
+                    title="No rejected requests"
+                    description="Rejected requests are kept here and can be approved later."
+                  />
+                )
+              ) : (
+                <ul className="divide-y">
+                  {visibleRequests.map((r) => {
+                    const busy = updatingRequestId === r.id;
+                    const isRejected = requestStatus === 'rejected';
+                    return (
+                      <li
+                        key={r.id}
+                        className="flex flex-col gap-4 px-4 py-4 transition-colors hover:bg-neutral-50/70 dark:hover:bg-neutral-900/40 sm:flex-row sm:items-start sm:gap-6 sm:px-5"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                            <PersonCell name={r.display_name} email={r.email} src={r.avatar_url} />
+                            {isRejected ? (
+                              <StatusPill tone="red">Rejected</StatusPill>
+                            ) : (
+                              <StatusPill tone="amber" pulse>
+                                Pending
+                              </StatusPill>
+                            )}
+                            <span className="text-xs text-muted-foreground" title={formatAbsolute(r.created_at)}>
+                              {formatRelative(r.created_at)}
+                            </span>
+                          </div>
+                          {r.why_need_access ? (
+                            <div className="ml-12 mt-3 rounded-lg border-l-2 border-neutral-300 bg-neutral-50 px-3 py-2 text-sm leading-relaxed text-neutral-700 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-300">
+                              <p className="line-clamp-3 whitespace-pre-line" title={r.why_need_access}>
+                                {r.why_need_access}
+                              </p>
+                            </div>
+                          ) : (
+                            <p className="ml-12 mt-2 text-xs italic text-muted-foreground">No reason provided</p>
+                          )}
+                        </div>
+                        <div className="ml-12 flex shrink-0 items-center gap-2 sm:ml-0 sm:pt-1">
+                          {!isRejected && (
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className={cn(
+                                    secondaryActionClass,
+                                    'h-8 px-3 text-xs hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700 dark:hover:border-rose-500/30 dark:hover:bg-rose-500/10 dark:hover:text-rose-400'
+                                  )}
+                                  disabled={busy}
+                                  onClick={() => handleAccessRequestDecision(r, 'rejected')}
+                                >
+                                  {busy && updatingAction === 'rejected' ? <Spinner /> : <X className="h-3.5 w-3.5" />}
+                                  Reject
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Decline this request</TooltipContent>
+                            </Tooltip>
+                          )}
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button
                                 size="sm"
-                                variant="default"
-                                className="min-w-[88px] text-xs bg-emerald-600 hover:bg-emerald-700 text-white border-0 shadow-sm"
-                                disabled={updatingRequestId === r.id}
+                                className={cn(approveActionClass, 'h-8 px-3 text-xs')}
+                                disabled={busy}
                                 onClick={() =>
-                                  accessRequestStatusFilter === 'rejected'
-                                    ? setConfirmApproveRejected(r)
-                                    : handleAccessRequestDecision(r.id, 'approved')
+                                  isRejected ? setConfirmApproveRejected(r) : handleAccessRequestDecision(r, 'approved')
                                 }
                               >
-                                {updatingRequestId === r.id && updatingAction === 'approved' ? (
-                                  <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden />
-                                ) : (
-                                  <ShieldCheck className="h-3.5 w-3.5" />
-                                )}
-                                {updatingRequestId === r.id && updatingAction === 'approved' ? 'Updating…' : 'Approve'}
+                                {busy && updatingAction === 'approved' ? <Spinner /> : <Check className="h-3.5 w-3.5" />}
+                                Approve
                               </Button>
                             </TooltipTrigger>
-                            <TooltipContent side="left">
-                              {accessRequestStatusFilter === 'rejected'
-                                ? 'Grant access (opens confirmation)'
-                                : 'Grant this user access'}
-                            </TooltipContent>
+                            <TooltipContent>{isRejected ? 'Grant access (requires confirmation)' : 'Grant access'}</TooltipContent>
                           </Tooltip>
-                          {accessRequestStatusFilter === 'pending' && (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="min-w-[88px] text-xs border-input text-destructive hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50"
-                                disabled={updatingRequestId === r.id}
-                                onClick={() => handleAccessRequestDecision(r.id, 'rejected')}
-                              >
-                                {updatingRequestId === r.id && updatingAction === 'rejected' ? (
-                                  <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden />
-                                ) : (
-                                  <XCircle className="h-3.5 w-3.5" />
-                                )}
-                                {updatingRequestId === r.id && updatingAction === 'rejected' ? 'Updating…' : 'Reject'}
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="left">Decline this request</TooltipContent>
-                          </Tooltip>
-                          )}
                         </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
-        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </Panel>
+          </>
+        ) : (
+          <>
+            <PageHeader
+              icon={Users}
+              eyebrow="Admin"
+              title="Users"
+              description="Manage who can sign in to Template Checker and what they can do."
+              actions={inviteButton}
+            />
 
-        {/* Users view: only the Approved users table */}
-        {!isAccessRequestsView && (
-        <Card className="w-full min-w-0">
-          <CardHeader className="pb-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle className="text-lg font-medium">Approved users</CardTitle>
-              <CardDescription>
-                {roleFilter === 'all'
-                  ? `${users.length} ${users.length === 1 ? 'user' : 'users'} with access.`
-                  : `${filteredAndSortedUsers.length} ${filteredAndSortedUsers.length === 1 ? 'user' : 'users'}.`}{' '}
-                Change roles or remove access.
-              </CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            <Table className="table-fixed">
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[52px] pr-0" />
-                  <SortableHead
-                    label="Email"
-                    sortKey="email"
-                    currentSortKey={userSortKey}
-                    sortDir={userSortDir}
-                    onSort={handleUserSort}
+            {!loadingRequests && pendingCount > 0 && (
+              <Notice
+                icon={Inbox}
+                action={
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 gap-1 rounded-lg px-2.5 text-xs font-medium"
+                    onClick={() => navigate('/admin/users#access-requests')}
+                  >
+                    Review
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                }
+              >
+                <span className="font-medium">
+                  {pendingCount} access {pendingCount === 1 ? 'request' : 'requests'}
+                </span>{' '}
+                <span className="text-muted-foreground">{pendingCount === 1 ? 'is' : 'are'} waiting for review.</span>
+              </Notice>
+            )}
+
+            <Panel
+              toolbar={
+                <>
+                  <Segmented<RoleFilter>
+                    ariaLabel="Filter by role"
+                    value={roleFilter}
+                    onChange={setRoleFilter}
+                    options={[
+                      { value: 'all', label: 'All', count: loading ? undefined : users.length },
+                      { value: 'admin', label: 'Admins', count: loading ? undefined : adminCount },
+                      { value: 'user', label: 'Users', count: loading ? undefined : users.length - adminCount },
+                    ]}
                   />
-                  <SortableHead
-                    label="Display name"
-                    sortKey="display_name"
-                    currentSortKey={userSortKey}
-                    sortDir={userSortDir}
-                    onSort={handleUserSort}
-                  />
-                  <TableHead className="w-[200px] min-w-[200px] whitespace-nowrap text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleUserSort('role')}
-                        className="flex cursor-pointer select-none items-center gap-1.5 rounded-sm py-0.5 text-left text-sm font-medium transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  <SearchField value={query} onChange={setQuery} placeholder="Search by name or email" />
+                </>
+              }
+              footer={
+                !loading && users.length > 0 ? (
+                  <span>
+                    Showing <span className="font-medium text-foreground">{visibleUsers.length}</span> of {users.length}{' '}
+                    {users.length === 1 ? 'user' : 'users'}
+                  </span>
+                ) : undefined
+              }
+            >
+              <div className={cn('hidden items-center gap-4 border-b px-5 py-2.5 sm:grid', USER_GRID)}>
+                <SortHeader label="User" sortKey="name" current={userSortKey} dir={userSortDir} onSort={handleUserSort} />
+                <SortHeader label="Role" sortKey="role" current={userSortKey} dir={userSortDir} onSort={handleUserSort} />
+                <SortHeader label="Joined" sortKey="joined" current={userSortKey} dir={userSortDir} onSort={handleUserSort} />
+                <SortHeader label="Last seen" sortKey="last_seen" current={userSortKey} dir={userSortDir} onSort={handleUserSort} />
+                <span />
+              </div>
+
+              {loading ? (
+                <RowSkeleton rows={5} />
+              ) : visibleUsers.length === 0 ? (
+                <EmptyState
+                  icon={Users}
+                  title={query || roleFilter !== 'all' ? 'No matching users' : 'No users yet'}
+                  description={
+                    query || roleFilter !== 'all'
+                      ? 'Try a different search term or role filter.'
+                      : 'Invite someone by email to give them access. They sign in with Google.'
+                  }
+                  action={
+                    query || roleFilter !== 'all' ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={secondaryActionClass}
+                        onClick={() => {
+                          setQuery('');
+                          setRoleFilter('all');
+                        }}
                       >
-                        Role
-                        {userSortKey === 'role' ? (
-                          <ArrowDown
-                            className={cn('h-3.5 w-3.5 shrink-0', userSortDir === 'desc' && 'rotate-180')}
-                            aria-hidden
-                          />
-                        ) : (
-                          <ArrowUpDown className="h-3.5 w-3.5 shrink-0 opacity-50" aria-hidden />
-                        )}
-                      </button>
-                      <span className="h-4 w-px shrink-0 bg-border" aria-hidden />
-                      <Select
-                        value={roleFilter}
-                        onValueChange={(v) => setRoleFilter(v as 'all' | 'user' | 'admin')}
-                      >
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <SelectTrigger
-                              className={cn(
-                                'h-8 w-9 shrink-0 border-dashed px-0 font-normal',
-                                roleFilter === 'all'
-                                  ? 'text-muted-foreground hover:text-foreground'
-                                  : 'border-primary/30 bg-primary/5 text-foreground'
-                              )}
-                              onClick={(e) => e.stopPropagation()}
-                              aria-label={
-                                roleFilter === 'all'
-                                  ? 'Filter by role'
-                                  : roleFilter === 'user'
-                                    ? 'Showing users only'
-                                    : 'Showing admins only'
-                              }
-                            >
-                              <span className="flex flex-1 items-center justify-center pl-1 [&:not(:only-child)]:mr-0">
-                                {roleFilter === 'all' && <Filter className="h-4 w-4" />}
-                                {roleFilter === 'user' && <User className="h-4 w-4" />}
-                                {roleFilter === 'admin' && <Shield className="h-4 w-4" />}
-                              </span>
-                            </SelectTrigger>
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom" className="font-normal">
-                            {roleFilter === 'all' && 'Filter by role'}
-                            {roleFilter === 'user' && 'Showing users only'}
-                            {roleFilter === 'admin' && 'Showing admins only'}
-                          </TooltipContent>
-                        </Tooltip>
-                        <SelectContent>
-                          <SelectItem value="all">
-                            <span className="flex items-center gap-2">
-                              <Filter className="h-4 w-4 text-muted-foreground" />
-                              All roles
-                            </span>
-                          </SelectItem>
-                          <SelectItem value="user">
-                            <span className="flex items-center gap-2">
-                              <User className="h-4 w-4 text-muted-foreground" />
-                              User
-                            </span>
-                          </SelectItem>
-                          <SelectItem value="admin">
-                            <span className="flex items-center gap-2">
-                              <Shield className="h-4 w-4 text-muted-foreground" />
-                              Admin
-                            </span>
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </TableHead>
-                  <SortableHead
-                    label="Joined"
-                    sortKey="joined"
-                    currentSortKey={userSortKey}
-                    sortDir={userSortDir}
-                    onSort={handleUserSort}
-                  />
-                  <SortableHead
-                    label="Last seen"
-                    sortKey="last_seen"
-                    currentSortKey={userSortKey}
-                    sortDir={userSortDir}
-                    onSort={handleUserSort}
-                    className="w-[120px]"
-                  />
-                  <TableHead className="w-[80px]" />
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredAndSortedUsers.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-48">
-                      <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <div className="rounded-full bg-muted/60 p-4">
-                          <Users className="h-6 w-6 text-muted-foreground" />
-                        </div>
-                        <p className="mt-4 text-sm font-medium text-foreground">
-                          {roleFilter !== 'all' ? 'No users with this role' : 'No users yet'}
-                        </p>
-                        <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
-                          Invite someone by email to give them access. They’ll sign in with Google.
-                        </p>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="mt-5"
-                          onClick={() => {
-                            if (roleFilter !== 'all') setRoleFilter('all');
-                            else {
-                              setInviteOpen(true);
-                              setInviteError(null);
-                              setInviteEmail('');
-                            }
-                          }}
-                        >
-                          <Mail className="mr-2 h-4 w-4" />
-                          {roleFilter !== 'all' ? 'Show all roles' : 'Invite by email'}
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredAndSortedUsers.map((u) => {
+                        Clear filters
+                      </Button>
+                    ) : (
+                      <Button variant="outline" size="sm" className={secondaryActionClass} onClick={openInvite}>
+                        <Mail className="h-4 w-4" />
+                        Invite by email
+                      </Button>
+                    )
+                  }
+                />
+              ) : (
+                <ul className="divide-y">
+                  {visibleUsers.map((u) => {
                     const isCurrentUser = currentUserEmail != null && u.email === currentUserEmail;
+                    const onlineRecently = isWithin(u.last_seen_at, 15 * 60 * 1000);
+                    const activeToday = isWithin(u.last_seen_at, DAY_MS);
                     return (
-                      <TableRow key={u.id}>
-                        <TableCell className="w-[52px] py-3 pr-0">
-                          <Avatar className="h-8 w-8">
-                            {u.avatar_url ? (
-                              <AvatarImage src={u.avatar_url} alt="" />
-                            ) : null}
-                            <AvatarFallback className="bg-muted text-xs">
-                              {(u.display_name || u.email || '?').charAt(0).toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                        </TableCell>
-                        <TableCell className="py-3 font-medium">
-                          <div className="flex min-w-0 flex-nowrap items-center gap-2">
-                            <span className="min-w-0 truncate">{u.email ?? '—'}</span>
-                            {isCurrentUser && (
-                              <Badge variant="secondary" className="shrink-0 text-xs font-normal">
+                      <li
+                        key={u.id}
+                        className={cn(
+                          'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 px-4 py-3 transition-colors hover:bg-neutral-50/70 dark:hover:bg-neutral-900/40 sm:px-5',
+                          USER_GRID
+                        )}
+                      >
+                        <PersonCell
+                          name={u.display_name}
+                          email={u.email}
+                          src={u.avatar_url}
+                          badge={
+                            isCurrentUser ? (
+                              <span className="shrink-0 rounded-md bg-neutral-900 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-white dark:bg-white dark:text-neutral-900">
                                 You
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell className="py-3 text-muted-foreground text-sm">
-                          {u.display_name ?? '—'}
-                        </TableCell>
-                        <TableCell className="py-3">
-                          <Select
-                            value={u.role}
-                            onValueChange={(value) =>
-                              handleRoleChange(u.id, value as 'user' | 'admin')
-                            }
-                          >
-                            <SelectTrigger className="h-8 w-[120px] border-dashed">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="user">
-                                <span className="flex items-center gap-1.5">
-                                  <User className="h-3.5 w-3.5 text-muted-foreground" />
-                                  User
-                                </span>
-                              </SelectItem>
-                              <SelectItem value="admin">
-                                <span className="flex items-center gap-1.5">
-                                  <Shield className="h-3.5 w-3.5 text-muted-foreground" />
-                                  Admin
-                                </span>
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                        <TableCell className="py-3 text-muted-foreground text-sm">
-                          <span title={formatDate(u.created_at)}>
-                            {formatDateRelative(u.created_at) ?? formatDate(u.created_at)}
+                              </span>
+                            ) : null
+                          }
+                        />
+
+                        <div className="col-start-1 row-start-2 flex items-center gap-3 pl-12 sm:col-start-auto sm:row-start-auto sm:block sm:pl-0">
+                          <RoleSelect value={u.role} onChange={(role) => handleRoleChange(u.id, role)} />
+                          <span className="text-xs text-muted-foreground sm:hidden">
+                            {u.last_seen_at ? `Seen ${formatRelativeInline(u.last_seen_at)}` : 'Never signed in'}
                           </span>
-                        </TableCell>
-                        <TableCell className="py-3 text-muted-foreground text-sm">
+                        </div>
+
+                        <span className="hidden text-sm text-muted-foreground sm:block" title={formatAbsolute(u.created_at)}>
+                          {formatRelative(u.created_at)}
+                        </span>
+
+                        <span className="hidden items-center gap-2 text-sm sm:flex" title={formatAbsolute(u.last_seen_at)}>
                           {u.last_seen_at ? (
-                            <span title={formatDate(u.last_seen_at)}>
-                              {formatDateTimeDisplay(u.last_seen_at)}
-                            </span>
+                            <>
+                              <StatusDot tone={activeToday ? 'green' : 'neutral'} pulse={onlineRecently} />
+                              <span className={activeToday ? 'text-foreground' : 'text-muted-foreground'}>
+                                {formatRelative(u.last_seen_at)}
+                              </span>
+                            </>
                           ) : (
-                            '—'
+                            <span className="text-muted-foreground">Never</span>
                           )}
-                        </TableCell>
-                        <TableCell className="py-3 text-right">
+                        </span>
+
+                        <div className="col-start-2 row-span-2 row-start-1 flex justify-end sm:col-start-auto sm:row-span-1 sm:row-start-auto">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button
                                 type="button"
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 shrink-0 text-muted-foreground hover:bg-muted data-[state=open]:bg-muted"
+                                className="h-8 w-8 rounded-lg text-muted-foreground hover:bg-neutral-100 data-[state=open]:bg-neutral-100 dark:hover:bg-neutral-800 dark:data-[state=open]:bg-neutral-800"
                                 aria-label={`More options for ${u.email ?? 'user'}`}
                               >
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                              align="end"
-                              sideOffset={8}
-                              className="w-[20rem] overflow-hidden rounded-lg border bg-popover p-0 shadow-lg"
-                            >
-                              <div className="border-b border-border/80 bg-gradient-to-b from-muted/50 to-muted/20 px-3 py-3">
-                                <div className="flex items-start gap-3">
-                                  <Avatar className="h-10 w-10 shrink-0 border border-border/60 bg-background shadow-sm">
-                                    {u.avatar_url ? (
-                                      <AvatarImage src={u.avatar_url} alt="" />
-                                    ) : null}
-                                    <AvatarFallback className="bg-muted text-sm font-medium">
-                                      {(u.display_name || u.email || '?').charAt(0).toUpperCase()}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <div className="min-w-0 flex-1 space-y-1">
-                                    <p className="truncate text-sm font-semibold leading-tight text-foreground">
-                                      {u.display_name?.trim() || u.email || 'User'}
-                                    </p>
-                                    {u.display_name?.trim() && u.email ? (
+                            <DropdownMenuContent align="end" sideOffset={6} className="w-[19rem] overflow-hidden rounded-xl p-0 shadow-xl">
+                              <div className="relative overflow-hidden px-4 pb-4 pt-5">
+                                <div className="pointer-events-none absolute inset-x-0 top-0 h-14 bg-gradient-to-br from-neutral-100 via-neutral-50 to-transparent dark:from-neutral-800 dark:via-neutral-900" />
+                                <div className="relative flex items-center gap-3">
+                                  <PersonAvatar name={u.display_name} email={u.email} src={u.avatar_url} size="lg" />
+                                  <div className="min-w-0">
+                                    <p className="truncate text-sm font-semibold">{u.display_name?.trim() || u.email || 'User'}</p>
+                                    {u.display_name?.trim() && u.email && (
                                       <p className="truncate text-xs text-muted-foreground">{u.email}</p>
-                                    ) : null}
-                                    <Badge
-                                      variant="secondary"
-                                      className="mt-1 text-[10px] font-medium uppercase tracking-wide"
-                                    >
-                                      {u.role === 'admin' ? 'Admin' : 'User'}
-                                    </Badge>
+                                    )}
                                   </div>
+                                </div>
+                                <div className="relative mt-3 flex flex-wrap gap-1.5">
+                                  <StatusPill tone={u.role === 'admin' ? 'violet' : 'neutral'} icon={u.role === 'admin' ? Shield : User}>
+                                    {u.role === 'admin' ? 'Admin' : 'User'}
+                                  </StatusPill>
+                                  <StatusPill tone={activeToday ? 'green' : 'neutral'}>
+                                    {activeToday ? 'Active today' : u.last_seen_at ? 'Inactive' : 'Never signed in'}
+                                  </StatusPill>
                                 </div>
                               </div>
-                              <div className="max-h-[min(60vh,22rem)] overflow-y-auto px-3 py-3">
-                                <div>
-                                  <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                                    Account
-                                  </p>
-                                  <div className="mt-2 space-y-2">
-                                    <UserMoreDetailRow label="Email" value={u.email ?? '—'} />
-                                    <UserMoreDetailRow label="Name" value={u.display_name ?? '—'} />
-                                    <UserMoreDetailRow
-                                      label="Role"
-                                      value={u.role === 'admin' ? 'Admin' : 'User'}
-                                    />
-                                  </div>
-                                </div>
-                                <div className="mt-3 border-t border-border/60 pt-3">
-                                  <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                                    Access
-                                  </p>
-                                  <div className="mt-2 space-y-2">
-                                    <UserMoreDetailRow label="Added via" value={addedViaLabel(u.added_via)} />
-                                    <UserMoreDetailRow label="Added by" value={approverLabel(u.approved_by)} />
-                                  </div>
-                                </div>
-                                <div className="mt-3 border-t border-border/60 pt-3">
-                                  <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                                    Activity
-                                  </p>
-                                  <div className="mt-2 space-y-2">
-                                    <UserMoreDetailRow label="Joined" value={formatDate(u.created_at)} />
-                                    <UserMoreDetailRow
-                                      label="Last seen"
-                                      value={
-                                        u.last_seen_at ? formatDateTimeDisplay(u.last_seen_at) : '—'
-                                      }
-                                    />
-                                  </div>
-                                </div>
+                              <div className="border-t px-4 py-2.5">
+                                <DetailRow label="Added via" value={addedViaLabel(u.added_via)} />
+                                <DetailRow label="Added by" value={approverLabel(u.approved_by)} />
+                                <DetailRow label="Joined" value={formatAbsolute(u.created_at)} />
+                                <DetailRow label="Last seen" value={u.last_seen_at ? formatAbsolute(u.last_seen_at) : 'Never'} />
                               </div>
                               <DropdownMenuSeparator className="my-0" />
                               <div className="p-1.5">
@@ -1087,160 +816,143 @@ export function UserManagement() {
                                   onSelect={() => {
                                     if (!isCurrentUser) setDeleteTarget(u);
                                   }}
-                                  className={cn(
-                                    'flex h-auto min-h-8 w-full cursor-pointer items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-destructive transition-colors duration-150',
-                                    'bg-transparent focus:bg-transparent focus:text-destructive',
-                                    'data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive',
-                                    'data-[disabled]:cursor-not-allowed data-[disabled]:bg-transparent data-[disabled]:text-muted-foreground'
-                                  )}
+                                  className="cursor-pointer gap-2 rounded-lg px-2.5 py-2 text-[13px] font-medium text-rose-600 focus:bg-rose-50 focus:text-rose-700 data-[disabled]:cursor-not-allowed dark:text-rose-400 dark:focus:bg-rose-500/10"
                                 >
-                                  <Trash2 className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                                  Remove access
+                                  <UserMinus className="h-4 w-4" aria-hidden />
+                                  {isCurrentUser ? 'You can’t remove yourself' : 'Remove access'}
                                 </DropdownMenuItem>
                               </div>
                             </DropdownMenuContent>
                           </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
+                        </div>
+                      </li>
                     );
-                  })
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+                  })}
+                </ul>
+              )}
+            </Panel>
+          </>
         )}
+      </PageShell>
 
-        </div>
-        {/* Remove user dialog */}
-        <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Remove user</DialogTitle>
-              <DialogDescription asChild>
-                <div>
-                  <p>
-                    This user will lose access and won’t be able to sign in again. This action cannot be undone.
-                  </p>
-                  {deleteTarget && (
-                    <p className="mt-3 rounded-md bg-muted px-3 py-2 font-medium text-foreground">
-                      {deleteTarget.email ?? deleteTarget.display_name ?? deleteTarget.id}
-                    </p>
-                  )}
-                </div>
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button
-                variant="outline"
-                onClick={() => setDeleteTarget(null)}
-                disabled={deleting}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={handleDeleteConfirm}
-                disabled={deleting}
-              >
-                {deleting ? 'Removing…' : 'Remove user'}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+      {/* Remove user dialog */}
+      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <DialogContent className="rounded-2xl outline-none sm:max-w-md">
+          <DialogHeader className="space-y-2">
+            <DialogIcon icon={Trash2} tone="red" />
+            <DialogTitle>Remove user</DialogTitle>
+            <DialogDescription>
+              This user will lose access immediately and won’t be able to sign in unless they’re invited again.
+            </DialogDescription>
+          </DialogHeader>
+          {deleteTarget && (
+            <DialogSubject>
+              <PersonCell name={deleteTarget.display_name} email={deleteTarget.email} src={deleteTarget.avatar_url} />
+            </DialogSubject>
+          )}
+          <DialogFooter className="mt-2 gap-2 sm:gap-0">
+            <Button variant="outline" className={secondaryActionClass} onClick={() => setDeleteTarget(null)} disabled={deleting}>
+              Cancel
+            </Button>
+            <Button variant="destructive" className="rounded-lg" onClick={handleDeleteConfirm} disabled={deleting}>
+              {deleting && <Spinner />}
+              {deleting ? 'Removing…' : 'Remove user'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-        {/* Confirm approve previously rejected request */}
-        <Dialog open={!!confirmApproveRejected} onOpenChange={(open) => !open && setConfirmApproveRejected(null)}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Approve previously rejected request?</DialogTitle>
-              <DialogDescription asChild>
-                <div>
-                  <p>
-                    This request was previously rejected. Approving will grant them access and they will be able to sign in.
-                  </p>
-                  {confirmApproveRejected && (
-                    <p className="mt-3 rounded-md bg-muted px-3 py-2 font-medium text-foreground">
-                      {confirmApproveRejected.email}
-                    </p>
-                  )}
-                </div>
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button
-                variant="outline"
-                onClick={() => setConfirmApproveRejected(null)}
-                disabled={updatingRequestId === confirmApproveRejected?.id}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="bg-emerald-600 hover:bg-emerald-700 text-white border-0"
-                onClick={async () => {
-                  if (!confirmApproveRejected) return;
-                  const ok = await handleAccessRequestDecision(confirmApproveRejected.id, 'approved');
-                  if (ok) setConfirmApproveRejected(null);
-                }}
-                disabled={updatingRequestId === confirmApproveRejected?.id}
-              >
-                {updatingRequestId === confirmApproveRejected?.id && updatingAction === 'approved'
-                  ? 'Approving…'
-                  : 'Approve access'}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+      {/* Confirm approve previously rejected request */}
+      <Dialog open={!!confirmApproveRejected} onOpenChange={(open) => !open && setConfirmApproveRejected(null)}>
+        <DialogContent className="rounded-2xl outline-none sm:max-w-md">
+          <DialogHeader className="space-y-2">
+            <DialogIcon icon={UserCheck} tone="green" />
+            <DialogTitle>Approve rejected request</DialogTitle>
+            <DialogDescription>
+              This request was previously rejected. Approving it grants access, and they’ll be able to sign in with Google.
+            </DialogDescription>
+          </DialogHeader>
+          {confirmApproveRejected && (
+            <DialogSubject>
+              <PersonCell
+                name={confirmApproveRejected.display_name}
+                email={confirmApproveRejected.email}
+                src={confirmApproveRejected.avatar_url}
+              />
+            </DialogSubject>
+          )}
+          <DialogFooter className="mt-2 gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              className={secondaryActionClass}
+              onClick={() => setConfirmApproveRejected(null)}
+              disabled={updatingRequestId === confirmApproveRejected?.id}
+            >
+              Cancel
+            </Button>
+            <Button
+              className={approveActionClass}
+              onClick={async () => {
+                if (!confirmApproveRejected) return;
+                const ok = await handleAccessRequestDecision(confirmApproveRejected, 'approved');
+                if (ok) setConfirmApproveRejected(null);
+              }}
+              disabled={updatingRequestId === confirmApproveRejected?.id}
+            >
+              {updatingRequestId === confirmApproveRejected?.id && updatingAction === 'approved' && <Spinner />}
+              {updatingRequestId === confirmApproveRejected?.id && updatingAction === 'approved' ? 'Approving…' : 'Approve access'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-        {/* Invite dialog */}
-        <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Mail className="h-5 w-5" />
-                Invite by email
-              </DialogTitle>
-              <DialogDescription>
-                Add an email to the allowed list. They’ll receive no automated email—they can sign in with Google once added.
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleInvite}>
-              <div className="grid gap-4 py-2">
-                <div className="grid gap-2">
-                  <Label htmlFor="invite-email">Email address</Label>
-                  <Input
-                    id="invite-email"
-                    type="email"
-                    placeholder="colleague@example.com"
-                    value={inviteEmail}
-                    onChange={(e) => setInviteEmail(e.target.value)}
-                    disabled={inviteSubmitting}
-                    autoFocus
-                    autoComplete="email"
-                    className="h-10"
-                  />
-                  {inviteError && (
-                    <p className="text-sm text-destructive">{inviteError}</p>
-                  )}
-                </div>
-              </div>
-              <DialogFooter className="gap-2 sm:gap-0">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setInviteOpen(false)}
+      {/* Invite dialog */}
+      <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
+        <DialogContent className="rounded-2xl outline-none sm:max-w-md">
+          <DialogHeader className="space-y-2">
+            <DialogIcon icon={Mail} tone="blue" />
+            <DialogTitle>Invite by email</DialogTitle>
+            <DialogDescription>
+              Adds the address to the allow list. No email is sent; they can sign in with Google once added.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleInvite}>
+            <div className="grid gap-2 py-3">
+              <Label htmlFor="invite-email">Email address</Label>
+              <div className="relative">
+                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="invite-email"
+                  type="email"
+                  placeholder="name@company.com"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
                   disabled={inviteSubmitting}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={inviteSubmitting}>
-                  {inviteSubmitting ? 'Sending…' : 'Send invite'}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+                  autoFocus
+                  autoComplete="email"
+                  className="h-10 rounded-lg pl-9"
+                />
+              </div>
+              {inviteError && <p className="text-sm text-destructive">{inviteError}</p>}
+            </div>
+            <DialogFooter className="mt-2 gap-2 sm:gap-0">
+              <Button
+                type="button"
+                variant="outline"
+                className={secondaryActionClass}
+                onClick={() => setInviteOpen(false)}
+                disabled={inviteSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" className={primaryActionClass} disabled={inviteSubmitting || !inviteEmail.includes('@')}>
+                {inviteSubmitting && <Spinner />}
+                {inviteSubmitting ? 'Adding…' : 'Add user'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </TooltipProvider>
   );
 }
