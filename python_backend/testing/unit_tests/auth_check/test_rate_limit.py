@@ -12,42 +12,76 @@ def create_key(client):
     return r.get_json()['key']
 
 
-# --- limiter primitives ---------------------------------------------------------------------------------------------
+# --- Supabase wrapper ------------------------------------------------------------------------------------------------
 
-def test_hit_allows_up_to_limit_within_window(monkeypatch):
-    now = [1000.0]
-    monkeypatch.setattr(rate_limit.time, 'time', lambda: now[0])
-    assert [rate_limit.hit('b', 3, 60)[0] for _ in range(3)] == [True, True, True]
-    allowed, retry_after = rate_limit.hit('b', 3, 60)
-    assert not allowed and 1 <= retry_after <= 61
-
-    now[0] += 61  # the window slides past the earlier hits
-    assert rate_limit.hit('b', 3, 60)[0]
+REAL_RPC = rate_limit._rpc  # captured before the autouse fake replaces it
 
 
-def test_rejected_hits_are_not_counted(monkeypatch):
-    now = [1000.0]
-    monkeypatch.setattr(rate_limit.time, 'time', lambda: now[0])
-    rate_limit.hit('b', 1, 60)
-    now[0] += 30
-    assert not rate_limit.hit('b', 1, 60)[0]
-    now[0] += 31  # 61s after the only counted hit
-    assert rate_limit.hit('b', 1, 60)[0]
+class RecordingSupabase:
+    def __init__(self, data):
+        self.data, self.calls = data, []
+
+    def rpc(self, name, params):
+        self.calls.append((name, params))
+        return self
+
+    def execute(self):
+        return type('R', (), {'data': self.data})
 
 
-def test_buckets_are_independent():
-    assert rate_limit.hit('a', 1, 60)[0]
-    assert rate_limit.hit('b', 1, 60)[0]
-    assert not rate_limit.hit('a', 1, 60)[0]
+def test_rpc_calls_supabase_function(monkeypatch):
+    sb = RecordingSupabase([{'allowed': True, 'retry_after_seconds': 0}])
+    monkeypatch.setattr(rate_limit, '_rpc', REAL_RPC)
+    monkeypatch.setattr(rate_limit, 'get_supabase_client', lambda: sb)
+    assert rate_limit.hit('checks:user:1', 50, 3600) == (True, 0)
+    assert sb.calls == [('rate_limit_hit', {'p_bucket': 'checks:user:1', 'p_limit': 50, 'p_window_seconds': 3600})]
 
 
-def test_lock_is_exclusive_until_released():
+def test_rpc_without_supabase_is_unavailable(monkeypatch):
+    monkeypatch.setattr(rate_limit, '_rpc', REAL_RPC)
+    monkeypatch.setattr(rate_limit, 'get_supabase_client', lambda: None)
+    with pytest.raises(rate_limit.LimiterUnavailable):
+        rate_limit.hit('b', 1, 60)
+    with pytest.raises(rate_limit.LimiterUnavailable):
+        rate_limit.acquire('b')
+
+
+@pytest.mark.parametrize('data, expected', [
+    ([{'allowed': False, 'retry_after_seconds': 42}], (False, 42)),
+    ({'allowed': True, 'retry_after_seconds': None}, (True, 0)),
+])
+def test_hit_parses_response_shapes(monkeypatch, data, expected):
+    monkeypatch.setattr(rate_limit, '_rpc', lambda name, params: data)
+    assert rate_limit.hit('b', 1, 60) == expected
+
+
+@pytest.mark.parametrize('data', [[], None])
+def test_hit_with_no_row_is_unavailable(monkeypatch, data):
+    monkeypatch.setattr(rate_limit, '_rpc', lambda name, params: data)
+    with pytest.raises(rate_limit.LimiterUnavailable):
+        rate_limit.hit('b', 1, 60)
+
+
+def test_lease_is_exclusive_until_released(fake_limiter):
     first = rate_limit.acquire('user-1')
     assert first is not None
     assert rate_limit.acquire('user-1') is None
     assert rate_limit.acquire('user-2') is not None
     rate_limit.release(first)
     assert rate_limit.acquire('user-1') is not None
+
+
+def test_stale_lease_expires(fake_limiter):
+    assert rate_limit.acquire('user-1') is not None  # holder never releases (e.g. worker killed)
+    fake_limiter.now += rate_limit.LEASE_TTL_SECONDS
+    assert rate_limit.acquire('user-1') is not None
+
+
+def test_release_never_raises(monkeypatch):
+    def broken(name, params):
+        raise RuntimeError('network down')
+    monkeypatch.setattr(rate_limit, '_rpc', broken)
+    rate_limit.release(('user-1', 'lease'))
 
 
 # --- checks per hour ------------------------------------------------------------------------------------------------
@@ -114,10 +148,28 @@ def test_lock_is_released_when_the_check_crashes(client, monkeypatch):
     rate_limit.release(lock)
 
 
-def test_limiter_failure_lets_checks_through(client, monkeypatch):
+@pytest.mark.parametrize('failing', ['acquire', 'hit'])
+def test_limiter_failure_lets_checks_through(client, monkeypatch, failing):
     def broken(*a, **k):
-        raise OSError('disk full')
-    monkeypatch.setattr(rate_limit, 'acquire', broken)
+        raise rate_limit.LimiterUnavailable('supabase down')
+    monkeypatch.setattr(rate_limit, failing, broken)
+    assert client.post('/run', headers=USER).status_code == 200
+
+
+def test_limiter_failure_lets_access_requests_through(client, monkeypatch):
+    def broken(*a, **k):
+        raise rate_limit.LimiterUnavailable('supabase down')
+    monkeypatch.setattr(rate_limit, 'hit', broken)
+    monkeypatch.setattr(routes, 'get_supabase_client', lambda: None)
+    assert client.post('/access-requests', json={'email': 'a@b.com'}).status_code == 503
+
+
+def test_hourly_window_slides(client, fake_limiter):
+    for _ in range(routes.CHECKS_PER_HOUR):
+        client.post('/run', headers=USER)
+    r = client.post('/run', headers=USER)
+    assert r.status_code == 429 and int(r.headers['Retry-After']) == 3600
+    fake_limiter.now += 3600
     assert client.post('/run', headers=USER).status_code == 200
 
 

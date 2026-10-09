@@ -106,7 +106,8 @@ curl -H "Authorization: Bearer tc_..." -F "file=@package.zip" https://template-c
 
 - **Checks:** each user can run one check at a time and 50 per rolling hour, counting web and API-key runs together. Over the limit the API returns `429` with `code` set to `check_in_progress` or `rate_limited`; the hourly limit also sends a `Retry-After` header (seconds).
 - **Access requests:** 5 per hour per client IP (`Fly-Client-IP` on Fly).
-- Limits are stored on the machine (`RATE_LIMIT_DIR`, default `/tmp/template-checker-rate-limit`) and shared by all gunicorn workers. They are per machine and reset on restart; if you run more than one machine, move them to Redis.
+- Limits are stored in Supabase (`python_backend/migrations/006_rate_limits.sql`), so they hold across every backend machine and worker. Only the backend's service role can call the limiter functions. If Supabase can't be reached, requests are allowed and the error is logged.
+- A check that is killed mid-run (e.g. by the 600s worker timeout) holds its "one at a time" lease for at most 11 minutes.
 
 ---
 
