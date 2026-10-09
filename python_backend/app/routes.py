@@ -10,6 +10,7 @@ from src.classes.FrontifyChecker import FrontifyChecker
 from .utils import upload_file, start_check, checker_cleanup
 from .analytics_api import get_analytics_summary, get_runs, get_supabase_client
 from . import users as user_helpers
+from . import api_keys
 
 main = Blueprint('main', __name__)
 
@@ -108,37 +109,49 @@ def verify_supabase_token(token):
     return _verify_supabase_token_legacy(token)
 
 
-def require_auth(f):
+def _auth_error(details):
+    return jsonify({'error': {'message': 'Authentication required', 'details': details}}), 401
+
+
+def require_auth(f=None, *, allow_api_key=False):
     """Require a valid Supabase JWT belonging to an approved user (a row in the users table).
+
+    With allow_api_key=True, a per-user API key (`tc_...`) is also accepted. Only the checker routes opt in;
+    admin, analytics and key-management routes stay browser-login only, so a leaked key cannot mint more keys.
 
     Fails closed: no static tokens, no query-string tokens, and no open access when auth is unconfigured.
     """
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        auth_header = request.headers.get('Authorization', '')
-        token = auth_header[7:] if auth_header.startswith('Bearer ') else auth_header
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            auth_header = request.headers.get('Authorization', '')
+            token = auth_header[7:] if auth_header.startswith('Bearer ') else auth_header
 
-        payload = verify_supabase_token(token) if token else None
-        if not payload:
-            return jsonify({
-                'error': {
-                    'message': 'Authentication required',
-                    'details': 'Invalid or missing authentication token'
-                }
-            }), 401
-        g.supabase_jwt = payload
+            if allow_api_key and api_keys.looks_like_api_key(token):
+                user_row = api_keys.resolve_key(token)
+                if not user_row:
+                    return _auth_error('Invalid, expired or revoked API key')
+                g.api_key_user = user_row
+                return f(*args, **kwargs)
 
-        # A Supabase login alone is not enough: anyone can sign in with Google. Only approved users may call the API.
-        email = (payload.get('email') or '').strip().lower()
-        if not email or not user_helpers.get_user_by_email(email):
-            return jsonify({
-                'error': {'message': 'Access not authorized', 'code': 'access_denied'},
-                'allowed': False,
-            }), 403
+            payload = verify_supabase_token(token) if token else None
+            if not payload:
+                return _auth_error('Invalid or missing authentication token')
+            g.supabase_jwt = payload
 
-        return f(*args, **kwargs)
+            # A Supabase login alone is not enough: anyone can sign in with Google. Only approved users may call the API.
+            email = (payload.get('email') or '').strip().lower()
+            if not email or not user_helpers.get_user_by_email(email):
+                return jsonify({
+                    'error': {'message': 'Access not authorized', 'code': 'access_denied'},
+                    'allowed': False,
+                }), 403
 
-    return decorated_function
+            return f(*args, **kwargs)
+
+        return decorated_function
+
+    return decorator(f) if f else decorator
 
 
 def _current_user_id():
@@ -153,6 +166,23 @@ def _current_user_email():
     if not hasattr(g, 'supabase_jwt') or not g.supabase_jwt:
         return None
     return g.supabase_jwt.get('email')
+
+
+def _current_users_row():
+    """Return the caller's users row (from API key or Supabase JWT), or None."""
+    if getattr(g, 'api_key_user', None):
+        return g.api_key_user
+    email = (_current_user_email() or '').strip().lower()
+    return user_helpers.get_user_by_email(email) if email else None
+
+
+def _run_source_and_user_id():
+    """Source type and users.id to attribute a checker run to. API-key calls are always recorded as 'api'."""
+    user_row = _current_users_row()
+    user_id = str(user_row['id']) if user_row and user_row.get('id') else None
+    if getattr(g, 'api_key_user', None):
+        return 'api', user_id
+    return request.headers.get('X-Source', 'api'), user_id
 
 
 def require_admin(f):
@@ -523,6 +553,117 @@ def admin_invite():
         return _internal_error()
 
 
+def _api_key_response(row):
+    return {
+        'id': str(row['id']),
+        'name': row.get('name'),
+        'key_prefix': row.get('key_prefix'),
+        'created_at': row.get('created_at'),
+        'expires_at': row.get('expires_at'),
+        'last_used_at': row.get('last_used_at'),
+        'revoked_at': row.get('revoked_at'),
+        'active': api_keys.is_active(row),
+    }
+
+
+@main.route('/api-keys', methods=['GET'])
+@require_auth
+def list_my_api_keys():
+    """List the caller's API keys (never the key itself)."""
+    user_row = _current_users_row()
+    if not user_row:
+        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+    try:
+        return jsonify([_api_key_response(row) for row in api_keys.list_keys(str(user_row['id']))]), 200
+    except Exception:
+        return _internal_error()
+
+
+@main.route('/api-keys', methods=['POST'])
+@require_auth
+def create_my_api_key():
+    """Create an API key for the caller. Body: {"name": "...", "expires_in_days": 90}. The key is returned once."""
+    user_row = _current_users_row()
+    if not user_row:
+        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+    data = request.get_json(silent=True) or {}
+    name = data.get('name')
+    if not isinstance(name, str) or not name.strip():
+        return jsonify({'error': {'message': 'name is required'}}), 400
+    name = name.strip()
+    if len(name) > 100:
+        return jsonify({'error': {'message': 'name must be 100 characters or fewer'}}), 400
+    expires_in_days = data.get('expires_in_days', api_keys.DEFAULT_EXPIRY_DAYS)
+    if not isinstance(expires_in_days, int) or isinstance(expires_in_days, bool) \
+            or not 1 <= expires_in_days <= api_keys.MAX_EXPIRY_DAYS:
+        return jsonify({'error': {
+            'message': f'expires_in_days must be a whole number from 1 to {api_keys.MAX_EXPIRY_DAYS}'
+        }}), 400
+    try:
+        user_id = str(user_row['id'])
+        if api_keys.count_active_keys(user_id) >= api_keys.MAX_ACTIVE_KEYS_PER_USER:
+            return jsonify({'error': {
+                'message': f'You can have at most {api_keys.MAX_ACTIVE_KEYS_PER_USER} active keys. Revoke one first.'
+            }}), 400
+        key, row = api_keys.create_key(user_id, name, expires_in_days)
+        return jsonify({**_api_key_response(row), 'key': key}), 201
+    except Exception:
+        return _internal_error()
+
+
+@main.route('/api-keys/<key_id>', methods=['DELETE'])
+@require_auth
+def revoke_my_api_key(key_id):
+    """Revoke one of the caller's API keys."""
+    user_row = _current_users_row()
+    if not user_row:
+        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+    try:
+        row = api_keys.get_key(key_id)
+        # Same 404 for "not found" and "not yours" so key ids cannot be probed.
+        if not row or str(row.get('user_id')) != str(user_row['id']):
+            return jsonify({'error': {'message': 'API key not found'}}), 404
+        api_keys.revoke_key(key_id)
+    except Exception:
+        return _internal_error()
+    return '', 204
+
+
+@main.route('/admin/api-keys', methods=['GET'])
+@require_auth
+@require_admin
+def admin_list_api_keys():
+    """List every user's API keys with the owner's email (admin only)."""
+    try:
+        rows = api_keys.list_keys()
+        emails = {}
+        supabase = get_supabase_client()
+        user_ids = list({str(row['user_id']) for row in rows})
+        if supabase and user_ids:
+            r = supabase.table('users').select('id, email').in_('id', user_ids).execute()
+            emails = {str(u['id']): u.get('email') for u in (r.data or [])}
+        return jsonify([
+            {**_api_key_response(row), 'user_id': str(row['user_id']), 'user_email': emails.get(str(row['user_id']))}
+            for row in rows
+        ]), 200
+    except Exception:
+        return _internal_error()
+
+
+@main.route('/admin/api-keys/<key_id>', methods=['DELETE'])
+@require_auth
+@require_admin
+def admin_revoke_api_key(key_id):
+    """Revoke any user's API key (admin only)."""
+    try:
+        if not api_keys.get_key(key_id):
+            return jsonify({'error': {'message': 'API key not found'}}), 404
+        api_keys.revoke_key(key_id)
+    except Exception:
+        return _internal_error()
+    return '', 204
+
+
 @main.route('/test')
 def test_cors():
     """Test endpoint to verify CORS."""
@@ -530,43 +671,38 @@ def test_cors():
 
 
 @main.route('/run', methods=['POST'])
-@require_auth
+@require_auth(allow_api_key=True)
 def run_checker():
     """Endpoint to run the checker and return results."""
     checker = FrontifyChecker()
     try:
-        # Get source type from header, default to 'api'
-        source_type = request.headers.get('X-Source', 'api')
+        source_type, run_user_id = _run_source_and_user_id()
 
         upload_result = upload_file()
         if upload_result['status'] != 'success':
             return jsonify(upload_result['error']), 400
 
         upload_path = upload_result['path']
-        results, status_code = start_check(checker, upload_path, source_type)
+        results, status_code = start_check(checker, upload_path, source_type, user_id=run_user_id)
         return results, status_code
     finally:
         checker_cleanup(checker)
 
 
 @main.route('/run-and-download-xml', methods=['POST'])
-@require_auth
+@require_auth(allow_api_key=True)
 def run_checker_and_download():
     """Endpoint to run the checker and download the resulting ZIP file."""
     checker = FrontifyChecker()
     zip_file_path = None
     try:
-        # Get source type from header, default to 'api'
-        source_type = request.headers.get('X-Source', 'api')
+        source_type, run_user_id = _run_source_and_user_id()
 
         upload_result = upload_file()
         if upload_result['status'] != 'success':
             return jsonify(upload_result['error']), 400
 
         upload_path = upload_result['path']
-        auth_uid = _current_user_id()
-        user_row = user_helpers.get_user_by_auth_id(auth_uid) if auth_uid else None
-        run_user_id = str(user_row['id']) if user_row and user_row.get('id') else None
         results, status_code = start_check(checker, upload_path, source_type, user_id=run_user_id)
         if status_code != 200:
             return results, status_code
