@@ -1,5 +1,5 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, Lock, MessageSquarePlus, Pencil, ThumbsUp, Trash2, TriangleAlert } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { ArrowLeft, Check, Lock, MessageSquarePlus, Pencil, ThumbsUp, Trash2, TriangleAlert } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { cn } from '../../lib/utils';
@@ -228,9 +228,10 @@ export function useCopyGuard(container: React.RefObject<HTMLElement>, active: bo
 
 type ReviewToolbarProps = {
   commentCount: number;
-  looksGoodAdded: boolean;
-  onLooksGood: () => void;
-  onGeneralFeedback: () => void;
+  /** Whether they've scrolled to the end of the summary; copying stays locked until they have. */
+  readToEnd: boolean;
+  /** 0–1, how far through the summary they've scrolled. */
+  progress: number;
   submitting: boolean;
   saved: boolean;
   error: string | null;
@@ -239,30 +240,26 @@ type ReviewToolbarProps = {
   onSubmit: () => void;
 };
 
-/** Sticky bar while reviewing: what to do, and the one action that copies the summary. */
-export function ReviewToolbar({
-  commentCount,
-  looksGoodAdded,
-  onLooksGood,
-  onGeneralFeedback,
-  submitting,
-  saved,
-  error,
-  copyHint,
-  onBack,
-  onSubmit,
-}: ReviewToolbarProps) {
-  const needsComment = commentCount === 0 && !saved;
+/** Sticky bar while reviewing: where they are, and the one action that copies the summary. */
+export function ReviewToolbar({ commentCount, readToEnd, progress, submitting, saved, error, copyHint, onBack, onSubmit }: ReviewToolbarProps) {
+  const needsRead = !readToEnd && !saved;
+  const needsComment = !needsRead && commentCount === 0 && !saved;
+  const locked = needsRead || needsComment;
   const label = submitting
     ? 'Saving…'
     : saved
       ? 'Copy summary'
-      : needsComment
-        ? 'Leave a comment to copy'
-        : `Send ${commentCount === 1 ? 'feedback' : `${commentCount} comments`} & copy`;
+      : needsRead
+        ? 'Read to the end to copy'
+        : needsComment
+          ? 'Leave a comment to copy'
+          : `Send ${commentCount === 1 ? 'feedback' : `${commentCount} comments`} & copy`;
+  const hint = needsRead
+    ? 'Read the whole summary first. Copying unlocks at the end.'
+    : 'At the end of the summary, confirm it looks good or leave a comment.';
   return (
-    <div className="sticky top-0 z-20 rounded-xl border bg-background/95 px-4 py-3 shadow-[0_8px_24px_-16px_rgba(0,0,0,0.5)] backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+    <div className="sticky top-0 z-20 overflow-hidden rounded-xl border bg-background/95 shadow-[0_8px_24px_-16px_rgba(0,0,0,0.5)] backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
         <Button variant="ghost" size="sm" className="-ml-2 h-8 gap-1.5 text-muted-foreground" onClick={onBack}>
           <ArrowLeft className="h-4 w-4" aria-hidden />
           Results
@@ -272,42 +269,21 @@ export function ReviewToolbar({
             <h2 className="text-sm font-semibold">Review customer summary</h2>
             <span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:text-amber-300">Beta</span>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Read it next to the results. Click a part to see it on the page, or select text to comment on it.
-          </p>
+          <p className="text-xs text-muted-foreground">Click a part to see it on the page. Select text to comment on it.</p>
         </div>
-        {!saved && (
-          <div className="flex items-center gap-1.5">
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-9 gap-1.5"
-              onClick={onLooksGood}
-              disabled={looksGoodAdded || submitting}
-              aria-pressed={looksGoodAdded}
-            >
-              <ThumbsUp className="h-3.5 w-3.5" aria-hidden />
-              {looksGoodAdded ? 'Marked as good' : 'Looks good to send'}
-            </Button>
-            <Button variant="outline" size="sm" className="h-9 gap-1.5" onClick={onGeneralFeedback} disabled={submitting}>
-              <MessageSquarePlus className="h-3.5 w-3.5" aria-hidden />
-              General feedback
-            </Button>
-          </div>
-        )}
         <Tooltip>
           <TooltipTrigger asChild>
             {/* span keeps the tooltip working while the button is disabled */}
-            <span tabIndex={needsComment ? 0 : -1}>
-              <Button onClick={onSubmit} disabled={submitting || needsComment} className="gap-1.5">
-                {needsComment && <Lock className="h-3.5 w-3.5" aria-hidden />}
+            <span tabIndex={locked ? 0 : -1}>
+              <Button onClick={onSubmit} disabled={submitting || locked} className="gap-1.5">
+                {locked && <Lock className="h-3.5 w-3.5" aria-hidden />}
                 {label}
               </Button>
             </span>
           </TooltipTrigger>
-          {needsComment && (
+          {locked && (
             <TooltipContent side="bottom" className="max-w-[16rem] text-center">
-              Leave at least one comment to copy the summary. If it reads well, click “Looks good to send”.
+              {hint}
             </TooltipContent>
           )}
         </Tooltip>
@@ -316,11 +292,20 @@ export function ReviewToolbar({
         <p
           role={error ? 'alert' : undefined}
           aria-live="polite"
-          className={cn('mt-2 flex items-center gap-1.5 text-xs', error ? 'text-destructive' : 'text-amber-600 dark:text-amber-400')}
+          className={cn('-mt-1 flex items-center gap-1.5 px-4 pb-3 text-xs', error ? 'text-destructive' : 'text-amber-600 dark:text-amber-400')}
         >
           {!error && <Lock className="h-3 w-3" aria-hidden />}
-          {error ?? 'Leave a comment and send it to copy the summary.'}
+          {error ?? hint}
         </p>
+      )}
+      {/* Reading progress through the summary */}
+      {!saved && (
+        <div className="h-0.5 w-full bg-muted" aria-hidden>
+          <div
+            className={cn('h-full transition-[width] duration-200 ease-out', readToEnd ? 'bg-foreground/60' : 'bg-foreground/30')}
+            style={{ width: `${Math.round((readToEnd ? 1 : progress) * 100)}%` }}
+          />
+        </div>
       )}
     </div>
   );
@@ -338,17 +323,22 @@ type SummaryReviewDocumentProps = {
   onSelectProblem: (problemId: string | null) => void;
   /** Wraps the summary text, for the copy guard. */
   summaryRef: React.RefObject<HTMLElement>;
+  /** Called with 0–1 as they scroll through the summary (1 = they've reached the end). */
+  onProgress: (progress: number) => void;
 };
 
 /** The customer summary as the customer will get it, with comments inline under the part they're about. */
-export type SummaryReviewDocumentHandle = { openGeneralFeedback: () => void };
-
-export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, SummaryReviewDocumentProps>(function SummaryReviewDocument(
-  { doc, comments, onCommentsChange, activeProblemId, onSelectProblem, summaryRef },
-  ref
-) {
+export function SummaryReviewDocument({
+  doc,
+  comments,
+  onCommentsChange,
+  activeProblemId,
+  onSelectProblem,
+  summaryRef,
+  onProgress,
+}: SummaryReviewDocumentProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const generalRef = useRef<HTMLDivElement>(null);
+  const endRef = useRef<HTMLDivElement>(null);
   const composerRef = useRef<HTMLTextAreaElement>(null);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [composer, setComposer] = useState<Composer | null>(null);
@@ -364,6 +354,26 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
   useEffect(() => {
     if (composer) composerRef.current?.focus();
   }, [composer]);
+
+  // How far through the summary they've read: the bottom of the window against the summary's extent.
+  useEffect(() => {
+    const update = () => {
+      const article = summaryRef.current;
+      const end = endRef.current;
+      if (!article || !end) return;
+      const top = article.getBoundingClientRect().top;
+      const bottom = end.getBoundingClientRect().top;
+      const span = Math.max(1, bottom - top);
+      onProgress(Math.min(1, Math.max(0, (window.innerHeight - top) / span)));
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, [summaryRef, onProgress]);
 
   const readSelection = () => {
     const sel = window.getSelection();
@@ -407,13 +417,6 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
     quoteEnd: null,
   });
 
-  useImperativeHandle(ref, () => ({
-    openGeneralFeedback: () => {
-      openComposer(forSection(GENERAL));
-      requestAnimationFrame(() => generalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
-    },
-  }));
-
   const saveComposer = () => {
     const body = composerText.trim();
     if (!composer || !body) return;
@@ -428,9 +431,12 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
   };
 
   const composerCard = (
-    <div className="ml-3 mt-2 rounded-lg border border-foreground/20 bg-background p-3 shadow-sm">
+    <div className="mx-4 mb-2 mt-1 rounded-lg border bg-background p-2.5 shadow-sm">
       {composer?.quote && (
-        <p className="mb-2 line-clamp-3 border-l-2 border-amber-500 pl-2 text-xs italic text-muted-foreground">“{composer.quote}”</p>
+        <p className="mb-2 flex gap-1.5 px-1 text-xs text-muted-foreground">
+          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
+          <span className="line-clamp-2 italic">“{composer.quote}”</span>
+        </p>
       )}
       <textarea
         ref={composerRef}
@@ -442,11 +448,11 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
         }}
         rows={2}
         placeholder={composer?.sectionId === GENERAL.id ? 'Anything about the summary as a whole?' : 'What should change, and why?'}
-        className="w-full resize-none rounded-md border bg-background px-2.5 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        className="w-full resize-none bg-transparent px-1 py-0.5 text-sm placeholder:text-muted-foreground focus:outline-none"
         aria-label="Comment"
       />
-      <div className="mt-2 flex items-center justify-between gap-2">
-        <span className="text-[11px] text-muted-foreground">⌘↵ to save · Esc to cancel</span>
+      <div className="mt-1 flex items-center justify-between gap-2">
+        <span className="px-1 text-[11px] text-muted-foreground">⌘↵ to save · Esc to cancel</span>
         <div className="flex gap-1.5">
           <Button size="sm" variant="ghost" className="h-7 px-2.5 text-xs" onClick={() => setComposer(null)}>
             Cancel
@@ -459,7 +465,8 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
     </div>
   );
 
-  const commentCards = (sectionId: string) =>
+  // Comments read as quiet notes under the text, not as cards.
+  const commentNotes = (sectionId: string) =>
     commentsFor(sectionId).map((c) =>
       composer?.editingId === c.id ? (
         <React.Fragment key={c.id}>{composerCard}</React.Fragment>
@@ -469,18 +476,19 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
           onMouseEnter={() => setActiveCommentId(c.id)}
           onMouseLeave={() => setActiveCommentId(null)}
           className={cn(
-            'group/card ml-3 mt-2 flex items-start gap-2.5 rounded-lg border bg-background px-3 py-2 transition-shadow',
-            activeCommentId === c.id && 'ring-1 ring-amber-500/60'
+            'group/note mx-4 mb-1.5 flex items-start gap-2.5 rounded-md px-2.5 py-1.5 transition-colors',
+            activeCommentId === c.id ? 'bg-muted' : 'bg-muted/50'
           )}
         >
+          <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
           <div className="min-w-0 flex-1">
-            {c.quote && <p className="mb-0.5 line-clamp-1 text-xs italic text-muted-foreground">“{c.quote}”</p>}
+            {c.quote && <p className="line-clamp-1 text-xs italic text-muted-foreground">“{c.quote}”</p>}
             <p className="whitespace-pre-wrap break-words text-sm leading-snug">{c.body}</p>
           </div>
-          <div className="-mr-1 flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover/card:opacity-100">
+          <div className="-mr-1 flex shrink-0 opacity-0 transition-opacity focus-within:opacity-100 group-hover/note:opacity-100">
             <button
               type="button"
-              className="grid h-6 w-6 place-items-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="grid h-6 w-6 place-items-center rounded text-muted-foreground hover:bg-background hover:text-foreground"
               onClick={() => openComposer({ ...c, editingId: c.id }, c.body)}
               aria-label="Edit comment"
             >
@@ -488,7 +496,7 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
             </button>
             <button
               type="button"
-              className="grid h-6 w-6 place-items-center rounded text-muted-foreground hover:bg-muted hover:text-destructive"
+              className="grid h-6 w-6 place-items-center rounded text-muted-foreground hover:bg-background hover:text-destructive"
               onClick={() => onCommentsChange(comments.filter((x) => x.id !== c.id))}
               aria-label="Delete comment"
             >
@@ -498,6 +506,8 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
         </div>
       )
     );
+
+  const looksGoodAdded = hasLooksGood(comments);
 
   return (
     <div ref={wrapRef} className="relative overflow-hidden rounded-xl border bg-card">
@@ -509,15 +519,7 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
         </p>
       </div>
 
-      {(commentsFor(GENERAL.id).length > 0 || composer?.sectionId === GENERAL.id) && (
-        <div ref={generalRef} className="scroll-mt-28 border-b px-2 pb-3 pt-2">
-          <p className="px-3 pt-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">General feedback</p>
-          {commentCards(GENERAL.id)}
-          {composer && !composer.editingId && composer.sectionId === GENERAL.id && composerCard}
-        </div>
-      )}
-
-      <article ref={summaryRef} className="space-y-0.5 p-2" aria-label="Customer summary" onMouseUp={readSelection} onKeyUp={readSelection}>
+      <article ref={summaryRef} className="py-2" aria-label="Customer summary" onMouseUp={readSelection} onKeyUp={readSelection}>
         {doc.sections.map((section) => {
           const active = !!section.problemId && section.problemId === activeProblemId;
           return (
@@ -528,22 +530,27 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
                   if (section.problemId) onSelectProblem(active ? null : section.problemId);
                 }}
                 className={cn(
-                  'group relative rounded-lg border-l-2 border-transparent px-3 py-2 transition-colors',
+                  'group relative px-5 py-2 transition-colors',
                   section.problemId && 'cursor-pointer',
-                  active ? 'border-foreground/60 bg-muted/60' : 'hover:bg-muted/40'
+                  active ? 'bg-muted/70' : section.problemId && 'hover:bg-muted/30'
                 )}
               >
+                {active && (
+                  <span className="pointer-events-none absolute right-12 top-2.5 hidden text-[11px] font-medium text-muted-foreground sm:inline">
+                    On the page →
+                  </span>
+                )}
                 <p
                   data-section-text={section.id}
-                  className="whitespace-pre-wrap break-words pr-8 text-[13.5px] leading-relaxed text-foreground"
+                  className="whitespace-pre-wrap break-words pr-10 text-[13.5px] leading-relaxed text-foreground"
                 >
                   {segments(section, comments).map((seg, i) =>
                     seg.ids.length ? (
                       <mark
                         key={i}
                         className={cn(
-                          'rounded-[2px] border-b-2 border-amber-500 bg-amber-400/20 text-inherit transition-colors',
-                          seg.ids.includes(activeCommentId ?? '') && 'bg-amber-400/45'
+                          'rounded-[2px] bg-amber-400/25 text-inherit underline decoration-amber-500 decoration-2 underline-offset-[3px] transition-colors',
+                          seg.ids.includes(activeCommentId ?? '') && 'bg-amber-400/50'
                         )}
                         onMouseEnter={() => setActiveCommentId(seg.ids[0])}
                         onMouseLeave={() => setActiveCommentId(null)}
@@ -563,7 +570,7 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
                         e.stopPropagation();
                         openComposer(forSection(section));
                       }}
-                      className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:bg-background hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
+                      className="absolute right-3 top-1.5 grid h-7 w-7 place-items-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:bg-background hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
                       aria-label={`Comment on ${section.title}`}
                     >
                       <MessageSquarePlus className="h-4 w-4" />
@@ -572,12 +579,40 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
                   <TooltipContent side="left">Comment on this part</TooltipContent>
                 </Tooltip>
               </div>
-              {commentCards(section.id)}
+              {commentNotes(section.id)}
               {composer && !composer.editingId && composer.sectionId === section.id && composerCard}
             </div>
           );
         })}
       </article>
+
+      {/* The end: confirm it reads well, or leave general feedback. Reaching here unlocks copying. */}
+      <div ref={endRef} className="border-t px-5 pb-4 pt-4">
+        <p className="text-sm font-medium">That&apos;s the whole summary.</p>
+        <p className="mt-0.5 text-xs text-muted-foreground">Does it read well? Confirm it, or tell me what should change.</p>
+        {(commentsFor(GENERAL.id).length > 0 || composer?.sectionId === GENERAL.id) && (
+          <div className="-mx-4 mt-3">
+            {commentNotes(GENERAL.id)}
+            {composer && !composer.editingId && composer.sectionId === GENERAL.id && composerCard}
+          </div>
+        )}
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5"
+            onClick={() => onCommentsChange(withLooksGood(comments))}
+            disabled={looksGoodAdded}
+          >
+            {looksGoodAdded ? <Check className="h-3.5 w-3.5" aria-hidden /> : <ThumbsUp className="h-3.5 w-3.5" aria-hidden />}
+            {looksGoodAdded ? 'Marked as good' : 'Looks good to send'}
+          </Button>
+          <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-muted-foreground" onClick={() => openComposer(forSection(GENERAL))}>
+            <MessageSquarePlus className="h-3.5 w-3.5" aria-hidden />
+            General feedback
+          </Button>
+        </div>
+      </div>
 
       {selection && (
         <button
@@ -602,4 +637,4 @@ export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, Sum
       )}
     </div>
   );
-});
+}

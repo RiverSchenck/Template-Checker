@@ -8,14 +8,11 @@ import PageViewer from './PageViewer';
 import { buildReport, compareReports, type Problem } from './buildReport';
 import { buildCustomerSummaryDocument } from './customerSummary';
 import {
-  hasLooksGood,
   ReviewToolbar,
   SummaryReviewDocument,
   useCopyGuard,
   useSummaryReviewSubmit,
-  withLooksGood,
   type DraftComment,
-  type SummaryReviewDocumentHandle,
 } from './SummaryReview';
 import { notify } from '../../lib/notify';
 
@@ -76,13 +73,21 @@ function ReportView({ result, previous }: ReportViewProps) {
   const [summaryCopied, setSummaryCopied] = useState(false);
   const [copyHint, setCopyHint] = useState(false);
   const summaryRef = useRef<HTMLElement>(null);
-  const reviewDocRef = useRef<SummaryReviewDocumentHandle>(null);
+  // Copying stays locked until they've scrolled to the end of the summary (once per review).
+  const [readProgress, setReadProgress] = useState(0);
+  const [readToEnd, setReadToEnd] = useState(false);
+  const handleProgress = useCallback((progress: number) => {
+    setReadProgress(progress);
+    if (progress >= 0.999) setReadToEnd(true);
+  }, []);
   const topRef = useRef<HTMLDivElement>(null);
 
   // A new upload means a new summary: start its review fresh.
   useEffect(() => {
     setDrafts([]);
     setReviewing(false);
+    setReadToEnd(false);
+    setReadProgress(0);
   }, [summaryDoc.text]);
 
   useEffect(() => {
@@ -137,9 +142,8 @@ function ReportView({ result, previous }: ReportViewProps) {
       <div ref={topRef} className="flex scroll-mt-4 flex-col gap-4 pb-10 pt-2">
         <ReviewToolbar
           commentCount={drafts.length}
-          looksGoodAdded={hasLooksGood(drafts)}
-          onLooksGood={() => setDrafts((current) => withLooksGood(current))}
-          onGeneralFeedback={() => reviewDocRef.current?.openGeneralFeedback()}
+          readToEnd={readToEnd}
+          progress={readProgress}
           submitting={submitting}
           saved={saved}
           error={error}
@@ -149,13 +153,13 @@ function ReportView({ result, previous }: ReportViewProps) {
         />
         <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-cols-[minmax(340px,520px)_minmax(0,1fr)]">
           <SummaryReviewDocument
-            ref={reviewDocRef}
             doc={summaryDoc}
             comments={drafts}
             onCommentsChange={setDrafts}
             activeProblemId={selectedId}
             onSelectProblem={selectProblem}
             summaryRef={summaryRef}
+            onProgress={handleProgress}
           />
           {pageLayouts.length > 0 && <div className="lg:sticky lg:top-24">{pageViewer}</div>}
         </div>
