@@ -6,6 +6,12 @@ WORKDIR /app
 COPY . ./
 
 RUN npm install
+
+# VITE_* values are baked into the bundle at build time. CI passes them with
+# `fly deploy --build-arg`; a local deploy without build args falls back to .env.
+ARG VITE_API_URL
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_ANON_KEY
 RUN npm run build
 
 # Serve stage
