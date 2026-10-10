@@ -8,6 +8,7 @@ import {
   Inbox,
   KeyRound,
   LogOut,
+  MessageSquareText,
   MoreVertical,
 } from 'lucide-react';
 import {
@@ -50,6 +51,8 @@ function pathnameToItemId(pathname: string, hash: string): string {
   if (pathname.startsWith('/results')) return 'results';
   if (pathname.startsWith('/analytics')) return 'analytics';
   if (pathname.startsWith('/admin/access-requests')) return 'admin-access-requests';
+  if (pathname.startsWith('/admin/summary-feedback')) return 'admin-summary-feedback';
+  if (pathname.startsWith('/my-feedback')) return 'my-feedback';
   if (pathname.startsWith('/admin/users')) return hash === '#access-requests' ? 'admin-access-requests' : 'admin-users';
   return 'upload-template';
 }
@@ -197,6 +200,16 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                       )}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      tooltip="Summary feedback"
+                      isActive={activeId === 'admin-summary-feedback'}
+                      onClick={() => navigate('/admin/summary-feedback')}
+                    >
+                      <MessageSquareText className="h-4 w-4" />
+                      <span>Summary feedback</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
@@ -244,6 +257,10 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                   <DropdownMenuItem onClick={() => navigate('/api-keys')} className="focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-neutral-600">
                     <KeyRound className="mr-2 h-4 w-4" />
                     API keys
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/my-feedback')} className="focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-neutral-600">
+                    <MessageSquareText className="mr-2 h-4 w-4" />
+                    Your feedback
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => signOut()} className="focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-neutral-600">
                     <LogOut className="mr-2 h-4 w-4" />
