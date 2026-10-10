@@ -117,7 +117,7 @@ export default function AuthCallback() {
   }, [sessionReceived, session, navigate]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-5">
+    <div className="app-background flex min-h-screen flex-col items-center justify-center p-5">
       {error ? (
         <Card className="w-full max-w-[500px] border-destructive/50 bg-destructive/5">
           <CardHeader className="pb-2">
@@ -137,9 +137,13 @@ export default function AuthCallback() {
           </CardContent>
         </Card>
       ) : (
-        <div className="flex flex-col items-center gap-3 text-muted-foreground">
-          <Loader2 className="h-8 w-8 animate-spin" aria-hidden />
-          <span className="text-sm">Completing authentication...</span>
+        // Usually done in a blink and followed by the app shell, so stay quiet; only show a spinner if it drags on.
+        <div
+          className="flex flex-col items-center gap-3 text-muted-foreground animate-in fade-in fill-mode-both duration-300 [animation-delay:1s]"
+          role="status"
+        >
+          <Loader2 className="h-6 w-6 animate-spin" aria-hidden />
+          <span className="text-sm">Signing you in…</span>
         </div>
       )}
     </div>

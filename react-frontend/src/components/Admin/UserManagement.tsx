@@ -22,6 +22,7 @@ import {
   X,
 } from 'lucide-react';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
+import { Skeleton } from '../ui/skeleton';
 import { useAuth } from '../AuthContext';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Button } from '../ui/button';
@@ -203,6 +204,29 @@ function RoleSelect({ value, onChange }: { value: AdminUser['role']; onChange: (
         <SelectItem value="admin">Admin</SelectItem>
       </SelectContent>
     </Select>
+  );
+}
+
+/** Placeholder rows laid out on USER_GRID, so each bar sits under its column header. */
+function UsersSkeleton({ rows }: { rows: number }) {
+  return (
+    <ul className="divide-y" aria-busy="true" aria-label="Loading users">
+      {Array.from({ length: rows }).map((_, i) => (
+        <li key={i} className={cn('grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 px-4 py-3 sm:px-5', USER_GRID)}>
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-9 w-9 shrink-0 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className={cn('h-3.5 rounded', ['w-32', 'w-40', 'w-28', 'w-36', 'w-44'][i % 5])} />
+              <Skeleton className={cn('h-3 rounded', ['w-44', 'w-52', 'w-40', 'w-48', 'w-56'][i % 5])} />
+            </div>
+          </div>
+          <Skeleton className="hidden h-7 w-20 rounded-md sm:block" />
+          <Skeleton className="hidden h-3.5 w-16 rounded sm:block" />
+          <Skeleton className="hidden h-3.5 w-14 rounded sm:block" />
+          <span />
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -696,7 +720,7 @@ export function UserManagement() {
               </div>
 
               {loading ? (
-                <RowSkeleton rows={5} />
+                <UsersSkeleton rows={5} />
               ) : visibleUsers.length === 0 ? (
                 <EmptyState
                   icon={Users}

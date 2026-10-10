@@ -1,21 +1,8 @@
 import React, { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuSkeleton,
-  SidebarProvider,
-} from './ui/sidebar';
+import { SidebarInset, SidebarProvider } from './ui/sidebar';
 import { SidebarMenu as SidebarMenuComponent } from './sidebar';
-import { Skeleton } from './ui/skeleton';
+import { PageSkeleton } from './layout/PageSkeleton';
 import { SiteHeader } from './site-header';
 import Login from './Login/Login';
 import { useAuth } from './AuthContext';
@@ -39,87 +26,21 @@ export default function ProtectedLayout() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Restoring the session is near-instant; show the bare background rather than a flash of text.
   if (loading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <div>Loading...</div>
-      </div>
-    );
+    return <div className="app-background min-h-screen" aria-busy="true" />;
   }
 
   if (!session) {
     return <Login />;
   }
 
-  // Don't show the app (avatar, sidebar, content) until we've verified access with /me.
-  // Show full layout skeleton so the shell appears to load in.
-  if (loadingRole) {
-    return (
-      <div className="app-background">
-        <SidebarProvider>
-          <Sidebar collapsible="offcanvas" variant="inset">
-            <SidebarHeader>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <div className="px-2 py-1.5">
-                    <Skeleton className="h-8 w-[140px] rounded" />
-                  </div>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarHeader>
-            <SidebarContent>
-              <SidebarGroup className="pt-1">
-                <SidebarGroupLabel className="h-auto min-h-0 px-2 pb-1.5 pt-0">
-                  <Skeleton className="h-4 w-28" />
-                </SidebarGroupLabel>
-                <SidebarGroupContent className="px-2">
-                  <SidebarMenuSkeleton showIcon className="mb-1" />
-                  <SidebarMenuSkeleton showIcon className="mb-1" />
-                  <SidebarMenuSkeleton showIcon className="mb-1" />
-                </SidebarGroupContent>
-              </SidebarGroup>
-              <SidebarGroup>
-                <SidebarGroupLabel className="h-auto min-h-0 px-2 pb-1.5 pt-0">
-                  <Skeleton className="h-4 w-20" />
-                </SidebarGroupLabel>
-                <SidebarGroupContent className="px-2">
-                  <SidebarMenuSkeleton showIcon className="mb-1" />
-                  <SidebarMenuSkeleton showIcon className="mb-1" />
-                </SidebarGroupContent>
-              </SidebarGroup>
-            </SidebarContent>
-            <SidebarFooter>
-              <div className="flex items-center gap-2 p-2">
-                <Skeleton className="h-8 w-8 shrink-0 rounded-full" />
-                <Skeleton className="h-4 w-24 flex-1" />
-              </div>
-            </SidebarFooter>
-          </Sidebar>
-          <SidebarInset className="min-w-0">
-            <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4 lg:px-6">
-              <Skeleton className="h-6 w-6 shrink-0 rounded" />
-              <Skeleton className="h-4 w-32" />
-            </header>
-            <div className="flex min-w-0 flex-1 flex-col p-6">
-              <Skeleton className="mb-2 h-8 w-56" />
-              <Skeleton className="mb-6 h-4 w-full max-w-md" />
-              <Skeleton className="h-48 w-full rounded-lg" />
-            </div>
-          </SidebarInset>
-        </SidebarProvider>
-      </div>
-    );
-  }
+  // While /me verifies access, render the real shell with a placeholder for the page, so the app
+  // appears once and nothing jumps when the content arrives.
+  const verifying = loadingRole;
 
   // Backend is the single source of truth: only show app when we have currentUser from /me.
-  if (!currentUser) {
+  if (!verifying && !currentUser) {
     return <Login />;
   }
 
@@ -164,7 +85,7 @@ export default function ProtectedLayout() {
             checkerResponse={checkerResponse}
           />
           <div className={contentWrapperClass}>
-            <Outlet context={outletContext} />
+            {verifying ? <PageSkeleton pathname={location.pathname} /> : <Outlet context={outletContext} />}
           </div>
         </SidebarInset>
       </SidebarProvider>

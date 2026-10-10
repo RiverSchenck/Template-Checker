@@ -35,6 +35,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { ValidationResult } from '../../types';
+import { Skeleton } from '../ui/skeleton';
 import FrontifyLogo from '../../assets/frontifyLogo.svg';
 import FrontifyNook from '../../assets/frontifyNook.svg';
 import { useAuth } from '../AuthContext';
@@ -164,7 +165,7 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
         </SidebarGroup>
 
         {/* User management section (admin only) */}
-        {(loadingRole || isAdmin) && (
+        {isAdmin && !loadingRole && (
           <SidebarGroup className="mt-3">
             <SidebarGroupLabel className="h-auto min-h-0 px-2 pb-1.5 pt-0 text-[13px] font-medium text-sidebar-foreground/60">
               User management
@@ -173,11 +174,9 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
               <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton
-                      tooltip={loadingRole ? 'Loading...' : 'Users'}
-                      isActive={!loadingRole && activeId === 'admin-users'}
-                      onClick={() => !loadingRole && isAdmin && navigate('/admin/users')}
-                      disabled={loadingRole}
-                      className={loadingRole ? 'opacity-60 pointer-events-none' : undefined}
+                      tooltip="Users"
+                      isActive={activeId === 'admin-users'}
+                      onClick={() => navigate('/admin/users')}
                     >
                       <Users className="h-4 w-4" />
                       <span>Users</span>
@@ -185,15 +184,13 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton
-                      tooltip={loadingRole ? 'Loading...' : 'Access requests'}
-                      isActive={!loadingRole && activeId === 'admin-access-requests'}
-                      onClick={() => !loadingRole && isAdmin && navigate('/admin/users#access-requests')}
-                      disabled={loadingRole}
-                      className={loadingRole ? 'opacity-60 pointer-events-none' : undefined}
+                      tooltip="Access requests"
+                      isActive={activeId === 'admin-access-requests'}
+                      onClick={() => navigate('/admin/users#access-requests')}
                     >
                       <Inbox className="h-4 w-4" />
                       <span>Access requests</span>
-                      {!loadingRole && accessRequestCount > 0 && (
+                      {accessRequestCount > 0 && (
                         <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-sidebar-accent px-1.5 text-xs font-medium text-sidebar-accent-foreground">
                           {accessRequestCount > 99 ? '99+' : accessRequestCount}
                         </span>
@@ -206,6 +203,15 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
         )}
       </SidebarContent>
       <SidebarFooter>
+        {!currentUser && loadingRole && (
+          <div className="flex items-center gap-2 p-2" aria-hidden>
+            <Skeleton className="h-8 w-8 shrink-0 rounded-full" />
+            <div className="flex-1 space-y-1.5">
+              <Skeleton className="h-3 w-24 rounded" />
+              <Skeleton className="h-2.5 w-32 rounded" />
+            </div>
+          </div>
+        )}
         {currentUser && (
           <SidebarMenu>
             <SidebarMenuItem>

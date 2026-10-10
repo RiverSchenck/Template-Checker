@@ -24,7 +24,6 @@ import {
   PageHeader,
   PageShell,
   Panel,
-  RowSkeleton,
   Segmented,
   Spinner,
   StatusPill,
@@ -35,6 +34,7 @@ import {
   primaryActionClass,
   secondaryActionClass,
 } from '../layout/page-kit';
+import { Skeleton } from '../ui/skeleton';
 
 export interface ApiKey {
   id: string;
@@ -179,6 +179,41 @@ async function errorMessage(res: Response, fallback: string): Promise<string> {
   } catch {
     return fallback;
   }
+}
+
+/** Placeholder rows on the key list's grid, so each bar sits under its column header. */
+function KeysSkeleton({ rows }: { rows: number }) {
+  return (
+    <>
+      <div className="hidden grid-cols-[minmax(0,1fr)_7.5rem_10rem_7rem_2.25rem] items-center gap-4 border-b px-5 py-2.5 text-xs font-medium text-muted-foreground md:grid">
+        <span>Key</span>
+        <span>Status</span>
+        <span>Expires</span>
+        <span>Last used</span>
+        <span />
+      </div>
+      <ul className="divide-y" aria-busy="true" aria-label="Loading API keys">
+        {Array.from({ length: rows }).map((_, i) => (
+          <li
+            key={i}
+            className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 px-4 py-3.5 sm:px-5 md:grid-cols-[minmax(0,1fr)_7.5rem_10rem_7rem_2.25rem]"
+          >
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-9 w-9 shrink-0 rounded-lg" />
+              <div className="space-y-2">
+                <Skeleton className={cn('h-3.5 rounded', i % 2 ? 'w-28' : 'w-36')} />
+                <Skeleton className="h-3 w-24 rounded" />
+              </div>
+            </div>
+            <Skeleton className="hidden h-5 w-16 rounded-full md:block" />
+            <Skeleton className="hidden h-3.5 w-20 rounded md:block" />
+            <Skeleton className="hidden h-3.5 w-14 rounded md:block" />
+            <span />
+          </li>
+        ))}
+      </ul>
+    </>
+  );
 }
 
 export function ApiKeys() {
@@ -343,7 +378,7 @@ export function ApiKeys() {
           }
         >
           {loading ? (
-            <RowSkeleton rows={2} />
+            <KeysSkeleton rows={2} />
           ) : visibleKeys.length === 0 ? (
             <EmptyState
               icon={KeyRound}
