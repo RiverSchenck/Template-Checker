@@ -10,11 +10,10 @@ from src.helpers.file_names import normalize_file_name
 # Description: A class to represent and manage image data.
 # **********************************************************
 class Image:
-    def __init__(self, image_path: str):
-        self.image_path = image_path
-        self.image_name: str = normalize_file_name(os.path.basename(image_path))
+    def __init__(self, file_name: str, size_bytes: int):
+        self.image_name: str = normalize_file_name(file_name)
         self.image_extension: str = os.path.splitext(self.image_name)[1]
-        self.image_size_bytes: int = os.path.getsize(image_path)
+        self.image_size_bytes: int = size_bytes
         self.image_size_MB: int = self._convert_bytes_to_MB()
         self.parent_link_data_id: str = ''
         print(self.image_name)
@@ -46,7 +45,6 @@ class Image:
     # ----------------String Method------------------
     def __str__(self) -> str:
         return (
-            f"Image Path: {self.image_path}\n"
             f"Image Name: {self.image_name}\n"
             f"Image Extension: {self.image_extension}\n"
             f"Image Size (Bytes): {self.image_size_bytes}\n"

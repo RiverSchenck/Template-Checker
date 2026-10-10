@@ -1,10 +1,11 @@
 import zipfile
 import os
 import uuid
-import shutil  # to delete the __MACOSX folder after unzipping
+import shutil
 import math
 import sys
-from typing import Dict, List, Optional, Union
+import traceback
+from typing import Dict, List, Optional, Tuple, Union
 from src.error_handling.ErrorHandling import ValidationResult, ValidationCategory
 from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning, ValidationInfo
 from src.parsers.SourceFoldersParser import SourceFoldersParser
@@ -16,7 +17,8 @@ from src.parsers.StoriesParser import StoriesParser
 from src.parsers.PreferencesParser import PreferencesParser
 from src.parsers.MetadataParser import MetadataParser
 from src.classes.States import States
-from src.helpers.file_names import extract_zip
+from src.helpers.package_zip import (
+    MultipleIdmlError, NoIdmlError, PackageError, extract_idml, extract_package, read_package)
 from src.helpers.page_geometry import PageGeometryIndex
 from src.helpers.pdf_previews import find_package_pdf, render_pdf_previews
 from src.helpers.page_item_transform import (
@@ -44,6 +46,8 @@ class FrontifyChecker:
         # Unarchived IDML
         self.idml_output_folder: str = ''
         self.idml_path: str = ''
+        self.idml_problem: Optional[str] = None
+        self.package_links: List[Tuple[str, int]] = []  # (file name, size) in Links/
         self.spreads_dir: str = ''
         # XML Data
         self.stories_parser: StoriesParser = None
@@ -190,101 +194,59 @@ class FrontifyChecker:
             return False
 
     # ---------------------------------------------------
-    # Function: find_idml_files
-    # Description: searches for IDML files in a directory
-    # Returns a list of idml files found.
-    # ---------------------------------------------------
-    def find_idml_files(self, directory) -> List[str]:
-        idml_files = []
-        # List all files in the given directory
-        for file in os.listdir(directory):
-            if file.endswith('.idml'):
-                idml_files.append(os.path.join(directory, file))
-        return idml_files
-
-    # ---------------------------------------------------
     # Function: extract_zip_to_data_folder
-    # Description: Extracts ZIP into unique folder. Then deletes the
-    # __MACOSC folder from ZIP. Check only 1 folder in unique folder.
+    # Description: Validates the package from the zip's directory, then
+    # extracts only what the checks read (.idml, Document Fonts, package
+    # PDF) into the unique folder. Links are listed, not extracted.
+    # A missing or duplicate .idml is reported by the UNZIP_IDML state.
     # ---------------------------------------------------
     def extract_zip_to_data_folder(self) -> bool:
+        self.idml_path = ''
+        self.package_links = []
+        self.idml_problem = None
         try:
             with zipfile.ZipFile(self.source_file_path, 'r') as zip_ref:
-                extract_zip(zip_ref, self.unzipped_root_path)
-                # to delete the __MACOSX folder after unzipping
-                macosx_dir = os.path.join(self.unzipped_root_path, '__MACOSX')
-                if os.path.exists(macosx_dir):
-                    shutil.rmtree(macosx_dir)
-
-                # We need to check if the unzipped package has a root folder or not
-                if len(self.find_idml_files(self.unzipped_root_path)) == 0:
-                    unzipped_folder_name = next(os.walk(self.unzipped_root_path))[
-                        1][0]  # Get the name of the unzipped folder
-                    self.unzipped_folder_path = os.path.join(
-                        self.unzipped_root_path, unzipped_folder_name)
-                else:
+                try:
+                    package = read_package(zip_ref)
+                except (NoIdmlError, MultipleIdmlError) as e:
+                    self.idml_problem = str(e)
                     self.unzipped_folder_path = self.unzipped_root_path
-
-        except Exception as e:
-            self.results.add_custom_error(
-                f"Failed to unzip the file. Error: {e}", ValidationError.ERROR)
+                    return True
+                self.unzipped_folder_path, self.idml_path = extract_package(
+                    zip_ref, package, self.unzipped_root_path)
+                self.package_links = package.links
+        except PackageError as e:
+            self.results.add_custom_error(str(e), ValidationError.ERROR)
             return False
-
-        # # Get all directories in the unique folder
-        # all_dirs = [d for d in os.listdir(
-        #     self.unzipped_root_path) if os.path.isdir(os.path.join(self.unzipped_root_path, d))]
-
-        # # Check if there's only one main folder
-        # if len(all_dirs) != 1:
-        #     # for _dir in all_dirs: #Debug Print
-        #     #     print(_dir)
-        #     self.results.add_custom_error(
-        #         "Multiple folders found in the provided package. Please ensure there's only one main folder after unzipping.", ValidationError.ERROR)
-        #     return False
+        except zipfile.BadZipFile:
+            self.results.add_custom_error(
+                "The file is not a valid ZIP archive. Please zip the package folder again and re-upload.", ValidationError.ERROR)
+            return False
+        except Exception:
+            traceback.print_exc()
+            self.results.add_custom_error(
+                "Failed to unzip the file.", ValidationError.ERROR)
+            return False
         return True
 
     # ========================================================================================
     # State: UNZIP_IDML
     # PASS Next State Transition: PARSE_XML
     # FAIL States Transition: RESULTS
-    # Description: Searches for the .idml files in the unzipped folder,
-    # ensures there's only one .idml file, and then unarchives it.
+    # Description: Reports a missing or duplicate .idml, otherwise unarchives it.
     # ========================================================================================
     def unzip_idml_state(self) -> States:
-
-        idml_path = self.validate_idml_files()
-        if not idml_path:
+        if self.idml_problem or not self.idml_path:
+            self.results.add_error(
+                self.idml_problem or NoIdmlError().args[0], ValidationError.IDML, page_id='', identifier='null', data_id='null')
             return States.EXIT
-        self.idml_path = idml_path
-        if not self.unarchive_idml_files(idml_path):
+        if not self.unarchive_idml_files(self.idml_path):
             return States.EXIT
         return States.PARSE_XML
 
     # ---------------------------------------------------
-    # Function: validate_idml_files
-    # Description: Searches for .idml files in the unzipped folder path.
-    # If no .idml files are found, an error is added to the results.
-    # If multiple .idml files are found, an error is added to the results.
-    # If one .idml file is found, its path is returned.
-    # Returns: Path of the .idml file if one is found, False otherwise.
-    # ---------------------------------------------------
-    def validate_idml_files(self) -> bool:
-        idml_files = self.find_idml_files(self.unzipped_folder_path)
-
-        if len(idml_files) == 0:
-            self.results.add_error(
-                "No .idml file found in the provided package.", ValidationError.IDML, page_id='', identifier='null', data_id='null')
-            return False
-        elif len(idml_files) > 1:
-            self.results.add_error(
-                "Multiple .idml files found in the provided package. Please ensure there's only one .idml file.", ValidationError.IDML, page_id='', identifier='null', data_id='null')
-            return False
-        return idml_files[0]
-
-    # ---------------------------------------------------
     # Function: unarchive_idml_files
     # Description: Unarchives the provided .idml file into a designated output folder.
-    # If the unarchiving is successful, a success message is added to the results.
     # If there's an error during unarchiving, an error message is added to the results.
     # Args:
     #       idml_path: Path to the .idml file to be unarchived.
@@ -295,13 +257,16 @@ class FrontifyChecker:
             self.unzipped_root_path, 'Source XML')
         os.makedirs(self.idml_output_folder, exist_ok=True)
         try:
-            with zipfile.ZipFile(idml_path, 'r') as zip_ref:
-                zip_ref.extractall(self.idml_output_folder)
+            extract_idml(idml_path, self.idml_output_folder)
             self.results.add_idml_output_folder(self.idml_output_folder)
             return True
-        except Exception as e:
+        except PackageError as e:
+            self.results.add_custom_error(str(e), ValidationError.ERROR)
+            return False
+        except Exception:
+            traceback.print_exc()
             self.results.add_custom_error(
-                f"Failed to unzip the .idml file. Error: {e}", ValidationError.ERROR)
+                "Failed to unzip the .idml file.", ValidationError.ERROR)
             return False
 
     # ========================================================================================
@@ -315,15 +280,11 @@ class FrontifyChecker:
         # Source Folders (Links, Document Fonts)
         # Init: SourceFoldersParser
         # -----------------------------
-        # Check if 'Links' exists, if not create it to continue code flow
-        document_links_folder_path = self.ensure_folder_exists(
-            self.unzipped_folder_path, 'Links')
-
         # Check if 'Document Fonts' exists, if not create it to continue code flow
         document_fonts_folder_path = self.ensure_folder_exists(
             self.unzipped_folder_path, 'Document Fonts')
         self.source_folders_parser = SourceFoldersParser(
-            document_links_folder_path, document_fonts_folder_path)
+            self.package_links, document_fonts_folder_path)
 
         # -----------------------------
         # Spreads XML

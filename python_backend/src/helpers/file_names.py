@@ -43,10 +43,3 @@ def zip_member_name(info: zipfile.ZipInfo) -> str:
     if info.flag_bits & _ZIP_UTF8_FLAG:
         return info.filename
     return _repair_mojibake(info.filename, 'cp437')
-
-
-def extract_zip(zip_ref: zipfile.ZipFile, target_dir: str) -> None:
-    """extractall() that writes entries under their correctly decoded names."""
-    for info in zip_ref.infolist():
-        info.filename = unicodedata.normalize('NFC', zip_member_name(info))
-        zip_ref.extract(info, target_dir)
