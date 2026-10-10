@@ -25,10 +25,9 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
   errors: {
     MASTERPAGE: {
       title: 'Items on a master page',
-      why: 'Frontify only reads items on the document pages. Anything placed on a master page (called a parent page in newer InDesign versions) is ignored or breaks the template.',
+      why: 'Frontify only reads items on the document pages, so anything on a master page (called a parent page in newer InDesign versions) is ignored or breaks the template.',
       fix: [
-        'Open the Pages panel and select the master (parent) page that has items on it.',
-        'Move those items onto the document pages, or delete them from the master page.',
+        'In the Pages panel, open the master (parent) page and move its items onto the document pages, or delete them.',
       ],
       subject: 'document',
     },
@@ -36,8 +35,7 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Text without a paragraph style',
       why: 'Frontify uses paragraph styles to format text and decide what can be edited. Text set to [Basic Paragraph] or [No Paragraph Style] has nothing to follow.',
       fix: [
-        'Select the text in the frame.',
-        'Apply a paragraph style from Window > Styles > Paragraph Styles (not [Basic Paragraph] or [No Paragraph Style]).',
+        'Select the text and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).',
       ],
       subject: 'frame',
     },
@@ -45,18 +43,16 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Text frame has no paragraph style',
       why: 'Frontify uses paragraph styles to format text and decide what can be edited. This frame only uses the default style.',
       fix: [
-        'Select the text frame.',
-        'Apply a paragraph style from Window > Styles > Paragraph Styles (not [Basic Paragraph] or [No Paragraph Style]).',
+        'Select the frame and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).',
       ],
       subject: 'frame',
     },
     FONTS_INCLUDED: {
       title: 'Font missing from the package',
-      why: 'Frontify needs the font files to render the text. Without them the template falls back to another font.',
+      why: 'Frontify needs the font files to render the text, otherwise the template falls back to another font.',
       fix: [
         'Make sure the font is installed or activated on your computer.',
-        'Package the document again with File > Package, keeping "Copy Fonts" checked.',
-        'Zip the whole package folder, including the "Document fonts" folder.',
+        'Package again with File > Package with "Copy Fonts" checked, and zip the whole folder, including "Document fonts".',
       ],
       subject: 'font',
     },
@@ -64,8 +60,7 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Unsupported font format',
       why: 'Frontify can only use OpenType (.otf) and TrueType (.ttf) fonts. Other formats, such as Type 1, can’t be loaded.',
       fix: [
-        'Get an OTF or TTF version of the font from the font vendor.',
-        'Replace the font in the document (Type > Find/Replace Font) and package it again.',
+        'Get an OTF or TTF version from the font vendor and swap it in with Type > Find/Replace Font.',
       ],
       subject: 'font',
     },
@@ -73,8 +68,7 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Variable font used',
       why: 'Frontify doesn’t support variable fonts, so text using them won’t render correctly.',
       fix: [
-        'Install the static (individual weight) version of the font.',
-        'Replace the variable font in the document (Type > Find/Replace Font) and package it again.',
+        'Install the static (non-variable) version of the font and swap it in with Type > Find/Replace Font.',
       ],
       subject: 'font',
     },
@@ -82,18 +76,17 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Linked image missing from the package',
       why: 'The document links to an image that isn’t in the package, so Frontify can’t show it.',
       fix: [
-        'Open Window > Links and relink any missing images.',
-        'Package the document again with File > Package, keeping "Copy Linked Graphics" checked.',
+        'Relink any missing images in Window > Links.',
+        'Package again with File > Package with "Copy Linked Graphics" checked.',
       ],
       subject: 'image',
     },
     EMBEDDED_IMAGE: {
       title: 'Embedded image',
-      why: 'Frontify needs images as separate linked files. Embedded images can’t be read from the package.',
+      why: 'Frontify needs images as separate linked files and can’t read images embedded in the document.',
       fix: [
-        'Select the image in Window > Links.',
-        'Choose Unembed Link from the panel menu and save the file into the Links folder.',
-        'Package the document again.',
+        'In Window > Links, select the image and choose Unembed Link from the panel menu.',
+        'Save it into the Links folder and package again.',
       ],
       subject: 'image',
     },
@@ -101,9 +94,8 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Image is flipped or skewed',
       why: 'Frontify can’t reproduce flipped or skewed images, so they’ll look different or break when edited.',
       fix: [
-        'Select the frame or image.',
-        'Choose Object > Transform > Clear Transformations, or set the shear angle to 0° and remove any flip.',
-        'If the flipped look is needed, save a flipped copy of the image file instead.',
+        'Select the image and choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip).',
+        'If you need the flipped look, save a flipped copy of the image file instead.',
       ],
       subject: 'image',
     },
@@ -111,9 +103,8 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Image is flipped or skewed',
       why: 'Frontify can’t reproduce flipped or skewed images, so they’ll look different or break when edited.',
       fix: [
-        'Select the image inside the frame (double-click it).',
-        'Choose Object > Transform > Clear Transformations, or set the shear angle to 0° and remove any flip.',
-        'If the flipped look is needed, save a flipped copy of the image file instead.',
+        'Double-click to select the image inside the frame, then choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip).',
+        'If you need the flipped look, save a flipped copy of the image file instead.',
       ],
       subject: 'image',
     },
@@ -121,8 +112,7 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Image frame is flipped or skewed',
       why: 'Frontify can’t reproduce flipped or skewed frames, so the image will look different or break when edited.',
       fix: [
-        'Select the image frame.',
-        'Choose Object > Transform > Clear Transformations, or set the shear angle to 0° and remove any flip.',
+        'Select the image frame and choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip).',
       ],
       subject: 'image',
     },
@@ -130,8 +120,7 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Item is flipped or skewed',
       why: 'Frontify can’t reproduce flipped or skewed items, so they’ll look different from the InDesign file.',
       fix: [
-        'Select the item.',
-        'Choose Object > Transform > Clear Transformations, or set the shear angle to 0° and remove any flip.',
+        'Select the item and choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip).',
       ],
       subject: 'frame',
     },
@@ -147,32 +136,31 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Pasted graphic',
       why: 'Graphics pasted straight into InDesign aren’t linked files, so Frontify can’t read them.',
       fix: [
-        'Save the graphic as a file (for example SVG, PDF, or PNG).',
-        'Delete the pasted version and place the file with File > Place, then package again.',
+        'Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place.',
       ],
       subject: 'document',
     },
     AUTO_SIZE_TEXT_BOX: {
       title: 'Auto-size text frame set up incorrectly',
-      why: 'Frontify grows auto-size frames as users type. With these settings the frame resizes in a way Frontify can’t match.',
+      why: 'Frontify grows auto-size frames as people type, and can’t match how these settings resize the frame.',
       fix: [
-        'Select the text frame and open Object > Text Frame Options > Auto-Size.',
-        'Change the setting described for each frame below.',
+        'For each frame, open Object > Text Frame Options > Auto-Size and make the change noted next to it.',
       ],
       subject: 'frame',
     },
     TEXT_COLUMNS: {
       title: 'Text frame has columns',
       why: 'Frontify doesn’t support multiple columns inside one text frame.',
-      fix: ['Open Object > Text Frame Options and set Columns to 1.', 'Use separate text frames if you need columns.'],
+      fix: [
+        'Set Columns to 1 in Object > Text Frame Options. Use separate text frames if you need columns.',
+      ],
       subject: 'frame',
     },
     LINKED_TEXT_FRAME: {
       title: 'Threaded (linked) text frames',
       why: 'Frontify doesn’t support text flowing from one frame into another.',
       fix: [
-        'Turn on View > Extras > Show Text Threads to see the links.',
-        'Double-click the out port of a frame to break the thread, so each frame holds its own text.',
+        'Turn on View > Extras > Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text.',
       ],
       subject: 'frame',
     },
@@ -180,8 +168,7 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Object style on a text frame',
       why: 'Frontify doesn’t apply object styles, so the frame will look different.',
       fix: [
-        'Select the frame and open Window > Styles > Object Styles.',
-        'Apply [None] or [Basic Text Frame], then re-apply any formatting you need directly.',
+        'Select the frame and apply [None] or [Basic Text Frame] in Window > Styles > Object Styles, then re-apply any formatting you need directly.',
       ],
       subject: 'frame',
     },
@@ -189,39 +176,48 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
       title: 'Object style on an image frame',
       why: 'Frontify doesn’t apply object styles, so the frame will look different.',
       fix: [
-        'Select the frame and open Window > Styles > Object Styles.',
-        'Apply [None] or [Basic Graphics Frame], then re-apply any formatting you need directly.',
+        'Select the frame and apply [None] or [Basic Graphics Frame] in Window > Styles > Object Styles, then re-apply any formatting you need directly.',
       ],
       subject: 'image',
     },
     GRID_ALIGNMENT: {
       title: 'Text aligned to the baseline grid',
       why: 'Frontify doesn’t use InDesign’s baseline grid, so line spacing will change.',
-      fix: ['Edit the paragraph style.', 'Under Indents and Spacing, set Align to Grid to None.'],
+      fix: [
+        'In the paragraph style, go to Indents and Spacing and set Align to Grid to None.',
+      ],
       subject: 'paragraph-style',
     },
     KERNING: {
       title: 'Kerning isn’t set to Metrics',
       why: 'Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited.',
-      fix: ['Edit the paragraph style.', 'Under Basic Character Formats, set Kerning to Metrics.'],
+      fix: [
+        'In the paragraph style, go to Basic Character Formats and set Kerning to Metrics.',
+      ],
       subject: 'paragraph-style',
     },
     KERNING_CHAR: {
       title: 'Kerning isn’t set to Metrics',
       why: 'Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited.',
-      fix: ['Edit the character style.', 'Under Basic Character Formats, set Kerning to Metrics.'],
+      fix: [
+        'In the character style, go to Basic Character Formats and set Kerning to Metrics.',
+      ],
       subject: 'character-style',
     },
     TEXT_WRAP: {
       title: 'Text wrap applied',
       why: 'Frontify doesn’t support text wrap, so text won’t flow around objects.',
-      fix: ['Select the frame and open Window > Text Wrap.', 'Choose No Text Wrap.'],
+      fix: [
+        'Select the frame and choose No Text Wrap in Window > Text Wrap.',
+      ],
       subject: 'frame',
     },
     FILL_TINT: {
       title: 'Text color tint isn’t 100%',
       why: 'Frontify shows text colors at full strength, so tinted text will look darker. This check is in beta and can be wrong.',
-      fix: ['Edit the paragraph style.', 'Under Character Color, set Tint to 100%.'],
+      fix: [
+        'In the paragraph style, go to Character Color and set Tint to 100%.',
+      ],
       subject: 'paragraph-style',
     },
   },
@@ -229,15 +225,18 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
     HYPHENATION: {
       title: 'Hyphenation is on',
       why: 'Browsers hyphenate differently from InDesign, so lines may break in different places.',
-      fix: ['Edit the paragraph style.', 'Under Hyphenation, uncheck Hyphenate.'],
+      fix: [
+        'In the paragraph style, go to Hyphenation and uncheck Hyphenate.',
+      ],
       subject: 'paragraph-style',
     },
     OVERRIDE: {
-      title: 'Style override (text formatted outside its style)',
-      why: 'Formatting applied directly to text (shown as a + next to the style name) may be lost or look different in Frontify.',
+      title: 'Text formatted outside its paragraph style',
+      why: 'Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.',
       fix: [
-        'Select the text and check the Paragraph Styles panel for a +.',
-        'Clear the override, or create a character style for the formatting and apply that instead.',
+        'Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.',
+        'To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.',
+        'To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.',
       ],
       subject: 'frame',
     },
@@ -273,14 +272,18 @@ const GUIDES: Record<ValidationType, Record<string, CheckGuide>> = {
     },
     DOCUMENT_BLEED: {
       title: 'Document has bleed',
-      why: 'Bleed is applied to exports. That’s right for print templates but usually unwanted for digital ones.',
-      fix: ['Check File > Document Setup > Bleed and Slug, and set bleed to 0 if this is a digital template.'],
+      why: 'Bleed is added to every export, which is right for print templates but usually unwanted for digital ones.',
+      fix: [
+        'For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine.',
+      ],
       subject: 'document',
     },
     COMPOSER: {
       title: 'Paragraph Composer used',
-      why: 'Browsers lay out text line by line. The Adobe Paragraph Composer breaks lines differently, so text may reflow.',
-      fix: ['Edit the paragraph style.', 'Under Justification, set Composer to Adobe Single-line Composer.'],
+      why: 'The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.',
+      fix: [
+        'In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.',
+      ],
       subject: 'paragraph-style',
     },
   },
