@@ -5,7 +5,7 @@ import { ValidationResult } from '../../types';
 import countValidationIssues from '../ValidationCount';
 import SuccessModal from './SuccessModal';
 import { Button } from '../ui/button';
-import { PageHeader, PageShell, Segmented } from '../layout/page-kit';
+import { Segmented } from '../layout/page-kit';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 import { useAuth } from '../AuthContext';
 import { cn } from '../../lib/utils';
@@ -21,6 +21,8 @@ interface TemplateUploaderProps {
   onUploadComplete?: () => void;
   seeDetails?: (value: boolean) => void;
   navigateToResults?: () => void;
+  /** Center the output toggle and hint under the drop area (the page card). */
+  centered?: boolean;
   className?: string;
 }
 
@@ -40,6 +42,7 @@ export function TemplateUploader({
   onUploadComplete,
   seeDetails,
   navigateToResults,
+  centered = false,
   className,
 }: TemplateUploaderProps) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -237,13 +240,13 @@ export function TemplateUploader({
             'group flex min-h-[13rem] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed px-6 py-10 text-center transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background',
             isDragging
               ? 'border-foreground/50 bg-muted'
-              : 'border-muted-foreground/40 bg-muted/30 hover:border-muted-foreground/60 hover:bg-muted/50'
+              : 'border-muted-foreground/45 bg-muted/40 hover:border-muted-foreground/70 hover:bg-muted/60'
           )}
         >
           <input type="file" accept=".zip" onChange={onFileInputChange} className="sr-only" />
           <div
             className={cn(
-              'grid h-11 w-11 place-items-center rounded-full border bg-background shadow-sm transition-transform',
+              'grid h-12 w-12 place-items-center rounded-full border bg-background shadow-sm transition-transform',
               isDragging ? '-translate-y-0.5' : 'group-hover:-translate-y-0.5'
             )}
           >
@@ -280,7 +283,7 @@ export function TemplateUploader({
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+      <div className={cn('flex items-center gap-x-3 gap-y-1.5', centered ? 'flex-col' : 'flex-wrap')}>
         <Segmented<Output>
           ariaLabel="Output"
           value={output}
@@ -302,13 +305,17 @@ export function TemplateUploader({
 
 export default function FileUploadPage(props: TemplateUploaderProps) {
   return (
-    <PageShell>
-      <PageHeader
-        icon={FileCheck2}
-        title="Check template"
-        description="Upload a packaged InDesign template to find issues before it reaches the customer."
-      />
-      <TemplateUploader {...props} />
-    </PageShell>
+    <div className="flex w-full flex-1 items-center justify-center px-4 pb-24 pt-10">
+      <div className="w-full max-w-xl rounded-2xl border bg-card p-6 shadow-[0_1px_3px_rgba(0,0,0,0.05)] sm:p-8">
+        <div className="mb-6 text-center">
+          <FileCheck2 className="mx-auto mb-3 h-7 w-7 text-muted-foreground" strokeWidth={1.5} aria-hidden />
+          <h1 className="text-2xl font-semibold tracking-tight">Check a template</h1>
+          <p className="mx-auto mt-1.5 max-w-sm text-sm leading-relaxed text-muted-foreground">
+            Upload a packaged InDesign template to find issues before it reaches the customer.
+          </p>
+        </div>
+        <TemplateUploader {...props} centered />
+      </div>
+    </div>
   );
 }
