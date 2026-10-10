@@ -14,6 +14,7 @@ from .analytics_api import (
 )
 from . import users as user_helpers
 from . import api_keys
+from . import summary_feedback
 from . import rate_limit
 
 main = Blueprint('main', __name__)
@@ -745,6 +746,105 @@ def admin_revoke_api_key(key_id):
     except Exception:
         return _internal_error()
     return '', 204
+
+
+def _comment_response(row, include_author=False):
+    """A summary comment for the client. Authors are only shown to admins."""
+    out = {
+        'id': str(row['id']),
+        'review_id': str(row['review_id']),
+        'section_key': row.get('section_key'),
+        'section_title': row.get('section_title'),
+        'quote': row.get('quote'),
+        'quote_start': row.get('quote_start'),
+        'quote_end': row.get('quote_end'),
+        'body': row.get('body'),
+        'created_at': row.get('created_at'),
+        'resolved_at': row.get('resolved_at'),
+        'template_name': row.get('template_name'),
+        'summary': row.get('summary'),
+        'reviewed_at': row.get('reviewed_at'),
+    }
+    if include_author:
+        out.update(user_id=str(row['user_id']), user_email=row.get('user_email'),
+                   user_display_name=row.get('user_display_name'))
+    return out
+
+
+@main.route('/summary-reviews', methods=['POST'])
+@require_auth
+def create_summary_review():
+    """Record that the caller reviewed a customer summary before copying it, with any comments they left.
+
+    Body: {"template_name", "summary", "comments": [{"section_key", "section_title"?, "body",
+    "quote"?, "quote_start"?, "quote_end"?}]}. No comments means "reviewed, no feedback".
+    """
+    user_row = _current_users_row()
+    if not user_row:
+        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+    try:
+        template_name, summary, comments = summary_feedback.validate_review(request.get_json(silent=True))
+    except summary_feedback.FeedbackError as e:
+        return jsonify({'error': {'message': str(e)}}), 400
+    try:
+        review = summary_feedback.create_review(str(user_row['id']), template_name, summary, comments)
+    except Exception:
+        return _internal_error("Couldn't save your feedback. Please try again.")
+    return jsonify({
+        'id': str(review['id']),
+        'outcome': review['outcome'],
+        'created_at': review.get('created_at'),
+        'comments': [_comment_response({**c, 'template_name': template_name}) for c in review['comments']],
+    }), 201
+
+
+@main.route('/summary-reviews/mine', methods=['GET'])
+@require_auth
+def list_my_summary_feedback():
+    """The caller's own summary comments, newest first (never anyone else's)."""
+    user_row = _current_users_row()
+    if not user_row:
+        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+    try:
+        rows = summary_feedback.list_user_comments(str(user_row['id']))
+    except Exception:
+        return _internal_error()
+    return jsonify([_comment_response(row) for row in rows]), 200
+
+
+@main.route('/admin/summary-feedback', methods=['GET'])
+@require_auth
+@require_admin
+def admin_list_summary_feedback():
+    """Every summary comment with its author, plus review counts (admin only). ?status=open|resolved|all."""
+    try:
+        data = summary_feedback.list_feedback(request.args.get('status', 'open'))
+    except summary_feedback.FeedbackError as e:
+        return jsonify({'error': {'message': str(e)}}), 400
+    except Exception:
+        return _internal_error()
+    return jsonify({
+        'stats': data['stats'],
+        'comments': [_comment_response(row, include_author=True) for row in data['comments']],
+    }), 200
+
+
+@main.route('/admin/summary-feedback/<comment_id>', methods=['PATCH'])
+@require_auth
+@require_admin
+def admin_resolve_summary_comment(comment_id):
+    """Mark a summary comment resolved or open again (admin only). Body: {"resolved": true|false}."""
+    data = request.get_json(silent=True) or {}
+    if not isinstance(data.get('resolved'), bool):
+        return jsonify({'error': {'message': 'resolved must be true or false'}}), 400
+    admin_row = _current_users_row()
+    try:
+        row = summary_feedback.set_resolved(comment_id, data['resolved'], str(admin_row['id']) if admin_row else None)
+    except Exception:
+        return _internal_error()
+    if not row:
+        return jsonify({'error': {'message': 'Comment not found'}}), 404
+    return jsonify(_comment_response(row)), 200
 
 
 @main.route('/test')
