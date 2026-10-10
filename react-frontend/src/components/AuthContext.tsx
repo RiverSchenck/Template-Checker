@@ -103,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let cancelled = false;
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let timeoutId: number | null = null;
 
     const initSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -136,7 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       cancelled = true;
-      if (timeoutId != null) clearTimeout(timeoutId);
+      if (timeoutId != null) window.clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
   }, []);
