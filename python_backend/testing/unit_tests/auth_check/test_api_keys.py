@@ -130,7 +130,7 @@ def test_unknown_key_is_rejected(client):
     assert client.post('/run', headers=bearer('tc_' + 'a' * 43)).status_code == 401
 
 
-@pytest.mark.parametrize('path', ['/analytics/summary', '/me', '/admin/users', '/admin/api-keys'])
+@pytest.mark.parametrize('path', ['/analytics/overview', '/me', '/admin/users', '/admin/api-keys'])
 def test_key_is_not_accepted_outside_checker_routes(client, path):
     key = create_key(client)['key']
     assert client.get(path, headers=bearer(key)).status_code == 401

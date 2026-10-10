@@ -23,7 +23,9 @@ def create_app():
     CORS(app,
          origins=allowed_origins,
          supports_credentials=True,
-         allow_headers=['Content-Type', 'Authorization', 'X-Source'])
+         allow_headers=['Content-Type', 'Authorization', 'X-Source'],
+         # The analytics CSV export reports how many rows matched vs. were included.
+         expose_headers=['Content-Disposition', 'X-Total-Rows', 'X-Exported-Rows'])
 
     UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

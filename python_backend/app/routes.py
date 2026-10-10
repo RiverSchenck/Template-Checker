@@ -5,10 +5,13 @@ import jwt
 import urllib.request
 from datetime import datetime, timezone
 from functools import wraps
-from flask import Blueprint, jsonify, send_file, after_this_request, request, current_app, g
+from flask import Blueprint, Response, jsonify, send_file, after_this_request, request, current_app, g
 from src.classes.FrontifyChecker import FrontifyChecker
 from .utils import upload_file, start_check, checker_cleanup
-from .analytics_api import get_analytics_summary, get_runs, get_supabase_client
+from .analytics_api import (
+    AnalyticsQueryError, analytics_period, export_runs_csv, get_issue_detail, get_overview, get_runs,
+    get_supabase_client, run_filters,
+)
 from . import users as user_helpers
 from . import api_keys
 from . import rate_limit
@@ -836,37 +839,84 @@ def run_checker_and_download():
         # 3. If we delete here, it happens BEFORE send_file finishes streaming, causing failures
 
 
-@main.route('/analytics/summary', methods=['GET'])
-@require_auth
-def analytics_summary():
-    """Endpoint to get analytics summary."""
+def _analytics_period():
+    """The period the request asks for: ?days=N, or ?start=YYYY-MM-DD&end=YYYY-MM-DD; plus ?tz=."""
+    args = request.args
+    return analytics_period(days=args.get('days', 30), tz=args.get('tz'), start=args.get('start'), end=args.get('end'))
+
+
+def _run_filters():
+    args = request.args
+    return run_filters(
+        status=args.get('status'),
+        source=args.get('source'),
+        user_id=args.get('user_id'),
+        search=args.get('q'),
+        validation_type=args.get('validation_type'),
+    )
+
+
+def _analytics_response(load):
+    """Run an analytics query: 400 for bad parameters, 500 (logged, generic message) for anything else."""
     try:
-        days = request.args.get('days', 30, type=int)
-        summary = get_analytics_summary(days=days)
+        data = load()
+    except AnalyticsQueryError as e:
+        return jsonify({'error': {'message': str(e)}}), 400
+    except Exception:
+        return _internal_error('Failed to load analytics')
+    if isinstance(data, dict) and 'error' in data:
+        current_app.logger.error('Analytics unavailable: %s', data['error'])
+        return jsonify({'error': {'message': 'Failed to load analytics'}}), 500
+    return jsonify(data), 200
 
-        if 'error' in summary:
-            return jsonify(summary), 500
 
-        return jsonify(summary), 200
-    except Exception as e:
-        current_app.logger.exception('Analytics request failed')
-        return jsonify({'error': 'Failed to load analytics'}), 500
+@main.route('/analytics/overview', methods=['GET'])
+@require_auth
+def analytics_overview():
+    """Everything the analytics page shows for the requested period, vs. the period before."""
+    return _analytics_response(lambda: get_overview(_analytics_period()))
+
+
+@main.route('/analytics/issues/<validation_type>', methods=['GET'])
+@require_auth
+def analytics_issue_detail(validation_type):
+    """Drill-down for one issue type: trend and the identifiers it hit most."""
+    return _analytics_response(lambda: get_issue_detail(validation_type, _analytics_period()))
 
 
 @main.route('/analytics/runs', methods=['GET'])
 @require_auth
 def analytics_runs():
-    """Endpoint to get paginated list of runs."""
+    """One page of runs, newest first. Filters: status, source, user_id, q (template name), validation_type."""
+    return _analytics_response(lambda: get_runs(
+        _analytics_period(),
+        _run_filters(),
+        limit=request.args.get('limit', 25),
+        offset=request.args.get('offset', 0),
+    ))
+
+
+@main.route('/analytics/runs.csv', methods=['GET'])
+@require_auth
+def analytics_runs_csv():
+    """The runs matching the same filters as /analytics/runs, as a CSV download (up to MAX_EXPORT_ROWS)."""
     try:
-        limit = request.args.get('limit', 100, type=int)
-        offset = request.args.get('offset', 0, type=int)
-
-        runs_data = get_runs(limit=limit, offset=offset)
-
-        if 'error' in runs_data:
-            return jsonify(runs_data), 500
-
-        return jsonify(runs_data), 200
-    except Exception as e:
-        current_app.logger.exception('Analytics request failed')
-        return jsonify({'error': 'Failed to load analytics'}), 500
+        export = export_runs_csv(_analytics_period(), _run_filters())
+    except AnalyticsQueryError as e:
+        return jsonify({'error': {'message': str(e)}}), 400
+    except Exception:
+        return _internal_error('Failed to export analytics')
+    if 'error' in export:
+        current_app.logger.error('Analytics unavailable: %s', export['error'])
+        return jsonify({'error': {'message': 'Failed to export analytics'}}), 500
+    filename = f"template-checks-{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"
+    return Response(
+        export['csv'],
+        mimetype='text/csv',
+        headers={
+            'Content-Disposition': f'attachment; filename="{filename}"',
+            'X-Total-Rows': str(export['total']),
+            'X-Exported-Rows': str(export['exported']),
+            'Cache-Control': 'no-store',
+        },
+    )

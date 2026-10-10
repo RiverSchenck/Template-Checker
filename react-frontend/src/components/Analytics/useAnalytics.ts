@@ -1,184 +1,78 @@
-import { useState, useEffect, useMemo } from 'react';
-import type { AnalyticsSummary } from './types';
-import { baseURL, getAuthHeaders } from './api';
-import { MAX_ANALYTICS_DAYS } from './constants';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../AuthContext';
+import { fetchAnalytics } from './api';
+import type { IssueDetail, Overview, PeriodSelection, RunFilters, RunsPage } from './types';
 
-export function useAnalytics(): {
+interface Loadable<T> {
+  data: T | null;
   loading: boolean;
   error: string | null;
-  data: AnalyticsSummary | null;
-  days: number;
-  setDays: (d: number) => void;
-} {
+}
+
+/** Query parameters for a period: ?days=N or ?start=&end=. */
+export function periodParams(period: PeriodSelection): Record<string, string | number> {
+  return period.kind === 'preset' ? { days: period.days } : { start: period.start, end: period.end };
+}
+
+/** The filters as /analytics/runs and /analytics/runs.csv take them. */
+export function runFilterParams(filters: RunFilters): Record<string, string | undefined> {
+  return {
+    status: filters.status,
+    source: filters.source,
+    user_id: filters.userId,
+    validation_type: filters.validationType,
+    q: filters.search?.trim() || undefined,
+  };
+}
+
+/**
+ * Load an analytics endpoint whenever its params (or `refresh`) change. Keeps showing the previous data while
+ * the next request is in flight (so switching ranges doesn't flash skeletons), and ignores stale responses.
+ */
+function useAnalyticsRequest<T>(
+  path: string | null,
+  params: Record<string, string | number | undefined>,
+  refresh: number
+): Loadable<T> {
   const { session } = useAuth();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [fullData, setFullData] = useState<AnalyticsSummary | null>(null);
-  const [days, setDays] = useState(30);
+  const token = session?.access_token;
+  const [state, setState] = useState<Loadable<T>>({ data: null, loading: Boolean(path), error: null });
+  const key = `${path}:${JSON.stringify(params)}:${refresh}`;
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(
-          `${baseURL}/analytics/summary?days=${MAX_ANALYTICS_DAYS}`,
-          { method: 'GET', headers: getAuthHeaders(session?.access_token) }
-        );
-        if (!response.ok) throw new Error('Failed to fetch analytics');
-        const result = await response.json();
-        if (result.error) throw new Error(result.error);
-        setFullData(result);
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Failed to load analytics');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAnalytics();
-  }, [session?.access_token]);
+    if (!path) {
+      setState({ data: null, loading: false, error: null });
+      return;
+    }
+    const controller = new AbortController();
+    setState((s) => ({ ...s, loading: true, error: null }));
+    fetchAnalytics<T>(path, params, token, controller.signal)
+      .then((data) => setState({ data, loading: false, error: null }))
+      .catch((err: unknown) => {
+        if (controller.signal.aborted) return;
+        setState((s) => ({ ...s, loading: false, error: err instanceof Error ? err.message : 'Failed to load analytics' }));
+      });
+    return () => controller.abort();
+    // `key` captures path + params + refresh; params is a fresh object each render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, token]);
 
-  const data = useMemo(() => {
-    if (!fullData) return null;
-    const runsOverTimeAll = fullData.runs_over_time || [];
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - days);
-    const cutoffStr = cutoff.toISOString().slice(0, 10);
-    const runsOverTimeFiltered = runsOverTimeAll.filter((d: { date: string }) => d.date >= cutoffStr);
-    const summary = {
-      ...fullData.summary,
-      total_runs: runsOverTimeFiltered.reduce((a: number, d: { runs: number }) => a + d.runs, 0),
-      total_errors: runsOverTimeFiltered.reduce((a: number, d: { errors: number }) => a + d.errors, 0),
-      total_warnings: runsOverTimeFiltered.reduce((a: number, d: { warnings: number }) => a + d.warnings, 0),
-      total_infos: runsOverTimeFiltered.reduce((a: number, d: { infos: number }) => a + d.infos, 0),
-      days,
-    };
-    type RunRow = {
-      date: string;
-      runs: number;
-      errors: number;
-      warnings: number;
-      infos: number;
-      react_frontend?: number;
-      extension?: number;
-      api?: number;
-      react_frontend_errors?: number;
-      react_frontend_warnings?: number;
-      react_frontend_infos?: number;
-      extension_errors?: number;
-      extension_warnings?: number;
-      extension_infos?: number;
-      api_errors?: number;
-      api_warnings?: number;
-      api_infos?: number;
-    };
-    const rows = runsOverTimeFiltered as RunRow[];
-    const rf = rows.reduce((a, d) => a + (d.react_frontend ?? 0), 0);
-    const ext = rows.reduce((a, d) => a + (d.extension ?? 0), 0);
-    const apiCount = rows.reduce((a, d) => a + (d.api ?? 0), 0);
-    const rfIssues = rows.reduce(
-      (a, d) => ({
-        e: a.e + (d.react_frontend_errors ?? 0),
-        w: a.w + (d.react_frontend_warnings ?? 0),
-        i: a.i + (d.react_frontend_infos ?? 0),
-      }),
-      { e: 0, w: 0, i: 0 }
-    );
-    const extIssues = rows.reduce(
-      (a, d) => ({
-        e: a.e + (d.extension_errors ?? 0),
-        w: a.w + (d.extension_warnings ?? 0),
-        i: a.i + (d.extension_infos ?? 0),
-      }),
-      { e: 0, w: 0, i: 0 }
-    );
-    const apiIssues = rows.reduce(
-      (a, d) => ({
-        e: a.e + (d.api_errors ?? 0),
-        w: a.w + (d.api_warnings ?? 0),
-        i: a.i + (d.api_infos ?? 0),
-      }),
-      { e: 0, w: 0, i: 0 }
-    );
-    const sourceTypes: AnalyticsSummary['source_types'] = {
-      'react-frontend': {
-        count: rf,
-        total_errors: rfIssues.e,
-        total_warnings: rfIssues.w,
-        total_infos: rfIssues.i,
-      },
-      extension: {
-        count: ext,
-        total_errors: extIssues.e,
-        total_warnings: extIssues.w,
-        total_infos: extIssues.i,
-      },
-      api: {
-        count: apiCount,
-        total_errors: apiIssues.e,
-        total_warnings: apiIssues.w,
-        total_infos: apiIssues.i,
-      },
-    };
-    const recentRuns = (fullData.recent_runs || []).filter((r: { timestamp?: string }) => {
-      if (!r.timestamp) return false;
-      return r.timestamp.slice(0, 10) >= cutoffStr;
-    });
-    const errorsPerRunByDayAll = fullData.errors_per_run_by_day || [];
-    const errorsPerRunByDayFiltered = errorsPerRunByDayAll.filter(
-      (d: { date: string }) => d.date >= cutoffStr
-    );
-    const errorsHistogram = errorsPerRunByDayFiltered.reduce(
-      (acc, d) => ({
-        errors_0: acc.errors_0 + (d.errors_0 ?? 0),
-        errors_1_5: acc.errors_1_5 + (d.errors_1_5 ?? 0),
-        errors_6_10: acc.errors_6_10 + (d.errors_6_10 ?? 0),
-        errors_11_15: acc.errors_11_15 + (d.errors_11_15 ?? 0),
-        errors_16_plus: acc.errors_16_plus + (d.errors_16_plus ?? 0),
-      }),
-      { errors_0: 0, errors_1_5: 0, errors_6_10: 0, errors_11_15: 0, errors_16_plus: 0 }
-    );
-    const warningsPerRunByDayAll = fullData.warnings_per_run_by_day || [];
-    const warningsPerRunByDayFiltered = warningsPerRunByDayAll.filter(
-      (d: { date: string }) => d.date >= cutoffStr
-    );
-    const warningsHistogram = warningsPerRunByDayFiltered.reduce(
-      (acc, d) => ({
-        warnings_0: acc.warnings_0 + (d.warnings_0 ?? 0),
-        warnings_1_5: acc.warnings_1_5 + (d.warnings_1_5 ?? 0),
-        warnings_6_10: acc.warnings_6_10 + (d.warnings_6_10 ?? 0),
-        warnings_11_15: acc.warnings_11_15 + (d.warnings_11_15 ?? 0),
-        warnings_16_plus: acc.warnings_16_plus + (d.warnings_16_plus ?? 0),
-      }),
-      { warnings_0: 0, warnings_1_5: 0, warnings_6_10: 0, warnings_11_15: 0, warnings_16_plus: 0 }
-    );
-    const infosPerRunByDayAll = fullData.infos_per_run_by_day || [];
-    const infosPerRunByDayFiltered = infosPerRunByDayAll.filter(
-      (d: { date: string }) => d.date >= cutoffStr
-    );
-    const infosHistogram = infosPerRunByDayFiltered.reduce(
-      (acc, d) => ({
-        infos_0: acc.infos_0 + (d.infos_0 ?? 0),
-        infos_1_5: acc.infos_1_5 + (d.infos_1_5 ?? 0),
-        infos_6_10: acc.infos_6_10 + (d.infos_6_10 ?? 0),
-        infos_11_15: acc.infos_11_15 + (d.infos_11_15 ?? 0),
-        infos_16_plus: acc.infos_16_plus + (d.infos_16_plus ?? 0),
-      }),
-      { infos_0: 0, infos_1_5: 0, infos_6_10: 0, infos_11_15: 0, infos_16_plus: 0 }
-    );
-    return {
-      summary,
-      source_types: sourceTypes,
-      all_validations: fullData.all_validations,
-      runs_over_time: runsOverTimeFiltered,
-      errors_per_run_by_day: errorsPerRunByDayFiltered,
-      errorsHistogram,
-      warningsHistogram,
-      infosHistogram,
-      recent_runs: recentRuns,
-    } as AnalyticsSummary;
-  }, [fullData, days]);
+  return state;
+}
 
-  return { loading, error, data, days, setDays };
+export function useOverview(period: PeriodSelection, refresh: number) {
+  return useAnalyticsRequest<Overview>('overview', periodParams(period), refresh);
+}
+
+export function useIssueDetail(validationType: string | null, period: PeriodSelection, refresh: number) {
+  const path = validationType ? `issues/${encodeURIComponent(validationType)}` : null;
+  return useAnalyticsRequest<IssueDetail>(path, periodParams(period), refresh);
+}
+
+export function useRuns(period: PeriodSelection, filters: RunFilters, page: number, pageSize: number, refresh: number) {
+  return useAnalyticsRequest<RunsPage>(
+    'runs',
+    { ...periodParams(period), ...runFilterParams(filters), limit: pageSize, offset: page * pageSize },
+    refresh
+  );
 }
