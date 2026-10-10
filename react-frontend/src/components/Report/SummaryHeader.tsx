@@ -95,24 +95,48 @@ function SummaryHeader({
           </h1>
           {meta.length > 0 && <p className="mt-0.5 text-xs text-muted-foreground">{meta.join(' · ')}</p>}
         </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="h-8 w-8" aria-label="More options">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onSelect={downloadJson} className="gap-2">
-                <FileJson className="h-4 w-4" aria-hidden />
-                Download raw JSON
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button size="sm" className="h-8 min-w-[11.5rem] gap-1.5" onClick={copySummary} aria-live="polite">
-            {copied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
-            {copied ? 'Copied' : 'Copy customer summary'}
-          </Button>
+        <div className="flex shrink-0 flex-col items-end gap-1.5">
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="h-8 w-8" aria-label="More options">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={downloadJson} className="gap-2">
+                  <FileJson className="h-4 w-4" aria-hidden />
+                  Download raw JSON
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              size="sm"
+              className="h-8 min-w-[13.5rem] gap-1.5"
+              onClick={copySummary}
+              aria-live="polite"
+              aria-describedby="customer-summary-beta-note"
+            >
+              {copied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
+              {copied ? 'Copied' : 'Copy customer summary'}
+              {!copied && (
+                <span className="rounded bg-amber-400 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-amber-950">
+                  Beta
+                </span>
+              )}
+            </Button>
+          </div>
+          {/* The customer summary is still being tested, so agents must review it before sending. */}
+          <p
+            id="customer-summary-beta-note"
+            className="flex max-w-[22rem] items-start gap-1.5 text-right text-xs leading-snug text-muted-foreground"
+          >
+            <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
+            <span>
+              <span className="font-medium text-foreground">Beta:</span> please read the summary before you send it.
+              I&apos;m still testing this, so let me know if anything looks off. — River
+            </span>
+          </p>
         </div>
       </div>
 
