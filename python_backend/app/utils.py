@@ -5,7 +5,8 @@ import uuid
 from typing import Optional
 from flask import request, current_app, jsonify, g
 from werkzeug.utils import secure_filename
-from .analytics import log_analytics_to_supabase
+from src.classes.States import States
+from .analytics import log_analytics_to_supabase, first_error_message
 
 
 def upload_file():
@@ -31,21 +32,33 @@ def upload_file():
         return {'status': 'error', 'error': {'message': 'An error occurred during processing.'}}
 
 
-def start_check(checker, file_path: str, source_type: str = 'api', user_id: Optional[str] = None):
-    """Run the checker on the uploaded file and return the results."""
+def _log_run(**kwargs):
+    """Log a run to analytics without ever failing the check because of it."""
     try:
-        # Track start time for duration calculation
-        start_time = time.time()
+        log_analytics_to_supabase(**kwargs)
+    except Exception:
+        current_app.logger.exception('Failed to log analytics to Supabase')
 
-        # Get file size
-        file_size_bytes = os.path.getsize(file_path) if os.path.exists(file_path) else 0
 
+def start_check(checker, file_path: str, source_type: str = 'api', user_id: Optional[str] = None):
+    """Run the checker on the uploaded file and return the results.
+
+    Every attempt is logged to analytics: 'completed' when all checks ran, 'rejected' when the upload couldn't be
+    checked (the user still gets the results explaining why), and 'failed' when the checker crashed.
+    """
+    start_time = time.time()
+    file_size_bytes = os.path.getsize(file_path) if os.path.exists(file_path) else 0
+    run_info = {
+        'template_name': os.path.basename(file_path),
+        'source_type': source_type,
+        'file_size_bytes': file_size_bytes,
+        'user_id': user_id,
+    }
+    try:
         checker.set_source_file_path(file_path)
         checker.run_state_machine()
 
-        # Calculate duration in milliseconds
-        end_time = time.time()
-        duration_ms = int((end_time - start_time) * 1000)
+        duration_ms = int((time.time() - start_time) * 1000)
 
         checker_json = checker.results.get_formatted_results_json()
 
@@ -56,20 +69,16 @@ def start_check(checker, file_path: str, source_type: str = 'api', user_id: Opti
             'file_size_bytes': file_size_bytes
         }
 
-        # Log analytics to Supabase (non-blocking - don't fail validation if this fails)
-        try:
-            template_name = checker_json.get('template_name', 'Unknown')
-            log_analytics_to_supabase(
-                template_name=template_name,
-                source_type=source_type,
-                duration_ms=duration_ms,
-                file_size_bytes=file_size_bytes,
-                results_json=checker_json,
-                user_id=user_id
-            )
-        except Exception as e:
-            # Log error but don't fail the validation
-            print(f"Warning: Failed to log analytics to Supabase: {e}")
+        # The state machine only reaches RESULTS when every check ran; otherwise it exited early on a bad upload.
+        completed = checker.last_state == States.RESULTS
+        _log_run(
+            **{**run_info, 'template_name': checker_json.get('template_name') or run_info['template_name']},
+            duration_ms=duration_ms,
+            results_json=checker_json,
+            status='completed' if completed else 'rejected',
+            stopped_at_stage=None if completed else _state_name(checker.last_state),
+            error_message=None if completed else first_error_message(checker_json),
+        )
 
         result_json = {
             "type": "data",
@@ -80,7 +89,18 @@ def start_check(checker, file_path: str, source_type: str = 'api', user_id: Opti
         return jsonify(result_json), 200
     except Exception as e:
         current_app.logger.exception('Template check failed')
+        _log_run(
+            **run_info,
+            duration_ms=int((time.time() - start_time) * 1000),
+            status='failed',
+            stopped_at_stage=_state_name(getattr(checker, 'last_state', None)),
+            error_message=f'{type(e).__name__}: {e}',
+        )
         return jsonify({'error': 'An error occurred during the check.'}), 500
+
+
+def _state_name(state) -> Optional[str]:
+    return state.name if state is not None else None
 
 
 def checker_cleanup(checker):

@@ -4,9 +4,12 @@ Analytics module for storing validation run data to Supabase.
 import os
 import logging
 from typing import Dict, Any, Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
+
+VALIDATION_CATEGORIES = ['par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general']
+MAX_ERROR_MESSAGE_LENGTH = 1000
 
 
 def get_supabase_client():
@@ -63,9 +66,7 @@ def extract_validation_counts(results_json: Dict[str, Any]) -> Dict[str, Any]:
     total_warnings = 0
     total_infos = 0
 
-    categories = ['par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general']
-
-    for category_key in categories:
+    for category_key in VALIDATION_CATEGORIES:
         category_data = results_json.get(category_key, {})
         details = category_data.get('details', {})
 
@@ -93,9 +94,7 @@ def extract_individual_validations(results_json: Dict[str, Any]) -> List[Dict[st
         List of validation dictionaries ready for database insertion
     """
     validations = []
-    categories = ['par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general']
-
-    for category_key in categories:
+    for category_key in VALIDATION_CATEGORIES:
         category_data = results_json.get(category_key, {})
         details = category_data.get('details', {})
 
@@ -136,13 +135,38 @@ def extract_individual_validations(results_json: Dict[str, Any]) -> List[Dict[st
     return validations
 
 
+def get_app_version() -> Optional[str]:
+    """Deployment that handled a run: APP_VERSION if set, else the Fly deployment tag from FLY_IMAGE_REF."""
+    version = os.getenv('APP_VERSION')
+    if version:
+        return version
+    image_ref = os.getenv('FLY_IMAGE_REF')  # e.g. registry.fly.io/template-checker:deployment-01J...
+    if image_ref:
+        return image_ref.rsplit(':', 1)[-1]
+    return None
+
+
+def first_error_message(results_json: Dict[str, Any]) -> Optional[str]:
+    """The first error's message in results JSON (for a rejected upload, the reason it was rejected)."""
+    for category_key in VALIDATION_CATEGORIES:
+        details = results_json.get(category_key, {}).get('details', {})
+        for type_dict in details.values():
+            for error in type_dict.get('errors', []):
+                if error.get('context'):
+                    return error['context']
+    return None
+
+
 def log_analytics_to_supabase(
     template_name: str,
     source_type: str,
     duration_ms: int,
     file_size_bytes: int,
-    results_json: Dict[str, Any],
-    user_id: Optional[str] = None
+    results_json: Optional[Dict[str, Any]] = None,
+    user_id: Optional[str] = None,
+    status: str = 'completed',
+    stopped_at_stage: Optional[str] = None,
+    error_message: Optional[str] = None,
 ) -> bool:
     """
     Log analytics data to Supabase.
@@ -152,8 +176,11 @@ def log_analytics_to_supabase(
         source_type: Source of the request ('react-frontend', 'extension', or 'api')
         duration_ms: Duration of validation in milliseconds
         file_size_bytes: Size of uploaded file in bytes
-        results_json: Full validation results JSON
+        results_json: Full validation results JSON. None when the checker crashed before producing results.
         user_id: Optional UUID of the user who ran the validation (users.id). None for unauthenticated runs.
+        status: 'completed', 'rejected' (the upload couldn't be checked) or 'failed' (the checker crashed)
+        stopped_at_stage: Checker state the run stopped or crashed in, for rejected and failed runs
+        error_message: Why a rejected or failed run didn't complete
 
     Returns:
         True if successful, False otherwise
@@ -164,11 +191,11 @@ def log_analytics_to_supabase(
             return False
 
         # Extract validation counts
-        counts = extract_validation_counts(results_json)
+        counts = extract_validation_counts(results_json or {})
 
         # Prepare run data
         run_data = {
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'template_name': template_name or 'Unknown',
             'source_type': source_type,
             'duration_ms': duration_ms,
@@ -176,6 +203,10 @@ def log_analytics_to_supabase(
             'total_errors': counts['total_errors'],
             'total_warnings': counts['total_warnings'],
             'total_infos': counts['total_infos'],
+            'status': status,
+            'stopped_at_stage': stopped_at_stage,
+            'error_message': error_message[:MAX_ERROR_MESSAGE_LENGTH] if error_message else None,
+            'app_version': get_app_version(),
         }
         if user_id is not None:
             run_data['user_id'] = user_id
@@ -193,7 +224,7 @@ def log_analytics_to_supabase(
             return False
 
         # Extract and insert individual validations
-        validations = extract_individual_validations(results_json)
+        validations = extract_individual_validations(results_json or {})
 
         if validations:
             # Add run_id to each validation
