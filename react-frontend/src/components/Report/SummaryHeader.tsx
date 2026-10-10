@@ -20,6 +20,8 @@ type SummaryHeaderProps = {
   onReviewSummary: () => void;
   /** Briefly true after the summary was copied, to confirm it on the button. */
   summaryCopied: boolean;
+  /** Comments drafted in an unfinished review, so the button can offer to continue it. */
+  draftCount: number;
   /** Raw checker response, downloadable for deeper debugging. */
   rawResult: unknown;
 };
@@ -52,6 +54,7 @@ function SummaryHeader({
   onJumpTo,
   onReviewSummary,
   summaryCopied,
+  draftCount,
   rawResult,
 }: SummaryHeaderProps) {
   const name = displayTemplateName(templateName) || 'Untitled template';
@@ -97,7 +100,11 @@ function SummaryHeader({
           </DropdownMenu>
           <Button size="sm" className="h-8 min-w-[14rem] gap-1.5" onClick={onReviewSummary} aria-live="polite">
             {summaryCopied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
-            {summaryCopied ? 'Copied' : 'Copy customer summary'}
+            {summaryCopied
+              ? 'Copied'
+              : draftCount > 0
+                ? `Continue review · ${draftCount} ${draftCount === 1 ? 'comment' : 'comments'}`
+                : 'Copy customer summary'}
             {/* Readable on the primary button in both themes: light text on dark, dark text on light. */}
             <span className="ml-0.5 rounded-full bg-amber-300/20 px-1.5 py-px text-[10px] font-semibold uppercase leading-4 tracking-wide text-amber-200 ring-1 ring-inset ring-amber-300/40 dark:bg-amber-400/25 dark:text-amber-900 dark:ring-amber-600/30">
               Beta
