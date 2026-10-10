@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Download, FileSearch, X } from 'lucide-react';
-import { toast } from 'sonner';
+import { notify } from '../../lib/notify';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -82,14 +82,14 @@ function ExportButton({ period, filters }: { period: PeriodSelection; filters: R
             session?.access_token
           );
           if (exported < total) {
-            toast.warning(`Exported the newest ${formatCount(exported)} of ${formatCount(total)} checks`, {
+            notify.warning(`Exported the newest ${formatCount(exported)} of ${formatCount(total)} checks`, {
               description: 'Narrow the date range or filters to export the rest.',
             });
           } else {
-            toast.success(`Exported ${formatCount(exported)} check${exported === 1 ? '' : 's'}`);
+            notify.success(`Exported ${formatCount(exported)} check${exported === 1 ? '' : 's'}`);
           }
         } catch (err) {
-          toast.error(err instanceof Error ? err.message : 'Export failed');
+          notify.error(err instanceof Error ? err.message : "Couldn't export the checks. Try again.");
         } finally {
           setBusy(false);
         }

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { toast } from 'sonner';
+import { notify } from '../../lib/notify';
 import { AlertCircle, Check, FileCheck2, X } from 'lucide-react';
 import { ValidationResult } from '../../types';
 import countValidationIssues from '../ValidationCount';
@@ -222,7 +222,7 @@ export function TemplateUploader({
           a.click();
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
-          toast.success('XML download started');
+          notify.success('XML download started');
         } else {
           const text = typeof result.body === 'string' ? result.body : await (result.body as Blob).text();
           const results: ValidationResult = JSON.parse(text)?.content?.results;
@@ -234,7 +234,9 @@ export function TemplateUploader({
           } else {
             navigateToResults?.();
           }
-          toast.success(`${file.name} checked`);
+          // A fresh check opens the results (or the all-clear popup), so it needs no toast. A reupload
+          // updates the results in place behind a closing dialog, so confirm it.
+          if (setPrevious) notify.success('Compared with your previous check');
         }
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : 'The check failed. Try again.');

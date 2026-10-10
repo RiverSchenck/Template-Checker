@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { toast } from 'sonner';
 import {
   ArrowDown,
   ArrowRight,
@@ -22,6 +21,7 @@ import {
   X,
 } from 'lucide-react';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
+import { notify, responseError } from '../../lib/notify';
 import { Skeleton } from '../ui/skeleton';
 import { useAuth } from '../AuthContext';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -56,6 +56,7 @@ import {
   Panel,
   PersonAvatar,
   PersonCell,
+  ErrorState,
   RowSkeleton,
   SearchField,
   Segmented,
@@ -236,6 +237,7 @@ export function UserManagement() {
   const location = useLocation();
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [usersError, setUsersError] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -244,6 +246,7 @@ export function UserManagement() {
   const [inviteError, setInviteError] = useState<string | null>(null);
   const [requests, setRequests] = useState<Record<RequestStatus, AccessRequest[]>>({ pending: [], rejected: [] });
   const [loadingRequests, setLoadingRequests] = useState(true);
+  const [requestsError, setRequestsError] = useState(false);
   const [updatingRequestId, setUpdatingRequestId] = useState<string | null>(null);
   const [updatingAction, setUpdatingAction] = useState<'approved' | 'rejected' | null>(null);
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('pending');
@@ -274,13 +277,14 @@ export function UserManagement() {
         return;
       }
       if (!res.ok) {
-        toast.error('Failed to load users');
+        setUsersError(true);
         return;
       }
       const data = await res.json();
       setUsers(Array.isArray(data) ? data : []);
+      setUsersError(false);
     } catch {
-      toast.error('Failed to load users');
+      setUsersError(true);
     } finally {
       setLoading(false);
     }
@@ -310,6 +314,7 @@ export function UserManagement() {
     setLoadingRequests(true);
     const [pending, rejected] = await Promise.all([fetchRequestList('pending'), fetchRequestList('rejected')]);
     setRequests((prev) => ({ pending: pending ?? prev.pending, rejected: rejected ?? prev.rejected }));
+    setRequestsError(pending === null || rejected === null);
     setLoadingRequests(false);
   };
 
@@ -344,7 +349,7 @@ export function UserManagement() {
       setInviteOpen(false);
       setInviteEmail('');
       fetchUsers();
-      toast.success(`${email} can now sign in with Google.`);
+      notify.success(`Invited ${email}. They can now sign in with Google.`);
     } catch {
       setInviteError('Failed to invite.');
     } finally {
@@ -363,7 +368,8 @@ export function UserManagement() {
         body: JSON.stringify({ status }),
       });
       if (!res.ok) {
-        toast.error(status === 'approved' ? 'Failed to approve' : 'Failed to reject');
+        const verb = status === 'approved' ? 'approve' : 'reject';
+        notify.error(await responseError(res, `Couldn't ${verb} ${request.email}'s request. Try again.`));
         return false;
       }
       setRequests((prev) => ({
@@ -375,13 +381,14 @@ export function UserManagement() {
       }));
       if (status === 'approved') {
         fetchUsers();
-        toast.success('Access approved. They can now sign in.');
+        notify.success(`Approved ${request.email}. They can now sign in.`);
       } else {
-        toast.success('Request rejected.');
+        notify.success(`Rejected ${request.email}'s request`);
       }
       return true;
     } catch {
-      toast.error('Request failed');
+      const verb = status === 'approved' ? 'approve' : 'reject';
+      notify.error(`Couldn't ${verb} ${request.email}'s request. Check your connection and try again.`);
       return false;
     } finally {
       setUpdatingRequestId(null);
@@ -401,13 +408,13 @@ export function UserManagement() {
         body: JSON.stringify({ role }),
       });
       if (!res.ok) {
-        toast.error('Failed to update role');
+        notify.error(await responseError(res, "Couldn't change the role. Try again."));
         return;
       }
+      // The role select shows the new value; no toast needed.
       setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role } : u)));
-      toast.success('Role updated');
     } catch {
-      toast.error('Failed to update role');
+      notify.error("Couldn't change the role. Check your connection and try again.");
     }
   };
 
@@ -419,20 +426,21 @@ export function UserManagement() {
         method: 'DELETE',
         headers: getAuthHeaders(token),
       });
+      const who = deleteTarget.email || deleteTarget.display_name || 'this user';
       if (res.status === 403) {
-        toast.error('You cannot delete this user');
+        notify.error(await responseError(res, `You can't remove ${who}.`));
         setDeleteTarget(null);
         return;
       }
       if (!res.ok) {
-        toast.error('Failed to delete user');
+        notify.error(await responseError(res, `Couldn't remove ${who}. Try again.`));
         return;
       }
       setUsers((prev) => prev.filter((u) => u.id !== deleteTarget.id));
       setDeleteTarget(null);
-      toast.success('User removed');
+      notify.success(`Removed ${who}`);
     } catch {
-      toast.error('Failed to delete user');
+      notify.error(`Couldn't remove ${deleteTarget.email || 'this user'}. Check your connection and try again.`);
     } finally {
       setDeleting(false);
     }
@@ -490,6 +498,9 @@ export function UserManagement() {
   const approverLabel = useMemo(() => buildApproverLabelLookup(users), [users]);
   const adminCount = useMemo(() => users.filter((u) => u.role === 'admin').length, [users]);
   const pendingCount = requests.pending.length;
+  // Nothing loaded at all: show the error in place of the list. After a failed refresh, keep what we have.
+  const usersFailed = usersError && users.length === 0;
+  const requestsFailed = requestsError && requests.pending.length === 0 && requests.rejected.length === 0;
 
   const inviteButton = (
     <Button onClick={openInvite} className={primaryActionClass}>
@@ -519,8 +530,8 @@ export function UserManagement() {
                       value={requestStatus}
                       onChange={setRequestStatus}
                       options={[
-                        { value: 'pending', label: 'Pending', count: loadingRequests ? undefined : pendingCount },
-                        { value: 'rejected', label: 'Rejected', count: loadingRequests ? undefined : requests.rejected.length },
+                        { value: 'pending', label: 'Pending', count: loadingRequests || requestsFailed ? undefined : pendingCount },
+                        { value: 'rejected', label: 'Rejected', count: loadingRequests || requestsFailed ? undefined : requests.rejected.length },
                       ]}
                     />
                     <Select value={requestSort} onValueChange={(v) => setRequestSort(v as RequestSort)}>
@@ -541,6 +552,8 @@ export function UserManagement() {
             >
               {loadingRequests ? (
                 <RowSkeleton rows={3} />
+              ) : requestsFailed ? (
+                <ErrorState title="Couldn't load access requests" onRetry={fetchAccessRequests} />
               ) : visibleRequests.length === 0 ? (
                 query ? (
                   <EmptyState
@@ -694,9 +707,9 @@ export function UserManagement() {
                     value={roleFilter}
                     onChange={setRoleFilter}
                     options={[
-                      { value: 'all', label: 'All', count: loading ? undefined : users.length },
-                      { value: 'admin', label: 'Admins', count: loading ? undefined : adminCount },
-                      { value: 'user', label: 'Users', count: loading ? undefined : users.length - adminCount },
+                      { value: 'all', label: 'All', count: loading || usersFailed ? undefined : users.length },
+                      { value: 'admin', label: 'Admins', count: loading || usersFailed ? undefined : adminCount },
+                      { value: 'user', label: 'Users', count: loading || usersFailed ? undefined : users.length - adminCount },
                     ]}
                   />
                   <SearchField value={query} onChange={setQuery} placeholder="Search by name or email" />
@@ -721,6 +734,8 @@ export function UserManagement() {
 
               {loading ? (
                 <UsersSkeleton rows={5} />
+              ) : usersFailed ? (
+                <ErrorState title="Couldn't load users" onRetry={fetchUsers} />
               ) : visibleUsers.length === 0 ? (
                 <EmptyState
                   icon={Users}

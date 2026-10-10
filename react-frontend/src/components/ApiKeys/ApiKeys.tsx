@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import { AlertTriangle, Check, CheckCircle2, Clock, Copy, KeyRound, Lock, Plus, Terminal, Trash2 } from 'lucide-react';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 import { useAuth } from '../AuthContext';
@@ -21,6 +20,7 @@ import {
   DialogIcon,
   DialogSubject,
   EmptyState,
+  ErrorState,
   PageHeader,
   PageShell,
   Panel,
@@ -34,6 +34,7 @@ import {
   primaryActionClass,
   secondaryActionClass,
 } from '../layout/page-kit';
+import { notify, responseError } from '../../lib/notify';
 import { Skeleton } from '../ui/skeleton';
 
 export interface ApiKey {
@@ -160,7 +161,7 @@ function CopyButton({ value, className }: { value: string; className?: string })
           await navigator.clipboard.writeText(value);
           setCopied(true);
         } catch {
-          toast.error('Could not copy. Select the text and copy it manually.');
+          notify.error("Couldn't copy. Select the text and copy it manually.");
         }
       }}
       className={cn('inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-medium transition-colors', className)}
@@ -170,15 +171,6 @@ function CopyButton({ value, className }: { value: string; className?: string })
       {copied ? 'Copied' : 'Copy'}
     </button>
   );
-}
-
-async function errorMessage(res: Response, fallback: string): Promise<string> {
-  try {
-    const data = await res.json();
-    return data?.error?.message || fallback;
-  } catch {
-    return fallback;
-  }
 }
 
 /** Placeholder rows on the key list's grid, so each bar sits under its column header. */
@@ -221,6 +213,7 @@ export function ApiKeys() {
   const token = session?.access_token;
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [filter, setFilter] = useState<KeyFilter>('active');
   const [example, setExample] = useState<ExampleKey>('run');
 
@@ -242,13 +235,14 @@ export function ApiKeys() {
     try {
       const res = await fetch(`${baseURL}/api-keys`, { headers: getAuthHeaders(token) });
       if (!res.ok) {
-        toast.error('Failed to load API keys');
+        setLoadError(true);
         return;
       }
       const data = await res.json();
       setKeys(Array.isArray(data) ? data : []);
+      setLoadError(false);
     } catch {
-      toast.error('Failed to load API keys');
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -290,7 +284,7 @@ export function ApiKeys() {
         body: JSON.stringify({ name: name.trim(), expires_in_days: Number(expiryDays) }),
       });
       if (!res.ok) {
-        setCreateError(await errorMessage(res, 'Failed to create API key'));
+        setCreateError(await responseError(res, "Couldn't create the key. Try again."));
         return;
       }
       const data = await res.json();
@@ -309,7 +303,7 @@ export function ApiKeys() {
       await navigator.clipboard.writeText(newKey);
       setCopied(true);
     } catch {
-      toast.error('Could not copy. Select the key and copy it manually.');
+      notify.error("Couldn't copy. Select the key and copy it manually.");
     }
   };
 
@@ -322,20 +316,22 @@ export function ApiKeys() {
         headers: getAuthHeaders(token),
       });
       if (!res.ok) {
-        toast.error(await errorMessage(res, 'Failed to revoke API key'));
+        notify.error(await responseError(res, `Couldn't revoke “${revokeTarget.name}”. Try again.`));
         return;
       }
-      toast.success(`Revoked “${revokeTarget.name}”`);
+      notify.success(`Revoked “${revokeTarget.name}”`);
       setRevokeTarget(null);
       fetchKeys();
     } catch {
-      toast.error('Failed to revoke API key');
+      notify.error(`Couldn't revoke “${revokeTarget.name}”. Check your connection and try again.`);
     } finally {
       setRevoking(false);
     }
   };
 
   const activeCount = keys.filter((k) => k.active).length;
+  // Nothing loaded at all: show the error in place of the list, without misleading zero counts.
+  const loadFailed = loadError && keys.length === 0;
   const visibleKeys = filter === 'active' ? keys.filter((k) => k.active) : keys;
   const expiryDate = new Date(Date.now() + Number(expiryDays) * DAY_MS);
   const exampleCode = `curl -X POST ${baseURL}${EXAMPLES[example].path} \\
@@ -366,8 +362,8 @@ export function ApiKeys() {
                 value={filter}
                 onChange={setFilter}
                 options={[
-                  { value: 'active', label: 'Active', count: loading ? undefined : activeCount },
-                  { value: 'all', label: 'All keys', count: loading ? undefined : keys.length },
+                  { value: 'active', label: 'Active', count: loading || loadFailed ? undefined : activeCount },
+                  { value: 'all', label: 'All keys', count: loading || loadFailed ? undefined : keys.length },
                 ]}
               />
               <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -379,6 +375,8 @@ export function ApiKeys() {
         >
           {loading ? (
             <KeysSkeleton rows={2} />
+          ) : loadFailed ? (
+            <ErrorState title="Couldn't load your API keys" onRetry={fetchKeys} />
           ) : visibleKeys.length === 0 ? (
             <EmptyState
               icon={KeyRound}
