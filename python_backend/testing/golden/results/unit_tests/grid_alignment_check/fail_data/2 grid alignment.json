@@ -1,0 +1,1253 @@
+{
+ "results": {
+  "char_styles": {
+   "details": {},
+   "total_count": 3
+  },
+  "checks": [
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "key": "MASTERPAGE",
+    "label": "Masterpage",
+    "message": "Master Page can't be used.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE_TEXT_BOX",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "FONTS_INCLUDED",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "OTF_TTF_FONT",
+    "label": "OTF/TTF Font",
+    "message": "Only OTF or TTF fonts are supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "VARIABLE_FONT",
+    "label": "Variable Font",
+    "message": "Variable fonts are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "key": "IMAGE_INCLUDED",
+    "label": "Images Included",
+    "message": "Package missing image link.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "EMBEDDED_IMAGE",
+    "label": "Embedded Image",
+    "message": "Embedded images are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item transformations (flip/skew) are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "key": "TABLE",
+    "label": "Table",
+    "message": "Tables are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "PASTED_GRAPHICS",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "key": "AUTO_SIZE_TEXT_BOX",
+    "label": "Auto Sizing Text Box",
+    "message": "Auto-size text boxes were not set up properly",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "key": "TEXT_COLUMNS",
+    "label": "Text Column",
+    "message": "Text columns are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "key": "LINKED_TEXT_FRAME",
+    "label": "Linked Text Frame",
+    "message": "Linked (threaded) text frames are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_TEXT",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_IMAGE",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "key": "GRID_ALIGNMENT",
+    "label": "Grid Alignment",
+    "message": "Grid alignment is not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING_CHAR",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP",
+    "label": "Text Wrap",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT",
+    "label": "Color Fill Tint (Beta)",
+    "message": "Fill Tint must be 100. (This may be inaccurate, testing currently)",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "key": "HYPHENATION",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "OVERRIDE",
+    "label": "Override",
+    "message": "Overrides are not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "UNUSED_IMAGE",
+    "label": "Unused Image",
+    "message": "Image(s) in package are unused making the package larger in size.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "key": "DOCUMENT_BLEED",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied.",
+    "severity": "warnings"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "key": "COMPOSER",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "EMPTY_TEXT_FRAME",
+    "label": "Empty Text Frames",
+    "message": "Empty text frame found.",
+    "severity": "infos"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "LARGE_IMAGE",
+    "label": "Large Image",
+    "message": "Image is large. Verify that this large of an image is needed.",
+    "severity": "infos"
+   }
+  ],
+  "fonts": {
+   "details": {
+    "FuturaEF": {
+     "errors": [
+      {
+       "context": "",
+       "data_id": "null",
+       "identifier": "FuturaEF",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "FONTS_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "FuturaEF DemiBold": {
+     "errors": [
+      {
+       "context": "",
+       "data_id": "null",
+       "identifier": "FuturaEF DemiBold",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "FONTS_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 4
+  },
+  "general": {
+   "details": {
+    "null": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "context": "top: 70.86614173228347pt, bottom: 70.86614173228347pt, inside: 70.86614173228347pt, outside: 70.86614173228347pt.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "DOCUMENT_BLEED"
+      }
+     ]
+    }
+   },
+   "total_count": 0
+  },
+  "images": {
+   "details": {
+    "Simple_CMYK_Gradients_Fuschia copy.ai": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 5811.02,
+        "kind": "Rectangle",
+        "page_id": "ud5",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": -70.87
+       },
+       "context": "Image inside Container has been rotated by 90.00 degrees.",
+       "data_id": "u10f",
+       "identifier": "Simple_CMYK_Gradients_Fuschia copy.ai",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      }
+     ]
+    },
+    "Simple_CMYK_Gradients_Violet copy.ai": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 5811.02,
+        "kind": "Rectangle",
+        "page_id": "u16d",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": -70.87
+       },
+       "context": "Image inside Container has been rotated by 90.00 degrees.",
+       "data_id": "u16e",
+       "identifier": "Simple_CMYK_Gradients_Violet copy.ai",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      }
+     ]
+    },
+    "null": {
+     "errors": [
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "PASTED_GRAPHICS"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 12
+  },
+  "page_layouts": [
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "ud5",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1970.21
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "ud5",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2569.85
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "ud5",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 2155.63
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "ud5",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2781.97
+     },
+     {
+      "height": 348.66,
+      "kind": "TextFrame",
+      "page_id": "ud5",
+      "width": 504.78,
+      "x": 1592.86,
+      "y": 1252.91
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 1,
+    "name": "1",
+    "page_id": "ud5",
+    "preview": "sha256:8185277415086481",
+    "spread_id": "ud0",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u16d",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1785.6
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u16d",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2357.25
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u16d",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1971.02
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u16d",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2569.37
+     },
+     {
+      "height": 467.72,
+      "kind": "TextFrame",
+      "page_id": "u16d",
+      "width": 884.41,
+      "x": 226.77,
+      "y": 3332.13
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 2,
+    "name": "2",
+    "page_id": "u16d",
+    "preview": "sha256:e75a23b9a6550c50",
+    "spread_id": "u162",
+    "width": 2409.448818897638
+   }
+  ],
+  "pages": {
+   "u16d": "2",
+   "ud5": "1"
+  },
+  "par_styles": {
+   "details": {
+    "HEader 2 - Our Future": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2569.85
+       },
+       "context": "",
+       "data_id": "u453",
+       "identifier": "HEader 2 - Our Future",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "GRID_ALIGNMENT"
+      }
+     ],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2569.85
+       },
+       "context": "",
+       "data_id": "u453",
+       "identifier": "HEader 2 - Our Future",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Header - Your Desire": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1785.6
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u12e7",
+       "identifier": "Header - Your Desire",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Header 1 - Your Drive": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1970.21
+       },
+       "context": "",
+       "data_id": "u42e",
+       "identifier": "Header 1 - Your Drive",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "GRID_ALIGNMENT"
+      }
+     ],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1970.21
+       },
+       "context": "",
+       "data_id": "u42e",
+       "identifier": "Header 1 - Your Drive",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Header 2": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2357.25
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u1300",
+       "identifier": "Header 2",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Learn": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1971.02
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u1319",
+       "identifier": "Learn",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "NormalParagraphStyle": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2569.37
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u1332",
+       "identifier": "NormalParagraphStyle",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Shaped": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2781.97
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u46c",
+       "identifier": "Shaped",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Win": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 2155.63
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u434",
+       "identifier": "Win",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    }
+   },
+   "total_count": 8
+  },
+  "spread_to_pages": {
+   "u162": [
+    "u16d"
+   ],
+   "ud0": [
+    "ud5"
+   ]
+  },
+  "template_name": "2 grid alignment.zip",
+  "text_box_data": {
+   "u1332": {
+    "content": "grow\n",
+    "identifier": "u1332",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u1335": {
+    "content": "grow\n",
+    "identifier": "u1335",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u1d44": {
+    "content": "Hello this is some text\n",
+    "identifier": "u1d44",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u1d56": {
+    "content": "Hello this is some text\n",
+    "identifier": "u1d56",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u1d5b": {
+    "content": "More text here, HI\n",
+    "identifier": "u1d5b",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u1d6d": {
+    "content": "More text here, HI\n",
+    "identifier": "u1d6d",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u453": {
+    "content": "Our future to be\n",
+    "identifier": "u453",
+    "page_id": "1",
+    "page_name": ""
+   }
+  },
+  "text_boxes": {
+   "details": {
+    "u1332": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2569.37
+       },
+       "context": "Text: grow — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Violet",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "grow"
+       },
+       "data_id": "u1332",
+       "identifier": "u1332",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "text_content": [
+        "grow"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1335": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2569.37
+       },
+       "context": "",
+       "data_id": "u1332",
+       "identifier": "u1335",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1d44": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 348.66,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 504.78,
+        "x": 1592.86,
+        "y": 1252.91
+       },
+       "context": "",
+       "data_id": "u1d56",
+       "identifier": "u1d44",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1d56": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 348.66,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 504.78,
+        "x": 1592.86,
+        "y": 1252.91
+       },
+       "context": "Text: Hello this is some text — Overrides: PointSize: 120",
+       "context_details": {
+        "overrides": {
+         "PointSize": "120"
+        },
+        "text": "Hello this is some text"
+       },
+       "data_id": "u1d56",
+       "identifier": "u1d56",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "text_content": [
+        "Hello this is some text"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1d5b": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 467.72,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 884.41,
+        "x": 226.77,
+        "y": 3332.13
+       },
+       "context": "",
+       "data_id": "u1d6d",
+       "identifier": "u1d5b",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1d6d": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 467.72,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 884.41,
+        "x": 226.77,
+        "y": 3332.13
+       },
+       "context": "Text: More text here, HI — Overrides: PointSize: 200, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "PointSize": "200",
+         "Tracking": "50"
+        },
+        "text": "More text here, HI"
+       },
+       "data_id": "u1d6d",
+       "identifier": "u1d6d",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "text_content": [
+        "More text here, HI"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u453": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2569.85
+       },
+       "context": "Text: be — Overrides: PointSize: 72, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "PointSize": "72",
+         "Tracking": "50"
+        },
+        "text": "be"
+       },
+       "data_id": "u453",
+       "identifier": "u453",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "text_content": [
+        "be"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    }
+   },
+   "total_count": 10
+  },
+  "validation_classifiers": {
+   "COMPOSER": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur."
+   },
+   "DOCUMENT_BLEED": {
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied."
+   },
+   "FONTS_INCLUDED": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts."
+   },
+   "GRID_ALIGNMENT": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "label": "Grid Alignment",
+    "message": "Grid alignment is not supported"
+   },
+   "IMAGE_TRANSFORMATION_IMAGE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing."
+   },
+   "OVERRIDE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Override",
+    "message": "Overrides are not supported."
+   },
+   "PARAGRAPH_STYLE_TEXT_BOX": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used."
+   },
+   "PASTED_GRAPHICS": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported"
+   }
+  }
+ },
+ "stopped_at": "RESULTS"
+}

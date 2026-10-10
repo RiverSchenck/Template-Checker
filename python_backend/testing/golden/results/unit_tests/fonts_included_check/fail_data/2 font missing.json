@@ -1,0 +1,1270 @@
+{
+ "results": {
+  "char_styles": {
+   "details": {},
+   "total_count": 1
+  },
+  "checks": [
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "key": "MASTERPAGE",
+    "label": "Masterpage",
+    "message": "Master Page can't be used.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE_TEXT_BOX",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "FONTS_INCLUDED",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "OTF_TTF_FONT",
+    "label": "OTF/TTF Font",
+    "message": "Only OTF or TTF fonts are supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "VARIABLE_FONT",
+    "label": "Variable Font",
+    "message": "Variable fonts are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "key": "IMAGE_INCLUDED",
+    "label": "Images Included",
+    "message": "Package missing image link.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "EMBEDDED_IMAGE",
+    "label": "Embedded Image",
+    "message": "Embedded images are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item transformations (flip/skew) are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "key": "TABLE",
+    "label": "Table",
+    "message": "Tables are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "PASTED_GRAPHICS",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "key": "AUTO_SIZE_TEXT_BOX",
+    "label": "Auto Sizing Text Box",
+    "message": "Auto-size text boxes were not set up properly",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "key": "TEXT_COLUMNS",
+    "label": "Text Column",
+    "message": "Text columns are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "key": "LINKED_TEXT_FRAME",
+    "label": "Linked Text Frame",
+    "message": "Linked (threaded) text frames are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_TEXT",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_IMAGE",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "key": "GRID_ALIGNMENT",
+    "label": "Grid Alignment",
+    "message": "Grid alignment is not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING_CHAR",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP",
+    "label": "Text Wrap",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT",
+    "label": "Color Fill Tint (Beta)",
+    "message": "Fill Tint must be 100. (This may be inaccurate, testing currently)",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "key": "HYPHENATION",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "OVERRIDE",
+    "label": "Override",
+    "message": "Overrides are not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "UNUSED_IMAGE",
+    "label": "Unused Image",
+    "message": "Image(s) in package are unused making the package larger in size.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "key": "DOCUMENT_BLEED",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied.",
+    "severity": "warnings"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "key": "COMPOSER",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "EMPTY_TEXT_FRAME",
+    "label": "Empty Text Frames",
+    "message": "Empty text frame found.",
+    "severity": "infos"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "LARGE_IMAGE",
+    "label": "Large Image",
+    "message": "Image is large. Verify that this large of an image is needed.",
+    "severity": "infos"
+   }
+  ],
+  "fonts": {
+   "details": {
+    "BlairITC TT": {
+     "errors": [
+      {
+       "context": "",
+       "data_id": "null",
+       "identifier": "BlairITC TT",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "FONTS_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "Montserrat": {
+     "errors": [
+      {
+       "context": "",
+       "data_id": "null",
+       "identifier": "Montserrat",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "FONTS_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 8
+  },
+  "general": {
+   "details": {},
+   "total_count": 0
+  },
+  "images": {
+   "details": {},
+   "total_count": 4
+  },
+  "page_layouts": [
+   {
+    "frames": [
+     {
+      "height": 595.28,
+      "kind": "Rectangle",
+      "page_id": "u2215",
+      "width": 841.89,
+      "x": 0.0,
+      "y": -0.0
+     },
+     {
+      "height": 594.28,
+      "kind": "GraphicLine",
+      "page_id": "u2215",
+      "width": 0.0,
+      "x": 420.44,
+      "y": 0.5
+     },
+     {
+      "height": 70.16,
+      "kind": "Rectangle",
+      "page_id": "u2215",
+      "width": 70.16,
+      "x": 596.34,
+      "y": 501.73
+     },
+     {
+      "height": 89.2,
+      "kind": "Rectangle",
+      "page_id": "u2215",
+      "width": 228.57,
+      "x": 517.13,
+      "y": 12.27
+     },
+     {
+      "height": 107.76,
+      "kind": "TextFrame",
+      "page_id": "u2215",
+      "width": 341.57,
+      "x": 39.69,
+      "y": 297.59
+     },
+     {
+      "height": 70.87,
+      "kind": "TextFrame",
+      "page_id": "u2215",
+      "width": 341.57,
+      "x": 39.69,
+      "y": 420.19
+     },
+     {
+      "height": 25.51,
+      "kind": "TextFrame",
+      "page_id": "u2215",
+      "width": 341.57,
+      "x": 39.69,
+      "y": 39.69
+     },
+     {
+      "height": 25.51,
+      "kind": "TextFrame",
+      "page_id": "u2215",
+      "width": 341.57,
+      "x": 39.69,
+      "y": 65.2
+     },
+     {
+      "height": 25.51,
+      "kind": "TextFrame",
+      "page_id": "u2215",
+      "width": 361.42,
+      "x": 39.69,
+      "y": 90.71
+     },
+     {
+      "height": 25.51,
+      "kind": "TextFrame",
+      "page_id": "u2215",
+      "width": 341.57,
+      "x": 39.69,
+      "y": 116.22
+     },
+     {
+      "height": 25.51,
+      "kind": "TextFrame",
+      "page_id": "u2215",
+      "width": 341.57,
+      "x": 39.69,
+      "y": 141.73
+     }
+    ],
+    "height": 595.2755905510003,
+    "index": 1,
+    "name": "1",
+    "page_id": "u2215",
+    "preview": "sha256:90805ddd896f7efc",
+    "spread_id": "u2210",
+    "width": 841.8897637779997
+   },
+   {
+    "frames": [
+     {
+      "height": 595.28,
+      "kind": "Rectangle",
+      "page_id": "u193b",
+      "width": 841.89,
+      "x": 0.0,
+      "y": 0.0
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 39.69,
+      "y": 96.63
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 39.69,
+      "y": 249.45
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 39.69,
+      "y": 402.52
+     },
+     {
+      "height": 22.68,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 342.07,
+      "x": 39.69,
+      "y": 39.69
+     },
+     {
+      "height": 31.18,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 110.55
+     },
+     {
+      "height": 17.01,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 150.44
+     },
+     {
+      "height": 17.01,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 167.66
+     },
+     {
+      "height": 38.56,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 200.97
+     },
+     {
+      "height": 31.18,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 265.54
+     },
+     {
+      "height": 17.01,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 305.43
+     },
+     {
+      "height": 17.01,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 322.65
+     },
+     {
+      "height": 38.56,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 355.96
+     },
+     {
+      "height": 31.18,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 418.61
+     },
+     {
+      "height": 17.01,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 458.5
+     },
+     {
+      "height": 17.01,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 475.72
+     },
+     {
+      "height": 38.56,
+      "kind": "TextFrame",
+      "page_id": "u193b",
+      "width": 341.57,
+      "x": 38.27,
+      "y": 509.03
+     }
+    ],
+    "height": 595.2755905510003,
+    "index": 2,
+    "name": "2",
+    "page_id": "u193b",
+    "preview": "sha256:28d529a95b3c9c13",
+    "spread_id": "u1936",
+    "width": 841.8897637779997
+   }
+  ],
+  "pages": {
+   "u193b": "2",
+   "u2215": "1"
+  },
+  "par_styles": {
+   "details": {
+    "Arrangement": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 31.18,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 110.55
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u414f",
+       "identifier": "Arrangement",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Title of Package"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 31.18,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 265.54
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u427c",
+       "identifier": "Arrangement",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Title of Package"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 31.18,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 418.61
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4363",
+       "identifier": "Arrangement",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Title of Package"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 31.18,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 110.55
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u414f",
+       "identifier": "Arrangement",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Arrangementen": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 22.68,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 342.07,
+        "x": 39.69,
+        "y": 39.69
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u3b0a",
+       "identifier": "Arrangementen",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Arrangementen"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 22.68,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 342.07,
+        "x": 39.69,
+        "y": 39.69
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u3b0a",
+       "identifier": "Arrangementen",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Body Harbour Club": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 70.87,
+        "kind": "TextFrame",
+        "page_id": "u2215",
+        "width": 341.57,
+        "x": 39.69,
+        "y": 420.19
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u3a98",
+       "identifier": "Body Harbour Club",
+       "page_id": "u2215",
+       "page_name": "1",
+       "spread_id": "u2210",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "body arrangement goud": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 17.01,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 167.66
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u417d",
+       "identifier": "body arrangement goud",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Extra information if needed"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 17.01,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 322.65
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u42ab",
+       "identifier": "body arrangement goud",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Extra information if needed"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 17.01,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 475.72
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4391",
+       "identifier": "body arrangement goud",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Extra information if needed"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 17.01,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 167.66
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u417d",
+       "identifier": "body arrangement goud",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "body arrangement wit": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 38.56,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 200.97
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4194",
+       "identifier": "body arrangement wit",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Information "
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 38.56,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 355.96
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u42c2",
+       "identifier": "body arrangement wit",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Information "
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 38.56,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 509.03
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u43a8",
+       "identifier": "body arrangement wit",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Information "
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 38.56,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 200.97
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4194",
+       "identifier": "body arrangement wit",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "intro Harbour Club": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 107.76,
+        "kind": "TextFrame",
+        "page_id": "u2215",
+        "width": 341.57,
+        "x": 39.69,
+        "y": 297.59
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u3a81",
+       "identifier": "intro Harbour Club",
+       "page_id": "u2215",
+       "page_name": "1",
+       "spread_id": "u2210",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "kop goud": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 25.51,
+        "kind": "TextFrame",
+        "page_id": "u2215",
+        "width": 361.42,
+        "x": 39.69,
+        "y": 90.71
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u442a",
+       "identifier": "kop goud",
+       "page_id": "u2215",
+       "page_name": "1",
+       "spread_id": "u2210",
+       "text_content": [
+        "Apollo Hotel Amsterdam,"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 25.51,
+        "kind": "TextFrame",
+        "page_id": "u2215",
+        "width": 341.57,
+        "x": 39.69,
+        "y": 116.22
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4441",
+       "identifier": "kop goud",
+       "page_id": "u2215",
+       "page_name": "1",
+       "spread_id": "u2210",
+       "text_content": [
+        "A Tribute"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 25.51,
+        "kind": "TextFrame",
+        "page_id": "u2215",
+        "width": 341.57,
+        "x": 39.69,
+        "y": 141.73
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4458",
+       "identifier": "kop goud",
+       "page_id": "u2215",
+       "page_name": "1",
+       "spread_id": "u2210",
+       "text_content": [
+        "Portfolio Hotel"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 25.51,
+        "kind": "TextFrame",
+        "page_id": "u2215",
+        "width": 361.42,
+        "x": 39.69,
+        "y": 90.71
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u442a",
+       "identifier": "kop goud",
+       "page_id": "u2215",
+       "page_name": "1",
+       "spread_id": "u2210",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "kop wit": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 25.51,
+        "kind": "TextFrame",
+        "page_id": "u2215",
+        "width": 341.57,
+        "x": 39.69,
+        "y": 39.69
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u43fb",
+       "identifier": "kop wit",
+       "page_id": "u2215",
+       "page_name": "1",
+       "spread_id": "u2210",
+       "text_content": [
+        "The Harbour Club"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 25.51,
+        "kind": "TextFrame",
+        "page_id": "u2215",
+        "width": 341.57,
+        "x": 39.69,
+        "y": 65.2
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4413",
+       "identifier": "kop wit",
+       "page_id": "u2215",
+       "page_name": "1",
+       "spread_id": "u2210",
+       "text_content": [
+        "Amsterdam Zuid"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 25.51,
+        "kind": "TextFrame",
+        "page_id": "u2215",
+        "width": 341.57,
+        "x": 39.69,
+        "y": 39.69
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u43fb",
+       "identifier": "kop wit",
+       "page_id": "u2215",
+       "page_name": "1",
+       "spread_id": "u2210",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "prijs": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 17.01,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 150.44
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4166",
+       "identifier": "prijs",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Price"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 17.01,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 305.43
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4293",
+       "identifier": "prijs",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Price"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 17.01,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 458.5
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u437a",
+       "identifier": "prijs",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "text_content": [
+        "Price"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 17.01,
+        "kind": "TextFrame",
+        "page_id": "u193b",
+        "width": 341.57,
+        "x": 38.27,
+        "y": 150.44
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4166",
+       "identifier": "prijs",
+       "page_id": "u193b",
+       "page_name": "2",
+       "spread_id": "u1936",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    }
+   },
+   "total_count": 9
+  },
+  "spread_to_pages": {
+   "u1936": [
+    "u193b"
+   ],
+   "u2210": [
+    "u2215"
+   ]
+  },
+  "template_name": "2 font missing.zip",
+  "text_box_data": {},
+  "text_boxes": {
+   "details": {},
+   "total_count": 20
+  },
+  "validation_classifiers": {
+   "COMPOSER": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur."
+   },
+   "FONTS_INCLUDED": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts."
+   },
+   "HYPHENATION": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported."
+   }
+  }
+ },
+ "stopped_at": "RESULTS"
+}

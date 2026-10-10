@@ -1,0 +1,1093 @@
+{
+ "results": {
+  "char_styles": {
+   "details": {},
+   "total_count": 1
+  },
+  "checks": [
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "key": "MASTERPAGE",
+    "label": "Masterpage",
+    "message": "Master Page can't be used.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE_TEXT_BOX",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "FONTS_INCLUDED",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "OTF_TTF_FONT",
+    "label": "OTF/TTF Font",
+    "message": "Only OTF or TTF fonts are supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "VARIABLE_FONT",
+    "label": "Variable Font",
+    "message": "Variable fonts are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "key": "IMAGE_INCLUDED",
+    "label": "Images Included",
+    "message": "Package missing image link.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "EMBEDDED_IMAGE",
+    "label": "Embedded Image",
+    "message": "Embedded images are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item transformations (flip/skew) are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "key": "TABLE",
+    "label": "Table",
+    "message": "Tables are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "PASTED_GRAPHICS",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "key": "AUTO_SIZE_TEXT_BOX",
+    "label": "Auto Sizing Text Box",
+    "message": "Auto-size text boxes were not set up properly",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "key": "TEXT_COLUMNS",
+    "label": "Text Column",
+    "message": "Text columns are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "key": "LINKED_TEXT_FRAME",
+    "label": "Linked Text Frame",
+    "message": "Linked (threaded) text frames are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_TEXT",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_IMAGE",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "key": "GRID_ALIGNMENT",
+    "label": "Grid Alignment",
+    "message": "Grid alignment is not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING_CHAR",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP",
+    "label": "Text Wrap",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT",
+    "label": "Color Fill Tint (Beta)",
+    "message": "Fill Tint must be 100. (This may be inaccurate, testing currently)",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "key": "HYPHENATION",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "OVERRIDE",
+    "label": "Override",
+    "message": "Overrides are not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "UNUSED_IMAGE",
+    "label": "Unused Image",
+    "message": "Image(s) in package are unused making the package larger in size.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "key": "DOCUMENT_BLEED",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied.",
+    "severity": "warnings"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "key": "COMPOSER",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "EMPTY_TEXT_FRAME",
+    "label": "Empty Text Frames",
+    "message": "Empty text frame found.",
+    "severity": "infos"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "LARGE_IMAGE",
+    "label": "Large Image",
+    "message": "Image is large. Verify that this large of an image is needed.",
+    "severity": "infos"
+   }
+  ],
+  "fonts": {
+   "details": {
+    "Minion Pro": {
+     "errors": [
+      {
+       "context": "",
+       "data_id": "null",
+       "identifier": "Minion Pro",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "FONTS_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 5
+  },
+  "general": {
+   "details": {
+    "null": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "context": "top: 9pt, bottom: 9pt, inside: 9pt, outside: 9pt.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "DOCUMENT_BLEED"
+      }
+     ]
+    }
+   },
+   "total_count": 0
+  },
+  "images": {
+   "details": {
+    "iStock-1226023798.jpg": {
+     "errors": [],
+     "infos": [
+      {
+       "bounds": {
+        "height": 164.16,
+        "kind": "Rectangle",
+        "page_id": "ufa2",
+        "width": 301.32,
+        "x": 319.68,
+        "y": 166.88
+       },
+       "context": "Image iStock-1226023798.jpg is 15.25MB.",
+       "data_id": "u361a",
+       "identifier": "iStock-1226023798.jpg",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "validationClassifier": "LARGE_IMAGE"
+      }
+     ],
+     "warnings": []
+    }
+   },
+   "total_count": 5
+  },
+  "page_layouts": [
+   {
+    "frames": [
+     {
+      "height": 858.0,
+      "kind": "TextFrame",
+      "page_id": "ufa2",
+      "width": 579.0,
+      "x": -588.0,
+      "y": -16.2
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ufa2",
+      "width": 97.5,
+      "x": 36.0,
+      "y": 316.09
+     },
+     {
+      "height": 70.25,
+      "kind": "Rectangle",
+      "page_id": "ufa2",
+      "width": 630.0,
+      "x": -9.0,
+      "y": -9.0
+     },
+     {
+      "height": 56.32,
+      "kind": "TextFrame",
+      "page_id": "ufa2",
+      "width": 256.68,
+      "x": 36.0,
+      "y": 166.88
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ufa2",
+      "width": 97.5,
+      "x": 36.0,
+      "y": 78.67
+     },
+     {
+      "height": 415.39,
+      "kind": "TextFrame",
+      "page_id": "ufa2",
+      "width": 256.68,
+      "x": 36.0,
+      "y": 229.01
+     },
+     {
+      "height": 64.8,
+      "kind": "TextFrame",
+      "page_id": "ufa2",
+      "width": 540.0,
+      "x": 36.0,
+      "y": 96.08
+     },
+     {
+      "height": 18.0,
+      "kind": "TextFrame",
+      "page_id": "ufa2",
+      "width": 52.92,
+      "x": 44.28,
+      "y": 756.0
+     },
+     {
+      "height": 67.07,
+      "kind": "Rectangle",
+      "page_id": "ufa2",
+      "width": 67.07,
+      "x": 36.0,
+      "y": 688.93
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ufa2",
+      "width": 256.68,
+      "x": 36.0,
+      "y": 681.56
+     },
+     {
+      "height": 27.0,
+      "kind": "Rectangle",
+      "page_id": "ufa2",
+      "width": 630.0,
+      "x": -9.0,
+      "y": 774.0
+     },
+     {
+      "height": 42.07,
+      "kind": "Rectangle",
+      "page_id": "ufa2",
+      "width": 104.8,
+      "x": 477.2,
+      "y": 713.93
+     },
+     {
+      "height": 30.69,
+      "kind": "Rectangle",
+      "page_id": "ufa2",
+      "width": 67.3,
+      "x": 36.0,
+      "y": 15.97
+     },
+     {
+      "height": 164.16,
+      "kind": "Rectangle",
+      "page_id": "ufa2",
+      "width": 301.32,
+      "x": 319.68,
+      "y": 166.88
+     },
+     {
+      "height": 69.69,
+      "kind": "TextFrame",
+      "page_id": "ufa2",
+      "width": 157.5,
+      "x": 119.92,
+      "y": 704.31
+     },
+     {
+      "height": 25.19,
+      "kind": "Rectangle",
+      "page_id": "ufa2",
+      "width": 32.51,
+      "x": 119.92,
+      "y": 691.71
+     },
+     {
+      "height": 7.9,
+      "kind": "TextFrame",
+      "page_id": "ufa2",
+      "width": 35.82,
+      "x": 568.0,
+      "y": 780.1
+     },
+     {
+      "height": 332.71,
+      "kind": "TextFrame",
+      "page_id": "ufa2",
+      "width": 256.32,
+      "x": 319.68,
+      "y": 348.48
+     }
+    ],
+    "height": 792.0,
+    "index": 1,
+    "name": "1",
+    "page_id": "ufa2",
+    "preview": "sha256:94af319a0301992f",
+    "spread_id": "uf95",
+    "width": 612.0
+   }
+  ],
+  "pages": {
+   "ufa2": "1"
+  },
+  "par_styles": {
+   "details": {
+    "H4": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 415.39,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 256.68,
+        "x": 36.0,
+        "y": 229.01
+       },
+       "context": "",
+       "data_id": "u319f",
+       "identifier": "H4",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        "No-cost Home Energy Assessment (HEA) ",
+        "Manufactured Homes Initiative (MHI)",
+        "Multifamily Energy Efficiency Program",
+        "Energy Efficiency Assistance Program"
+       ],
+       "validationClassifier": "KERNING"
+      },
+      {
+       "bounds": {
+        "height": 69.69,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 157.5,
+        "x": 119.92,
+        "y": 704.31
+       },
+       "context": "",
+       "data_id": "u3623",
+       "identifier": "H4",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        "Start Saving"
+       ],
+       "validationClassifier": "KERNING"
+      },
+      {
+       "bounds": {
+        "height": 332.71,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 256.32,
+        "x": 319.68,
+        "y": 348.48
+       },
+       "context": "",
+       "data_id": "u3698",
+       "identifier": "H4",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        "New construction rebates",
+        "Energy efficiency rebates",
+        "Our Marketplace"
+       ],
+       "validationClassifier": "KERNING"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 8
+  },
+  "spread_to_pages": {
+   "uf95": [
+    "ufa2"
+   ]
+  },
+  "template_name": "SEMCO1 Fixed.zip",
+  "text_box_data": {
+   "u2f9a": {
+    "content": "15189510419\n",
+    "identifier": "u2f9a",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u2fad": {
+    "content": "15189510419\n",
+    "identifier": "u2fad",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u319f": {
+    "content": "Residential\nNo-cost Home Energy Assessment (HEA) \nRather than focusing on a single problem like an old heating and water system, not enough insulation in the attic, or leaky windows, a no-cost Home Energy Assessment looks for opportunities throughout an entire home to improve performance. \nManufactured Homes Initiative (MHI)\nResidential customers in manufactured homes with active SEMCO natural gas accounts may be eligible for no-cost upgrades. These upgrades are designed to increase a home’s comfort and reduce overall energy costs.\nMultifamily Energy Efficiency Program\nSEMCO’s Multifamily Energy Efficiency Program offers reduced-cost energy-efficient upgrades for multifamily properties. This program also offers no-cost direct installation of showerheads, faucet aerators, and pipe wrap, based on water heater fuel type. \nEnergy Efficiency Assistance Program\nThe SEMCO Energy Efficiency Assistance Program reduces financial barriers to energy efficiency and home comfort by providing customers with increased incentives for EWR upgrades. Participants must be SEMCO residential customers and meet the household income levels established (currently 200 percent of poverty level), which is based on the federal income guidelines published by the US Department of Energy Weatherization Program. Renters must have expressed consent from property owner to qualify for upgrades. \n",
+    "identifier": "u319f",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u3623": {
+    "content": "Start Saving\nSee all the ways we can help you save at semcoewr.com, or give us a call at 855.298.5387.\n",
+    "identifier": "u3623",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u3648": {
+    "content": "3984229\n",
+    "identifier": "u3648",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u3698": {
+    "content": "New construction rebates\nEnergy efficiency Home Energy Rating System (HERS) rated homes with a score of 56 or lower can receive a rebate for building energy efficient. Go to www.hersindex.com to learn more about HERS ratings\nEnergy efficiency rebates\nSEMCO’s EWR program offers generous rebates to help encourage customers to make the most energy-efficient choice. Rebates are only available to SEMCO customers and are subject to change. For specific eligibility requirements,  visit semcoewr.com. We offer rebates in the following areas:\nSpace heatingWater heatingAir sealing and insulationWindow and door replacementsENERGY STAR\nOur Marketplace\nOur online store makes it easier than ever to save on the latest smart thermostats from ecobee and Google Nest. Customers can save up to $100 instantly on Wi-Fi enabled thermostats, with no need to complete a rebate application. We ship the  new thermostat directly to their home within two weeks.\n",
+    "identifier": "u3698",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ufa6": {
+    "content": "SEMCO IQ flyer (868331)[TOP BANNER]<Efficiency United logo>\t\tSavings brought to you by SEMCO Energy Gas Company and our \t\t\t\t\tMichigan energy providers. [HEADLINE OPTIONS]We’re Here to Help.Helping Neighbors in Need. Need an Extra Hand? Energy Efficiency Assistance Program[BODY COPY]Efficiency United’s Energy Efficiency Assistance Program offers no-cost weatherization products and services like insulation, high-efficiency heating equipment and ENERGY STAR® certified appliances to households that fall below a certain income. Check the chart below to see if you qualify. Members in Household\tMax. Qualifying Income1\t\t\t\t$24,1202\t\t\t\t$32,4803\t\t\t\t$40,8404\t\t\t\t$49,2005\t\t\t\t$57,5606\t\t\t\t$65,9207\t\t\t\t$74,2808\t\t\t\t$82,640*Add $8,360 for each additional household member[CTA]\nReady to get started? Call us at 877.367.3191 or visit efficiencyunited.com to learn more.\n",
+    "identifier": "ufa6",
+    "page_id": "1",
+    "page_name": ""
+   }
+  },
+  "text_boxes": {
+   "details": {
+    "NormalParagraphStyle": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 69.69,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 157.5,
+        "x": 119.92,
+        "y": 704.31
+       },
+       "context": "See all the ways we can help you save at semcoewr.com, or give us a call at 855.298.5387. ",
+       "data_id": "u3623",
+       "identifier": "NormalParagraphStyle",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "validationClassifier": "PARAGRAPH_STYLE"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u2f9a": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 18.0,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 52.92,
+        "x": 44.28,
+        "y": 756.0
+       },
+       "context": "",
+       "data_id": "u2fad",
+       "identifier": "u2f9a",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u2fad": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 18.0,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 52.92,
+        "x": 44.28,
+        "y": 756.0
+       },
+       "context": "Text: 15189510419 — Overrides: Leading: 11, AppliedFont: Roboto, FillColor: Color/C=0 M=0 Y=0 K=85 2, PointSize: 6, Ligatures: false, Tracking: 10, OTFContextualAlternate: false",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Roboto",
+         "FillColor": "Color/C=0 M=0 Y=0 K=85 2",
+         "Leading": "11",
+         "Ligatures": "false",
+         "OTFContextualAlternate": "false",
+         "PointSize": "6",
+         "Tracking": "10"
+        },
+        "text": "15189510419"
+       },
+       "data_id": "u2fad",
+       "identifier": "u2fad",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        "15189510419"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u319f": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 415.39,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 256.68,
+        "x": 36.0,
+        "y": 229.01
+       },
+       "context": "Text:  Whitespace after text: Rather than focusing on a single problem like an old heating and water system, not enough insulation in the attic, or leaky windows, a no-cost Home Energy Assessment looks for opportunities throughout an entire home to improve performance. — Overrides: Tracking: -10",
+       "context_details": {
+        "overrides": {
+         "Tracking": "-10"
+        },
+        "text": ""
+       },
+       "data_id": "u319f",
+       "identifier": "u319f",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u3623": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 69.69,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 157.5,
+        "x": 119.92,
+        "y": 704.31
+       },
+       "context": "Text: Start Saving — Overrides: Leading: 11.708852099873559, StrokeWeight: 0, OTFContextualAlternate: false, MiterLimit: 2.601967133305235, StrokeAlignment: CenterAlignment, RubyFontSize: -0.3841088931363521, KentenFontSize: -0.3841088931363521",
+       "context_details": {
+        "overrides": {
+         "KentenFontSize": "-0.3841088931363521",
+         "Leading": "11.708852099873559",
+         "MiterLimit": "2.601967133305235",
+         "OTFContextualAlternate": "false",
+         "RubyFontSize": "-0.3841088931363521",
+         "StrokeAlignment": "CenterAlignment",
+         "StrokeWeight": "0"
+        },
+        "text": "Start Saving"
+       },
+       "data_id": "u3623",
+       "identifier": "u3623",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        "Start Saving"
+       ],
+       "validationClassifier": "OVERRIDE"
+      },
+      {
+       "bounds": {
+        "height": 69.69,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 157.5,
+        "x": 119.92,
+        "y": 704.31
+       },
+       "context": "Text:  Whitespace after text: Start Saving — Overrides: Leading: 14.4, StrokeWeight: 0.8647777732326433, Tracking: 15, MiterLimit: 3.459111092930573, RubyFontSize: -0.8647777732326433, KentenFontSize: -0.8647777732326433",
+       "context_details": {
+        "overrides": {
+         "KentenFontSize": "-0.8647777732326433",
+         "Leading": "14.4",
+         "MiterLimit": "3.459111092930573",
+         "RubyFontSize": "-0.8647777732326433",
+         "StrokeWeight": "0.8647777732326433",
+         "Tracking": "15"
+        },
+        "text": ""
+       },
+       "data_id": "u3623",
+       "identifier": "u3623",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "validationClassifier": "OVERRIDE"
+      },
+      {
+       "bounds": {
+        "height": 69.69,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 157.5,
+        "x": 119.92,
+        "y": 704.31
+       },
+       "context": "Text: See — Overrides: Leading: 15, AppliedFont: Roboto, FillColor: Color/C=0 M=0 Y=0 K=85, FontStyle: Medium, PointSize: 9.9, KerningMethod: $ID/Optical, StrokeWeight: 0.9, Tracking: 10, MiterLimit: 3.6, RubyFontSize: -0.9, KentenFontSize: -0.9",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Roboto",
+         "FillColor": "Color/C=0 M=0 Y=0 K=85",
+         "FontStyle": "Medium",
+         "KentenFontSize": "-0.9",
+         "KerningMethod": "$ID/Optical",
+         "Leading": "15",
+         "MiterLimit": "3.6",
+         "PointSize": "9.9",
+         "RubyFontSize": "-0.9",
+         "StrokeWeight": "0.9",
+         "Tracking": "10"
+        },
+        "text": "See "
+       },
+       "data_id": "u3623",
+       "identifier": "u3623",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        "See "
+       ],
+       "validationClassifier": "OVERRIDE"
+      },
+      {
+       "bounds": {
+        "height": 69.69,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 157.5,
+        "x": 119.92,
+        "y": 704.31
+       },
+       "context": "Text: all the ways we can help you save at — Overrides: AppliedFont: Roboto, FillColor: Color/C=0 M=0 Y=0 K=85, FontStyle: Medium, PointSize: 9.9, KerningMethod: $ID/Optical, StrokeWeight: 0.9, Tracking: 10, MiterLimit: 3.6, RubyFontSize: -0.9, KentenFontSize: -0.9",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Roboto",
+         "FillColor": "Color/C=0 M=0 Y=0 K=85",
+         "FontStyle": "Medium",
+         "KentenFontSize": "-0.9",
+         "KerningMethod": "$ID/Optical",
+         "MiterLimit": "3.6",
+         "PointSize": "9.9",
+         "RubyFontSize": "-0.9",
+         "StrokeWeight": "0.9",
+         "Tracking": "10"
+        },
+        "text": "all the ways we can help you save at "
+       },
+       "data_id": "u3623",
+       "identifier": "u3623",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        "all the ways we can help you save at "
+       ],
+       "validationClassifier": "OVERRIDE"
+      },
+      {
+       "bounds": {
+        "height": 69.69,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 157.5,
+        "x": 119.92,
+        "y": 704.31
+       },
+       "context": "Text: semcoewr.com — Overrides: AppliedFont: Roboto, FillColor: Color/C=80 M=13 Y=45 K=0, FontStyle: Medium, PointSize: 9.9, KerningMethod: $ID/Optical, StrokeWeight: 0.9, Tracking: 10, MiterLimit: 3.6, RubyFontSize: -0.9, KentenFontSize: -0.9",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Roboto",
+         "FillColor": "Color/C=80 M=13 Y=45 K=0",
+         "FontStyle": "Medium",
+         "KentenFontSize": "-0.9",
+         "KerningMethod": "$ID/Optical",
+         "MiterLimit": "3.6",
+         "PointSize": "9.9",
+         "RubyFontSize": "-0.9",
+         "StrokeWeight": "0.9",
+         "Tracking": "10"
+        },
+        "text": "semcoewr.com"
+       },
+       "data_id": "u3623",
+       "identifier": "u3623",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        "semcoewr.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      },
+      {
+       "bounds": {
+        "height": 69.69,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 157.5,
+        "x": 119.92,
+        "y": 704.31
+       },
+       "context": "Text: , or give us a call at 855.298.5387. — Overrides: AppliedFont: Roboto, FillColor: Color/C=0 M=0 Y=0 K=85, FontStyle: Medium, PointSize: 9.9, KerningMethod: $ID/Optical, StrokeWeight: 0.9, Tracking: 10, MiterLimit: 3.6, RubyFontSize: -0.9, KentenFontSize: -0.9",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Roboto",
+         "FillColor": "Color/C=0 M=0 Y=0 K=85",
+         "FontStyle": "Medium",
+         "KentenFontSize": "-0.9",
+         "KerningMethod": "$ID/Optical",
+         "MiterLimit": "3.6",
+         "PointSize": "9.9",
+         "RubyFontSize": "-0.9",
+         "StrokeWeight": "0.9",
+         "Tracking": "10"
+        },
+        "text": ", or give us a call at 855.298.5387."
+       },
+       "data_id": "u3623",
+       "identifier": "u3623",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        ", or give us a call at 855.298.5387."
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u3648": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 7.9,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 35.82,
+        "x": 568.0,
+        "y": 780.1
+       },
+       "context": "Text: 3984229 — Overrides: FillColor: Color/Paper, FontStyle: Regular, PointSize: 5",
+       "context_details": {
+        "overrides": {
+         "FillColor": "Color/Paper",
+         "FontStyle": "Regular",
+         "PointSize": "5"
+        },
+        "text": "3984229"
+       },
+       "data_id": "u3648",
+       "identifier": "u3648",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "text_content": [
+        "3984229"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u3698": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 332.71,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 256.32,
+        "x": 319.68,
+        "y": 348.48
+       },
+       "context": "Text:  Whitespace after text: Energy efficiency Home Energy Rating System (HERS) rated homes with a score of 56 or lower can receive a rebate for building energy efficient. Go to www.hersindex.com to learn more about HERS ratings — Overrides: FillColor: Color/C=0 M=0 Y=0 K=85",
+       "context_details": {
+        "overrides": {
+         "FillColor": "Color/C=0 M=0 Y=0 K=85"
+        },
+        "text": ""
+       },
+       "data_id": "u3698",
+       "identifier": "u3698",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "ufa6": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 858.0,
+        "kind": "TextFrame",
+        "page_id": "ufa2",
+        "width": 579.0,
+        "x": -588.0,
+        "y": -16.2
+       },
+       "context": "",
+       "data_id": "ufa3",
+       "identifier": "ufa6",
+       "page_id": "ufa2",
+       "page_name": "1",
+       "spread_id": "uf95",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 8
+  },
+  "validation_classifiers": {
+   "DOCUMENT_BLEED": {
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied."
+   },
+   "FONTS_INCLUDED": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts."
+   },
+   "KERNING": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'"
+   },
+   "LARGE_IMAGE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "label": "Large Image",
+    "message": "Image is large. Verify that this large of an image is needed."
+   },
+   "OVERRIDE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Override",
+    "message": "Overrides are not supported."
+   },
+   "PARAGRAPH_STYLE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles."
+   },
+   "PARAGRAPH_STYLE_TEXT_BOX": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used."
+   }
+  }
+ },
+ "stopped_at": "RESULTS"
+}

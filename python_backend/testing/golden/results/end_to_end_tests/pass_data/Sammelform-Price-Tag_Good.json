@@ -1,0 +1,2078 @@
+{
+ "results": {
+  "char_styles": {
+   "details": {},
+   "total_count": 1
+  },
+  "checks": [
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "key": "MASTERPAGE",
+    "label": "Masterpage",
+    "message": "Master Page can't be used.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE_TEXT_BOX",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "FONTS_INCLUDED",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "OTF_TTF_FONT",
+    "label": "OTF/TTF Font",
+    "message": "Only OTF or TTF fonts are supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "VARIABLE_FONT",
+    "label": "Variable Font",
+    "message": "Variable fonts are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "key": "IMAGE_INCLUDED",
+    "label": "Images Included",
+    "message": "Package missing image link.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "EMBEDDED_IMAGE",
+    "label": "Embedded Image",
+    "message": "Embedded images are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item transformations (flip/skew) are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "key": "TABLE",
+    "label": "Table",
+    "message": "Tables are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "PASTED_GRAPHICS",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "key": "AUTO_SIZE_TEXT_BOX",
+    "label": "Auto Sizing Text Box",
+    "message": "Auto-size text boxes were not set up properly",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "key": "TEXT_COLUMNS",
+    "label": "Text Column",
+    "message": "Text columns are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "key": "LINKED_TEXT_FRAME",
+    "label": "Linked Text Frame",
+    "message": "Linked (threaded) text frames are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_TEXT",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_IMAGE",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "key": "GRID_ALIGNMENT",
+    "label": "Grid Alignment",
+    "message": "Grid alignment is not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING_CHAR",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP",
+    "label": "Text Wrap",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT",
+    "label": "Color Fill Tint (Beta)",
+    "message": "Fill Tint must be 100. (This may be inaccurate, testing currently)",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "key": "HYPHENATION",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "OVERRIDE",
+    "label": "Override",
+    "message": "Overrides are not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "UNUSED_IMAGE",
+    "label": "Unused Image",
+    "message": "Image(s) in package are unused making the package larger in size.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "key": "DOCUMENT_BLEED",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied.",
+    "severity": "warnings"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "key": "COMPOSER",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "EMPTY_TEXT_FRAME",
+    "label": "Empty Text Frames",
+    "message": "Empty text frame found.",
+    "severity": "infos"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "LARGE_IMAGE",
+    "label": "Large Image",
+    "message": "Image is large. Verify that this large of an image is needed.",
+    "severity": "infos"
+   }
+  ],
+  "fonts": {
+   "details": {},
+   "total_count": 3
+  },
+  "general": {
+   "details": {},
+   "total_count": 0
+  },
+  "images": {
+   "details": {},
+   "total_count": 63
+  },
+  "page_layouts": [
+   {
+    "frames": [
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 38.83,
+      "y": 24.66
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 45.92
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 45.92
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 295.52
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 295.52
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 544.67
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 544.67
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 794.12
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 794.12
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 38.83,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 197.42,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 197.42,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 356.01,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 356.01,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 515.21,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 515.21,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 673.65,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 673.65,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 832.39,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 832.39,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 991.13,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 991.13,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 1149.87,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 1149.87,
+      "y": 802.35
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 38.53,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 38.53,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 38.53,
+      "y": 544.22
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 68.56,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 68.56,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 68.56,
+      "y": 564.06
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 651.94
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 77.17,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 77.17,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 77.17,
+      "y": 767.45
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 606.58
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 50.8,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 50.8,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 50.8,
+      "y": 700.12
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 197.57,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 197.57,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 197.57,
+      "y": 544.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 544.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 544.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 544.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 295.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 544.67
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 990.83,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 990.83,
+      "y": 295.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 990.83,
+      "y": 544.67
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 227.6,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 227.6,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 227.6,
+      "y": 564.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 385.89,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 385.89,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 385.89,
+      "y": 564.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 544.63,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 544.63,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 544.63,
+      "y": 564.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 703.37,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 703.37,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 703.37,
+      "y": 564.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 862.11,
+      "y": 66.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 862.11,
+      "y": 315.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 862.11,
+      "y": 564.51
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 1020.85,
+      "y": 66.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 1020.85,
+      "y": 315.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 1020.85,
+      "y": 564.51
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 651.94
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 651.94
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 651.94
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 651.94
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 153.68
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 402.68
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 652.13
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 153.68
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 402.68
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 652.13
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 236.21,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 236.21,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 236.21,
+      "y": 767.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 394.5,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 394.5,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 394.5,
+      "y": 767.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 553.24,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 553.24,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 553.24,
+      "y": 767.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 711.98,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 711.98,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 711.98,
+      "y": 767.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 870.72,
+      "y": 269.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 870.72,
+      "y": 518.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 870.72,
+      "y": 767.9
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 1029.46,
+      "y": 269.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 1029.46,
+      "y": 518.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 1029.46,
+      "y": 767.9
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 606.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 606.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 606.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 606.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 108.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 357.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 607.03
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 108.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 357.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 607.03
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 209.84,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 209.84,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 209.84,
+      "y": 700.12
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 368.13,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 368.13,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 368.13,
+      "y": 700.12
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 526.87,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 526.87,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 526.87,
+      "y": 700.12
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 685.61,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 685.61,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 685.61,
+      "y": 700.12
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 844.35,
+      "y": 202.13
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 844.35,
+      "y": 451.13
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 844.35,
+      "y": 700.57
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 1003.09,
+      "y": 202.13
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 1003.09,
+      "y": 451.13
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 1003.09,
+      "y": 700.57
+     }
+    ],
+    "height": 841.8897637795001,
+    "index": 1,
+    "name": "1",
+    "page_id": "u192",
+    "preview": "sha256:49816d6736a78974",
+    "spread_id": "u18d",
+    "width": 1190.5511811024
+   },
+   {
+    "frames": [
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 38.83,
+      "y": 24.66
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 45.92
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 45.92
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 295.52
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 295.52
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 544.67
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 544.67
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 794.12
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 794.12
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 38.83,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 197.42,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 197.42,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 356.01,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 356.01,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 515.21,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 515.21,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 673.65,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 673.65,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 832.39,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 832.39,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 991.13,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 991.13,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 1149.87,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 1149.87,
+      "y": 802.35
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 38.98,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 38.98,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 38.98,
+      "y": 544.52
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 68.85,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 68.85,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 68.85,
+      "y": 635.23
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 197.42,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 197.42,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 197.42,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 991.28,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 991.28,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 991.28,
+      "y": 544.52
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 227.29,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 227.29,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 227.29,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 385.73,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 385.73,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 385.73,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 544.48,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 544.48,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 544.48,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 703.22,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 703.22,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 703.22,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 861.96,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 861.96,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 861.96,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 1021.15,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 1021.15,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 1021.15,
+      "y": 635.23
+     }
+    ],
+    "height": 841.8897637795001,
+    "index": 2,
+    "name": "2",
+    "page_id": "ud3",
+    "preview": "sha256:23f8ec743a6c2f13",
+    "spread_id": "uce",
+    "width": 1190.5511811024
+   }
+  ],
+  "pages": {
+   "u192": "1",
+   "ud3": "2"
+  },
+  "par_styles": {
+   "details": {},
+   "total_count": 3
+  },
+  "spread_to_pages": {
+   "u18d": [
+    "u192"
+   ],
+   "uce": [
+    "ud3"
+   ]
+  },
+  "template_name": "Sammelform-Price-Tag_Good.zip",
+  "text_box_data": {},
+  "text_boxes": {
+   "details": {},
+   "total_count": 63
+  },
+  "validation_classifiers": {}
+ },
+ "stopped_at": "RESULTS"
+}
