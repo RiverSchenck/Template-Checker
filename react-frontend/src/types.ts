@@ -18,6 +18,29 @@ export type ContextDetails = {
   [key: string]: unknown;
 };
 
+/** Frame position on its page, in points from the page's top-left corner. */
+export type PageBounds = {
+  page_id: string;
+  /** IDML element the box belongs to, e.g. TextFrame, Rectangle, Group. */
+  kind?: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+export type PageLayout = {
+  page_id: string;
+  name: string;
+  index: number;
+  spread_id: string;
+  width: number;
+  height: number;
+  /** Base64 JPEG preview embedded by InDesign (usually only the first pages). */
+  preview: string | null;
+  frames: (PageBounds & { kind: string })[];
+};
+
 export type ValidationItem = {
   validationClassifier: string;
   context: string;
@@ -27,6 +50,9 @@ export type ValidationItem = {
   page_name: string; // Page Name (was "page_id")
   spread_id: string; // Spread Self
   data_id: string;
+  /** Text the issue was found in (style and override issues). */
+  text_content?: string[];
+  bounds?: PageBounds;
 };
 
 export type ValidationEntries = {
@@ -62,28 +88,25 @@ export interface ValidationResult {
   text_box_data: { [key: string]: TextBoxData };
   spread_to_pages: { [spread_self: string]: string[] };
   pages: { [page_self: string]: string };
+  page_layouts?: PageLayout[];
+  /** Every template check that ran (missing on results from older backends). */
+  checks?: CheckDefinition[];
 }
+
+export type CheckDefinition = {
+  key: string;
+  severity: ValidationType;
+  label: string;
+  message: string;
+  help_article: string | null;
+  category: keyof typeof ValidationCategory;
+};
 
 export type ClassifierData = {
   label: string;
   message: string;
   help_article: string | null; //optional
 };
-
-export interface TableDataItem {
-  key: string;
-  identifier: string;
-  page_id: string; // Page Self (was "page")
-  page_name: string; // Page Name (was "page_id")
-  spread_id?: string;
-  type: string;
-  validationType: ValidationType;
-  context: string;
-  context_details?: ContextDetails | null;
-  data_id: string;
-  textBox?: TextBoxData;
-  classifier: ClassifierData;
-}
 
 // export type ValidationClassifier = ValidationError | ValidationWarning | ValidationInfo | ValidationAPI
 

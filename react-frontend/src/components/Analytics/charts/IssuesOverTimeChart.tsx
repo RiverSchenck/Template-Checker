@@ -54,7 +54,7 @@ export function IssuesOverTimeChart({ data, activeCategory, onCategoryChange }: 
   return (
     <ChartCardWithTabs
       title="Issues Over Time"
-      description="Errors, warnings, and infos by day"
+      description="Blockers, warnings, and infos by day"
       tabs={tabs}
       activeId={activeCategory}
       onTabChange={(id) => onCategoryChange(id as RunsCategory)}

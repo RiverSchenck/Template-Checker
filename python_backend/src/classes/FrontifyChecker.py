@@ -14,7 +14,9 @@ from src.parsers.MasterPageParser import MasterPageParser
 from src.parsers.StylesParser import StylesParser
 from src.parsers.StoriesParser import StoriesParser
 from src.parsers.PreferencesParser import PreferencesParser
+from src.parsers.MetadataParser import MetadataParser
 from src.classes.States import States
+from src.helpers.page_geometry import PageGeometryIndex
 from src.helpers.page_item_transform import (
     parse_item_transform,
     classify_page_item_transform,
@@ -427,6 +429,8 @@ class FrontifyChecker:
             if os.path.exists(potential_metadata_path):
                 self.metadata_xml_path = potential_metadata_path
 
+        self._load_page_highlighting_data()
+
         # -----------------------------
         # Preferences XML
         # Init: Preferences Parser
@@ -445,6 +449,26 @@ class FrontifyChecker:
         self._build_data_id_to_page_id_mapping()
 
         return States.MASTERPAGE_CHECK
+
+    def _load_page_highlighting_data(self):
+        """Page geometry and embedded previews let the frontend highlight issues on the page."""
+        try:
+            page_geometry = PageGeometryIndex(self.idml_output_folder)
+            self.results.set_page_geometry(page_geometry)
+            if not self.metadata_xml_path:
+                return
+            # XMP PageNumber is the 1-based position of the page in the document.
+            page_by_index = {str(page['index']): page['page_id']
+                             for page in page_geometry.get_pages()}
+            previews = {}
+            for preview in MetadataParser(self.metadata_xml_path, self.unzipped_root_path).previews_objs_list:
+                page_id = page_by_index.get(str(preview.page))
+                if page_id and preview.get_base_64():
+                    previews[page_id] = ''.join(preview.get_base_64().split())
+            self.results.set_page_previews(previews)
+        except Exception as e:
+            # Highlighting is a nice-to-have; never fail the check because of it.
+            print(f"Page highlighting data error: {e}")
 
     def ensure_folder_exists(self, path, folder_name):
         # Convert all folder names in the unzipped folder path to lowercase and check if the lowercase version of the target folder exists

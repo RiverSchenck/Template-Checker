@@ -29,6 +29,9 @@ class ValidationResult():
         self.text_box_data = {}
         self.spread_to_pages: Dict[str, List[str]] = {}
         self.pages: Dict[str, str] = {}
+        self.page_geometry = None
+        # page Self -> base64 JPEG preview embedded by InDesign
+        self.page_previews: Dict[str, str] = {}
 
     # -------------------------------Helper Methods-------------------------------
     @staticmethod
@@ -160,6 +163,12 @@ class ValidationResult():
         self._build_spread_to_pages_mapping()
         self._build_pages_mapping()
 
+    def set_page_geometry(self, page_geometry):
+        self.page_geometry = page_geometry
+
+    def set_page_previews(self, page_previews: Dict[str, str]):
+        self.page_previews = page_previews
+
     def set_fonts_total_count(self, count):
         self.fonts_total_count = count
 
@@ -272,6 +281,10 @@ class ValidationResult():
             "data_id": item.get_data_id()
         }
 
+        bounds = self.page_geometry.get_bounds(item.get_data_id()) if self.page_geometry else None
+        if bounds:
+            base_item["bounds"] = bounds
+
         context_details = item.get_context_details()
         if context_details is not None:
             base_item["context_details"] = context_details
@@ -372,6 +385,46 @@ class ValidationResult():
             "validation_classifiers": self.validation_classifiers,
             "text_box_data": mapped_text_box_data,
             "spread_to_pages": self.spread_to_pages,
-            "pages": self.pages
+            "pages": self.pages,
+            "page_layouts": self._build_page_layouts(),
+            "checks": self._build_checks()
         }
         return response
+
+    # Generic classifiers used for package/parsing failures rather than template checks.
+    _NON_CHECK_CLASSIFIERS = {'ERROR', 'FOLDER', 'IDML', 'ZIP', 'WARNING'}
+
+    def _build_checks(self) -> List[dict]:
+        """Every template check that runs, so the frontend can list what passed.
+
+        Keyed by severity and name: some names (e.g. IMAGE_TRANSFORMATION) exist as both an
+        error and a warning with different messages.
+        """
+        checks = []
+        for severity, classifiers in (('errors', ValidationError), ('warnings', ValidationWarning), ('infos', ValidationInfo)):
+            for classifier in classifiers:
+                if classifier.name in self._NON_CHECK_CLASSIFIERS:
+                    continue
+                checks.append({
+                    "key": classifier.name,
+                    "severity": severity,
+                    "label": classifier.label,
+                    "message": classifier.message or "",
+                    "help_article": classifier.help_article,
+                    "category": self._category_to_response_key(classifier.category),
+                })
+        return checks
+
+    def _build_page_layouts(self) -> List[dict]:
+        """Pages in document order with size (points) and preview image, for issue highlighting."""
+        if not self.page_geometry:
+            return []
+        frames = self.page_geometry.get_page_frames()
+        return [
+            {
+                **page,
+                "preview": self.page_previews.get(page["page_id"]),
+                "frames": frames.get(page["page_id"], []),
+            }
+            for page in self.page_geometry.get_pages()
+        ]

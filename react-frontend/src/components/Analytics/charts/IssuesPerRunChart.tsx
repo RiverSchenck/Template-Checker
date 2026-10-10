@@ -32,7 +32,7 @@ export function IssuesPerRunChart({ data, activeCategory, onCategoryChange }: Is
 
   const tabs = useMemo(
     () => [
-      { id: 'errors' as IssuesPerRunCategory, label: 'Errors', value: data?.summary?.total_errors ?? 0 },
+      { id: 'errors' as IssuesPerRunCategory, label: 'Blockers', value: data?.summary?.total_errors ?? 0 },
       { id: 'warnings' as IssuesPerRunCategory, label: 'Warnings', value: data?.summary?.total_warnings ?? 0 },
       { id: 'infos' as IssuesPerRunCategory, label: 'Infos', value: data?.summary?.total_infos ?? 0 },
     ],

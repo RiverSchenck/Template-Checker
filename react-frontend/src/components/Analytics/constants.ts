@@ -24,7 +24,7 @@ export const runsChartConfig = {
 
 export const issuesChartConfig = {
   errors: {
-    label: 'Errors',
+    label: 'Blockers',
     color: 'var(--destructive)',
   },
   warnings: {
@@ -43,7 +43,7 @@ export const barChartConfig = {
     color: 'hsl(var(--chart-1))',
   },
   error: {
-    label: 'Error',
+    label: 'Blocker',
     color: 'var(--destructive)',
   },
   warning: {

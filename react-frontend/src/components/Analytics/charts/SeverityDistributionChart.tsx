@@ -13,7 +13,7 @@ export function SeverityDistributionChart({ data }: SeverityDistributionChartPro
   const severityPieData = useMemo(() => {
     if (!data?.summary) return [];
     return [
-      { name: 'Errors', value: data.summary.total_errors },
+      { name: 'Blockers', value: data.summary.total_errors },
       { name: 'Warnings', value: data.summary.total_warnings },
       { name: 'Infos', value: data.summary.total_infos },
     ];
@@ -23,7 +23,7 @@ export function SeverityDistributionChart({ data }: SeverityDistributionChartPro
     <Card>
       <CardHeader>
         <CardTitle>Severity Distribution</CardTitle>
-        <CardDescription>Errors vs warnings vs infos</CardDescription>
+        <CardDescription>Blockers vs warnings vs infos</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={{}} className="mx-auto h-[320px] w-full max-w-[380px]">
