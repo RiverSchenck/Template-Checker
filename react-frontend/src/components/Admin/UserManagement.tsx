@@ -481,7 +481,6 @@ export function UserManagement() {
           <>
             <PageHeader
               icon={Inbox}
-              eyebrow="Admin"
               title="Access requests"
               description="Review requests to join from the sign-in page, or invite someone directly by email."
               actions={inviteButton}
@@ -636,7 +635,6 @@ export function UserManagement() {
           <>
             <PageHeader
               icon={Users}
-              eyebrow="Admin"
               title="Users"
               description="Manage who can sign in to Template Checker and what they can do."
               actions={inviteButton}

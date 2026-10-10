@@ -36,13 +36,11 @@ export function PageShell({ children, className }: { children: React.ReactNode; 
 
 export function PageHeader({
   icon: Icon,
-  eyebrow,
   title,
   description,
   actions,
 }: {
   icon: LucideIcon;
-  eyebrow?: string;
   title: string;
   description?: React.ReactNode;
   actions?: React.ReactNode;
@@ -50,11 +48,10 @@ export function PageHeader({
   return (
     <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
-        <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={2} aria-hidden />
-          {eyebrow}
-        </p>
-        <h1 className="text-[1.65rem] font-semibold leading-tight tracking-tight">{title}</h1>
+        <h1 className="flex items-center gap-2.5 text-[1.65rem] font-semibold leading-tight tracking-tight">
+          <Icon className="h-6 w-6 shrink-0 text-muted-foreground" strokeWidth={1.75} aria-hidden />
+          {title}
+        </h1>
         {description && (
           <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground">{description}</p>
         )}
