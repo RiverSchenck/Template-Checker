@@ -71,6 +71,10 @@ module.exports = {
   			}
   		},
   		keyframes: {
+  			skeleton: {
+  				'0%, 100%': { opacity: '1' },
+  				'50%': { opacity: '0.5' }
+  			},
   			'page-bob': {
   				'0%, 100%': { translate: '0 0' },
   				'50%': { translate: '0 -3px' }
@@ -93,6 +97,7 @@ module.exports = {
   			}
   		},
   		animation: {
+  			skeleton: 'skeleton 1.8s ease-in-out infinite',
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
   			'page-bob': 'page-bob 1.2s ease-in-out infinite'

@@ -24,7 +24,8 @@ function FileUploadWrapper() {
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { isAdmin, loadingRole } = useAuth();
-  if (loadingRole) return <div className="p-6">Loading...</div>;
+  // ProtectedLayout shows the page skeleton while the role loads.
+  if (loadingRole) return null;
   if (!isAdmin) return <Navigate to="/" replace />;
   return <>{children}</>;
 }

@@ -3,6 +3,7 @@ import type { LucideIcon } from 'lucide-react';
 import { Search, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Skeleton } from '../ui/skeleton';
 
 /**
  * Shared building blocks for the settings-style pages (Users, Access requests, API keys).
@@ -385,19 +386,32 @@ export function EmptyState({
   );
 }
 
-export function RowSkeleton({ rows = 4 }: { rows?: number }) {
+/** Name/detail widths per row, so a list of placeholders doesn't look like a barcode. */
+const ROW_WIDTHS = [
+  ['w-40', 'w-56'],
+  ['w-32', 'w-44'],
+  ['w-48', 'w-52'],
+  ['w-36', 'w-40'],
+  ['w-44', 'w-60'],
+];
+
+/** Placeholder rows for a list. `leading` matches the row's avatar (people) or icon tile (keys). */
+export function RowSkeleton({ rows = 4, leading = 'avatar' }: { rows?: number; leading?: 'avatar' | 'tile' }) {
   return (
-    <div className="divide-y">
-      {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3 px-4 py-3.5">
-          <div className="h-9 w-9 animate-pulse rounded-full bg-muted" />
-          <div className="flex-1 space-y-1.5">
-            <div className="h-3.5 w-40 animate-pulse rounded bg-muted" />
-            <div className="h-3 w-56 animate-pulse rounded bg-muted" />
+    <div className="divide-y" aria-busy="true" aria-label="Loading">
+      {Array.from({ length: rows }).map((_, i) => {
+        const [name, detail] = ROW_WIDTHS[i % ROW_WIDTHS.length];
+        return (
+          <div key={i} className="flex items-center gap-3 px-4 py-3.5 sm:px-5">
+            <Skeleton className={cn('h-9 w-9 shrink-0', leading === 'avatar' ? 'rounded-full' : 'rounded-lg')} />
+            <div className="flex-1 space-y-2">
+              <Skeleton className={cn('h-3.5 rounded', name)} />
+              <Skeleton className={cn('h-3 rounded', detail)} />
+            </div>
+            <Skeleton className="hidden h-5 w-16 rounded-full sm:block" />
           </div>
-          <div className="hidden h-6 w-20 animate-pulse rounded-full bg-muted sm:block" />
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

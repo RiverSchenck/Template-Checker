@@ -4,13 +4,13 @@ import { toast } from 'sonner';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Skeleton } from '../ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import {
   EmptyState,
   formatAbsolute,
   formatRelative,
   Panel,
-  RowSkeleton,
   SearchField,
   secondaryActionClass,
   Segmented,
@@ -98,6 +98,53 @@ function ExportButton({ period, filters }: { period: PeriodSelection; filters: R
       {busy ? <Spinner /> : <Download className="h-3.5 w-3.5" aria-hidden />}
       Export CSV
     </Button>
+  );
+}
+
+
+const SKELETON_TEMPLATE_WIDTHS = ['w-48', 'w-36', 'w-56', 'w-40', 'w-44', 'w-32'];
+
+/** The runs table's real header with placeholder rows, so the table doesn't jump when data arrives. */
+function RunsTableSkeleton() {
+  return (
+    <div className="overflow-x-auto" aria-busy="true" aria-label="Loading checks">
+      <Table>
+        <TableHeader>
+          <TableRow className="hover:bg-transparent">
+            <TableHead className="h-9 pl-4 text-xs">Template</TableHead>
+            <TableHead className="h-9 text-xs">Agent</TableHead>
+            <TableHead className="h-9 text-xs">Source</TableHead>
+            <TableHead className="h-9 text-xs">Result</TableHead>
+            <TableHead className="h-9 text-right text-xs">Time</TableHead>
+            <TableHead className="h-9 pr-4 text-right text-xs">When</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {SKELETON_TEMPLATE_WIDTHS.map((width, i) => (
+            <TableRow key={i} className="hover:bg-transparent">
+              <TableCell className="py-3.5 pl-4">
+                <Skeleton className={cn('h-3.5 rounded', width)} />
+              </TableCell>
+              <TableCell className="py-3.5">
+                <Skeleton className="h-3.5 w-24 rounded" />
+              </TableCell>
+              <TableCell className="py-3.5">
+                <Skeleton className="h-3.5 w-14 rounded" />
+              </TableCell>
+              <TableCell className="py-3.5">
+                <Skeleton className="h-5 w-20 rounded-full" />
+              </TableCell>
+              <TableCell className="py-3.5">
+                <Skeleton className="ml-auto h-3.5 w-10 rounded" />
+              </TableCell>
+              <TableCell className="py-3.5 pr-4">
+                <Skeleton className="ml-auto h-3.5 w-16 rounded" />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 
@@ -206,7 +253,11 @@ export function RunsTable({
       footer={
         <div className="flex items-center justify-between gap-3">
           <span className="tabular-nums" aria-live="polite">
-            {total === 0 ? 'No checks' : `${formatCount(from)}–${formatCount(to)} of ${formatCount(total)} checks`}
+            {loading && !data
+              ? 'Loading checks…'
+              : total === 0
+                ? 'No checks'
+                : `${formatCount(from)}–${formatCount(to)} of ${formatCount(total)} checks`}
           </span>
           <div className="flex items-center gap-1">
             <Button
@@ -239,7 +290,7 @@ export function RunsTable({
         </div>
       )}
       {loading && !data ? (
-        <RowSkeleton rows={6} />
+        <RunsTableSkeleton />
       ) : runs.length === 0 && !error ? (
         <EmptyState icon={FileSearch} title="No checks match" description="Try a different search or remove a filter." />
       ) : (

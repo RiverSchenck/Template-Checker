@@ -21,19 +21,52 @@ import { ErrorNote } from './parts';
 import { personLabel } from './format';
 import type { RunFilters, RunRow } from './types';
 
-function LoadingState() {
+/** A card outline with placeholder content, so loading looks like the page instead of grey slabs. */
+function SkeletonCard({ className, children }: { className?: string; children: React.ReactNode }) {
+  return <div className={cn('flex flex-col rounded-xl border bg-card p-5', className)}>{children}</div>;
+}
+
+function ListSkeleton({ rows }: { rows: number }) {
+  return (
+    <div className="mt-5 space-y-4">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="flex items-center gap-3">
+          <Skeleton className={cn('h-3.5 rounded', ['w-48', 'w-36', 'w-44', 'w-28', 'w-40', 'w-32'][i % 6])} />
+          <Skeleton className="ml-auto h-3.5 w-10 rounded" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function AnalyticsLoadingState() {
   return (
     <div className="space-y-6" aria-busy="true" aria-label="Loading analytics">
-      <Skeleton className="h-5 w-80" />
+      <Skeleton className="h-4 w-80 max-w-full rounded" />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-[178px] rounded-xl" />
+          <SkeletonCard key={i} className="h-[178px]">
+            <Skeleton className="h-3 w-24 rounded" />
+            <Skeleton className="mt-3 h-7 w-20 rounded" />
+            <Skeleton className="mt-2 h-3 w-28 rounded" />
+            <Skeleton className="mt-auto h-10 w-full rounded" />
+          </SkeletonCard>
         ))}
       </div>
-      <Skeleton className="h-[360px] rounded-xl" />
+      <SkeletonCard className="h-[360px]">
+        <Skeleton className="h-4 w-32 rounded" />
+        <Skeleton className="mt-2 h-3 w-64 max-w-full rounded" />
+        <Skeleton className="mt-6 w-full flex-1 rounded-lg" />
+      </SkeletonCard>
       <div className="grid gap-6 lg:grid-cols-3">
-        <Skeleton className="h-[420px] rounded-xl lg:col-span-2" />
-        <Skeleton className="h-[420px] rounded-xl" />
+        <SkeletonCard className="lg:col-span-2">
+          <Skeleton className="h-4 w-28 rounded" />
+          <ListSkeleton rows={6} />
+        </SkeletonCard>
+        <SkeletonCard>
+          <Skeleton className="h-4 w-24 rounded" />
+          <ListSkeleton rows={6} />
+        </SkeletonCard>
       </div>
     </div>
   );
@@ -91,7 +124,7 @@ export function Analytics() {
         />
 
         {error && !overview && <ErrorNote message={error} onRetry={() => setRefresh((r) => r + 1)} />}
-        {!overview && !error && <LoadingState />}
+        {!overview && !error && <AnalyticsLoadingState />}
 
         {overview && (
           <div className={cn('transition-opacity', loading && 'opacity-60')} aria-busy={loading}>
