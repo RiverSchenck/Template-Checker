@@ -31,6 +31,15 @@ function formatSize(bytes: number): string {
   return mb >= 1 ? `${mb.toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
+/**
+ * One continuous bar: the upload fills the first 30%, then the check (which reports no progress)
+ * eases on toward 95% so the bar never stalls or restarts.
+ */
+function barProgress(phase: Phase, uploadPercent: number, elapsedSeconds: number): number {
+  if (phase === 'uploading') return uploadPercent * 0.3;
+  return 30 + 65 * (1 - Math.exp(-(elapsedSeconds + 1) / 20));
+}
+
 function formatElapsed(seconds: number): string {
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 }
@@ -286,14 +295,13 @@ export function TemplateUploader({
               </Button>
             </div>
             <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-muted">
-              {phase === 'uploading' ? (
-                <div
-                  className="h-full rounded-full bg-violet-500 transition-[width] duration-200 ease-out"
-                  style={{ width: `${uploadProgress}%` }}
-                />
-              ) : (
-                <div className="h-full w-2/5 animate-indeterminate rounded-full bg-violet-500" />
-              )}
+              <div
+                className={cn(
+                  'h-full rounded-full bg-violet-500 transition-[width] ease-out',
+                  phase === 'uploading' ? 'duration-200' : 'duration-1000'
+                )}
+                style={{ width: `${barProgress(phase, uploadProgress, elapsed)}%` }}
+              />
             </div>
             <p className="mt-3 text-xs text-muted-foreground">
               {phase === 'uploading'
