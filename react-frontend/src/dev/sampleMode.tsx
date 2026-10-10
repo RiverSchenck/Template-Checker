@@ -1,6 +1,6 @@
 /**
  * Dev-only sample data mode: run `npm run dev:sample` to see the app signed in as an admin, with the analytics
- * endpoints answered from src/dev/sampleData.ts. No backend or Supabase project needed.
+ * and summary feedback endpoints answered from src/dev/sampleData.ts. No backend or Supabase project needed.
  *
  * index.tsx only imports this behind `import.meta.env.DEV`, so it never ships in a production build.
  */
@@ -10,10 +10,19 @@ import type { Session, User } from '@supabase/supabase-js';
 import App from '../App';
 import { AuthContext, type AuthContextType } from '../components/AuthContext';
 import { baseURL } from '../components/Analytics/api';
-import { sampleIssueDetail, sampleOverview, sampleRuns, sampleRunsCsv } from './sampleData';
+import {
+  SAMPLE_ADMIN_ID,
+  sampleAdminSummaryFeedback,
+  sampleIssueDetail,
+  sampleMySummaryFeedback,
+  sampleOverview,
+  sampleResolveSummaryComment,
+  sampleRuns,
+  sampleRunsCsv,
+} from './sampleData';
 
 const SAMPLE_USER = {
-  id: 'a1000000-0000-4000-8000-000000000000',
+  id: SAMPLE_ADMIN_ID,
   email: 'admin@example.com',
   display_name: 'Sample Admin',
   avatar_url: null,
@@ -69,13 +78,22 @@ function installFetchMock() {
     if (issue) return json(sampleIssueDetail(decodeURIComponent(issue[1]), params));
     if (path === '/me') return json(SAMPLE_USER);
     if (path.startsWith('/admin/access-requests')) return json([]);
+    if (path === '/summary-reviews/mine') return json(sampleMySummaryFeedback(SAMPLE_USER.id));
+    if (path === '/admin/summary-feedback') return json(sampleAdminSummaryFeedback(params));
+    const comment = path.match(/^\/admin\/summary-feedback\/([^/]+)$/);
+    if (comment && init?.method === 'PATCH') {
+      const { resolved } = JSON.parse(String(init.body ?? '{}'));
+      if (typeof resolved !== 'boolean') return json({ error: { message: 'resolved must be true or false' } }, 400);
+      const updated = sampleResolveSummaryComment(decodeURIComponent(comment[1]), resolved);
+      return updated ? json(updated) : json({ error: { message: 'Comment not found' } }, 404);
+    }
     return json({ error: { message: `Not available in sample data mode: ${path}` } }, 404);
   };
 }
 
 export function renderWithSampleData(root: Root) {
   installFetchMock();
-  console.info('[sample data] Analytics endpoints are answered from src/dev/sampleData.ts');
+  console.info('[sample data] Analytics and summary feedback endpoints are answered from src/dev/sampleData.ts');
   root.render(
     <React.StrictMode>
       <AuthContext.Provider value={auth}>

@@ -20,6 +20,7 @@ import type {
   Severity,
   SourceType,
 } from '../components/Analytics/types';
+import type { AdminFeedback, SummaryComment } from '../components/SummaryFeedback/api';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -492,4 +493,248 @@ export function sampleRunsCsv(params: URLSearchParams): { csv: string; total: nu
   const lines = [CSV_COLUMNS.map(([, label]) => label).join(',')];
   for (const run of runs) lines.push(CSV_COLUMNS.map(([key]) => cell(run[key])).join(','));
   return { csv: lines.join('\r\n') + '\r\n', total, exported: runs.length };
+}
+
+/* ---------- Customer summary feedback ---------- */
+
+
+/** The sample-mode admin; comments by them show up on "Your feedback". */
+export const SAMPLE_ADMIN_ID = 'a1000000-0000-4000-8000-000000000000';
+const SAMPLE_ADMIN = { id: SAMPLE_ADMIN_ID, display_name: 'Sample Admin', email: 'admin@example.com' };
+
+/** Summary sections as review mode lays them out: [section_key, section_title, text]. */
+type Section = readonly [string, string, string];
+
+const FONT_MISSING: Section = [
+  'FONTS_INCLUDED',
+  'Font missing from the package',
+  '1. Font missing from the package\n   Where: “Brand Sans Bold” (used on pages 1–3)\n   – Make sure the font is installed or activated on your computer.\n   – Package the document again with File > Package, keeping "Copy Fonts" checked.\n   More info: https://help.frontify.com/en/articles/fonts-in-templates',
+];
+const NO_PAR_STYLE: Section = [
+  'TEXT_FRAME_PAR_STYLE',
+  'Text frame has no paragraph style',
+  '2. Text frame has no paragraph style\n   Where: the text frame “Headline” on page 1, the text frame “Body copy” on pages 1, 2\n   – Select the text frame.\n   – Apply a paragraph style from Window > Styles > Paragraph Styles (not [Basic Paragraph] or [No Paragraph Style]).',
+];
+const MASTER_ITEMS: Section = [
+  'MASTER_PAGE_ITEMS',
+  'Items on a master page',
+  '1. Items on a master page\n   Where: A-Parent\n   – Open the Pages panel and select the master (parent) page that has items on it.\n   – Move those items onto the document pages, or delete them from the master page.',
+];
+const LINK_MISSING: Section = [
+  'LINKS_INCLUDED',
+  'Linked image missing from the package',
+  '1. Linked image missing from the package\n   Where: hero_visual.psd on page 1\n   – Open Window > Links and relink any missing images.\n   – Package the document again with File > Package, keeping "Copy Linked Graphics" checked.',
+];
+const VARIABLE_FONT: Section = [
+  'VARIABLE_FONT',
+  'Variable font used',
+  '1. Variable font used\n   Where: “Inter Variable” (used on page 1)\n   – Install the static (individual weight) version of the font.\n   – Replace the variable font in the document (Type > Find/Replace Font) and package it again.',
+];
+const FLIPPED: Section = [
+  'IMAGE_FLIPPED',
+  'Image is flipped or skewed',
+  '1. Image is flipped or skewed\n   Where: the image frame “Product shot” on page 2\n   – Select the image and reset its transformation (Object > Transform > Clear Transformations).',
+];
+const CLOSING: Section = [
+  'closing',
+  'Closing',
+  'After making changes, package the document again with File > Package and upload the new ZIP to Frontify.',
+];
+
+const introFor = (name: string, n: number): Section => [
+  'intro',
+  'Introduction',
+  `We checked “${name}” and found ${n === 1 ? 'one thing' : `${n} things`} in the InDesign file that are likely causing the issues. These can stop a template from working in Frontify, or make it look different:`,
+];
+
+type Author = { id: string; display_name: string | null; email: string };
+type SampleComment = {
+  /** 'intro' is the review's own introduction; 'general' is a general comment. */
+  section: Section | 'intro' | 'general';
+  body: string;
+  quote?: string;
+  hoursAgo: number;
+  resolvedHoursAgo?: number;
+};
+type SampleReview = { template: string; author: Author; hoursAgo: number; sections: Section[]; comments: SampleComment[] };
+
+const LOOKS_GOOD = 'Looks good to send.';
+const [maya, jonas, priya, tomas, elena, sam, lea] = AGENTS;
+
+const REVIEWS: SampleReview[] = [
+  {
+    template: 'Rollup_Banner_850x2000.zip',
+    author: maya,
+    hoursAgo: 2,
+    sections: [FONT_MISSING, NO_PAR_STYLE],
+    comments: [
+      { section: FONT_MISSING, quote: 'keeping "Copy Fonts" checked', body: 'The customer is on InDesign 2025, where this option is called "Copy Fonts (Except activated from Adobe Fonts)". Worth matching the wording.', hoursAgo: 2 },
+      { section: NO_PAR_STYLE, body: 'Lists every frame. With 14 frames this got very long; could we cap it and say "and 10 more"?', hoursAgo: 2 },
+    ],
+  },
+  {
+    template: 'Q3_Sales_Deck.zip',
+    author: jonas,
+    hoursAgo: 5,
+    sections: [MASTER_ITEMS],
+    comments: [{ section: 'general', body: LOOKS_GOOD, hoursAgo: 5 }],
+  },
+  {
+    template: 'Event_Poster_A2.zip',
+    author: priya,
+    hoursAgo: 20,
+    sections: [LINK_MISSING],
+    comments: [
+      { section: LINK_MISSING, quote: 'hero_visual.psd', body: 'Customer asked whether PSDs are supported at all. The summary should say they are, the link just needs to be in the package.', hoursAgo: 20 },
+      { section: 'intro', quote: 'likely causing the issues', body: 'Customer never said they had issues; they asked for a check before launch. "likely causing the issues" sounds like we assume something broke.', hoursAgo: 20 },
+    ],
+  },
+  {
+    template: 'Brochure_A4.zip',
+    author: SAMPLE_ADMIN,
+    hoursAgo: 26,
+    sections: [FONT_MISSING, NO_PAR_STYLE],
+    comments: [
+      { section: NO_PAR_STYLE, quote: 'not [Basic Paragraph] or [No Paragraph Style]', body: 'Good that this is spelled out. Customers kept applying Basic Paragraph before.', hoursAgo: 26, resolvedHoursAgo: 4 },
+      { section: 'general', body: 'Would be nice to have a short German version for DACH customers.', hoursAgo: 26 },
+    ],
+  },
+  {
+    template: 'Social_Story_1080x1920.zip',
+    author: tomas,
+    hoursAgo: 30,
+    sections: [VARIABLE_FONT],
+    comments: [{ section: 'general', body: LOOKS_GOOD, hoursAgo: 30 }],
+  },
+  {
+    template: 'Business_Card.zip',
+    author: elena,
+    hoursAgo: 52,
+    sections: [FONT_MISSING],
+    comments: [
+      { section: FONT_MISSING, quote: 'installed or activated on your computer', body: 'They use a font manager (Extensis). Maybe mention that the font has to be active when packaging?', hoursAgo: 52, resolvedHoursAgo: 30 },
+      { section: CLOSING, body: 'Closing line could link to the upload help article.', hoursAgo: 52 },
+    ],
+  },
+  {
+    template: 'Product_Flyer.zip',
+    author: sam,
+    hoursAgo: 75,
+    sections: [FLIPPED],
+    comments: [
+      { section: FLIPPED, quote: 'Object > Transform > Clear Transformations', body: 'This also resets the crop, which the customer didn\'t want. We should warn about that.', hoursAgo: 75 },
+      { section: 'general', body: LOOKS_GOOD, hoursAgo: 75, resolvedHoursAgo: 50 },
+    ],
+  },
+  {
+    template: 'Annual_Report_2026.zip',
+    author: SAMPLE_ADMIN,
+    hoursAgo: 98,
+    sections: [MASTER_ITEMS, LINK_MISSING],
+    comments: [
+      { section: MASTER_ITEMS, quote: 'A-Parent', body: 'Customers don\'t know what A-Parent means. Say "the master page called A-Parent".', hoursAgo: 98 },
+      { section: 'general', body: LOOKS_GOOD, hoursAgo: 98 },
+    ],
+  },
+  {
+    template: 'Menu_Card.zip',
+    author: lea,
+    hoursAgo: 140,
+    sections: [NO_PAR_STYLE],
+    comments: [
+      { section: NO_PAR_STYLE, body: 'Fine, but the numbering starts at 2 because there was only one issue in this group.', hoursAgo: 140, resolvedHoursAgo: 120 },
+    ],
+  },
+  {
+    template: 'Letterhead.zip',
+    author: maya,
+    hoursAgo: 170,
+    sections: [FONT_MISSING],
+    comments: [{ section: 'general', body: LOOKS_GOOD, hoursAgo: 170 }],
+  },
+  {
+    template: 'Price_List.zip',
+    author: jonas,
+    hoursAgo: 220,
+    sections: [VARIABLE_FONT],
+    comments: [
+      { section: VARIABLE_FONT, quote: 'static (individual weight) version', body: 'Customer asked where to get the static version. Link to Google Fonts for open-source fonts?', hoursAgo: 220 },
+      { section: 'general', body: LOOKS_GOOD, hoursAgo: 220, resolvedHoursAgo: 200 },
+    ],
+  },
+  {
+    template: 'Recruiting_Ad.zip',
+    author: SAMPLE_ADMIN,
+    hoursAgo: 300,
+    sections: [FLIPPED],
+    comments: [{ section: 'general', body: LOOKS_GOOD, hoursAgo: 300, resolvedHoursAgo: 280 }],
+  },
+];
+
+function buildFeedback(): (SummaryComment & { user_id: string })[] {
+  const now = Date.now();
+  const iso = (hoursAgo: number) => new Date(now - hoursAgo * 60 * 60 * 1000).toISOString();
+  const out: (SummaryComment & { user_id: string })[] = [];
+  REVIEWS.forEach((review, r) => {
+    // Number the issues in the order this summary lists them, as the real summary does.
+    const issues = review.sections.map(([key, title, text], i): Section => [key, title, text.replace(/^\d+\./, `${i + 1}.`)]);
+    const sections = [introFor(review.template.replace(/\.zip$/, ''), issues.length), ...issues, CLOSING];
+    const summary = sections.map(([, , text]) => text).join('\n\n');
+    review.comments.forEach((c, i) => {
+      const section = c.section === 'intro' ? sections[0] : c.section === 'general' ? 'general' : issues[review.sections.indexOf(c.section)] ?? c.section;
+      const [key, title, text] = section === 'general' ? (['general', 'General feedback', ''] as const) : section;
+      // Offsets within the whole summary, as review mode records them.
+      const sectionStart = section === 'general' ? 0 : summary.indexOf(text);
+      const at = c.quote ? summary.indexOf(c.quote, sectionStart) : -1;
+      out.push({
+        id: `5f000000-0000-4000-8000-${String(r * 10 + i).padStart(12, '0')}`,
+        review_id: `5e000000-0000-4000-8000-${String(r).padStart(12, '0')}`,
+        section_key: key,
+        section_title: title,
+        quote: c.quote ?? null,
+        quote_start: at >= 0 ? at : null,
+        quote_end: at >= 0 ? at + c.quote!.length : null,
+        body: c.body,
+        created_at: iso(c.hoursAgo),
+        resolved_at: c.resolvedHoursAgo != null ? iso(c.resolvedHoursAgo) : null,
+        template_name: review.template,
+        summary,
+        reviewed_at: iso(review.hoursAgo),
+        user_id: review.author.id,
+        user_email: review.author.email,
+        user_display_name: review.author.display_name,
+      });
+    });
+  });
+  return out.sort((a, b) => b.created_at.localeCompare(a.created_at));
+}
+
+/** In memory, so resolving in sample mode sticks until the page reloads. */
+const summaryFeedback = buildFeedback();
+
+export function sampleAdminSummaryFeedback(params: URLSearchParams): AdminFeedback {
+  const status = params.get('status') ?? 'open';
+  return {
+    // A few older reviews from before a comment was required.
+    stats: { reviews: REVIEWS.length + 3, with_feedback: REVIEWS.length, no_feedback: 3 },
+    comments: summaryFeedback.filter((c) =>
+      status === 'open' ? !c.resolved_at : status === 'resolved' ? !!c.resolved_at : true
+    ),
+  };
+}
+
+/** The caller's own comments, without author fields, as /summary-reviews/mine returns them. */
+export function sampleMySummaryFeedback(userId: string): SummaryComment[] {
+  return summaryFeedback
+    .filter((c) => c.user_id === userId)
+    .map(({ user_id, user_email, user_display_name, ...c }) => c);
+}
+
+/** PATCH /admin/summary-feedback/<id>. Like the API, the response has no author or review fields. */
+export function sampleResolveSummaryComment(id: string, resolved: boolean): SummaryComment | null {
+  const c = summaryFeedback.find((x) => x.id === id);
+  if (!c) return null;
+  c.resolved_at = resolved ? new Date().toISOString() : null;
+  const { user_id, user_email, user_display_name, template_name, summary, reviewed_at, ...rest } = c;
+  return { ...rest, template_name: null, summary: null, reviewed_at: null };
 }
