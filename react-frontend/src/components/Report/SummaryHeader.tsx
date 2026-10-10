@@ -2,6 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { ArrowDown, ArrowUp, Check, Copy, FileJson, MoreHorizontal } from 'lucide-react';
 import { notify } from '../../lib/notify';
 import { Button } from '../ui/button';
+import { Checkbox } from '../ui/checkbox';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { ValidationType } from '../../types';
@@ -60,6 +69,13 @@ function SummaryHeader({
     report.checked.length ? `${report.checked.map((c) => `${c.count} ${c.label}`).join(', ')} checked` : null,
   ].filter(Boolean);
 
+  // The summary is in beta: agents review it in a dialog and confirm before it's copied.
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewed, setReviewed] = useState(false);
+  const openReview = () => {
+    setReviewed(false);
+    setReviewOpen(true);
+  };
   // The button itself confirms the copy; only a failure needs a toast.
   const [copied, setCopied] = useState(false);
   useEffect(() => {
@@ -71,6 +87,7 @@ function SummaryHeader({
     try {
       await navigator.clipboard.writeText(customerSummary);
       setCopied(true);
+      setReviewOpen(false);
     } catch {
       notify.error('Couldn’t copy the summary. Try again, or select the text and copy it manually.');
     }
@@ -95,7 +112,7 @@ function SummaryHeader({
           </h1>
           {meta.length > 0 && <p className="mt-0.5 text-xs text-muted-foreground">{meta.join(' · ')}</p>}
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-1.5">
+        <div className="flex shrink-0 flex-col items-end">
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -110,33 +127,11 @@ function SummaryHeader({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button
-              size="sm"
-              className="h-8 min-w-[13.5rem] gap-1.5"
-              onClick={copySummary}
-              aria-live="polite"
-              aria-describedby="customer-summary-beta-note"
-            >
+            <Button size="sm" className="h-8 min-w-[11.5rem] gap-1.5" onClick={openReview} aria-live="polite">
               {copied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
               {copied ? 'Copied' : 'Copy customer summary'}
-              {!copied && (
-                <span className="rounded bg-amber-400 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-amber-950">
-                  Beta
-                </span>
-              )}
             </Button>
           </div>
-          {/* The customer summary is still being tested, so agents must review it before sending. */}
-          <p
-            id="customer-summary-beta-note"
-            className="flex max-w-[22rem] items-start gap-1.5 text-right text-xs leading-snug text-muted-foreground"
-          >
-            <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
-            <span>
-              <span className="font-medium text-foreground">Beta:</span> please read the summary before you send it.
-              I&apos;m still testing this, so let me know if anything looks off. — River
-            </span>
-          </p>
         </div>
       </div>
 
@@ -183,6 +178,39 @@ function SummaryHeader({
           );
         })}
       </div>
+
+      <Dialog open={reviewOpen} onOpenChange={setReviewOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Customer summary (beta)</DialogTitle>
+            <DialogDescription>
+              Please read the summary before you send it. I&apos;m still testing this, so let me know if anything looks
+              off. — River
+            </DialogDescription>
+          </DialogHeader>
+          <pre className="max-h-72 overflow-auto whitespace-pre-wrap rounded-lg border bg-muted/40 p-3 font-sans text-sm leading-relaxed text-foreground">
+            {customerSummary}
+          </pre>
+          <label htmlFor="summary-reviewed" className="flex cursor-pointer items-start gap-2.5 text-sm">
+            <Checkbox
+              id="summary-reviewed"
+              checked={reviewed}
+              onCheckedChange={(value) => setReviewed(value === true)}
+              className="mt-0.5"
+            />
+            <span>I&apos;ve read this summary and will check it before sending it to the customer.</span>
+          </label>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setReviewOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={copySummary} disabled={!reviewed} className="gap-1.5">
+              <Copy className="h-3.5 w-3.5" aria-hidden />
+              Copy summary
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </header>
   );
 }
