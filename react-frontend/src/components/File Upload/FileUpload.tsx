@@ -1,117 +1,124 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-import { FileArchive, Loader2 } from 'lucide-react';
+import { AlertCircle, FileArchive, FileCheck2, Upload, X } from 'lucide-react';
 import { ValidationResult } from '../../types';
 import countValidationIssues from '../ValidationCount';
 import SuccessModal from './SuccessModal';
-import FileSizeErrorModal from './FileSizeErrorModal';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
-import { Label } from '../ui/label';
+import { PageHeader, PageShell, Segmented } from '../layout/page-kit';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 import { useAuth } from '../AuthContext';
+import { cn } from '../../lib/utils';
 
 const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200MB
 
-interface FileUploadPageProps {
+type Output = 'results' | 'xml';
+type Phase = 'idle' | 'uploading' | 'checking';
+
+interface TemplateUploaderProps {
   checkerResponse: (jsonResponse: ValidationResult, setPrevious?: boolean) => void;
   setPrevious?: boolean;
   onUploadComplete?: () => void;
   seeDetails?: (value: boolean) => void;
   navigateToResults?: () => void;
+  className?: string;
 }
 
-interface CustomResponse {
-  content: {
-    results: ValidationResult;
-  };
+function formatSize(bytes: number): string {
+  const mb = bytes / (1024 * 1024);
+  return mb >= 1 ? `${mb.toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
-export default function FileUploadPage({
+function formatElapsed(seconds: number): string {
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+}
+
+/** Drop zone, output choice and upload/check progress. Used by the page and the reupload dialog. */
+export function TemplateUploader({
   checkerResponse,
   setPrevious = false,
   onUploadComplete,
   seeDetails,
   navigateToResults,
-}: FileUploadPageProps) {
+  className,
+}: TemplateUploaderProps) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showFileSizeErrorModal, setShowFileSizeErrorModal] = useState(false);
-  const [fileSizeError, setFileSizeError] = useState<{ fileSizeMB: string; maxSizeMB: number } | null>(null);
-  const [downloadXML, setDownloadXML] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+  const [output, setOutput] = useState<Output>('results');
+  const [phase, setPhase] = useState<Phase>('idle');
+  const [current, setCurrent] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [elapsed, setElapsed] = useState(0);
+  const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-
+  const xhrRef = useRef<XMLHttpRequest | null>(null);
 
   const { session } = useAuth();
+  const busy = phase !== 'idle';
 
-  const uploadEndpoint = downloadXML ? `${baseURL}/run-and-download-xml` : `${baseURL}/run`;
+  useEffect(() => {
+    if (phase !== 'checking') return;
+    setElapsed(0);
+    const id = window.setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [phase]);
+
+  useEffect(() => () => xhrRef.current?.abort(), []);
 
   const doUpload = useCallback(
     async (file: File) => {
+      setError(null);
+      if (!file.name.toLowerCase().endsWith('.zip')) {
+        setError(`${file.name} isn't a .zip file. Package the template in InDesign and upload the .zip.`);
+        return;
+      }
       if (file.size > MAX_FILE_SIZE) {
-        const maxSizeMB = MAX_FILE_SIZE / (1024 * 1024);
-        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-        setFileSizeError({ fileSizeMB, maxSizeMB });
-        setShowFileSizeErrorModal(true);
+        setError(`${file.name} is ${formatSize(file.size)}. The limit is 200 MB. Remove unused links or fonts and try again.`);
         return;
       }
 
-      setUploading(true);
+      const downloadXML = output === 'xml';
+      setCurrent(file);
+      setPhase('uploading');
       setUploadProgress(0);
       const formData = new FormData();
       formData.append('file', file);
 
       try {
-        const result = await new Promise<{ ok: boolean; body: Blob | string }>(
-          (resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            const headers = getAuthHeaders(session?.access_token);
+        const result = await new Promise<{ ok: boolean; body: Blob | string } | null>((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhrRef.current = xhr;
+          const headers = getAuthHeaders(session?.access_token);
 
-            xhr.upload.addEventListener('progress', (e) => {
-              if (e.lengthComputable) {
-                setUploadProgress(Math.round((e.loaded / e.total) * 100));
-              }
-            });
+          xhr.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100));
+          });
+          xhr.upload.addEventListener('load', () => setPhase('checking'));
+          xhr.addEventListener('load', () => resolve({ ok: xhr.status >= 200 && xhr.status < 300, body: xhr.response }));
+          xhr.addEventListener('error', () => reject(new Error("Couldn't reach the checker. Check your connection and try again.")));
+          xhr.addEventListener('abort', () => resolve(null));
 
-            xhr.addEventListener('load', () => {
-              resolve({
-                ok: xhr.status >= 200 && xhr.status < 300,
-                body: xhr.response,
-              });
-            });
-            xhr.addEventListener('error', () => reject(new Error('Network error')));
-            xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
+          xhr.open('POST', downloadXML ? `${baseURL}/run-and-download-xml` : `${baseURL}/run`);
+          xhr.responseType = downloadXML ? 'blob' : 'text';
+          Object.entries(headers).forEach(([key, value]) => xhr.setRequestHeader(key, value));
+          xhr.send(formData);
+        });
 
-            xhr.open('POST', uploadEndpoint);
-            xhr.responseType = downloadXML ? 'blob' : 'text';
-            Object.entries(headers).forEach(([key, value]) => xhr.setRequestHeader(key, value));
-            xhr.send(formData);
-          }
-        );
-
-        setUploadProgress(100);
+        if (!result) return; // cancelled
 
         if (!result.ok) {
-          const errorText =
-            typeof result.body === 'string' ? result.body : await (result.body as Blob).text();
-          let errorMessage = 'Upload failed';
+          const errorText = typeof result.body === 'string' ? result.body : await (result.body as Blob).text();
+          let errorMessage = 'The check failed. Try again, or contact the team if it keeps happening.';
           try {
             const errorJson = JSON.parse(errorText);
             errorMessage = errorJson.error?.message || errorJson.error || errorMessage;
           } catch {
-            errorMessage = errorText || errorMessage;
+            // keep the generic message; raw response bodies aren't user-facing
           }
           throw new Error(errorMessage);
         }
 
-        setFile(file);
-
         if (downloadXML) {
-          const blob = result.body as Blob;
-          const url = window.URL.createObjectURL(blob);
+          const url = window.URL.createObjectURL(result.body as Blob);
           const a = document.createElement('a');
           a.href = url;
           a.download = `${file.name.replace(/\.[^.]+$/, '')}_output_XML.zip`;
@@ -119,11 +126,10 @@ export default function FileUploadPage({
           a.click();
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
-          toast.success('Download started');
+          toast.success('XML download started');
         } else {
           const text = typeof result.body === 'string' ? result.body : await (result.body as Blob).text();
-          const json = JSON.parse(text);
-          const results: ValidationResult = json?.content?.results;
+          const results: ValidationResult = JSON.parse(text)?.content?.results;
           checkerResponse(results, setPrevious);
           onUploadComplete?.();
           const { totalErrors, totalWarnings, totalInfos } = countValidationIssues(results);
@@ -132,17 +138,17 @@ export default function FileUploadPage({
           } else {
             navigateToResults?.();
           }
-          toast.success(`${file.name} uploaded and checked`);
+          toast.success(`${file.name} checked`);
         }
       } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Upload failed';
-        toast.error(message);
+        setError(err instanceof Error ? err.message : 'The check failed. Try again.');
       } finally {
-        setUploading(false);
-        setUploadProgress(null);
+        xhrRef.current = null;
+        setPhase('idle');
+        setCurrent(null);
       }
     },
-    [checkerResponse, setPrevious, onUploadComplete, navigateToResults, uploadEndpoint, session?.access_token]
+    [output, checkerResponse, setPrevious, onUploadComplete, navigateToResults, session?.access_token]
   );
 
   const onDrop = useCallback(
@@ -150,13 +156,9 @@ export default function FileUploadPage({
       e.preventDefault();
       setIsDragging(false);
       const item = e.dataTransfer.files[0];
-      if (item?.name?.toLowerCase().endsWith('.zip')) {
-        doUpload(item);
-      } else if (item) {
-        toast.error('Please upload a .zip file');
-      }
+      if (item && !busy) doUpload(item);
     },
-    [doUpload]
+    [doUpload, busy]
   );
 
   const onDragOver = useCallback((e: React.DragEvent) => {
@@ -179,86 +181,134 @@ export default function FileUploadPage({
   );
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className={cn('w-full space-y-4', className)}>
       <SuccessModal
         open={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}
         seeDetails={seeDetails}
         navigateToResults={navigateToResults}
       />
-      {showFileSizeErrorModal && fileSizeError && (
-        <FileSizeErrorModal
-          open={showFileSizeErrorModal}
-          onClose={() => {
-            setShowFileSizeErrorModal(false);
-            setFileSizeError(null);
-          }}
-          fileSizeMB={fileSizeError.fileSizeMB}
-          maxSizeMB={fileSizeError.maxSizeMB}
-        />
+
+      {busy && current ? (
+        <div className="flex min-h-[13rem] flex-col justify-center rounded-xl border bg-card px-6 py-8" aria-live="polite">
+          <div className="mx-auto w-full max-w-md">
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border bg-muted/50">
+                <FileArchive className="h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium" title={current.name}>
+                  {current.name}
+                </p>
+                <p className="text-xs tabular-nums text-muted-foreground">
+                  {formatSize(current.size)} ·{' '}
+                  {phase === 'uploading' ? `Uploading ${uploadProgress}%` : `Checking template · ${formatElapsed(elapsed)}`}
+                </p>
+              </div>
+              <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => xhrRef.current?.abort()}>
+                Cancel
+              </Button>
+            </div>
+            <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-muted">
+              {phase === 'uploading' ? (
+                <div
+                  className="h-full rounded-full bg-foreground/70 transition-[width] duration-200 ease-out"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              ) : (
+                <div className="h-full w-2/5 animate-indeterminate rounded-full bg-foreground/70" />
+              )}
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">
+              {phase === 'uploading'
+                ? 'Uploading your template…'
+                : output === 'xml'
+                  ? 'Converting to XML. The download starts when it’s ready.'
+                  : 'Checking styles, text boxes, fonts and images…'}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <label
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+          className={cn(
+            'group flex min-h-[13rem] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed px-6 py-10 text-center transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background',
+            isDragging
+              ? 'border-foreground/50 bg-muted'
+              : 'border-muted-foreground/40 bg-muted/30 hover:border-muted-foreground/60 hover:bg-muted/50'
+          )}
+        >
+          <input type="file" accept=".zip" onChange={onFileInputChange} className="sr-only" />
+          <div
+            className={cn(
+              'grid h-11 w-11 place-items-center rounded-full border bg-background shadow-sm transition-transform',
+              isDragging ? '-translate-y-0.5' : 'group-hover:-translate-y-0.5'
+            )}
+          >
+            <Upload className="h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
+          </div>
+          <p className="mt-4 text-sm font-medium text-foreground">
+            {isDragging ? (
+              'Drop to check'
+            ) : (
+              <>
+                Drop a .zip here or <span className="underline decoration-muted-foreground/50 underline-offset-4">browse</span>
+              </>
+            )}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">Packaged InDesign template, up to 200 MB</p>
+        </label>
       )}
 
-      <Card className="overflow-hidden">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-lg">Check template</CardTitle>
-          <CardDescription>
-            Upload a .zip template to validate. Max size 200 MB.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <label
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-            className={`
-              flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-10
-              transition-colors cursor-pointer
-              ${isDragging ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/50'}
-              ${uploading ? 'pointer-events-none opacity-70' : ''}
-            `}
+      {error && (
+        <div
+          role="alert"
+          className="flex items-start gap-2.5 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2.5 text-sm"
+        >
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+          <p className="flex-1 text-foreground">{error}</p>
+          <button
+            type="button"
+            onClick={() => setError(null)}
+            className="grid h-5 w-5 shrink-0 place-items-center rounded text-muted-foreground hover:bg-muted hover:text-foreground"
+            aria-label="Dismiss"
           >
-            <input
-              type="file"
-              accept=".zip"
-              onChange={onFileInputChange}
-              disabled={uploading}
-              className="sr-only"
-            />
-            {uploading ? (
-              <Loader2 className="h-12 w-12 text-purple-500 animate-spin mb-3" />
-            ) : (
-              <FileArchive className="h-12 w-12 text-purple-500 mb-3" />
-            )}
-            <span className="text-sm font-medium text-foreground">
-              {uploading ? 'Checking…' : 'Drop your .zip here or click to browse'}
-            </span>
-            {uploading && uploadProgress != null && (
-              <div className="mt-3 w-full max-w-xs">
-                <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-                  <div
-                    className="h-full rounded-full bg-purple-500 transition-[width] duration-200 ease-out"
-                    style={{ width: `${uploadProgress}%` }}
-                  />
-                </div>
-                <span className="mt-1.5 block text-xs text-muted-foreground">
-                  Uploading… {uploadProgress}%
-                </span>
-              </div>
-            )}
-          </label>
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
 
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="download-xml"
-              checked={downloadXML}
-              onCheckedChange={(v) => setDownloadXML(!!v)}
-            />
-            <Label htmlFor="download-xml" className="text-sm font-normal cursor-pointer">
-              Download XML output
-            </Label>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        <Segmented<Output>
+          ariaLabel="Output"
+          value={output}
+          onChange={(v) => !busy && setOutput(v)}
+          options={[
+            { value: 'results', label: 'Show results' },
+            { value: 'xml', label: 'Download XML' },
+          ]}
+        />
+        <p className="text-xs text-muted-foreground">
+          {output === 'results'
+            ? 'Opens the results when the check is done.'
+            : 'Downloads converted XML instead of results.'}
+        </p>
+      </div>
     </div>
+  );
+}
+
+export default function FileUploadPage(props: TemplateUploaderProps) {
+  return (
+    <PageShell>
+      <PageHeader
+        icon={FileCheck2}
+        title="Check template"
+        description="Upload a packaged InDesign template to find issues before it reaches the customer."
+      />
+      <TemplateUploader {...props} />
+    </PageShell>
   );
 }
