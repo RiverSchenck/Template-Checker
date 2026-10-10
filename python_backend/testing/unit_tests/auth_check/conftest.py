@@ -95,7 +95,7 @@ def client(monkeypatch, fake_db):
     monkeypatch.setattr(routes, 'verify_supabase_token', fake_verify)
     monkeypatch.setattr(routes.user_helpers, 'get_user_by_email', get_user_by_email)
     monkeypatch.setattr(routes.user_helpers, 'is_admin', lambda email=None, auth_user_id=None: False)
-    monkeypatch.setattr(routes, 'get_analytics_summary', lambda days=30: {'ok': True})
+    monkeypatch.setattr(routes, 'get_overview', lambda period: {'ok': True})
 
     # Don't run the real checker; just record who the run was attributed to.
     calls = []

@@ -16,3 +16,65 @@ export function getAuthHeaders(accessToken?: string | null): Record<string, stri
   }
   return headers;
 }
+
+/** The viewer's IANA timezone, so day buckets match their calendar. */
+export function viewerTimezone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  } catch {
+    return 'UTC';
+  }
+}
+
+type Params = Record<string, string | number | undefined>;
+
+function analyticsUrl(path: string, params: Params): string {
+  const query = new URLSearchParams({ tz: viewerTimezone() });
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== '') query.set(key, String(value));
+  }
+  return `${baseURL}/analytics/${path}?${query}`;
+}
+
+async function errorMessage(response: Response, fallback: string): Promise<string> {
+  const body = await response.json().catch(() => null);
+  return body?.error?.message || fallback;
+}
+
+/** GET an analytics endpoint. Throws with the backend's message when it gives one. */
+export async function fetchAnalytics<T>(
+  path: string,
+  params: Params,
+  accessToken: string | null | undefined,
+  signal?: AbortSignal
+): Promise<T> {
+  const response = await fetch(analyticsUrl(path, params), { headers: getAuthHeaders(accessToken), signal });
+  if (!response.ok) throw new Error(await errorMessage(response, 'Failed to load analytics'));
+  return (await response.json()) as T;
+}
+
+/**
+ * Download a CSV export and hand it to the browser as a file. The request needs the bearer token, so this
+ * fetches it rather than linking to it. Returns how many rows matched vs. made it into the file.
+ */
+export async function downloadAnalyticsCsv(
+  path: string,
+  params: Params,
+  accessToken: string | null | undefined
+): Promise<{ total: number; exported: number }> {
+  const response = await fetch(analyticsUrl(path, params), { headers: getAuthHeaders(accessToken) });
+  if (!response.ok) throw new Error(await errorMessage(response, 'Export failed'));
+  const blob = await response.blob();
+  const filename =
+    response.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] ?? 'template-checks.csv';
+  const href = URL.createObjectURL(blob);
+  const link = Object.assign(document.createElement('a'), { href, download: filename });
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(href), 0);
+  return {
+    total: Number(response.headers.get('X-Total-Rows') ?? 0),
+    exported: Number(response.headers.get('X-Exported-Rows') ?? 0),
+  };
+}

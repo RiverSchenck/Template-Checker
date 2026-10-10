@@ -61,6 +61,13 @@ Stores high-level information about each validation run.
 | `total_errors`    | `integer`                            | Total number of errors found                                     |
 | `total_warnings`  | `integer`                            | Total number of warnings found                                   |
 | `total_infos`     | `integer`                            | Total number of info messages                                    |
+| `user_id`         | `uuid` (FK → `users.id`)             | Who ran the check; null for older runs                           |
+| `status`          | `text`                               | `'completed'`, `'rejected'` (upload couldn't be checked) or `'failed'` (checker crashed). See migration `007_analytics_v2.sql`. |
+| `stopped_at_stage`| `text`                               | Checker state a rejected or failed run stopped in (e.g. `UNZIP_PACKAGE`, `PARSE_XML`) |
+| `error_message`   | `text`                               | Why a rejected or failed run didn't complete (max 1000 chars)    |
+| `app_version`     | `text`                               | Deployment that handled the run (`APP_VERSION`, else the Fly deployment tag) |
+
+Analytics reads go through SQL functions in `007_analytics_v2.sql` (`analytics_overview`, `analytics_runs`, `analytics_issue_detail`), callable by the service role only.
 
 ### `validations` table
 

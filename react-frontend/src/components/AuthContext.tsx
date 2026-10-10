@@ -51,7 +51,7 @@ function clearCachedRole(userId: string) {
   }
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   session: Session | null;
   /** Current user from backend /me. Use this for display (name, avatar, email) and role. */
@@ -86,7 +86,8 @@ const defaultContextValue: AuthContextType = {
   },
 };
 
-const AuthContext = createContext<AuthContextType>(defaultContextValue);
+// Exported for the dev-only sample data mode (src/dev/sampleMode.tsx), which supplies a signed-in admin.
+export const AuthContext = createContext<AuthContextType>(defaultContextValue);
 
 export const useAuth = () => useContext(AuthContext);
 

@@ -4,7 +4,7 @@ import uuid
 import shutil  # to delete the __MACOSX folder after unzipping
 import math
 import sys
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 from src.error_handling.ErrorHandling import ValidationResult, ValidationCategory
 from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning, ValidationInfo
 from src.parsers.SourceFoldersParser import SourceFoldersParser
@@ -53,6 +53,8 @@ class FrontifyChecker:
         self.metadata_xml_path: bool = False
         # Initial State for State Machine, through GUI we already called States.GET_ZIP
         self.current_state: States = States.UNZIP_PACKAGE
+        # Last state run_state_machine ran; RESULTS once every check finished
+        self.last_state: Optional[States] = None
         # Defaults
         self.default_par_styles: List[str] = [
             "ParagraphStyle/$ID/NormalParagraphStyle", "ParagraphStyle/$ID/[No paragraph style]"]
@@ -100,6 +102,8 @@ class FrontifyChecker:
     def run_state_machine(self):
         while self.current_state:
             print(self.current_state)
+            # Remember the state being run, so a caller can tell where the check stopped or crashed
+            self.last_state = self.current_state
             self.current_state = self.states[self.current_state]()
             if (self.current_state == States.EXIT):
                 return

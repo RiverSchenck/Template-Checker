@@ -1,11 +1,18 @@
 """
 API functions for fetching analytics data from Supabase.
+
+Aggregation happens in Postgres (migrations/007_analytics_v2.sql); this module validates parameters and
+calls those functions.
 """
+import csv
+import io
 import os
 import logging
 import re
 from typing import Dict, Any, Optional
-from datetime import datetime, timedelta
+from datetime import date, datetime, time, timedelta, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning, ValidationInfo
 
 logger = logging.getLogger(__name__)
 
@@ -69,252 +76,229 @@ def get_supabase_client():
         return None
 
 
-def get_analytics_summary(days: int = 30) -> Dict[str, Any]:
-    """
-    Get analytics summary for the last N days.
+MAX_DAYS = 366
+# Up to this many days the time series is daily; longer ranges are weekly so charts stay readable.
+MAX_DAILY_BUCKET_DAYS = 90
+MAX_RUNS_PAGE_SIZE = 100
+# A CSV export is one query; past this many rows, narrow the filters.
+MAX_EXPORT_ROWS = 10000
+RUN_STATUSES = ('completed', 'rejected', 'failed')
+SOURCE_TYPES = ('react-frontend', 'extension', 'api')
+MAX_SEARCH_LENGTH = 200
+_UUID_RE = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
+_VALIDATION_TYPE_RE = re.compile(r'^[A-Za-z0-9_]{1,100}$')
+_DATE_RE = re.compile(r'^\d{4}-\d{2}-\d{2}$')
 
-    Returns:
-        Dictionary with summary statistics
-    """
+
+class AnalyticsQueryError(ValueError):
+    """A request parameter is invalid; the message is safe to show the caller."""
+
+
+def _parse_date(value: str, name: str) -> date:
+    if not _DATE_RE.match(value or ''):
+        raise AnalyticsQueryError(f'{name} must be a date like 2026-10-01')
     try:
-        supabase = get_supabase_client()
-        if not supabase:
-            return {'error': 'Supabase not configured'}
-
-        # Calculate date range
-        end_date = datetime.utcnow()
-        start_date = end_date - timedelta(days=days)
-
-        # Get runs summary
-        runs_response = supabase.table('runs')\
-            .select('*')\
-            .gte('timestamp', start_date.isoformat())\
-            .order('timestamp', desc=True)\
-            .execute()
-
-        runs = runs_response.data if runs_response.data else []
-
-        # Calculate summary stats
-        total_runs = len(runs)
-        total_errors = sum(r.get('total_errors', 0) for r in runs)
-        total_warnings = sum(r.get('total_warnings', 0) for r in runs)
-        total_infos = sum(r.get('total_infos', 0) for r in runs)
-
-        avg_duration = sum(r.get('duration_ms', 0) for r in runs) / total_runs if total_runs > 0 else 0
-        avg_file_size = sum(r.get('file_size_bytes', 0) for r in runs) / total_runs if total_runs > 0 else 0
-
-        # Get source type breakdown
-        source_types = {}
-        for run in runs:
-            source = run.get('source_type', 'unknown')
-            if source not in source_types:
-                source_types[source] = {'count': 0, 'total_errors': 0, 'total_warnings': 0, 'total_infos': 0}
-            source_types[source]['count'] += 1
-            source_types[source]['total_errors'] += run.get('total_errors', 0)
-            source_types[source]['total_warnings'] += run.get('total_warnings', 0)
-            source_types[source]['total_infos'] += run.get('total_infos', 0)
-
-        # Get most common validation types
-        validations_response = supabase.table('validations')\
-            .select('validation_type, severity, category')\
-            .gte('created_at', start_date.isoformat())\
-            .execute()
-
-        validations = validations_response.data if validations_response.data else []
-
-        # Group by validation_type and severity using a tuple key
-        # Helper function to determine severity (same logic as in analytics.py)
-        def determine_severity(validation_type: str) -> str:
-            """Determine severity from validation type."""
-            warning_types = [
-                'HYPHENATION', 'OVERRIDE', 'UNUSED_IMAGE', 'IMAGE_TRANSFORMATION',
-                'IMAGE_TRANSFORMATION_IMAGE', 'IMAGE_TRANSFORMATION_CONTAINER',
-                'PAGE_ITEM_TRANSFORMATION',
-                'DOCUMENT_BLEED', 'COMPOSER'
-            ]
-            info_types = ['EMPTY_TEXT_FRAME', 'LARGE_IMAGE']
-
-            if validation_type in warning_types or validation_type.startswith('WARNING'):
-                return 'warning'
-            elif validation_type in info_types or validation_type.startswith('INFO'):
-                return 'info'
-            else:
-                return 'error'
-
-        validation_counts = {}
-        for v in validations:
-            v_type = v.get('validation_type', 'UNKNOWN')
-            severity = v.get('severity', 'error')
-            # Ensure severity is one of the valid values
-            if severity not in ['error', 'warning', 'info']:
-                # If severity is invalid, re-determine it from validation_type
-                severity = determine_severity(v_type)
-
-            # Use tuple as key to avoid issues with underscores in validation_type
-            key = (v_type, severity)
-            validation_counts[key] = validation_counts.get(key, 0) + 1
-
-        # Sort all validation types by count (descending)
-        all_validations = sorted(
-            validation_counts.items(),
-            key=lambda x: x[1],
-            reverse=True
-        )
-
-        # Prepare time series data for runs over time (group by day)
-        runs_by_day = {}
-        for run in runs:
-            run_date = parse_timestamp(run.get('timestamp', ''))
-            day_key = run_date.strftime('%Y-%m-%d')
-            if day_key not in runs_by_day:
-                runs_by_day[day_key] = {
-                    'date': day_key,
-                    'runs': 0,
-                    'errors': 0,
-                    'warnings': 0,
-                    'infos': 0,
-                    'react_frontend': 0,
-                    'extension': 0,
-                    'api': 0,
-                    'react_frontend_errors': 0,
-                    'react_frontend_warnings': 0,
-                    'react_frontend_infos': 0,
-                    'extension_errors': 0,
-                    'extension_warnings': 0,
-                    'extension_infos': 0,
-                    'api_errors': 0,
-                    'api_warnings': 0,
-                    'api_infos': 0,
-                    'errors_0': 0,
-                    'errors_1_5': 0,
-                    'errors_6_10': 0,
-                    'errors_11_15': 0,
-                    'errors_16_plus': 0,
-                    'warnings_0': 0,
-                    'warnings_1_5': 0,
-                    'warnings_6_10': 0,
-                    'warnings_11_15': 0,
-                    'warnings_16_plus': 0,
-                    'infos_0': 0,
-                    'infos_1_5': 0,
-                    'infos_6_10': 0,
-                    'infos_11_15': 0,
-                    'infos_16_plus': 0,
-                }
-            runs_by_day[day_key]['runs'] += 1
-            runs_by_day[day_key]['errors'] += run.get('total_errors', 0)
-            runs_by_day[day_key]['warnings'] += run.get('total_warnings', 0)
-            runs_by_day[day_key]['infos'] += run.get('total_infos', 0)
-            # Per-source run counts and issues
-            source = run.get('source_type', 'unknown')
-            re = run.get('total_errors', 0)
-            rw = run.get('total_warnings', 0)
-            ri = run.get('total_infos', 0)
-            if source == 'react-frontend':
-                runs_by_day[day_key]['react_frontend'] += 1
-                runs_by_day[day_key]['react_frontend_errors'] += re
-                runs_by_day[day_key]['react_frontend_warnings'] += rw
-                runs_by_day[day_key]['react_frontend_infos'] += ri
-            elif source == 'extension':
-                runs_by_day[day_key]['extension'] += 1
-                runs_by_day[day_key]['extension_errors'] += re
-                runs_by_day[day_key]['extension_warnings'] += rw
-                runs_by_day[day_key]['extension_infos'] += ri
-            elif source == 'api':
-                runs_by_day[day_key]['api'] += 1
-                runs_by_day[day_key]['api_errors'] += re
-                runs_by_day[day_key]['api_warnings'] += rw
-                runs_by_day[day_key]['api_infos'] += ri
-            # Per-run histogram buckets (errors, warnings, infos): 0, 1-5, 6-10, 11-15, 16+
-            def bucket_suffix(val):
-                if val == 0:
-                    return '_0'
-                if 1 <= val <= 5:
-                    return '_1_5'
-                if 6 <= val <= 10:
-                    return '_6_10'
-                if 11 <= val <= 15:
-                    return '_11_15'
-                return '_16_plus'
-            e = run.get('total_errors', 0)
-            runs_by_day[day_key]['errors' + bucket_suffix(e)] += 1
-            w = run.get('total_warnings', 0)
-            runs_by_day[day_key]['warnings' + bucket_suffix(w)] += 1
-            i = run.get('total_infos', 0)
-            runs_by_day[day_key]['infos' + bucket_suffix(i)] += 1
-
-        # Sort by date
-        runs_over_time = sorted(runs_by_day.values(), key=lambda x: x['date'])
-        bucket_keys = ('_0', '_1_5', '_6_10', '_11_15', '_16_plus')
-        errors_per_run_by_day = [
-            {'date': row['date'], **{f'errors{k}': row[f'errors{k}'] for k in bucket_keys}}
-            for row in runs_over_time
-        ]
-        warnings_per_run_by_day = [
-            {'date': row['date'], **{f'warnings{k}': row[f'warnings{k}'] for k in bucket_keys}}
-            for row in runs_over_time
-        ]
-        infos_per_run_by_day = [
-            {'date': row['date'], **{f'infos{k}': row[f'infos{k}'] for k in bucket_keys}}
-            for row in runs_over_time
-        ]
-
-        return {
-            'summary': {
-                'total_runs': total_runs,
-                'total_errors': total_errors,
-                'total_warnings': total_warnings,
-                'total_infos': total_infos,
-                'avg_duration_ms': int(avg_duration),
-                'avg_file_size_bytes': int(avg_file_size),
-                'days': days
-            },
-            'source_types': source_types,
-            'all_validations': [{'type': k[0], 'severity': k[1], 'count': v} for k, v in all_validations],
-            'runs_over_time': runs_over_time,
-            'errors_per_run_by_day': errors_per_run_by_day,
-            'warnings_per_run_by_day': warnings_per_run_by_day,
-            'infos_per_run_by_day': infos_per_run_by_day,
-            'recent_runs': runs[:50]  # Last 50 runs
-        }
-
-    except Exception as e:
-        logger.error(f"Error fetching analytics: {e}", exc_info=True)
-        return {'error': 'Failed to load analytics'}
+        return date.fromisoformat(value)
+    except ValueError:
+        raise AnalyticsQueryError(f'{name} must be a real date')
 
 
-def get_runs(limit: int = 100, offset: int = 0) -> Dict[str, Any]:
+def analytics_period(
+    days: Any = 30,
+    tz: Optional[str] = None,
+    start: Optional[str] = None,
+    end: Optional[str] = None,
+    now: Optional[datetime] = None,
+) -> Dict[str, Any]:
+    """The window to report on, as seen from timezone tz.
+
+    Either "the last N days" (local midnight N-1 days ago until now) or a custom range of calendar days
+    start..end inclusive (an end of today stops at now). Day buckets line up with the viewer's calendar days.
+    The previous period used for comparisons (computed in SQL) is the same length, immediately before.
     """
-    Get paginated list of runs.
-
-    Args:
-        limit: Number of runs to return
-        offset: Offset for pagination
-    """
+    tz = tz or 'UTC'
     try:
-        supabase = get_supabase_client()
-        if not supabase:
-            return {'error': 'Supabase not configured'}
+        zone = ZoneInfo(tz)
+    except (ZoneInfoNotFoundError, ValueError):
+        raise AnalyticsQueryError('tz must be an IANA timezone name, e.g. Europe/Zurich')
+    now = now or datetime.now(timezone.utc)
+    today = now.astimezone(zone).date()
 
-        runs_response = supabase.table('runs')\
-            .select('*')\
-            .order('timestamp', desc=True)\
-            .range(offset, offset + limit - 1)\
-            .execute()
+    if start or end:
+        if not (start and end):
+            raise AnalyticsQueryError('A custom range needs both start and end')
+        first_day, last_day = _parse_date(start, 'start'), _parse_date(end, 'end')
+        if first_day > last_day:
+            raise AnalyticsQueryError('start must be on or before end')
+        if first_day > today:
+            raise AnalyticsQueryError('start cannot be in the future')
+        last_day = min(last_day, today)
+        days = (last_day - first_day).days + 1
+        if days > MAX_DAYS:
+            raise AnalyticsQueryError(f'A range can be at most {MAX_DAYS} days')
+        period_end = min(now, datetime.combine(last_day + timedelta(days=1), time.min, tzinfo=zone))
+    else:
+        try:
+            days = int(days)
+        except (TypeError, ValueError):
+            raise AnalyticsQueryError('days must be a whole number')
+        if not 1 <= days <= MAX_DAYS:
+            raise AnalyticsQueryError(f'days must be between 1 and {MAX_DAYS}')
+        first_day = today - timedelta(days=days - 1)
+        period_end = now
 
-        count_response = supabase.table('runs')\
-            .select('id', count='exact')\
-            .execute()
+    return {
+        'start': datetime.combine(first_day, time.min, tzinfo=zone).isoformat(),
+        'end': period_end.isoformat(),
+        'tz': tz,
+        'bucket': 'day' if days <= MAX_DAILY_BUCKET_DAYS else 'week',
+    }
 
-        total_count = count_response.count if hasattr(count_response, 'count') else len(runs_response.data)
 
-        return {
-            'runs': runs_response.data if runs_response.data else [],
-            'total': total_count,
-            'limit': limit,
-            'offset': offset
-        }
+def describe_issue(validation_type: str, severity: Optional[str] = None) -> Dict[str, Optional[str]]:
+    """Display label, message and help article for a validation type, from the checker's own classifiers.
 
-    except Exception as e:
-        logger.error(f"Error fetching runs: {e}", exc_info=True)
-        return {'error': 'Failed to load runs'}
+    A few types exist as both an error and a warning with different messages; severity picks the right one.
+    """
+    enums = (ValidationError, ValidationWarning, ValidationInfo)
+    preferred = {'error': ValidationError, 'warning': ValidationWarning, 'info': ValidationInfo}.get(severity)
+    if preferred:
+        enums = (preferred,) + tuple(e for e in enums if e is not preferred)
+    for enum in enums:
+        classifier = enum.__members__.get(validation_type)
+        if classifier is not None:
+            return {
+                'label': classifier.label or validation_type.replace('_', ' ').title(),
+                'message': classifier.message,
+                'help_article': classifier.help_article,
+            }
+    return {'label': validation_type.replace('_', ' ').title(), 'message': None, 'help_article': None}
+
+
+def _rpc(name: str, params: Dict[str, Any]) -> Dict[str, Any]:
+    supabase = get_supabase_client()
+    if not supabase:
+        return {'error': 'Supabase not configured'}
+    return supabase.rpc(name, params).execute().data
+
+
+def get_overview(period: Dict[str, Any]) -> Dict[str, Any]:
+    """Headline numbers (with the previous period), time series, issues, categories, users and problem runs."""
+    overview = _rpc('analytics_overview', {
+        'p_start': period['start'],
+        'p_end': period['end'],
+        'p_bucket': period['bucket'],
+        'p_tz': period['tz'],
+    })
+    for issue in overview.get('issues') or []:
+        issue.update(describe_issue(issue['validation_type'], issue.get('severity')))
+    return overview
+
+
+def get_issue_detail(validation_type: str, period: Dict[str, Any]) -> Dict[str, Any]:
+    """One issue type: how often it hit over time and which identifiers (fonts, styles, ...) it hit most."""
+    if not _VALIDATION_TYPE_RE.match(validation_type or ''):
+        raise AnalyticsQueryError('Unknown validation type')
+    detail = _rpc('analytics_issue_detail', {
+        'p_validation_type': validation_type,
+        'p_start': period['start'],
+        'p_end': period['end'],
+        'p_bucket': period['bucket'],
+        'p_tz': period['tz'],
+    })
+    if 'error' not in detail:
+        detail.update(describe_issue(validation_type))
+    return detail
+
+
+def run_filters(
+    status: Optional[str] = None,
+    source: Optional[str] = None,
+    user_id: Optional[str] = None,
+    search: Optional[str] = None,
+    validation_type: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Validated filters for analytics_runs, blanks turned into NULL (= any)."""
+    if status and status not in RUN_STATUSES:
+        raise AnalyticsQueryError(f"status must be one of: {', '.join(RUN_STATUSES)}")
+    if source and source not in SOURCE_TYPES:
+        raise AnalyticsQueryError(f"source must be one of: {', '.join(SOURCE_TYPES)}")
+    if user_id and not _UUID_RE.match(user_id):
+        raise AnalyticsQueryError('user_id must be a UUID')
+    if validation_type and not _VALIDATION_TYPE_RE.match(validation_type):
+        raise AnalyticsQueryError('Unknown validation type')
+    search = (search or '').strip()
+    if len(search) > MAX_SEARCH_LENGTH:
+        raise AnalyticsQueryError(f'Search must be at most {MAX_SEARCH_LENGTH} characters')
+    return {
+        'p_status': status or None,
+        'p_source': source or None,
+        'p_user_id': user_id or None,
+        'p_search': search or None,
+        'p_validation_type': validation_type or None,
+    }
+
+
+def get_runs(period: Dict[str, Any], filters: Dict[str, Any], limit: Any = 25, offset: Any = 0) -> Dict[str, Any]:
+    """One page of runs in the period, newest first. Returns {'total', 'runs'}."""
+    try:
+        limit, offset = int(limit), int(offset)
+    except (TypeError, ValueError):
+        raise AnalyticsQueryError('limit and offset must be whole numbers')
+    if not 1 <= limit <= MAX_RUNS_PAGE_SIZE or offset < 0:
+        raise AnalyticsQueryError(f'limit must be between 1 and {MAX_RUNS_PAGE_SIZE}, and offset at least 0')
+
+    return _rpc('analytics_runs', {
+        'p_start': period['start'],
+        'p_end': period['end'],
+        **filters,
+        'p_limit': limit,
+        'p_offset': offset,
+    })
+
+
+CSV_COLUMNS = [
+    ('timestamp', 'Time (UTC)'),
+    ('template_name', 'Template'),
+    ('status', 'Result'),
+    ('source_type', 'Source'),
+    ('display_name', 'Agent'),
+    ('email', 'Agent email'),
+    ('total_errors', 'Errors'),
+    ('total_warnings', 'Warnings'),
+    ('total_infos', 'Infos'),
+    ('duration_ms', 'Duration (ms)'),
+    ('file_size_bytes', 'File size (bytes)'),
+    ('stopped_at_stage', 'Stopped at'),
+    ('error_message', 'Error'),
+    ('app_version', 'App version'),
+    ('id', 'Run ID'),
+]
+# A cell starting with one of these is run as a formula by Excel/Sheets. Template names and error messages
+# come from customer uploads, so neutralize them.
+_FORMULA_PREFIXES = ('=', '+', '-', '@', '\t', '\r')
+
+
+def _csv_cell(value: Any) -> Any:
+    if isinstance(value, str) and value.startswith(_FORMULA_PREFIXES):
+        return "'" + value
+    return '' if value is None else value
+
+
+def export_runs_csv(period: Dict[str, Any], filters: Dict[str, Any]) -> Dict[str, Any]:
+    """Every run matching the filters (up to MAX_EXPORT_ROWS) as CSV text. Returns {'csv', 'total', 'exported'}."""
+    page = _rpc('analytics_runs', {
+        'p_start': period['start'],
+        'p_end': period['end'],
+        **filters,
+        'p_limit': MAX_EXPORT_ROWS,
+        'p_offset': 0,
+    })
+    if 'error' in page:
+        return page
+    out = io.StringIO()
+    writer = csv.writer(out)
+    writer.writerow([label for _, label in CSV_COLUMNS])
+    for run in page['runs']:
+        writer.writerow([_csv_cell(run.get(key)) for key, _ in CSV_COLUMNS])
+    return {'csv': out.getvalue(), 'total': page['total'], 'exported': len(page['runs'])}

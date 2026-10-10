@@ -127,7 +127,7 @@ function ClassicValidationList({
         if (entries.infos.length) typeSet.add('infos');
       });
     });
-    if (typeSet.has('errors')) validationTypeOptions.push({ value: 'errors', label: 'Errors' });
+    if (typeSet.has('errors')) validationTypeOptions.push({ value: 'errors', label: 'Blockers' });
     if (typeSet.has('warnings')) validationTypeOptions.push({ value: 'warnings', label: 'Warnings' });
     if (typeSet.has('infos')) validationTypeOptions.push({ value: 'infos', label: 'Infos' });
 

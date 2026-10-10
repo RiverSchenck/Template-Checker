@@ -1,3 +1,9 @@
+// Theme colors are CSS variables holding full oklch() values, so Tailwind can't
+// inject an alpha channel itself. color-mix() makes opacity modifiers like
+// bg-muted/40 work; without a modifier <alpha-value> is 1 (the solid color).
+const withAlpha = (name) =>
+  `color-mix(in oklab, var(--${name}) calc(<alpha-value> * 100%), transparent)`;
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -12,47 +18,47 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
-  			background: 'var(--background)',
-  			foreground: 'var(--foreground)',
+  			background: withAlpha('background'),
+  			foreground: withAlpha('foreground'),
   			card: {
-  				DEFAULT: 'var(--card)',
-  				foreground: 'var(--card-foreground)'
+  				DEFAULT: withAlpha('card'),
+  				foreground: withAlpha('card-foreground')
   			},
   			popover: {
-  				DEFAULT: 'var(--popover)',
-  				foreground: 'var(--popover-foreground)'
+  				DEFAULT: withAlpha('popover'),
+  				foreground: withAlpha('popover-foreground')
   			},
   			primary: {
-  				DEFAULT: 'var(--primary)',
-  				foreground: 'var(--primary-foreground)'
+  				DEFAULT: withAlpha('primary'),
+  				foreground: withAlpha('primary-foreground')
   			},
   			secondary: {
-  				DEFAULT: 'var(--secondary)',
-  				foreground: 'var(--secondary-foreground)'
+  				DEFAULT: withAlpha('secondary'),
+  				foreground: withAlpha('secondary-foreground')
   			},
   			muted: {
-  				DEFAULT: 'var(--muted)',
-  				foreground: 'var(--muted-foreground)'
+  				DEFAULT: withAlpha('muted'),
+  				foreground: withAlpha('muted-foreground')
   			},
   			accent: {
-  				DEFAULT: 'var(--accent)',
-  				foreground: 'var(--accent-foreground)'
+  				DEFAULT: withAlpha('accent'),
+  				foreground: withAlpha('accent-foreground')
   			},
   			destructive: {
-  				DEFAULT: 'var(--destructive)',
-  				foreground: 'var(--destructive-foreground)'
+  				DEFAULT: withAlpha('destructive'),
+  				foreground: withAlpha('destructive-foreground')
   			},
   			warning: {
-  				DEFAULT: 'var(--warning)',
-  				foreground: 'var(--warning-foreground)'
+  				DEFAULT: withAlpha('warning'),
+  				foreground: withAlpha('warning-foreground')
   			},
   			info: {
-  				DEFAULT: 'var(--info)',
-  				foreground: 'var(--info-foreground)'
+  				DEFAULT: withAlpha('info'),
+  				foreground: withAlpha('info-foreground')
   			},
-  			border: 'var(--border)',
-  			input: 'var(--input)',
-  			ring: 'var(--ring)',
+  			border: withAlpha('border'),
+  			input: withAlpha('input'),
+  			ring: withAlpha('ring'),
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',
@@ -70,12 +76,12 @@ module.exports = {
   					height: '0'
   				},
   				to: {
-  					height: 'var(--radix-accordion-content-height)'
+  					height: withAlpha('radix-accordion-content-height')
   				}
   			},
   			'accordion-up': {
   				from: {
-  					height: 'var(--radix-accordion-content-height)'
+  					height: withAlpha('radix-accordion-content-height')
   				},
   				to: {
   					height: '0'

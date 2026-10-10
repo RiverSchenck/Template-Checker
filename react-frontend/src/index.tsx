@@ -8,10 +8,15 @@ import { AuthProvider } from './components/AuthContext';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
+if (import.meta.env.DEV && import.meta.env.VITE_SAMPLE_DATA === 'true') {
+  // `npm run dev:sample`: signed-in admin + sample analytics, no backend needed. Never in production builds.
+  import('./dev/sampleMode').then(({ renderWithSampleData }) => renderWithSampleData(root));
+} else {
+  root.render(
     <React.StrictMode>
       <AuthProvider>
         <App />
       </AuthProvider>
     </React.StrictMode>
-);
+  );
+}

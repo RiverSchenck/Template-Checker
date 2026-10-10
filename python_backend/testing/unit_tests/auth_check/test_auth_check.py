@@ -13,30 +13,30 @@ def client(monkeypatch):
     monkeypatch.setattr(routes, 'verify_supabase_token', fake_verify)
     monkeypatch.setattr(routes.user_helpers, 'get_user_by_email',
                         lambda email: {'id': '1', 'email': email} if email == 'approved@example.com' else None)
-    monkeypatch.setattr(routes, 'get_analytics_summary', lambda days=30: {'ok': True})
+    monkeypatch.setattr(routes, 'get_overview', lambda period: {'ok': True})
     return flask_app.test_client()
 
 
 def test_no_token_is_rejected(client):
-    assert client.get('/analytics/summary').status_code == 401
+    assert client.get('/analytics/overview').status_code == 401
 
 
 def test_invalid_token_is_rejected(client):
-    assert client.get('/analytics/summary', headers={'Authorization': 'Bearer nope'}).status_code == 401
+    assert client.get('/analytics/overview', headers={'Authorization': 'Bearer nope'}).status_code == 401
 
 
 def test_query_string_token_is_ignored(client):
-    assert client.get('/analytics/summary?token=valid-approved@example.com').status_code == 401
+    assert client.get('/analytics/overview?token=valid-approved@example.com').status_code == 401
 
 
 def test_signed_in_but_not_approved_is_forbidden(client):
-    r = client.get('/analytics/summary', headers={'Authorization': 'Bearer valid-stranger@gmail.com'})
+    r = client.get('/analytics/overview', headers={'Authorization': 'Bearer valid-stranger@gmail.com'})
     assert r.status_code == 403
     assert r.get_json()['error']['code'] == 'access_denied'
 
 
 def test_approved_user_is_allowed(client):
-    r = client.get('/analytics/summary', headers={'Authorization': 'Bearer valid-approved@example.com'})
+    r = client.get('/analytics/overview', headers={'Authorization': 'Bearer valid-approved@example.com'})
     assert r.status_code == 200
 
 
