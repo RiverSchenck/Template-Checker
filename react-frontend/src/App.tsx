@@ -52,7 +52,7 @@ function ValidationListWrapper() {
 export default function App() {
   return (
     <BrowserRouter>
-      <Toaster position="top-center" />
+      <Toaster position="bottom-right" visibleToasts={3} offset={20} />
       <Routes>
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/" element={<ProtectedLayout />}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { Search, X } from 'lucide-react';
+import { AlertCircle, RotateCw, Search, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Skeleton } from '../ui/skeleton';
@@ -382,6 +382,37 @@ export function EmptyState({
       <p className="text-sm font-semibold text-foreground">{title}</p>
       {description && <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-muted-foreground">{description}</p>}
       {action && <div className="mt-5">{action}</div>}
+    </div>
+  );
+}
+
+/** A panel's data failed to load. Shown in place of the list (not as a toast) so it can't be mistaken for "empty". */
+export function ErrorState({
+  title,
+  description = 'Check your connection and try again.',
+  onRetry,
+}: {
+  title: string;
+  description?: React.ReactNode;
+  onRetry?: () => void;
+}) {
+  return (
+    <div role="alert" className="flex flex-col items-center justify-center px-6 py-14 text-center">
+      <div className="mb-4 grid h-10 w-10 place-items-center rounded-full bg-rose-500/10">
+        <AlertCircle className="h-5 w-5 text-rose-500" strokeWidth={1.75} />
+      </div>
+      <p className="text-sm font-semibold text-foreground">{title}</p>
+      {description && <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-muted-foreground">{description}</p>}
+      {onRetry && (
+        <button
+          type="button"
+          onClick={onRetry}
+          className="mt-4 inline-flex h-8 items-center gap-1.5 rounded-lg border bg-background px-3 text-xs font-medium shadow-sm transition-colors hover:bg-muted"
+        >
+          <RotateCw className="h-3.5 w-3.5" aria-hidden />
+          Try again
+        </button>
+      )}
     </div>
   );
 }

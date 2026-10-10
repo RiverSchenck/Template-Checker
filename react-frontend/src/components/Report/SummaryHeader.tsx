@@ -1,6 +1,6 @@
-import React from 'react';
-import { ArrowDown, ArrowUp, Copy, FileJson, MoreHorizontal } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useEffect, useState } from 'react';
+import { ArrowDown, ArrowUp, Check, Copy, FileJson, MoreHorizontal } from 'lucide-react';
+import { notify } from '../../lib/notify';
 import { Button } from '../ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
@@ -60,12 +60,19 @@ function SummaryHeader({
     report.checked.length ? `${report.checked.map((c) => `${c.count} ${c.label}`).join(', ')} checked` : null,
   ].filter(Boolean);
 
-  const copy = async (text: string, message: string) => {
+  // The button itself confirms the copy; only a failure needs a toast.
+  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    if (!copied) return;
+    const t = setTimeout(() => setCopied(false), 1800);
+    return () => clearTimeout(t);
+  }, [copied]);
+  const copySummary = async () => {
     try {
-      await navigator.clipboard.writeText(text);
-      toast.success(message);
+      await navigator.clipboard.writeText(customerSummary);
+      setCopied(true);
     } catch {
-      toast.error('Couldn’t copy to the clipboard');
+      notify.error('Couldn’t copy the summary. Try again, or select the text and copy it manually.');
     }
   };
 
@@ -102,9 +109,9 @@ function SummaryHeader({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button size="sm" className="h-8 gap-1.5" onClick={() => copy(customerSummary, 'Customer summary copied')}>
-            <Copy className="h-3.5 w-3.5" aria-hidden />
-            Copy customer summary
+          <Button size="sm" className="h-8 min-w-[11.5rem] gap-1.5" onClick={copySummary} aria-live="polite">
+            {copied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
+            {copied ? 'Copied' : 'Copy customer summary'}
           </Button>
         </div>
       </div>
