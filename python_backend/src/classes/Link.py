@@ -1,6 +1,6 @@
-from urllib.parse import unquote
 from xml.etree.ElementTree import Element
 from typing import Optional, Tuple
+from src.helpers.file_names import normalize_file_name, unquote_uri
 
 
 # **********************************************************
@@ -31,7 +31,7 @@ class Link:
         resource_uri_quoted = link_element.get("LinkResourceURI")
 
         # Convert URL(URI) to regular
-        self.resource_uri = unquote(resource_uri_quoted)
+        self.resource_uri = unquote_uri(resource_uri_quoted)
         self.stored_state = link_element.get("StoredState")
         self.link_id = link_element.get("Self")
 
@@ -100,7 +100,7 @@ class Link:
     # ----------------Getters------------------
     def get_image_name(self) -> str:
         # Extract the image name from the URI
-        return self.resource_uri.split("/")[-1]
+        return normalize_file_name(self.resource_uri.split("/")[-1])
 
     def get_stored_state(self) -> str:
         return self.stored_state
