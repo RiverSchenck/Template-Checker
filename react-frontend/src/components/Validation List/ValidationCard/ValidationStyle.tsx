@@ -1,19 +1,17 @@
 import React from 'react';
-import { ValidationType, ClassifierData, ValidationItem, ValidationCategory } from '../../../types';
+import { ValidationType, ClassifierData, ValidationItem } from '../../../types';
 import { getValidationTag, renderHelpLink, renderContextContent } from '../../helpers';
 import { cn } from '../../../lib/utils';
 import { Badge } from '../../ui/badge';
 
 interface ValidationStyleProps {
   validationType: ValidationType;
-  category: ValidationCategory;
   items: ValidationItem[];
   classifierData?: ClassifierData;
 }
 
 const ValidationStyle = ({
   validationType,
-  category,
   items,
   classifierData,
 }: ValidationStyleProps) => {

@@ -57,7 +57,7 @@ const PAGE_LINES = (
     <span className="absolute left-2 right-6 top-[24px] h-[3px] rounded-full bg-muted-foreground/25" />
   </>
 );
-const FAN = 'transition-transform duration-300 ease-[cubic-bezier(.3,1.4,.5,1)] motion-reduce:transition-none';
+const FAN = 'transition-transform duration-300 [transition-timing-function:cubic-bezier(.3,1.4,.5,1)] motion-reduce:transition-none';
 
 /** A little stack of template pages. Fans out on hover/drag; bobs while a check runs. */
 function PageStack({ open, working }: { open?: boolean; working?: boolean }) {
@@ -112,7 +112,7 @@ function PageStack({ open, working }: { open?: boolean; working?: boolean }) {
         <span
           className={cn(
             'absolute -bottom-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-violet-500 text-white shadow-sm',
-            'transition-transform delay-100 duration-300 ease-[cubic-bezier(.3,1.6,.5,1)] motion-reduce:transition-none',
+            'transition-transform delay-100 duration-300 [transition-timing-function:cubic-bezier(.3,1.6,.5,1)] motion-reduce:transition-none',
             open ? 'scale-100' : 'scale-0 group-hover:scale-100'
           )}
         >

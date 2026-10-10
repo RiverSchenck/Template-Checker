@@ -45,7 +45,6 @@ function ValidationListWrapper() {
     <ValidationList
       jsonResponse={ctx.checkerResults}
       previousJsonResponse={ctx.previousCheckerResults ?? null}
-      checkerResponse={ctx.checkerResponse}
       seeDetails={ctx.seeDetails}
     />
   );

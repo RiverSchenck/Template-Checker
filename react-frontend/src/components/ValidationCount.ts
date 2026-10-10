@@ -13,7 +13,7 @@ function countValidationIssues(validationData: ValidationResult): ValidationCoun
 
     // Helper function to sum items in each identifier group
     const sumItems = (categoryDetail: CategoryDetail) => {
-        for (let entries of Object.values(categoryDetail.details)) {
+        for (const entries of Object.values(categoryDetail.details)) {
             totalErrors += entries.errors.length;
             totalWarnings += entries.warnings.length;
             totalInfos += entries.infos.length;

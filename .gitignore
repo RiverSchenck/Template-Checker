@@ -1,0 +1,27 @@
+AI Projects/
+node_modules/
+extension/dist/
+extension/node_modules/
+venv/
+__pycache__/
+.DS_Store
+.vscode/
+
+# Environment / secrets (do not commit)
+.env
+.env.local
+.env.*.local
+
+src/data/
+logs/
+/pytest.ini
+.pytest_cache
+
+# Local Claude Code config and session worktrees
+.claude/
+
+# Local sample templates
+test_files/
+
+# Cursor editor settings and debug logs
+.cursor/
