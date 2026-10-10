@@ -24,6 +24,7 @@ Everything below was confirmed against the code on `main` and, where marked, by 
 | B3 | **Results order is random between runs.** Merged `text_content` goes through `set()`. | `error_handling/ErrorHandling.py:90` | Two runs of unchanged code differ on 12 of 187 packages, all in `par_styles` text order. | Users (list order shifts); makes diff-testing impossible. |
 | B4 | **`text_box_data` page fields are wrong in every response.** `SpreadData.page_name` holds the page *Self* and `page_id` holds the page *Name* (swapped), so `text_box_data[*].page_id` is a page name ("1") and `page_name` is always empty. | `classes/SpreadData.py:27-28, 62-63`; used via `StoryData.get_page_id()` | 980 of 998 text-box entries across the test set have a `page_id` that isn't a page; the rest are empty. | API-key users. The web UI only reads `.content`, so it's invisible there. |
 | B5 | **Some issues are attributed to the wrong page.** Page IDs come from the *first page of the spread*, while the highlight box uses the item's real page. | `FrontifyChecker.py:1615-1643` (`_build_data_id_to_page_id_mapping`), `SpreadsParser._build_story_id_mappings` | 4 of 2,298 issues with a highlight box disagree (e.g. list says page 2, box is on the facing page). Only affects facing-page spreads. | Users (rare). |
+| B7 | **Horizontal flips are reported as rotations.** Flip detection requires `a < 0 < d` *and* an angle other than 180°, but a plain horizontal flip (`-1 0 0 1`) has an angle of exactly 180°, and a flip combined with a 90° turn (`0 -s -s 0`) has `a = 0`. Both fall through to "rotated by …" (a warning) instead of a flip (an error). The page-item check shares the formula. | `FrontifyChecker.py:1073-1104`, `helpers/page_item_transform.py:43-52` | Found by computing matrices by hand (phase 0 spot check). The oracle, which classifies by determinant (`a*d - b*c < 0` = mirrored), disagrees on 21 test packages: 19 frames `-1 0 0 1` and 14 images `0 -4.42 -4.42 0`. | Users: flipped images pass with a warning. |
 | B6 | **File order depends on the OS.** All parsers iterate `os.listdir()` unsorted; production (Linux) and Mac can order stories/spreads differently. | `SpreadsParser.py:28`, `StoriesParser.py:25`, `MasterPageParser.py:36`, `SourceFoldersParser.py:27` | Code reading; feeds result order. | Same as B3. |
 
 ### 1.2 Latent bugs (code is wrong; no test package triggers it today)
@@ -58,6 +59,12 @@ Everything below was confirmed against the code on `main` and, where marked, by 
    (`FrontifyChecker.py:143-160`); unused `GET_ZIP`/`IDLE` states; commented-out checks; 26 `print()` calls
    (including one per image and one per master-page link) going to production logs; a sleep/retry loop in
    `zip_idml_output_folder`; `FontsParser.add_used_font_family` does a linear scan per text run.
+
+### 1.3a Rules clarified with the product owner
+
+- Kerning and composer are judged on the **paragraph or character style** (through `BasedOn`) only. A value set
+  directly on the text is an override, which the overrides check already reports, and the paragraph-style rule
+  makes people fix it anyway. So the checker ignoring local `KerningMethod`/`Composer` is correct, not a gap.
 
 ### 1.4 What the current tests do and don't protect
 
@@ -153,6 +160,7 @@ For each: write a failing fixture or oracle test → fix → update goldens → 
 | B2 Composer inheritance | Composer contexts change in affected packages |
 | B4 Un-swap `SpreadData` page fields; `text_box_data` gets real page id + name | Every `text_box_data` entry |
 | B5 Page attribution from page geometry (the item's real page), falling back to the spread's first page | 4 items |
+| B7 Flip detection by determinant, for images and page items | 21 packages: rotation warnings become flip errors |
 | L1–L6 | None expected; each gets a fixture test |
 
 ### Phase 2 — Check runner (the main structural change; zero golden changes)
@@ -184,9 +192,8 @@ src/
 - One `inherited_context(prop)` helper for the five "Inherited from" checks.
 - Merge the two `overrides_check` blocks into one function used for character and paragraph level.
 - `image_transformation_check` uses `classify_page_item_transform`. The two have identical branches, thresholds
-  and message text (verified), so this is a straight swap; goldens include a 180° container and a skewed
-  container to confirm. Both share one limitation to keep in mind (not fix here): an item that is rotated *and*
-  skewed only reports the rotation.
+  and message text (verified), so after B7 is fixed in the shared helper this is a straight swap. Both share one
+  limitation to keep in mind (not fixed here): an item that is rotated *and* skewed only reports the rotation.
 - `PropertyBase`: memoise resolution per (style, property) and add the loop guard (L5) if not already done.
 - `FontsParser`: dict lookup instead of a scan per text run.
 
@@ -214,7 +221,7 @@ src/
 | 1 | Phase 0.1–0.2: determinism fixes + goldens | Order only |
 | 2 | Phase 0.3–0.5: oracle, fixture builder, shared test fixture | No |
 | 3 | Phase 1: B1, L1–L6 (crash and latent fixes) | No |
-| 4 | Phase 1: B2, B4, B5 (visible fixes) + spot checks | Yes, documented |
+| 4 | Phase 1: B2, B4, B5, B7 (visible fixes) + spot checks | Yes, documented |
 | 5–8 | Phase 2: runner + move checks, one theme per PR | No |
 | 9 | Phase 3: de-duplication | No |
 | 10+ | Phase 4: dataclasses, logging, cleanup | No |
