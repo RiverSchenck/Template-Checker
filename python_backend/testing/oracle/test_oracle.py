@@ -1,5 +1,6 @@
 """The checker's results must match an independent reading of the IDML, for every test package.
 
+The rules it checks are written down in docs/checker-rules.md; a disagreement may mean the rule is wrong.
 Known disagreements are listed in KNOWN_GAPS with the plan item that fixes them. Markers are strict:
 once a fix lands the test starts passing, which fails the run until the entry is removed.
 """

@@ -21,6 +21,11 @@ Determinant `a·d − b·c` < 0 means the item is mirrored (flipped). Rotation i
 | Composer | `NormalParagraphStyle` sets no `Composer`; its `BasedOn` is `[No paragraph style]`, which has `Composer="HL Composer"` → should warn "Inherited from: ParagraphStyle/$ID/[No paragraph style]" | warns `NormalParagraphStyle` with **empty** context | ❌ **B2** |
 | Image transform — frame `u188` | `1 0 −0.364 1`: no rotation (`atan2(0, 1)` = 0°); `c` = −0.364 = tan(−20°) → 20° skew | skew, `c=-0.36` | ✅ |
 | Image transform — frame `u17f` | `−1 0 0 1`: x mirrored, y unchanged, determinant −1 → **horizontal flip** (a 180° turn would be `−1 0 0 −1`) | "rotated by 180.00 degrees" (warning) | ❌ **B7** |
+
+Rendered from the package's own PDF export: the placed logo reads backwards but isn't upside down, so it's
+mirrored, not rotated. Its image inside the frame isn't mirrored, so the end state is a flip.
+
+![Frame u17f: original, what a 180° rotation looks like, and as placed](img/spot-check-u17f-flip.png)
 | Image inside `u188` | `0.2467 0 0 0.2467`: uniform scale only | none | ✅ |
 
 ## 2026-10-10 — *Image Transformation Folder.zip* (unit test pass data, also in 13 other suites)
@@ -29,6 +34,10 @@ Determinant `a·d − b·c` < 0 means the item is mirrored (flipped). Rotation i
 |------|---------|---------|---------|
 | Container `uea`, `−1 0 0 1` | Horizontal flip (det −1) | "rotated by 180.00 degrees" | ❌ **B7** |
 | An image `0 −4.42 −4.42 0` | x axis → (0, −4.42), y axis → (−4.42, 0): a −90° turn of a mirrored image (det −19.5) → flip | "rotated by −90.00 degrees" | ❌ **B7** |
+
+**Rule (confirmed):** judge the *end state*. If the item ends up only rotated (and scaled), it's a warning; if it
+ends up mirrored, it's a flip error. For every flagged item in the test set, combining the frame's and the image's
+transforms still leaves it mirrored. None cancel out, so all 21 packages' cases are flips under this rule.
 
 ## 2026-10-10 — *SEMCO1 Fixed.zip* (composer pass data): kerning set on text
 
