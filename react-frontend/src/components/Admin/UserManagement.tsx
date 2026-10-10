@@ -9,6 +9,7 @@ import {
   Check,
   Inbox,
   Mail,
+  MessageSquare,
   MoreHorizontal,
   Shield,
   ShieldCheck,
@@ -567,13 +568,23 @@ export function UserManagement() {
                             </span>
                           </div>
                           {r.why_need_access ? (
-                            <div className="ml-12 mt-3 rounded-lg border-l-2 border-neutral-300 bg-neutral-50 px-3 py-2 text-sm leading-relaxed text-neutral-700 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-300">
-                              <p className="line-clamp-3 whitespace-pre-line" title={r.why_need_access}>
+                            <div className="ml-12 mt-3 max-w-2xl rounded-lg border bg-muted/50 px-3 py-2.5">
+                              <p className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                                <MessageSquare className="h-3 w-3" aria-hidden />
+                                Reason for access
+                              </p>
+                              <p
+                                className="line-clamp-3 whitespace-pre-line text-sm leading-relaxed text-foreground"
+                                title={r.why_need_access}
+                              >
                                 {r.why_need_access}
                               </p>
                             </div>
                           ) : (
-                            <p className="ml-12 mt-2 text-xs italic text-muted-foreground">No reason provided</p>
+                            <p className="ml-12 mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
+                              <MessageSquare className="h-3 w-3" aria-hidden />
+                              No reason provided
+                            </p>
                           )}
                         </div>
                         <div className="ml-12 flex shrink-0 items-center gap-2 sm:ml-0 sm:pt-1">
