@@ -1,20 +1,28 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Loader2, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle, FileCheck2, X } from 'lucide-react';
 import { useAuth } from '../AuthContext';
 import { baseURL } from '../Analytics/api';
 import { Button } from '../ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../ui/card';
 import { Checkbox } from '../ui/checkbox';
 import { Input } from '../ui/input';
+import { cn } from '../../lib/utils';
 
 const REQUEST_SUBMITTED_STORAGE_KEY = 'requestSubmittedEmail';
+
+/** Everyone confirms these before signing in. */
+const ACKNOWLEDGEMENTS: React.ReactNode[] = [
+  <>
+    This is a workaround, <strong className="font-medium text-zinc-100">not a solution</strong>.
+  </>,
+  <>
+    This is River&apos;s weekend project and{' '}
+    <strong className="font-medium text-zinc-100">not a Frontify-sponsored Template Checker</strong>.
+  </>,
+  <>
+    There is <strong className="font-medium text-zinc-100">no expectation of maintenance</strong>.
+  </>,
+];
 /** Set by AuthContext when user gets 403 so we can pre-fill email and show the request form. */
 const ACCESS_DENIED_EMAIL_KEY = 'template-checker-accessDeniedEmail';
 
@@ -65,9 +73,7 @@ export default function Login() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { signInWithGoogle, loading, accessDenied, requestSubmittedForEmail } = useAuth();
-  const [checked1, setChecked1] = useState(false);
-  const [checked2, setChecked2] = useState(false);
-  const [checked3, setChecked3] = useState(false);
+  const [acknowledged, setAcknowledged] = useState<boolean[]>(() => ACKNOWLEDGEMENTS.map(() => false));
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [requestEmail, setRequestEmail] = useState('');
   const [requestWhy, setRequestWhy] = useState('');
@@ -109,7 +115,8 @@ export default function Login() {
   }, [searchParams, navigate]);
 
   const showAccessDenied = accessDenied || searchParams.get('accessDenied') === '1';
-  const canSignIn = checked1 && checked2 && checked3;
+  const acknowledgedCount = acknowledged.filter(Boolean).length;
+  const canSignIn = acknowledgedCount === ACKNOWLEDGEMENTS.length;
   const submittedEmail = requestSubmittedForEmail || requestSubmittedEmail;
 
   const handleSubmitAccessRequest = async (e: React.FormEvent) => {
@@ -149,146 +156,121 @@ export default function Login() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-x-hidden bg-zinc-950 px-4 py-12 sm:px-6 lg:px-8">
-      {/* Single soft gradient — calm, no clutter */}
-      <div
-        className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,119,198,0.15),transparent_50%)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_60%_40%_at_80%_100%,rgba(82,82,91,0.12),transparent_50%)]"
-        aria-hidden
-      />
+    <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-950 px-4 py-12 text-zinc-100">
+      <main className="w-full max-w-[420px]">
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6 shadow-xl shadow-black/30 sm:p-8">
+          <header className="text-center">
+            <h1 className="flex items-center justify-center gap-2 text-lg font-semibold tracking-tight">
+              <FileCheck2 className="h-5 w-5 text-zinc-400" strokeWidth={1.75} aria-hidden />
+              Template Checker
+            </h1>
+            <p className="mt-1 text-sm text-zinc-400">Validate and check Frontify templates</p>
+          </header>
 
-      <Card className="relative z-10 w-full max-w-md border border-zinc-800/80 bg-zinc-900/60 shadow-2xl shadow-black/40 backdrop-blur-xl sm:max-w-md rounded-2xl overflow-hidden">
-        {/* Subtle top edge highlight */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-zinc-500/40 to-transparent" aria-hidden />
+          {authErrorFromUrl && (
+            <div role="alert" className="mt-6 flex items-start gap-2.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2.5">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-amber-200">Sign-in issue</p>
+                <p className="mt-0.5 text-sm leading-relaxed text-zinc-300">{authErrorFromUrl}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setAuthErrorFromUrl(null)}
+                className="grid h-5 w-5 shrink-0 place-items-center rounded text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+                aria-label="Dismiss"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
 
-        <CardHeader className="space-y-2 text-center pb-2">
-          <CardTitle className="text-xl font-semibold tracking-tight text-zinc-100">
-            Template Checker
-          </CardTitle>
-          <CardDescription className="text-sm text-zinc-400">
-            Validate and check Frontify templates
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="space-y-6 pt-2">
-          <p className="text-xs text-zinc-500">
-            I know these acknowledgments are annoying, but I want to make sure expectations are set.
-          </p>
-
-          <div className="space-y-1">
-            <p className="text-xs text-zinc-500 mb-1">Check each box to continue</p>
-            <label
-              htmlFor="ack1"
-              className="flex items-center gap-3 cursor-pointer group rounded-lg py-1.5 px-2 -mx-2 -my-1 hover:bg-zinc-800/50 transition-colors"
-            >
-              <Checkbox
-                id="ack1"
-                checked={checked1}
-                onCheckedChange={(value) => setChecked1(value === true)}
-                className="shrink-0 h-5 w-5 border-2 border-zinc-500 data-[state=checked]:bg-zinc-100 data-[state=checked]:border-zinc-100 data-[state=checked]:text-zinc-900 group-hover:border-zinc-400 transition-colors"
-              />
-              <span className="text-xs text-zinc-300 group-hover:text-zinc-200 transition-colors leading-relaxed">
-                I understand this is a workaround <strong className="font-medium text-zinc-100">NOT A SOLUTION</strong>.
+          <section className="mt-7" aria-labelledby="ack-heading">
+            <div className="flex items-baseline justify-between gap-3">
+              <h2 id="ack-heading" className="text-sm font-medium">Before you sign in</h2>
+              <span className="text-xs tabular-nums text-zinc-500" aria-live="polite">
+                {acknowledgedCount} of {ACKNOWLEDGEMENTS.length}
               </span>
-            </label>
-            <label
-              htmlFor="ack2"
-              className="flex items-center gap-3 cursor-pointer group rounded-lg py-1.5 px-2 -mx-2 -my-1 hover:bg-zinc-800/50 transition-colors"
-            >
-              <Checkbox
-                id="ack2"
-                checked={checked2}
-                onCheckedChange={(value) => setChecked2(value === true)}
-                className="shrink-0 h-5 w-5 border-2 border-zinc-500 data-[state=checked]:bg-zinc-100 data-[state=checked]:border-zinc-100 data-[state=checked]:text-zinc-900 group-hover:border-zinc-400 transition-colors"
-              />
-              <span className="text-xs text-zinc-300 group-hover:text-zinc-200 transition-colors leading-relaxed">
-                I understand this is River&apos;s weekend project and <strong className="font-medium text-zinc-100">not a Frontify sponsored Template Checker</strong>.
-              </span>
-            </label>
-            <label
-              htmlFor="ack3"
-              className="flex items-center gap-3 cursor-pointer group rounded-lg py-1.5 px-2 -mx-2 -my-1 hover:bg-zinc-800/50 transition-colors"
-            >
-              <Checkbox
-                id="ack3"
-                checked={checked3}
-                onCheckedChange={(value) => setChecked3(value === true)}
-                className="shrink-0 h-5 w-5 border-2 border-zinc-500 data-[state=checked]:bg-zinc-100 data-[state=checked]:border-zinc-100 data-[state=checked]:text-zinc-900 group-hover:border-zinc-400 transition-colors"
-              />
-              <span className="text-xs text-zinc-300 group-hover:text-zinc-200 transition-colors leading-relaxed">
-                I understand there is <strong className="font-medium text-zinc-100">no expectation of maintenance</strong>.
-              </span>
-            </label>
-          </div>
+            </div>
+            <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+              I know these are annoying, but I want to make sure expectations are set.
+            </p>
+            <div className="mt-3 divide-y divide-zinc-800 overflow-hidden rounded-lg border border-zinc-800">
+              {ACKNOWLEDGEMENTS.map((text, i) => (
+                <label
+                  key={i}
+                  htmlFor={`ack${i + 1}`}
+                  className={cn(
+                    'flex cursor-pointer items-start gap-3 px-3.5 py-3 transition-colors hover:bg-zinc-800/60',
+                    acknowledged[i] && 'bg-zinc-800/40'
+                  )}
+                >
+                  <Checkbox
+                    id={`ack${i + 1}`}
+                    checked={acknowledged[i]}
+                    onCheckedChange={(value) =>
+                      setAcknowledged((prev) => prev.map((v, j) => (j === i ? value === true : v)))
+                    }
+                    className="mt-0.5 h-4 w-4 shrink-0 border-zinc-500 data-[state=checked]:border-zinc-100 data-[state=checked]:bg-zinc-100 data-[state=checked]:text-zinc-900"
+                  />
+                  <span className={cn('text-sm leading-snug transition-colors', acknowledged[i] ? 'text-zinc-200' : 'text-zinc-400')}>
+                    {text}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </section>
 
           <Button
-            className="h-11 w-full rounded-xl bg-white text-zinc-900 font-medium shadow-lg shadow-black/20 hover:bg-zinc-100 transition-colors"
+            className="mt-5 h-10 w-full rounded-lg bg-white font-medium text-zinc-900 hover:bg-zinc-200 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:opacity-100"
             onClick={signInWithGoogle}
             disabled={!canSignIn || loading}
           >
             {loading ? (
               <>
-                <Loader2 className="h-5 w-5 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
                 Signing in…
               </>
             ) : (
               <>
-                <GoogleIcon className="h-5 w-5" />
+                <GoogleIcon className="h-4 w-4" />
                 Sign in with Google
               </>
             )}
           </Button>
-
-          {authErrorFromUrl && (
-            <div className="rounded-xl border border-amber-500/50 bg-amber-500/10 px-4 py-3 flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 shrink-0 text-amber-400 mt-0.5" aria-hidden />
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-amber-200">Sign-in issue</p>
-                <p className="text-sm text-zinc-300">{authErrorFromUrl}</p>
-                <button
-                  type="button"
-                  onClick={() => setAuthErrorFromUrl(null)}
-                  className="text-xs text-amber-300 hover:text-amber-200 underline"
-                >
-                  Dismiss
-                </button>
-              </div>
-            </div>
+          {!canSignIn && !loading && (
+            <p className="mt-2 text-center text-xs text-zinc-500">Check all three to continue.</p>
           )}
 
-          <div className="border-t border-zinc-800" />
-
-          <div className="rounded-xl border border-zinc-700/50 bg-zinc-800/20 px-4 py-4 space-y-2">
-            <p className="text-xs font-medium uppercase tracking-wider text-zinc-500 text-center">
-              Need access?
-            </p>
+          <div className="mt-6 border-t border-zinc-800 pt-5">
             {submittedEmail ? (
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400/90 mt-0.5" aria-hidden />
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
                 <p className="text-sm leading-relaxed text-zinc-300">
-                  We&apos;ve submitted an access request for <span className="font-medium text-zinc-100">{submittedEmail}</span>. An admin will review it shortly.
+                  Access requested for <span className="font-medium text-zinc-100">{submittedEmail}</span>. An admin will
+                  review it shortly.
                 </p>
               </div>
-            ) : showAccessDenied ? (
-              <div className="flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 shrink-0 text-amber-400/90 mt-0.5" aria-hidden />
-                <p className="text-sm leading-relaxed text-zinc-300">
-                  Your account isn&apos;t authorized yet. Enter your email and tell us why you need access below.
-                </p>
-              </div>
-            ) : null}
-            {showRequestForm && !submittedEmail ? (
-              <form onSubmit={handleSubmitAccessRequest} className="space-y-2">
+            ) : showRequestForm ? (
+              <form onSubmit={handleSubmitAccessRequest} className="space-y-3">
+                {showAccessDenied ? (
+                  <div className="flex items-start gap-2.5">
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden />
+                    <p className="text-sm leading-relaxed text-zinc-300">
+                      Your account isn&apos;t authorized yet. Tell us who you are and why you need access.
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-sm font-medium">Request access</p>
+                )}
                 <Input
                   type="email"
                   placeholder="you@company.com"
                   value={requestEmail}
                   onChange={(e) => { setRequestEmail(e.target.value); setRequestError(null); }}
                   disabled={requestSubmitting}
-                  className="h-10 bg-zinc-800/50 border-zinc-600 text-zinc-100 placeholder:text-zinc-500"
+                  className="h-10 border-zinc-700 bg-zinc-950/40 text-zinc-100 placeholder:text-zinc-500"
+                  aria-label="Your email"
                   autoFocus
                 />
                 <textarea
@@ -297,17 +279,15 @@ export default function Login() {
                   onChange={(e) => { setRequestWhy(e.target.value); setRequestError(null); }}
                   disabled={requestSubmitting}
                   rows={3}
-                  className="w-full rounded-md border border-zinc-600 bg-zinc-800/50 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-0 focus:ring-offset-zinc-900 disabled:opacity-50"
+                  className="w-full resize-none rounded-md border border-zinc-700 bg-zinc-950/40 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 disabled:opacity-50"
                   aria-label="Why you need access"
                 />
-                {requestError && (
-                  <p className="text-xs text-amber-400">{requestError}</p>
-                )}
+                {requestError && <p className="text-xs text-amber-400">{requestError}</p>}
                 <div className="flex gap-2">
                   <Button
                     type="submit"
                     disabled={requestSubmitting}
-                    className="flex-1 h-10 border-zinc-600 bg-zinc-700/50 text-zinc-200 hover:bg-zinc-600/50 hover:text-zinc-100"
+                    className="h-9 flex-1 border border-zinc-700 bg-zinc-800 text-zinc-100 hover:bg-zinc-700"
                   >
                     {requestSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Submit request'}
                   </Button>
@@ -316,37 +296,31 @@ export default function Login() {
                     variant="ghost"
                     onClick={() => { setShowRequestForm(false); setRequestError(null); setRequestWhy(''); }}
                     disabled={requestSubmitting}
-                    className="text-zinc-400 hover:text-zinc-200"
+                    className="h-9 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
                   >
                     Cancel
                   </Button>
                 </div>
               </form>
-            ) : !submittedEmail ? (
-              <div className="pt-1 flex justify-center">
-                <Button
+            ) : (
+              <p className="text-center text-sm text-zinc-400">
+                {showAccessDenied ? "Your account isn't authorized yet. " : "Don't have access? "}
+                <button
                   type="button"
-                  variant="outline"
                   onClick={() => setShowRequestForm(true)}
-                  className="w-full border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-700/50 hover:text-zinc-100 hover:border-zinc-500"
+                  className="font-medium text-zinc-100 underline decoration-zinc-600 underline-offset-4 hover:decoration-zinc-300"
                 >
-                  <Mail className="h-4 w-4" aria-hidden />
                   Request access
-                </Button>
-              </div>
-            ) : null}
+                </button>
+              </p>
+            )}
           </div>
+        </div>
 
-          <div className="border-t border-zinc-800" />
-
-          <p className="text-center text-xs leading-relaxed text-zinc-500">
-            PS: If the template checker saved your day, feel free to send a beer{' '}
-            <span className="whitespace-nowrap">my way 😉</span>
-            <br />
-            Cheers to debugging🍺 — River
-          </p>
-        </CardContent>
-      </Card>
+        <p className="mt-6 text-center text-xs leading-relaxed text-zinc-500">
+          Saved your day? Feel free to send a beer my way 🍺 — River
+        </p>
+      </main>
     </div>
   );
 }
