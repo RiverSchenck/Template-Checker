@@ -856,12 +856,19 @@ def _run_filters():
     )
 
 
+def _bad_analytics_request(error):
+    """400 for invalid analytics parameters. The specific reason is logged, not echoed back: exception text
+    never goes into a response (CodeQL py/stack-trace-exposure), and our own frontend validates first anyway."""
+    current_app.logger.info('Rejected analytics request: %s', error)
+    return jsonify({'error': {'message': 'Invalid analytics request. Check the date range and filters.'}}), 400
+
+
 def _analytics_response(load):
     """Run an analytics query: 400 for bad parameters, 500 (logged, generic message) for anything else."""
     try:
         data = load()
     except AnalyticsQueryError as e:
-        return jsonify({'error': {'message': str(e)}}), 400
+        return _bad_analytics_request(e)
     except Exception:
         return _internal_error('Failed to load analytics')
     if isinstance(data, dict) and 'error' in data:
@@ -903,7 +910,7 @@ def analytics_runs_csv():
     try:
         export = export_runs_csv(_analytics_period(), _run_filters())
     except AnalyticsQueryError as e:
-        return jsonify({'error': {'message': str(e)}}), 400
+        return _bad_analytics_request(e)
     except Exception:
         return _internal_error('Failed to export analytics')
     if 'error' in export:

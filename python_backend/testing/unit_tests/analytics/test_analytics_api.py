@@ -179,14 +179,15 @@ def test_overview_endpoint(client, fake_rpc):
     assert fake_rpc.calls[0][0] == 'analytics_overview'
 
 
-def test_bad_parameters_are_a_400_with_the_reason(client, fake_rpc):
-    r = client.get('/analytics/overview?days=9999', headers=AUTH)
-    assert r.status_code == 400
-    assert 'days must be between' in r.get_json()['error']['message']
-    r = client.get('/analytics/runs?status=nope', headers=AUTH)
-    assert r.status_code == 400
-    r = client.get('/analytics/issues/bad-type!', headers=AUTH)
-    assert r.status_code == 400
+def test_bad_parameters_are_a_generic_400_and_the_reason_is_only_logged(client, fake_rpc, caplog):
+    generic = {'error': {'message': 'Invalid analytics request. Check the date range and filters.'}}
+    with caplog.at_level('INFO'):
+        r = client.get('/analytics/overview?days=9999', headers=AUTH)
+    assert (r.status_code, r.get_json()) == (400, generic)
+    assert 'days must be between' in caplog.text
+    for path in ('/analytics/runs?status=nope', '/analytics/issues/bad-type!', '/analytics/runs.csv?status=nope'):
+        r = client.get(path, headers=AUTH)
+        assert (r.status_code, r.get_json()) == (400, generic)
     assert fake_rpc.calls == []
 
 
