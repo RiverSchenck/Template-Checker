@@ -14,7 +14,6 @@ import {
 type ValidationListProps = {
   jsonResponse: ValidationResult;
   previousJsonResponse?: ValidationResult | null;
-  checkerResponse: (jsonResponse: ValidationResult) => void;
   seeDetails?: boolean;
 };
 
@@ -31,7 +30,6 @@ const defaultKeys: (keyof ValidationResult)[] = [
 function ClassicValidationList({
   jsonResponse,
   previousJsonResponse,
-  checkerResponse,
   seeDetails,
 }: ValidationListProps) {
   const [filters, setFilters] = useState<ValidationFilterState>({
@@ -172,7 +170,6 @@ function ClassicValidationList({
       <div className="bg-muted/30 px-[4%]">
         <ValidationStats
           jsonResponse={jsonResponse}
-          checkerResponse={checkerResponse}
           previousJsonResponse={previousJsonResponse}
           seeDetails={seeDetails}
         />

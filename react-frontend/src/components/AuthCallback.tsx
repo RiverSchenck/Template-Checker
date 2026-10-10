@@ -26,7 +26,6 @@ export default function AuthCallback() {
   const [searchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [errorType, setErrorType] = useState<'not_allowed' | 'general' | null>(null);
-  const [loading, setLoading] = useState(true);
   /** Set when getSession() returns a session; we wait for context to have session before navigating. */
   const [sessionReceived, setSessionReceived] = useState(false);
 
@@ -51,7 +50,6 @@ export default function AuthCallback() {
               ? "Your email domain or address isn't authorized yet. You'll be redirected to the sign-in page where you can submit an access request for an admin to review. If you need help, contact River."
               : errorMessage || 'Authentication failed. Please try again.'
           );
-          setLoading(false);
           setTimeout(() => navigate('/'), isNotAllowed ? 5000 : 3000);
           return;
         }
@@ -69,24 +67,20 @@ export default function AuthCallback() {
               ? "Your email domain or address isn't authorized yet. You'll be redirected to the sign-in page where you can submit an access request for an admin to review. If you need help, contact River."
               : errorMsg || 'Failed to complete authentication. Please try again.'
           );
-          setLoading(false);
           setTimeout(() => navigate('/'), isNotAllowed ? 5000 : 3000);
           return;
         }
 
         if (data.session) {
-          setLoading(false);
           setSessionReceived(true);
         } else {
           // No session yet (hash may not be processed); retry once
           const { data: retryData } = await supabase.auth.getSession();
           if (retryData.session) {
-            setLoading(false);
             setSessionReceived(true);
           } else {
             setErrorType('general');
             setError('No session received. Please try signing in again.');
-            setLoading(false);
             setTimeout(() => navigate('/'), 3000);
           }
         }
@@ -100,7 +94,6 @@ export default function AuthCallback() {
             ? "Your email domain or address isn't authorized yet. You'll be redirected to the sign-in page where you can submit an access request for an admin to review. If you need help, contact River."
             : errorMsg
         );
-        setLoading(false);
         setTimeout(() => navigate('/'), isNotAllowed ? 5000 : 3000);
       }
     };

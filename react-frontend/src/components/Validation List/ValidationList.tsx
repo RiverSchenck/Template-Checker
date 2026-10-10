@@ -7,7 +7,6 @@ import ClassicValidationList from './ClassicValidationList';
 type ValidationListProps = {
   jsonResponse: ValidationResult;
   previousJsonResponse?: ValidationResult | null;
-  checkerResponse: (jsonResponse: ValidationResult) => void;
   seeDetails?: boolean;
 };
 
@@ -24,7 +23,7 @@ function readStoredView(): ResultsView {
   }
 }
 
-function ValidationList({ jsonResponse, previousJsonResponse, checkerResponse, seeDetails }: ValidationListProps) {
+function ValidationList({ jsonResponse, previousJsonResponse, seeDetails }: ValidationListProps) {
   const [view, setView] = useState<ResultsView>(readStoredView);
 
   const changeView = (next: ResultsView) => {
@@ -56,7 +55,6 @@ function ValidationList({ jsonResponse, previousJsonResponse, checkerResponse, s
         <ClassicValidationList
           jsonResponse={jsonResponse}
           previousJsonResponse={previousJsonResponse}
-          checkerResponse={checkerResponse}
           seeDetails={seeDetails}
         />
       </div>

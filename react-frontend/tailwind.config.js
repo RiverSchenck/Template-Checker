@@ -1,3 +1,5 @@
+import tailwindcssAnimate from "tailwindcss-animate";
+
 // Theme colors are CSS variables holding full oklch() values, so Tailwind can't
 // inject an alpha channel itself. color-mix() makes opacity modifiers like
 // bg-muted/40 work; without a modifier <alpha-value> is 1 (the solid color).
@@ -5,7 +7,7 @@ const withAlpha = (name) =>
   `color-mix(in oklab, var(--${name}) calc(<alpha-value> * 100%), transparent)`;
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -104,5 +106,5 @@ module.exports = {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 };

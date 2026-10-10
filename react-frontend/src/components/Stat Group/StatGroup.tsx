@@ -2,18 +2,16 @@ import React from 'react';
 import { ValidationResult } from '../../types';
 import countValidationIssues from '../ValidationCount';
 import StatsToggle from './StatDetails';
-import ReuploadButton from './ReuploadButton';
 import { Card, CardContent } from '../ui/card';
 import { Separator } from '../ui/separator';
 
 type ValidationStatsProps = {
   jsonResponse: ValidationResult;
-  checkerResponse: (jsonResponse: ValidationResult) => void;
   previousJsonResponse?: ValidationResult | null;
   seeDetails?: boolean;
 };
 
-function ValidationStats({ jsonResponse, checkerResponse, previousJsonResponse, seeDetails }: ValidationStatsProps) {
+function ValidationStats({ jsonResponse, previousJsonResponse, seeDetails }: ValidationStatsProps) {
   const { totalErrors, totalWarnings, totalInfos } = countValidationIssues(jsonResponse);
 
   return (

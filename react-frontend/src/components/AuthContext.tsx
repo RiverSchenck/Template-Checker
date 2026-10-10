@@ -142,7 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
+    const cancelled = false;
     if (!session) {
       setCurrentUser(null);
       setRole(null);
@@ -228,6 +228,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
     fetchMe();
+    // Keyed on token + user id only: re-fetching on every session object refresh would refetch /me needlessly.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.access_token, session?.user?.id]);
 
   const signInWithGoogle = async () => {

@@ -43,7 +43,6 @@ const ValidationCards = ({
       <ValidationStyle
         key={`${classifier}-${index}`}
         validationType={type}
-        category={category}
         items={items}
         classifierData={validationClassifiers[classifier]}
       />
