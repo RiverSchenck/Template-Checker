@@ -27,62 +27,77 @@ COMMENT_COLUMNS = (
 )
 
 
-class FeedbackError(ValueError):
-    """The request is invalid; the message is safe to show the user."""
+# Validation returns (value, error) instead of raising, so error messages are always our own fixed text and no
+# exception detail can reach a response.
+Result = tuple[Any, Optional[str]]
 
 
-def _text(value: Any, field: str, max_len: int, required: bool = True) -> Optional[str]:
+def _text(value: Any, field: str, max_len: int, required: bool = True) -> Result:
     if value is None or (isinstance(value, str) and not value.strip()):
-        if required:
-            raise FeedbackError(f'{field} is required')
-        return None
+        return None, (f'{field} is required' if required else None)
     if not isinstance(value, str):
-        raise FeedbackError(f'{field} must be text')
+        return None, f'{field} must be text'
     if len(value) > max_len:
-        raise FeedbackError(f'{field} must be {max_len} characters or fewer')
-    return value
+        return None, f'{field} must be {max_len} characters or fewer'
+    return value, None
 
 
-def _comment(raw: Any, summary: str) -> dict[str, Any]:
+def _comment(raw: Any, summary: str) -> Result:
     if not isinstance(raw, dict):
-        raise FeedbackError('Each comment must be an object')
+        return None, 'Each comment must be an object'
     section_key = raw.get('section_key')
     if not isinstance(section_key, str) or not SECTION_KEY.match(section_key):
-        raise FeedbackError('Each comment needs a valid section_key')
-    body = _text(raw.get('body'), 'Comment', MAX_BODY).strip()
-    title = _text(raw.get('section_title'), 'section_title', MAX_SECTION_TITLE, required=False)
+        return None, 'Each comment needs a valid section_key'
+    body, error = _text(raw.get('body'), 'Comment', MAX_BODY)
+    if error:
+        return None, error
+    title, error = _text(raw.get('section_title'), 'section_title', MAX_SECTION_TITLE, required=False)
+    if error:
+        return None, error
     comment = {
         'section_key': section_key,
         'section_title': title.strip() if title else None,
-        'body': body,
+        'body': body.strip(),
         'quote': None,
         'quote_start': None,
         'quote_end': None,
     }
     quote = raw.get('quote')
     if quote is not None and quote != '':
-        quote = _text(quote, 'Quote', MAX_QUOTE)
+        quote, error = _text(quote, 'Quote', MAX_QUOTE)
+        if error:
+            return None, error
         start, end = raw.get('quote_start'), raw.get('quote_end')
         valid = all(isinstance(n, int) and not isinstance(n, bool) for n in (start, end))
         # The quote must be exactly the text at those offsets in the summary that was reviewed.
         if not valid or not 0 <= start < end <= len(summary) or summary[start:end] != quote:
-            raise FeedbackError("A quoted comment doesn't match the summary text")
+            return None, "A quoted comment doesn't match the summary text"
         comment.update(quote=quote, quote_start=start, quote_end=end)
-    return comment
+    return comment, None
 
 
-def validate_review(data: Any) -> tuple[str, str, list[dict[str, Any]]]:
-    """(template_name, summary, comments) from a request body, or FeedbackError with a user-safe message."""
+def validate_review(data: Any) -> Result:
+    """((template_name, summary, comments), None) from a request body, or (None, user-safe error message)."""
     if not isinstance(data, dict):
-        raise FeedbackError('Invalid request')
-    template_name = _text(data.get('template_name'), 'template_name', MAX_TEMPLATE_NAME).strip()
-    summary = _text(data.get('summary'), 'summary', MAX_SUMMARY)
+        return None, 'Invalid request'
+    template_name, error = _text(data.get('template_name'), 'template_name', MAX_TEMPLATE_NAME)
+    if error:
+        return None, error
+    summary, error = _text(data.get('summary'), 'summary', MAX_SUMMARY)
+    if error:
+        return None, error
     raw_comments = data.get('comments') or []
     if not isinstance(raw_comments, list):
-        raise FeedbackError('comments must be a list')
+        return None, 'comments must be a list'
     if len(raw_comments) > MAX_COMMENTS:
-        raise FeedbackError(f'You can leave at most {MAX_COMMENTS} comments on one summary')
-    return template_name, summary, [_comment(c, summary) for c in raw_comments]
+        return None, f'You can leave at most {MAX_COMMENTS} comments on one summary'
+    comments = []
+    for raw in raw_comments:
+        comment, error = _comment(raw, summary)
+        if error:
+            return None, error
+        comments.append(comment)
+    return (template_name.strip(), summary, comments), None
 
 
 def create_review(user_id: str, template_name: str, summary: str, comments: list[dict[str, Any]]) -> dict[str, Any]:
@@ -138,9 +153,7 @@ def list_user_comments(user_id: str) -> list[dict[str, Any]]:
 
 
 def list_feedback(status: str = 'open') -> dict[str, Any]:
-    """Every comment (filtered by status) with the author's email, plus how many reviews had feedback."""
-    if status not in STATUSES:
-        raise FeedbackError(f"status must be one of: {', '.join(STATUSES)}")
+    """Every comment (filtered by status: one of STATUSES) with the author's email, plus review counts."""
     supabase = get_supabase_client()
     q = supabase.table('summary_comments').select(COMMENT_COLUMNS)
     if status == 'open':

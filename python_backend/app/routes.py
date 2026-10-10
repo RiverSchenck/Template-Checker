@@ -782,10 +782,10 @@ def create_summary_review():
     user_row = _current_users_row()
     if not user_row:
         return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
-    try:
-        template_name, summary, comments = summary_feedback.validate_review(request.get_json(silent=True))
-    except summary_feedback.FeedbackError as e:
-        return jsonify({'error': {'message': str(e)}}), 400
+    review_input, error = summary_feedback.validate_review(request.get_json(silent=True))
+    if error:
+        return jsonify({'error': {'message': error}}), 400
+    template_name, summary, comments = review_input
     try:
         review = summary_feedback.create_review(str(user_row['id']), template_name, summary, comments)
     except Exception:
@@ -817,10 +817,11 @@ def list_my_summary_feedback():
 @require_admin
 def admin_list_summary_feedback():
     """Every summary comment with its author, plus review counts (admin only). ?status=open|resolved|all."""
+    status = request.args.get('status', 'open')
+    if status not in summary_feedback.STATUSES:
+        return jsonify({'error': {'message': 'status must be one of: open, resolved, all'}}), 400
     try:
-        data = summary_feedback.list_feedback(request.args.get('status', 'open'))
-    except summary_feedback.FeedbackError as e:
-        return jsonify({'error': {'message': str(e)}}), 400
+        data = summary_feedback.list_feedback(status)
     except Exception:
         return _internal_error()
     return jsonify({
