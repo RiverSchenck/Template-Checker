@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-import { AlertCircle, FileArchive, FileCheck2, Upload, X } from 'lucide-react';
+import { AlertCircle, Check, FileCheck2, X } from 'lucide-react';
 import { ValidationResult } from '../../types';
 import countValidationIssues from '../ValidationCount';
 import SuccessModal from './SuccessModal';
 import { Button } from '../ui/button';
-import { Segmented } from '../layout/page-kit';
+import { PageHeader, PageShell, Segmented } from '../layout/page-kit';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 import { useAuth } from '../AuthContext';
 import { cn } from '../../lib/utils';
@@ -21,8 +21,6 @@ interface TemplateUploaderProps {
   onUploadComplete?: () => void;
   seeDetails?: (value: boolean) => void;
   navigateToResults?: () => void;
-  /** Center the output toggle and hint under the drop area (the page card). */
-  centered?: boolean;
   className?: string;
 }
 
@@ -35,6 +33,81 @@ function formatElapsed(seconds: number): string {
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 }
 
+const PAGE = 'absolute inset-0 rounded-md border bg-background shadow-sm';
+const BACK_PAGE = 'absolute inset-0 rounded-md border border-muted-foreground/30 bg-muted shadow-sm';
+const PAGE_LINES = (
+  <>
+    <span className="absolute left-2 right-2 top-2.5 h-[3px] rounded-full bg-muted-foreground/25" />
+    <span className="absolute left-2 right-4 top-[17px] h-[3px] rounded-full bg-muted-foreground/25" />
+    <span className="absolute left-2 right-6 top-[24px] h-[3px] rounded-full bg-muted-foreground/25" />
+  </>
+);
+const FAN = 'transition-transform duration-300 ease-[cubic-bezier(.3,1.4,.5,1)] motion-reduce:transition-none';
+
+/** A little stack of template pages. Fans out on hover/drag; bobs while a check runs. */
+function PageStack({ open, working }: { open?: boolean; working?: boolean }) {
+  if (working) {
+    return (
+      <div className="relative h-11 w-9 shrink-0" aria-hidden>
+        <div className={cn(BACK_PAGE, '-rotate-[10deg] motion-safe:animate-page-bob [animation-delay:-0.4s]')} />
+        <div className={cn(BACK_PAGE, 'rotate-[10deg] motion-safe:animate-page-bob [animation-delay:-0.8s]')} />
+        <div className={cn(PAGE, 'border-violet-400/70 motion-safe:animate-page-bob')}>
+          <span className="absolute left-1.5 right-1.5 top-2 h-[2px] rounded-full bg-muted-foreground/25" />
+          <span className="absolute left-1.5 right-3 top-3.5 h-[2px] rounded-full bg-muted-foreground/25" />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="relative h-[72px] w-[60px]" aria-hidden>
+      <div
+        className={cn(
+          BACK_PAGE,
+          FAN,
+          '-translate-x-1 -rotate-[8deg]',
+          open
+            ? '-translate-x-6 translate-y-1 -rotate-[18deg]'
+            : 'group-hover:-translate-x-6 group-hover:translate-y-1 group-hover:-rotate-[18deg]'
+        )}
+      >
+        {PAGE_LINES}
+      </div>
+      <div
+        className={cn(
+          BACK_PAGE,
+          FAN,
+          'translate-x-1 rotate-[8deg]',
+          open
+            ? 'translate-x-6 translate-y-1 rotate-[16deg]'
+            : 'group-hover:translate-x-6 group-hover:translate-y-1 group-hover:rotate-[16deg]'
+        )}
+      >
+        {PAGE_LINES}
+      </div>
+      <div
+        className={cn(
+          PAGE,
+          FAN,
+          'transition-[transform,border-color]',
+          'border-muted-foreground/40',
+          open ? '-translate-y-2 border-violet-400' : 'group-hover:-translate-y-2 group-hover:border-violet-400'
+        )}
+      >
+        {PAGE_LINES}
+        <span
+          className={cn(
+            'absolute -bottom-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-violet-500 text-white shadow-sm',
+            'transition-transform delay-100 duration-300 ease-[cubic-bezier(.3,1.6,.5,1)] motion-reduce:transition-none',
+            open ? 'scale-100' : 'scale-0 group-hover:scale-100'
+          )}
+        >
+          <Check className="h-3 w-3" strokeWidth={3} />
+        </span>
+      </div>
+    </div>
+  );
+}
+
 /** Drop zone, output choice and upload/check progress. Used by the page and the reupload dialog. */
 export function TemplateUploader({
   checkerResponse,
@@ -42,7 +115,6 @@ export function TemplateUploader({
   onUploadComplete,
   seeDetails,
   navigateToResults,
-  centered = false,
   className,
 }: TemplateUploaderProps) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -196,9 +268,7 @@ export function TemplateUploader({
         <div className="flex min-h-[13rem] flex-col justify-center rounded-xl border bg-card px-6 py-8" aria-live="polite">
           <div className="mx-auto w-full max-w-md">
             <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border bg-muted/50">
-                <FileArchive className="h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
-              </div>
+              <PageStack working />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium" title={current.name}>
                   {current.name}
@@ -215,11 +285,11 @@ export function TemplateUploader({
             <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-muted">
               {phase === 'uploading' ? (
                 <div
-                  className="h-full rounded-full bg-foreground/70 transition-[width] duration-200 ease-out"
+                  className="h-full rounded-full bg-violet-500 transition-[width] duration-200 ease-out"
                   style={{ width: `${uploadProgress}%` }}
                 />
               ) : (
-                <div className="h-full w-2/5 animate-indeterminate rounded-full bg-foreground/70" />
+                <div className="h-full w-2/5 animate-indeterminate rounded-full bg-violet-500" />
               )}
             </div>
             <p className="mt-3 text-xs text-muted-foreground">
@@ -239,29 +309,22 @@ export function TemplateUploader({
           className={cn(
             'group flex min-h-[13rem] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed px-6 py-10 text-center transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background',
             isDragging
-              ? 'border-foreground/50 bg-muted'
-              : 'border-muted-foreground/45 bg-muted/40 hover:border-muted-foreground/70 hover:bg-muted/60'
+              ? 'border-violet-500 bg-violet-500/5'
+              : 'border-muted-foreground/40 bg-muted/30 hover:border-violet-400/70 hover:bg-muted/50'
           )}
         >
           <input type="file" accept=".zip" onChange={onFileInputChange} className="sr-only" />
-          <div
-            className={cn(
-              'grid h-12 w-12 place-items-center rounded-full border bg-background shadow-sm transition-transform',
-              isDragging ? '-translate-y-0.5' : 'group-hover:-translate-y-0.5'
-            )}
-          >
-            <Upload className="h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
-          </div>
-          <p className="mt-4 text-sm font-medium text-foreground">
+          <PageStack open={isDragging} />
+          <p className="mt-5 text-sm font-medium text-foreground">
             {isDragging ? (
               'Drop to check'
             ) : (
               <>
-                Drop a .zip here or <span className="underline decoration-muted-foreground/50 underline-offset-4">browse</span>
+                Drop your template here or <span className="underline decoration-muted-foreground/50 underline-offset-4">browse</span>
               </>
             )}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground">Packaged InDesign template, up to 200 MB</p>
+          <p className="mt-1 text-xs text-muted-foreground">Packaged InDesign template (.zip), up to 200 MB</p>
         </label>
       )}
 
@@ -283,7 +346,7 @@ export function TemplateUploader({
         </div>
       )}
 
-      <div className={cn('flex items-center gap-x-3 gap-y-1.5', centered ? 'flex-col' : 'flex-wrap')}>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
         <Segmented<Output>
           ariaLabel="Output"
           value={output}
@@ -305,17 +368,13 @@ export function TemplateUploader({
 
 export default function FileUploadPage(props: TemplateUploaderProps) {
   return (
-    <div className="flex w-full flex-1 items-center justify-center px-4 pb-24 pt-10">
-      <div className="w-full max-w-xl rounded-2xl border bg-card p-6 shadow-[0_1px_3px_rgba(0,0,0,0.05)] sm:p-8">
-        <div className="mb-6 text-center">
-          <FileCheck2 className="mx-auto mb-3 h-7 w-7 text-muted-foreground" strokeWidth={1.5} aria-hidden />
-          <h1 className="text-2xl font-semibold tracking-tight">Check a template</h1>
-          <p className="mx-auto mt-1.5 max-w-sm text-sm leading-relaxed text-muted-foreground">
-            Upload a packaged InDesign template to find issues before it reaches the customer.
-          </p>
-        </div>
-        <TemplateUploader {...props} centered />
-      </div>
-    </div>
+    <PageShell>
+      <PageHeader
+        icon={FileCheck2}
+        title="Check template"
+        description="Upload a packaged InDesign template to find issues before it reaches the customer."
+      />
+      <TemplateUploader {...props} />
+    </PageShell>
   );
 }
