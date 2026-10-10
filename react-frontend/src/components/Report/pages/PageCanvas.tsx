@@ -37,8 +37,10 @@ export const severityStyles: Record<
   },
 };
 
-/** Boxes smaller than this (as a share of the page) are grown so they stay visible and clickable. */
-const MIN_SIZE = 0.025;
+/** Boxes smaller than this (in points) are grown so they stay visible and clickable. */
+const MIN_SIZE_PT = 12;
+/** Markers sit this many pixels outside the frame so they wrap the content instead of cutting into it. */
+const MARKER_OUTSET_PX = 3;
 
 type Box = { x: number; y: number; width: number; height: number; offPage: boolean };
 
@@ -61,8 +63,8 @@ export function placeOnPage(b: PageBounds, page: PageLayout): Box {
     const cy = Math.min(Math.max(b.y + b.height / 2, 0), page.height);
     box = { x: cx, y: cy, width: 0, height: 0 };
   }
-  const minW = page.width * MIN_SIZE;
-  const minH = page.height * MIN_SIZE;
+  const minW = Math.min(MIN_SIZE_PT, page.width);
+  const minH = Math.min(MIN_SIZE_PT, page.height);
   if (box.width < minW) box = { ...box, x: box.x - (minW - box.width) / 2, width: minW };
   if (box.height < minH) box = { ...box, y: box.y - (minH - box.height) / 2, height: minH };
   box.x = Math.min(Math.max(box.x, 0), page.width - box.width);
@@ -95,11 +97,11 @@ function PageCanvas({
   selectedLabel,
 }: PageCanvasProps) {
   const outlines = !page.preview || showOutlines;
-  const style = (b: { x: number; y: number; width: number; height: number }) => ({
-    left: pct(b.x, page.width),
-    top: pct(b.y, page.height),
-    width: pct(b.width, page.width),
-    height: pct(b.height, page.height),
+  const style = (b: { x: number; y: number; width: number; height: number }, outset = 0) => ({
+    left: `calc(${pct(b.x, page.width)} - ${outset}px)`,
+    top: `calc(${pct(b.y, page.height)} - ${outset}px)`,
+    width: `calc(${pct(b.width, page.width)} + ${outset * 2}px)`,
+    height: `calc(${pct(b.height, page.height)} + ${outset * 2}px)`,
   });
 
   return (
@@ -139,7 +141,7 @@ function PageCanvas({
               selectedKey && !selected && !hovered && 'opacity-50',
               hovered && !selected && styles.boxSelected
             )}
-            style={{ ...style(box), zIndex: selected ? 30 : hovered ? 20 : 10 }}
+            style={{ ...style(box, MARKER_OUTSET_PX), zIndex: selected ? 30 : hovered ? 20 : 10 }}
             onMouseEnter={() => onHover?.(marker.key)}
             onMouseLeave={() => onHover?.(null)}
             onClick={() => onSelect?.(marker.key)}

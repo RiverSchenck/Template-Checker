@@ -17,6 +17,7 @@ from src.parsers.PreferencesParser import PreferencesParser
 from src.parsers.MetadataParser import MetadataParser
 from src.classes.States import States
 from src.helpers.page_geometry import PageGeometryIndex
+from src.helpers.pdf_previews import find_package_pdf, render_pdf_previews
 from src.helpers.page_item_transform import (
     parse_item_transform,
     classify_page_item_transform,
@@ -41,6 +42,7 @@ class FrontifyChecker:
         self.unzipped_root_path: str = ''
         # Unarchived IDML
         self.idml_output_folder: str = ''
+        self.idml_path: str = ''
         self.spreads_dir: str = ''
         # XML Data
         self.stories_parser: StoriesParser = None
@@ -252,6 +254,7 @@ class FrontifyChecker:
         idml_path = self.validate_idml_files()
         if not idml_path:
             return States.EXIT
+        self.idml_path = idml_path
         if not self.unarchive_idml_files(idml_path):
             return States.EXIT
         return States.PARSE_XML
@@ -459,20 +462,35 @@ class FrontifyChecker:
         try:
             page_geometry = PageGeometryIndex(self.idml_output_folder)
             self.results.set_page_geometry(page_geometry)
-            if not self.metadata_xml_path:
-                return
-            # XMP PageNumber is the 1-based position of the page in the document.
-            page_by_index = {str(page['index']): page['page_id']
-                             for page in page_geometry.get_pages()}
             previews = {}
-            for preview in MetadataParser(self.metadata_xml_path, self.unzipped_root_path).previews_objs_list:
-                page_id = page_by_index.get(str(preview.page))
-                if page_id and preview.get_base_64():
-                    previews[page_id] = ''.join(preview.get_base_64().split())
+            if self.metadata_xml_path:
+                # XMP PageNumber is the 1-based position of the page in the document.
+                page_by_index = {str(page['index']): page['page_id']
+                                 for page in page_geometry.get_pages()}
+                for preview in MetadataParser(self.metadata_xml_path, self.unzipped_root_path).previews_objs_list:
+                    page_id = page_by_index.get(str(preview.page))
+                    if page_id and preview.get_base_64():
+                        previews[page_id] = ''.join(preview.get_base_64().split())
+            previews.update(self._render_package_pdf_previews(page_geometry))
             self.results.set_page_previews(previews)
         except Exception as e:
             # Highlighting is a nice-to-have; never fail the check because of it.
             print(f"Page highlighting data error: {e}")
+
+    def _render_package_pdf_previews(self, page_geometry) -> dict:
+        """Sharp page previews from the package PDF, when it matches the document page for page.
+
+        The thumbnails embedded in the IDML are tiny (about 200px wide), so highlights drawn over them
+        look misaligned even when the geometry is exact.
+        """
+        try:
+            pdf_path = find_package_pdf(self.unzipped_folder_path, self.idml_path)
+            if not pdf_path:
+                return {}
+            return render_pdf_previews(pdf_path, page_geometry.get_pages())
+        except Exception as e:
+            print(f"PDF preview rendering skipped: {e}")
+            return {}
 
     def ensure_folder_exists(self, path, folder_name):
         # Convert all folder names in the unzipped folder path to lowercase and check if the lowercase version of the target folder exists
