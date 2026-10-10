@@ -8,6 +8,8 @@ import AuthCallback from './components/AuthCallback';
 import ProtectedLayout, { type ProtectedLayoutOutletContext } from './components/ProtectedLayout';
 import { UserManagement } from './components/Admin/UserManagement';
 import { ApiKeys } from './components/ApiKeys/ApiKeys';
+import { SummaryFeedbackAdmin } from './components/SummaryFeedback/SummaryFeedbackAdmin';
+import { MyFeedback } from './components/SummaryFeedback/MyFeedback';
 import { useAuth } from './components/AuthContext';
 
 function FileUploadWrapper() {
@@ -60,7 +62,9 @@ export default function App() {
           <Route path="results" element={<ValidationListWrapper />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="api-keys" element={<ApiKeys />} />
+          <Route path="my-feedback" element={<MyFeedback />} />
           <Route path="admin/users" element={<AdminGuard><UserManagement /></AdminGuard>} />
+          <Route path="admin/summary-feedback" element={<AdminGuard><SummaryFeedbackAdmin /></AdminGuard>} />
           <Route path="admin/access-requests" element={<Navigate to="/admin/users#access-requests" replace />} />
         </Route>
       </Routes>

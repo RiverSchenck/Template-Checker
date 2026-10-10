@@ -21,8 +21,8 @@ export type DraftComment = {
   body: string;
 };
 
-const GENERAL = { id: 'general', key: 'general', title: 'General feedback' };
-const LOOKS_GOOD = 'Looks good to send.';
+export const GENERAL = { id: 'general', key: 'general', title: 'General feedback' };
+export const LOOKS_GOOD = 'Looks good to send.';
 
 export const hasLooksGood = (comments: DraftComment[]) =>
   comments.some((c) => c.sectionId === GENERAL.id && c.body === LOOKS_GOOD);
