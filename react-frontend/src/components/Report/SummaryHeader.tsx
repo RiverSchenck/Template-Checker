@@ -180,28 +180,49 @@ function SummaryHeader({
       </div>
 
       <Dialog open={reviewOpen} onOpenChange={setReviewOpen}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Customer summary (beta)</DialogTitle>
-            <DialogDescription>
-              Please read the summary before you send it. I&apos;m still testing this, so let me know if anything looks
-              off. — River
+        <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-xl sm:rounded-xl">
+          <DialogHeader className="space-y-2 px-6 pb-4 pt-6 text-left">
+            <div className="flex items-center gap-2">
+              <DialogTitle className="text-base">Copy customer summary</DialogTitle>
+              <span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:text-amber-300">
+                Beta
+              </span>
+            </div>
+            <DialogDescription className="text-sm leading-relaxed">
+              Please read it before you send it. I&apos;m still testing this, so let me know if anything looks off.{' '}
+              <span className="whitespace-nowrap">— River</span>
             </DialogDescription>
           </DialogHeader>
-          <pre className="max-h-72 overflow-auto whitespace-pre-wrap rounded-lg border bg-muted/40 p-3 font-sans text-sm leading-relaxed text-foreground">
-            {customerSummary}
-          </pre>
-          <label htmlFor="summary-reviewed" className="flex cursor-pointer items-start gap-2.5 text-sm">
-            <Checkbox
-              id="summary-reviewed"
-              checked={reviewed}
-              onCheckedChange={(value) => setReviewed(value === true)}
-              className="mt-0.5"
-            />
-            <span>I&apos;ve read this summary and will check it before sending it to the customer.</span>
-          </label>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => setReviewOpen(false)}>
+
+          <div className="px-6">
+            <p className="mb-1.5 text-xs font-medium text-muted-foreground">What the customer will get</p>
+            <div className="max-h-[min(18rem,45vh)] overflow-y-auto rounded-lg border bg-muted/30 px-4 py-3 [scrollbar-color:color-mix(in_oklab,var(--muted-foreground)_45%,transparent)_transparent] [scrollbar-width:thin]">
+              <p className="whitespace-pre-wrap break-words text-[13px] leading-relaxed text-foreground/90">
+                {customerSummary}
+              </p>
+            </div>
+
+            <label
+              htmlFor="summary-reviewed"
+              className={cn(
+                'mt-4 flex cursor-pointer items-start gap-3 rounded-lg border px-3.5 py-3 text-sm transition-colors hover:bg-muted/50',
+                reviewed && 'border-foreground/20 bg-muted/40'
+              )}
+            >
+              <Checkbox
+                id="summary-reviewed"
+                checked={reviewed}
+                onCheckedChange={(value) => setReviewed(value === true)}
+                className="mt-0.5"
+              />
+              <span className={cn('leading-snug transition-colors', reviewed ? 'text-foreground' : 'text-muted-foreground')}>
+                I&apos;ve read this summary and will check it before sending it to the customer.
+              </span>
+            </label>
+          </div>
+
+          <DialogFooter className="mt-6 gap-2 border-t bg-muted/30 px-6 py-4 sm:gap-2 sm:space-x-0">
+            <Button variant="ghost" onClick={() => setReviewOpen(false)}>
               Cancel
             </Button>
             <Button onClick={copySummary} disabled={!reviewed} className="gap-1.5">
