@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ArrowDown, ArrowUp, Check, Copy, FileJson, MoreHorizontal } from 'lucide-react';
-import { notify } from '../../lib/notify';
 import { Button } from '../ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
@@ -17,8 +16,10 @@ type SummaryHeaderProps = {
   /** Counts from the previous upload, when comparing. */
   previousCounts: Record<ValidationType, number> | null;
   onJumpTo: (severity: ValidationType) => void;
-  /** Message for the customer: what may be causing their issues and how to fix it. */
-  customerSummary: string;
+  /** Opens the review of the customer summary (it's copied from there, after review). */
+  onReviewSummary: () => void;
+  /** Briefly true after the summary was copied, to confirm it on the button. */
+  summaryCopied: boolean;
   /** Raw checker response, downloadable for deeper debugging. */
   rawResult: unknown;
 };
@@ -49,7 +50,8 @@ function SummaryHeader({
   pageCount,
   previousCounts,
   onJumpTo,
-  customerSummary,
+  onReviewSummary,
+  summaryCopied,
   rawResult,
 }: SummaryHeaderProps) {
   const name = displayTemplateName(templateName) || 'Untitled template';
@@ -59,22 +61,6 @@ function SummaryHeader({
     pageCount ? plural(pageCount, 'page') : null,
     report.checked.length ? `${report.checked.map((c) => `${c.count} ${c.label}`).join(', ')} checked` : null,
   ].filter(Boolean);
-
-  // The button itself confirms the copy; only a failure needs a toast.
-  const [copied, setCopied] = useState(false);
-  useEffect(() => {
-    if (!copied) return;
-    const t = setTimeout(() => setCopied(false), 1800);
-    return () => clearTimeout(t);
-  }, [copied]);
-  const copySummary = async () => {
-    try {
-      await navigator.clipboard.writeText(customerSummary);
-      setCopied(true);
-    } catch {
-      notify.error('Couldn’t copy the summary. Try again, or select the text and copy it manually.');
-    }
-  };
 
   const downloadJson = () => {
     const blob = new Blob([JSON.stringify(rawResult, null, 2)], { type: 'application/json' });
@@ -109,9 +95,13 @@ function SummaryHeader({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button size="sm" className="h-8 min-w-[11.5rem] gap-1.5" onClick={copySummary} aria-live="polite">
-            {copied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
-            {copied ? 'Copied' : 'Copy customer summary'}
+          <Button size="sm" className="h-8 min-w-[14rem] gap-1.5" onClick={onReviewSummary} aria-live="polite">
+            {summaryCopied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
+            {summaryCopied ? 'Copied' : 'Copy customer summary'}
+            {/* Readable on the primary button in both themes: light text on dark, dark text on light. */}
+            <span className="ml-0.5 rounded-full bg-amber-300/20 px-1.5 py-px text-[10px] font-semibold uppercase leading-4 tracking-wide text-amber-200 ring-1 ring-inset ring-amber-300/40 dark:bg-amber-400/25 dark:text-amber-900 dark:ring-amber-600/30">
+              Beta
+            </span>
           </Button>
         </div>
       </div>
