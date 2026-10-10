@@ -85,7 +85,6 @@ export function Analytics() {
       <PageShell className="max-w-6xl">
         <PageHeader
           icon={BarChart3}
-          eyebrow="Insights"
           title="Analytics"
           description="How support uses the template checker, and what customers' templates get wrong."
           actions={<PeriodPicker period={period} onChange={setPeriod} />}

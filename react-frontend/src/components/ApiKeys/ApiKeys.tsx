@@ -312,7 +312,6 @@ export function ApiKeys() {
       <PageShell>
         <PageHeader
           icon={KeyRound}
-          eyebrow="Developer"
           title="API keys"
           description="Use API keys to run the checker from scripts and CI pipelines. Keys act on your behalf and can only access the check endpoints."
           actions={
