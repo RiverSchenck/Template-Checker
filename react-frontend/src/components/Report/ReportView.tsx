@@ -8,11 +8,14 @@ import PageViewer from './PageViewer';
 import { buildReport, compareReports, type Problem } from './buildReport';
 import { buildCustomerSummaryDocument } from './customerSummary';
 import {
+  hasLooksGood,
   ReviewToolbar,
   SummaryReviewDocument,
   useCopyGuard,
   useSummaryReviewSubmit,
+  withLooksGood,
   type DraftComment,
+  type SummaryReviewDocumentHandle,
 } from './SummaryReview';
 import { notify } from '../../lib/notify';
 
@@ -73,6 +76,7 @@ function ReportView({ result, previous }: ReportViewProps) {
   const [summaryCopied, setSummaryCopied] = useState(false);
   const [copyHint, setCopyHint] = useState(false);
   const summaryRef = useRef<HTMLElement>(null);
+  const reviewDocRef = useRef<SummaryReviewDocumentHandle>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
   // A new upload means a new summary: start its review fresh.
@@ -133,6 +137,9 @@ function ReportView({ result, previous }: ReportViewProps) {
       <div ref={topRef} className="flex scroll-mt-4 flex-col gap-4 pb-10 pt-2">
         <ReviewToolbar
           commentCount={drafts.length}
+          looksGoodAdded={hasLooksGood(drafts)}
+          onLooksGood={() => setDrafts((current) => withLooksGood(current))}
+          onGeneralFeedback={() => reviewDocRef.current?.openGeneralFeedback()}
           submitting={submitting}
           saved={saved}
           error={error}
@@ -142,6 +149,7 @@ function ReportView({ result, previous }: ReportViewProps) {
         />
         <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-cols-[minmax(340px,520px)_minmax(0,1fr)]">
           <SummaryReviewDocument
+            ref={reviewDocRef}
             doc={summaryDoc}
             comments={drafts}
             onCommentsChange={setDrafts}

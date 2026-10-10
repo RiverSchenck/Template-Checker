@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, Lock, MessageSquarePlus, Pencil, ThumbsUp, Trash2, TriangleAlert } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
@@ -23,6 +23,27 @@ export type DraftComment = {
 
 const GENERAL = { id: 'general', key: 'general', title: 'General feedback' };
 const LOOKS_GOOD = 'Looks good to send.';
+
+export const hasLooksGood = (comments: DraftComment[]) =>
+  comments.some((c) => c.sectionId === GENERAL.id && c.body === LOOKS_GOOD);
+
+/** Adds the one-click "Looks good to send." general comment (once). */
+export function withLooksGood(comments: DraftComment[]): DraftComment[] {
+  if (hasLooksGood(comments)) return comments;
+  return [
+    ...comments,
+    {
+      id: crypto.randomUUID(),
+      sectionId: GENERAL.id,
+      sectionKey: GENERAL.key,
+      sectionTitle: GENERAL.title,
+      quote: null,
+      quoteStart: null,
+      quoteEnd: null,
+      body: LOOKS_GOOD,
+    },
+  ];
+}
 const MAX_BODY = 2000;
 
 /** Character offset of (node, offset) within `root`'s text. Works across highlight <mark>s. */
@@ -207,6 +228,9 @@ export function useCopyGuard(container: React.RefObject<HTMLElement>, active: bo
 
 type ReviewToolbarProps = {
   commentCount: number;
+  looksGoodAdded: boolean;
+  onLooksGood: () => void;
+  onGeneralFeedback: () => void;
   submitting: boolean;
   saved: boolean;
   error: string | null;
@@ -216,7 +240,18 @@ type ReviewToolbarProps = {
 };
 
 /** Sticky bar while reviewing: what to do, and the one action that copies the summary. */
-export function ReviewToolbar({ commentCount, submitting, saved, error, copyHint, onBack, onSubmit }: ReviewToolbarProps) {
+export function ReviewToolbar({
+  commentCount,
+  looksGoodAdded,
+  onLooksGood,
+  onGeneralFeedback,
+  submitting,
+  saved,
+  error,
+  copyHint,
+  onBack,
+  onSubmit,
+}: ReviewToolbarProps) {
   const needsComment = commentCount === 0 && !saved;
   const label = submitting
     ? 'Saving…'
@@ -241,6 +276,25 @@ export function ReviewToolbar({ commentCount, submitting, saved, error, copyHint
             Read it next to the results. Click a part to see it on the page, or select text to comment on it.
           </p>
         </div>
+        {!saved && (
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-9 gap-1.5"
+              onClick={onLooksGood}
+              disabled={looksGoodAdded || submitting}
+              aria-pressed={looksGoodAdded}
+            >
+              <ThumbsUp className="h-3.5 w-3.5" aria-hidden />
+              {looksGoodAdded ? 'Marked as good' : 'Looks good to send'}
+            </Button>
+            <Button variant="outline" size="sm" className="h-9 gap-1.5" onClick={onGeneralFeedback} disabled={submitting}>
+              <MessageSquarePlus className="h-3.5 w-3.5" aria-hidden />
+              General feedback
+            </Button>
+          </div>
+        )}
         <Tooltip>
           <TooltipTrigger asChild>
             {/* span keeps the tooltip working while the button is disabled */}
@@ -253,7 +307,7 @@ export function ReviewToolbar({ commentCount, submitting, saved, error, copyHint
           </TooltipTrigger>
           {needsComment && (
             <TooltipContent side="bottom" className="max-w-[16rem] text-center">
-              Leave at least one comment, even “Looks good to send”, to copy the summary.
+              Leave at least one comment to copy the summary. If it reads well, click “Looks good to send”.
             </TooltipContent>
           )}
         </Tooltip>
@@ -287,8 +341,14 @@ type SummaryReviewDocumentProps = {
 };
 
 /** The customer summary as the customer will get it, with comments inline under the part they're about. */
-export function SummaryReviewDocument({ doc, comments, onCommentsChange, activeProblemId, onSelectProblem, summaryRef }: SummaryReviewDocumentProps) {
+export type SummaryReviewDocumentHandle = { openGeneralFeedback: () => void };
+
+export const SummaryReviewDocument = forwardRef<SummaryReviewDocumentHandle, SummaryReviewDocumentProps>(function SummaryReviewDocument(
+  { doc, comments, onCommentsChange, activeProblemId, onSelectProblem, summaryRef },
+  ref
+) {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const generalRef = useRef<HTMLDivElement>(null);
   const composerRef = useRef<HTMLTextAreaElement>(null);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [composer, setComposer] = useState<Composer | null>(null);
@@ -347,6 +407,13 @@ export function SummaryReviewDocument({ doc, comments, onCommentsChange, activeP
     quoteEnd: null,
   });
 
+  useImperativeHandle(ref, () => ({
+    openGeneralFeedback: () => {
+      openComposer(forSection(GENERAL));
+      requestAnimationFrame(() => generalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+    },
+  }));
+
   const saveComposer = () => {
     const body = composerText.trim();
     if (!composer || !body) return;
@@ -358,11 +425,6 @@ export function SummaryReviewDocument({ doc, comments, onCommentsChange, activeP
     }
     setComposer(null);
     setComposerText('');
-  };
-
-  const looksGood = () => {
-    if (comments.some((c) => c.sectionId === GENERAL.id && c.body === LOOKS_GOOD)) return;
-    onCommentsChange([...comments, { ...forSection(GENERAL), id: crypto.randomUUID(), body: LOOKS_GOOD }]);
   };
 
   const composerCard = (
@@ -447,6 +509,14 @@ export function SummaryReviewDocument({ doc, comments, onCommentsChange, activeP
         </p>
       </div>
 
+      {(commentsFor(GENERAL.id).length > 0 || composer?.sectionId === GENERAL.id) && (
+        <div ref={generalRef} className="scroll-mt-28 border-b px-2 pb-3 pt-2">
+          <p className="px-3 pt-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">General feedback</p>
+          {commentCards(GENERAL.id)}
+          {composer && !composer.editingId && composer.sectionId === GENERAL.id && composerCard}
+        </div>
+      )}
+
       <article ref={summaryRef} className="space-y-0.5 p-2" aria-label="Customer summary" onMouseUp={readSelection} onKeyUp={readSelection}>
         {doc.sections.map((section) => {
           const active = !!section.problemId && section.problemId === activeProblemId;
@@ -509,21 +579,6 @@ export function SummaryReviewDocument({ doc, comments, onCommentsChange, activeP
         })}
       </article>
 
-      <div className="border-t px-4 py-3">
-        {commentCards(GENERAL.id)}
-        {composer && !composer.editingId && composer.sectionId === GENERAL.id && composerCard}
-        <div className={cn('flex flex-wrap items-center gap-2', (commentsFor(GENERAL.id).length > 0 || composer?.sectionId === GENERAL.id) && 'mt-3')}>
-          <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs" onClick={looksGood}>
-            <ThumbsUp className="h-3.5 w-3.5" aria-hidden />
-            Looks good to send
-          </Button>
-          <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs text-muted-foreground" onClick={() => openComposer(forSection(GENERAL))}>
-            <MessageSquarePlus className="h-3.5 w-3.5" aria-hidden />
-            General feedback
-          </Button>
-        </div>
-      </div>
-
       {selection && (
         <button
           type="button"
@@ -547,4 +602,4 @@ export function SummaryReviewDocument({ doc, comments, onCommentsChange, activeP
       )}
     </div>
   );
-}
+});
