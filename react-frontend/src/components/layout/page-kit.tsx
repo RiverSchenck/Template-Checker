@@ -49,22 +49,15 @@ export function PageHeader({
 }) {
   return (
     <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-      <div className="flex min-w-0 items-start gap-4">
-        <div className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-neutral-800 to-neutral-950 text-white shadow-[0_6px_16px_-6px_rgba(0,0,0,0.45)] ring-1 ring-black/5">
-          <Icon className="h-[22px] w-[22px]" strokeWidth={1.75} />
-          <span className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-white/15 to-transparent" />
-        </div>
-        <div className="min-w-0">
-          {eyebrow && (
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-              {eyebrow}
-            </p>
-          )}
-          <h1 className="text-[1.65rem] font-semibold leading-tight tracking-tight">{title}</h1>
-          {description && (
-            <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground">{description}</p>
-          )}
-        </div>
+      <div className="min-w-0">
+        <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={2} aria-hidden />
+          {eyebrow}
+        </p>
+        <h1 className="text-[1.65rem] font-semibold leading-tight tracking-tight">{title}</h1>
+        {description && (
+          <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground">{description}</p>
+        )}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </header>
@@ -287,15 +280,16 @@ export function StatusPill({
 
 /* ---------- Identity ---------- */
 
-const AVATAR_GRADIENTS = [
-  'from-rose-400 to-orange-300',
-  'from-amber-400 to-yellow-300',
-  'from-emerald-400 to-teal-300',
-  'from-sky-400 to-cyan-300',
-  'from-indigo-400 to-sky-300',
-  'from-violet-400 to-fuchsia-300',
-  'from-pink-400 to-rose-300',
-  'from-teal-400 to-lime-300',
+/** Flat per-person tints: soft fill with darker initials, picked from the email. */
+const AVATAR_TINTS = [
+  'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-200',
+  'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-200',
+  'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200',
+  'bg-sky-100 text-sky-700 dark:bg-sky-500/20 dark:text-sky-200',
+  'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-200',
+  'bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-200',
+  'bg-pink-100 text-pink-700 dark:bg-pink-500/20 dark:text-pink-200',
+  'bg-teal-100 text-teal-700 dark:bg-teal-500/20 dark:text-teal-200',
 ];
 
 function hashString(s: string): number {
@@ -327,12 +321,12 @@ export function PersonAvatar({
   className?: string;
 }) {
   const seed = email || name || '?';
-  const gradient = AVATAR_GRADIENTS[hashString(seed) % AVATAR_GRADIENTS.length];
+  const tint = AVATAR_TINTS[hashString(seed) % AVATAR_TINTS.length];
   const dims = size === 'lg' ? 'h-11 w-11 text-sm' : size === 'sm' ? 'h-7 w-7 text-[10px]' : 'h-9 w-9 text-xs';
   return (
-    <Avatar className={cn(dims, 'shrink-0 shadow-sm ring-2 ring-background', className)}>
+    <Avatar className={cn(dims, 'shrink-0 ring-2 ring-background', className)}>
       {src ? <AvatarImage src={src} alt="" referrerPolicy="no-referrer" /> : null}
-      <AvatarFallback className={cn('bg-gradient-to-br font-semibold text-white', gradient)}>
+      <AvatarFallback className={cn('font-semibold', tint)}>
         {initials(name, email)}
       </AvatarFallback>
     </Avatar>
