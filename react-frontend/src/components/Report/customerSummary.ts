@@ -63,6 +63,8 @@ export type SummarySection = {
   key: string;
   /** Short label for the section, e.g. the issue's title. */
   title: string;
+  /** The issue this section describes, so the results can show it. Missing for the intro and closing. */
+  problemId?: string;
   text: string;
   /** Character offsets of `text` within the full summary. */
   start: number;
@@ -85,7 +87,7 @@ export function buildCustomerSummaryDocument(report: Report, templateName: strin
   const intro = (text: string) => parts.push({ key: 'intro', title: parts.length ? 'Group heading' : 'Introduction', text });
   const issues = (problems: Problem[]) =>
     problems.forEach((problem, i) =>
-      parts.push({ key: problem.key, title: problem.guide.title, text: problemBlock(problem, i + 1) })
+      parts.push({ key: problem.key, title: problem.guide.title, problemId: problem.id, text: problemBlock(problem, i + 1) })
     );
 
   if (blockers.length) {

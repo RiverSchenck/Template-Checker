@@ -1,5 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import type { ImperativePanelHandle } from 'react-resizable-panels';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { ValidationResult } from '../../types';
 import SummaryHeader from './SummaryHeader';
@@ -8,10 +7,14 @@ import ProblemList from './ProblemList';
 import PageViewer from './PageViewer';
 import { buildReport, compareReports, type Problem } from './buildReport';
 import { buildCustomerSummaryDocument } from './customerSummary';
-import { SummaryReview, SummaryReviewBar, type DraftComment } from './SummaryReview';
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable';
+import {
+  ReviewToolbar,
+  SummaryReviewDocument,
+  useCopyGuard,
+  useSummaryReviewSubmit,
+  type DraftComment,
+} from './SummaryReview';
 import { notify } from '../../lib/notify';
-import { cn } from '../../lib/utils';
 
 type ReportViewProps = {
   result: ValidationResult;
@@ -43,57 +46,6 @@ function ReportView({ result, previous }: ReportViewProps) {
 
   const selected = report.problems.find((p) => p.id === selectedId) ?? null;
 
-  // Reviewing the customer summary (beta): a pane under the results, which can be minimized to a bar.
-  const [review, setReview] = useState<'closed' | 'open' | 'minimized'>('closed');
-  const [drafts, setDrafts] = useState<DraftComment[]>([]);
-  const [summaryCopied, setSummaryCopied] = useState(false);
-  const reviewPanel = useRef<ImperativePanelHandle>(null);
-  const splitRef = useRef<HTMLDivElement>(null);
-  const [splitHeight, setSplitHeight] = useState<number | null>(null);
-  const reviewing = review !== 'closed';
-
-  // A new upload means a new summary: start its review fresh.
-  useEffect(() => {
-    setDrafts([]);
-    setReview('closed');
-  }, [summaryDoc.text]);
-
-  useEffect(() => {
-    if (!summaryCopied) return;
-    const t = setTimeout(() => setSummaryCopied(false), 2000);
-    return () => clearTimeout(t);
-  }, [summaryCopied]);
-
-  // The split view fills the rest of the window, so the results and the review scroll on their own.
-  useLayoutEffect(() => {
-    if (!reviewing) return;
-    const measure = () => {
-      const top = splitRef.current?.getBoundingClientRect().top ?? 0;
-      setSplitHeight(Math.max(360, window.innerHeight - top - 8));
-    };
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, [reviewing]);
-
-  // The panel remembers its size; make sure it opens expanded even if it was last left collapsed.
-  useEffect(() => {
-    if (review === 'open' && reviewPanel.current?.isCollapsed()) reviewPanel.current.expand();
-  }, [review]);
-
-  const openReview = () => {
-    if (!reviewing) window.scrollTo({ top: 0 });
-    setReview('open');
-  };
-
-  const handleCopied = (commentCount: number) => {
-    setReview('closed');
-    setDrafts([]);
-    setSummaryCopied(true);
-    // Feedback goes somewhere they can't see, so confirm it; the copy itself shows on the button.
-    if (commentCount > 0) notify.success('Summary copied. Your feedback was sent to River. Thanks!');
-  };
-
   const selectProblem = (id: string | null) => {
     setSelectedId(id);
     setSelectedPlaceKey(null);
@@ -114,8 +66,97 @@ function ReportView({ result, previous }: ReportViewProps) {
     if (place?.bounds) setPageId(place.bounds.page_id);
   };
 
-  const content = (
-    <div className="flex flex-col gap-4 pb-10 pt-2">
+  // Review mode (beta): the customer summary takes the issue list's place, next to the page preview, and has to
+  // get at least one comment before it can be copied.
+  const [reviewing, setReviewing] = useState(false);
+  const [drafts, setDrafts] = useState<DraftComment[]>([]);
+  const [summaryCopied, setSummaryCopied] = useState(false);
+  const [copyHint, setCopyHint] = useState(false);
+  const summaryRef = useRef<HTMLElement>(null);
+  const topRef = useRef<HTMLDivElement>(null);
+
+  // A new upload means a new summary: start its review fresh.
+  useEffect(() => {
+    setDrafts([]);
+    setReviewing(false);
+  }, [summaryDoc.text]);
+
+  useEffect(() => {
+    if (!summaryCopied) return;
+    const t = setTimeout(() => setSummaryCopied(false), 2000);
+    return () => clearTimeout(t);
+  }, [summaryCopied]);
+
+  useEffect(() => {
+    if (!copyHint) return;
+    const t = setTimeout(() => setCopyHint(false), 4000);
+    return () => clearTimeout(t);
+  }, [copyHint]);
+
+  const handleCopied = (commentCount: number) => {
+    setReviewing(false);
+    setDrafts([]);
+    setSummaryCopied(true);
+    // Feedback goes somewhere they can't see, so confirm it; the copy itself shows on the button.
+    notify.success(
+      commentCount === 1 ? 'Summary copied. Your feedback was sent to River. Thanks!' : `Summary copied. ${commentCount} comments sent to River. Thanks!`
+    );
+  };
+
+  const { submit, submitting, saved, error } = useSummaryReviewSubmit(summaryDoc, templateName, drafts, handleCopied);
+  const blockCopy = useCallback(() => setCopyHint(true), []);
+  useCopyGuard(summaryRef, reviewing && !saved, blockCopy);
+
+  const setMode = (next: boolean) => {
+    setReviewing(next);
+    setSelectedPlaceKey(null);
+    requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+
+  const pageViewer = (
+    <PageViewer
+      pageLayouts={pageLayouts}
+      problems={report.problems}
+      selectedProblem={selected}
+      selectedPlaceKey={selectedPlaceKey}
+      onSelect={selectPlace}
+      pageId={pageId}
+      onPageChange={(id) => {
+        setPageId(id);
+        setSelectedPlaceKey(null);
+      }}
+    />
+  );
+
+  if (reviewing) {
+    return (
+      <div ref={topRef} className="flex scroll-mt-4 flex-col gap-4 pb-10 pt-2">
+        <ReviewToolbar
+          commentCount={drafts.length}
+          submitting={submitting}
+          saved={saved}
+          error={error}
+          copyHint={copyHint}
+          onBack={() => setMode(false)}
+          onSubmit={submit}
+        />
+        <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-cols-[minmax(340px,520px)_minmax(0,1fr)]">
+          <SummaryReviewDocument
+            doc={summaryDoc}
+            comments={drafts}
+            onCommentsChange={setDrafts}
+            activeProblemId={selectedId}
+            onSelectProblem={selectProblem}
+            summaryRef={summaryRef}
+          />
+          {pageLayouts.length > 0 && <div className="lg:sticky lg:top-24">{pageViewer}</div>}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={topRef} className="flex scroll-mt-4 flex-col gap-4 pb-10 pt-2">
       <SummaryHeader
         report={report}
         templateName={templateName}
@@ -124,8 +165,9 @@ function ReportView({ result, previous }: ReportViewProps) {
         onJumpTo={(severity) =>
           document.getElementById(`report-section-${severity}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
-        onReviewSummary={openReview}
+        onReviewSummary={() => setMode(true)}
         summaryCopied={summaryCopied}
+        draftCount={drafts.length}
         rawResult={result}
       />
 
@@ -157,69 +199,7 @@ function ReportView({ result, previous }: ReportViewProps) {
               checked={report.checked}
             />
           </div>
-          <div className="order-1 lg:sticky lg:top-4 lg:order-2">
-            <PageViewer
-              pageLayouts={pageLayouts}
-              problems={report.problems}
-              selectedProblem={selected}
-              selectedPlaceKey={selectedPlaceKey}
-              onSelect={selectPlace}
-              pageId={pageId}
-              onPageChange={(id) => {
-                setPageId(id);
-                setSelectedPlaceKey(null);
-              }}
-            />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  if (!reviewing) return content;
-
-  return (
-    <div ref={splitRef} style={{ height: splitHeight ?? undefined }} className="flex min-h-0 flex-col">
-      <ResizablePanelGroup direction="vertical" autoSaveId="summary-review-split">
-        <ResizablePanel id="report" order={1} minSize={15} className="scrollbar-thin !overflow-y-auto">
-          {content}
-        </ResizablePanel>
-        <ResizableHandle
-          withHandle
-          className={cn('my-1 bg-transparent hover:bg-transparent', review === 'minimized' && 'hidden')}
-          aria-label="Resize the summary review"
-        />
-        <ResizablePanel
-          id="review"
-          order={2}
-          ref={reviewPanel}
-          defaultSize={50}
-          minSize={30}
-          collapsible
-          collapsedSize={0}
-          onCollapse={() => setReview('minimized')}
-          onExpand={() => setReview('open')}
-        >
-          <div className="h-full overflow-hidden rounded-t-xl border border-b-0 shadow-[0_-12px_32px_-16px_rgba(0,0,0,0.45)]">
-            <SummaryReview
-              doc={summaryDoc}
-              templateName={templateName}
-              comments={drafts}
-              onCommentsChange={setDrafts}
-              onMinimize={() => reviewPanel.current?.collapse()}
-              onClose={() => setReview('closed')}
-              onCopied={handleCopied}
-            />
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
-      {review === 'minimized' && (
-        <div className="overflow-hidden rounded-t-xl border border-b-0">
-          <SummaryReviewBar
-            commentCount={drafts.length}
-            onExpand={() => reviewPanel.current?.expand()}
-            onClose={() => setReview('closed')}
-          />
+          <div className="order-1 lg:sticky lg:top-4 lg:order-2">{pageViewer}</div>
         </div>
       )}
     </div>
