@@ -173,8 +173,8 @@ export function KpiTiles({ overview }: { overview: Overview }) {
       />
       <Tile
         comparedWith={comparedWith}
-        label="Templates with no errors"
-        info="Share of completed checks that found no errors (warnings and infos don't count). Expect this to be low: support mostly checks templates customers are struggling with."
+        label="Templates with no blockers"
+        info="Share of completed checks that found no blockers (warnings and infos don't count). Expect this to be low: support mostly checks templates customers are struggling with."
         value={formatPercent(cleanRate(cur))}
         delta={compare(pointsDelta(cleanRate(cur), cleanRate(prev), 'up'))}
         spark={series(timeseries, (p) => ratio(p.clean_runs, p.completed))}
@@ -182,7 +182,7 @@ export function KpiTiles({ overview }: { overview: Overview }) {
         detail={
           cur.median_errors == null
             ? 'No completed checks'
-            : `Typical check finds ${formatCount(Math.round(cur.median_errors))} error${Math.round(cur.median_errors) === 1 ? '' : 's'}`
+            : `Typical check finds ${formatCount(Math.round(cur.median_errors))} blocker${Math.round(cur.median_errors) === 1 ? '' : 's'}`
         }
       />
       <Tile

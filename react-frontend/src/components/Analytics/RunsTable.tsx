@@ -55,7 +55,7 @@ function Findings({ run }: { run: RunRow }) {
   return (
     <span className="inline-flex items-center gap-3 text-xs tabular-nums">
       <span className={cn(errors ? 'text-foreground' : 'text-muted-foreground')}>
-        <span className="font-semibold">{formatCount(errors)}</span> error{errors === 1 ? '' : 's'}
+        <span className="font-semibold">{formatCount(errors)}</span> blocker{errors === 1 ? '' : 's'}
       </span>
       <span className="text-muted-foreground">
         <span className="font-medium">{formatCount(warnings)}</span> warning{warnings === 1 ? '' : 's'}

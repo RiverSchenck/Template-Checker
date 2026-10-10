@@ -10,7 +10,7 @@ import type { IssueSummary, Overview, Severity } from './types';
 type SeverityFilter = 'all' | Severity;
 
 export const SEVERITY: Record<Severity, { icon: LucideIcon; label: string; className: string }> = {
-  error: { icon: AlertCircle, label: 'Error', className: 'text-rose-600 dark:text-rose-400' },
+  error: { icon: AlertCircle, label: 'Blocker', className: 'text-rose-600 dark:text-rose-400' },
   warning: { icon: AlertTriangle, label: 'Warning', className: 'text-amber-600 dark:text-amber-400' },
   info: { icon: Info, label: 'Info', className: 'text-sky-600 dark:text-sky-400' },
 };
@@ -88,7 +88,7 @@ export function TopIssues({ overview, onSelect }: { overview: Overview; onSelect
           }}
           options={[
             { value: 'all', label: 'All', count: counts.all },
-            { value: 'error', label: 'Errors', count: counts.error },
+            { value: 'error', label: 'Blockers', count: counts.error },
             { value: 'warning', label: 'Warnings', count: counts.warning },
           ]}
         />

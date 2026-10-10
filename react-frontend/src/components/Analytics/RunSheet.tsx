@@ -78,7 +78,7 @@ export function RunSheet({
                 <dl className="divide-y">
                   {run.status === 'completed' && (
                     <Field label="Findings">
-                      {formatCount(run.total_errors ?? 0)} errors · {formatCount(run.total_warnings ?? 0)} warnings ·{' '}
+                      {formatCount(run.total_errors ?? 0)} blockers · {formatCount(run.total_warnings ?? 0)} warnings ·{' '}
                       {formatCount(run.total_infos ?? 0)} infos
                     </Field>
                   )}

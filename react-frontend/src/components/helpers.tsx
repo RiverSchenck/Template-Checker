@@ -1,56 +1,15 @@
 import React from 'react';
-import { AlertCircle, AlertTriangle, Info, HelpCircle, ExternalLink } from 'lucide-react';
+import { AlertCircle, AlertTriangle, Info, ExternalLink } from 'lucide-react';
 import {
   IdentifierGroupedData,
-  ClassifierData,
   ContextDetails,
-  TableDataItem,
   ValidationType,
-  TextBoxData,
   ValidationItem,
   ValidationEntries,
 } from '../types';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from './ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { cn } from '../lib/utils';
-
-export function transformDataForTable(
-  identifierData: IdentifierGroupedData,
-  validationClassifiers: { [key: string]: ClassifierData },
-  textBoxes: { [key: string]: TextBoxData }
-): TableDataItem[] {
-  const tableData: TableDataItem[] = [];
-  Object.entries(identifierData).forEach(([identifier, entries]) => {
-    (['errors', 'warnings', 'infos'] as ValidationType[]).forEach((type) => {
-      entries[type].forEach((issue, index) => {
-        if (validationClassifiers[issue.validationClassifier]) {
-          const textBoxData = issue.identifier ? textBoxes[issue.identifier] : undefined;
-          tableData.push({
-            key: `${identifier}-${issue.validationClassifier}-${type}-${index}`,
-            identifier,
-            type: issue.validationClassifier,
-            page_id: issue.page_id,
-            page_name: issue.page_name,
-            spread_id: issue.spread_id,
-            context: issue.context,
-            context_details: issue.context_details ?? undefined,
-            data_id: issue.data_id,
-            validationType: type,
-            textBox: textBoxData,
-            classifier: validationClassifiers[issue.validationClassifier],
-          });
-        }
-      });
-    });
-  });
-  return tableData;
-}
 
 export function renderHelpLink(helpArticleUrl: string | null): React.ReactNode {
   if (!helpArticleUrl) return null;
@@ -69,26 +28,6 @@ export function renderHelpLink(helpArticleUrl: string | null): React.ReactNode {
       </TooltipTrigger>
       <TooltipContent side="top">Help article</TooltipContent>
     </Tooltip>
-  );
-}
-
-export function renderMessageElement(classifierMessage: string, context: string): React.ReactNode {
-  return (
-    <span className="inline-flex flex-wrap items-center gap-1">
-      <span>{classifierMessage}</span>
-      {context && (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-7 px-2 text-muted-foreground">
-              Context
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="max-w-sm" side="top">
-            <p className="text-sm">{context}</p>
-          </PopoverContent>
-        </Popover>
-      )}
-    </span>
   );
 }
 
@@ -135,25 +74,6 @@ export function renderContextContent(
   return context ? <span className="text-sm">{context}</span> : null;
 }
 
-/** Message + context for table: message on first line, context inline below in muted text. */
-export function renderMessageWithContextForTable(
-  classifierMessage: string,
-  context: string,
-  context_details?: ContextDetails | null
-): React.ReactNode {
-  const contextNode = context_details != null
-    ? renderContextContent(context, context_details)
-    : context ? (
-        <span className="text-xs leading-relaxed text-muted-foreground">{context}</span>
-      ) : null;
-  return (
-    <div className="flex min-w-0 flex-col gap-0.5">
-      <span className="text-sm text-foreground">{classifierMessage}</span>
-      {contextNode}
-    </div>
-  );
-}
-
 export function getValidationTag(
   label: string,
   type: ValidationType,
@@ -196,30 +116,6 @@ export function groupItemsByClassifier(
     acc[validationClassifier].push(item);
     return acc;
   }, {} as Record<string, ValidationItem[]>);
-}
-
-/** Group validation entries by data_id so issues for the same element can be shown together in the UI. */
-export function groupEntriesByDataId(
-  entries: ValidationEntries
-): Array<{ dataId: string; entries: ValidationEntries }> {
-  const byDataId = new Map<
-    string,
-    { errors: ValidationItem[]; warnings: ValidationItem[]; infos: ValidationItem[] }
-  >();
-  const add = (item: ValidationItem, type: keyof ValidationEntries) => {
-    const id = item.data_id ?? 'null';
-    if (!byDataId.has(id)) {
-      byDataId.set(id, { errors: [], warnings: [], infos: [] });
-    }
-    byDataId.get(id)![type].push(item);
-  };
-  entries.errors.forEach((i) => add(i, 'errors'));
-  entries.warnings.forEach((i) => add(i, 'warnings'));
-  entries.infos.forEach((i) => add(i, 'infos'));
-  return Array.from(byDataId.entries()).map(([dataId, entriesForId]) => ({
-    dataId,
-    entries: entriesForId,
-  }));
 }
 
 /**

@@ -25,7 +25,7 @@ function ValidationStats({ jsonResponse, checkerResponse, previousJsonResponse, 
               {totalErrors}
             </span>
             <span className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
-              Errors
+              Blockers
             </span>
           </div>
           <Separator orientation="vertical" className="h-8 shrink-0" decorative />
