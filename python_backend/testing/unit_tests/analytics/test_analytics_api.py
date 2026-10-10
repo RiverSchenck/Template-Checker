@@ -161,7 +161,15 @@ def test_csv_export_neutralizes_formulas_and_reports_truncation(fake_rpc):
 
 
 @pytest.fixture
-def client(monkeypatch, fake_rpc):
+def admin(monkeypatch):
+    """Whether the signed-in test user is an admin; tests flip `admin['value']`."""
+    flag = {'value': True}
+    monkeypatch.setattr(routes.user_helpers, 'is_admin', lambda email=None, auth_user_id=None: flag['value'])
+    return flag
+
+
+@pytest.fixture
+def client(monkeypatch, fake_rpc, admin):
     monkeypatch.setattr(routes, 'verify_supabase_token',
                         lambda token: {'sub': 'uid-1', 'email': 'approved@example.com'} if token == 'ok' else None)
     monkeypatch.setattr(routes.user_helpers, 'get_user_by_email',
@@ -241,3 +249,41 @@ def test_custom_range_through_the_api(client, fake_rpc):
     assert params['p_start'] == '2026-09-01T00:00:00+02:00'
     assert params['p_end'] == '2026-10-01T00:00:00+02:00'
     assert client.get('/analytics/overview?start=2026-09-30&end=2026-09-01', headers=AUTH).status_code == 400
+
+
+OVERVIEW_WITH_PEOPLE = {
+    'current': {'runs': 10, 'failed': 2, 'active_users': 3},
+    'issues': [],
+    'users': [{'user_id': 'u1', 'email': 'agent@example.com', 'runs': 7}],
+    'problem_runs': [{'id': 'r1', 'status': 'failed', 'error_message': 'KeyError', 'email': 'agent@example.com'}],
+}
+
+
+def test_admins_get_the_operations_data_in_the_overview(client, fake_rpc, admin):
+    fake_rpc.result = dict(OVERVIEW_WITH_PEOPLE)
+    body = client.get('/analytics/overview?days=7&tz=UTC', headers=AUTH).get_json()
+    assert body['users'] and body['problem_runs']
+
+
+def test_non_admins_get_aggregates_but_not_who_or_which_runs(client, fake_rpc, admin):
+    admin['value'] = False
+    fake_rpc.result = dict(OVERVIEW_WITH_PEOPLE)
+    r = client.get('/analytics/overview?days=7&tz=UTC', headers=AUTH)
+    body = r.get_json()
+    assert r.status_code == 200
+    assert body['users'] == [] and body['problem_runs'] == []
+    assert body['current'] == OVERVIEW_WITH_PEOPLE['current']
+
+
+def test_only_admins_can_list_or_export_runs(client, fake_rpc, admin):
+    admin['value'] = False
+    for path in ('/analytics/runs?days=7', '/analytics/runs.csv?days=7'):
+        r = client.get(path, headers=AUTH)
+        assert r.status_code == 403, path
+    assert fake_rpc.calls == []
+
+
+def test_issue_detail_stays_open_to_everyone(client, fake_rpc, admin):
+    admin['value'] = False
+    fake_rpc.result = {'occurrences': 1}
+    assert client.get('/analytics/issues/FONTS_INCLUDED?days=7', headers=AUTH).status_code == 200

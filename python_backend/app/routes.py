@@ -189,6 +189,18 @@ def _run_source_and_user_id():
     return request.headers.get('X-Source', 'api'), user_id
 
 
+def _is_admin_request() -> bool:
+    """Whether the signed-in user (Supabase JWT, after require_auth) is an admin."""
+    jwt = getattr(g, 'supabase_jwt', None)
+    if not jwt:
+        return False
+    return user_helpers.is_admin(email=jwt.get('email') or '', auth_user_id=jwt.get('sub'))
+
+
+# Overview fields only admins see: who uses the checker, and crashed/rejected runs with their errors.
+ADMIN_ONLY_OVERVIEW_FIELDS = ('users', 'problem_runs')
+
+
 def require_admin(f):
     """Decorator that requires the user to be an admin (after require_auth)."""
     @wraps(f)
@@ -197,9 +209,7 @@ def require_admin(f):
             return jsonify({
                 'error': {'message': 'Authentication required', 'details': 'Supabase JWT required for admin'}
             }), 401
-        user_id = g.supabase_jwt.get('sub')
-        email = g.supabase_jwt.get('email') or ''
-        if not user_helpers.is_admin(email=email, auth_user_id=user_id):
+        if not _is_admin_request():
             return jsonify({
                 'error': {'message': 'Forbidden', 'details': 'Admin role required'}
             }), 403
@@ -880,8 +890,18 @@ def _analytics_response(load):
 @main.route('/analytics/overview', methods=['GET'])
 @require_auth
 def analytics_overview():
-    """Everything the analytics page shows for the requested period, vs. the period before."""
-    return _analytics_response(lambda: get_overview(_analytics_period()))
+    """Everything the analytics page shows for the requested period, vs. the period before.
+
+    Non-admins get the aggregate numbers and findings, but not who's using it or which runs crashed.
+    """
+    def load():
+        overview = get_overview(_analytics_period())
+        if isinstance(overview, dict) and 'error' not in overview and not _is_admin_request():
+            for field in ADMIN_ONLY_OVERVIEW_FIELDS:
+                if field in overview:
+                    overview[field] = []
+        return overview
+    return _analytics_response(load)
 
 
 @main.route('/analytics/issues/<validation_type>', methods=['GET'])
@@ -893,8 +913,9 @@ def analytics_issue_detail(validation_type):
 
 @main.route('/analytics/runs', methods=['GET'])
 @require_auth
+@require_admin
 def analytics_runs():
-    """One page of runs, newest first. Filters: status, source, user_id, q (template name), validation_type."""
+    """One page of runs, newest first (admin only). Filters: status, source, user_id, q (template name), validation_type."""
     return _analytics_response(lambda: get_runs(
         _analytics_period(),
         _run_filters(),
@@ -905,8 +926,9 @@ def analytics_runs():
 
 @main.route('/analytics/runs.csv', methods=['GET'])
 @require_auth
+@require_admin
 def analytics_runs_csv():
-    """The runs matching the same filters as /analytics/runs, as a CSV download (up to MAX_EXPORT_ROWS)."""
+    """The runs matching the same filters as /analytics/runs, as a CSV download (admin only, up to MAX_EXPORT_ROWS)."""
     try:
         export = export_runs_csv(_analytics_period(), _run_filters())
     except AnalyticsQueryError as e:

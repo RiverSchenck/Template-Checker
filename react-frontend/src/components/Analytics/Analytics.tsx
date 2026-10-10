@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { BarChart3, Inbox } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { useAuth } from '../AuthContext';
 import { Skeleton } from '../ui/skeleton';
 import { TooltipProvider } from '../ui/tooltip';
 import { EmptyState, PageHeader, PageShell } from '../layout/page-kit';
@@ -83,6 +84,7 @@ function SectionHeading({ title, description }: { title: string; description: st
 
 export function Analytics() {
   const { period, setPeriod, filters, setFilters, issue: issueParam, setIssue } = useAnalyticsUrlState();
+  const { isAdmin } = useAuth();
   const [refresh, setRefresh] = useState(0);
   const { data: overview, loading, error } = useOverview(period, refresh);
   const [selectedRun, setSelectedRun] = useState<RunRow | null>(null);
@@ -148,7 +150,7 @@ export function Analytics() {
                 <Highlights
                   overview={overview}
                   onSelectIssue={(i) => setIssue(i.validation_type)}
-                  onShowFailures={() => showRuns({ status: 'failed' })}
+                  onShowFailures={isAdmin ? () => showRuns({ status: 'failed' }) : undefined}
                 />
 
                 <KpiTiles overview={overview} />
@@ -165,29 +167,36 @@ export function Analytics() {
                   <Categories overview={overview} />
                 </div>
 
-                <SectionHeading title="Operations" description="How the checker is holding up, and who's using it" />
-                <div className="grid gap-6 lg:grid-cols-5">
-                  <div className="min-w-0 lg:col-span-3">
-                    <Reliability overview={overview} onSelectRun={setSelectedRun} />
-                  </div>
-                  <div className="min-w-0 lg:col-span-2">
-                    <Team overview={overview} onSelect={(user) => showRuns({ userId: user.user_id ?? undefined })} />
-                  </div>
-                </div>
+                {/* Operations (who uses it, what crashed) and the run list are admin only; the backend enforces it too. */}
+                {isAdmin && (
+                  <>
+                    <SectionHeading title="Operations" description="How the checker is holding up, and who's using it" />
+                    <div className="grid gap-6 lg:grid-cols-5">
+                      <div className="min-w-0 lg:col-span-3">
+                        <Reliability overview={overview} onSelectRun={setSelectedRun} />
+                      </div>
+                      <div className="min-w-0 lg:col-span-2">
+                        <Team overview={overview} onSelect={(user) => showRuns({ userId: user.user_id ?? undefined })} />
+                      </div>
+                    </div>
+                  </>
+                )}
               </>
             )}
 
-            <div ref={runsRef} className="scroll-mt-6">
-              <SectionHeading title="All checks" description="Every check in this period, newest first. Select one for details." />
-              <RunsTable
-                period={period}
-                filters={filters}
-                onFiltersChange={setFilters}
-                labels={chipLabels}
-                refresh={refresh}
-                onSelectRun={setSelectedRun}
-              />
-            </div>
+            {isAdmin && (
+              <div ref={runsRef} className="scroll-mt-6">
+                <SectionHeading title="All checks" description="Every check in this period, newest first. Select one for details." />
+                <RunsTable
+                  period={period}
+                  filters={filters}
+                  onFiltersChange={setFilters}
+                  labels={chipLabels}
+                  refresh={refresh}
+                  onSelectRun={setSelectedRun}
+                />
+              </div>
+            )}
 
             <IssueSheet
               issue={selectedIssue}
@@ -195,10 +204,14 @@ export function Analytics() {
               period={period}
               refresh={refresh}
               onClose={() => setIssue(null)}
-              onShowRuns={(issue) => {
-                setIssue(null);
-                showRuns({ validationType: issue.validation_type, status: undefined });
-              }}
+              onShowRuns={
+                isAdmin
+                  ? (issue) => {
+                      setIssue(null);
+                      showRuns({ validationType: issue.validation_type, status: undefined });
+                    }
+                  : undefined
+              }
             />
             <RunSheet
               run={selectedRun}
