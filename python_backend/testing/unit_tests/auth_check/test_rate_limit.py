@@ -156,12 +156,18 @@ def test_limiter_failure_lets_checks_through(client, monkeypatch, failing):
     assert client.post('/run', headers=USER).status_code == 200
 
 
-def test_limiter_failure_lets_access_requests_through(client, monkeypatch):
+def test_limiter_failure_refuses_access_requests(client, monkeypatch):
     def broken(*a, **k):
         raise rate_limit.LimiterUnavailable('supabase down')
     monkeypatch.setattr(rate_limit, 'hit', broken)
-    monkeypatch.setattr(routes, 'get_supabase_client', lambda: None)
-    assert client.post('/access-requests', json={'email': 'a@b.com'}).status_code == 503
+    # Supabase is reachable for the insert, so a 503 can only come from refusing up front.
+    inserts = []
+    monkeypatch.setattr(routes, 'get_supabase_client', lambda: inserts.append(1))
+    r = client.post('/access-requests', json={'email': 'a@b.com', 'why_need_access': 'support'})
+    assert r.status_code == 503
+    assert r.get_json()['error']['code'] == 'temporarily_unavailable'
+    assert r.headers['Retry-After'] == '60'
+    assert inserts == []
 
 
 def test_hourly_window_slides(client, fake_limiter):
