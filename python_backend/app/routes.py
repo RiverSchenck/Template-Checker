@@ -425,13 +425,20 @@ def _validate_email(email):
 def post_access_request():
     """Submit an access request. With valid JWT: use email (and name/avatar) from token, idempotent. Without: body { \"email\": \"...\" }."""
     # Unauthenticated endpoint: cap per client IP so the request list can't be flooded.
+    # Fails closed: without the limiter anyone could flood the list, so refuse until it's back.
     try:
         allowed, retry_after = rate_limit.hit(
             f'access-requests:ip:{_client_ip()}', ACCESS_REQUESTS_PER_HOUR_PER_IP, 3600
         )
     except Exception:
-        current_app.logger.exception('Rate limiter unavailable; allowing request')
-        allowed, retry_after = True, 0
+        current_app.logger.exception('Rate limiter unavailable; refusing access request')
+        response = jsonify({'error': {
+            'message': "We couldn't take your request right now. Please try again in a minute.",
+            'code': 'temporarily_unavailable',
+        }})
+        response.status_code = 503
+        response.headers['Retry-After'] = '60'
+        return response
     if not allowed:
         return _rate_limited('Too many access requests. Please try again later.', 'rate_limited', retry_after)
     supabase = get_supabase_client()
