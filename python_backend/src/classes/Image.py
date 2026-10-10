@@ -1,4 +1,5 @@
 import os
+from src.helpers.file_names import normalize_file_name
 
 
 # **********************************************************
@@ -11,7 +12,7 @@ import os
 class Image:
     def __init__(self, image_path: str):
         self.image_path = image_path
-        self.image_name: str = os.path.basename(image_path)
+        self.image_name: str = normalize_file_name(os.path.basename(image_path))
         self.image_extension: str = os.path.splitext(self.image_name)[1]
         self.image_size_bytes: int = os.path.getsize(image_path)
         self.image_size_MB: int = self._convert_bytes_to_MB()

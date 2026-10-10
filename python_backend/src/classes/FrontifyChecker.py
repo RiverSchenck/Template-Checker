@@ -16,6 +16,7 @@ from src.parsers.StoriesParser import StoriesParser
 from src.parsers.PreferencesParser import PreferencesParser
 from src.parsers.MetadataParser import MetadataParser
 from src.classes.States import States
+from src.helpers.file_names import extract_zip
 from src.helpers.page_geometry import PageGeometryIndex
 from src.helpers.pdf_previews import find_package_pdf, render_pdf_previews
 from src.helpers.page_item_transform import (
@@ -209,7 +210,7 @@ class FrontifyChecker:
     def extract_zip_to_data_folder(self) -> bool:
         try:
             with zipfile.ZipFile(self.source_file_path, 'r') as zip_ref:
-                zip_ref.extractall(self.unzipped_root_path)
+                extract_zip(zip_ref, self.unzipped_root_path)
                 # to delete the __MACOSX folder after unzipping
                 macosx_dir = os.path.join(self.unzipped_root_path, '__MACOSX')
                 if os.path.exists(macosx_dir):
