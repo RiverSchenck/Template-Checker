@@ -85,7 +85,8 @@ export function IssueSheet({
   period: PeriodSelection;
   refresh: number;
   onClose: () => void;
-  onShowRuns: (issue: IssueSummary) => void;
+  /** Jump to these checks in the runs table; omitted for people who can't see it (non-admins). */
+  onShowRuns?: (issue: IssueSummary) => void;
 }) {
   const { data: detail, loading, error } = useIssueDetail(issue?.validation_type ?? null, period, refresh);
   const bucket = overview.period.bucket;
@@ -213,12 +214,14 @@ export function IssueSheet({
               )}
             </div>
 
-            <div className={cn('sticky bottom-0 border-t bg-background px-6 py-4')}>
-              <Button className="w-full gap-2" onClick={() => onShowRuns(issue)}>
-                Show the {formatCount(issue.runs_affected)} check{issue.runs_affected === 1 ? '' : 's'}
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </Button>
-            </div>
+            {onShowRuns && (
+              <div className={cn('sticky bottom-0 border-t bg-background px-6 py-4')}>
+                <Button className="w-full gap-2" onClick={() => onShowRuns(issue)}>
+                  Show the {formatCount(issue.runs_affected)} check{issue.runs_affected === 1 ? '' : 's'}
+                  <ArrowRight className="h-4 w-4" aria-hidden />
+                </Button>
+              </div>
+            )}
           </>
         )}
       </SheetContent>

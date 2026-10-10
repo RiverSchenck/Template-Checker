@@ -38,7 +38,7 @@ function topCrash(overview: Overview) {
 function buildHighlights(
   overview: Overview,
   onSelectIssue: (issue: IssueSummary) => void,
-  onShowFailures: () => void
+  onShowFailures?: () => void
 ): Highlight[] {
   const { current, previous, issues } = overview;
   const comparable = hasFullPreviousPeriod(overview);
@@ -48,7 +48,8 @@ function buildHighlights(
   // against, call out any crash rate of 1% or more.
   const crashRate = ratio(current.failed, current.runs) ?? 0;
   const prevCrashRate = ratio(previous.failed, previous.runs) ?? 0;
-  if (current.failed > 0 && crashRate >= 0.01 && (!comparable || crashRate >= prevCrashRate * 1.5)) {
+  // Crashes are operational, so only shown to people who can open the crashed runs (admins).
+  if (onShowFailures && current.failed > 0 && crashRate >= 0.01 && (!comparable || crashRate >= prevCrashRate * 1.5)) {
     const crash = topCrash(overview);
     highlights.push({
       key: 'crashes',
@@ -140,7 +141,8 @@ export function Highlights({
 }: {
   overview: Overview;
   onSelectIssue: (issue: IssueSummary) => void;
-  onShowFailures: () => void;
+  /** Omitted for non-admins, which also hides the crash highlight. */
+  onShowFailures?: () => void;
 }) {
   const highlights = buildHighlights(overview, onSelectIssue, onShowFailures);
   if (highlights.length === 0) return null;
