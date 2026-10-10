@@ -1,5 +1,4 @@
 import io
-import os
 import unicodedata
 import zipfile
 
@@ -8,7 +7,8 @@ from lxml import etree as ET
 
 from src.classes.Image import Image
 from src.classes.Link import Link
-from src.helpers.file_names import extract_zip, normalize_file_name, unquote_uri
+from src.helpers.file_names import normalize_file_name, unquote_uri
+from src.helpers.package_zip import read_package
 
 NAME = 'logo_Förderturm_original.png'
 
@@ -50,22 +50,19 @@ def _zip_without_utf8_flag(name: str, data: bytes) -> bytes:
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, 'w') as zf:
         zf.writestr('Pkg Folder/Links/' + placeholder.decode(), data)
+        zf.writestr('Pkg Folder/Doc.idml', b'idml')
     raw = buf.getvalue()
     assert raw.count(placeholder) == 2  # local header + central directory
     return raw.replace(placeholder, encoded)
 
 
-def test_zip_without_utf8_flag_extracts_and_matches_link(tmp_path):
+def test_zip_without_utf8_flag_lists_link_under_real_name():
     raw = _zip_without_utf8_flag(unicodedata.normalize('NFD', NAME), b'png')
     with zipfile.ZipFile(io.BytesIO(raw)) as zf:
         assert not zf.infolist()[0].flag_bits & 0x800
-        extract_zip(zf, str(tmp_path))
+        package = read_package(zf)
 
-    links_dir = tmp_path / 'Pkg Folder' / 'Links'
-    files = os.listdir(links_dir)
-    assert len(files) == 1
-    assert unicodedata.normalize('NFC', files[0]) == NAME
-
-    image = Image(str(links_dir / files[0]))
+    assert package.links == [(NAME, 3)]
+    image = Image(*package.links[0])
     link = make_link('file:/Users/me/Pkg%20Folder/Links/logo_F%C3%B6rderturm_original.png')
     assert image.get_image_name() == link.get_image_name() == NAME
