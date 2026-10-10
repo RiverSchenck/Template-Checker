@@ -1,0 +1,6512 @@
+{
+ "results": {
+  "char_styles": {
+   "details": {},
+   "total_count": 1
+  },
+  "checks": [
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "key": "MASTERPAGE",
+    "label": "Masterpage",
+    "message": "Master Page can't be used.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE_TEXT_BOX",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "FONTS_INCLUDED",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "OTF_TTF_FONT",
+    "label": "OTF/TTF Font",
+    "message": "Only OTF or TTF fonts are supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "VARIABLE_FONT",
+    "label": "Variable Font",
+    "message": "Variable fonts are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "key": "IMAGE_INCLUDED",
+    "label": "Images Included",
+    "message": "Package missing image link.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "EMBEDDED_IMAGE",
+    "label": "Embedded Image",
+    "message": "Embedded images are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item transformations (flip/skew) are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "key": "TABLE",
+    "label": "Table",
+    "message": "Tables are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "PASTED_GRAPHICS",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "key": "AUTO_SIZE_TEXT_BOX",
+    "label": "Auto Sizing Text Box",
+    "message": "Auto-size text boxes were not set up properly",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "key": "TEXT_COLUMNS",
+    "label": "Text Column",
+    "message": "Text columns are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "key": "LINKED_TEXT_FRAME",
+    "label": "Linked Text Frame",
+    "message": "Linked (threaded) text frames are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_TEXT",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_IMAGE",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "key": "GRID_ALIGNMENT",
+    "label": "Grid Alignment",
+    "message": "Grid alignment is not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING_CHAR",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP",
+    "label": "Text Wrap",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT",
+    "label": "Color Fill Tint (Beta)",
+    "message": "Fill Tint must be 100. (This may be inaccurate, testing currently)",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "key": "HYPHENATION",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "OVERRIDE",
+    "label": "Override",
+    "message": "Overrides are not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "UNUSED_IMAGE",
+    "label": "Unused Image",
+    "message": "Image(s) in package are unused making the package larger in size.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "key": "DOCUMENT_BLEED",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied.",
+    "severity": "warnings"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "key": "COMPOSER",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "EMPTY_TEXT_FRAME",
+    "label": "Empty Text Frames",
+    "message": "Empty text frame found.",
+    "severity": "infos"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "LARGE_IMAGE",
+    "label": "Large Image",
+    "message": "Image is large. Verify that this large of an image is needed.",
+    "severity": "infos"
+   }
+  ],
+  "fonts": {
+   "details": {
+    "Minion Pro": {
+     "errors": [
+      {
+       "context": "",
+       "data_id": "null",
+       "identifier": "Minion Pro",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "FONTS_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 4
+  },
+  "general": {
+   "details": {},
+   "total_count": 0
+  },
+  "images": {
+   "details": {},
+   "total_count": 63
+  },
+  "page_layouts": [
+   {
+    "frames": [
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 38.83,
+      "y": 24.66
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 45.92
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 45.92
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 295.52
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 295.52
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 544.67
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 544.67
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 794.12
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 794.12
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 38.83,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 197.42,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 197.42,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 356.01,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 356.01,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 515.21,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 515.21,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 673.65,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 673.65,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 832.39,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 832.39,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 991.13,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 991.13,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 1149.87,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "u192",
+      "width": 0.0,
+      "x": 1149.87,
+      "y": 802.35
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 38.53,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 38.53,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 38.53,
+      "y": 544.22
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 68.56,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 68.56,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 68.56,
+      "y": 564.06
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 651.94
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 77.17,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 77.17,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 77.17,
+      "y": 767.45
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 52.71,
+      "y": 606.58
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 50.8,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 50.8,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 50.8,
+      "y": 700.12
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 197.57,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 197.57,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 197.57,
+      "y": 544.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 544.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 544.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 45.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 294.77
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 544.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 295.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 544.67
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 990.83,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 990.83,
+      "y": 295.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 158.74,
+      "x": 990.83,
+      "y": 544.67
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 227.6,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 227.6,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 227.6,
+      "y": 564.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 385.89,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 385.89,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 385.89,
+      "y": 564.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 544.63,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 544.63,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 544.63,
+      "y": 564.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 703.37,
+      "y": 65.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 703.37,
+      "y": 314.61
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 703.37,
+      "y": 564.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 862.11,
+      "y": 66.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 862.11,
+      "y": 315.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 862.11,
+      "y": 564.51
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 1020.85,
+      "y": 66.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 1020.85,
+      "y": 315.06
+     },
+     {
+      "height": 9.41,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 98.69,
+      "x": 1020.85,
+      "y": 564.51
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 651.94
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 651.94
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 651.94
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 153.49
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 402.49
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 651.94
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 153.68
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 402.68
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 652.13
+     },
+     {
+      "height": 41.91,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 153.68
+     },
+     {
+      "height": 40.94,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 402.68
+     },
+     {
+      "height": 42.35,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 652.13
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 236.21,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 236.21,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 236.21,
+      "y": 767.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 394.5,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 394.5,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 394.5,
+      "y": 767.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 553.24,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 553.24,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 553.24,
+      "y": 767.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 711.98,
+      "y": 269.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 711.98,
+      "y": 518.0
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 711.98,
+      "y": 767.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 870.72,
+      "y": 269.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 870.72,
+      "y": 518.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 870.72,
+      "y": 767.9
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 1029.46,
+      "y": 269.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 1029.46,
+      "y": 518.45
+     },
+     {
+      "height": 8.71,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 81.47,
+      "x": 1029.46,
+      "y": 767.9
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 211.75,
+      "y": 606.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 370.04,
+      "y": 606.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 528.78,
+      "y": 606.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 108.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 357.13
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 687.52,
+      "y": 606.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 108.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 357.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 846.26,
+      "y": 607.03
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 108.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 357.58
+     },
+     {
+      "height": 34.02,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 130.39,
+      "x": 1005.0,
+      "y": 607.03
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 209.84,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 209.84,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 209.84,
+      "y": 700.12
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 368.13,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 368.13,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 368.13,
+      "y": 700.12
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 526.87,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 526.87,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 526.87,
+      "y": 700.12
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 685.61,
+      "y": 201.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 685.61,
+      "y": 450.68
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 685.61,
+      "y": 700.12
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 844.35,
+      "y": 202.13
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 844.35,
+      "y": 451.13
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 844.35,
+      "y": 700.57
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 1003.09,
+      "y": 202.13
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 1003.09,
+      "y": 451.13
+     },
+     {
+      "height": 59.39,
+      "kind": "Rectangle",
+      "page_id": "u192",
+      "width": 134.21,
+      "x": 1003.09,
+      "y": 700.57
+     }
+    ],
+    "height": 841.8897637795001,
+    "index": 1,
+    "name": "1",
+    "page_id": "u192",
+    "preview": "sha256:c726012ebf677320",
+    "spread_id": "u18d",
+    "width": 1190.5511811024
+   },
+   {
+    "frames": [
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 38.83,
+      "y": 24.66
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 45.92
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 45.92
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 295.52
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 295.52
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 544.67
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 544.67
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 16.72,
+      "y": 794.12
+     },
+     {
+      "height": 0.0,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 14.17,
+      "x": 1157.95,
+      "y": 794.12
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 38.83,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 197.42,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 197.42,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 356.01,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 356.01,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 515.21,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 515.21,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 673.65,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 673.65,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 832.39,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 832.39,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 991.13,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 991.13,
+      "y": 802.35
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 1149.87,
+      "y": 24.66
+     },
+     {
+      "height": 14.17,
+      "kind": "GraphicLine",
+      "page_id": "ud3",
+      "width": 0.0,
+      "x": 1149.87,
+      "y": 802.35
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 38.98,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 38.98,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 38.98,
+      "y": 544.52
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 68.85,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 68.85,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 68.85,
+      "y": 635.23
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 197.42,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 197.42,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 197.42,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 355.86,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 514.61,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 673.35,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 832.09,
+      "y": 544.52
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 991.28,
+      "y": 46.22
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 991.28,
+      "y": 295.07
+     },
+     {
+      "height": 249.45,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 158.74,
+      "x": 991.28,
+      "y": 544.52
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 227.29,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 227.29,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 227.29,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 385.73,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 385.73,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 385.73,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 544.48,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 544.48,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 544.48,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 703.22,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 703.22,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 703.22,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 861.96,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 861.96,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 861.96,
+      "y": 635.23
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 1021.15,
+      "y": 136.93
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 1021.15,
+      "y": 385.78
+     },
+     {
+      "height": 99.0,
+      "kind": "Rectangle",
+      "page_id": "ud3",
+      "width": 99.0,
+      "x": 1021.15,
+      "y": 635.23
+     }
+    ],
+    "height": 841.8897637795001,
+    "index": 2,
+    "name": "2",
+    "page_id": "ud3",
+    "preview": "sha256:cbd4750d5bfbfb55",
+    "spread_id": "uce",
+    "width": 1190.5511811024
+   }
+  ],
+  "pages": {
+   "u192": "1",
+   "ud3": "2"
+  },
+  "par_styles": {
+   "details": {
+    "NormalParagraphStyle": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 153.49
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u2ec",
+       "identifier": "NormalParagraphStyle",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    }
+   },
+   "total_count": 1
+  },
+  "spread_to_pages": {
+   "u18d": [
+    "u192"
+   ],
+   "uce": [
+    "ud3"
+   ]
+  },
+  "template_name": "Sammelform-Price-Tag_Bad.zip",
+  "text_box_data": {
+   "u2ec": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u2ec",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u2ef": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u2ef",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u303": {
+    "content": "monobrand.com\n",
+    "identifier": "u303",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u306": {
+    "content": "monobrand.com\n",
+    "identifier": "u306",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u31a": {
+    "content": "$ 250.00\n",
+    "identifier": "u31a",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u31d": {
+    "content": "$ 250.00\n",
+    "identifier": "u31d",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u43d": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u43d",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u440": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u440",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u454": {
+    "content": "monobrand.com\n",
+    "identifier": "u454",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u457": {
+    "content": "monobrand.com\n",
+    "identifier": "u457",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u46b": {
+    "content": "$ 250.00\n",
+    "identifier": "u46b",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u46e": {
+    "content": "$ 250.00\n",
+    "identifier": "u46e",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u489": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u489",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u48c": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u48c",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4a0": {
+    "content": "monobrand.com\n",
+    "identifier": "u4a0",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4a3": {
+    "content": "monobrand.com\n",
+    "identifier": "u4a3",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4b7": {
+    "content": "$ 250.00\n",
+    "identifier": "u4b7",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4bb": {
+    "content": "$ 250.00\n",
+    "identifier": "u4bb",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4d7": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u4d7",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4da": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u4da",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4ee": {
+    "content": "monobrand.com\n",
+    "identifier": "u4ee",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4f1": {
+    "content": "monobrand.com\n",
+    "identifier": "u4f1",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u505": {
+    "content": "$ 250.00\n",
+    "identifier": "u505",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u508": {
+    "content": "$ 250.00\n",
+    "identifier": "u508",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u525": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u525",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u528": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u528",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u53c": {
+    "content": "monobrand.com\n",
+    "identifier": "u53c",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u53f": {
+    "content": "monobrand.com\n",
+    "identifier": "u53f",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u553": {
+    "content": "$ 250.00\n",
+    "identifier": "u553",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u556": {
+    "content": "$ 250.00\n",
+    "identifier": "u556",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u578": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u578",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u57b": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u57b",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u58f": {
+    "content": "monobrand.com\n",
+    "identifier": "u58f",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u592": {
+    "content": "monobrand.com\n",
+    "identifier": "u592",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5a6": {
+    "content": "$ 250.00\n",
+    "identifier": "u5a6",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5a9": {
+    "content": "$ 250.00\n",
+    "identifier": "u5a9",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5c4": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u5c4",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5c7": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u5c7",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5db": {
+    "content": "monobrand.com\n",
+    "identifier": "u5db",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5de": {
+    "content": "monobrand.com\n",
+    "identifier": "u5de",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5f2": {
+    "content": "$ 250.00\n",
+    "identifier": "u5f2",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5f5": {
+    "content": "$ 250.00\n",
+    "identifier": "u5f5",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u682": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u682",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u686": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u686",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u69a": {
+    "content": "monobrand.com\n",
+    "identifier": "u69a",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u69d": {
+    "content": "monobrand.com\n",
+    "identifier": "u69d",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u6b1": {
+    "content": "$ 250.00\n",
+    "identifier": "u6b1",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u6b4": {
+    "content": "$ 250.00\n",
+    "identifier": "u6b4",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u6ec": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u6ec",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u6ef": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u6ef",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u703": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u703",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u706": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u706",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u71a": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u71a",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u71d": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u71d",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u731": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u731",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u734": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u734",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u748": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u748",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u74b": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u74b",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u75f": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u75f",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u762": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u762",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u776": {
+    "content": "monobrand.com\n",
+    "identifier": "u776",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u779": {
+    "content": "monobrand.com\n",
+    "identifier": "u779",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u78d": {
+    "content": "monobrand.com\n",
+    "identifier": "u78d",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u790": {
+    "content": "monobrand.com\n",
+    "identifier": "u790",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u7a4": {
+    "content": "monobrand.com\n",
+    "identifier": "u7a4",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u7a7": {
+    "content": "monobrand.com\n",
+    "identifier": "u7a7",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u7bb": {
+    "content": "monobrand.com\n",
+    "identifier": "u7bb",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u7be": {
+    "content": "monobrand.com\n",
+    "identifier": "u7be",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u7d2": {
+    "content": "monobrand.com\n",
+    "identifier": "u7d2",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u7d5": {
+    "content": "monobrand.com\n",
+    "identifier": "u7d5",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u7e9": {
+    "content": "monobrand.com\n",
+    "identifier": "u7e9",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u7ec": {
+    "content": "monobrand.com\n",
+    "identifier": "u7ec",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u800": {
+    "content": "$ 250.00\n",
+    "identifier": "u800",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u803": {
+    "content": "$ 250.00\n",
+    "identifier": "u803",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u817": {
+    "content": "$ 250.00\n",
+    "identifier": "u817",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u81a": {
+    "content": "$ 250.00\n",
+    "identifier": "u81a",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u82e": {
+    "content": "$ 250.00\n",
+    "identifier": "u82e",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u831": {
+    "content": "$ 250.00\n",
+    "identifier": "u831",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u845": {
+    "content": "$ 250.00\n",
+    "identifier": "u845",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u849": {
+    "content": "$ 250.00\n",
+    "identifier": "u849",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u85d": {
+    "content": "$ 250.00\n",
+    "identifier": "u85d",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u860": {
+    "content": "$ 250.00\n",
+    "identifier": "u860",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u874": {
+    "content": "$ 250.00\n",
+    "identifier": "u874",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u878": {
+    "content": "$ 250.00\n",
+    "identifier": "u878",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u8a5": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u8a5",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u8a8": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u8a8",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u8bc": {
+    "content": "monobrand.com\n",
+    "identifier": "u8bc",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u8bf": {
+    "content": "monobrand.com\n",
+    "identifier": "u8bf",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u8d3": {
+    "content": "$ 250.00\n",
+    "identifier": "u8d3",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u8d7": {
+    "content": "$ 250.00\n",
+    "identifier": "u8d7",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u90c": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u90c",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u90f": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u90f",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u923": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u923",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u926": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u926",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u93a": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u93a",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u93d": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u93d",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u951": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u951",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u955": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u955",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u969": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u969",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u96c": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u96c",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u980": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u980",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u983": {
+    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "identifier": "u983",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u997": {
+    "content": "monobrand.com\n",
+    "identifier": "u997",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u99a": {
+    "content": "monobrand.com\n",
+    "identifier": "u99a",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u9ae": {
+    "content": "monobrand.com\n",
+    "identifier": "u9ae",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u9b1": {
+    "content": "monobrand.com\n",
+    "identifier": "u9b1",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u9c5": {
+    "content": "monobrand.com\n",
+    "identifier": "u9c5",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u9c9": {
+    "content": "monobrand.com\n",
+    "identifier": "u9c9",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u9dd": {
+    "content": "monobrand.com\n",
+    "identifier": "u9dd",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u9e0": {
+    "content": "monobrand.com\n",
+    "identifier": "u9e0",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u9f4": {
+    "content": "monobrand.com\n",
+    "identifier": "u9f4",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u9f7": {
+    "content": "monobrand.com\n",
+    "identifier": "u9f7",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua0b": {
+    "content": "monobrand.com\n",
+    "identifier": "ua0b",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua0f": {
+    "content": "monobrand.com\n",
+    "identifier": "ua0f",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua23": {
+    "content": "$ 250.00\n",
+    "identifier": "ua23",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua26": {
+    "content": "$ 250.00\n",
+    "identifier": "ua26",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua3a": {
+    "content": "$ 250.00\n",
+    "identifier": "ua3a",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua3d": {
+    "content": "$ 250.00\n",
+    "identifier": "ua3d",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua51": {
+    "content": "$ 250.00\n",
+    "identifier": "ua51",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua54": {
+    "content": "$ 250.00\n",
+    "identifier": "ua54",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua68": {
+    "content": "$ 250.00\n",
+    "identifier": "ua68",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua6b": {
+    "content": "$ 250.00\n",
+    "identifier": "ua6b",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua7f": {
+    "content": "$ 250.00\n",
+    "identifier": "ua7f",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua82": {
+    "content": "$ 250.00\n",
+    "identifier": "ua82",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua96": {
+    "content": "$ 250.00\n",
+    "identifier": "ua96",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ua99": {
+    "content": "$ 250.00\n",
+    "identifier": "ua99",
+    "page_id": "1",
+    "page_name": ""
+   }
+  },
+  "text_boxes": {
+   "details": {
+    "u2ec": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 153.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u2ec",
+       "identifier": "u2ec",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u2ef": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 153.49
+       },
+       "context": "",
+       "data_id": "u2ec",
+       "identifier": "u2ef",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u303": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 77.17,
+        "y": 269.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u303",
+       "identifier": "u303",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u306": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 77.17,
+        "y": 269.0
+       },
+       "context": "",
+       "data_id": "u303",
+       "identifier": "u306",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u31a": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 108.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u31a",
+       "identifier": "u31a",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u31d": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 108.13
+       },
+       "context": "",
+       "data_id": "u31a",
+       "identifier": "u31d",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u43d": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 153.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u43d",
+       "identifier": "u43d",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u440": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 153.49
+       },
+       "context": "",
+       "data_id": "u43d",
+       "identifier": "u440",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u454": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 236.21,
+        "y": 269.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u454",
+       "identifier": "u454",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u457": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 236.21,
+        "y": 269.0
+       },
+       "context": "",
+       "data_id": "u454",
+       "identifier": "u457",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u46b": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 108.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u46b",
+       "identifier": "u46b",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u46e": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 108.13
+       },
+       "context": "",
+       "data_id": "u46b",
+       "identifier": "u46e",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u489": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 153.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u489",
+       "identifier": "u489",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u48c": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 153.49
+       },
+       "context": "",
+       "data_id": "u489",
+       "identifier": "u48c",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u4a0": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 394.5,
+        "y": 269.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u4a0",
+       "identifier": "u4a0",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u4a3": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 394.5,
+        "y": 269.0
+       },
+       "context": "",
+       "data_id": "u4a0",
+       "identifier": "u4a3",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u4b7": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 108.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u4b7",
+       "identifier": "u4b7",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u4bb": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 108.13
+       },
+       "context": "",
+       "data_id": "u4b7",
+       "identifier": "u4bb",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u4d7": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 153.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u4d7",
+       "identifier": "u4d7",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u4da": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 153.49
+       },
+       "context": "",
+       "data_id": "u4d7",
+       "identifier": "u4da",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u4ee": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 553.24,
+        "y": 269.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u4ee",
+       "identifier": "u4ee",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u4f1": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 553.24,
+        "y": 269.0
+       },
+       "context": "",
+       "data_id": "u4ee",
+       "identifier": "u4f1",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u505": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 108.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u505",
+       "identifier": "u505",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u508": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 108.13
+       },
+       "context": "",
+       "data_id": "u505",
+       "identifier": "u508",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u525": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 153.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u525",
+       "identifier": "u525",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u528": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 153.49
+       },
+       "context": "",
+       "data_id": "u525",
+       "identifier": "u528",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u53c": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 711.98,
+        "y": 269.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u53c",
+       "identifier": "u53c",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u53f": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 711.98,
+        "y": 269.0
+       },
+       "context": "",
+       "data_id": "u53c",
+       "identifier": "u53f",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u553": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 108.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u553",
+       "identifier": "u553",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u556": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 108.13
+       },
+       "context": "",
+       "data_id": "u553",
+       "identifier": "u556",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u578": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 153.68
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u578",
+       "identifier": "u578",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u57b": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 153.68
+       },
+       "context": "",
+       "data_id": "u578",
+       "identifier": "u57b",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u58f": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 870.72,
+        "y": 269.45
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u58f",
+       "identifier": "u58f",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u592": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 870.72,
+        "y": 269.45
+       },
+       "context": "",
+       "data_id": "u58f",
+       "identifier": "u592",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u5a6": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 108.58
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u5a6",
+       "identifier": "u5a6",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u5a9": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 108.58
+       },
+       "context": "",
+       "data_id": "u5a6",
+       "identifier": "u5a9",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u5c4": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 153.68
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u5c4",
+       "identifier": "u5c4",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u5c7": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 41.91,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 153.68
+       },
+       "context": "",
+       "data_id": "u5c4",
+       "identifier": "u5c7",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u5db": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 1029.46,
+        "y": 269.45
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u5db",
+       "identifier": "u5db",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u5de": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 1029.46,
+        "y": 269.45
+       },
+       "context": "",
+       "data_id": "u5db",
+       "identifier": "u5de",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u5f2": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 108.58
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u5f2",
+       "identifier": "u5f2",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u5f5": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 108.58
+       },
+       "context": "",
+       "data_id": "u5f2",
+       "identifier": "u5f5",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u682": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 402.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u682",
+       "identifier": "u682",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u686": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 402.49
+       },
+       "context": "",
+       "data_id": "u682",
+       "identifier": "u686",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u69a": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 77.17,
+        "y": 518.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u69a",
+       "identifier": "u69a",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u69d": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 77.17,
+        "y": 518.0
+       },
+       "context": "",
+       "data_id": "u69a",
+       "identifier": "u69d",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u6b1": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 357.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u6b1",
+       "identifier": "u6b1",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u6b4": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 357.13
+       },
+       "context": "",
+       "data_id": "u6b1",
+       "identifier": "u6b4",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u6ec": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 402.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u6ec",
+       "identifier": "u6ec",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u6ef": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 402.49
+       },
+       "context": "",
+       "data_id": "u6ec",
+       "identifier": "u6ef",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u703": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 402.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u703",
+       "identifier": "u703",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u706": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 402.49
+       },
+       "context": "",
+       "data_id": "u703",
+       "identifier": "u706",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u71a": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 402.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u71a",
+       "identifier": "u71a",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u71d": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 402.49
+       },
+       "context": "",
+       "data_id": "u71a",
+       "identifier": "u71d",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u731": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 402.49
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u731",
+       "identifier": "u731",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u734": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 402.49
+       },
+       "context": "",
+       "data_id": "u731",
+       "identifier": "u734",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u748": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 402.68
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u748",
+       "identifier": "u748",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u74b": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 402.68
+       },
+       "context": "",
+       "data_id": "u748",
+       "identifier": "u74b",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u75f": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 402.68
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u75f",
+       "identifier": "u75f",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u762": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 40.94,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 402.68
+       },
+       "context": "",
+       "data_id": "u75f",
+       "identifier": "u762",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u776": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 236.21,
+        "y": 518.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u776",
+       "identifier": "u776",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u779": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 236.21,
+        "y": 518.0
+       },
+       "context": "",
+       "data_id": "u776",
+       "identifier": "u779",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u78d": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 394.5,
+        "y": 518.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u78d",
+       "identifier": "u78d",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u790": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 394.5,
+        "y": 518.0
+       },
+       "context": "",
+       "data_id": "u78d",
+       "identifier": "u790",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u7a4": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 553.24,
+        "y": 518.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u7a4",
+       "identifier": "u7a4",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u7a7": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 553.24,
+        "y": 518.0
+       },
+       "context": "",
+       "data_id": "u7a4",
+       "identifier": "u7a7",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u7bb": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 711.98,
+        "y": 518.0
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u7bb",
+       "identifier": "u7bb",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u7be": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 711.98,
+        "y": 518.0
+       },
+       "context": "",
+       "data_id": "u7bb",
+       "identifier": "u7be",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u7d2": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 870.72,
+        "y": 518.45
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u7d2",
+       "identifier": "u7d2",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u7d5": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 870.72,
+        "y": 518.45
+       },
+       "context": "",
+       "data_id": "u7d2",
+       "identifier": "u7d5",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u7e9": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 1029.46,
+        "y": 518.45
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u7e9",
+       "identifier": "u7e9",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u7ec": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 1029.46,
+        "y": 518.45
+       },
+       "context": "",
+       "data_id": "u7e9",
+       "identifier": "u7ec",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u800": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 357.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u800",
+       "identifier": "u800",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u803": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 357.13
+       },
+       "context": "",
+       "data_id": "u800",
+       "identifier": "u803",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u817": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 357.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u817",
+       "identifier": "u817",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u81a": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 357.13
+       },
+       "context": "",
+       "data_id": "u817",
+       "identifier": "u81a",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u82e": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 357.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u82e",
+       "identifier": "u82e",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u831": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 357.13
+       },
+       "context": "",
+       "data_id": "u82e",
+       "identifier": "u831",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u845": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 357.13
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u845",
+       "identifier": "u845",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u849": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 357.13
+       },
+       "context": "",
+       "data_id": "u845",
+       "identifier": "u849",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u85d": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 357.58
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u85d",
+       "identifier": "u85d",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u860": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 357.58
+       },
+       "context": "",
+       "data_id": "u85d",
+       "identifier": "u860",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u874": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 357.58
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u874",
+       "identifier": "u874",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u878": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 357.58
+       },
+       "context": "",
+       "data_id": "u874",
+       "identifier": "u878",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u8a5": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 651.94
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u8a5",
+       "identifier": "u8a5",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u8a8": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 651.94
+       },
+       "context": "",
+       "data_id": "u8a5",
+       "identifier": "u8a8",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u8bc": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 77.17,
+        "y": 767.45
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u8bc",
+       "identifier": "u8bc",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u8bf": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 77.17,
+        "y": 767.45
+       },
+       "context": "",
+       "data_id": "u8bc",
+       "identifier": "u8bf",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u8d3": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 606.58
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "u8d3",
+       "identifier": "u8d3",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u8d7": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 52.71,
+        "y": 606.58
+       },
+       "context": "",
+       "data_id": "u8d3",
+       "identifier": "u8d7",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u90c": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 651.94
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u90c",
+       "identifier": "u90c",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u90f": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 651.94
+       },
+       "context": "",
+       "data_id": "u90c",
+       "identifier": "u90f",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u923": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 651.94
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u923",
+       "identifier": "u923",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u926": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 651.94
+       },
+       "context": "",
+       "data_id": "u923",
+       "identifier": "u926",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u93a": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 651.94
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u93a",
+       "identifier": "u93a",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u93d": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 651.94
+       },
+       "context": "",
+       "data_id": "u93a",
+       "identifier": "u93d",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u951": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 651.94
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u951",
+       "identifier": "u951",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u955": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 651.94
+       },
+       "context": "",
+       "data_id": "u951",
+       "identifier": "u955",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u969": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 652.13
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u969",
+       "identifier": "u969",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u96c": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 652.13
+       },
+       "context": "",
+       "data_id": "u969",
+       "identifier": "u96c",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u980": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 652.13
+       },
+       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "JACKETSIZE: MCOLOR: BLACK"
+       },
+       "data_id": "u980",
+       "identifier": "u980",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "JACKETSIZE: MCOLOR: BLACK"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u983": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 42.35,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 652.13
+       },
+       "context": "",
+       "data_id": "u980",
+       "identifier": "u983",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u997": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 236.21,
+        "y": 767.45
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u997",
+       "identifier": "u997",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u99a": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 236.21,
+        "y": 767.45
+       },
+       "context": "",
+       "data_id": "u997",
+       "identifier": "u99a",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u9ae": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 394.5,
+        "y": 767.45
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u9ae",
+       "identifier": "u9ae",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u9b1": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 394.5,
+        "y": 767.45
+       },
+       "context": "",
+       "data_id": "u9ae",
+       "identifier": "u9b1",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u9c5": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 553.24,
+        "y": 767.45
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u9c5",
+       "identifier": "u9c5",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u9c9": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 553.24,
+        "y": 767.45
+       },
+       "context": "",
+       "data_id": "u9c5",
+       "identifier": "u9c9",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u9dd": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 711.98,
+        "y": 767.45
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u9dd",
+       "identifier": "u9dd",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u9e0": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 711.98,
+        "y": 767.45
+       },
+       "context": "",
+       "data_id": "u9dd",
+       "identifier": "u9e0",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u9f4": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 870.72,
+        "y": 767.9
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u9f4",
+       "identifier": "u9f4",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u9f7": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 870.72,
+        "y": 767.9
+       },
+       "context": "",
+       "data_id": "u9f4",
+       "identifier": "u9f7",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "ua0b": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 1029.46,
+        "y": 767.9
+       },
+       "context": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "PointSize": "9",
+         "Tracking": "50"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "ua0b",
+       "identifier": "ua0b",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "ua0f": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 8.71,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 81.47,
+        "x": 1029.46,
+        "y": 767.9
+       },
+       "context": "",
+       "data_id": "ua0b",
+       "identifier": "ua0f",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "ua23": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 606.58
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "ua23",
+       "identifier": "ua23",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "ua26": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 211.75,
+        "y": 606.58
+       },
+       "context": "",
+       "data_id": "ua23",
+       "identifier": "ua26",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "ua3a": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 606.58
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "ua3a",
+       "identifier": "ua3a",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "ua3d": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 370.04,
+        "y": 606.58
+       },
+       "context": "",
+       "data_id": "ua3a",
+       "identifier": "ua3d",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "ua51": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 606.58
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "ua51",
+       "identifier": "ua51",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "ua54": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 528.78,
+        "y": 606.58
+       },
+       "context": "",
+       "data_id": "ua51",
+       "identifier": "ua54",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "ua68": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 606.58
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "ua68",
+       "identifier": "ua68",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "ua6b": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 687.52,
+        "y": 606.58
+       },
+       "context": "",
+       "data_id": "ua68",
+       "identifier": "ua6b",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "ua7f": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 607.03
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "ua7f",
+       "identifier": "ua7f",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "ua82": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 846.26,
+        "y": 607.03
+       },
+       "context": "",
+       "data_id": "ua7f",
+       "identifier": "ua82",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "ua96": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 607.03
+       },
+       "context": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "PointSize": "23",
+         "Tracking": "50"
+        },
+        "text": "$ 250.00"
+       },
+       "data_id": "ua96",
+       "identifier": "ua96",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "text_content": [
+        "$ 250.00"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "ua99": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 34.02,
+        "kind": "TextFrame",
+        "page_id": "u192",
+        "width": 130.39,
+        "x": 1005.0,
+        "y": 607.03
+       },
+       "context": "",
+       "data_id": "ua96",
+       "identifier": "ua99",
+       "page_id": "u192",
+       "page_name": "1",
+       "spread_id": "u18d",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 63
+  },
+  "validation_classifiers": {
+   "COMPOSER": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur."
+   },
+   "FONTS_INCLUDED": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts."
+   },
+   "OVERRIDE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Override",
+    "message": "Overrides are not supported."
+   },
+   "PARAGRAPH_STYLE_TEXT_BOX": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used."
+   }
+  }
+ },
+ "stopped_at": "RESULTS"
+}

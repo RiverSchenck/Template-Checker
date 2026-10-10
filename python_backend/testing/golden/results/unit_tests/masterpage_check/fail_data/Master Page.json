@@ -1,0 +1,7024 @@
+{
+ "results": {
+  "char_styles": {
+   "details": {},
+   "total_count": 1
+  },
+  "checks": [
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "key": "MASTERPAGE",
+    "label": "Masterpage",
+    "message": "Master Page can't be used.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE_TEXT_BOX",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "FONTS_INCLUDED",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "OTF_TTF_FONT",
+    "label": "OTF/TTF Font",
+    "message": "Only OTF or TTF fonts are supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "VARIABLE_FONT",
+    "label": "Variable Font",
+    "message": "Variable fonts are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "key": "IMAGE_INCLUDED",
+    "label": "Images Included",
+    "message": "Package missing image link.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "EMBEDDED_IMAGE",
+    "label": "Embedded Image",
+    "message": "Embedded images are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item transformations (flip/skew) are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "key": "TABLE",
+    "label": "Table",
+    "message": "Tables are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "PASTED_GRAPHICS",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "key": "AUTO_SIZE_TEXT_BOX",
+    "label": "Auto Sizing Text Box",
+    "message": "Auto-size text boxes were not set up properly",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "key": "TEXT_COLUMNS",
+    "label": "Text Column",
+    "message": "Text columns are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "key": "LINKED_TEXT_FRAME",
+    "label": "Linked Text Frame",
+    "message": "Linked (threaded) text frames are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_TEXT",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_IMAGE",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "key": "GRID_ALIGNMENT",
+    "label": "Grid Alignment",
+    "message": "Grid alignment is not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING_CHAR",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP",
+    "label": "Text Wrap",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT",
+    "label": "Color Fill Tint (Beta)",
+    "message": "Fill Tint must be 100. (This may be inaccurate, testing currently)",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "key": "HYPHENATION",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "OVERRIDE",
+    "label": "Override",
+    "message": "Overrides are not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "UNUSED_IMAGE",
+    "label": "Unused Image",
+    "message": "Image(s) in package are unused making the package larger in size.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "key": "DOCUMENT_BLEED",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied.",
+    "severity": "warnings"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "key": "COMPOSER",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "EMPTY_TEXT_FRAME",
+    "label": "Empty Text Frames",
+    "message": "Empty text frame found.",
+    "severity": "infos"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "LARGE_IMAGE",
+    "label": "Large Image",
+    "message": "Image is large. Verify that this large of an image is needed.",
+    "severity": "infos"
+   }
+  ],
+  "fonts": {
+   "details": {},
+   "total_count": 6
+  },
+  "general": {
+   "details": {
+    "null": {
+     "errors": [
+      {
+       "context": "Elements: TextFrame, TextFrame, Rectangle",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "MASTERPAGE"
+      }
+     ],
+     "infos": [],
+     "warnings": [
+      {
+       "context": "top: 70.86614173228347pt, bottom: 70.86614173228347pt, inside: 70.86614173228347pt, outside: 70.86614173228347pt.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "DOCUMENT_BLEED"
+      }
+     ]
+    }
+   },
+   "total_count": 0
+  },
+  "images": {
+   "details": {
+    "Arrow_Pattern_CMYK_Gray.ai": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 3118.11,
+        "kind": "Rectangle",
+        "page_id": "u2be",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 2622.05
+       },
+       "context": "Image inside Container has been rotated by -90.00 degrees.",
+       "data_id": "u2c3",
+       "identifier": "Arrow_Pattern_CMYK_Gray.ai",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      },
+      {
+       "bounds": {
+        "height": 3118.11,
+        "kind": "Rectangle",
+        "page_id": "u2f9",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 2622.05
+       },
+       "context": "Image inside Container has been rotated by -90.00 degrees.",
+       "data_id": "u301",
+       "identifier": "Arrow_Pattern_CMYK_Gray.ai",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      },
+      {
+       "bounds": {
+        "height": 3118.11,
+        "kind": "Rectangle",
+        "page_id": "u335",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 2622.05
+       },
+       "context": "Image inside Container has been rotated by -90.00 degrees.",
+       "data_id": "u33b",
+       "identifier": "Arrow_Pattern_CMYK_Gray.ai",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      },
+      {
+       "bounds": {
+        "height": 3118.11,
+        "kind": "Rectangle",
+        "page_id": "u362",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 2622.05
+       },
+       "context": "Image inside Container has been rotated by -90.00 degrees.",
+       "data_id": "u367",
+       "identifier": "Arrow_Pattern_CMYK_Gray.ai",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      },
+      {
+       "bounds": {
+        "height": 3118.11,
+        "kind": "Rectangle",
+        "page_id": "u389",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 2622.05
+       },
+       "context": "Image inside Container has been rotated by -90.00 degrees.",
+       "data_id": "u38b",
+       "identifier": "Arrow_Pattern_CMYK_Gray.ai",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      },
+      {
+       "bounds": {
+        "height": 3118.11,
+        "kind": "Rectangle",
+        "page_id": "u3ae",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 2622.05
+       },
+       "context": "Image inside Container has been rotated by -90.00 degrees.",
+       "data_id": "u3b0",
+       "identifier": "Arrow_Pattern_CMYK_Gray.ai",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      },
+      {
+       "bounds": {
+        "height": 3118.11,
+        "kind": "Rectangle",
+        "page_id": "u3d8",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 2622.05
+       },
+       "context": "Image inside Container has been rotated by -90.00 degrees.",
+       "data_id": "u3da",
+       "identifier": "Arrow_Pattern_CMYK_Gray.ai",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      }
+     ]
+    },
+    "Simple_CMYK_Gradients_Fuschia copy.ai": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 5811.02,
+        "kind": "Rectangle",
+        "page_id": "u2be",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": -70.87
+       },
+       "context": "Image inside Container has been rotated by 90.00 degrees.",
+       "data_id": "u2bf",
+       "identifier": "Simple_CMYK_Gradients_Fuschia copy.ai",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      },
+      {
+       "bounds": {
+        "height": 5811.02,
+        "kind": "Rectangle",
+        "page_id": "ud5",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": -70.87
+       },
+       "context": "Image inside Container has been rotated by 90.00 degrees.",
+       "data_id": "u10f",
+       "identifier": "Simple_CMYK_Gradients_Fuschia copy.ai",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      }
+     ]
+    },
+    "Simple_CMYK_Gradients_Violet copy.ai": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 5811.02,
+        "kind": "Rectangle",
+        "page_id": "u16d",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": -70.87
+       },
+       "context": "Image inside Container has been rotated by 90.00 degrees.",
+       "data_id": "u16e",
+       "identifier": "Simple_CMYK_Gradients_Violet copy.ai",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      },
+      {
+       "bounds": {
+        "height": 5811.02,
+        "kind": "Rectangle",
+        "page_id": "u2f9",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": -70.87
+       },
+       "context": "Image inside Container has been rotated by 90.00 degrees.",
+       "data_id": "u2fa",
+       "identifier": "Simple_CMYK_Gradients_Violet copy.ai",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      }
+     ]
+    },
+    "Simple_CMYK_Gradients_Violet_Fuschia copy.ai": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 5811.02,
+        "kind": "Rectangle",
+        "page_id": "u19f",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": -70.87
+       },
+       "context": "Image inside Container has been rotated by 90.00 degrees.",
+       "data_id": "u1a0",
+       "identifier": "Simple_CMYK_Gradients_Violet_Fuschia copy.ai",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      },
+      {
+       "bounds": {
+        "height": 5811.02,
+        "kind": "Rectangle",
+        "page_id": "u335",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": -70.87
+       },
+       "context": "Image inside Container has been rotated by 90.00 degrees.",
+       "data_id": "u336",
+       "identifier": "Simple_CMYK_Gradients_Violet_Fuschia copy.ai",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
+      }
+     ]
+    },
+    "null": {
+     "errors": [
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "PASTED_GRAPHICS"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "pexels-mizuno-k-12903254.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "ud5",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'pexels-mizuno-k-12903254.png' (ID: u3ff) is used but not found in the Links folder.",
+       "data_id": "u3ff",
+       "identifier": "pexels-mizuno-k-12903254.png",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_1033103851.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u24c",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_1033103851.png' (ID: u15fe) is used but not found in the Links folder.",
+       "data_id": "u15fe",
+       "identifier": "shutterstock_1033103851.png",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_1151850470.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u16d",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_1151850470.png' (ID: u1275) is used but not found in the Links folder.",
+       "data_id": "u1275",
+       "identifier": "shutterstock_1151850470.png",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_1281259936.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u1cf",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_1281259936.png' (ID: u13e9) is used but not found in the Links folder.",
+       "data_id": "u13e9",
+       "identifier": "shutterstock_1281259936.png",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_1654831870.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u200",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_1654831870.png' (ID: u146c) is used but not found in the Links folder.",
+       "data_id": "u146c",
+       "identifier": "shutterstock_1654831870.png",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_1660490494.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u3d8",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_1660490494.png' (ID: u1a6e) is used but not found in the Links folder.",
+       "data_id": "u1a6e",
+       "identifier": "shutterstock_1660490494.png",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_1865153395.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u3ae",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_1865153395.png' (ID: u19e8) is used but not found in the Links folder.",
+       "data_id": "u19e8",
+       "identifier": "shutterstock_1865153395.png",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_1912253137.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u2be",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_1912253137.png' (ID: u16ea) is used but not found in the Links folder.",
+       "data_id": "u16ea",
+       "identifier": "shutterstock_1912253137.png",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_1935739078.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u19f",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_1935739078.png' (ID: u1369) is used but not found in the Links folder.",
+       "data_id": "u1369",
+       "identifier": "shutterstock_1935739078.png",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_2079591820.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u227",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_2079591820.png' (ID: u157f) is used but not found in the Links folder.",
+       "data_id": "u157f",
+       "identifier": "shutterstock_2079591820.png",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "shutterstock_2091390667.png": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 2958.65,
+        "kind": "Rectangle",
+        "page_id": "u2f9",
+        "width": 2551.18,
+        "x": -70.87,
+        "y": 779.89
+       },
+       "context": "Link 'shutterstock_2091390667.png' (ID: u171c) is used but not found in the Links folder.",
+       "data_id": "u171c",
+       "identifier": "shutterstock_2091390667.png",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "validationClassifier": "IMAGE_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 76
+  },
+  "page_layouts": [
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "ud5",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1970.21
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "ud5",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2569.85
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "ud5",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 2155.63
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "ud5",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2781.97
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "ud5",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "ud5",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 1,
+    "name": "1",
+    "page_id": "ud5",
+    "preview": "sha256:ff8ca433ef54da56",
+    "spread_id": "ud0",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u16d",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1785.6
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u16d",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2357.25
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u16d",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1971.02
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u16d",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2569.37
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u16d",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u16d",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 2,
+    "name": "2",
+    "page_id": "u16d",
+    "preview": "sha256:551d2b5172991df7",
+    "spread_id": "u162",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u19f",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u19f",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u19f",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u19f",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u19f",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u19f",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u19f",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u19f",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u19f",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u19f",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1733.39
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u19f",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2305.06
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u19f",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1918.81
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u19f",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2517.17
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u19f",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u19f",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 3,
+    "name": "3",
+    "page_id": "u19f",
+    "preview": null,
+    "spread_id": "u194",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u1cf",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u1cf",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u1cf",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u1cf",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u1cf",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u1cf",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u1cf",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u1cf",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u1cf",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u1cf",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1733.39
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u1cf",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2305.06
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u1cf",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1918.81
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u1cf",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2517.17
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u1cf",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u1cf",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 4,
+    "name": "4",
+    "page_id": "u1cf",
+    "preview": null,
+    "spread_id": "u1c4",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u200",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u200",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u200",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u200",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u200",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u200",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u200",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u200",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u200",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u200",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1785.6
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u200",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2305.06
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u200",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1971.02
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u200",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2517.17
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u200",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u200",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 5,
+    "name": "5",
+    "page_id": "u200",
+    "preview": null,
+    "spread_id": "u1f5",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u227",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u227",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u227",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u227",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u227",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u227",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u227",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u227",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u227",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u227",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1785.6
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u227",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2305.06
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u227",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1971.02
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u227",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2517.17
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u227",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u227",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 6,
+    "name": "6",
+    "page_id": "u227",
+    "preview": null,
+    "spread_id": "u21c",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u24c",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u24c",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u24c",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u24c",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u24c",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u24c",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u24c",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u24c",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u24c",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u24c",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1754.65
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u24c",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2354.29
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u24c",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1940.07
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u24c",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2566.41
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u24c",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u24c",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 7,
+    "name": "7",
+    "page_id": "u24c",
+    "preview": null,
+    "spread_id": "u241",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u2be",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u2be",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u2be",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u2be",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u2be",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u2be",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u2be",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u2be",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u2be",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u2be",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1826.93
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u2be",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2426.58
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u2be",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 2012.35
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u2be",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2638.69
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u2be",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u2be",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 8,
+    "name": "8",
+    "page_id": "u2be",
+    "preview": null,
+    "spread_id": "u2b3",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u2f9",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u2f9",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u2f9",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u2f9",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u2f9",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u2f9",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u2f9",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u2f9",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u2f9",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u2f9",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1754.65
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u2f9",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2354.29
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u2f9",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1940.07
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u2f9",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2566.41
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u2f9",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u2f9",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 9,
+    "name": "9",
+    "page_id": "u2f9",
+    "preview": null,
+    "spread_id": "u2ee",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u335",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u335",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u335",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u335",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u335",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u335",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u335",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u335",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u335",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u335",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1767.4
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u335",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2367.05
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u335",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1952.83
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u335",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2579.16
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u335",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u335",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 10,
+    "name": "10",
+    "page_id": "u335",
+    "preview": null,
+    "spread_id": "u32a",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u362",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u362",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u362",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u362",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u362",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u362",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u362",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u362",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u362",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u362",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1733.39
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u362",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2305.06
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u362",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1918.81
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u362",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2517.17
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u362",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u362",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 11,
+    "name": "11",
+    "page_id": "u362",
+    "preview": null,
+    "spread_id": "u357",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u389",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u389",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u389",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u389",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u389",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u389",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u389",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u389",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u389",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u389",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1733.39
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u389",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2305.06
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u389",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1918.81
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u389",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2517.17
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u389",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u389",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 12,
+    "name": "12",
+    "page_id": "u389",
+    "preview": null,
+    "spread_id": "u37e",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u3ae",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u3ae",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u3ae",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u3ae",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u3ae",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u3ae",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u3ae",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u3ae",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u3ae",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u3ae",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1767.4
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u3ae",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2315.06
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u3ae",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1952.83
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u3ae",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2527.17
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u3ae",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u3ae",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 13,
+    "name": "13",
+    "page_id": "u3ae",
+    "preview": null,
+    "spread_id": "u3a3",
+    "width": 2409.448818897638
+   },
+   {
+    "frames": [
+     {
+      "height": 5811.02,
+      "kind": "Rectangle",
+      "page_id": "u3d8",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": -70.87
+     },
+     {
+      "height": 3118.11,
+      "kind": "Rectangle",
+      "page_id": "u3d8",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 2622.05
+     },
+     {
+      "height": 2958.65,
+      "kind": "Rectangle",
+      "page_id": "u3d8",
+      "width": 2551.18,
+      "x": -70.87,
+      "y": 779.89
+     },
+     {
+      "height": 99.06,
+      "kind": "Rectangle",
+      "page_id": "u3d8",
+      "width": 141.16,
+      "x": 1592.86,
+      "y": 4251.3
+     },
+     {
+      "height": 126.34,
+      "kind": "Rectangle",
+      "page_id": "u3d8",
+      "width": 126.34,
+      "x": 1600.27,
+      "y": 4398.62
+     },
+     {
+      "height": 82.47,
+      "kind": "Polygon",
+      "page_id": "u3d8",
+      "width": 117.82,
+      "x": 1604.53,
+      "y": 4600.26
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u3d8",
+      "width": 789.54,
+      "x": 675.43,
+      "y": 4600.34
+     },
+     {
+      "height": 83.93,
+      "kind": "Polygon",
+      "page_id": "u3d8",
+      "width": 782.08,
+      "x": 680.35,
+      "y": 4425.82
+     },
+     {
+      "height": 77.55,
+      "kind": "Polygon",
+      "page_id": "u3d8",
+      "width": 557.36,
+      "x": 907.28,
+      "y": 4257.9
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u3d8",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 1767.4
+     },
+     {
+      "height": 370.85,
+      "kind": "TextFrame",
+      "page_id": "u3d8",
+      "width": 1017.64,
+      "x": 1250.08,
+      "y": 2315.06
+     },
+     {
+      "height": 297.14,
+      "kind": "TextFrame",
+      "page_id": "u3d8",
+      "width": 609.45,
+      "x": 1658.27,
+      "y": 1952.83
+     },
+     {
+      "height": 317.47,
+      "kind": "TextFrame",
+      "page_id": "u3d8",
+      "width": 792.49,
+      "x": 1475.23,
+      "y": 2527.17
+     },
+     {
+      "height": 399.6,
+      "kind": "Rectangle",
+      "page_id": "u3d8",
+      "width": 1113.59,
+      "x": 647.93,
+      "y": 195.67
+     },
+     {
+      "height": 155.81,
+      "kind": "Polygon",
+      "page_id": "u3d8",
+      "width": 1386.18,
+      "x": 511.63,
+      "y": 3923.15
+     }
+    ],
+    "height": 5669.291338582677,
+    "index": 14,
+    "name": "14",
+    "page_id": "u3d8",
+    "preview": null,
+    "spread_id": "u3cd",
+    "width": 2409.448818897638
+   }
+  ],
+  "pages": {
+   "u16d": "2",
+   "u19f": "3",
+   "u1cf": "4",
+   "u200": "5",
+   "u227": "6",
+   "u24c": "7",
+   "u2be": "8",
+   "u2f9": "9",
+   "u335": "10",
+   "u362": "11",
+   "u389": "12",
+   "u3ae": "13",
+   "u3d8": "14",
+   "ud5": "1"
+  },
+  "par_styles": {
+   "details": {
+    "Header Par Style": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "",
+       "identifier": "Header Par Style",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "text_content": [
+        "Par style"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "",
+       "identifier": "Header Par Style",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "NormalParagraphStyle": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1785.6
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u12e7",
+       "identifier": "NormalParagraphStyle",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    }
+   },
+   "total_count": 2
+  },
+  "spread_to_pages": {
+   "u162": [
+    "u16d"
+   ],
+   "u194": [
+    "u19f"
+   ],
+   "u1c4": [
+    "u1cf"
+   ],
+   "u1f5": [
+    "u200"
+   ],
+   "u21c": [
+    "u227"
+   ],
+   "u241": [
+    "u24c"
+   ],
+   "u2b3": [
+    "u2be"
+   ],
+   "u2ee": [
+    "u2f9"
+   ],
+   "u32a": [
+    "u335"
+   ],
+   "u357": [
+    "u362"
+   ],
+   "u37e": [
+    "u389"
+   ],
+   "u3a3": [
+    "u3ae"
+   ],
+   "u3cd": [
+    "u3d8"
+   ],
+   "ud0": [
+    "ud5"
+   ]
+  },
+  "template_name": "Master Page.zip",
+  "text_box_data": {
+   "u12e7": {
+    "content": "Your desire to\n",
+    "identifier": "u12e7",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u12ea": {
+    "content": "Your desire to\n",
+    "identifier": "u12ea",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u1300": {
+    "content": "Our guidance to\n",
+    "identifier": "u1300",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u1303": {
+    "content": "Our guidance to\n",
+    "identifier": "u1303",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u1319": {
+    "content": "learn\n",
+    "identifier": "u1319",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u131c": {
+    "content": "learn\n",
+    "identifier": "u131c",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u1332": {
+    "content": "grow\n",
+    "identifier": "u1332",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u1335": {
+    "content": "grow\n",
+    "identifier": "u1335",
+    "page_id": "2",
+    "page_name": ""
+   },
+   "u13fc": {
+    "content": "Your desire to\n",
+    "identifier": "u13fc",
+    "page_id": "4",
+    "page_name": ""
+   },
+   "u13ff": {
+    "content": "Your desire to\n",
+    "identifier": "u13ff",
+    "page_id": "4",
+    "page_name": ""
+   },
+   "u1415": {
+    "content": "Our guidance to\n",
+    "identifier": "u1415",
+    "page_id": "4",
+    "page_name": ""
+   },
+   "u1418": {
+    "content": "Our guidance to\n",
+    "identifier": "u1418",
+    "page_id": "4",
+    "page_name": ""
+   },
+   "u142e": {
+    "content": "learn\n",
+    "identifier": "u142e",
+    "page_id": "4",
+    "page_name": ""
+   },
+   "u1431": {
+    "content": "learn\n",
+    "identifier": "u1431",
+    "page_id": "4",
+    "page_name": ""
+   },
+   "u1447": {
+    "content": "grow\n",
+    "identifier": "u1447",
+    "page_id": "4",
+    "page_name": ""
+   },
+   "u144a": {
+    "content": "grow\n",
+    "identifier": "u144a",
+    "page_id": "4",
+    "page_name": ""
+   },
+   "u148b": {
+    "content": "Your desire to\n",
+    "identifier": "u148b",
+    "page_id": "5",
+    "page_name": ""
+   },
+   "u148e": {
+    "content": "Your desire to\n",
+    "identifier": "u148e",
+    "page_id": "5",
+    "page_name": ""
+   },
+   "u14a4": {
+    "content": "Our guidance to\n",
+    "identifier": "u14a4",
+    "page_id": "5",
+    "page_name": ""
+   },
+   "u14a7": {
+    "content": "Our guidance to\n",
+    "identifier": "u14a7",
+    "page_id": "5",
+    "page_name": ""
+   },
+   "u14bd": {
+    "content": "learn\n",
+    "identifier": "u14bd",
+    "page_id": "5",
+    "page_name": ""
+   },
+   "u14c0": {
+    "content": "learn\n",
+    "identifier": "u14c0",
+    "page_id": "5",
+    "page_name": ""
+   },
+   "u14d6": {
+    "content": "grow\n",
+    "identifier": "u14d6",
+    "page_id": "5",
+    "page_name": ""
+   },
+   "u14d9": {
+    "content": "grow\n",
+    "identifier": "u14d9",
+    "page_id": "5",
+    "page_name": ""
+   },
+   "u1595": {
+    "content": "Your desire to\n",
+    "identifier": "u1595",
+    "page_id": "6",
+    "page_name": ""
+   },
+   "u1598": {
+    "content": "Your desire to\n",
+    "identifier": "u1598",
+    "page_id": "6",
+    "page_name": ""
+   },
+   "u15ae": {
+    "content": "Our guidance to\n",
+    "identifier": "u15ae",
+    "page_id": "6",
+    "page_name": ""
+   },
+   "u15b1": {
+    "content": "Our guidance to\n",
+    "identifier": "u15b1",
+    "page_id": "6",
+    "page_name": ""
+   },
+   "u15c7": {
+    "content": "learn\n",
+    "identifier": "u15c7",
+    "page_id": "6",
+    "page_name": ""
+   },
+   "u15ca": {
+    "content": "learn\n",
+    "identifier": "u15ca",
+    "page_id": "6",
+    "page_name": ""
+   },
+   "u15e0": {
+    "content": "grow\n",
+    "identifier": "u15e0",
+    "page_id": "6",
+    "page_name": ""
+   },
+   "u15e3": {
+    "content": "grow\n",
+    "identifier": "u15e3",
+    "page_id": "6",
+    "page_name": ""
+   },
+   "u1617": {
+    "content": "Your drive to\n",
+    "identifier": "u1617",
+    "page_id": "7",
+    "page_name": ""
+   },
+   "u161a": {
+    "content": "Your drive to\n",
+    "identifier": "u161a",
+    "page_id": "7",
+    "page_name": ""
+   },
+   "u1630": {
+    "content": "Our future to be\n",
+    "identifier": "u1630",
+    "page_id": "7",
+    "page_name": ""
+   },
+   "u1633": {
+    "content": "Our future to be\n",
+    "identifier": "u1633",
+    "page_id": "7",
+    "page_name": ""
+   },
+   "u1649": {
+    "content": "win\n",
+    "identifier": "u1649",
+    "page_id": "7",
+    "page_name": ""
+   },
+   "u164c": {
+    "content": "win\n",
+    "identifier": "u164c",
+    "page_id": "7",
+    "page_name": ""
+   },
+   "u1662": {
+    "content": "shaped\n",
+    "identifier": "u1662",
+    "page_id": "7",
+    "page_name": ""
+   },
+   "u1665": {
+    "content": "shaped\n",
+    "identifier": "u1665",
+    "page_id": "7",
+    "page_name": ""
+   },
+   "u173c": {
+    "content": "Your drive to\n",
+    "identifier": "u173c",
+    "page_id": "9",
+    "page_name": ""
+   },
+   "u173f": {
+    "content": "Your drive to\n",
+    "identifier": "u173f",
+    "page_id": "9",
+    "page_name": ""
+   },
+   "u1755": {
+    "content": "Our future to be\n",
+    "identifier": "u1755",
+    "page_id": "9",
+    "page_name": ""
+   },
+   "u1758": {
+    "content": "Our future to be\n",
+    "identifier": "u1758",
+    "page_id": "9",
+    "page_name": ""
+   },
+   "u176e": {
+    "content": "win\n",
+    "identifier": "u176e",
+    "page_id": "9",
+    "page_name": ""
+   },
+   "u1771": {
+    "content": "win\n",
+    "identifier": "u1771",
+    "page_id": "9",
+    "page_name": ""
+   },
+   "u1787": {
+    "content": "shaped\n",
+    "identifier": "u1787",
+    "page_id": "9",
+    "page_name": ""
+   },
+   "u178a": {
+    "content": "shaped\n",
+    "identifier": "u178a",
+    "page_id": "9",
+    "page_name": ""
+   },
+   "u17be": {
+    "content": "Your drive to\n",
+    "identifier": "u17be",
+    "page_id": "10",
+    "page_name": ""
+   },
+   "u17c1": {
+    "content": "Your drive to\n",
+    "identifier": "u17c1",
+    "page_id": "10",
+    "page_name": ""
+   },
+   "u17d7": {
+    "content": "Our future to be\n",
+    "identifier": "u17d7",
+    "page_id": "10",
+    "page_name": ""
+   },
+   "u17da": {
+    "content": "Our future to be\n",
+    "identifier": "u17da",
+    "page_id": "10",
+    "page_name": ""
+   },
+   "u17f0": {
+    "content": "win\n",
+    "identifier": "u17f0",
+    "page_id": "10",
+    "page_name": ""
+   },
+   "u17f3": {
+    "content": "win\n",
+    "identifier": "u17f3",
+    "page_id": "10",
+    "page_name": ""
+   },
+   "u1809": {
+    "content": "shaped\n",
+    "identifier": "u1809",
+    "page_id": "10",
+    "page_name": ""
+   },
+   "u180c": {
+    "content": "shaped\n",
+    "identifier": "u180c",
+    "page_id": "10",
+    "page_name": ""
+   },
+   "u1984": {
+    "content": "Your desire to\n",
+    "identifier": "u1984",
+    "page_id": "12",
+    "page_name": ""
+   },
+   "u1987": {
+    "content": "Your desire to\n",
+    "identifier": "u1987",
+    "page_id": "12",
+    "page_name": ""
+   },
+   "u199d": {
+    "content": "Our guidance to\n",
+    "identifier": "u199d",
+    "page_id": "12",
+    "page_name": ""
+   },
+   "u19a0": {
+    "content": "Our guidance to\n",
+    "identifier": "u19a0",
+    "page_id": "12",
+    "page_name": ""
+   },
+   "u19b6": {
+    "content": "learn\n",
+    "identifier": "u19b6",
+    "page_id": "12",
+    "page_name": ""
+   },
+   "u19b9": {
+    "content": "learn\n",
+    "identifier": "u19b9",
+    "page_id": "12",
+    "page_name": ""
+   },
+   "u19cf": {
+    "content": "grow\n",
+    "identifier": "u19cf",
+    "page_id": "12",
+    "page_name": ""
+   },
+   "u19d2": {
+    "content": "grow\n",
+    "identifier": "u19d2",
+    "page_id": "12",
+    "page_name": ""
+   },
+   "u19fd": {
+    "content": "Your drive to\n",
+    "identifier": "u19fd",
+    "page_id": "13",
+    "page_name": ""
+   },
+   "u1a00": {
+    "content": "Your drive to\n",
+    "identifier": "u1a00",
+    "page_id": "13",
+    "page_name": ""
+   },
+   "u1a16": {
+    "content": "Our future to be\n",
+    "identifier": "u1a16",
+    "page_id": "13",
+    "page_name": ""
+   },
+   "u1a19": {
+    "content": "Our future to be\n",
+    "identifier": "u1a19",
+    "page_id": "13",
+    "page_name": ""
+   },
+   "u1a2f": {
+    "content": "win\n",
+    "identifier": "u1a2f",
+    "page_id": "13",
+    "page_name": ""
+   },
+   "u1a32": {
+    "content": "win\n",
+    "identifier": "u1a32",
+    "page_id": "13",
+    "page_name": ""
+   },
+   "u1a48": {
+    "content": "shaped\n",
+    "identifier": "u1a48",
+    "page_id": "13",
+    "page_name": ""
+   },
+   "u1a4b": {
+    "content": "shaped\n",
+    "identifier": "u1a4b",
+    "page_id": "13",
+    "page_name": ""
+   },
+   "u1ae9": {
+    "content": "Your drive to\n",
+    "identifier": "u1ae9",
+    "page_id": "14",
+    "page_name": ""
+   },
+   "u1aec": {
+    "content": "Your drive to\n",
+    "identifier": "u1aec",
+    "page_id": "14",
+    "page_name": ""
+   },
+   "u1b02": {
+    "content": "Our future to be\n",
+    "identifier": "u1b02",
+    "page_id": "14",
+    "page_name": ""
+   },
+   "u1b05": {
+    "content": "Our future to be\n",
+    "identifier": "u1b05",
+    "page_id": "14",
+    "page_name": ""
+   },
+   "u1b1b": {
+    "content": "win\n",
+    "identifier": "u1b1b",
+    "page_id": "14",
+    "page_name": ""
+   },
+   "u1b1e": {
+    "content": "win\n",
+    "identifier": "u1b1e",
+    "page_id": "14",
+    "page_name": ""
+   },
+   "u1b34": {
+    "content": "shaped\n",
+    "identifier": "u1b34",
+    "page_id": "14",
+    "page_name": ""
+   },
+   "u1b37": {
+    "content": "shaped\n",
+    "identifier": "u1b37",
+    "page_id": "14",
+    "page_name": ""
+   },
+   "u1b53": {
+    "content": "Your desire to\n",
+    "identifier": "u1b53",
+    "page_id": "11",
+    "page_name": ""
+   },
+   "u1b56": {
+    "content": "Your desire to\n",
+    "identifier": "u1b56",
+    "page_id": "11",
+    "page_name": ""
+   },
+   "u1b6c": {
+    "content": "Our guidance to\n",
+    "identifier": "u1b6c",
+    "page_id": "11",
+    "page_name": ""
+   },
+   "u1b6f": {
+    "content": "Our guidance to\n",
+    "identifier": "u1b6f",
+    "page_id": "11",
+    "page_name": ""
+   },
+   "u1b85": {
+    "content": "learn\n",
+    "identifier": "u1b85",
+    "page_id": "11",
+    "page_name": ""
+   },
+   "u1b88": {
+    "content": "learn\n",
+    "identifier": "u1b88",
+    "page_id": "11",
+    "page_name": ""
+   },
+   "u1b9e": {
+    "content": "grow\n",
+    "identifier": "u1b9e",
+    "page_id": "11",
+    "page_name": ""
+   },
+   "u1ba1": {
+    "content": "grow\n",
+    "identifier": "u1ba1",
+    "page_id": "11",
+    "page_name": ""
+   },
+   "u1bc7": {
+    "content": "Your drive to\n",
+    "identifier": "u1bc7",
+    "page_id": "8",
+    "page_name": ""
+   },
+   "u1bca": {
+    "content": "Your drive to\n",
+    "identifier": "u1bca",
+    "page_id": "8",
+    "page_name": ""
+   },
+   "u1be0": {
+    "content": "Our future to be\n",
+    "identifier": "u1be0",
+    "page_id": "8",
+    "page_name": ""
+   },
+   "u1be3": {
+    "content": "Our future to be\n",
+    "identifier": "u1be3",
+    "page_id": "8",
+    "page_name": ""
+   },
+   "u1bf9": {
+    "content": "win\n",
+    "identifier": "u1bf9",
+    "page_id": "8",
+    "page_name": ""
+   },
+   "u1bfc": {
+    "content": "win\n",
+    "identifier": "u1bfc",
+    "page_id": "8",
+    "page_name": ""
+   },
+   "u1c12": {
+    "content": "shaped\n",
+    "identifier": "u1c12",
+    "page_id": "8",
+    "page_name": ""
+   },
+   "u1c15": {
+    "content": "shaped\n",
+    "identifier": "u1c15",
+    "page_id": "8",
+    "page_name": ""
+   },
+   "u1c32": {
+    "content": "Your desire to\n",
+    "identifier": "u1c32",
+    "page_id": "3",
+    "page_name": ""
+   },
+   "u1c35": {
+    "content": "Your desire to\n",
+    "identifier": "u1c35",
+    "page_id": "3",
+    "page_name": ""
+   },
+   "u1c4b": {
+    "content": "Our guidance to\n",
+    "identifier": "u1c4b",
+    "page_id": "3",
+    "page_name": ""
+   },
+   "u1c4e": {
+    "content": "Our guidance to\n",
+    "identifier": "u1c4e",
+    "page_id": "3",
+    "page_name": ""
+   },
+   "u1c64": {
+    "content": "learn\n",
+    "identifier": "u1c64",
+    "page_id": "3",
+    "page_name": ""
+   },
+   "u1c67": {
+    "content": "learn\n",
+    "identifier": "u1c67",
+    "page_id": "3",
+    "page_name": ""
+   },
+   "u1c7d": {
+    "content": "grow\n",
+    "identifier": "u1c7d",
+    "page_id": "3",
+    "page_name": ""
+   },
+   "u1c80": {
+    "content": "grow\n",
+    "identifier": "u1c80",
+    "page_id": "3",
+    "page_name": ""
+   },
+   "u1ca3": {
+    "content": "Hello\n",
+    "identifier": "u1ca3",
+    "page_id": "",
+    "page_name": ""
+   },
+   "u41a": {
+    "content": "Your drive to\n",
+    "identifier": "u41a",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u42e": {
+    "content": "Your drive to\n",
+    "identifier": "u42e",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u434": {
+    "content": "win\n",
+    "identifier": "u434",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u437": {
+    "content": "win\n",
+    "identifier": "u437",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u453": {
+    "content": "Our future to be\n",
+    "identifier": "u453",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u456": {
+    "content": "Our future to be\n",
+    "identifier": "u456",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u46c": {
+    "content": "shaped\n",
+    "identifier": "u46c",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u470": {
+    "content": "shaped\n",
+    "identifier": "u470",
+    "page_id": "1",
+    "page_name": ""
+   }
+  },
+  "text_boxes": {
+   "details": {
+    "null": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "context": "Text: Hello — Overrides: PointSize: 72",
+       "context_details": {
+        "overrides": {
+         "PointSize": "72"
+        },
+        "text": "Hello"
+       },
+       "data_id": "",
+       "identifier": "null",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "text_content": [
+        "Hello"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u12e7": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1785.6
+       },
+       "context": "Text: Your desire to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your desire to"
+       },
+       "data_id": "u12e7",
+       "identifier": "u12e7",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "text_content": [
+        "Your desire to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u12ea": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1785.6
+       },
+       "context": "",
+       "data_id": "u12e7",
+       "identifier": "u12ea",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1300": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2357.25
+       },
+       "context": "Text: Our guidance to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our guidance to"
+       },
+       "data_id": "u1300",
+       "identifier": "u1300",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "text_content": [
+        "Our guidance to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1303": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2357.25
+       },
+       "context": "",
+       "data_id": "u1300",
+       "identifier": "u1303",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1319": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1971.02
+       },
+       "context": "Text: learn — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Violet",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "learn"
+       },
+       "data_id": "u1319",
+       "identifier": "u1319",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "text_content": [
+        "learn"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u131c": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1971.02
+       },
+       "context": "",
+       "data_id": "u1319",
+       "identifier": "u131c",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1332": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2569.37
+       },
+       "context": "Text: grow — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Violet",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "grow"
+       },
+       "data_id": "u1332",
+       "identifier": "u1332",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "text_content": [
+        "grow"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1335": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u16d",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2569.37
+       },
+       "context": "",
+       "data_id": "u1332",
+       "identifier": "u1335",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u13fc": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u1cf",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1733.39
+       },
+       "context": "Text: Your desire to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your desire to"
+       },
+       "data_id": "u13fc",
+       "identifier": "u13fc",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "text_content": [
+        "Your desire to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u13ff": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u1cf",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1733.39
+       },
+       "context": "",
+       "data_id": "u13fc",
+       "identifier": "u13ff",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1415": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u1cf",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "Text: Our guidance to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our guidance to"
+       },
+       "data_id": "u1415",
+       "identifier": "u1415",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "text_content": [
+        "Our guidance to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1418": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u1cf",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "",
+       "data_id": "u1415",
+       "identifier": "u1418",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u142e": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u1cf",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1918.81
+       },
+       "context": "Text: learn — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Violet",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "learn"
+       },
+       "data_id": "u142e",
+       "identifier": "u142e",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "text_content": [
+        "learn"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1431": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u1cf",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1918.81
+       },
+       "context": "",
+       "data_id": "u142e",
+       "identifier": "u1431",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1447": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u1cf",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "Text: grow — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Violet",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "grow"
+       },
+       "data_id": "u1447",
+       "identifier": "u1447",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "text_content": [
+        "grow"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u144a": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u1cf",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "",
+       "data_id": "u1447",
+       "identifier": "u144a",
+       "page_id": "u1cf",
+       "page_name": "4",
+       "spread_id": "u1c4",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u148b": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u200",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1785.6
+       },
+       "context": "Text: Your desire to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your desire to"
+       },
+       "data_id": "u148b",
+       "identifier": "u148b",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "text_content": [
+        "Your desire to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u148e": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u200",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1785.6
+       },
+       "context": "",
+       "data_id": "u148b",
+       "identifier": "u148e",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u14a4": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u200",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "Text: Our guidance to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our guidance to"
+       },
+       "data_id": "u14a4",
+       "identifier": "u14a4",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "text_content": [
+        "Our guidance to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u14a7": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u200",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "",
+       "data_id": "u14a4",
+       "identifier": "u14a7",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u14bd": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u200",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1971.02
+       },
+       "context": "Text: learn — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "learn"
+       },
+       "data_id": "u14bd",
+       "identifier": "u14bd",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "text_content": [
+        "learn"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u14c0": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u200",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1971.02
+       },
+       "context": "",
+       "data_id": "u14bd",
+       "identifier": "u14c0",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u14d6": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u200",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "Text: grow — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "grow"
+       },
+       "data_id": "u14d6",
+       "identifier": "u14d6",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "text_content": [
+        "grow"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u14d9": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u200",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "",
+       "data_id": "u14d6",
+       "identifier": "u14d9",
+       "page_id": "u200",
+       "page_name": "5",
+       "spread_id": "u1f5",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1595": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u227",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1785.6
+       },
+       "context": "Text: Your desire to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your desire to"
+       },
+       "data_id": "u1595",
+       "identifier": "u1595",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "text_content": [
+        "Your desire to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1598": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u227",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1785.6
+       },
+       "context": "",
+       "data_id": "u1595",
+       "identifier": "u1598",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u15ae": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u227",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "Text: Our guidance to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our guidance to"
+       },
+       "data_id": "u15ae",
+       "identifier": "u15ae",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "text_content": [
+        "Our guidance to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u15b1": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u227",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "",
+       "data_id": "u15ae",
+       "identifier": "u15b1",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u15c7": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u227",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1971.02
+       },
+       "context": "Text: learn — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Grass, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Grass",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "learn"
+       },
+       "data_id": "u15c7",
+       "identifier": "u15c7",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "text_content": [
+        "learn"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u15ca": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u227",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1971.02
+       },
+       "context": "",
+       "data_id": "u15c7",
+       "identifier": "u15ca",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u15e0": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u227",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "Text: grow — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Grass, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Grass",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "grow"
+       },
+       "data_id": "u15e0",
+       "identifier": "u15e0",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "text_content": [
+        "grow"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u15e3": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u227",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "",
+       "data_id": "u15e0",
+       "identifier": "u15e3",
+       "page_id": "u227",
+       "page_name": "6",
+       "spread_id": "u21c",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1617": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u24c",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1754.65
+       },
+       "context": "Text: Your drive to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your drive to"
+       },
+       "data_id": "u1617",
+       "identifier": "u1617",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "text_content": [
+        "Your drive to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u161a": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u24c",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1754.65
+       },
+       "context": "",
+       "data_id": "u1617",
+       "identifier": "u161a",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1630": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u24c",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2354.29
+       },
+       "context": "Text: Our future to be — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our future to be"
+       },
+       "data_id": "u1630",
+       "identifier": "u1630",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "text_content": [
+        "Our future to be"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1633": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u24c",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2354.29
+       },
+       "context": "",
+       "data_id": "u1630",
+       "identifier": "u1633",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1649": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u24c",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1940.07
+       },
+       "context": "Text: win — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Amber, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Amber",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "win"
+       },
+       "data_id": "u1649",
+       "identifier": "u1649",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "text_content": [
+        "win"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u164c": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u24c",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1940.07
+       },
+       "context": "",
+       "data_id": "u1649",
+       "identifier": "u164c",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1662": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u24c",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2566.41
+       },
+       "context": "Text: shaped — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Amber, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Amber",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "shaped"
+       },
+       "data_id": "u1662",
+       "identifier": "u1662",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "text_content": [
+        "shaped"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1665": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u24c",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2566.41
+       },
+       "context": "",
+       "data_id": "u1662",
+       "identifier": "u1665",
+       "page_id": "u24c",
+       "page_name": "7",
+       "spread_id": "u241",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u173c": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u2f9",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1754.65
+       },
+       "context": "Text: Your drive to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your drive to"
+       },
+       "data_id": "u173c",
+       "identifier": "u173c",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "text_content": [
+        "Your drive to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u173f": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u2f9",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1754.65
+       },
+       "context": "",
+       "data_id": "u173c",
+       "identifier": "u173f",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1755": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u2f9",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2354.29
+       },
+       "context": "Text: Our future to be — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our future to be"
+       },
+       "data_id": "u1755",
+       "identifier": "u1755",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "text_content": [
+        "Our future to be"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1758": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u2f9",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2354.29
+       },
+       "context": "",
+       "data_id": "u1755",
+       "identifier": "u1758",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u176e": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u2f9",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1940.07
+       },
+       "context": "Text: win — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Violet",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "win"
+       },
+       "data_id": "u176e",
+       "identifier": "u176e",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "text_content": [
+        "win"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1771": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u2f9",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1940.07
+       },
+       "context": "",
+       "data_id": "u176e",
+       "identifier": "u1771",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1787": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u2f9",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2566.41
+       },
+       "context": "Text: shaped — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Violet",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "shaped"
+       },
+       "data_id": "u1787",
+       "identifier": "u1787",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "text_content": [
+        "shaped"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u178a": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u2f9",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2566.41
+       },
+       "context": "",
+       "data_id": "u1787",
+       "identifier": "u178a",
+       "page_id": "u2f9",
+       "page_name": "9",
+       "spread_id": "u2ee",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u17be": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u335",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1767.4
+       },
+       "context": "Text: Your drive to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your drive to"
+       },
+       "data_id": "u17be",
+       "identifier": "u17be",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "text_content": [
+        "Your drive to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u17c1": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u335",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1767.4
+       },
+       "context": "",
+       "data_id": "u17be",
+       "identifier": "u17c1",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u17d7": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u335",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2367.05
+       },
+       "context": "Text: Our future to be — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our future to be"
+       },
+       "data_id": "u17d7",
+       "identifier": "u17d7",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "text_content": [
+        "Our future to be"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u17da": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u335",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2367.05
+       },
+       "context": "",
+       "data_id": "u17d7",
+       "identifier": "u17da",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u17f0": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u335",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1952.83
+       },
+       "context": "Text: win — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "win"
+       },
+       "data_id": "u17f0",
+       "identifier": "u17f0",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "text_content": [
+        "win"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u17f3": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u335",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1952.83
+       },
+       "context": "",
+       "data_id": "u17f0",
+       "identifier": "u17f3",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1809": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u335",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2579.16
+       },
+       "context": "Text: shaped — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "shaped"
+       },
+       "data_id": "u1809",
+       "identifier": "u1809",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "text_content": [
+        "shaped"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u180c": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u335",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2579.16
+       },
+       "context": "",
+       "data_id": "u1809",
+       "identifier": "u180c",
+       "page_id": "u335",
+       "page_name": "10",
+       "spread_id": "u32a",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1984": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u389",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1733.39
+       },
+       "context": "Text: Your desire to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your desire to"
+       },
+       "data_id": "u1984",
+       "identifier": "u1984",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "text_content": [
+        "Your desire to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1987": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u389",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1733.39
+       },
+       "context": "",
+       "data_id": "u1984",
+       "identifier": "u1987",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u199d": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u389",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "Text: Our guidance to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our guidance to"
+       },
+       "data_id": "u199d",
+       "identifier": "u199d",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "text_content": [
+        "Our guidance to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u19a0": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u389",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "",
+       "data_id": "u199d",
+       "identifier": "u19a0",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u19b6": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u389",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1918.81
+       },
+       "context": "Text: learn — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "learn"
+       },
+       "data_id": "u19b6",
+       "identifier": "u19b6",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "text_content": [
+        "learn"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u19b9": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u389",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1918.81
+       },
+       "context": "",
+       "data_id": "u19b6",
+       "identifier": "u19b9",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u19cf": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u389",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "Text: grow — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "grow"
+       },
+       "data_id": "u19cf",
+       "identifier": "u19cf",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "text_content": [
+        "grow"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u19d2": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u389",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "",
+       "data_id": "u19cf",
+       "identifier": "u19d2",
+       "page_id": "u389",
+       "page_name": "12",
+       "spread_id": "u37e",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u19fd": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u3ae",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1767.4
+       },
+       "context": "Text: Your drive to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your drive to"
+       },
+       "data_id": "u19fd",
+       "identifier": "u19fd",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "text_content": [
+        "Your drive to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1a00": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u3ae",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1767.4
+       },
+       "context": "",
+       "data_id": "u19fd",
+       "identifier": "u1a00",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1a16": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u3ae",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2315.06
+       },
+       "context": "Text: Our future to be — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our future to be"
+       },
+       "data_id": "u1a16",
+       "identifier": "u1a16",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "text_content": [
+        "Our future to be"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1a19": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u3ae",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2315.06
+       },
+       "context": "",
+       "data_id": "u1a16",
+       "identifier": "u1a19",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1a2f": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u3ae",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1952.83
+       },
+       "context": "Text: win — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Grass, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Grass",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "win"
+       },
+       "data_id": "u1a2f",
+       "identifier": "u1a2f",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "text_content": [
+        "win"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1a32": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u3ae",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1952.83
+       },
+       "context": "",
+       "data_id": "u1a2f",
+       "identifier": "u1a32",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1a48": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u3ae",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2527.17
+       },
+       "context": "Text: shaped — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Grass, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Grass",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "shaped"
+       },
+       "data_id": "u1a48",
+       "identifier": "u1a48",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "text_content": [
+        "shaped"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1a4b": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u3ae",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2527.17
+       },
+       "context": "",
+       "data_id": "u1a48",
+       "identifier": "u1a4b",
+       "page_id": "u3ae",
+       "page_name": "13",
+       "spread_id": "u3a3",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1ae9": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u3d8",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1767.4
+       },
+       "context": "Text: Your drive to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your drive to"
+       },
+       "data_id": "u1ae9",
+       "identifier": "u1ae9",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "text_content": [
+        "Your drive to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1aec": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u3d8",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1767.4
+       },
+       "context": "",
+       "data_id": "u1ae9",
+       "identifier": "u1aec",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1b02": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u3d8",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2315.06
+       },
+       "context": "Text: Our future to be — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our future to be"
+       },
+       "data_id": "u1b02",
+       "identifier": "u1b02",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "text_content": [
+        "Our future to be"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1b05": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u3d8",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2315.06
+       },
+       "context": "",
+       "data_id": "u1b02",
+       "identifier": "u1b05",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1b1b": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u3d8",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1952.83
+       },
+       "context": "Text: win — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Amber, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Amber",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "win"
+       },
+       "data_id": "u1b1b",
+       "identifier": "u1b1b",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "text_content": [
+        "win"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1b1e": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u3d8",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1952.83
+       },
+       "context": "",
+       "data_id": "u1b1b",
+       "identifier": "u1b1e",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1b34": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u3d8",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2527.17
+       },
+       "context": "Text: shaped — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Amber, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Amber",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "shaped"
+       },
+       "data_id": "u1b34",
+       "identifier": "u1b34",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "text_content": [
+        "shaped"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1b37": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u3d8",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2527.17
+       },
+       "context": "",
+       "data_id": "u1b34",
+       "identifier": "u1b37",
+       "page_id": "u3d8",
+       "page_name": "14",
+       "spread_id": "u3cd",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1b53": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u362",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1733.39
+       },
+       "context": "Text: Your desire to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your desire to"
+       },
+       "data_id": "u1b53",
+       "identifier": "u1b53",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "text_content": [
+        "Your desire to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1b56": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u362",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1733.39
+       },
+       "context": "",
+       "data_id": "u1b53",
+       "identifier": "u1b56",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1b6c": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u362",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "Text: Our guidance to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our guidance to"
+       },
+       "data_id": "u1b6c",
+       "identifier": "u1b6c",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "text_content": [
+        "Our guidance to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1b6f": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u362",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "",
+       "data_id": "u1b6c",
+       "identifier": "u1b6f",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1b85": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u362",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1918.81
+       },
+       "context": "Text: learn — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Violet",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "learn"
+       },
+       "data_id": "u1b85",
+       "identifier": "u1b85",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "text_content": [
+        "learn"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1b88": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u362",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1918.81
+       },
+       "context": "",
+       "data_id": "u1b85",
+       "identifier": "u1b88",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1b9e": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u362",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "Text: grow — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Violet",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "grow"
+       },
+       "data_id": "u1b9e",
+       "identifier": "u1b9e",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "text_content": [
+        "grow"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1ba1": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u362",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "",
+       "data_id": "u1b9e",
+       "identifier": "u1ba1",
+       "page_id": "u362",
+       "page_name": "11",
+       "spread_id": "u357",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1bc7": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u2be",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1826.93
+       },
+       "context": "Text: Your drive to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your drive to"
+       },
+       "data_id": "u1bc7",
+       "identifier": "u1bc7",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "text_content": [
+        "Your drive to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1bca": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u2be",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1826.93
+       },
+       "context": "",
+       "data_id": "u1bc7",
+       "identifier": "u1bca",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1be0": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u2be",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2426.58
+       },
+       "context": "Text: Our future to be — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our future to be"
+       },
+       "data_id": "u1be0",
+       "identifier": "u1be0",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "text_content": [
+        "Our future to be"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1be3": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u2be",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2426.58
+       },
+       "context": "",
+       "data_id": "u1be0",
+       "identifier": "u1be3",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1bf9": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u2be",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 2012.35
+       },
+       "context": "Text: win — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "win"
+       },
+       "data_id": "u1bf9",
+       "identifier": "u1bf9",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "text_content": [
+        "win"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1bfc": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u2be",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 2012.35
+       },
+       "context": "",
+       "data_id": "u1bf9",
+       "identifier": "u1bfc",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1c12": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u2be",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2638.69
+       },
+       "context": "Text: shaped — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "shaped"
+       },
+       "data_id": "u1c12",
+       "identifier": "u1c12",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "text_content": [
+        "shaped"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1c15": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u2be",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2638.69
+       },
+       "context": "",
+       "data_id": "u1c12",
+       "identifier": "u1c15",
+       "page_id": "u2be",
+       "page_name": "8",
+       "spread_id": "u2b3",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1c32": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u19f",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1733.39
+       },
+       "context": "Text: Your desire to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your desire to"
+       },
+       "data_id": "u1c32",
+       "identifier": "u1c32",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "text_content": [
+        "Your desire to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1c35": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u19f",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1733.39
+       },
+       "context": "",
+       "data_id": "u1c32",
+       "identifier": "u1c35",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1c4b": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u19f",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "Text: Our guidance to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our guidance to"
+       },
+       "data_id": "u1c4b",
+       "identifier": "u1c4b",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "text_content": [
+        "Our guidance to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1c4e": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "u19f",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2305.06
+       },
+       "context": "",
+       "data_id": "u1c4b",
+       "identifier": "u1c4e",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1c64": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u19f",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1918.81
+       },
+       "context": "Text: learn — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "learn"
+       },
+       "data_id": "u1c64",
+       "identifier": "u1c64",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "text_content": [
+        "learn"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1c67": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "u19f",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 1918.81
+       },
+       "context": "",
+       "data_id": "u1c64",
+       "identifier": "u1c67",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1c7d": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u19f",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "Text: grow — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "grow"
+       },
+       "data_id": "u1c7d",
+       "identifier": "u1c7d",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "text_content": [
+        "grow"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u1c80": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "u19f",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2517.17
+       },
+       "context": "",
+       "data_id": "u1c7d",
+       "identifier": "u1c80",
+       "page_id": "u19f",
+       "page_name": "3",
+       "spread_id": "u194",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u1ca3": {
+     "errors": [
+      {
+       "context": "",
+       "data_id": "",
+       "identifier": "u1ca3",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u41a": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1970.21
+       },
+       "context": "",
+       "data_id": "u42e",
+       "identifier": "u41a",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u42e": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 1970.21
+       },
+       "context": "Text: Your drive to — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Your drive to"
+       },
+       "data_id": "u42e",
+       "identifier": "u42e",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "text_content": [
+        "Your drive to"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u434": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 2155.63
+       },
+       "context": "Text: win — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "win"
+       },
+       "data_id": "u434",
+       "identifier": "u434",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "text_content": [
+        "win"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u437": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 297.14,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 609.45,
+        "x": 1658.27,
+        "y": 2155.63
+       },
+       "context": "",
+       "data_id": "u434",
+       "identifier": "u437",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u453": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2569.85
+       },
+       "context": "Text: Our future to be — Overrides: AppliedFont: FuturaEF, FillColor: Color/Paper, FontStyle: Medium, PointSize: 165",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF",
+         "FillColor": "Color/Paper",
+         "FontStyle": "Medium",
+         "PointSize": "165"
+        },
+        "text": "Our future to be"
+       },
+       "data_id": "u453",
+       "identifier": "u453",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "text_content": [
+        "Our future to be"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u456": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 370.85,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 1017.64,
+        "x": 1250.08,
+        "y": 2569.85
+       },
+       "context": "",
+       "data_id": "u453",
+       "identifier": "u456",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u46c": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2781.97
+       },
+       "context": "Text: shaped — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Fuschia, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "FuturaEF DemiBold",
+         "FillColor": "Color/Paper",
+         "PointSize": "230.99999999999997",
+         "Underline": "true",
+         "UnderlineColor": "Color/Finastra Fuschia",
+         "UnderlineOffset": "38",
+         "UnderlineWeight": "28"
+        },
+        "text": "shaped"
+       },
+       "data_id": "u46c",
+       "identifier": "u46c",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "text_content": [
+        "shaped"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u470": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 317.47,
+        "kind": "TextFrame",
+        "page_id": "ud5",
+        "width": 792.49,
+        "x": 1475.23,
+        "y": 2781.97
+       },
+       "context": "",
+       "data_id": "u46c",
+       "identifier": "u470",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 58
+  },
+  "validation_classifiers": {
+   "COMPOSER": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur."
+   },
+   "DOCUMENT_BLEED": {
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied."
+   },
+   "HYPHENATION": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported."
+   },
+   "IMAGE_INCLUDED": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "label": "Images Included",
+    "message": "Package missing image link."
+   },
+   "IMAGE_TRANSFORMATION_IMAGE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing."
+   },
+   "MASTERPAGE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "label": "Masterpage",
+    "message": "Master Page can't be used."
+   },
+   "OVERRIDE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Override",
+    "message": "Overrides are not supported."
+   },
+   "PARAGRAPH_STYLE_TEXT_BOX": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used."
+   },
+   "PASTED_GRAPHICS": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported"
+   }
+  }
+ },
+ "stopped_at": "RESULTS"
+}

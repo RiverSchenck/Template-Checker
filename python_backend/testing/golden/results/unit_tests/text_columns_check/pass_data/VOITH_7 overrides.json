@@ -1,0 +1,637 @@
+{
+ "results": {
+  "char_styles": {
+   "details": {},
+   "total_count": 1
+  },
+  "checks": [
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "key": "MASTERPAGE",
+    "label": "Masterpage",
+    "message": "Master Page can't be used.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE_TEXT_BOX",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "FONTS_INCLUDED",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "OTF_TTF_FONT",
+    "label": "OTF/TTF Font",
+    "message": "Only OTF or TTF fonts are supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "VARIABLE_FONT",
+    "label": "Variable Font",
+    "message": "Variable fonts are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "key": "IMAGE_INCLUDED",
+    "label": "Images Included",
+    "message": "Package missing image link.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "EMBEDDED_IMAGE",
+    "label": "Embedded Image",
+    "message": "Embedded images are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item transformations (flip/skew) are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "key": "TABLE",
+    "label": "Table",
+    "message": "Tables are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "PASTED_GRAPHICS",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "key": "AUTO_SIZE_TEXT_BOX",
+    "label": "Auto Sizing Text Box",
+    "message": "Auto-size text boxes were not set up properly",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "key": "TEXT_COLUMNS",
+    "label": "Text Column",
+    "message": "Text columns are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "key": "LINKED_TEXT_FRAME",
+    "label": "Linked Text Frame",
+    "message": "Linked (threaded) text frames are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_TEXT",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_IMAGE",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "key": "GRID_ALIGNMENT",
+    "label": "Grid Alignment",
+    "message": "Grid alignment is not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING_CHAR",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP",
+    "label": "Text Wrap",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT",
+    "label": "Color Fill Tint (Beta)",
+    "message": "Fill Tint must be 100. (This may be inaccurate, testing currently)",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "key": "HYPHENATION",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "OVERRIDE",
+    "label": "Override",
+    "message": "Overrides are not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "UNUSED_IMAGE",
+    "label": "Unused Image",
+    "message": "Image(s) in package are unused making the package larger in size.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "key": "DOCUMENT_BLEED",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied.",
+    "severity": "warnings"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "key": "COMPOSER",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "EMPTY_TEXT_FRAME",
+    "label": "Empty Text Frames",
+    "message": "Empty text frame found.",
+    "severity": "infos"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "LARGE_IMAGE",
+    "label": "Large Image",
+    "message": "Image is large. Verify that this large of an image is needed.",
+    "severity": "infos"
+   }
+  ],
+  "fonts": {
+   "details": {},
+   "total_count": 5
+  },
+  "general": {
+   "details": {},
+   "total_count": 0
+  },
+  "images": {
+   "details": {},
+   "total_count": 1
+  },
+  "page_layouts": [
+   {
+    "frames": [
+     {
+      "height": 17.07,
+      "kind": "TextFrame",
+      "page_id": "u100",
+      "width": 103.46,
+      "x": 17.01,
+      "y": 47.32
+     },
+     {
+      "height": 4.28,
+      "kind": "TextFrame",
+      "page_id": "u100",
+      "width": 103.46,
+      "x": 17.01,
+      "y": 69.08
+     },
+     {
+      "height": 25.51,
+      "kind": "TextFrame",
+      "page_id": "u100",
+      "width": 103.46,
+      "x": 17.01,
+      "y": 87.08
+     },
+     {
+      "height": 17.55,
+      "kind": "Rectangle",
+      "page_id": "u100",
+      "width": 76.68,
+      "x": 119.06,
+      "y": 20.58
+     },
+     {
+      "height": 4.28,
+      "kind": "TextFrame",
+      "page_id": "u100",
+      "width": 104.75,
+      "x": 126.14,
+      "y": 49.09
+     },
+     {
+      "height": 85.28,
+      "kind": "TextFrame",
+      "page_id": "u100",
+      "width": 104.75,
+      "x": 126.14,
+      "y": 58.1
+     }
+    ],
+    "height": 153.0708661417323,
+    "index": 1,
+    "name": "1",
+    "page_id": "u100",
+    "preview": "sha256:166efd22ddac20f3",
+    "spread_id": "ufb",
+    "width": 240.9448818897638
+   }
+  ],
+  "pages": {
+   "u100": "1"
+  },
+  "par_styles": {
+   "details": {},
+   "total_count": 2
+  },
+  "spread_to_pages": {
+   "ufb": [
+    "u100"
+   ]
+  },
+  "template_name": "VOITH_7 overrides.zip",
+  "text_box_data": {
+   "u116": {
+    "content": "Wolfgang Mustermann-Langname\n",
+    "identifier": "u116",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u12c": {
+    "content": "Akademischer Titel\n",
+    "identifier": "u12c",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u142": {
+    "content": "Position Abteilung Bereich\nDivision\n",
+    "identifier": "u142",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u163": {
+    "content": "Voith Group\n",
+    "identifier": "u163",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u179": {
+    "content": "Voith GmbH & Co. KGaASt. Pöltener Straße 4389522 Heidenheim, GermanyTelefon +49 7321 37 0000Mobil +49 151 26430000Fax +49 7321 37 0000wolfgang.mustermann-langname@voith.com\n",
+    "identifier": "u179",
+    "page_id": "1",
+    "page_name": ""
+   }
+  },
+  "text_boxes": {
+   "details": {
+    "u116": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 17.07,
+        "kind": "TextFrame",
+        "page_id": "u100",
+        "width": 103.46,
+        "x": 17.01,
+        "y": 47.32
+       },
+       "context": "Text: Mu — Overrides: PointSize: 12",
+       "context_details": {
+        "overrides": {
+         "PointSize": "12"
+        },
+        "text": "Mu"
+       },
+       "data_id": "u116",
+       "identifier": "u116",
+       "page_id": "u100",
+       "page_name": "1",
+       "spread_id": "ufb",
+       "text_content": [
+        "Mu"
+       ],
+       "validationClassifier": "OVERRIDE"
+      },
+      {
+       "bounds": {
+        "height": 17.07,
+        "kind": "TextFrame",
+        "page_id": "u100",
+        "width": 103.46,
+        "x": 17.01,
+        "y": 47.32
+       },
+       "context": "Text: m — Overrides: Leading: 9",
+       "context_details": {
+        "overrides": {
+         "Leading": "9"
+        },
+        "text": "m"
+       },
+       "data_id": "u116",
+       "identifier": "u116",
+       "page_id": "u100",
+       "page_name": "1",
+       "spread_id": "ufb",
+       "text_content": [
+        "m"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u12c": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 4.28,
+        "kind": "TextFrame",
+        "page_id": "u100",
+        "width": 103.46,
+        "x": 17.01,
+        "y": 69.08
+       },
+       "context": "Text: Akademischer Titel — Overrides: Justification: CenterJustified",
+       "context_details": {
+        "overrides": {
+         "Justification": "CenterJustified"
+        },
+        "text": "Akademischer Titel"
+       },
+       "data_id": "u12c",
+       "identifier": "u12c",
+       "page_id": "u100",
+       "page_name": "1",
+       "spread_id": "ufb",
+       "text_content": [
+        "Akademischer Titel"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u142": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 25.51,
+        "kind": "TextFrame",
+        "page_id": "u100",
+        "width": 103.46,
+        "x": 17.01,
+        "y": 87.08
+       },
+       "context": "Text: Position Abteilung Bereich — Overrides: LeftIndent: 18, FirstLineIndent: -18, BulletsAndNumberingListType: NumberedList, NumberingContinue: false",
+       "context_details": {
+        "overrides": {
+         "BulletsAndNumberingListType": "NumberedList",
+         "FirstLineIndent": "-18",
+         "LeftIndent": "18",
+         "NumberingContinue": "false"
+        },
+        "text": "Position Abteilung Bereich"
+       },
+       "data_id": "u142",
+       "identifier": "u142",
+       "page_id": "u100",
+       "page_name": "1",
+       "spread_id": "ufb",
+       "text_content": [
+        "Position Abteilung Bereich"
+       ],
+       "validationClassifier": "OVERRIDE"
+      },
+      {
+       "bounds": {
+        "height": 25.51,
+        "kind": "TextFrame",
+        "page_id": "u100",
+        "width": 103.46,
+        "x": 17.01,
+        "y": 87.08
+       },
+       "context": "Text: isi — Overrides: AppliedFont: EmojiOne, FontStyle: Color",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "EmojiOne",
+         "FontStyle": "Color"
+        },
+        "text": "isi"
+       },
+       "data_id": "u142",
+       "identifier": "u142",
+       "page_id": "u100",
+       "page_name": "1",
+       "spread_id": "ufb",
+       "text_content": [
+        "isi"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u163": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 4.28,
+        "kind": "TextFrame",
+        "page_id": "u100",
+        "width": 104.75,
+        "x": 126.14,
+        "y": 49.09
+       },
+       "context": "Text: oit — Overrides: FontStyle: 65 Medium",
+       "context_details": {
+        "overrides": {
+         "FontStyle": "65 Medium"
+        },
+        "text": "oit"
+       },
+       "data_id": "u163",
+       "identifier": "u163",
+       "page_id": "u100",
+       "page_name": "1",
+       "spread_id": "ufb",
+       "text_content": [
+        "oit"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u179": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 85.28,
+        "kind": "TextFrame",
+        "page_id": "u100",
+        "width": 104.75,
+        "x": 126.14,
+        "y": 58.1
+       },
+       "context": "Text: St. Pöltener Straße 4389522 Heidenheim, Germany — Overrides: FillColor: Color/Paper",
+       "context_details": {
+        "overrides": {
+         "FillColor": "Color/Paper"
+        },
+        "text": "St. Pöltener Straße 4389522 Heidenheim, Germany"
+       },
+       "data_id": "u179",
+       "identifier": "u179",
+       "page_id": "u100",
+       "page_name": "1",
+       "spread_id": "ufb",
+       "text_content": [
+        "St. Pöltener Straße 4389522 Heidenheim, Germany"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    }
+   },
+   "total_count": 5
+  },
+  "validation_classifiers": {
+   "OVERRIDE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Override",
+    "message": "Overrides are not supported."
+   }
+  }
+ },
+ "stopped_at": "RESULTS"
+}

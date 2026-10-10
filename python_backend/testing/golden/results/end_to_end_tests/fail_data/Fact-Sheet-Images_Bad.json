@@ -1,0 +1,1577 @@
+{
+ "results": {
+  "char_styles": {
+   "details": {},
+   "total_count": 3
+  },
+  "checks": [
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "key": "MASTERPAGE",
+    "label": "Masterpage",
+    "message": "Master Page can't be used.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "PARAGRAPH_STYLE_TEXT_BOX",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "FONTS_INCLUDED",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "OTF_TTF_FONT",
+    "label": "OTF/TTF Font",
+    "message": "Only OTF or TTF fonts are supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "key": "VARIABLE_FONT",
+    "label": "Variable Font",
+    "message": "Variable fonts are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "key": "IMAGE_INCLUDED",
+    "label": "Images Included",
+    "message": "Package missing image link.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "EMBEDDED_IMAGE",
+    "label": "Embedded Image",
+    "message": "Embedded images are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image transformations are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item transformations (flip/skew) are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "key": "TABLE",
+    "label": "Table",
+    "message": "Tables are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "key": "PASTED_GRAPHICS",
+    "label": "Pasted Graphics",
+    "message": "Pasted graphics are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "key": "AUTO_SIZE_TEXT_BOX",
+    "label": "Auto Sizing Text Box",
+    "message": "Auto-size text boxes were not set up properly",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "key": "TEXT_COLUMNS",
+    "label": "Text Column",
+    "message": "Text columns are not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "key": "LINKED_TEXT_FRAME",
+    "label": "Linked Text Frame",
+    "message": "Linked (threaded) text frames are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_TEXT",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "key": "OBJECT_STYLE_IMAGE",
+    "label": "Object Style",
+    "message": "Object styles are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "key": "GRID_ALIGNMENT",
+    "label": "Grid Alignment",
+    "message": "Grid alignment is not supported",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "key": "KERNING_CHAR",
+    "label": "Kerning",
+    "message": "Kerning must be 'Metrics'",
+    "severity": "errors"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP",
+    "label": "Text Wrap",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT",
+    "label": "Color Fill Tint (Beta)",
+    "message": "Fill Tint must be 100. (This may be inaccurate, testing currently)",
+    "severity": "errors"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "key": "HYPHENATION",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "OVERRIDE",
+    "label": "Override",
+    "message": "Overrides are not supported.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "UNUSED_IMAGE",
+    "label": "Unused Image",
+    "message": "Image(s) in package are unused making the package larger in size.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION",
+    "label": "Image Transformation",
+    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_IMAGE",
+    "label": "Image Transformation (Image)",
+    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "IMAGE_TRANSFORMATION_CONTAINER",
+    "label": "Image Transformation (Container)",
+    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "key": "PAGE_ITEM_TRANSFORMATION",
+    "label": "Page Item Transformation",
+    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
+    "severity": "warnings"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "key": "DOCUMENT_BLEED",
+    "label": "Document Bleed",
+    "message": "InDesign defined bleed is applied.",
+    "severity": "warnings"
+   },
+   {
+    "category": "par_styles",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "key": "COMPOSER",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "severity": "warnings"
+   },
+   {
+    "category": "text_boxes",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "key": "EMPTY_TEXT_FRAME",
+    "label": "Empty Text Frames",
+    "message": "Empty text frame found.",
+    "severity": "infos"
+   },
+   {
+    "category": "images",
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "key": "LARGE_IMAGE",
+    "label": "Large Image",
+    "message": "Image is large. Verify that this large of an image is needed.",
+    "severity": "infos"
+   }
+  ],
+  "fonts": {
+   "details": {
+    "Minion Pro": {
+     "errors": [
+      {
+       "context": "",
+       "data_id": "null",
+       "identifier": "Minion Pro",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "FONTS_INCLUDED"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 7
+  },
+  "general": {
+   "details": {
+    "TextFrame:u594": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 204.09,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 67.74,
+        "x": 521.43,
+        "y": 637.8
+       },
+       "context": "TextFrame has been rotated by -90.00 degrees.",
+       "data_id": "u594",
+       "identifier": "TextFrame:u594",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "PAGE_ITEM_TRANSFORMATION"
+      }
+     ]
+    }
+   },
+   "total_count": 0
+  },
+  "images": {
+   "details": {},
+   "total_count": 10
+  },
+  "page_layouts": [
+   {
+    "frames": [
+     {
+      "height": 33.87,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 34.87,
+      "x": 318.88,
+      "y": 449.61
+     },
+     {
+      "height": 67.74,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 170.08,
+      "x": 363.12,
+      "y": 449.61
+     },
+     {
+      "height": 67.74,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 170.08,
+      "x": 363.12,
+      "y": 371.19
+     },
+     {
+      "height": 67.74,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 170.08,
+      "x": 363.12,
+      "y": 303.45
+     },
+     {
+      "height": 67.74,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 170.08,
+      "x": 109.44,
+      "y": 528.03
+     },
+     {
+      "height": 67.74,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 170.08,
+      "x": 109.44,
+      "y": 449.61
+     },
+     {
+      "height": 67.74,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 170.08,
+      "x": 109.44,
+      "y": 371.19
+     },
+     {
+      "height": 33.87,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 34.87,
+      "x": 62.08,
+      "y": 303.45
+     },
+     {
+      "height": 67.74,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 170.08,
+      "x": 109.44,
+      "y": 303.45
+     },
+     {
+      "height": 67.74,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 322.38,
+      "x": 136.45,
+      "y": 196.52
+     },
+     {
+      "height": 204.09,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 67.74,
+      "x": 521.43,
+      "y": 637.8
+     },
+     {
+      "height": 37.87,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 471.12,
+      "x": 62.08,
+      "y": 134.16
+     },
+     {
+      "height": 19.36,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 135.92,
+      "x": 229.68,
+      "y": 114.8
+     },
+     {
+      "height": 47.02,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 47.02,
+      "x": -222.05,
+      "y": -8.03
+     },
+     {
+      "height": 33.87,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 34.87,
+      "x": 318.88,
+      "y": 303.45
+     },
+     {
+      "height": 33.87,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 34.87,
+      "x": 62.08,
+      "y": 371.19
+     },
+     {
+      "height": 33.87,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 34.87,
+      "x": 318.88,
+      "y": 371.19
+     },
+     {
+      "height": 33.87,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 34.87,
+      "x": 62.08,
+      "y": 449.61
+     },
+     {
+      "height": 33.87,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 34.87,
+      "x": 62.08,
+      "y": 528.03
+     },
+     {
+      "height": 21.26,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 119.06,
+      "x": 240.94,
+      "y": 31.18
+     },
+     {
+      "height": 204.09,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 204.09,
+      "x": 86.98,
+      "y": 637.8
+     },
+     {
+      "height": 204.09,
+      "kind": "Rectangle",
+      "page_id": "u3dc",
+      "width": 204.09,
+      "x": 304.2,
+      "y": 637.8
+     },
+     {
+      "height": 15.12,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 170.08,
+      "x": 109.13,
+      "y": 303.07
+     },
+     {
+      "height": 67.74,
+      "kind": "TextFrame",
+      "page_id": "u3dc",
+      "width": 170.08,
+      "x": 109.61,
+      "y": 315.35
+     }
+    ],
+    "height": 841.8897637779999,
+    "index": 1,
+    "name": "1",
+    "page_id": "u3dc",
+    "preview": "sha256:844e28f27e106871",
+    "spread_id": "u3d7",
+    "width": 595.275590551
+   }
+  ],
+  "pages": {
+   "u3dc": "1"
+  },
+  "par_styles": {
+   "details": {
+    "NormalParagraphStyle": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 37.87,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 471.12,
+        "x": 62.08,
+        "y": 134.16
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u3dd",
+       "identifier": "NormalParagraphStyle",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Text": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 303.45
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u3f4",
+       "identifier": "Text",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt."
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 371.19
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u47d",
+       "identifier": "Text",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. "
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 449.61
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u499",
+       "identifier": "Text",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Evenis apid et facimagnisim ilita cuptate delibus nusci bea nobis ium autectatet volestr umendi."
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 528.03
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4b1",
+       "identifier": "Text",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Reici qui dolese in pla dest, susam eos doluptate licid ut la voluptaeperi por sum."
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 363.12,
+        "y": 303.45
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4df",
+       "identifier": "Text",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. "
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 363.12,
+        "y": 371.19
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4f6",
+       "identifier": "Text",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "quiaestrum quoditem quist qui quibea voluptatur adipiendi blabo. Evenis apid et facimagnisim ilita cuptate delibus nusci bea nobis ium autectatet volestr umendit."
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 363.12,
+        "y": 449.61
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u50d",
+       "identifier": "Text",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt."
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.61,
+        "y": 315.35
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "ud61",
+       "identifier": "Text",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt."
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 303.45
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u3f4",
+       "identifier": "Text",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    },
+    "Title": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 303.45
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u3f4",
+       "identifier": "Title",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Materials"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 371.19
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u47d",
+       "identifier": "Title",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Sizes"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 449.61
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u499",
+       "identifier": "Title",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "PACKAGING"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 528.03
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4b1",
+       "identifier": "Title",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "DELIVERY"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 363.12,
+        "y": 303.45
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4df",
+       "identifier": "Title",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "PRODUCT CARE"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 363.12,
+        "y": 371.19
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u4f6",
+       "identifier": "Title",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Recycling"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 363.12,
+        "y": 449.61
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u50d",
+       "identifier": "Title",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Sources"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 15.12,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.13,
+        "y": 303.07
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "ud4a",
+       "identifier": "Title",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Materials"
+       ],
+       "validationClassifier": "HYPHENATION"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 303.45
+       },
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
+       "data_id": "u3f4",
+       "identifier": "Title",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "COMPOSER"
+      }
+     ]
+    }
+   },
+   "total_count": 3
+  },
+  "spread_to_pages": {
+   "u3d7": [
+    "u3dc"
+   ]
+  },
+  "template_name": "Fact-Sheet-Images_Bad.zip",
+  "text_box_data": {
+   "u3dd": {
+    "content": "Summer Collection 2020\n",
+    "identifier": "u3dd",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u3e0": {
+    "content": "Summer Collection 2020\n",
+    "identifier": "u3e0",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u3f4": {
+    "content": "Materials\nIcatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.\n\n",
+    "identifier": "u3f4",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u423": {
+    "content": "FACT SHEET\n",
+    "identifier": "u423",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u426": {
+    "content": "FACT SHEET\n",
+    "identifier": "u426",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u47d": {
+    "content": "Sizes\nReptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n\n",
+    "identifier": "u47d",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4df": {
+    "content": "PRODUCT CARE\nreptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n",
+    "identifier": "u4df",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u4f6": {
+    "content": "Recycling\nquiaestrum quoditem quist qui quibea voluptatur adipiendi blabo. Evenis apid et facimagnisim ilita cuptate delibus nusci bea nobis ium autectatet volestr umendit.\n",
+    "identifier": "u4f6",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u594": {
+    "content": "monobrand.com\n",
+    "identifier": "u594",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u597": {
+    "content": "monobrand.com\n",
+    "identifier": "u597",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5ce": {
+    "content": "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n",
+    "identifier": "u5ce",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "u5d1": {
+    "content": "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n",
+    "identifier": "u5d1",
+    "page_id": "1",
+    "page_name": ""
+   },
+   "ud61": {
+    "content": "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.\n\n",
+    "identifier": "ud61",
+    "page_id": "1",
+    "page_name": ""
+   }
+  },
+  "text_boxes": {
+   "details": {
+    "NormalParagraphStyle": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 303.45
+       },
+       "context": " Whitespace after text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.",
+       "data_id": "u3f4",
+       "identifier": "NormalParagraphStyle",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "PARAGRAPH_STYLE"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 371.19
+       },
+       "context": " Whitespace after text: Reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga.",
+       "data_id": "u47d",
+       "identifier": "NormalParagraphStyle",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "PARAGRAPH_STYLE"
+      },
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.61,
+        "y": 315.35
+       },
+       "context": " Whitespace after text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.",
+       "data_id": "ud61",
+       "identifier": "NormalParagraphStyle",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "PARAGRAPH_STYLE"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u3dd": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 37.87,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 471.12,
+        "x": 62.08,
+        "y": 134.16
+       },
+       "context": "Text: Summer Collection 2020 — Overrides: Leading: 74, AppliedFont: Playfair Display, PointSize: 35, StrokeWeight: 0.34917959091351974, OTFContextualAlternate: false, MiterLimit: 1.396718363654079, RubyFontSize: -0.34917959091351974, KentenFontSize: -0.34917959091351974",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Playfair Display",
+         "KentenFontSize": "-0.34917959091351974",
+         "Leading": "74",
+         "MiterLimit": "1.396718363654079",
+         "OTFContextualAlternate": "false",
+         "PointSize": "35",
+         "RubyFontSize": "-0.34917959091351974",
+         "StrokeWeight": "0.34917959091351974"
+        },
+        "text": "Summer Collection 2020"
+       },
+       "data_id": "u3dd",
+       "identifier": "u3dd",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Summer Collection 2020"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u3e0": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 37.87,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 471.12,
+        "x": 62.08,
+        "y": 134.16
+       },
+       "context": "",
+       "data_id": "u3dd",
+       "identifier": "u3e0",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u3f4": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 303.45
+       },
+       "context": "Text:  Whitespace — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "Leading": "12",
+         "PointSize": "8"
+        },
+        "text": ""
+       },
+       "data_id": "u3f4",
+       "identifier": "u3f4",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u423": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 19.36,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 135.92,
+        "x": 229.68,
+        "y": 114.8
+       },
+       "context": "Text: FACT SHEET — Overrides: AppliedFont: Montserrat, FontStyle: Medium, StrokeWeight: 0.32244888188967313, Tracking: 60, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Medium",
+         "KentenFontSize": "-0.32244888188967313",
+         "MiterLimit": "1.2897955275586925",
+         "OTFContextualAlternate": "false",
+         "RubyFontSize": "-0.32244888188967313",
+         "StrokeWeight": "0.32244888188967313",
+         "Tracking": "60"
+        },
+        "text": "FACT SHEET"
+       },
+       "data_id": "u423",
+       "identifier": "u423",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "FACT SHEET"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u426": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 19.36,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 135.92,
+        "x": 229.68,
+        "y": 114.8
+       },
+       "context": "",
+       "data_id": "u423",
+       "identifier": "u426",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u47d": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.44,
+        "y": 371.19
+       },
+       "context": "Text:  Whitespace — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "Leading": "12",
+         "PointSize": "8"
+        },
+        "text": ""
+       },
+       "data_id": "u47d",
+       "identifier": "u47d",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u4df": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 363.12,
+        "y": 303.45
+       },
+       "context": "Text:  Whitespace after text: PRODUCT CARE — Overrides: FontStyle: Medium",
+       "context_details": {
+        "overrides": {
+         "FontStyle": "Medium"
+        },
+        "text": ""
+       },
+       "data_id": "u4df",
+       "identifier": "u4df",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u4f6": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 363.12,
+        "y": 371.19
+       },
+       "context": "Text:  Whitespace after text: Recycling — Overrides: FontStyle: Medium",
+       "context_details": {
+        "overrides": {
+         "FontStyle": "Medium"
+        },
+        "text": ""
+       },
+       "data_id": "u4f6",
+       "identifier": "u4f6",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u594": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 204.09,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 67.74,
+        "x": 521.43,
+        "y": 637.8
+       },
+       "context": "Text: monobrand.com — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "Leading": "12",
+         "PointSize": "8"
+        },
+        "text": "monobrand.com"
+       },
+       "data_id": "u594",
+       "identifier": "u594",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "monobrand.com"
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u597": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 204.09,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 67.74,
+        "x": 521.43,
+        "y": 637.8
+       },
+       "context": "",
+       "data_id": "u594",
+       "identifier": "u597",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "u5ce": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 322.38,
+        "x": 136.45,
+        "y": 196.52
+       },
+       "context": "Text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "Leading": "12",
+         "PointSize": "8"
+        },
+        "text": "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. "
+       },
+       "data_id": "u5ce",
+       "identifier": "u5ce",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "text_content": [
+        "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. "
+       ],
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    },
+    "u5d1": {
+     "errors": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 322.38,
+        "x": 136.45,
+        "y": 196.52
+       },
+       "context": "",
+       "data_id": "u5ce",
+       "identifier": "u5d1",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "ud61": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "bounds": {
+        "height": 67.74,
+        "kind": "TextFrame",
+        "page_id": "u3dc",
+        "width": 170.08,
+        "x": 109.61,
+        "y": 315.35
+       },
+       "context": "Text:  Whitespace — Overrides: Leading: 12, AppliedFont: Montserrat, FontStyle: Regular, PointSize: 8",
+       "context_details": {
+        "overrides": {
+         "AppliedFont": "Montserrat",
+         "FontStyle": "Regular",
+         "Leading": "12",
+         "PointSize": "8"
+        },
+        "text": ""
+       },
+       "data_id": "ud61",
+       "identifier": "ud61",
+       "page_id": "u3dc",
+       "page_name": "1",
+       "spread_id": "u3d7",
+       "validationClassifier": "OVERRIDE"
+      }
+     ]
+    }
+   },
+   "total_count": 13
+  },
+  "validation_classifiers": {
+   "COMPOSER": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "label": "Composer",
+    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur."
+   },
+   "FONTS_INCLUDED": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "label": "Fonts Included",
+    "message": "Package is missing fonts."
+   },
+   "HYPHENATION": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "label": "Hyphenation",
+    "message": "Hyphenation is not supported."
+   },
+   "OVERRIDE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Override",
+    "message": "Overrides are not supported."
+   },
+   "PAGE_ITEM_TRANSFORMATION": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "label": "Page Item Transformation",
+    "message": "Page item has been rotated. You may see slight discrepencies between export and editing."
+   },
+   "PARAGRAPH_STYLE": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Paragraph Style",
+    "message": "Text found missing paragraph styles."
+   },
+   "PARAGRAPH_STYLE_TEXT_BOX": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "label": "Paragraph Style",
+    "message": "No paragraph styles were used."
+   }
+  }
+ },
+ "stopped_at": "RESULTS"
+}

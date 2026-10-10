@@ -22,7 +22,7 @@ class StoriesParser:
 
     # ---------------- Private Setters------------------
     def _extract_stories_data(self, stories_dir: str, styles_parser: 'StylesParser', fonts_parser: 'FontsParser', spreads_parser: 'SpreadsParser'):
-        for story_file in os.listdir(stories_dir):
+        for story_file in sorted(os.listdir(stories_dir)):
             if story_file.endswith('.xml'):
                 file_path = os.path.join(stories_dir, story_file)
                 tree = ET.parse(file_path)

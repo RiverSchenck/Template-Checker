@@ -24,7 +24,7 @@ class SourceFoldersParser:
     def _extract_document_fonts(self, document_fonts_folder_path: str):
         document_fonts: List[SourceFontFamily] = []
 
-        for file_name in os.listdir(document_fonts_folder_path):
+        for file_name in sorted(os.listdir(document_fonts_folder_path)):
 
             if file_name.endswith('.lst') or file_name == '.DS_Store':
                 continue

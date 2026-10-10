@@ -87,7 +87,7 @@ class ValidationResult():
         if existing_validation:
             # Merge text_content arrays
             existing_text_content = existing_validation.get_text_content()
-            merged_text_content = list(set(existing_text_content + text_content))  # Remove duplicates
+            merged_text_content = list(dict.fromkeys(existing_text_content + text_content))  # Remove duplicates, keep order
             existing_validation.text_content = merged_text_content
         else:
             # Create new validation

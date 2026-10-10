@@ -33,7 +33,7 @@ class MasterPageParser:
         return elements
 
     def _get_elements_from_all_files(self, master_spreads_dir: str):
-        for file_name in os.listdir(master_spreads_dir):
+        for file_name in sorted(os.listdir(master_spreads_dir)):
             if file_name.endswith('.xml'):
                 file_path = os.path.join(master_spreads_dir, file_name)
                 self._get_elements_from_file(

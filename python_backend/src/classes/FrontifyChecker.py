@@ -456,10 +456,9 @@ class FrontifyChecker:
 
     def ensure_folder_exists(self, path, folder_name):
         # Convert all folder names in the unzipped folder path to lowercase and check if the lowercase version of the target folder exists
-        folder_paths = [os.path.join(path, f) for f in os.listdir(path)
-                        if os.path.isdir(os.path.join(path, f))]
-        folder_names_lowercase = [f.lower() for f in os.listdir(path)
-                                  if os.path.isdir(os.path.join(path, f))]
+        folder_names = sorted(f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f)))
+        folder_paths = [os.path.join(path, f) for f in folder_names]
+        folder_names_lowercase = [f.lower() for f in folder_names]
         target_folder_name_lowercase = folder_name.lower()
 
         if target_folder_name_lowercase not in folder_names_lowercase:
@@ -950,7 +949,7 @@ class FrontifyChecker:
         # Check if all link names are found in the image names.
         missing_images = set(link_name_to_id.keys()) - image_names
         if missing_images:
-            for missing_image in missing_images:
+            for missing_image in sorted(missing_images):
                 # Use the link ID if it's from spreads, None if from master spreads
                 missing_link_id = link_name_to_id[missing_image]
                 if missing_link_id is None:
@@ -972,7 +971,7 @@ class FrontifyChecker:
         # Check if there are any image names not used in links.
         unused_images = image_names - set(link_name_to_id.keys())
         if unused_images:
-            for unused_image in unused_images:
+            for unused_image in sorted(unused_images):
                 # Unused images would not have a corresponding link ID in this case
                 message = f"Image '{unused_image}' is present in the document but not used."
                 self.results.add_warning(

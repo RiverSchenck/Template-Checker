@@ -25,7 +25,7 @@ class SpreadsParser:
         spreads_obj_list: List[SpreadData] = []
 
         # Iterate over each file in the directory
-        for filename in os.listdir(spreads_xml_dir):
+        for filename in sorted(os.listdir(spreads_xml_dir)):
             if filename.endswith('.xml'):
                 file_path = os.path.join(spreads_xml_dir, filename)
                 parser = ET.XMLParser(huge_tree=True)
