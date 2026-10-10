@@ -6,9 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 /**
  * Shared building blocks for the settings-style pages (Users, Access requests, API keys).
- *
- * Note: theme colors are CSS vars without an <alpha-value> slot, so Tailwind opacity
- * modifiers (e.g. `bg-muted/50`) don't compile for them. Use palette colors for tints.
  */
 
 /** Primary page action: dark, slightly raised, matches the header icon tile. */
