@@ -13,7 +13,10 @@ import { cn } from '../../lib/utils';
 const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200MB
 
 type Output = 'results' | 'xml';
-type Phase = 'idle' | 'uploading' | 'checking';
+type Phase = 'idle' | 'uploading' | 'checking' | 'done';
+
+/** How long the full bar and "Checked" stay up before results open, so a fast check doesn't feel cut off. */
+const DONE_PAUSE_MS = 600;
 
 interface TemplateUploaderProps {
   checkerResponse: (jsonResponse: ValidationResult, setPrevious?: boolean) => void;
@@ -32,12 +35,13 @@ function formatSize(bytes: number): string {
 }
 
 /**
- * One continuous bar: the upload fills the first 30%, then the check (which reports no progress)
- * eases on toward 95% so the bar never stalls or restarts.
+ * One continuous bar: the upload fills the first 70%, then the check (which reports no progress)
+ * eases on toward 95%, and a finished check fills it. It never stalls or restarts.
  */
 function barProgress(phase: Phase, uploadPercent: number, elapsedSeconds: number): number {
-  if (phase === 'uploading') return uploadPercent * 0.3;
-  return 30 + 65 * (1 - Math.exp(-(elapsedSeconds + 1) / 20));
+  if (phase === 'done') return 100;
+  if (phase === 'uploading') return uploadPercent * 0.7;
+  return 70 + 25 * (1 - Math.exp(-(elapsedSeconds + 1) / 15));
 }
 
 function formatElapsed(seconds: number): string {
@@ -192,6 +196,11 @@ export function TemplateUploader({
 
         if (!result) return; // cancelled
 
+        if (result.ok) {
+          setPhase('done');
+          await new Promise((r) => window.setTimeout(r, DONE_PAUSE_MS));
+        }
+
         if (!result.ok) {
           const errorText = typeof result.body === 'string' ? result.body : await (result.body as Blob).text();
           let errorMessage = 'The check failed. Try again, or contact the team if it keeps happening.';
@@ -287,18 +296,28 @@ export function TemplateUploader({
                 </p>
                 <p className="text-xs tabular-nums text-muted-foreground">
                   {formatSize(current.size)} ·{' '}
-                  {phase === 'uploading' ? `Uploading ${uploadProgress}%` : `Checking template · ${formatElapsed(elapsed)}`}
+                  {phase === 'uploading'
+                    ? `Uploading ${uploadProgress}%`
+                    : phase === 'done'
+                      ? 'Checked'
+                      : `Checking template · ${formatElapsed(elapsed)}`}
                 </p>
               </div>
-              <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => xhrRef.current?.abort()}>
-                Cancel
-              </Button>
+              {phase === 'done' ? (
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-violet-500 text-white motion-safe:animate-in motion-safe:zoom-in-50">
+                  <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                </span>
+              ) : (
+                <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => xhrRef.current?.abort()}>
+                  Cancel
+                </Button>
+              )}
             </div>
             <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-muted">
               <div
                 className={cn(
                   'h-full rounded-full bg-violet-500 transition-[width] ease-out',
-                  phase === 'uploading' ? 'duration-200' : 'duration-1000'
+                  phase === 'uploading' ? 'duration-200' : phase === 'done' ? 'duration-500' : 'duration-1000'
                 )}
                 style={{ width: `${barProgress(phase, uploadProgress, elapsed)}%` }}
               />
@@ -306,7 +325,11 @@ export function TemplateUploader({
             <p className="mt-3 text-xs text-muted-foreground">
               {phase === 'uploading'
                 ? 'Uploading your template…'
-                : output === 'xml'
+                : phase === 'done'
+                  ? output === 'xml'
+                    ? 'Done. Starting your download…'
+                    : 'Done. Opening results…'
+                  : output === 'xml'
                   ? 'Converting to XML. The download starts when it’s ready.'
                   : 'Checking styles, text boxes, fonts and images…'}
             </p>
