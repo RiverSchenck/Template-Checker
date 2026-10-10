@@ -5,7 +5,7 @@ import { ValidationResult } from '../../types';
 import countValidationIssues from '../ValidationCount';
 import SuccessModal from './SuccessModal';
 import { Button } from '../ui/button';
-import { PageHeader, PageShell, Segmented } from '../layout/page-kit';
+import { Segmented } from '../layout/page-kit';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 import { useAuth } from '../AuthContext';
 import { cn } from '../../lib/utils';
@@ -21,6 +21,8 @@ interface TemplateUploaderProps {
   onUploadComplete?: () => void;
   seeDetails?: (value: boolean) => void;
   navigateToResults?: () => void;
+  /** Center the output toggle and hint under the drop area (the page layout). */
+  centered?: boolean;
   className?: string;
 }
 
@@ -115,6 +117,7 @@ export function TemplateUploader({
   onUploadComplete,
   seeDetails,
   navigateToResults,
+  centered = false,
   className,
 }: TemplateUploaderProps) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -346,7 +349,7 @@ export function TemplateUploader({
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+      <div className={cn('flex flex-wrap items-center gap-x-3 gap-y-1.5', centered && 'flex-col')}>
         <Segmented<Output>
           ariaLabel="Output"
           value={output}
@@ -368,13 +371,19 @@ export function TemplateUploader({
 
 export default function FileUploadPage(props: TemplateUploaderProps) {
   return (
-    <PageShell>
-      <PageHeader
-        icon={FileCheck2}
-        title="Check template"
-        description="Upload a packaged InDesign template to find issues before it reaches the customer."
-      />
-      <TemplateUploader {...props} />
-    </PageShell>
+    <div className="flex w-full flex-1 items-center justify-center px-4 pb-24 pt-10 sm:px-6">
+      <div className="w-full max-w-2xl">
+        <header className="mb-8 text-center">
+          <h1 className="flex items-center justify-center gap-2.5 text-[1.65rem] font-semibold leading-tight tracking-tight">
+            <FileCheck2 className="h-6 w-6 shrink-0 text-muted-foreground" strokeWidth={1.75} aria-hidden />
+            Check template
+          </h1>
+          <p className="mx-auto mt-1.5 max-w-xl text-balance text-sm leading-relaxed text-muted-foreground">
+            Upload a packaged InDesign template to find issues before it reaches the customer.
+          </p>
+        </header>
+        <TemplateUploader {...props} centered />
+      </div>
+    </div>
   );
 }
