@@ -1,6 +1,6 @@
 import { CategoryDetail, CheckDefinition, ValidationItem, ValidationResult } from '../../types';
 import { buildReport, compareReports, describeWhere, formatPages } from './buildReport';
-import { buildCustomerSummary } from './customerSummary';
+import { buildCustomerSummary, buildCustomerSummaryDocument } from './customerSummary';
 
 const item = (overrides: Partial<ValidationItem>): ValidationItem => ({
   validationClassifier: 'KERNING',
@@ -235,5 +235,26 @@ describe('buildCustomerSummary severities', () => {
     expect(summary).toContain('Also worth a quick check, though these are often fine as they are:');
     expect(summary).toContain('1. Empty text frame');
     expect(summary).toContain('After making changes, package the document again');
+  });
+});
+
+describe('buildCustomerSummaryDocument', () => {
+  it('splits the summary into sections whose offsets point at their text', () => {
+    const report = buildReport(makeResult());
+    const doc = buildCustomerSummaryDocument(report, 'Sample');
+    expect(doc.text).toBe(buildCustomerSummary(report, 'Sample'));
+    for (const section of doc.sections) {
+      expect(doc.text.slice(section.start, section.end)).toBe(section.text);
+    }
+    expect(doc.sections[0].key).toBe('intro');
+    expect(doc.sections.at(-1)?.key).toBe('closing');
+    const issueKeys = doc.sections.filter((s) => !['intro', 'closing'].includes(s.key)).map((s) => s.key);
+    expect(issueKeys).toEqual(report.problems.map((p) => p.key));
+  });
+
+  it('is a single intro section when nothing was found', () => {
+    const doc = buildCustomerSummaryDocument(buildReport({ ...makeResult(), par_styles: category({}) } as never), 'X');
+    expect(doc.sections.length).toBeGreaterThan(0);
+    expect(doc.text.slice(doc.sections[0].start, doc.sections[0].end)).toBe(doc.sections[0].text);
   });
 });

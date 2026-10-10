@@ -55,46 +55,84 @@ function problemBlock(problem: Problem, number: number): string {
 /** Removes the file extension so the message names the template, not the upload. */
 export const displayTemplateName = (templateName: string) => templateName.replace(/\.(zip|idml|indd)$/i, '');
 
-/** A message support can paste into a reply, explaining what may be causing the customer's issues. */
-export function buildCustomerSummary(report: Report, templateName: string): string {
+/** One part of the summary: the intro, a single issue, a group heading, or the closing line. */
+export type SummarySection = {
+  /** Stable id within this summary, e.g. "issue-3". */
+  id: string;
+  /** What feedback on it is filed under: an issue's check key (e.g. FONTS_INCLUDED), or 'intro' / 'closing'. */
+  key: string;
+  /** Short label for the section, e.g. the issue's title. */
+  title: string;
+  text: string;
+  /** Character offsets of `text` within the full summary. */
+  start: number;
+  end: number;
+};
+
+export type SummaryDocument = { text: string; sections: SummarySection[] };
+
+const SECTION_GAP = '\n\n';
+
+/** The customer summary, plus where each section sits in it so reviewers can comment on parts of it. */
+export function buildCustomerSummaryDocument(report: Report, templateName: string): SummaryDocument {
   const blockers = report.problems.filter((p) => p.severity === 'errors');
   const warnings = report.problems.filter((p) => p.severity === 'warnings');
   const infos = report.problems.filter((p) => p.severity === 'infos');
   const cleanName = displayTemplateName(templateName);
   const name = cleanName && cleanName !== 'No Name' ? `“${cleanName}”` : 'your template';
   const count = (n: number) => (n === 1 ? 'one thing' : `${n} things`);
-  const parts: string[] = [];
+  const parts: Omit<SummarySection, 'id' | 'start' | 'end'>[] = [];
+  const intro = (text: string) => parts.push({ key: 'intro', title: parts.length ? 'Group heading' : 'Introduction', text });
+  const issues = (problems: Problem[]) =>
+    problems.forEach((problem, i) =>
+      parts.push({ key: problem.key, title: problem.guide.title, text: problemBlock(problem, i + 1) })
+    );
 
   if (blockers.length) {
-    parts.push(
-      `We checked ${name} and found ${count(blockers.length)} in the InDesign file that are likely causing the issues. These can stop a template from working in Frontify, or make it look different:`,
-      ''
+    intro(
+      `We checked ${name} and found ${count(blockers.length)} in the InDesign file that are likely causing the issues. These can stop a template from working in Frontify, or make it look different:`
     );
-    blockers.forEach((problem, i) => parts.push(problemBlock(problem, i + 1), ''));
+    issues(blockers);
   }
 
   if (warnings.length) {
-    parts.push(
+    intro(
       blockers.length
         ? 'These may also make the template look different than expected:'
-        : `We checked ${name} and found ${count(warnings.length)} that may make it look different than expected in Frontify:`,
-      ''
+        : `We checked ${name} and found ${count(warnings.length)} that may make it look different than expected in Frontify:`
     );
-    warnings.forEach((problem, i) => parts.push(problemBlock(problem, i + 1), ''));
+    issues(warnings);
   }
 
   if (infos.length) {
-    parts.push(
+    intro(
       parts.length
         ? 'Also worth a quick check, though these are often fine as they are:'
-        : `We checked ${name}. A few things are worth a quick check, though they’re often fine as they are:`,
-      ''
+        : `We checked ${name}. A few things are worth a quick check, though they’re often fine as they are:`
     );
-    infos.forEach((problem, i) => parts.push(problemBlock(problem, i + 1), ''));
+    issues(infos);
   }
 
-  if (!parts.length) return `We checked ${name} and didn’t find anything in the template that would cause issues.`;
+  if (!parts.length) {
+    intro(`We checked ${name} and didn’t find anything in the template that would cause issues.`);
+  } else {
+    parts.push({
+      key: 'closing',
+      title: 'Closing',
+      text: 'After making changes, package the document again with File > Package and upload the new ZIP to Frontify.',
+    });
+  }
 
-  parts.push('After making changes, package the document again with File > Package and upload the new ZIP to Frontify.');
-  return parts.join('\n');
+  let offset = 0;
+  const sections = parts.map((part, i) => {
+    const start = offset;
+    offset += part.text.length + SECTION_GAP.length;
+    return { ...part, id: `section-${i}`, start, end: start + part.text.length };
+  });
+  return { text: parts.map((p) => p.text).join(SECTION_GAP), sections };
+}
+
+/** A message support can paste into a reply, explaining what may be causing the customer's issues. */
+export function buildCustomerSummary(report: Report, templateName: string): string {
+  return buildCustomerSummaryDocument(report, templateName).text;
 }
