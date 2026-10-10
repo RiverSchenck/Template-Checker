@@ -6,7 +6,7 @@ import { cn } from '../../lib/utils';
 import { responseError } from '../../lib/notify';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 import { useAuth } from '../AuthContext';
-import type { SummaryDocument, SummarySection } from './customerSummary';
+import { lineText, type SummaryDocument, type SummaryLine, type SummarySection } from './customerSummary';
 
 /** A comment the reviewer is drafting; saved with the review when they copy. */
 export type DraftComment = {
@@ -59,25 +59,48 @@ function sectionTextElement(node: Node | null): HTMLElement | null {
   return el?.closest<HTMLElement>('[data-section-text]') ?? null;
 }
 
-/** The section's text split into plain runs and highlighted runs (one per overlapping set of quotes). */
-function segments(section: SummarySection, comments: DraftComment[]) {
+/** The section's lines, each split into plain runs and highlighted runs (one per overlapping set of quotes). */
+function lineSegments(section: SummarySection, comments: DraftComment[]) {
   const ranges = comments
     .filter((c) => c.sectionId === section.id && c.quoteStart != null && c.quoteEnd != null)
     .map((c) => ({ id: c.id, start: c.quoteStart! - section.start, end: c.quoteEnd! - section.start }));
-  const cuts = Array.from(new Set([0, section.text.length, ...ranges.flatMap((r) => [r.start, r.end])])).sort((a, b) => a - b);
-  const out: { text: string; ids: string[] }[] = [];
-  for (let i = 0; i < cuts.length - 1; i++) {
-    const [a, b] = [cuts[i], cuts[i + 1]];
-    out.push({ text: section.text.slice(a, b), ids: ranges.filter((r) => r.start <= a && r.end >= b).map((r) => r.id) });
-  }
-  return out;
+  let lineStart = 0;
+  return section.lines.map((line) => {
+    const text = lineText(line);
+    const lineEnd = lineStart + text.length;
+    const inside = (n: number) => Math.min(Math.max(n, lineStart), lineEnd);
+    const cuts = Array.from(
+      new Set([lineStart, lineEnd, ...ranges.flatMap((r) => [inside(r.start), inside(r.end)])])
+    ).sort((a, b) => a - b);
+    const segs: { text: string; ids: string[] }[] = [];
+    for (let i = 0; i < cuts.length - 1; i++) {
+      const [a, b] = [cuts[i], cuts[i + 1]];
+      segs.push({ text: section.text.slice(a, b), ids: ranges.filter((r) => r.start <= a && r.end >= b).map((r) => r.id) });
+    }
+    lineStart = lineEnd + 1; // the newline between lines
+    return { line, segs };
+  });
 }
+
+/** Line styles that match how the copy looks once pasted into Intercom. */
+const LINE_CLASSES: Record<SummaryLine['kind'], string> = {
+  heading: 'font-semibold',
+  title: 'font-semibold',
+  text: '',
+  step: 'pl-[1.1em] -indent-[0.65em]',
+  link: 'mt-1',
+};
 
 type Selection = { section: SummarySection; start: number; end: number; quote: string; top: number; left: number };
 type Composer = Omit<DraftComment, 'id' | 'body'> & { editingId?: string };
 
 // ---------------------------------------------------------------------------------------------------------------
 // Saving and copying
+
+const clipboardBlobs = (doc: SummaryDocument) => ({
+  'text/plain': new Blob([doc.plainText], { type: 'text/plain' }),
+  'text/html': new Blob([doc.html], { type: 'text/html' }),
+});
 
 /** Save the review, then copy the summary. Returns what the toolbar needs. */
 export function useSummaryReviewSubmit(
@@ -97,13 +120,20 @@ export function useSummaryReviewSubmit(
     setError(null);
   }, [doc.text]);
 
-  /** Copy with the async clipboard API, falling back to the classic copy command if it's blocked. */
+  /**
+   * Copy as HTML and plain text, so it pastes formatted into Intercom and cleanly anywhere else. Falls back to plain
+   * text, then to the classic copy command if the clipboard API is blocked.
+   */
   const copyNow = async () => {
     try {
-      await navigator.clipboard.writeText(doc.text);
+      if (typeof ClipboardItem !== 'undefined' && navigator.clipboard?.write) {
+        await navigator.clipboard.write([new ClipboardItem(clipboardBlobs(doc))]);
+      } else {
+        await navigator.clipboard.writeText(doc.plainText);
+      }
     } catch {
       const area = document.createElement('textarea');
-      area.value = doc.text;
+      area.value = doc.plainText;
       area.setAttribute('readonly', '');
       area.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
       document.body.appendChild(area);
@@ -162,14 +192,19 @@ export function useSummaryReviewSubmit(
     const saving = saveReview();
     // Browsers only allow clipboard writes during the click, so start the copy now and hand it the text once the
     // review is saved (a failed save rejects it, so nothing is copied). Older browsers copy after saving instead.
-    const text = saving.then((ok) => {
+    const afterSave = saving.then((ok) => {
       if (!ok) throw new Error('not saved');
-      return new Blob([doc.text], { type: 'text/plain' });
     });
+    const blobs = clipboardBlobs(doc);
     const copying =
       typeof ClipboardItem !== 'undefined' && navigator.clipboard?.write
-        ? navigator.clipboard.write([new ClipboardItem({ 'text/plain': text })])
-        : text.then(() => copyNow());
+        ? navigator.clipboard.write([
+            new ClipboardItem({
+              'text/plain': afterSave.then(() => blobs['text/plain']),
+              'text/html': afterSave.then(() => blobs['text/html']),
+            }),
+          ])
+        : afterSave.then(() => copyNow());
     copying.catch(() => undefined);
     const ok = await saving;
     if (!ok) {
@@ -540,28 +575,52 @@ export function SummaryReviewDocument({
                     On the page →
                   </span>
                 )}
-                <p
+                <div
                   data-section-text={section.id}
-                  className="whitespace-pre-wrap break-words pr-10 text-[13.5px] leading-relaxed text-foreground"
+                  className="break-words pr-10 text-[13.5px] leading-relaxed text-foreground"
                 >
-                  {segments(section, comments).map((seg, i) =>
-                    seg.ids.length ? (
-                      <mark
-                        key={i}
-                        className={cn(
-                          'rounded-[2px] bg-amber-400/25 text-inherit underline decoration-amber-500 decoration-2 underline-offset-[3px] transition-colors',
-                          seg.ids.includes(activeCommentId ?? '') && 'bg-amber-400/50'
-                        )}
-                        onMouseEnter={() => setActiveCommentId(seg.ids[0])}
-                        onMouseLeave={() => setActiveCommentId(null)}
-                      >
-                        {seg.text}
-                      </mark>
-                    ) : (
-                      <React.Fragment key={i}>{seg.text}</React.Fragment>
-                    )
-                  )}
-                </p>
+                  {lineSegments(section, comments).map(({ line, segs }, li, all) => {
+                    const runs = segs.map((seg, i) =>
+                      seg.ids.length ? (
+                        <mark
+                          key={i}
+                          className={cn(
+                            'rounded-[2px] bg-amber-400/25 text-inherit underline decoration-amber-500 decoration-2 underline-offset-[3px] transition-colors',
+                            seg.ids.includes(activeCommentId ?? '') && 'bg-amber-400/50'
+                          )}
+                          onMouseEnter={() => setActiveCommentId(seg.ids[0])}
+                          onMouseLeave={() => setActiveCommentId(null)}
+                        >
+                          {seg.text}
+                        </mark>
+                      ) : (
+                        <React.Fragment key={i}>{seg.text}</React.Fragment>
+                      )
+                    );
+                    const firstStep = line.kind === 'step' && all[li - 1]?.line.kind !== 'step';
+                    return (
+                      <React.Fragment key={li}>
+                        <span className={cn('block', LINE_CLASSES[line.kind], firstStep && 'mt-1')}>
+                          {line.kind === 'link' ? (
+                            <a
+                              href={line.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="text-primary underline underline-offset-2"
+                            >
+                              {runs}
+                            </a>
+                          ) : (
+                            runs
+                          )}
+                        </span>
+                        {/* Keeps the newline in the text so selection offsets match the summary text. */}
+                        {li < all.length - 1 && <span hidden>{'\n'}</span>}
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
