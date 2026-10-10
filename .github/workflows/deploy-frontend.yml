@@ -1,0 +1,30 @@
+name: Deploy frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "react-frontend/**"
+      - ".github/workflows/deploy-frontend.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-frontend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: react-frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: >
+          flyctl deploy --remote-only
+          --build-arg VITE_API_URL="${{ vars.VITE_API_URL }}"
+          --build-arg VITE_SUPABASE_URL="${{ vars.VITE_SUPABASE_URL }}"
+          --build-arg VITE_SUPABASE_ANON_KEY="${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
