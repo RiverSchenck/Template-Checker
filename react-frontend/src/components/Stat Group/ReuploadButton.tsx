@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { Button } from '../ui/button';
-import FileUploadPage from '../File Upload/FileUpload';
+import { TemplateUploader } from '../File Upload/FileUpload';
 import { ValidationResult } from '../../types';
 
 interface ReuploadButtonProps {
@@ -38,13 +38,12 @@ export default function ReuploadButton({ checkerResponse, className }: ReuploadB
           <DialogHeader>
             <DialogTitle>Upload new file</DialogTitle>
           </DialogHeader>
-          <div className="flex justify-center py-4">
-            <FileUploadPage
-              checkerResponse={checkerResponse}
-              setPrevious={true}
-              onUploadComplete={handleUploadComplete}
-            />
-          </div>
+          <TemplateUploader
+            checkerResponse={checkerResponse}
+            setPrevious={true}
+            onUploadComplete={handleUploadComplete}
+            className="pt-2"
+          />
         </DialogContent>
       </Dialog>
     </>

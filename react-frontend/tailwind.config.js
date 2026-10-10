@@ -71,6 +71,10 @@ module.exports = {
   			}
   		},
   		keyframes: {
+  			'page-bob': {
+  				'0%, 100%': { translate: '0 0' },
+  				'50%': { translate: '0 -3px' }
+  			},
   			'accordion-down': {
   				from: {
   					height: '0'
@@ -90,7 +94,8 @@ module.exports = {
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'page-bob': 'page-bob 1.2s ease-in-out infinite'
   		}
   	}
   },
