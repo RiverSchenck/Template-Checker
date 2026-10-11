@@ -1,7 +1,10 @@
+import logging
 from xml.etree.ElementTree import Element
 from typing import List, Dict, Any
 from src.classes.TextFrame import TextFrame
 from src.classes.Link import Link
+
+logger = logging.getLogger(__name__)
 
 
 def _xml_local_tag(tag: str) -> str:
@@ -138,10 +141,9 @@ class SpreadData:
         links_obj_list = []
         for link_element in root.findall(".//Link"):
             try:
-                link_obj = Link(link_element)
-            except Exception as e:
-                print(f"Link data error: {e}")
-            links_obj_list.append(link_obj)
+                links_obj_list.append(Link(link_element))
+            except Exception:
+                logger.warning('Skipping unreadable link %s', link_element.get('Self'), exc_info=True)
 
         return links_obj_list
 

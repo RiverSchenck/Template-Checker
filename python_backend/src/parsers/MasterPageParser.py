@@ -1,8 +1,11 @@
+import logging
 import os
 from lxml import etree as ET
 from xml.etree.ElementTree import Element
-from typing import List
+from typing import List, Optional
 from src.classes.Link import Link
+
+logger = logging.getLogger(__name__)
 
 
 # **********************************************************
@@ -13,10 +16,12 @@ from src.classes.Link import Link
 # Description: Parses master page XML.
 # **********************************************************
 class MasterPageParser:
-    def __init__(self, masterspreads_dir: str):
+    def __init__(self, masterspreads_dir: Optional[str]):
+        """masterspreads_dir is None when the IDML has no master spreads (valid: the [None] master only)."""
         self.unexpected_elements: List[str] = []
         self.links_obj_list: List[Link] = []
-        self._get_elements_from_all_files(masterspreads_dir)
+        if masterspreads_dir:
+            self._get_elements_from_all_files(masterspreads_dir)
 
     # ---------------- Private Setters------------------
     def _get_elements_from_file(self, file_path: str) -> List[str]:
@@ -25,7 +30,7 @@ class MasterPageParser:
         master_spread = root.find('MasterSpread')
         elements: List[str] = []
         if master_spread is not None:
-            self.links_obj_list = self._extract_links_data(root)
+            self.links_obj_list.extend(self._extract_links_data(root))
             for child in master_spread:
                 if child.tag not in ['Properties', 'Page']:
                     self.unexpected_elements.append(child.tag)
@@ -42,9 +47,10 @@ class MasterPageParser:
     def _extract_links_data(self, root: Element) -> List[Link]:
         links_obj_list: List[Link] = []
         for link_element in root.findall(".//Link"):
-            print(link_element)
-            image_data = Link(link_element)
-            links_obj_list.append(image_data)
+            try:
+                links_obj_list.append(Link(link_element))
+            except Exception:
+                logger.warning('Skipping unreadable master-page link %s', link_element.get('Self'), exc_info=True)
 
         return links_obj_list
 

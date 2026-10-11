@@ -379,8 +379,9 @@ class FrontifyChecker:
         if not os.path.exists(masterspreads_dir):
             self.results.add_warning(
                 "MasterSpreads directory does not exist", ValidationWarning.WARNING, page_id='', identifier='null', data_id='null')
+            # No master spreads is valid (only the [None] master); checks see an empty master page.
+            self.masterspreads_parser = MasterPageParser(None)
         else:
-            # Initialize the StoriesParser and extract story data
             self.masterspreads_parser = MasterPageParser(masterspreads_dir)
 
         # -----------------------------
@@ -1255,15 +1256,11 @@ class FrontifyChecker:
     #   and the sizing must be referenced from one of the corners.
     # ========================================================================================
     def auto_size_text_box_check(self) -> States:
-        if not self.stories_exist:
-            return States.TEXT_COLUMNS_CHECK
         for spread in self.spreads_parser.get_spreads_obj_list():
             for text_frame in spread.get_text_frame_obj_list():
                 if text_frame.get_is_auto_size():
                     # Verify not auto sizing from center
-                    story = text_frame.get_parent_story_obj()
-                    story_page_id = story.get_page()  # page Self
-                    story_id = story.get_story_id()
+                    story_id, story_page_id = self._frame_story_and_page(text_frame)
                     data_id = text_frame.get_frame_id()
                     use_line_breaks = text_frame.get_use_no_line_breaks()
                     if text_frame.get_auto_sizing_type() == 'HeightOnly':
@@ -1336,16 +1333,11 @@ class FrontifyChecker:
     # count is larger than '1' (string) then error.
     # ========================================================================================
     def text_columns_check(self) -> States:
-        if not self.stories_exist:
-            return States.LINKED_TEXT_FRAME_CHECK
-
         # Just checking columns, not fixed width column settings
         for spread in self.spreads_parser.get_spreads_obj_list():
             for text_frame in spread.get_text_frame_obj_list():
                 if text_frame.get_text_column_count() and text_frame.get_text_column_count() != '1':
-                    story = text_frame.get_parent_story_obj()
-                    story_id = story.get_story_id()
-                    story_page_id = story.get_page()  # page Self
+                    story_id, story_page_id = self._frame_story_and_page(text_frame)
                     data_id = text_frame.get_frame_id()
                     self.results.add_error(
                         context=None,
@@ -1365,16 +1357,12 @@ class FrontifyChecker:
     # mode is not 'None' error
     # ========================================================================================
     def text_wrap_check(self) -> States:
-        if not self.stories_exist:
-            return States.LINKED_TEXT_FRAME_CHECK
-
         for spread in self.spreads_parser.get_spreads_obj_list():
             for text_frame in spread.get_text_frame_obj_list():
                 text_wrap_mode = text_frame.get_text_wrap_mode()
-                if text_wrap_mode != 'None':
-                    story = text_frame.get_parent_story_obj()
-                    story_id = story.get_story_id()
-                    story_page_id = story.get_page()  # page Self
+                # No TextWrapPreference means InDesign's default: no wrap.
+                if text_wrap_mode not in (None, 'None'):
+                    story_id, story_page_id = self._frame_story_and_page(text_frame)
                     data_id = text_frame.get_frame_id()
                     message = f"Text box wrap is '{text_wrap_mode}' not None."
                     self.results.add_error(
@@ -1395,17 +1383,10 @@ class FrontifyChecker:
     # get_is_linked_text_frame(). If true then error.
     # ========================================================================================
     def linked_text_frame_check(self) -> States:
-        if not self.stories_exist:
-            return States.OBJECT_STYLE_CHECK
-
         for spread in self.spreads_parser.get_spreads_obj_list():
             for text_frame in spread.get_text_frame_obj_list():
                 if text_frame.get_is_linked_text_frame():
-                    story = text_frame.get_parent_story_obj()
-                    # frame_id = text_frame.get_frame_id() TO DO
-                    story_id = story.get_story_id()
-                    story_content = story.get_story_text_content()
-                    story_page_id = story.get_page()  # page Self
+                    story_id, story_page_id = self._frame_story_and_page(text_frame)
                     data_id = text_frame.get_frame_id()
                     self.results.add_error(
                         context=None,
@@ -1432,8 +1413,7 @@ class FrontifyChecker:
         for spread in self.spreads_parser.get_spreads_obj_list():
             for text_frame in spread.get_text_frame_obj_list():
                 if text_frame.get_applied_object_style() not in self.default_object_styles:
-                    story = text_frame.get_parent_story_obj()
-                    story_page_id = story.get_page()  # page Self
+                    _, story_page_id = self._frame_story_and_page(text_frame)
                     data_id = text_frame.get_frame_id()
                     self.results.add_error(
                         context=None,
@@ -1488,7 +1468,7 @@ class FrontifyChecker:
             for par_style in story.get_paragraph_styles():
                 grid_alignment = par_style.get_grid_alignment()
                 normalized_style_id = par_style.get_normalized_style_id()
-                if grid_alignment != 'None' and normalized_style_id not in styles_with_errors:
+                if grid_alignment not in (None, 'None') and normalized_style_id not in styles_with_errors:
                     styles_with_errors.add(normalized_style_id)
                     data_id = story.get_parent_text_frame_id()
                     # Format message with inheritance
@@ -1640,6 +1620,14 @@ class FrontifyChecker:
                 cid = cand.get('self_id') or ''
                 if cid:
                     self._data_id_to_page_id_cache[cid] = page_id
+
+    def _frame_story_and_page(self, text_frame) -> tuple:
+        """(story id, page Self) for a text frame. Uses its story when it has one; a frame whose story is
+        missing from the package still gets its own story reference and the page it sits on."""
+        story = text_frame.get_parent_story_obj()
+        if story is not None:
+            return story.get_story_id(), story.get_page()
+        return text_frame.parent_story_id, self.find_page_id_from_data_id(text_frame.get_frame_id())
 
     def find_page_id_from_data_id(self, data_id: str) -> str:
         """
