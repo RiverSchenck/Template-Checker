@@ -540,7 +540,10 @@
         "x": 17.01,
         "y": 47.32
        },
-       "context": "",
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
        "data_id": "u116",
        "identifier": "Name",
        "page_id": "u100",
@@ -898,26 +901,26 @@
    "u11a": {
     "content": "Akademischer Titel\n",
     "identifier": "u11a",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "u100",
+    "page_name": "1"
    },
    "u130": {
     "content": "Position Abteilung BereichDivision\n",
     "identifier": "u130",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "u100",
+    "page_name": "1"
    },
    "u179": {
     "content": "Voith GmbH & Co. KGaASt. Pöltener Straße 4389522 Heidenheim, GermanyTelefon +49 7321 37 0000Mobil +49 151 26430000Fax +49 7321 37 0000wolfgang.mustermann-langname@voith.com\n",
     "identifier": "u179",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "u100",
+    "page_name": "1"
    },
    "u20a": {
     "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n",
     "identifier": "u20a",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "u100",
+    "page_name": "1"
    }
   },
   "text_boxes": {

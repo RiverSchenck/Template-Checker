@@ -714,7 +714,8 @@ class FrontifyChecker:
                             self.results.text_box_data[data_id] = {
                                 "identifier": data_id,
                                 "content": story_content,
-                                "page_id": story_page_id if story_page_id is not None else ""
+                                "page_id": story_page_id if story_page_id is not None else "",
+                                "frame_id": data_id,
                             }
 
                         self.results.add_warning(
@@ -747,7 +748,8 @@ class FrontifyChecker:
                         self.results.text_box_data[data_id] = {
                             "identifier": data_id,
                             "content": story_content,
-                            "page_id": story_page_id if story_page_id is not None else ""
+                            "page_id": story_page_id if story_page_id is not None else "",
+                            "frame_id": data_id,
                         }
 
                     self.results.add_warning(
@@ -1062,57 +1064,31 @@ class FrontifyChecker:
                 # Try to find the specific page_id from data_id, fallback to spread's first page
                 page_id = self.find_page_id_from_data_id(rectangle_id) if rectangle_id else spread_page_id
                 for idx, asset in enumerate([item_transform, container_transform]):
-                    if asset:
-                        a, b, c, d, e, f = map(float, asset.split())
-                        context = "Image inside Container" if idx == 0 else "Image Container"
-                        # Determine error and warning types based on whether it's the image or container
-                        is_image = (idx == 0)
-                        error_type = ValidationError.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationError.IMAGE_TRANSFORMATION_CONTAINER
-                        warning_type = ValidationWarning.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationWarning.IMAGE_TRANSFORMATION_CONTAINER
-                        # Check for rotation
-                        rotation_angle = math.atan2(b, a)
-                        rotation_angle_degrees = math.degrees(rotation_angle)
-                        # Check for horizontal flip
-                        if a < 0 and d > 0 and abs(rotation_angle_degrees) != 180:
-                            message = f"{context} has a horizontal flip transformation."
-                            self.results.add_error(
-                                context=message,
-                                error_type=error_type,
-                                page_id=page_id,
-                                identifier=file_name,
-                                data_id=rectangle_id
-                            )
-                        # Check for vertical flip
-                        elif a > 0 and d < 0 and abs(rotation_angle_degrees) != 180:
-                            message = f"{context} has a vertical flip transformation."
-                            self.results.add_error(
-                                context=message,
-                                error_type=error_type,
-                                page_id=page_id,
-                                identifier=file_name,
-                                data_id=rectangle_id
-                            )
-                        # Warning for only rotation and only flip
-                        elif abs(rotation_angle_degrees) > 0.01:
-                            message = f"{context} has been rotated by {rotation_angle_degrees:.2f} degrees."
-                            self.results.add_warning(
-                                context=message,
-                                warning_type=warning_type,
-                                page_id=page_id,
-                                identifier=file_name,
-                                data_id=rectangle_id
-                            )
-                        # Check for skews
-                            # or not is_rectangle
-                        elif abs(b) > .01 or abs(c) > .01:
-                            message = f"{context} has skew transformations. Skew factors: b={b}, c={c}"
-                            self.results.add_error(
-                                context=message,
-                                error_type=error_type,
-                                page_id=page_id,
-                                identifier=file_name,
-                                data_id=rectangle_id
-                            )
+                    parsed = parse_item_transform(asset)
+                    if parsed is None:
+                        continue
+                    is_image = (idx == 0)
+                    context = "Image inside Container" if is_image else "Image Container"
+                    classification = classify_page_item_transform(*parsed[:4])
+                    if classification.kind == TransformKind.NONE:
+                        continue
+                    message = f"{context} {classification.message}"
+                    if classification.is_error:
+                        self.results.add_error(
+                            context=message,
+                            error_type=ValidationError.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationError.IMAGE_TRANSFORMATION_CONTAINER,
+                            page_id=page_id,
+                            identifier=file_name,
+                            data_id=rectangle_id
+                        )
+                    else:
+                        self.results.add_warning(
+                            context=message,
+                            warning_type=ValidationWarning.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationWarning.IMAGE_TRANSFORMATION_CONTAINER,
+                            page_id=page_id,
+                            identifier=file_name,
+                            data_id=rectangle_id
+                        )
 
         return States.PAGE_ITEM_TRANSFORMATION_CHECK
 
@@ -1140,11 +1116,7 @@ class FrontifyChecker:
                     continue
                 identifier = f"{tag}:{self_id}" if self_id else tag
                 message = f"{tag} {classification.message}"
-                if classification.kind in (
-                    TransformKind.FLIP_HORIZONTAL,
-                    TransformKind.FLIP_VERTICAL,
-                    TransformKind.SKEW,
-                ):
+                if classification.is_error:
                     self.results.add_error(
                         context=message,
                         error_type=ValidationError.PAGE_ITEM_TRANSFORMATION,

@@ -46,7 +46,8 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.VARIABLE_FONT.value}",
             f"{ValidationError.IMAGE_INCLUDED.value}",
             f"{ValidationError.EMBEDDED_IMAGE.value}",
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",
+            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Skew (frame u188)
+            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Horizontal flip (frame u17f, -1 0 0 1)
             f"{ValidationError.TABLE.value}",
             f"{ValidationError.PASTED_GRAPHICS.value}",
             f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
@@ -61,7 +62,6 @@ EXPECTED_OUTCOMES = {
         "warnings": [
             f"{ValidationWarning.OVERRIDE.value}",
             f"{ValidationWarning.UNUSED_IMAGE.value}",
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",
             f"{ValidationWarning.DOCUMENT_BLEED.value}",
             # f"{ValidationWarning.HYPHENATION.value}",
             f"{ValidationWarning.HYPHENATION.value}",

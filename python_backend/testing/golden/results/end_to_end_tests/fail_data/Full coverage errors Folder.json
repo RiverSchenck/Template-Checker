@@ -509,9 +509,7 @@
      "warnings": []
     },
     "logo_Yatta_Studio_original.png": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
+     "errors": [
       {
        "bounds": {
         "height": 62.0,
@@ -521,7 +519,7 @@
         "x": 83.3,
         "y": 360.5
        },
-       "context": "Image Container has been rotated by 180.00 degrees.",
+       "context": "Image Container has a horizontal flip transformation.",
        "data_id": "u17f",
        "identifier": "logo_Yatta_Studio_original.png",
        "page_id": "ud3",
@@ -529,7 +527,9 @@
        "spread_id": "uce",
        "validationClassifier": "IMAGE_TRANSFORMATION_CONTAINER"
       }
-     ]
+     ],
+     "infos": [],
+     "warnings": []
     },
     "null": {
      "errors": [
@@ -678,7 +678,10 @@
         "x": 64.8,
         "y": 47.52
        },
-       "context": "",
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
        "data_id": "u127",
        "identifier": "NormalParagraphStyle",
        "page_id": "ud3",
@@ -748,26 +751,26 @@
    "u115": {
     "content": "No paragraph style, override here\n",
     "identifier": "u115",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "ud3",
+    "page_name": "1"
    },
    "u127": {
     "content": "No paragraph style, override here\n",
     "identifier": "u127",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "ud3",
+    "page_name": "1"
    },
    "u13f": {
     "content": "hello\n",
     "identifier": "u13f",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "ud3",
+    "page_name": "1"
    },
    "u191": {
     "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n",
     "identifier": "u191",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "ud3",
+    "page_name": "1"
    },
    "ue5": {
     "content": "I used the masterpage\n",
@@ -1037,7 +1040,7 @@
    "IMAGE_TRANSFORMATION_CONTAINER": {
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
     "label": "Image Transformation (Container)",
-    "message": "Image container has been rotated. You may see slight discrepencies between export and editing."
+    "message": "Image transformations are not supported."
    },
    "LARGE_IMAGE": {
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",

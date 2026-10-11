@@ -509,7 +509,10 @@
         "x": 306.0,
         "y": 589.5
        },
-       "context": "",
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
        "data_id": "u1b9",
        "identifier": "Paragraph Style 2",
        "page_id": "ud3",
@@ -532,20 +535,20 @@
    "u16d": {
     "content": "A lot of text here\n",
     "identifier": "u16d",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "ud3",
+    "page_name": "1"
    },
    "u18d": {
     "content": "using paragraph style\n",
     "identifier": "u18d",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "ud3",
+    "page_name": "1"
    },
    "u1b9": {
     "content": "using paragraph style\n",
     "identifier": "u1b9",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "ud3",
+    "page_name": "1"
    }
   },
   "text_boxes": {

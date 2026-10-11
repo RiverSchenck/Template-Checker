@@ -35,10 +35,10 @@ def format_counter_diff(expected: Counter, actual: Counter, label: str) -> tuple
 EXPECTED_OUTCOMES = {
     "Image Transformation Folder.zip": {
         "errors": [
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Flip
+            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Flip (frame uf3)
+            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Horizontal flip (frame uea, -1 0 0 1; was reported as a 180 degree rotation)
         ],
         "warnings": [
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",  # Rotation
         ]
     },
     "Not Using paragraph style.zip": {
