@@ -1013,7 +1013,7 @@ def run_checker_and_download():
 
         try:
             return send_file(zip_path, mimetype='application/zip', as_attachment=True,
-                             download_name=f'{checker.get_template_name()}.zip')
+                             download_name=f'{display_template_name(checker.get_template_name() or "template")}-xml.zip')
         except Exception:
             current_app.logger.exception('Failed to send the XML export')
             return api_error(500, 'export_failed', _EXPORT_FAILED)

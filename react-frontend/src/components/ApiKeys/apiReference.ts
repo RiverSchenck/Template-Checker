@@ -159,7 +159,7 @@ export const ENDPOINTS: EndpointDoc[] = [
     output: 'zip',
     response: {
       contentType: 'application/zip',
-      example: 'Content-Type: application/zip\nContent-Disposition: attachment; filename="Brochure.zip"',
+      example: 'Content-Type: application/zip\nContent-Disposition: attachment; filename="Brochure-xml.zip"',
     },
     fields: [],
     errors: [
