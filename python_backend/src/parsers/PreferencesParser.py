@@ -2,19 +2,12 @@ from lxml import etree as ET
 from typing import Dict
 
 
-# **********************************************************
-# Class: PreferencesParser
-# Init Locations: FrontifyChecker
-# Methods calls from:
-# Method calls to:
-# Description: A parser class to extract document preferences.
-# **********************************************************
 class PreferencesParser:
+    """A parser class to extract document preferences."""
     def __init__(self, xml_path: str):
         self.document_bleed: Dict[str,
                                   str] = self._extract_document_bleed(xml_path)
 
-    # ---------------- Private Setters------------------
     def _extract_document_bleed(self, xml_path: str):
         tree = ET.parse(xml_path)
         root = tree.getroot()
@@ -31,7 +24,3 @@ class PreferencesParser:
             return bleed_values
         else:
             return None
-
-    # ----------------Getters------------------
-    def get_document_bleed(self):
-        return self.document_bleed

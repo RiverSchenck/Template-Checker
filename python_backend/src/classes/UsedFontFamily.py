@@ -2,22 +2,13 @@ from typing import List
 from xml.etree.ElementTree import Element
 from src.classes.FontFamily import FontFamily
 
-# **********************************************************
-# Class: Font
-# Init Locations: FontsParser, SourceFolderParser
-# Methods calls from:
-# Method calls to:
-# Description: FontsParser inits this object. Stores data related
-# to a specific fontFamily including fonts.
-# **********************************************************
-
 
 class UsedFontFamily(FontFamily):
+    """FontsParser inits this object. Stores data related to a specific fontFamily including fonts."""
     def __init__(self, font_family_element: Element):
         super().__init__()
         self._extract_fonts(font_family_element)
 
-    # ---------------- Private Setters------------------
     def _extract_fonts(self, font_family_element: Element):
         # For each FontFamily, find its nested Font tags
         self.font_family = font_family_element.get('Name')

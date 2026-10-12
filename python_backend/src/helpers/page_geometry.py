@@ -49,16 +49,9 @@ def _element_transform(el) -> Matrix:
     return parse_item_transform(el.get('ItemTransform')) or IDENTITY
 
 
-# **********************************************************
-# Class: PageGeometryIndex
-# Init Locations: FrontifyChecker
-# Methods calls from: ValidationResult
-# Method calls to:
-# Description: Resolves page item Self ids to bounding boxes in page
-#              coordinates (points, origin top-left of the page) so the
-#              frontend can draw issue highlights over page previews.
-# **********************************************************
 class PageGeometryIndex:
+    """Resolves page item Self ids to bounding boxes in page coordinates (points, origin top-left of
+    the page) so the frontend can draw issue highlights over page previews."""
     def __init__(self, idml_output_folder: str):
         # Pages in document order: {self, name, index, width, height, spread_id}
         self.pages: List[Dict] = []
@@ -71,7 +64,6 @@ class PageGeometryIndex:
         self._bounds_cache: Dict[str, Optional[Dict]] = {}
         self._parse(idml_output_folder)
 
-    # ---------------- Private Setters------------------
     def _spread_paths_in_order(self, idml_output_folder: str) -> List[str]:
         designmap = os.path.join(idml_output_folder, 'designmap.xml')
         if os.path.exists(designmap):
@@ -195,7 +187,6 @@ class PageGeometryIndex:
             'height': round(y1 - y0, 2),
         }
 
-    # ----------------Getters------------------
     def get_bounds(self, self_id: str) -> Optional[Dict]:
         """Bounding box of a page item in its page's coordinates, or None if unknown."""
         if not self_id or self_id == 'null':

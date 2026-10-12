@@ -17,13 +17,6 @@ _PAGE_ITEM_TRANSFORM_TAGS = frozenset(
     {'TextFrame', 'Rectangle', 'Oval', 'Polygon', 'Group'})
 
 
-# **********************************************************
-# Class: SpreadData
-# Init Locations: SpreadsParser
-# Methods calls from: SpreadsParser
-# Method calls to: TextFrame, Link
-# Description:
-# **********************************************************
 class SpreadData:
     def __init__(self, root: Element):
         self.spread_self: str = ''
@@ -38,7 +31,6 @@ class SpreadData:
         self.page_item_transform_candidates: List[Dict[str, Any]] = []
         self._extract_spread_data(root)
 
-    # ---------------- Private Setters------------------
     def _extract_spread_data(self, root: Element):
         spread = root.find(".//Spread")
 
@@ -158,42 +150,12 @@ class SpreadData:
         if story_id not in self.child_stories:
             self.child_stories.append(story_id)
 
-    # ---------------- External Setters------------------
-
-    # ----------------Getters------------------
-
-    def get_first_page_self(self) -> str:
-        return self.first_page_self
-
-    def get_first_page_name(self) -> str:
-        return self.first_page_name
-
-    def get_geographic_bounds(self) -> str:
-        return self.geometric_bounds
-
-    def get_links_obj_list(self) -> List[Link]:
-        return self.links_obj_list
-
-    def get_pasted_graphics_num(self) -> int:
-        return self.pasted_graphics_num
-
-    def get_text_frame_obj_list(self) -> List[TextFrame]:
-        return self.text_frame_obj_list
-
-    def get_child_stories(self) -> List['StoryData']:
-        return self.child_stories
-
-    def get_spread_self(self) -> str:
-        return self.spread_self
-
     def get_pages(self) -> List[Dict[str, str]]:
         return self.pages
 
     def get_page_item_transform_candidates(self) -> List[Dict[str, Any]]:
         return self.page_item_transform_candidates
 
-
-    # ----------------String Method------------------
     def __str__(self):
         link_names = [link.link_name for link in self.links_obj_list]
         return f"First page: {self.first_page_name}, Stories: {', '.join(self.child_stories)}, Links: {', '.join(link_names)}"

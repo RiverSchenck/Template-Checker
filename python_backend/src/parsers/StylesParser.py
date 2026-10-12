@@ -2,21 +2,14 @@ from typing import Dict
 from lxml import etree as ET
 
 
-# **********************************************************
-# Class: StylesParser
-# Init Locations: FrontifyChecker
-# Methods calls from: StoryParagraphData, PropertyBase
-# Method calls to:
-# Description: A parser class to extract paragraph styles from the provided XML path.
-# **********************************************************
 class StylesParser:
+    """A parser class to extract paragraph styles from the provided XML path."""
     def __init__(self, xml_path: str):
         self.paragraph_styles: Dict[str, Dict[str, str]] = self._extract_paragraph_styles(
             xml_path)
         self.character_styles: Dict[str, Dict[str, str]] = self._extract_character_styles(
             xml_path)
 
-    # ---------------- Private Setters------------------
     def _extract_paragraph_styles(self, xml_path: str) -> Dict[str, Dict[str, str]]:
         styles: Dict[str, Dict[str, str]] = {}
         tree = ET.parse(xml_path)
@@ -51,7 +44,6 @@ class StylesParser:
             styles[style_id] = style_properties
         return styles
 
-    # ----------------Getters------------------
     def get_all_properties(self, style_id: str) -> Dict[str, str]:
         return self.paragraph_styles.get(style_id, {})
 

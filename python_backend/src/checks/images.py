@@ -13,18 +13,18 @@ def images_included_check(doc: ParsedDocument, results: ValidationResult) -> Non
     zero-byte file in Links."""
     # Placed images (frame id) and master-page images (no id); embedded ones aren't expected in Links.
     link_name_to_id = {link.get_image_name(): link.get_rectangle_link_id()
-                       for spread in doc.spreads_parser.get_spreads_obj_list()
-                       for link in spread.get_links_obj_list()
-                       if link.get_stored_state() != 'Embedded'}
+                       for spread in doc.spreads_parser.spreads_obj_list
+                       for link in spread.links_obj_list
+                       if link.stored_state != 'Embedded'}
     link_name_to_id.update({link.get_image_name(): None
-                            for link in doc.masterspreads_parser.get_links_objs()
-                            if link.get_stored_state() != 'Embedded'})
+                            for link in doc.masterspreads_parser.links_obj_list
+                            if link.stored_state != 'Embedded'})
 
-    images = doc.source_folders_parser.get_images_obj_list()
+    images = doc.source_folders_parser.images_obj_list
     image_names = {image.get_image_name() for image in images}
 
     for image in images:
-        if image.get_image_byte_size() == 0:
+        if image.image_size_bytes == 0:
             results.add_custom_error(
                 f"Image '{image.get_image_name()}' has zero size. Likely a corrupted image.", ValidationError.ERROR)
 
@@ -46,29 +46,29 @@ def images_included_check(doc: ParsedDocument, results: ValidationResult) -> Non
 
 def large_image_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Info for each file in Links larger than 10 MB."""
-    for image in doc.source_folders_parser.get_images_obj_list():
-        if image.get_image_size() > 10:
-            data_id = image.get_parent_link_data_id()
+    for image in doc.source_folders_parser.images_obj_list:
+        if image.image_size_MB > 10:
+            data_id = image.parent_link_data_id
             page_id = doc.find_page_id_from_data_id(data_id) if data_id and data_id != 'null' else ''
-            report(results, ValidationInfo.LARGE_IMAGE, f"Image {image.get_image_name()} is {image.get_image_size()}MB.",
+            report(results, ValidationInfo.LARGE_IMAGE, f"Image {image.get_image_name()} is {image.image_size_MB}MB.",
                    page_id=page_id, identifier=image.get_image_name(), data_id=data_id)
 
 
 def embedded_image_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each image stored inside the document (StoredState "Embedded") instead of linked."""
-    for spread in doc.spreads_parser.get_spreads_obj_list():
-        for link in spread.get_links_obj_list():
-            if link.get_stored_state() == 'Embedded':
+    for spread in doc.spreads_parser.spreads_obj_list:
+        for link in spread.links_obj_list:
+            if link.stored_state == 'Embedded':
                 report(results, ValidationError.EMBEDDED_IMAGE, **at_link(doc, spread, link))
 
 
 def image_transformation_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """The placed image and its frame are each judged by their end state (docs/checker-rules.md):
     mirrored -> flip error, skewed -> error, rotated only -> warning."""
-    for spread in doc.spreads_parser.get_spreads_obj_list():
-        for link in spread.get_links_obj_list():
+    for spread in doc.spreads_parser.spreads_obj_list:
+        for link in spread.links_obj_list:
             where = at_link(doc, spread, link)
-            for is_image, transform in ((True, link.get_item_transform()), (False, link.get_container_item_transform())):
+            for is_image, transform in ((True, link.item_transform), (False, link.get_container_item_transform())):
                 parsed = parse_item_transform(transform)
                 if parsed is None:
                     continue

@@ -1,14 +1,8 @@
 from enum import Enum, auto
 
 
-# **********************************************************
-# Class: States
-# Init Locations: FrontifyChecker
-# Methods calls from:
-# Method calls to:
-# Description: Declares the state machine states.
-# **********************************************************
 class States(Enum):
+    """Declares the state machine states."""
     UNZIP_PACKAGE = auto()
     UNZIP_IDML = auto()
     PARSE_XML = auto()

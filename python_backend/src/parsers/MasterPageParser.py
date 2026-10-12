@@ -8,14 +8,8 @@ from src.classes.Link import Link
 logger = logging.getLogger(__name__)
 
 
-# **********************************************************
-# Class: MasterPageParser
-# Init Locations: FrontifyChecker
-# Methods calls from:
-# Method calls to:
-# Description: Parses master page XML.
-# **********************************************************
 class MasterPageParser:
+    """Parses master page XML."""
     def __init__(self, masterspreads_dir: Optional[str]):
         """masterspreads_dir is None when the IDML has no master spreads (valid: the [None] master only)."""
         self.unexpected_elements: List[str] = []
@@ -23,7 +17,6 @@ class MasterPageParser:
         if masterspreads_dir:
             self._get_elements_from_all_files(masterspreads_dir)
 
-    # ---------------- Private Setters------------------
     def _get_elements_from_file(self, file_path: str) -> List[str]:
         tree = ET.parse(file_path)
         root = tree.getroot()
@@ -53,14 +46,3 @@ class MasterPageParser:
                 logger.warning('Skipping unreadable master-page link %s', link_element.get('Self'), exc_info=True)
 
         return links_obj_list
-
-    # ----------------Getters------------------
-    def has_unexpected_elements(self) -> bool:
-        """Returns true if there master page is used"""
-        return bool(self.unexpected_elements)
-
-    def get_unexpected_elements(self) -> List:
-        return self.unexpected_elements
-
-    def get_links_objs(self) -> List[Link]:
-        return self.links_obj_list

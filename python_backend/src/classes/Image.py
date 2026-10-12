@@ -2,14 +2,8 @@ import os
 from src.helpers.file_names import normalize_file_name
 
 
-# **********************************************************
-# Class: Image
-# Init Locations: SourceFolderParser
-# Methods calls from:
-# Method calls to:
-# Description: A class to represent and manage image data.
-# **********************************************************
 class Image:
+    """A class to represent and manage image data."""
     def __init__(self, file_name: str, size_bytes: int):
         self.image_name: str = normalize_file_name(file_name)
         self.image_extension: str = os.path.splitext(self.image_name)[1]
@@ -17,31 +11,16 @@ class Image:
         self.image_size_MB: int = self._convert_bytes_to_MB()
         self.parent_link_data_id: str = ''
 
-    # ---------------- Private Setters------------------
     def _convert_bytes_to_MB(self) -> float:
         return round(self.image_size_bytes / (1024 ** 2), 2)
 
-    # ---------------- Public Setters------------------
-    def set_parent_link_data_id(self, data_id: str):
-        self.parent_link_data_id = data_id
-    # ----------------Getters------------------
 
     def get_image_name(self) -> str:
         return self.image_name
 
-    def get_image_extension(self) -> str:
-        return self.image_extension
 
-    def get_image_size(self) -> int:
-        return self.image_size_MB
     
-    def get_image_byte_size(self) -> int:
-        return self.image_size_bytes
 
-    def get_parent_link_data_id(self) -> str:
-        return self.parent_link_data_id
-
-    # ----------------String Method------------------
     def __str__(self) -> str:
         return (
             f"Image Name: {self.image_name}\n"

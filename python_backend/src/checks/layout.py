@@ -10,7 +10,7 @@ from src.helpers.page_item_transform import TransformKind, classify_page_item_tr
 def masterpage_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error when a master spread holds anything besides its pages and properties (items on a master
     page)."""
-    unexpected_elements = doc.masterspreads_parser.get_unexpected_elements()
+    unexpected_elements = doc.masterspreads_parser.unexpected_elements
     if unexpected_elements:
         report(results, ValidationError.MASTERPAGE, 'Elements: ' + ', '.join(unexpected_elements), identifier=None)
 
@@ -18,7 +18,7 @@ def masterpage_check(doc: ParsedDocument, results: ValidationResult) -> None:
 def page_item_transformation_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Same end-state rule as image_transformation_check, for text frames, image-less rectangles,
     ovals, polygons and groups: flip or skew -> error, rotation only -> warning."""
-    for spread in doc.spreads_parser.get_spreads_obj_list():
+    for spread in doc.spreads_parser.spreads_obj_list:
         for cand in spread.get_page_item_transform_candidates():
             tag = cand.get('tag') or 'Item'
             self_id = cand.get('self_id') or ''
@@ -40,8 +40,8 @@ def page_item_transformation_check(doc: ParsedDocument, results: ValidationResul
 def pasted_graphics_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each spread with graphics pasted into the document (PDF/EPS/image content without a
     link)."""
-    for spread in doc.spreads_parser.get_spreads_obj_list():
-        count = spread.get_pasted_graphics_num()
+    for spread in doc.spreads_parser.spreads_obj_list:
+        count = spread.pasted_graphics_num
         if count > 0:
             report(results, ValidationError.PASTED_GRAPHICS, f"{count} pasted graphics found.",
                    page_id=first_page_id(spread), identifier=None)
@@ -49,7 +49,7 @@ def pasted_graphics_check(doc: ParsedDocument, results: ValidationResult) -> Non
 
 def document_bleed_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """One warning when any document bleed offset isn't 0."""
-    bleed_values = doc.preferences_parser.get_document_bleed()
+    bleed_values = doc.preferences_parser.document_bleed
     if bleed_values is not None and any(value != '0' for value in bleed_values.values()):
         descriptions = ', '.join(f"{k}: {v}pt" for k, v in bleed_values.items())
         report(results, ValidationWarning.DOCUMENT_BLEED, f"{descriptions}.", identifier=None)
@@ -65,13 +65,13 @@ def auto_size_text_box_check(doc: ParsedDocument, results: ValidationResult) -> 
     """Error for auto-sizing text frames Frontify can't reproduce: HeightOnly must grow from the top
     or bottom center; WidthOnly and HeightAndWidth need "No Line Breaks", and grow from the
     left/right center or a corner respectively."""
-    for spread in doc.spreads_parser.get_spreads_obj_list():
-        for text_frame in spread.get_text_frame_obj_list():
-            if not text_frame.get_is_auto_size():
+    for spread in doc.spreads_parser.spreads_obj_list:
+        for text_frame in spread.text_frame_obj_list:
+            if not text_frame.is_auto_size:
                 continue
-            sizing = text_frame.get_auto_sizing_type()
-            point = text_frame.get_auto_sizing_reference_point()
-            no_line_breaks = text_frame.get_use_no_line_breaks()
+            sizing = text_frame.auto_sizing_type
+            point = text_frame.auto_sizing_reference_point
+            no_line_breaks = text_frame.use_no_line_breaks
             # InDesign moves the reference point when 'No Line Breaks' is off, so that's the only thing reported then.
             needs_no_line_breaks = sizing in ('WidthOnly', 'HeightAndWidth')
             if sizing == 'HeightOnly':
@@ -90,9 +90,9 @@ def auto_size_text_box_check(doc: ParsedDocument, results: ValidationResult) -> 
 
 def text_columns_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each text frame with more than one column."""
-    for spread in doc.spreads_parser.get_spreads_obj_list():
-        for text_frame in spread.get_text_frame_obj_list():
-            columns = text_frame.get_text_column_count()
+    for spread in doc.spreads_parser.spreads_obj_list:
+        for text_frame in spread.text_frame_obj_list:
+            columns = text_frame.text_column_count
             if columns and columns != '1':
                 report(results, ValidationError.TEXT_COLUMNS, **at_frame(doc, text_frame))
 
@@ -100,9 +100,9 @@ def text_columns_check(doc: ParsedDocument, results: ValidationResult) -> None:
 def text_wrap_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each text frame with text wrap on. A frame without wrap settings has none
     (InDesign's default)."""
-    for spread in doc.spreads_parser.get_spreads_obj_list():
-        for text_frame in spread.get_text_frame_obj_list():
-            mode = text_frame.get_text_wrap_mode()
+    for spread in doc.spreads_parser.spreads_obj_list:
+        for text_frame in spread.text_frame_obj_list:
+            mode = text_frame.text_wrap_mode
             if mode not in (None, 'None'):
                 report(results, ValidationError.TEXT_WRAP, f"Text box wrap is '{mode}' not None.",
                        **at_frame(doc, text_frame))
@@ -110,23 +110,23 @@ def text_wrap_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 def linked_text_frame_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each text frame threaded to a previous or next frame."""
-    for spread in doc.spreads_parser.get_spreads_obj_list():
-        for text_frame in spread.get_text_frame_obj_list():
-            if text_frame.get_is_linked_text_frame():
+    for spread in doc.spreads_parser.spreads_obj_list:
+        for text_frame in spread.text_frame_obj_list:
+            if text_frame.linked_text_frame:
                 report(results, ValidationError.LINKED_TEXT_FRAME, **at_frame(doc, text_frame))
 
 
 def object_style_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each text frame, and each placed image or its frame, using an object style other
     than InDesign's defaults."""
-    for spread in doc.spreads_parser.get_spreads_obj_list():
-        for text_frame in spread.get_text_frame_obj_list():
-            if text_frame.get_applied_object_style() not in doc.default_object_styles:
+    for spread in doc.spreads_parser.spreads_obj_list:
+        for text_frame in spread.text_frame_obj_list:
+            if text_frame.applied_object_style not in doc.default_object_styles:
                 report(results, ValidationError.OBJECT_STYLE_TEXT, **{**at_frame(doc, text_frame), 'identifier': None})
 
-    for spread in doc.spreads_parser.get_spreads_obj_list():
-        for link in spread.get_links_obj_list():
+    for spread in doc.spreads_parser.spreads_obj_list:
+        for link in spread.links_obj_list:
             # The image and its frame each count: one error for each that has a custom object style.
-            for style in (link.get_image_object_style(), link.get_container_object_style()):
+            for style in (link.image_object_style, link.container_object_style):
                 if style not in doc.default_object_styles:
                     report(results, ValidationError.OBJECT_STYLE_IMAGE, **at_link(doc, spread, link))
