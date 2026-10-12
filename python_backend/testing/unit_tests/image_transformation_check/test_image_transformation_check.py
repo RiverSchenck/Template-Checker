@@ -1,6 +1,7 @@
 import pytest
 import os
 from testing.checker_setup import setup_instance
+from src.classes.States import States
 from src.error_handling.ValidationClassifier import ValidationWarning, ValidationError
 from collections import Counter
 
@@ -85,7 +86,7 @@ def test_zip_check_fail(testcase_zip):
     # Setup
     checker = setup_instance(testcase_zip)
     # Execute
-    checker.image_transformation_check()
+    checker.run_check(States.IMAGE_TRANSFORMATION_CHECK)
    # Cleanup files
     checker.delete_unzipped_root_path()
 
@@ -173,7 +174,7 @@ def test_zip_check_pass(testcase_zip):
     # Setup
     checker = setup_instance(testcase_zip)
     # Exuecute
-    checker.image_transformation_check()
+    checker.run_check(States.IMAGE_TRANSFORMATION_CHECK)
     # Cleanup files
     checker.delete_unzipped_root_path()
 
@@ -196,7 +197,7 @@ def test_zips_check_pass(testcase_zip):
     # Setup
     checker = setup_instance(testcase_zip)
     # Exuecute
-    checker.image_transformation_check()
+    checker.run_check(States.IMAGE_TRANSFORMATION_CHECK)
     # Cleanup files
     checker.delete_unzipped_root_path()
 
