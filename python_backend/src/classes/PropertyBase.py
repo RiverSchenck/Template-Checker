@@ -3,21 +3,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-# **********************************************************
-# Class: PropertyBase
-# Init Locations: ParagraphStyle
-# Methods calls from: ParagraphStyle
-# Method calls to: StyleParser
-# Description: Finds a properties actual value if inherited.
-# **********************************************************
 class PropertyBase:
+    """Finds a properties actual value if inherited."""
     def __init__(self, style_id: str, styles_parser: 'StylesParser', property_name: str):
         self.style_id = style_id
         self.inherited_from: str = ''
         self.property_name = property_name
         self.value: str = self._resolve_inheritance(style_id, styles_parser)
 
-    # ---------------- Private Setters------------------
     def _resolve_inheritance(self, style_id: str, styles_parser: 'StylesParser') -> str:
         if "ParagraphStyle" in style_id:
             return self._par_resolve_inheritance(style_id, styles_parser)
@@ -57,14 +50,6 @@ class PropertyBase:
             style_id = base_style
         return None
 
-    # ----------------Getters------------------
-    def get_property_value(self) -> str:
-        return self.value
-
-    def get_inherited_from_value(self) -> str:
-        return self.inherited_from
-
-    # ----------------String Method------------------
     def __str__(self) -> str:
         if self.inherited_from:
             return f"{self.property_name}: {self.value} (Inherited from: {self.inherited_from})"

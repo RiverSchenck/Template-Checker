@@ -5,19 +5,12 @@ from typing import List
 from src.classes.Preview import Preview
 
 
-# **********************************************************
-# Class: MetadataParser
-# Init Locations: FrontifyGUI
-# Methods calls from:
-# Method calls to:
-# Description: Parsers XML metadata for preview image data.
-# **********************************************************
 class MetadataParser:
+    """Parsers XML metadata for preview image data."""
     def __init__(self, xml_path: str, data_folder: str):
         self.previews_objs_list: List[Preview] = self._parse(
             data_folder, xml_path)
 
-    # ---------------- Private Setters------------------
     def _parse(self, data_folder: str, xml_path: str):
         previews = []
         with open(xml_path, 'r') as file:
@@ -65,22 +58,3 @@ class MetadataParser:
                             image_name, image_file_path, page_number, width, height, image_data_b64)
                         previews.append(preview)
         return previews
-
-    # ----------------Getters------------------
-    def get_all_image_paths(self):
-        images = []
-        for preview in self.previews_objs_list:
-            images.append(preview.get_image_path())
-        return images
-
-    def get_all_base_64(self):
-        base_64_arr = []
-        for preview in self.previews_objs_list:
-            base_64_arr.append(preview.get_base_64())
-        return base_64_arr
-
-    def get_preview_by_page(self, page_number):
-        for preview in self.previews_objs_list:
-            if preview.page == page_number:
-                return preview
-        return None

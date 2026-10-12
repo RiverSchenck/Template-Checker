@@ -3,14 +3,8 @@ from typing import Optional, Tuple
 from src.helpers.file_names import normalize_file_name, unquote_uri
 
 
-# **********************************************************
-# Class: Link
-# Init Locations: MasterPageParser, SpreadsParser
-# Methods calls from: SpreadsParser
-# Method calls to:
-# Description: A class to represent and manage image data.
-# **********************************************************
 class Link:
+    """A class to represent and manage image data."""
     def __init__(self, link_element: Element):
         self.link_id: str = ''
         self.grandparent_link_id: str = ''
@@ -26,7 +20,6 @@ class Link:
         self.link_name: str = self.get_image_name()
         # self.is_rectangle: bool = self._is_rectangle()
 
-    # ---------------- PrivateSetters------------------
     def _extract_xml(self, link_element: Element):
         resource_uri_quoted = link_element.get("LinkResourceURI")
 
@@ -93,38 +86,16 @@ class Link:
 
     #     return True
 
-    # ---------------- External Setters------------------
-
-    # ----------------Getters------------------
     def get_image_name(self) -> str:
         # Extract the image name from the URI
         return normalize_file_name(self.resource_uri.split("/")[-1])
 
-    def get_stored_state(self) -> str:
-        return self.stored_state
-
-    def get_item_transform(self) -> str:
-        return self.item_transform
-
     def get_container_item_transform(self) -> str:
         return self.container_item_transform
-
-    def get_container_object_style(self) -> str:
-        return self.container_object_style
-
-    def get_image_object_style(self) -> str:
-        return self.image_object_style
-
-    def get_link_id(self) -> str:
-        return self.link_id
-
-    def get_link_name(self) -> str:
-        return self.link_name
 
     def get_rectangle_link_id(self) -> str:
         return self.grandparent_link_id
 
-    # ----------------String Method------------------
     def __str__(self):
         return f"Image Name: {self.link_name}\n" + \
             f"Resource URI: {self.resource_uri}\n" + \

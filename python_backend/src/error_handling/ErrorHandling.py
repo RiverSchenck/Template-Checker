@@ -33,7 +33,6 @@ class ValidationResult():
         # page Self -> base64 JPEG preview embedded by InDesign
         self.page_previews: Dict[str, str] = {}
 
-    # -------------------------------Helper Methods-------------------------------
     @staticmethod
     def _category_to_response_key(category: ValidationCategory) -> str:
         """Convert ValidationCategory enum to response JSON key format."""
@@ -47,10 +46,6 @@ class ValidationResult():
         }
         return mapping.get(category, category.value.lower())
 
-    # -------------------------------Validation setters-------------------------------
-    def add_success(self, message: str, success_type: Union['ValidationError', 'ValidationWarning']):
-        success = Success(message, success_type)
-        self.successes.append(success)
 
     def add_validation(self, validation_type: str, classifier, context: str = '',
                       page_id: str = '', identifier: str = 'null',
@@ -64,6 +59,11 @@ class ValidationResult():
             text_content: list of text strings where the issue occurs (for PAR_STYLE, CHAR_STYLE, and OVERRIDE)
             context_details: optional structured data (e.g. text, overrides, inheritedFrom) for the frontend
         """
+        # "No identifier" / "no item" is 'null' in the results JSON. Checks may pass None or 'null'; store one
+        # form, or a None group and a 'null' group would collide in the JSON and one would overwrite the other.
+        identifier = 'null' if identifier is None else identifier
+        data_id = 'null' if data_id is None else data_id
+
         # Get category from classifier and convert to response key
         category = classifier.category
         category_key = self._category_to_response_key(category)
@@ -78,15 +78,15 @@ class ValidationResult():
         if text_content and len(text_content) > 0 and not is_override:
             existing_validations = self.validations[category_key][identifier][validation_type]
             for existing in existing_validations:
-                if (existing.get_page_id() == page_id and
-                    existing.get_data_id() == data_id and
+                if (existing.page_id == page_id and
+                    existing.data_id == data_id and
                     existing.classifier_type == classifier.value):
                     existing_validation = existing
                     break
 
         if existing_validation:
             # Merge text_content arrays
-            existing_text_content = existing_validation.get_text_content()
+            existing_text_content = existing_validation.text_content
             merged_text_content = list(dict.fromkeys(existing_text_content + text_content))  # Remove duplicates, keep order
             existing_validation.text_content = merged_text_content
         else:
@@ -132,44 +132,10 @@ class ValidationResult():
         """Add info validation."""
         self.add_validation('infos', info_type, context, page_id, identifier, data_id, text_content, context_details)
 
-    def add_template_name(self, template_name: str):
-        self.template_name = template_name
-
-    def add_idml_output_folder(self, idml_output_folder: str):
-        self.idml_output_folder = idml_output_folder
-
-    # -------------------------------External Setters-------------------------------
-
-    def set_stories_parser(self, stories_parser):
-        self.stories_parser = stories_parser
-
     def set_spreads_parser(self, spreads_parser):
         self.spreads_parser = spreads_parser
         self._build_spread_to_pages_mapping()
         self._build_pages_mapping()
-
-    def set_page_geometry(self, page_geometry):
-        self.page_geometry = page_geometry
-
-    def set_page_previews(self, page_previews: Dict[str, str]):
-        self.page_previews = page_previews
-
-    def set_fonts_total_count(self, count):
-        self.fonts_total_count = count
-
-    def set_par_styles_total_count(self, count):
-        self.par_styles_count = count
-
-    def set_char_styles_total_count(self, count):
-        self.char_styles_count = count
-
-    def set_images_total_count(self, count):
-        self.images_total_count = count
-
-    def set_text_box_total_count(self, count):
-        self.text_box_total_count = count
-
-    # -------------------------------Getters-------------------------------
 
     def get_errors(self) -> List[ValidationContext]:
         """Get all errors from all categories."""
@@ -207,18 +173,17 @@ class ValidationResult():
         """Get all info types (classifier types) from all infos."""
         return [info.classifier_type for info in self.get_infos()]
 
-    # -------------------------------API-------------------------------
 
     def extract_text_box_content(self, identifier):
         story = self.stories_parser.get_story_by_id(identifier)
         if story:
             content = story.get_content()  # Get full story content
-            page_id = story.get_page_id()  # spread's first page; refined from the frame's position when building JSON
+            page_id = story.page_id  # spread's first page; refined from the frame's position when building JSON
             page_id = page_id if page_id is not None else ""
             # page_name will be mapped later in JSON generation
             self.text_box_data[identifier] = {
                 "identifier": identifier, "content": content, "page_id": page_id,
-                "frame_id": story.get_parent_text_frame_id()}
+                "frame_id": story.parent_text_frame_id}
 
     def _build_spread_to_pages_mapping(self):
         """Build mapping of spread Self to list of page Selfs."""
@@ -226,8 +191,8 @@ class ValidationResult():
             return
 
         self.spread_to_pages = {}
-        for spread_data in self.spreads_parser.get_spreads_obj_list():
-            spread_self = spread_data.get_spread_self()
+        for spread_data in self.spreads_parser.spreads_obj_list:
+            spread_self = spread_data.spread_self
             if spread_self:  # Ensure spread_self is not None or empty
                 pages = spread_data.get_pages()
                 # Filter out None values explicitly
@@ -241,7 +206,7 @@ class ValidationResult():
             return
 
         self.pages = {}
-        for spread_data in self.spreads_parser.get_spreads_obj_list():
+        for spread_data in self.spreads_parser.spreads_obj_list:
             pages = spread_data.get_pages()
             for page in pages:
                 page_self = page.get("self")
@@ -260,23 +225,23 @@ class ValidationResult():
         """Build JSON representation of a validation item, including text_content when applicable."""
         from src.error_handling.ValidationClassifier import ValidationWarning
 
-        bounds = self.page_geometry.get_bounds(item.get_data_id()) if self.page_geometry else None
-        page_id = self._page_of(bounds, item.get_page_id())
+        bounds = self.page_geometry.get_bounds(item.data_id) if self.page_geometry else None
+        page_id = self._page_of(bounds, item.page_id)
 
         base_item = {
             "validationClassifier": item.classifier_type,
             "context": item.get_formatted_message(),
-            "identifier": item.get_identifier(),
+            "identifier": item.identifier,
             "page_id": page_id,  # page Self (stored directly)
             "page_name": self.pages.get(page_id, "") if page_id else "",  # mapped from pages
             "spread_id": page_to_spread.get(page_id, "") if page_id else "",  # mapped from spread_to_pages
-            "data_id": item.get_data_id()
+            "data_id": item.data_id
         }
 
         if bounds:
             base_item["bounds"] = bounds
 
-        context_details = item.get_context_details()
+        context_details = item.context_details
         if context_details is not None:
             base_item["context_details"] = context_details
 
@@ -288,7 +253,7 @@ class ValidationResult():
         )
 
         if should_include_text_content:
-            text_content = item.get_text_content()
+            text_content = item.text_content
             if text_content and len(text_content) > 0:
                 base_item["text_content"] = text_content
 

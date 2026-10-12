@@ -46,21 +46,21 @@ class ParsedDocument:
         if not self.spreads_parser:
             return
 
-        for spread in self.spreads_parser.get_spreads_obj_list():
+        for spread in self.spreads_parser.spreads_obj_list:
             pages = spread.get_pages()
             if not pages or len(pages) == 0:
                 continue
             page_id = pages[0].get("self", '')
 
             # Map link rectangle IDs to page_id
-            for link in spread.get_links_obj_list():
+            for link in spread.links_obj_list:
                 link_id = link.get_rectangle_link_id()
                 if link_id:
                     self._data_id_to_page_id[link_id] = page_id
 
             # Map text frame IDs to page_id
-            for text_frame in spread.get_text_frame_obj_list():
-                frame_id = text_frame.get_frame_id()
+            for text_frame in spread.text_frame_obj_list:
+                frame_id = text_frame.frame_id
                 if frame_id:
                     self._data_id_to_page_id[frame_id] = page_id
 
@@ -84,7 +84,7 @@ class ParsedDocument:
     def frame_story_and_page(self, text_frame) -> tuple:
         """(story id, page Self) for a text frame. Uses its story when it has one; a frame whose story is
         missing from the package still gets its own story reference and the page it sits on."""
-        story = text_frame.get_parent_story_obj()
+        story = text_frame.parent_story_obj
         if story is not None:
-            return story.get_story_id(), story.get_page()
-        return text_frame.parent_story_id, self.find_page_id_from_data_id(text_frame.get_frame_id())
+            return story.story_id, story.page_id
+        return text_frame.parent_story_id, self.find_page_id_from_data_id(text_frame.frame_id)

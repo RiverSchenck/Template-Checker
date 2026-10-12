@@ -12,23 +12,5 @@ class ValidationContext:
         self.text_content = text_content if text_content is not None else []
         self.context_details = context_details
 
-    def get_identifier(self):
-        return self.identifier
-
-    def get_page_id(self):
-        return self.page_id
-
-    def get_type(self):
-        return self.classifier_type
-
     def get_formatted_message(self):
         return f"{self.context}"
-
-    def get_data_id(self):
-        return self.data_id
-
-    def get_text_content(self):
-        return self.text_content
-
-    def get_context_details(self):
-        return self.context_details

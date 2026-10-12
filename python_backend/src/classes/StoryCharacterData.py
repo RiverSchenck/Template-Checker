@@ -3,16 +3,9 @@ from xml.etree.ElementTree import Element
 from src.classes.PropertyBase import PropertyBase
 
 
-# ---------------------------------------------------
-# Class: StoryCharacterData
-# Init Locations: StoriesParser
-# Methods calls from: StoryData, StoriesParser
-# Method calls to: FontsParser
-# Description: CharacterStyle objects are stored in the associated ParagraphStyle.
-# This class stores information related to CharacterStyles used,
-# including default CharacterStyles
-# ---------------------------------------------------
 class StoryCharacterData:
+    """One CharacterStyleRange in a story: its character style, text, font and overrides. Stored on the
+    paragraph (StoryParagraphData) it belongs to."""
     def __init__(self, char_style_range: Element, fonts_parser: 'FontsParser', styles_parser: 'StylesParser'):
         self.style_id: str = ''
         self.normalized_style_id: str = ''
@@ -27,7 +20,6 @@ class StoryCharacterData:
         self.kerning_obj: PropertyBase = PropertyBase(
             self.style_id, styles_parser, "KerningMethod")
 
-    # ---------------- Private Setters------------------
     def _extract_character_data(self, char_style_range: Element):
         self.style_id = char_style_range.get(
             "AppliedCharacterStyle")
@@ -61,7 +53,6 @@ class StoryCharacterData:
             fonts_parser.add_used_font_family(
                 self.applied_font)
 
-        # ---------------- Utility------------------
     def normalize_style_id(self, style_id):
         # Check if the style ID is valid and not None
         if style_id is None:
@@ -77,22 +68,11 @@ class StoryCharacterData:
 
         return style_id
 
-    # ---------------- External Setters------------------
     def add_table(self):
         self.table_used = True
 
-    # ----------------Getters------------------
-    def get_normalized_style_id(self) -> str:
-        return self.normalized_style_id
-
     def has_overrides(self) -> bool:
         return bool(self.overrides)
-
-    def get_kerning(self) -> PropertyBase:
-        return self.kerning_obj
-
-    def get_overrides(self) -> Dict[str, str]:
-        return self.overrides
 
     def find_override(self, key: str):
         return self.overrides.get(key, None)
@@ -103,7 +83,6 @@ class StoryCharacterData:
     def has_table(self) -> bool:
         return bool(self.table_used)
 
-    # ----------------String Method------------------
     def __str__(self):
         return f"Applied Character Style: {self.style_id}\n" + \
                f"Content: {self.content}\n" + \

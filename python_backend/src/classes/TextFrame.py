@@ -1,14 +1,8 @@
 from xml.etree.ElementTree import Element
-# **********************************************************
-# Class:TextFrame
-# Init Locations: SpreadData
-# Methods calls from:
-# Method calls to:
-# Description: Parses textFrame XML. Stores data related to textFrames.
-# **********************************************************
 
 
 class TextFrame:
+    """Parses textFrame XML. Stores data related to textFrames."""
     def __init__(self, frame_element: Element):
         self.frame_id: str = ''
         self.parent_story_id: str = ''
@@ -23,7 +17,6 @@ class TextFrame:
         self.text_wrap_mode: str = ''
         self._from_xml_element(frame_element)
 
-    # ---------------- Private Setters------------------
     def _from_xml_element(self, frame_element: Element):
         self.frame_id = frame_element.get("Self")
         previous_text_frame = frame_element.get("PreviousTextFrame")
@@ -53,42 +46,6 @@ class TextFrame:
         self.text_wrap_mode = text_wrap_pref.get(
             "TextWrapMode") if text_wrap_pref is not None else None
 
-    # ---------------- External Setters------------------
-    def add_parent_story_obj(self, story: 'StoryData'):
-        self.parent_story_obj = story
-
-    # ----------------Getters------------------
-    def get_parent_story_obj(self) -> 'StoryData':
-        return self.parent_story_obj
-
-    def get_auto_sizing_type(self) -> str:
-        return self.auto_sizing_type
-
-    def get_use_no_line_breaks(self) -> str:
-        return self.use_no_line_breaks
-
-    def get_auto_sizing_reference_point(self) -> str:
-        return self.auto_sizing_reference_point
-
-    def get_is_auto_size(self) -> bool:
-        return self.is_auto_size
-
-    def get_text_column_count(self) -> int:
-        return self.text_column_count
-
-    def get_is_linked_text_frame(self) -> bool:
-        return self.linked_text_frame
-
-    def get_applied_object_style(self):
-        return self.applied_object_style
-
-    def get_text_wrap_mode(self) -> str:
-        return self.text_wrap_mode
-
-    def get_frame_id(self) -> str:
-        return self.frame_id
-
-    # ----------------String Method------------------
     def __str__(self):
         return f"TextFrame ID: {self.frame_id}\n" + \
                f"Parent Story: {self.parent_story_id}\n" + \

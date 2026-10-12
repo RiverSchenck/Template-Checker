@@ -28,13 +28,13 @@ def report(results: ValidationResult, classifier, context: Optional[str] = None,
 
 def at_story(story, identifier) -> dict:
     """An issue in a story's text: the story's page and its text frame."""
-    return dict(page_id=story.get_page(), identifier=identifier, data_id=story.get_parent_text_frame_id())
+    return dict(page_id=story.page_id, identifier=identifier, data_id=story.parent_text_frame_id)
 
 
 def at_frame(doc, text_frame) -> dict:
     """An issue with a text frame: identified by its story, located by the frame."""
     story_id, page_id = doc.frame_story_and_page(text_frame)
-    return dict(page_id=page_id, identifier=story_id, data_id=text_frame.get_frame_id())
+    return dict(page_id=page_id, identifier=story_id, data_id=text_frame.frame_id)
 
 
 def first_page_id(spread) -> str:
@@ -55,7 +55,7 @@ def at_link(doc, spread, link) -> dict:
 def inherited(prop) -> Tuple[str, Optional[dict]]:
     """Context for a style property: ('Inherited from: <style>', {'inheritedFrom': <style>}), or ('', None)
     when the style sets it itself."""
-    source = prop.get_inherited_from_value()
+    source = prop.inherited_from
     if not source:
         return '', None
     return f'Inherited from: {source}', {"inheritedFrom": source}

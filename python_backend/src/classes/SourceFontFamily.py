@@ -7,24 +7,15 @@ from fontTools.ttLib import TTFont
 
 logger = logging.getLogger(__name__)
 
-# **********************************************************
-# Class: Font
-# Init Locations: FontsParser, SourceFolderParser
-# Methods calls from:
-# Method calls to:
-# Description: FontsParser inits this object. Stores data related
-# to a specific fontFamily including fonts.
-# **********************************************************
-
 
 class SourceFontFamily(FontFamily):
+    """FontsParser inits this object. Stores data related to a specific fontFamily including fonts."""
     def __init__(self, file_name: str, document_links_folder_path: str):
         super().__init__()
         self.font_error: bool = False
         self.extension: str = ''
         self._extract_fonts(file_name, document_links_folder_path)
 
-    # ---------------- Private Setters------------------
     def _extract_fonts(self, file_name: str, document_links_folder_path: str):
         self.extension = os.path.splitext(file_name)[1].lower()
 
@@ -99,13 +90,5 @@ class SourceFontFamily(FontFamily):
         self.set_font_error()
         logger.warning("Unreadable font %s: %s", file_name, e)
 
-    # ---------------- External Setters------------------
     def set_font_error(self):
         self.font_error = True
-
-    # ----------------Getters------------------
-    def get_font_error(self) -> bool:
-        return self.font_error
-
-    def get_extension(self) -> str:
-        return self.extension

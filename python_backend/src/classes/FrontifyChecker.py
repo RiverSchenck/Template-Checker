@@ -110,7 +110,7 @@ class FrontifyChecker:
 
     def unzip_package_state(self) -> States:
         """UNZIP_PACKAGE: check it's a zip, make this run's folder, extract what the checks read."""
-        self.results.add_template_name(os.path.basename(self.source_file_path))
+        self.results.template_name = os.path.basename(self.source_file_path)
         self.data_folder = DATA_FOLDER
         if not self.get_zip_state():
             return States.EXIT
@@ -185,7 +185,7 @@ class FrontifyChecker:
         os.makedirs(self.idml_output_folder, exist_ok=True)
         try:
             extract_idml(idml_path, self.idml_output_folder)
-            self.results.add_idml_output_folder(self.idml_output_folder)
+            self.results.idml_output_folder = self.idml_output_folder
             return True
         except PackageError as e:
             self.results.add_custom_error(str(e), ValidationError.ERROR)
@@ -199,20 +199,16 @@ class FrontifyChecker:
     def parse_xml(self) -> States:
         """PARSE_XML: read the IDML's XML (spreads, fonts, styles, stories, masters, preferences) into
         self.document. Returns the first check's state, or EXIT if a required file is missing."""
-        # -----------------------------
         # Source Folders (Links, Document Fonts)
         # Init: SourceFoldersParser
-        # -----------------------------
         # Check if 'Document Fonts' exists, if not create it to continue code flow
         document_fonts_folder_path = self.ensure_folder_exists(
             self.unzipped_folder_path, 'Document Fonts')
         self.source_folders_parser = SourceFoldersParser(
             self.package_links, document_fonts_folder_path)
 
-        # -----------------------------
         # Spreads XML
         # Init: SpreadsParser
-        # -----------------------------
         # Check if Spreads directory exists
         spreads_dir = os.path.join(
             self.idml_output_folder, 'Spreads')
@@ -225,10 +221,8 @@ class FrontifyChecker:
             spreads_dir)
         # Set spreads_parser in results to build spread-to-page mapping
         self.results.set_spreads_parser(self.spreads_parser)
-        # -----------------------------
         # Fonts.XML
         # Init: FontsParser
-        # -----------------------------
         # Check if Fonts.XML exists
         fonts_xml_path = os.path.join(
             self.idml_output_folder, 'Resources', 'Fonts.xml')
@@ -238,10 +232,8 @@ class FrontifyChecker:
             return States.EXIT
         self.fonts_parser = FontsParser(
             fonts_xml_path)
-        # -----------------------------
         # Styles.XML
         # Init: StylesParser
-        # -----------------------------
         # Check if Styles.xml exists
         styles_xml_path = os.path.join(
             self.idml_output_folder, 'Resources', 'Styles.xml')
@@ -252,50 +244,45 @@ class FrontifyChecker:
         # Initialize the StylesParser
         styles_parser = StylesParser(styles_xml_path)
 
-        # -----------------------------
         # Stories XML
         # Init: StoriesParser
-        # -----------------------------
         # Check if Stories directory exists
         stories_dir = os.path.join(self.idml_output_folder, 'Stories')
         if not os.path.exists(stories_dir):
             self.stories_exist = False
             # Set stories_parser to None in ValidationResult
-            self.results.set_stories_parser(None)
+            self.results.stories_parser = None
         else:
             # Initialize the StoriesParser and extract story data
             self.stories_parser = StoriesParser(
                 stories_dir, styles_parser, self.fonts_parser, self.spreads_parser)
             # Set stories_parser in ValidationResult so it's available when adding validations
-            self.results.set_stories_parser(self.stories_parser)
+            self.results.stories_parser = self.stories_parser
 
         # Map stories to text frames
         if self.stories_parser:
             for spread in self.spreads_parser.spreads_obj_list:
-                for text_frame in spread.get_text_frame_obj_list():
+                for text_frame in spread.text_frame_obj_list:
                     # Use dictionary lookup for O(1) performance instead of O(n) search
                     story = self.stories_parser.stories_dict.get(
                         text_frame.parent_story_id)
                     if story:
-                        text_frame.add_parent_story_obj(story)
-                        story.add_parent_text_frame_id(text_frame.get_frame_id())
+                        text_frame.parent_story_obj = story
+                        story.parent_text_frame_id = text_frame.frame_id
         # Map source images to links
         link_dict = {}
         for spread in self.spreads_parser.spreads_obj_list:
-            for link in spread.get_links_obj_list():
-                link_name = link.get_link_name()
+            for link in spread.links_obj_list:
+                link_name = link.link_name
                 link_dict[link_name] = link
 
-        for image in self.source_folders_parser.get_images_obj_list():
+        for image in self.source_folders_parser.images_obj_list:
             if image.get_image_name() in link_dict:
                 matching_link = link_dict[image.get_image_name()]
-                image.set_parent_link_data_id(
-                    matching_link.get_rectangle_link_id())
+                image.parent_link_data_id = matching_link.get_rectangle_link_id()
 
-        # -----------------------------
         # MasterSpreads XML
         # Init: MasterPageParser
-        # -----------------------------
         # Check if MasterSpreads directory exists
         masterspreads_dir = os.path.join(
             self.idml_output_folder, 'MasterSpreads')
@@ -307,10 +294,8 @@ class FrontifyChecker:
         else:
             self.masterspreads_parser = MasterPageParser(masterspreads_dir)
 
-        # -----------------------------
         # META-INF XML
         # Init: NA
-        # -----------------------------
         # Store Folder location
         meta_inf_folder = os.path.join(
             self.idml_output_folder, 'META-INF')
@@ -324,10 +309,8 @@ class FrontifyChecker:
 
         self._load_page_highlighting_data()
 
-        # -----------------------------
         # Preferences XML
         # Init: Preferences Parser
-        # -----------------------------
         # Check if Styles.xml exists
         preferences_xml_path = os.path.join(
             self.idml_output_folder, 'Resources', 'Preferences.xml')
@@ -353,7 +336,7 @@ class FrontifyChecker:
         """Page geometry and embedded previews let the frontend highlight issues on the page."""
         try:
             page_geometry = PageGeometryIndex(self.idml_output_folder)
-            self.results.set_page_geometry(page_geometry)
+            self.results.page_geometry = page_geometry
             previews = {}
             if self.metadata_xml_path:
                 # XMP PageNumber is the 1-based position of the page in the document.
@@ -361,10 +344,10 @@ class FrontifyChecker:
                                  for page in page_geometry.get_pages()}
                 for preview in MetadataParser(self.metadata_xml_path, self.unzipped_root_path).previews_objs_list:
                     page_id = page_by_index.get(str(preview.page))
-                    if page_id and preview.get_base_64():
-                        previews[page_id] = ''.join(preview.get_base_64().split())
+                    if page_id and preview.base_64:
+                        previews[page_id] = ''.join(preview.base_64.split())
             previews.update(self._render_package_pdf_previews(page_geometry))
-            self.results.set_page_previews(previews)
+            self.results.page_previews = previews
         except Exception:
             # Highlighting is a nice-to-have; never fail the check because of it.
             logger.warning('Page highlighting data unavailable', exc_info=True)
@@ -406,48 +389,43 @@ class FrontifyChecker:
         """Totals per category (how many styles, text boxes, fonts and images the document has)."""
 
         if (self.stories_exist):
-            # -----Par Styles-----
             par_styles_count = self.calculate_style_total_count('paragraph')
-            self.results.set_par_styles_total_count(par_styles_count)
-            # -----Char Styles-----
+            self.results.par_styles_count = par_styles_count
             char_styles_count = self.calculate_style_total_count('character')
-            self.results.set_char_styles_total_count(char_styles_count)
-            # -----Text Box-----
+            self.results.char_styles_count = char_styles_count
             text_box_count = self.stories_parser.get_stories_length()
-            self.results.set_text_box_total_count(text_box_count)
-            self.results.set_stories_parser(self.stories_parser)
+            self.results.text_box_total_count = text_box_count
+            self.results.stories_parser = self.stories_parser
         else:
-            self.results.set_stories_parser(None)
+            self.results.stories_parser = None
 
-        # -----Fonts-----
         fonts_count = self.fonts_parser.get_used_font_families_count()
-        fonts_count += len(self.source_folders_parser.get_document_fonts())
-        self.results.set_fonts_total_count(fonts_count)
+        fonts_count += len(self.source_folders_parser.document_fonts)
+        self.results.fonts_total_count = fonts_count
 
-        # -----Images-----
         images_count = 0
-        spreads = self.spreads_parser.get_spreads_obj_list()
+        spreads = self.spreads_parser.spreads_obj_list
         for spread in spreads:
-            images_count += len(spread.get_links_obj_list())
-            images_count += spread.get_pasted_graphics_num()
-        self.results.set_images_total_count(images_count)
+            images_count += len(spread.links_obj_list)
+            images_count += spread.pasted_graphics_num
+        self.results.images_total_count = images_count
 
     def calculate_style_total_count(self, style_type='paragraph'):
         """Fetch all styles from documents and count unique instances."""
         unique_styles = set()
-        stories_data = self.stories_parser.get_stories_data()
+        stories_data = self.stories_parser.stories_data_list
 
         if style_type == 'paragraph':
             for story in stories_data:
-                par_styles = story.get_paragraph_styles()
+                par_styles = story.paragraph_styles
                 for style in par_styles:
-                    style_id = style.get_normalized_style_id()
+                    style_id = style.normalized_style_id
                     unique_styles.add(style_id)
         elif style_type == 'character':
             for story in stories_data:
-                char_styles = story.get_character_styles()
+                char_styles = story.character_styles
                 for style in char_styles:
-                    style_id = style.get_normalized_style_id()
+                    style_id = style.normalized_style_id
                     unique_styles.add(style_id)
 
         return len(unique_styles)
