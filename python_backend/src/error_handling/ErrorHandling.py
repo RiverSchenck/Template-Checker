@@ -64,6 +64,11 @@ class ValidationResult():
             text_content: list of text strings where the issue occurs (for PAR_STYLE, CHAR_STYLE, and OVERRIDE)
             context_details: optional structured data (e.g. text, overrides, inheritedFrom) for the frontend
         """
+        # "No identifier" / "no item" is 'null' in the results JSON. Checks may pass None or 'null'; store one
+        # form, or a None group and a 'null' group would collide in the JSON and one would overwrite the other.
+        identifier = 'null' if identifier is None else identifier
+        data_id = 'null' if data_id is None else data_id
+
         # Get category from classifier and convert to response key
         category = classifier.category
         category_key = self._category_to_response_key(category)
