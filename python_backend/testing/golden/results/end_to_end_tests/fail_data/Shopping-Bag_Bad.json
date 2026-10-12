@@ -514,7 +514,10 @@
         "x": 246.61,
         "y": 710.83
        },
-       "context": "",
+       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+       "context_details": {
+        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
+       },
        "data_id": "u118",
        "identifier": "Paragraph Style 2",
        "page_id": "uec",
@@ -537,14 +540,14 @@
    "u106": {
     "content": "monobrand.com\n",
     "identifier": "u106",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "uec",
+    "page_name": "1"
    },
    "u181": {
     "content": "\n\n\n\n\n\n\n\n\n",
     "identifier": "u181",
-    "page_id": "1",
-    "page_name": ""
+    "page_id": "uec",
+    "page_name": "1"
    }
   },
   "text_boxes": {

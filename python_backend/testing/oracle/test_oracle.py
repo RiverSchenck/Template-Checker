@@ -9,10 +9,7 @@ import pytest
 from testing.golden.golden import packages
 from testing.oracle.compare import CHECKS, compare
 
-KNOWN_GAPS = {
-    'image_transformations': 'B7: a flip whose matrix also reads as a 180 or 90 degree turn (e.g. "-1 0 0 1") is reported as a rotation',
-    'composer': 'B2: composer warnings show grid alignment\'s "Inherited from" (StoryParagraphData.get_composer_obj)',
-}
+KNOWN_GAPS = {}
 
 
 def _params():

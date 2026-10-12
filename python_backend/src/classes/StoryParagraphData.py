@@ -129,7 +129,7 @@ class StoryParagraphData:
         return self.grid_alignment_obj
 
     def get_composer_obj(self) -> PropertyBase:
-        return self.grid_alignment_obj
+        return self.composer_obj
     
     def get_filltint_obj(self) -> PropertyBase:
         return self.filltint_obj
