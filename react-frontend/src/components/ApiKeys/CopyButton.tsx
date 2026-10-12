@@ -24,7 +24,7 @@ export function CopyButton({ value, className }: { value: string; className?: st
       }}
       className={cn(
         'inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-medium transition-colors',
-        className,
+        className
       )}
       aria-label="Copy"
     >
