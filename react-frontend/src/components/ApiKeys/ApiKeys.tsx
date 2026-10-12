@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { AlertTriangle, Check, CheckCircle2, Clock, Copy, KeyRound, Lock, Plus, Terminal, Trash2 } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Check, CheckCircle2, Clock, Copy, KeyRound, Lock, Plus, Terminal, Trash2 } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 import { useAuth } from '../AuthContext';
 import { Button } from '../ui/button';
@@ -36,6 +37,7 @@ import {
 } from '../layout/page-kit';
 import { notify, responseError } from '../../lib/notify';
 import { Skeleton } from '../ui/skeleton';
+import { ApiDocs } from './ApiDocs';
 
 export interface ApiKey {
   id: string;
@@ -59,26 +61,8 @@ const EXPIRY_OPTIONS = [
 const EXPIRING_SOON_DAYS = 14;
 
 type KeyFilter = 'active' | 'all';
+type Tab = 'keys' | 'docs';
 
-const EXAMPLES = {
-  run: {
-    label: 'JSON report',
-    path: '/run',
-    note: 'Returns the validation report as JSON.',
-  },
-  summary: {
-    label: 'Customer summary',
-    path: '/summary',
-    note: 'Returns a message for the customer, as HTML (pastes with formatting into Intercom) and plain text.',
-  },
-  xml: {
-    label: 'ZIP output',
-    path: '/run-and-download-xml',
-    note: 'Returns a ZIP archive containing the generated XML output.',
-  },
-} as const;
-
-type ExampleKey = keyof typeof EXAMPLES;
 
 function daysUntil(iso: string | null): number | null {
   if (!iso) return null;
@@ -151,33 +135,6 @@ function LifetimeBar({ k }: { k: ApiKey }) {
   );
 }
 
-function CopyButton({ value, className }: { value: string; className?: string }) {
-  const [copied, setCopied] = useState(false);
-  useEffect(() => {
-    if (!copied) return;
-    const t = setTimeout(() => setCopied(false), 1600);
-    return () => clearTimeout(t);
-  }, [copied]);
-  return (
-    <button
-      type="button"
-      onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(value);
-          setCopied(true);
-        } catch {
-          notify.error("Couldn't copy. Select the text and copy it manually.");
-        }
-      }}
-      className={cn('inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-medium transition-colors', className)}
-      aria-label="Copy"
-    >
-      {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-      {copied ? 'Copied' : 'Copy'}
-    </button>
-  );
-}
-
 /** Placeholder rows on the key list's grid, so each bar sits under its column header. */
 function KeysSkeleton({ rows }: { rows: number }) {
   return (
@@ -220,7 +177,10 @@ export function ApiKeys() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [filter, setFilter] = useState<KeyFilter>('active');
-  const [example, setExample] = useState<ExampleKey>('run');
+  // The tab lives in the URL (?tab=docs) so the docs can be linked to.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab: Tab = searchParams.get('tab') === 'docs' ? 'docs' : 'keys';
+  const setTab = (next: Tab) => setSearchParams(next === 'docs' ? { tab: 'docs' } : {}, { replace: true });
 
   const [createOpen, setCreateOpen] = useState(false);
   const [name, setName] = useState('');
@@ -339,9 +299,6 @@ export function ApiKeys() {
   const loadFailed = loadError && keys.length === 0;
   const visibleKeys = filter === 'active' ? keys.filter((k) => k.active) : keys;
   const expiryDate = new Date(Date.now() + Number(expiryDays) * DAY_MS);
-  const exampleCode = `curl -X POST ${baseURL}${EXAMPLES[example].path} \\
-  -H "Authorization: Bearer tc_…" \\
-  -F "file=@package.zip"`;
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -349,7 +306,7 @@ export function ApiKeys() {
         <PageHeader
           icon={KeyRound}
           title="API keys"
-          description="Use API keys to run the checker from scripts and CI pipelines. Keys act on your behalf and can only access the check endpoints."
+          description="Run the checker from scripts, CI pipelines and tools like Intercom. Keys act on your behalf and can only run checks."
           actions={
             <Button onClick={openCreate} className={primaryActionClass}>
               <Plus className="h-4 w-4" />
@@ -358,178 +315,170 @@ export function ApiKeys() {
           }
         />
 
-        <Panel
-          className="mb-6"
-          toolbar={
-            <>
-              <Segmented<KeyFilter>
-                ariaLabel="Filter keys"
-                value={filter}
-                onChange={setFilter}
-                options={[
-                  { value: 'active', label: 'Active', count: loading || loadFailed ? undefined : activeCount },
-                  { value: 'all', label: 'All keys', count: loading || loadFailed ? undefined : keys.length },
-                ]}
-              />
-              <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Lock className="h-3.5 w-3.5" />
-                Treat keys like passwords. Each key is shown only once.
-              </p>
-            </>
-          }
-        >
-          {loading ? (
-            <KeysSkeleton rows={2} />
-          ) : loadFailed ? (
-            <ErrorState title="Couldn't load your API keys" onRetry={fetchKeys} />
-          ) : visibleKeys.length === 0 ? (
-            <EmptyState
-              icon={KeyRound}
-              title={keys.length === 0 ? 'No API keys' : 'No active keys'}
-              description={
-                keys.length === 0
-                  ? 'Create a key to call the checker from a script or CI job.'
-                  : 'All of your keys have been revoked or have expired. Create a new key to continue using the API.'
+        <div className="mb-6">
+          <Segmented<Tab>
+            ariaLabel="API keys page"
+            value={tab}
+            onChange={setTab}
+            options={[
+              { value: 'keys', label: 'Keys' },
+              { value: 'docs', label: 'Docs' },
+            ]}
+          />
+        </div>
+
+        {tab === 'keys' ? (
+          <>
+            <Panel
+              className="mb-6"
+              toolbar={
+                <>
+                  <Segmented<KeyFilter>
+                    ariaLabel="Filter keys"
+                    value={filter}
+                    onChange={setFilter}
+                    options={[
+                      { value: 'active', label: 'Active', count: loading || loadFailed ? undefined : activeCount },
+                      { value: 'all', label: 'All keys', count: loading || loadFailed ? undefined : keys.length },
+                    ]}
+                  />
+                  <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Lock className="h-3.5 w-3.5" />
+                    Treat keys like passwords. Each key is shown only once.
+                  </p>
+                </>
               }
-              action={
-                <Button size="sm" className={cn(primaryActionClass, 'h-9')} onClick={openCreate}>
-                  <Plus className="h-4 w-4" />
-                  Create key
-                </Button>
-              }
-            />
-          ) : (
-            <>
-              <div className="hidden grid-cols-[minmax(0,1fr)_7.5rem_10rem_7rem_2.25rem] items-center gap-4 border-b px-5 py-2.5 text-xs font-medium text-muted-foreground md:grid">
-                <span>Key</span>
-                <span>Status</span>
-                <span>Expires</span>
-                <span>Last used</span>
-                <span />
-              </div>
-              <ul className="divide-y">
-                {visibleKeys.map((k) => {
-                  const inactive = !k.active;
-                  return (
-                    <li
-                      key={k.id}
-                      className={cn(
-                        'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3 px-4 py-3.5 transition-colors hover:bg-neutral-50/70 dark:hover:bg-neutral-900/40 sm:px-5 md:grid-cols-[minmax(0,1fr)_7.5rem_10rem_7rem_2.25rem]',
-                        inactive && 'opacity-60'
-                      )}
-                    >
-                      <div className="flex min-w-0 items-center gap-3">
-                        <div
+            >
+              {loading ? (
+                <KeysSkeleton rows={2} />
+              ) : loadFailed ? (
+                <ErrorState title="Couldn't load your API keys" onRetry={fetchKeys} />
+              ) : visibleKeys.length === 0 ? (
+                <EmptyState
+                  icon={KeyRound}
+                  title={keys.length === 0 ? 'No API keys' : 'No active keys'}
+                  description={
+                    keys.length === 0
+                      ? 'Create a key to call the checker from a script or CI job.'
+                      : 'All of your keys have been revoked or have expired. Create a new key to continue using the API.'
+                  }
+                  action={
+                    <Button size="sm" className={cn(primaryActionClass, 'h-9')} onClick={openCreate}>
+                      <Plus className="h-4 w-4" />
+                      Create key
+                    </Button>
+                  }
+                />
+              ) : (
+                <>
+                  <div className="hidden grid-cols-[minmax(0,1fr)_7.5rem_10rem_7rem_2.25rem] items-center gap-4 border-b px-5 py-2.5 text-xs font-medium text-muted-foreground md:grid">
+                    <span>Key</span>
+                    <span>Status</span>
+                    <span>Expires</span>
+                    <span>Last used</span>
+                    <span />
+                  </div>
+                  <ul className="divide-y">
+                    {visibleKeys.map((k) => {
+                      const inactive = !k.active;
+                      return (
+                        <li
+                          key={k.id}
                           className={cn(
-                            'grid h-9 w-9 shrink-0 place-items-center rounded-lg border',
-                            inactive
-                              ? 'bg-neutral-50 text-neutral-400 dark:bg-neutral-900'
-                              : 'bg-gradient-to-br from-white to-neutral-100 text-neutral-700 shadow-sm dark:from-neutral-800 dark:to-neutral-900 dark:text-neutral-300'
+                            'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3 px-4 py-3.5 transition-colors hover:bg-neutral-50/70 dark:hover:bg-neutral-900/40 sm:px-5 md:grid-cols-[minmax(0,1fr)_7.5rem_10rem_7rem_2.25rem]',
+                            inactive && 'opacity-60'
                           )}
                         >
-                          <KeyRound className="h-4 w-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-medium">{k.name}</p>
-                          <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
-                            <code className="rounded bg-neutral-100 px-1.5 py-px font-mono text-[11px] text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
-                              {k.key_prefix}••••
-                            </code>
-                            <span className="hidden sm:inline" title={formatAbsolute(k.created_at)}>
-                              Created {formatShortDate(k.created_at)}
-                            </span>
+                          <div className="flex min-w-0 items-center gap-3">
+                            <div
+                              className={cn(
+                                'grid h-9 w-9 shrink-0 place-items-center rounded-lg border',
+                                inactive
+                                  ? 'bg-neutral-50 text-neutral-400 dark:bg-neutral-900'
+                                  : 'bg-gradient-to-br from-white to-neutral-100 text-neutral-700 shadow-sm dark:from-neutral-800 dark:to-neutral-900 dark:text-neutral-300'
+                              )}
+                            >
+                              <KeyRound className="h-4 w-4" />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-medium">{k.name}</p>
+                              <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+                                <code className="rounded bg-neutral-100 px-1.5 py-px font-mono text-[11px] text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
+                                  {k.key_prefix}••••
+                                </code>
+                                <span className="hidden sm:inline" title={formatAbsolute(k.created_at)}>
+                                  Created {formatShortDate(k.created_at)}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
 
-                      <div className="hidden md:block">
-                        <StatusFor k={k} />
-                      </div>
+                          <div className="hidden md:block">
+                            <StatusFor k={k} />
+                          </div>
 
-                      <div className="col-span-2 row-start-2 flex items-center gap-3 pl-12 md:col-span-1 md:row-start-auto md:block md:pl-0">
-                        <span className="md:hidden">
-                          <StatusFor k={k} />
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <LifetimeBar k={k} />
-                        </div>
-                      </div>
+                          <div className="col-span-2 row-start-2 flex items-center gap-3 pl-12 md:col-span-1 md:row-start-auto md:block md:pl-0">
+                            <span className="md:hidden">
+                              <StatusFor k={k} />
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <LifetimeBar k={k} />
+                            </div>
+                          </div>
 
-                      <span className="hidden text-sm md:block" title={formatAbsolute(k.last_used_at)}>
-                        {k.last_used_at ? formatRelative(k.last_used_at) : <span className="text-muted-foreground">Never</span>}
-                      </span>
+                          <span className="hidden text-sm md:block" title={formatAbsolute(k.last_used_at)}>
+                            {k.last_used_at ? formatRelative(k.last_used_at) : <span className="text-muted-foreground">Never</span>}
+                          </span>
 
-                      <div className="col-start-2 row-start-1 flex justify-end md:col-start-auto md:row-start-auto">
-                        {k.active && (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 rounded-lg text-muted-foreground hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-500/10 dark:hover:text-rose-400"
-                                aria-label={`Revoke ${k.name}`}
-                                onClick={() => setRevokeTarget(k)}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Revoke key</TooltipContent>
-                          </Tooltip>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </>
-          )}
-        </Panel>
+                          <div className="col-start-2 row-start-1 flex justify-end md:col-start-auto md:row-start-auto">
+                            {k.active && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 rounded-lg text-muted-foreground hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-500/10 dark:hover:text-rose-400"
+                                    aria-label={`Revoke ${k.name}`}
+                                    onClick={() => setRevokeTarget(k)}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Revoke key</TooltipContent>
+                              </Tooltip>
+                            )}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              )}
+            </Panel>
 
-        {/* Example request */}
-        <section className="overflow-hidden rounded-xl border border-neutral-800 bg-neutral-950 text-neutral-200 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.45)]">
-          <div className="flex flex-col gap-3 border-b border-white/10 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between">
-            <span className="flex items-center gap-2 text-xs font-medium text-neutral-300">
-              <span className="grid h-6 w-6 place-items-center rounded-md bg-white/10">
-                <Terminal className="h-3.5 w-3.5" />
+            <div className="flex flex-col gap-3 rounded-xl border bg-card px-4 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.04)] sm:flex-row sm:items-center">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-neutral-950 text-white dark:bg-white dark:text-neutral-950">
+                <Terminal className="h-4 w-4" />
               </span>
-              Example request
-            </span>
-            <div className="flex items-center gap-1">
-              {(Object.keys(EXAMPLES) as ExampleKey[]).map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setExample(key)}
-                  className={cn(
-                    'h-7 rounded-md px-2.5 text-xs font-medium transition-colors',
-                    example === key ? 'bg-white/10 text-white' : 'text-neutral-400 hover:text-neutral-200'
-                  )}
-                >
-                  {EXAMPLES[key].label}
-                </button>
-              ))}
-              <span className="mx-1 h-4 w-px bg-white/10" />
-              <CopyButton value={exampleCode} className="text-neutral-400 hover:bg-white/10 hover:text-white" />
+              <p className="min-w-0 flex-1 text-sm">
+                <span className="font-medium">Got a key? Now make it do something.</span>{' '}
+                <span className="text-muted-foreground">Endpoints, examples in three languages, limits and every error code.</span>
+              </p>
+              <Button variant="outline" size="sm" className={cn(secondaryActionClass, 'h-8 shrink-0')} onClick={() => setTab('docs')}>
+                Read the docs
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
             </div>
-          </div>
-          <pre className="overflow-x-auto px-5 py-4 font-mono text-[12.5px] leading-6">
-            <code>
-              <span className="text-emerald-400">curl</span>
-              <span className="text-neutral-400"> -X </span>
-              <span className="text-sky-300">POST</span> <span className="text-neutral-100">{baseURL}</span>
-              <span className="text-amber-300">{EXAMPLES[example].path}</span>
-              <span className="text-neutral-500"> \</span>
-              {'\n  '}
-              <span className="text-neutral-400">-H </span>
-              <span className="text-orange-200">"Authorization: Bearer tc_…"</span>
-              <span className="text-neutral-500"> \</span>
-              {'\n  '}
-              <span className="text-neutral-400">-F </span>
-              <span className="text-orange-200">"file=@package.zip"</span>
-            </code>
-          </pre>
-          <p className="border-t border-white/10 px-5 py-2.5 text-xs text-neutral-400">{EXAMPLES[example].note}</p>
-        </section>
+          </>
+        ) : (
+          <ApiDocs
+            baseURL={baseURL}
+            onCreateKey={() => {
+              setTab('keys');
+              openCreate();
+            }}
+          />
+        )}
       </PageShell>
 
       <Dialog open={createOpen} onOpenChange={closeCreate}>

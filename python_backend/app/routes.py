@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from functools import wraps
 from flask import Blueprint, Response, jsonify, send_file, after_this_request, request, current_app, g
 from src.classes.FrontifyChecker import FrontifyChecker
+from .errors import api_error, error_body
 from .utils import CheckFailed, upload_file, run_check, start_check, checker_cleanup
 from .analytics import first_error_message
 from .customer_summary import display_template_name, summary_payload
@@ -117,7 +118,7 @@ def verify_supabase_token(token):
 
 
 def _auth_error(details):
-    return jsonify({'error': {'message': 'Authentication required', 'details': details}}), 401
+    return api_error(401, 'unauthorized', 'Authentication required', details=details)
 
 
 def require_auth(f=None, *, allow_api_key=False):
@@ -149,10 +150,7 @@ def require_auth(f=None, *, allow_api_key=False):
             # A Supabase login alone is not enough: anyone can sign in with Google. Only approved users may call the API.
             email = (payload.get('email') or '').strip().lower()
             if not email or not user_helpers.get_user_by_email(email):
-                return jsonify({
-                    'error': {'message': 'Access not authorized', 'code': 'access_denied'},
-                    'allowed': False,
-                }), 403
+                return jsonify({**error_body('access_denied', 'Access not authorized'), 'allowed': False}), 403
 
             return f(*args, **kwargs)
 
@@ -225,8 +223,7 @@ ACCESS_REQUESTS_PER_HOUR_PER_IP = 5
 
 
 def _rate_limited(message, code, retry_after=None):
-    response = jsonify({'error': {'message': message, 'code': code}})
-    response.status_code = 429
+    response = api_error(429, code, message)
     if retry_after:
         response.headers['Retry-After'] = str(retry_after)
     return response
@@ -863,8 +860,25 @@ def test_cors():
     return jsonify({'message': 'Yep, it\'s on.'})
 
 
+def _require_upload(zip_only=False):
+    """Reject a missing (or, with zip_only, non-.zip) upload before the rate limiter, so it doesn't use up a check."""
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            upload = request.files.get('file')
+            if upload is None or not upload.filename:
+                return api_error(400, 'missing_file', 'Attach the packaged template as a .zip file in the "file" field.')
+            if zip_only and not upload.filename.lower().endswith('.zip'):
+                return api_error(
+                    400, 'unsupported_file_type', 'Upload the packaged template as a .zip file (InDesign: File > Package).')
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+
 @main.route('/run', methods=['POST'])
 @require_auth(allow_api_key=True)
+@_require_upload()
 @limit_checks
 def run_checker():
     """Endpoint to run the checker and return results."""
@@ -874,7 +888,7 @@ def run_checker():
 
         upload_result = upload_file()
         if upload_result['status'] != 'success':
-            return jsonify(upload_result['error']), 400
+            return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
 
         upload_path = upload_result['path']
         results, status_code = start_check(checker, upload_path, source_type, user_id=run_user_id)
@@ -883,42 +897,9 @@ def run_checker():
         checker_cleanup(checker)
 
 
-def _summary_error(status, code, message):
-    """Error response for /summary: a stable machine-readable code, a message for people, and the request id."""
-    response = jsonify({'error': {'code': code, 'message': message, 'request_id': g.get('request_id')}})
-    response.status_code = status
-    response.headers['Cache-Control'] = 'no-store'
-    return response
-
-
-def _customer_safe_reason(results):
-    """Why an upload was rejected, in words the checker wrote for users (bad ZIP, no IDML, too many files...).
-
-    A server-side folder error includes a filesystem path and exception text, so that one is never passed on.
-    """
-    reason = first_error_message(results)
-    if not reason or reason.startswith('Error creating the folders'):
-        return None
-    return reason
-
-
-def _require_zip_upload(f):
-    """Reject a missing or non-.zip upload before the rate limiter, so a bad request doesn't use up a check."""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        upload = request.files.get('file')
-        if upload is None or not upload.filename:
-            return _summary_error(400, 'missing_file', 'Attach the packaged template as a .zip file in the "file" field.')
-        if not upload.filename.lower().endswith('.zip'):
-            return _summary_error(
-                400, 'unsupported_file_type', 'Upload the packaged template as a .zip file (InDesign: File > Package).')
-        return f(*args, **kwargs)
-    return decorated_function
-
-
 @main.route('/summary', methods=['POST'])
 @require_auth(allow_api_key=True)
-@_require_zip_upload
+@_require_upload(zip_only=True)
 @limit_checks
 def customer_summary():
     """Check an uploaded template package and return the customer summary, ready to review and paste into Intercom.
@@ -936,21 +917,22 @@ def customer_summary():
 
         upload_result = upload_file()
         if upload_result['status'] != 'success':
-            return _summary_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
+            return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
 
         try:
             outcome = run_check(checker, upload_result['path'], source_type, user_id=run_user_id)
         except CheckFailed:
-            return _summary_error(
+            return api_error(
                 500, 'check_failed', 'The template couldn\'t be checked. Try again, or contact us with the request ID.')
 
         if not outcome.completed:
-            reason = _customer_safe_reason(outcome.results)
+            # Rejection reasons are written by the checker for users: not a valid ZIP, no .idml file, too many files...
+            reason = first_error_message(outcome.results)
             message = f'The file couldn\'t be checked: {reason}' if reason else 'The file couldn\'t be checked.'
-            return _summary_error(422, 'template_not_checkable', message)
+            return api_error(422, 'template_not_checkable', message)
 
         if outcome.summary is None:
-            return _summary_error(
+            return api_error(
                 500, 'summary_failed', 'The summary couldn\'t be written. Try again, or contact us with the request ID.')
 
         template_name = display_template_name(outcome.results.get('template_name') or upload.filename)
@@ -966,8 +948,12 @@ def customer_summary():
         checker_cleanup(checker)
 
 
+_EXPORT_FAILED = 'The XML export couldn\'t be created. Try again, or contact us with the request ID.'
+
+
 @main.route('/run-and-download-xml', methods=['POST'])
 @require_auth(allow_api_key=True)
+@_require_upload()
 @limit_checks
 def run_checker_and_download():
     """Endpoint to run the checker and download the resulting ZIP file."""
@@ -978,7 +964,7 @@ def run_checker_and_download():
 
         upload_result = upload_file()
         if upload_result['status'] != 'success':
-            return jsonify(upload_result['error']), 400
+            return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
 
         upload_path = upload_result['path']
         results, status_code = start_check(checker, upload_path, source_type, user_id=run_user_id)
@@ -988,12 +974,9 @@ def run_checker_and_download():
         template_name = checker.get_template_name()
         zip_file_path = checker.zip_idml_output_folder()
 
-        if not zip_file_path:
-            return jsonify({'error': 'Failed to create the ZIP file'}), 500
-
-        # Verify the file exists before attempting to send
-        if not os.path.exists(zip_file_path) or not os.path.isfile(zip_file_path):
-            return jsonify({'error': f'ZIP file does not exist at path: {zip_file_path}'}), 500
+        if not zip_file_path or not os.path.isfile(zip_file_path):
+            current_app.logger.error('XML export ZIP missing: %s', zip_file_path)
+            return api_error(500, 'export_failed', _EXPORT_FAILED)
 
         print(f"ZIP FILE PATH: {zip_file_path}, EXISTS: {os.path.exists(zip_file_path)}, SIZE: {os.path.getsize(zip_file_path) if os.path.exists(zip_file_path) else 0}")
 
@@ -1031,7 +1014,7 @@ def run_checker_and_download():
                 except Exception as e2:
                     print(f'Failed to delete ZIP file in exception handler: {e2}')
             current_app.logger.exception('Failed to send the ZIP file')
-            return jsonify({'error': 'Failed to send the ZIP file'}), 500
+            return api_error(500, 'export_failed', _EXPORT_FAILED)
     finally:
         # Always cleanup checker resources (unzipped files, uploaded files)
         # This handles early returns where @after_this_request never runs

@@ -1,5 +1,7 @@
 # Template Checker API
 
+The same reference, with examples in cURL, JavaScript and Python, is in the app under **API keys > Docs**.
+
 Base URL: `https://template-checker-test.fly.dev` (production backend).
 
 ## Authentication
@@ -88,30 +90,7 @@ await navigator.clipboard.write([
 
 ### Errors
 
-All errors from this endpoint have the same shape:
-
-```json
-{ "error": { "code": "template_not_checkable", "message": "The file couldn't be checked: …", "request_id": "…" } }
-```
-
-Branch on `code`; `message` is written for people and may change.
-
-| Status | `code` | When |
-|---|---|---|
-| 400 | `missing_file` | No `file` field, or it's empty. |
-| 400 | `unsupported_file_type` | The file isn't a `.zip`. |
-| 401 | — | Missing, invalid, expired or revoked token or key. |
-| 403 | `access_denied` | Signed in, but not an approved Template Checker user. |
-| 413 | `file_too_large` | Upload over 200 MB. |
-| 422 | `template_not_checkable` | The package couldn't be checked (not a valid ZIP, no `.idml` file, password-protected…). `message` says why; pass it on to the customer. |
-| 429 | `check_in_progress` | You already have a check running. |
-| 429 | `rate_limited` | Hourly limit reached; see `Retry-After`. |
-| 500 | `upload_failed` | The upload couldn't be stored. Retry. |
-| 500 | `check_failed` | The checker crashed on this file. Retrying won't help; report it with the request ID. |
-| 500 | `summary_failed` | The check ran but the summary couldn't be written. Report it with the request ID. |
-
-`401`, `403`, `413` and `429` come from layers shared with the other endpoints: same `error.code` and
-`error.message`, but no `request_id` in the body (`401` has no `code`). Use the `X-Request-ID` header for those.
+See [Errors](#errors) below; every endpoint answers them the same way.
 
 ---
 
@@ -125,6 +104,39 @@ uses:
   built from. `null` if the summary couldn't be written; the results are still returned.
 - `check_guides`: the plain-language copy for each check that ran or found something, as
   `{severity: {check key: {title, why, fix, subject}}}`.
+
+## `POST /run-and-download-xml`
+
+Same request. Runs the same check, then returns the template's generated XML as a ZIP download
+(`Content-Type: application/zip`) instead of the results.
+
+---
+
+## Errors
+
+Every error from the check endpoints (`/summary`, `/run`, `/run-and-download-xml`) has the same shape:
+
+```json
+{ "error": { "code": "template_not_checkable", "message": "The file couldn't be checked: …", "request_id": "…" } }
+```
+
+Branch on `code`; `message` is written for people and may change. `request_id` matches the `X-Request-ID` header.
+4xx means something to fix on your side, 5xx means ours.
+
+| Status | `code` | When |
+|---|---|---|
+| 400 | `missing_file` | No `file` field, or it's empty. |
+| 400 | `unsupported_file_type` | The file isn't a `.zip` (`/summary` only). |
+| 401 | `unauthorized` | Missing, invalid, expired or revoked token or key. |
+| 403 | `access_denied` | Signed in, but not an approved Template Checker user. |
+| 413 | `file_too_large` | Upload over 200 MB. |
+| 422 | `template_not_checkable` | `/summary` only: the package couldn't be checked (not a valid ZIP, no `.idml` file, password-protected…). `message` says why; pass it on to the customer. `/run` returns 200 with the reason in the results instead. |
+| 429 | `check_in_progress` | You already have a check running. |
+| 429 | `rate_limited` | Hourly limit reached; see `Retry-After`. |
+| 500 | `upload_failed` | The upload couldn't be stored. Retry. |
+| 500 | `check_failed` | The checker crashed on this file. Retrying won't help; report it with the request ID. |
+| 500 | `summary_failed` | `/summary` only: the check ran but the summary couldn't be written. |
+| 500 | `export_failed` | `/run-and-download-xml` only: the XML export couldn't be created. |
 
 ---
 

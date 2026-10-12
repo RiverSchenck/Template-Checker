@@ -1,4 +1,4 @@
-from flask import Flask, g, jsonify, request
+from flask import Flask, g, request
 from flask.logging import default_handler
 from werkzeug.exceptions import RequestEntityTooLarge
 from flask_cors import CORS
@@ -6,6 +6,7 @@ import logging
 import os
 import re
 import uuid
+from .errors import api_error
 from .routes import main as main_blueprint
 
 # A caller-supplied X-Request-ID is reused only if it looks like an id, so it can't inject anything into logs.
@@ -76,12 +77,8 @@ def create_app():
     @app.errorhandler(RequestEntityTooLarge)
     def handle_file_too_large(e):
         max_size_mb = app.config.get('MAX_CONTENT_LENGTH', 0) / (1024 * 1024)
-        return jsonify({
-            'error': {
-                'code': 'file_too_large',
-                'message': f'File size exceeds the maximum allowed size of {max_size_mb:.0f}MB',
-                'details': 'Please upload a smaller file or contact support if you need to upload larger files.'
-            }
-        }), 413
+        return api_error(
+            413, 'file_too_large', f'File size exceeds the maximum allowed size of {max_size_mb:.0f}MB',
+            details='Please upload a smaller file or contact support if you need to upload larger files.')
 
     return app
