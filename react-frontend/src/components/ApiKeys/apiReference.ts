@@ -20,7 +20,7 @@ export const ERRORS: ApiErrorDoc[] = [
     status: 400,
     code: 'unsupported_file_type',
     hint: 'Send a .zip: File > Package in InDesign, then zip the folder.',
-    only: '/summary',
+    only: '/v1/checks/summary',
   },
   { status: 401, code: 'unauthorized', hint: 'The key is missing, expired or revoked.' },
   { status: 403, code: 'access_denied', hint: 'Signed in, but not approved yet. Request access first.' },
@@ -29,7 +29,7 @@ export const ERRORS: ApiErrorDoc[] = [
     status: 422,
     code: 'template_not_checkable',
     hint: 'Not a checkable package. `message` says why; pass it on.',
-    only: '/summary',
+    only: '/v1/checks/summary',
   },
   { status: 429, code: 'check_in_progress', hint: 'One check at a time. Retry when the other finishes.' },
   { status: 429, code: 'rate_limited', hint: 'Over 50 checks this hour. Wait `Retry-After` seconds.' },
@@ -39,13 +39,13 @@ export const ERRORS: ApiErrorDoc[] = [
     status: 500,
     code: 'summary_failed',
     hint: 'The check ran, the summary didn’t. Send us the request ID.',
-    only: '/summary',
+    only: '/v1/checks/summary',
   },
   {
     status: 500,
     code: 'export_failed',
     hint: 'The XML export failed. Retry, then send us the request ID.',
-    only: '/run-and-download-xml',
+    only: '/v1/checks/xml',
   },
 ];
 
@@ -76,7 +76,7 @@ export const ENDPOINTS: EndpointDoc[] = [
   {
     id: 'summary',
     method: 'POST',
-    path: '/summary',
+    path: '/v1/checks/summary',
     name: 'Customer summary',
     summary: 'Check a template and get a message for the customer, ready to paste into Intercom.',
     output: 'json',
@@ -115,29 +115,29 @@ export const ENDPOINTS: EndpointDoc[] = [
   {
     id: 'run',
     method: 'POST',
-    path: '/run',
+    path: '/v1/checks',
     name: 'Check results',
     summary: 'Check a template and get every result as JSON.',
-    note: 'A package that can’t be checked still returns 200, with the reason in the results.',
+    note: 'A package that can’t be checked still returns 200, with `status: "rejected"` and the reason in the results.',
     output: 'json',
     response: {
       contentType: 'application/json',
       example: json({
-        type: 'data',
-        content: {
-          results: {
-            template_name: 'Brochure.zip',
-            fonts: { details: {}, total_count: 3 },
-            check_guides: {},
-            customer_summary: {},
-          },
+        run_id: '6f1c2b9e-0d4a-4c1e-9a51-3b2f7c8d9e10',
+        status: 'completed',
+        results: {
+          template_name: 'Brochure.zip',
+          fonts: { details: {}, total_count: 3 },
+          check_guides: {},
+          customer_summary: {},
         },
       }),
     },
     fields: [
+      { name: 'status', type: 'string', description: '`completed`, or `rejected` if the package couldn’t be checked.' },
       { name: 'results.<category>', type: 'object', description: 'Issues by category, then severity.' },
       { name: 'results.check_guides', type: 'object', description: 'Plain-language copy per check.' },
-      { name: 'results.customer_summary', type: 'object | null', description: 'Same as /summary, plus sections.' },
+      { name: 'results.customer_summary', type: 'object | null', description: 'Same message as the summary endpoint.' },
     ],
     errors: [
       'missing_file',
@@ -153,7 +153,7 @@ export const ENDPOINTS: EndpointDoc[] = [
   {
     id: 'run-and-download-xml',
     method: 'POST',
-    path: '/run-and-download-xml',
+    path: '/v1/checks/xml',
     name: 'XML export',
     summary: 'Check a template and download its XML as a ZIP.',
     output: 'zip',

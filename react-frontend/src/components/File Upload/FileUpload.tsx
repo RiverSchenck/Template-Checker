@@ -188,7 +188,7 @@ export function TemplateUploader({
           xhr.addEventListener('error', () => reject(new Error("Couldn't reach the checker. Check your connection and try again.")));
           xhr.addEventListener('abort', () => resolve(null));
 
-          xhr.open('POST', downloadXML ? `${baseURL}/run-and-download-xml` : `${baseURL}/run`);
+          xhr.open('POST', downloadXML ? `${baseURL}/v1/checks/xml` : `${baseURL}/v1/checks`);
           xhr.responseType = downloadXML ? 'blob' : 'text';
           Object.entries(headers).forEach(([key, value]) => xhr.setRequestHeader(key, value));
           xhr.send(formData);
@@ -225,7 +225,7 @@ export function TemplateUploader({
           notify.success('XML download started');
         } else {
           const text = typeof result.body === 'string' ? result.body : await (result.body as Blob).text();
-          const results: ValidationResult = JSON.parse(text)?.content?.results;
+          const results: ValidationResult = JSON.parse(text)?.results;
           checkerResponse(results, setPrevious);
           onUploadComplete?.();
           const { totalErrors, totalWarnings, totalInfos } = countValidationIssues(results);

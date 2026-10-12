@@ -2,7 +2,7 @@
 import pytest
 
 import app.routes as routes
-from app.errors import api_error
+from app.utils import CheckFailed
 
 USER = {'Authorization': 'Bearer valid-approved@example.com'}
 CHECK_PATHS = ['/run', '/run-and-download-xml', '/summary']
@@ -50,7 +50,9 @@ def test_upload_failure(client, monkeypatch, path):
 
 @pytest.mark.parametrize('path', ['/run', '/run-and-download-xml'])
 def test_checker_crash(client, monkeypatch, path):
-    monkeypatch.setattr(routes, 'start_check', lambda *a, **k: (api_error(500, 'check_failed', 'Nope.'), 500))
+    def crash(*a, **k):
+        raise CheckFailed()
+    monkeypatch.setattr(routes, 'run_check', crash)
     r = client.post(path, headers=USER)
     assert r.status_code == 500
     assert _error(r)['code'] == 'check_failed'

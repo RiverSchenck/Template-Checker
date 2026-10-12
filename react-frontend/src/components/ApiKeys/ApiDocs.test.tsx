@@ -31,11 +31,11 @@ describe('ApiDocs', () => {
   it('builds runnable requests against the given base URL', () => {
     const [summary, , xml] = ENDPOINTS;
     expect(requestExample(summary, 'curl', 'https://api.example')).toContain(
-      'curl -X POST https://api.example/summary'
+      'curl -X POST https://api.example/v1/checks/summary'
     );
     expect(requestExample(xml, 'curl', 'https://api.example')).toContain('-o Brochure-xml.zip');
     expect(requestExample(summary, 'javascript', 'https://api.example')).toContain(
-      "fetch('https://api.example/summary'"
+      "fetch('https://api.example/v1/checks/summary'"
     );
   });
 
