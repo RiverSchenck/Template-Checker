@@ -7,7 +7,8 @@ from src.helpers.page_item_transform import classify_page_item_transform, parse_
 
 
 def masterpage_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks masterspreads_parser for unexprected elements (not properties or page)"""
+    """Error when a master spread holds anything besides its pages and properties (items on a master
+    page)."""
     # doc.masterspreads_parser.print_unexpected_elements()  # Debug Print
     unexpected_elements = doc.masterspreads_parser.get_unexpected_elements()
     message = ''
@@ -24,8 +25,8 @@ def masterpage_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def page_item_transformation_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks TextFrame, Rectangle (without Link), Oval, Polygon, and Group for ItemTransform
-    flip/skew (error) and rotation (warning), separate from image link logic."""
+    """Same end-state rule as image_transformation_check, for text frames, image-less rectangles,
+    ovals, polygons and groups: flip or skew -> error, rotation only -> warning."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
         pages = spread.get_pages()
         spread_page_id = pages[0].get("self", '') if pages and len(pages) > 0 else ''
@@ -62,8 +63,8 @@ def page_item_transformation_check(doc: ParsedDocument, results: ValidationResul
 
 
 def pasted_graphics_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks for pasted graphics, by iterating through each spread. We can then check the
-    num_pasted_graphics from spreads_parser."""
+    """Error for each spread with graphics pasted into the document (PDF/EPS/image content without a
+    link)."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
         num_pasted_graphics = spread.get_pasted_graphics_num()
         if num_pasted_graphics > 0:
@@ -82,7 +83,7 @@ def pasted_graphics_check(doc: ParsedDocument, results: ValidationResult) -> Non
 
 
 def document_bleed_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """If document bleed is not '0' then error."""
+    """One warning when any document bleed offset isn't 0."""
     bleed_values = doc.preferences_parser.get_document_bleed()
     print(bleed_values)
     if bleed_values is not None:
@@ -103,13 +104,9 @@ def document_bleed_check(doc: ParsedDocument, results: ValidationResult) -> None
 
 
 def auto_size_text_box_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """This check verifies that text frames within the document are not set to auto-size from an
-    unsupported reference point. The function iterates through each text frame in each spread of the
-    document. It checks the auto-sizing type of the text frame and ensures that: - If auto-sizing is
-    set to 'HeightOnly', the reference point is not centered. - If auto-sizing is set to
-    'WidthOnly', the 'No Line Breaks' option must be enabled, and the reference point cannot be
-    centered. - If auto-sizing is set to 'HeightAndWidth', the 'No Line Breaks' option must be
-    enabled, and the sizing must be referenced from one of the corners."""
+    """Error for auto-sizing text frames Frontify can't reproduce: HeightOnly must grow from the top
+    or bottom center; WidthOnly and HeightAndWidth need "No Line Breaks", and grow from the
+    left/right center or a corner respectively."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
         for text_frame in spread.get_text_frame_obj_list():
             if text_frame.get_is_auto_size():
@@ -179,8 +176,7 @@ def auto_size_text_box_check(doc: ParsedDocument, results: ValidationResult) -> 
 
 
 def text_columns_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Iterate through each spread, then each text frame. If the text_frames column count is larger
-    than '1' (string) then error."""
+    """Error for each text frame with more than one column."""
     # Just checking columns, not fixed width column settings
     for spread in doc.spreads_parser.get_spreads_obj_list():
         for text_frame in spread.get_text_frame_obj_list():
@@ -197,8 +193,8 @@ def text_columns_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def text_wrap_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Iterate through each spread, then each text frame. If the text_frames wrap mode is not 'None'
-    error"""
+    """Error for each text frame with text wrap on. A frame without wrap settings has none
+    (InDesign's default)."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
         for text_frame in spread.get_text_frame_obj_list():
             text_wrap_mode = text_frame.get_text_wrap_mode()
@@ -217,8 +213,7 @@ def text_wrap_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def linked_text_frame_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Iterate through each spread, then each text frame. Check get_is_linked_text_frame(). If true
-    then error."""
+    """Error for each text frame threaded to a previous or next frame."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
         for text_frame in spread.get_text_frame_obj_list():
             if text_frame.get_is_linked_text_frame():
@@ -234,8 +229,8 @@ def linked_text_frame_check(doc: ParsedDocument, results: ValidationResult) -> N
 
 
 def object_style_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Iterate through each spread, then each text frame. Check if the object style is a default
-    object style found in default_object_styles. Do the same for all link objects."""
+    """Error for each text frame, and each placed image or its frame, using an object style other
+    than InDesign's defaults."""
     # ONLY CHECKS TEXT FRAMES AND IMAGES
 
     # Check Text Frames

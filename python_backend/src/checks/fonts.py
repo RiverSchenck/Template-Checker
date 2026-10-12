@@ -6,9 +6,9 @@ from src.error_handling.ValidationClassifier import ValidationError
 
 
 def fonts_included_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """We get all used fonts (StoriesParser adds to FontsParser with override fonts) and we get all
-    fonts in document fonts. We compare them to see that all used fonts are in the documents fonts
-    folder."""
+    """Error for each font family used in the document (Fonts.xml, via styles and text) that has no
+    file in Document Fonts. Variable fonts are skipped (variable_font_check reports them). Compares
+    family names only."""
     # Currently only checking font families, not specific font.
     used_font_families_objects = doc.fonts_parser.get_used_font_families()
     # skip variable fonts
@@ -32,8 +32,7 @@ def fonts_included_check(doc: ParsedDocument, results: ValidationResult) -> None
 
 
 def otf_ttf_font_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """From FontsParser we can get a list of all Font objects from Fonts.XML. We verify that the
-    font type is TrueType(.TTF) or OpenTypeCFF(.OTF)"""
+    """Error for each file in Document Fonts that isn't .otf or .ttf."""
     # We could go further and map used fonts, to source fonts but this isn't needed because from XML we dont know fonts source (OTF, TTF, TTC). So we anyways dont get anything out of mapping.
 
     for font in doc.source_folders_parser.get_document_fonts():
@@ -50,8 +49,7 @@ def otf_ttf_font_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def variable_font_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """From FontsParser we get a list of Font objects. We can call a helper function to get the
-    variable font attribute."""
+    """Error for each variable font family the document uses."""
     for font_obj in doc.fonts_parser.get_used_font_families():
         if font_obj.is_variable_font():
             font_family = font_obj.get_font_family()

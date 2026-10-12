@@ -7,12 +7,9 @@ from src.helpers.page_item_transform import classify_page_item_transform, parse_
 
 
 def images_included_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """This state checks the consistency between the images used in the document (links) and the
-    images present in the Links folder. It performs two main checks: 1. Verifies that every image
-    used in the document (as a link) is present in the Links folder. If an image is missing, it's
-    flagged as an error. 2. Identifies any images in the Links folder that are not used in the
-    document. These are flagged as warnings since they might be unnecessary and could increase the
-    document's size."""
+    """Links vs. the Links folder. Error for an image used on a page or master page that isn't in
+    Links (embedded images excluded); warning for a file in Links that nothing uses; error for a
+    zero-byte file in Links."""
     # Extract all the link names and their IDs from the spreads.
     # Skipping embedded because they obviously will not be included anyways
     link_name_to_id = {link.get_image_name(): link.get_rectangle_link_id()
@@ -81,8 +78,7 @@ def images_included_check(doc: ParsedDocument, results: ValidationResult) -> Non
 
 
 def large_image_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks each image in the source folder to determine if its size exceeds 20MB. If an image is
-    larger than 10MB, a warning is raised."""
+    """Info for each file in Links larger than 10 MB."""
     for image in doc.source_folders_parser.get_images_obj_list():
         if image.get_image_size() > 10:
             image_name = image.get_image_name()
@@ -99,8 +95,7 @@ def large_image_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def embedded_image_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks each link in the spreads to determine if its stored state is 'Embedded'. If an image
-    is embedded, an error is raised."""
+    """Error for each image stored inside the document (StoredState "Embedded") instead of linked."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
         # Get first page's Self from spread
         pages = spread.get_pages()
@@ -121,13 +116,8 @@ def embedded_image_check(doc: ParsedDocument, results: ValidationResult) -> None
 
 
 def image_transformation_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """This method examines each image link within the document's spreads to identify any
-    transformations applied. It checks for: - Rotations: Determines if the image or its container
-    has been rotated and by how many degrees. - Skews: Identifies any skew transformations applied
-    to the image or its container. - Flips: Checks if the image or its container has been flipped
-    horizontally or vertically. For each detected transformation, an error message (warning for
-    rotation) is generated specifying the type of transformation, the image affected, and the page
-    where the image is located."""
+    """The placed image and its frame are each judged by their end state (docs/checker-rules.md):
+    mirrored -> flip error, skewed -> error, rotated only -> warning."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
         # Get first page's Self from spread
         pages = spread.get_pages()

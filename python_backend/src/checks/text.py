@@ -39,10 +39,9 @@ def generate_context_message(content: str, items: Union[List[List['StoryParagrap
 
 
 def par_style_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks story paragraph styles (used styles) for default InDesign par styles. We are grouping
-    standard paragraph styles together. Overrides break a style into seperate parts in XML. So they
-    are parsed as seperate, but if they are in sequence they will be the same paragraph. Grouped par
-    styles are NEEDED."""
+    """Text without a paragraph style. Error when a whole text frame uses only a default style ([No
+    paragraph style] / [Basic Paragraph]); otherwise an error per run of default-styled text
+    (consecutive ranges with the same style are grouped). Info for empty text frames."""
     # doc.stories_parser.print_stories_data()  # Debug Print
     # Currently master page par styles are checked too, as text frames are a story. Might want to change in a phase 2.
 
@@ -106,8 +105,8 @@ def par_style_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def hyphenation_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks story paragraph styles for hyphenation enabled. The BaseProperty class parses for
-    inheritance of hyphenation."""
+    """Warning for each paragraph whose style (through BasedOn) has hyphenation on. Default styles
+    are skipped."""
     hyphenated_default_styles = set()
 
     for story in doc.stories_parser.get_stories_data():
@@ -151,9 +150,8 @@ def hyphenation_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def overrides_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks stories for character styles used. CharacterStyles class keeps track of all additional
-    properties or attributes used. We call a helper method to see if there are any, if so, it is an
-    override."""
+    """Warning for text formatted outside its style: character-level overrides, or paragraph-level
+    ones when the paragraph has none at character level (to avoid reporting both)."""
     # Many overrides occur from the last or first char having an override, so showing the content isnt helpful.
     # Would be great to figure out a way to have better context in these situations
     overrides_default_par = False
@@ -252,9 +250,8 @@ def overrides_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def kerning_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks stories for character styles used and kerning. CharacterStyles class keeps track of
-    all additional properties or attributes used. We call a helper method to see if there kerning
-    non-metrics, if so, it is an override."""
+    """Error when a paragraph style or character style (through BasedOn) uses kerning other than
+    Metrics. Kerning set directly on text is an override, reported by overrides_check."""
 
     # Need index for content context
     for story in doc.stories_parser.get_stories_data():
@@ -305,7 +302,7 @@ def kerning_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def table_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Checks every story for a table element"""
+    """Error for each table in a story (reported against the story's text frame)."""
     for story in doc.stories_parser.get_stories_data():
         for char_style in story.get_character_styles():
             if char_style.has_table():
@@ -322,8 +319,8 @@ def table_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def grid_alignment_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Iterate through each story, then each USED paragraph style. If get_grid_alignment() is not
-    'None' then throw an error."""
+    """Error, once per paragraph style, when its style (through BasedOn) aligns to the baseline
+    grid."""
     styles_with_errors = set()  # Only throw 1 error for a paragraph style
     for story in doc.stories_parser.get_stories_data():
         page_id = story.get_page()  # page Self
@@ -349,8 +346,8 @@ def grid_alignment_check(doc: ParsedDocument, results: ValidationResult) -> None
 
 
 def composer_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Iterate through each story, then each USED paragraph style. If get_composer() is not 'HL
-    Single' then throw an error."""
+    """Warning, once per paragraph style, when its style (through BasedOn) uses a composer other
+    than Adobe Single-line (HL Single)."""
     styles_with_errors = set()  # Only throw 1 error for a paragraph style
     for story in doc.stories_parser.get_stories_data():
         page_id = story.get_page()  # page Self
@@ -376,7 +373,8 @@ def composer_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def other_checks(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Fill tint: a paragraph style whose text tint isn't 100% (or unset). Reported once per style."""
+    """Fill tint: error, once per paragraph style, when its style's fill tint is set to anything but
+    100% (-1 and unset mean the default, 100%)."""
     styles_with_errors = set()  # Only throw 1 error for a paragraph style
     for story in doc.stories_parser.get_stories_data():
         page_id = story.get_page()  # page Self

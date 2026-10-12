@@ -82,6 +82,8 @@ class FrontifyChecker:
             self.current_state = self.states[self.current_state]()
             if self.current_state == States.EXIT:
                 return
+        if self.document is None:  # intake stopped without parsing (shouldn't happen: every path returns a state)
+            return
         for check in self.checks:
             self.last_state = check.state
             self._run(check)

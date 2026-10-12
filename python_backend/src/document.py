@@ -30,7 +30,7 @@ class ParsedDocument:
     preferences_parser: Optional[PreferencesParser] = None
     default_par_styles: Tuple[str, ...] = DEFAULT_PAR_STYLES
     default_object_styles: Tuple[str, ...] = DEFAULT_OBJECT_STYLES
-    _data_id_to_page_id: Dict[str, str] = field(default_factory=dict, repr=False)
+    _data_id_to_page_id: Dict[str, str] = field(default_factory=dict, init=False, repr=False)
 
     def __post_init__(self):
         self._build_data_id_to_page_id_mapping()
