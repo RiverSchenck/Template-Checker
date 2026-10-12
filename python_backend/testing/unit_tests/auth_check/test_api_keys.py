@@ -48,7 +48,7 @@ def test_active_key_limit(client):
     for _ in range(api_keys.MAX_ACTIVE_KEYS_PER_USER):
         create_key(client)
     r = client.post('/api-keys', json={'name': 'one too many'}, headers=bearer('valid-approved@example.com'))
-    assert r.status_code == 400
+    assert r.status_code == 409
 
 
 def test_cannot_revoke_someone_elses_key(client):

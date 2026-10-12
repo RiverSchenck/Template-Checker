@@ -13,19 +13,22 @@ PASS_ZIP = os.path.join(os.path.dirname(__file__), '..', 'par_check', 'pass_data
 
 @pytest.fixture
 def logged(monkeypatch):
-    """Capture what start_check asks to log instead of writing to Supabase."""
+    """Capture what run_check asks to log instead of writing to Supabase."""
     calls = []
     monkeypatch.setattr(utils, 'log_analytics_to_supabase', lambda **kwargs: calls.append(kwargs) or True)
     return calls
 
 
 def run_check(checker, path):
+    """200 if the check ran (completed or rejected), 500 if it crashed, like the check endpoints."""
     with flask_app.test_request_context():
         try:
-            _, status_code = utils.start_check(checker, path, 'react-frontend', user_id='user-1')
+            utils.run_check(checker, path, 'react-frontend', user_id='user-1')
+            return 200
+        except utils.CheckFailed:
+            return 500
         finally:
             checker.delete_unzipped_root_path()
-    return status_code
 
 
 def test_completed_run_is_logged_as_completed(logged):

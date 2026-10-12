@@ -91,7 +91,50 @@ export interface ValidationResult {
   page_layouts?: PageLayout[];
   /** Every template check that ran (missing on results from older backends). */
   checks?: CheckDefinition[];
+  /** Plain-language copy for each check that ran or found something, by severity then check key. */
+  check_guides?: Partial<Record<ValidationType, Record<string, CheckGuide>>>;
+  /** The message for the customer, written by the backend. Null if it couldn't be written; missing on older results. */
+  customer_summary?: CustomerSummaryPayload | null;
 }
+
+/** What goes wrong in Frontify and how to fix it in InDesign, for one check. */
+export type CheckGuide = {
+  /** Short plain-language name of the problem. */
+  title: string;
+  /** What goes wrong in Frontify, in a sentence or two. */
+  why: string;
+  /** How the template author fixes it in InDesign. */
+  fix: string[];
+  /**
+   * What a problem is tied to, which decides how its places are grouped: fixing one paragraph style fixes every
+   * frame that uses it, while a frame problem has to be fixed frame by frame.
+   */
+  subject: SubjectKind;
+};
+
+export type SubjectKind = 'paragraph-style' | 'character-style' | 'font' | 'image' | 'frame' | 'document';
+
+/** One line of the customer summary. The HTML and plain-text copies are rendered from the same lines. */
+export type SummaryLine =
+  | { kind: 'heading' | 'title' | 'text' | 'step'; text: string }
+  | { kind: 'link'; text: string; href: string };
+
+export type CustomerSummaryPayload = {
+  summary_version: string;
+  counts: { blockers: number; warnings: number; infos: number };
+  /** For pasting with formatting (Intercom). */
+  html: string;
+  /** For pasting where formatting isn't kept; links are written out. */
+  text: string;
+  sections: {
+    /** What review feedback is filed under: an issue's check key, or 'intro' / 'closing'. */
+    key: string;
+    title: string;
+    /** The issue the section describes, e.g. 'errors:FONTS_INCLUDED'. */
+    problem_id: string | null;
+    lines: SummaryLine[];
+  }[];
+};
 
 export type CheckDefinition = {
   key: string;

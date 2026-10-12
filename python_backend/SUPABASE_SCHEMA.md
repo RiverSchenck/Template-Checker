@@ -38,7 +38,9 @@ Stores people who requested access but are not yet approved. When an admin appro
 | `status`    | text        | NOT NULL, CHECK (status IN ('pending', 'approved', 'rejected')). |
 | `created_at`| timestamptz | DEFAULT now(). |
 | `updated_at`| timestamptz | DEFAULT now(). |
-| `decided_by`| uuid        | Nullable, FK → auth.users(id). Admin who approved/rejected. |
+| `decided_by`| uuid        | Nullable, FK → users(id) (migration 010; was auth.users). Admin who approved/rejected. |
+
+At most one `pending` request per email (unique index on `lower(email)`, migration 010).
 
 **RLS**: Enabled. No policies for anon/authenticated—only the service role (backend) can access.
 
