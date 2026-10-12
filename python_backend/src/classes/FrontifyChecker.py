@@ -188,9 +188,10 @@ class FrontifyChecker:
             self.unzipped_root_path = unique_folder_path
 
             return True
-        except Exception as e:
+        except Exception:
+            traceback.print_exc()
             self.results.add_custom_error(
-                f"Error creating the folders '{self.data_folder}': {str(e)}", ValidationError.ERROR)
+                "The server couldn't prepare the upload. Try again.", ValidationError.ERROR)
             return False
 
     # ---------------------------------------------------
