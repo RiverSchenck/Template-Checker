@@ -12,8 +12,8 @@ Send an API key (create one on the **API keys** page) or a signed-in session tok
 Authorization: Bearer tc_…
 ```
 
-Keys act on behalf of the user who created them and can only call the check endpoints (`/run`, `/summary`,
-`/run-and-download-xml`).
+Keys act on behalf of the user who created them and can only call the check endpoints (`/v1/checks`,
+`/v1/checks/summary`, `/v1/checks/xml`).
 
 ## Limits
 
@@ -24,6 +24,20 @@ Per user, across the web app and API keys together:
   (seconds).
 - **Uploads up to 200 MB.** Larger gets `413` with code `file_too_large`.
 
+## Versions
+
+The public API lives under `/v1`. The paths from before it still work, but every response on them carries
+`Deprecation: @1791763200` (2026-10-12) and `Link: <new path>; rel="successor-version"`:
+
+| Old path | Use instead |
+|---|---|
+| `POST /run` | `POST /v1/checks` (note the new response shape below) |
+| `POST /summary` | `POST /v1/checks/summary` |
+| `POST /run-and-download-xml` | `POST /v1/checks/xml` |
+| `GET /test` | `GET /health` |
+
+`GET /health` needs no auth and returns `{"status": "ok", "version": "…"}`.
+
 ## Request IDs
 
 Every response has an `X-Request-ID` header. Send your own (letters, digits, `.` `_` `:` `-`, up to 128
@@ -32,7 +46,7 @@ the server logs for that request.
 
 ---
 
-## `POST /summary`
+## `POST /v1/checks/summary`
 
 Checks a packaged InDesign template and returns a message for the customer: what to change in the InDesign file,
 why, and where. It's written to be reviewed by support and pasted into an Intercom reply.
@@ -42,7 +56,7 @@ why, and where. It's written to be reviewed by support and pasted into an Interc
 `multipart/form-data` with the package (InDesign: **File > Package**, then zip the folder) in the `file` field.
 
 ```bash
-curl -X POST https://template-checker-test.fly.dev/summary \
+curl -X POST https://template-checker-test.fly.dev/v1/checks/summary \
   -H "Authorization: Bearer tc_…" \
   -F "file=@Brochure.zip"
 ```
@@ -94,9 +108,10 @@ See [Errors](#errors) below; every endpoint answers them the same way.
 
 ---
 
-## `POST /run`
+## `POST /v1/checks`
 
-Same request as `/summary`. Returns the full check results under `content.results`, including two fields the web app
+Same request as `/v1/checks/summary`. Returns `{run_id, status, results}`: `status` is `completed`, or `rejected` when
+the package couldn't be checked (the reason is in `results`; still a 200). `results` includes two fields the web app
 uses:
 
 - `customer_summary`: the summary as above (`summary_version`, `counts`, `html`, `text`), plus `sections`, the
@@ -105,7 +120,7 @@ uses:
 - `check_guides`: the plain-language copy for each check that ran or found something, as
   `{severity: {check key: {title, why, fix, subject}}}`.
 
-## `POST /run-and-download-xml`
+## `POST /v1/checks/xml`
 
 Same request. Runs the same check, then returns the template's generated XML as a ZIP download
 (`Content-Type: application/zip`) instead of the results.
@@ -114,7 +129,7 @@ Same request. Runs the same check, then returns the template's generated XML as 
 
 ## Errors
 
-Every error from the check endpoints (`/summary`, `/run`, `/run-and-download-xml`) has the same shape:
+Every error, from every endpoint, has the same shape:
 
 ```json
 { "error": { "code": "template_not_checkable", "message": "The file couldn't be checked: …", "request_id": "…" } }
@@ -126,17 +141,23 @@ Branch on `code`; `message` is written for people and may change. `request_id` m
 | Status | `code` | When |
 |---|---|---|
 | 400 | `missing_file` | No `file` field, or it's empty. |
-| 400 | `unsupported_file_type` | The file isn't a `.zip` (`/summary` only). |
+| 400 | `unsupported_file_type` | The file isn't a `.zip` (`/v1/checks/summary` only). |
 | 401 | `unauthorized` | Missing, invalid, expired or revoked token or key. |
 | 403 | `access_denied` | Signed in, but not an approved Template Checker user. |
 | 413 | `file_too_large` | Upload over 200 MB. |
-| 422 | `template_not_checkable` | `/summary` only: the package couldn't be checked (not a valid ZIP, no `.idml` file, password-protected…). `message` says why; pass it on to the customer. `/run` returns 200 with the reason in the results instead. |
+| 422 | `template_not_checkable` | `/v1/checks/summary` only: the package couldn't be checked (not a valid ZIP, no `.idml` file, password-protected…). `message` says why; pass it on to the customer. `/v1/checks` returns 200 with `status: "rejected"` instead. |
 | 429 | `check_in_progress` | You already have a check running. |
 | 429 | `rate_limited` | Hourly limit reached; see `Retry-After`. |
 | 500 | `upload_failed` | The upload couldn't be stored. Retry. |
 | 500 | `check_failed` | The checker crashed on this file. Retrying won't help; report it with the request ID. |
-| 500 | `summary_failed` | `/summary` only: the check ran but the summary couldn't be written. |
-| 500 | `export_failed` | `/run-and-download-xml` only: the XML export couldn't be created. |
+| 500 | `summary_failed` | `/v1/checks/summary` only: the check ran but the summary couldn't be written. |
+| 500 | `export_failed` | `/v1/checks/xml` only: the XML export couldn't be created. |
+
+---
+
+The web app's own endpoints (admin, API keys, analytics, feedback) use the same shape with these general codes:
+`invalid_request` (400), `forbidden` (403), `not_found` (404), `conflict` (409, e.g. already approved, or removing
+yourself), `service_unavailable` (503) and `internal_error` (500).
 
 ---
 

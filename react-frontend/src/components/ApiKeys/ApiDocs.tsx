@@ -168,7 +168,11 @@ function Endpoint({
         />
       </div>
 
-      {endpoint.note && <p className="mt-2 text-xs text-muted-foreground">{endpoint.note}</p>}
+      {endpoint.note && (
+        <p className="mt-2 text-xs text-muted-foreground">
+          <Prose text={endpoint.note} />
+        </p>
+      )}
 
       {endpoint.fields.length > 0 && (
         <dl className="mt-4 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[auto_minmax(0,1fr)]">
@@ -289,6 +293,12 @@ export function ApiDocs({ baseURL, onCreateKey }: { baseURL: string; onCreateKey
       label: 'Request ID',
       value: <code className="font-mono text-[12.5px]">X-Request-ID</code>,
       detail: 'On every response. Send your own to trace a call; quote it when something breaks.',
+    },
+    {
+      label: 'Versions',
+      value: <code className="font-mono text-[12.5px]">/v1</code>,
+      detail:
+        'The old `/run`, `/summary` and `/run-and-download-xml` still work, but answer with a `Deprecation` header that points to their `/v1` path.',
     },
   ];
 

@@ -8,8 +8,8 @@ from functools import wraps
 from flask import Blueprint, Response, jsonify, send_file, after_this_request, request, current_app, g
 from src.classes.FrontifyChecker import FrontifyChecker
 from .errors import api_error, error_body
-from .utils import CheckFailed, upload_file, run_check, start_check, checker_cleanup
-from .analytics import first_error_message
+from .utils import CheckFailed, upload_file, run_check, checker_cleanup
+from .analytics import first_error_message, get_app_version
 from .customer_summary import display_template_name, summary_payload
 from .analytics_api import (
     AnalyticsQueryError, analytics_period, export_runs_csv, get_issue_detail, get_overview, get_runs,
@@ -26,7 +26,7 @@ main = Blueprint('main', __name__)
 def _internal_error(message='Something went wrong. Please try again.'):
     """Log the active exception server-side and return a generic 500 (never leak exception text to clients)."""
     current_app.logger.exception(message)
-    return jsonify({'error': {'message': message}}), 500
+    return api_error(500, 'internal_error', message)
 
 # Cache JWKS for 10 minutes so we don't hit the discovery endpoint on every request
 _jwks_cache = {"data": None, "expires": 0}
@@ -181,13 +181,33 @@ def _current_users_row():
     return user_helpers.get_user_by_email(email) if email else None
 
 
+SOURCE_TYPES = ('react-frontend', 'extension', 'api')
+
+
+def _run_source():
+    """Where a check came from, for analytics: 'react-frontend', 'extension' or 'api'.
+
+    Worked out from facts the caller can't easily fake rather than trusted from a header: API keys are always 'api';
+    otherwise the browser-set Origin says whether it's the web app or the Chrome extension. X-Source is only a fallback
+    for signed-in callers without a recognised Origin (e.g. an extension content script), and only if it's valid, so a
+    wrong value can never stop a run from being logged.
+    """
+    if getattr(g, 'api_key_user', None):
+        return 'api'
+    origin = request.headers.get('Origin', '')
+    if origin.startswith('chrome-extension://'):
+        return 'extension'
+    if origin and origin in current_app.config.get('WEB_APP_ORIGINS', ()):
+        return 'react-frontend'
+    hinted = request.headers.get('X-Source', '')
+    return hinted if hinted in SOURCE_TYPES else 'api'
+
+
 def _run_source_and_user_id():
-    """Source type and users.id to attribute a checker run to. API-key calls are always recorded as 'api'."""
+    """Source type and users.id to attribute a checker run to."""
     user_row = _current_users_row()
     user_id = str(user_row['id']) if user_row and user_row.get('id') else None
-    if getattr(g, 'api_key_user', None):
-        return 'api', user_id
-    return request.headers.get('X-Source', 'api'), user_id
+    return _run_source(), user_id
 
 
 def _is_admin_request() -> bool:
@@ -207,13 +227,9 @@ def require_admin(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not hasattr(g, 'supabase_jwt') or not g.supabase_jwt:
-            return jsonify({
-                'error': {'message': 'Authentication required', 'details': 'Supabase JWT required for admin'}
-            }), 401
+            return api_error(401, 'unauthorized', 'Authentication required', details='Sign in to use admin features')
         if not _is_admin_request():
-            return jsonify({
-                'error': {'message': 'Forbidden', 'details': 'Admin role required'}
-            }), 403
+            return api_error(403, 'forbidden', 'Admin role required')
         return f(*args, **kwargs)
     return decorated_function
 
@@ -282,20 +298,13 @@ def me():
     """Return current user and role from users table. 403 if not approved."""
     user_id = _current_user_id()
     if not user_id:
-        return jsonify({
-            'error': {'message': 'Authentication required', 'details': 'Valid Supabase JWT required'}
-        }), 401
+        return _auth_error('Valid Supabase JWT required')
     email = (_current_user_email() or '').strip().lower()
     if not email:
-        return jsonify({
-            'error': {'message': 'Authentication required', 'details': 'Email required'}
-        }), 401
+        return _auth_error('Email required')
     user_row = user_helpers.get_user_by_email(email)
     if not user_row:
-        return jsonify({
-            'error': {'message': 'Access not authorized', 'code': 'access_denied'},
-            'allowed': False,
-        }), 403
+        return jsonify({**error_body('access_denied', 'Access not authorized'), 'allowed': False}), 403
     user_metadata = g.supabase_jwt.get('user_metadata') or {}
     display_name = user_metadata.get('full_name') or user_metadata.get('name') or user_metadata.get('email') or email
     avatar_url = user_metadata.get('avatar_url') or user_metadata.get('picture')
@@ -322,7 +331,7 @@ def admin_list_users():
     """List approved users from users table (admin only)."""
     supabase = get_supabase_client()
     if not supabase:
-        return jsonify({'error': {'message': 'Supabase not configured'}}), 500
+        return api_error(503, 'service_unavailable', 'Supabase not configured')
     try:
         # Use * so missing optional columns (e.g. added_via before migration) do not break the query.
         r = supabase.table('users').select('*').order('created_at', desc=True).execute()
@@ -353,19 +362,19 @@ def admin_list_users():
 def admin_update_user_role(user_id):
     """Update a user's role (admin only). user_id is users.id from our table."""
     if not user_id:
-        return jsonify({'error': {'message': 'user_id required'}}), 400
+        return api_error(400, 'invalid_request', 'user_id required')
     data = request.get_json(silent=True) or {}
     new_role = data.get('role')
     if new_role not in ('user', 'admin'):
-        return jsonify({'error': {'message': 'role must be "user" or "admin"'}}), 400
+        return api_error(400, 'invalid_request', 'role must be "user" or "admin"')
     supabase = get_supabase_client()
     if not supabase:
-        return jsonify({'error': {'message': 'Supabase not configured'}}), 500
+        return api_error(503, 'service_unavailable', 'Supabase not configured')
     try:
         now = datetime.now(timezone.utc).isoformat()
         r = supabase.table('users').update({'role': new_role, 'updated_at': now}).eq('id', user_id).execute()
         if not r.data or len(r.data) == 0:
-            return jsonify({'error': {'message': 'User not found'}}), 404
+            return api_error(404, 'not_found', 'User not found')
         row = dict(r.data[0])
         auth_user_id = row.get('auth_user_id')
         if auth_user_id:
@@ -393,14 +402,14 @@ def admin_update_user_role(user_id):
 def admin_delete_user(user_id):
     """Remove user access (admin only). user_id is users.id. Cannot delete self. Does not delete from Auth."""
     if not user_id:
-        return jsonify({'error': {'message': 'user_id required'}}), 400
+        return api_error(400, 'invalid_request', 'user_id required')
     email = _current_user_email() or ''
     current_user_row = user_helpers.get_user_by_email(email)
     if current_user_row and str(current_user_row.get('id')) == str(user_id):
-        return jsonify({'error': {'message': 'Cannot delete your own account'}}), 403
+        return api_error(409, 'conflict', 'You can\'t remove your own account.')
     supabase = get_supabase_client()
     if not supabase:
-        return jsonify({'error': {'message': 'Supabase not configured'}}), 500
+        return api_error(503, 'service_unavailable', 'Supabase not configured')
     try:
         supabase.table('users').delete().eq('id', user_id).execute()
     except Exception as e:
@@ -420,9 +429,66 @@ def _validate_email(email):
     return email, None
 
 
+def _current_admin_id():
+    """users.id of the signed-in admin: what approved_by and decided_by record."""
+    row = _current_users_row()
+    return str(row['id']) if row and row.get('id') else None
+
+
+def _is_unique_violation(error) -> bool:
+    text = str(error).lower()
+    return 'duplicate' in text or 'unique' in text or '23505' in text
+
+
+def _access_request_response(row):
+    return {
+        'id': str(row['id']),
+        'email': row['email'],
+        'why_need_access': row.get('why_need_access'),
+        'status': row['status'],
+        'created_at': row.get('created_at'),
+        'updated_at': row.get('updated_at'),
+        'decided_by': str(row['decided_by']) if row.get('decided_by') else None,
+    }
+
+
+def _pending_request(supabase, email):
+    r = (supabase.table('access_requests').select('*')
+         .eq('status', 'pending').eq('email', email).limit(1).execute())
+    return dict(r.data[0]) if r.data else None
+
+
+def _record_access_request(supabase, email, why):
+    """Record a request for access, once. Returns (status, row, created).
+
+    An email that already has access gets ('approved', None, False); one with a pending request gets that request.
+    A unique index (migration 010) backs this up when two requests race.
+    """
+    if user_helpers.get_user_by_email(email):
+        return 'approved', None, False
+    existing = _pending_request(supabase, email)
+    if existing:
+        return 'pending', existing, False
+    try:
+        r = supabase.table('access_requests').insert(
+            {'email': email, 'status': 'pending', 'why_need_access': why}).execute()
+    except Exception as e:
+        if not _is_unique_violation(e):
+            raise
+        return 'pending', _pending_request(supabase, email), False
+    if not r.data:
+        raise RuntimeError('access_requests insert returned no row')
+    return 'pending', dict(r.data[0]), True
+
+
 @main.route('/access-requests', methods=['POST'])
 def post_access_request():
-    """Submit an access request. With valid JWT: use email (and name/avatar) from token, idempotent. Without: body { \"email\": \"...\" }."""
+    """Ask for access. Signed in (Supabase JWT): the email comes from the token. Otherwise the body is
+    {"email", "why_need_access"}.
+
+    One pending request per email: asking again, or for an email that already has access, changes nothing.
+    Anonymous callers always get the same 202 answer, so the endpoint can't be used to find out who has access.
+    """
     # Unauthenticated endpoint: cap per client IP so the request list can't be flooded.
     # Fails closed: without the limiter anyone could flood the list, so refuse until it's back.
     try:
@@ -431,90 +497,49 @@ def post_access_request():
         )
     except Exception:
         current_app.logger.exception('Rate limiter unavailable; refusing access request')
-        response = jsonify({'error': {
-            'message': "We couldn't take your request right now. Please try again in a minute.",
-            'code': 'temporarily_unavailable',
-        }})
-        response.status_code = 503
+        response = api_error(
+            503, 'service_unavailable', "We couldn't take your request right now. Please try again in a minute.")
         response.headers['Retry-After'] = '60'
         return response
     if not allowed:
         return _rate_limited('Too many access requests. Please try again later.', 'rate_limited', retry_after)
     supabase = get_supabase_client()
     if not supabase:
-        return jsonify({'error': {'message': 'Service unavailable'}}), 503
+        return api_error(503, 'service_unavailable', 'Service unavailable')
 
-    # Try JWT from Authorization header
     auth_header = request.headers.get('Authorization', '')
-    token = None
-    if auth_header.startswith('Bearer '):
-        token = auth_header[7:].strip()
-    elif auth_header:
-        token = auth_header.strip()
-    if token:
-        payload = verify_supabase_token(token)
-        if payload:
-            email = (payload.get('email') or '').strip().lower()
-            if not email or '@' not in email:
-                return jsonify({'error': {'message': 'Invalid email in token'}}), 400
-            user_metadata = payload.get('user_metadata') or {}
-            display_name = user_metadata.get('full_name') or user_metadata.get('name') or user_metadata.get('email')
-            avatar_url = user_metadata.get('avatar_url') or user_metadata.get('picture')
-            # Idempotent: if pending request exists for this email, return it
-            try:
-                existing = supabase.table('access_requests').select('id, email, status, created_at').eq('status', 'pending').eq('email', email).limit(1).execute()
-                if existing.data and len(existing.data) > 0:
-                    row = dict(existing.data[0])
-                    return jsonify({
-                        'id': str(row['id']),
-                        'email': row['email'],
-                        'status': row['status'],
-                    }), 200
-            except Exception:
-                pass
-            # Insert new request (schema: email, status, optional why_need_access from JWT path)
-            try:
-                body_why = (request.get_json(silent=True) or {}).get('why_need_access') if request.is_json else None
-                why_need_access = (body_why or '').strip() or None
-                r = supabase.table('access_requests').insert({'email': email, 'status': 'pending', 'why_need_access': why_need_access}).execute()
-            except Exception as e:
-                current_app.logger.exception('access_requests insert failed')
-                return _internal_error()
-            if not r.data or len(r.data) == 0:
-                return jsonify({'error': {'message': 'Failed to create request'}}), 500
-            row = dict(r.data[0])
-            return jsonify({
-                'id': str(row['id']),
-                'email': row['email'],
-                'status': row['status'],
-            }), 201
+    token = (auth_header[7:] if auth_header.startswith('Bearer ') else auth_header).strip()
+    payload = verify_supabase_token(token) if token else None
+    body = request.get_json(silent=True) or {}
 
-    # No valid JWT: require JSON body with email and why_need_access
-    if not request.is_json:
-        return jsonify({'error': {'message': 'Request must be JSON with email and why_need_access or provide Authorization'}}), 400
-    data = request.get_json() or {}
-    email, err = _validate_email(data.get('email'))
-    if err:
-        return jsonify({'error': {'message': err}}), 400
-    why = (data.get('why_need_access') or '').strip()
-    if not why:
-        return jsonify({'error': {'message': 'Please tell us why you need access.'}}), 400
+    if payload:
+        email = (payload.get('email') or '').strip().lower()
+        if not email or '@' not in email:
+            return api_error(400, 'invalid_request', 'Invalid email in token')
+        why = (body.get('why_need_access') or '').strip() or None
+    else:
+        if not request.is_json:
+            return api_error(
+                400, 'invalid_request', 'Send JSON with email and why_need_access, or sign in first.')
+        email, err = _validate_email(body.get('email'))
+        if err:
+            return api_error(400, 'invalid_request', err)
+        why = (body.get('why_need_access') or '').strip()
+        if not why:
+            return api_error(400, 'invalid_request', 'Please tell us why you need access.')
+
     try:
-        r = supabase.table('access_requests').insert({
-            'email': email,
-            'status': 'pending',
-            'why_need_access': why,
-        }).execute()
-        if not r.data or len(r.data) == 0:
-            return jsonify({'error': {'message': 'Failed to create request'}}), 500
-        row = dict(r.data[0])
-        return jsonify({
-            'id': str(row['id']),
-            'email': row['email'],
-            'status': row['status'],
-        }), 201
-    except Exception as e:
+        status, row, created = _record_access_request(supabase, email, why)
+    except Exception:
         return _internal_error()
+
+    if not payload:
+        return jsonify({'email': email, 'status': 'received'}), 202
+    # Signed in: it's their own request, so they can see where it stands.
+    response = {'email': email, 'status': status}
+    if row:
+        response['id'] = str(row['id'])
+    return jsonify(response), 201 if created else 200
 
 
 @main.route('/admin/access-requests', methods=['GET'])
@@ -525,16 +550,15 @@ def admin_list_access_requests():
     status_filter = request.args.get('status', 'pending')
     supabase = get_supabase_client()
     if not supabase:
-        return jsonify({'error': {'message': 'Supabase not configured'}}), 500
+        return api_error(503, 'service_unavailable', 'Supabase not configured')
     try:
-        q = supabase.table('access_requests').select('id, email, why_need_access, status, created_at, updated_at, decided_by').order('created_at', desc=True)
+        q = supabase.table('access_requests').select(
+            'id, email, why_need_access, status, created_at, updated_at, decided_by').order('created_at', desc=True)
         if status_filter != 'all':
             q = q.eq('status', status_filter)
-        r = q.execute()
-        rows = r.data if r.data else []
-        result = [{'id': str(x['id']), 'email': x['email'], 'why_need_access': x.get('why_need_access'), 'status': x['status'], 'created_at': x.get('created_at'), 'updated_at': x.get('updated_at'), 'decided_by': str(x['decided_by']) if x.get('decided_by') else None} for x in rows]
-        return jsonify(result), 200
-    except Exception as e:
+        rows = q.execute().data or []
+        return jsonify([_access_request_response(x) for x in rows]), 200
+    except Exception:
         return _internal_error()
 
 
@@ -543,66 +567,44 @@ def admin_list_access_requests():
 @require_admin
 def admin_update_access_request(request_id):
     """Approve or reject an access request (admin only). Body: { "status": "approved" | "rejected" }."""
-    if not request_id:
-        return jsonify({'error': {'message': 'request_id required'}}), 400
     data = request.get_json(silent=True) or {}
     new_status = data.get('status')
     if new_status not in ('approved', 'rejected'):
-        return jsonify({'error': {'message': 'status must be "approved" or "rejected"'}}), 400
+        return api_error(400, 'invalid_request', 'status must be "approved" or "rejected"')
     supabase = get_supabase_client()
     if not supabase:
-        return jsonify({'error': {'message': 'Supabase not configured'}}), 500
-    current_user_id = _current_user_id()
+        return api_error(503, 'service_unavailable', 'Supabase not configured')
+    admin_id = _current_admin_id()
     try:
         r = supabase.table('access_requests').select('*').eq('id', request_id).limit(1).execute()
-        if not r.data or len(r.data) == 0:
-            return jsonify({'error': {'message': 'Request not found'}}), 404
+        if not r.data:
+            return api_error(404, 'not_found', 'Request not found')
         req = dict(r.data[0])
         # Allow approving pending or rejected; allow rejecting only pending
-        if new_status == 'approved':
-            if req['status'] not in ('pending', 'rejected'):
-                return jsonify({'error': {'message': 'Request already approved'}}), 400
-        else:  # rejected
-            if req['status'] != 'pending':
-                return jsonify({'error': {'message': 'Only pending requests can be rejected'}}), 400
-        now = datetime.now(timezone.utc).isoformat()
+        if new_status == 'approved' and req['status'] == 'approved':
+            return api_error(409, 'conflict', 'This request is already approved.')
+        if new_status == 'rejected' and req['status'] != 'pending':
+            return api_error(409, 'conflict', 'Only pending requests can be rejected.')
         if new_status == 'approved':
             email = (req.get('email') or '').strip().lower()
             if not email:
-                return jsonify({'error': {'message': 'Invalid request email'}}), 400
-            admin_row = user_helpers.get_user_by_auth_id(current_user_id) if current_user_id else None
-            approved_by_id = str(admin_row['id']) if admin_row and admin_row.get('id') else None
-            user_insert = {
-                'email': email,
-                'role': 'user',
-                'added_via': 'access_request',
-            }
-            if approved_by_id:
-                user_insert['approved_by'] = approved_by_id
+                return api_error(400, 'invalid_request', 'Invalid request email')
+            user_insert = {'email': email, 'role': 'user', 'added_via': 'access_request'}
+            if admin_id:
+                user_insert['approved_by'] = admin_id
             try:
                 supabase.table('users').insert(user_insert).execute()
             except Exception as insert_err:
-                if 'duplicate' in str(insert_err).lower() or 'unique' in str(insert_err).lower():
-                    pass
-                else:
+                if not _is_unique_violation(insert_err):
                     return _internal_error('Failed to create user for this request.')
         supabase.table('access_requests').update({
             'status': new_status,
-            'updated_at': now,
-            'decided_by': current_user_id,
+            'updated_at': datetime.now(timezone.utc).isoformat(),
+            'decided_by': admin_id,
         }).eq('id', request_id).execute()
         r2 = supabase.table('access_requests').select('*').eq('id', request_id).limit(1).execute()
-        row = dict(r2.data[0]) if r2.data and len(r2.data) > 0 else req
-        return jsonify({
-            'id': str(row['id']),
-            'email': row['email'],
-            'why_need_access': row.get('why_need_access'),
-            'status': row['status'],
-            'created_at': row.get('created_at'),
-            'updated_at': row.get('updated_at'),
-            'decided_by': str(row['decided_by']) if row.get('decided_by') else None,
-        }), 200
-    except Exception as e:
+        return jsonify(_access_request_response(dict(r2.data[0]) if r2.data else req)), 200
+    except Exception:
         return _internal_error()
 
 
@@ -610,37 +612,45 @@ def admin_update_access_request(request_id):
 @require_auth
 @require_admin
 def admin_invite():
-    """Invite a user by email (admin only). Body: { "email": "..." }."""
+    """Invite a user by email (admin only). Body: { "email": "..." }. Approves any pending request for that email."""
     if not request.is_json:
-        return jsonify({'error': {'message': 'Request must be JSON with email field'}}), 400
+        return api_error(400, 'invalid_request', 'Request must be JSON with email field')
     data = request.get_json() or {}
     email, err = _validate_email(data.get('email'))
     if err:
-        return jsonify({'error': {'message': err}}), 400
+        return api_error(400, 'invalid_request', err)
     supabase = get_supabase_client()
     if not supabase:
-        return jsonify({'error': {'message': 'Supabase not configured'}}), 503
-    admin_row = user_helpers.get_user_by_auth_id(_current_user_id()) if _current_user_id() else None
-    approved_by_id = str(admin_row['id']) if admin_row and admin_row.get('id') else None
+        return api_error(503, 'service_unavailable', 'Supabase not configured')
+    admin_id = _current_admin_id()
     user_insert = {'email': email, 'role': 'user', 'added_via': 'invite'}
-    if approved_by_id:
-        user_insert['approved_by'] = approved_by_id
+    if admin_id:
+        user_insert['approved_by'] = admin_id
     try:
         r = supabase.table('users').insert(user_insert).execute()
-        if not r.data or len(r.data) == 0:
-            return jsonify({'error': {'message': 'Failed to create invite'}}), 500
+        if not r.data:
+            return api_error(500, 'internal_error', 'Failed to create invite')
         row = dict(r.data[0])
-        return jsonify({
-            'id': str(row['id']),
-            'email': row['email'],
-            'role': row.get('role', 'user'),
-            'added_via': row.get('added_via'),
-            'created_at': row.get('created_at'),
-        }), 201
     except Exception as e:
-        if 'duplicate' in str(e).lower() or 'unique' in str(e).lower():
-            return jsonify({'error': {'message': 'User already invited or approved'}}), 409
+        if _is_unique_violation(e):
+            return api_error(409, 'conflict', 'User already invited or approved')
         return _internal_error()
+    try:
+        # They're in now, so a request they left waiting is answered too.
+        supabase.table('access_requests').update({
+            'status': 'approved',
+            'updated_at': datetime.now(timezone.utc).isoformat(),
+            'decided_by': admin_id,
+        }).eq('status', 'pending').eq('email', email).execute()
+    except Exception:
+        current_app.logger.exception('Invited %s but could not close their pending access request', email)
+    return jsonify({
+        'id': str(row['id']),
+        'email': row['email'],
+        'role': row.get('role', 'user'),
+        'added_via': row.get('added_via'),
+        'created_at': row.get('created_at'),
+    }), 201
 
 
 def _api_key_response(row):
@@ -662,7 +672,7 @@ def list_my_api_keys():
     """List the caller's API keys (never the key itself)."""
     user_row = _current_users_row()
     if not user_row:
-        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+        return api_error(403, 'access_denied', 'Access not authorized')
     try:
         return jsonify([_api_key_response(row) for row in api_keys.list_keys(str(user_row['id']))]), 200
     except Exception:
@@ -675,26 +685,24 @@ def create_my_api_key():
     """Create an API key for the caller. Body: {"name": "...", "expires_in_days": 90}. The key is returned once."""
     user_row = _current_users_row()
     if not user_row:
-        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+        return api_error(403, 'access_denied', 'Access not authorized')
     data = request.get_json(silent=True) or {}
     name = data.get('name')
     if not isinstance(name, str) or not name.strip():
-        return jsonify({'error': {'message': 'name is required'}}), 400
+        return api_error(400, 'invalid_request', 'name is required')
     name = name.strip()
     if len(name) > 100:
-        return jsonify({'error': {'message': 'name must be 100 characters or fewer'}}), 400
+        return api_error(400, 'invalid_request', 'name must be 100 characters or fewer')
     expires_in_days = data.get('expires_in_days', api_keys.DEFAULT_EXPIRY_DAYS)
     if not isinstance(expires_in_days, int) or isinstance(expires_in_days, bool) \
             or not 1 <= expires_in_days <= api_keys.MAX_EXPIRY_DAYS:
-        return jsonify({'error': {
-            'message': f'expires_in_days must be a whole number from 1 to {api_keys.MAX_EXPIRY_DAYS}'
-        }}), 400
+        return api_error(
+            400, 'invalid_request', f'expires_in_days must be a whole number from 1 to {api_keys.MAX_EXPIRY_DAYS}')
     try:
         user_id = str(user_row['id'])
         if api_keys.count_active_keys(user_id) >= api_keys.MAX_ACTIVE_KEYS_PER_USER:
-            return jsonify({'error': {
-                'message': f'You can have at most {api_keys.MAX_ACTIVE_KEYS_PER_USER} active keys. Revoke one first.'
-            }}), 400
+            return api_error(
+                409, 'conflict', f'You can have at most {api_keys.MAX_ACTIVE_KEYS_PER_USER} active keys. Revoke one first.')
         key, row = api_keys.create_key(user_id, name, expires_in_days)
         return jsonify({**_api_key_response(row), 'key': key}), 201
     except Exception:
@@ -707,12 +715,12 @@ def revoke_my_api_key(key_id):
     """Revoke one of the caller's API keys."""
     user_row = _current_users_row()
     if not user_row:
-        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+        return api_error(403, 'access_denied', 'Access not authorized')
     try:
         row = api_keys.get_key(key_id)
         # Same 404 for "not found" and "not yours" so key ids cannot be probed.
         if not row or str(row.get('user_id')) != str(user_row['id']):
-            return jsonify({'error': {'message': 'API key not found'}}), 404
+            return api_error(404, 'not_found', 'API key not found')
         api_keys.revoke_key(key_id)
     except Exception:
         return _internal_error()
@@ -747,7 +755,7 @@ def admin_revoke_api_key(key_id):
     """Revoke any user's API key (admin only)."""
     try:
         if not api_keys.get_key(key_id):
-            return jsonify({'error': {'message': 'API key not found'}}), 404
+            return api_error(404, 'not_found', 'API key not found')
         api_keys.revoke_key(key_id)
     except Exception:
         return _internal_error()
@@ -787,10 +795,10 @@ def create_summary_review():
     """
     user_row = _current_users_row()
     if not user_row:
-        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+        return api_error(403, 'access_denied', 'Access not authorized')
     review_input, error = summary_feedback.validate_review(request.get_json(silent=True))
     if error:
-        return jsonify({'error': {'message': error}}), 400
+        return api_error(400, 'invalid_request', error)
     template_name, summary, comments = review_input
     try:
         review = summary_feedback.create_review(str(user_row['id']), template_name, summary, comments)
@@ -810,7 +818,7 @@ def list_my_summary_feedback():
     """The caller's own summary comments, newest first (never anyone else's)."""
     user_row = _current_users_row()
     if not user_row:
-        return jsonify({'error': {'message': 'Access not authorized', 'code': 'access_denied'}}), 403
+        return api_error(403, 'access_denied', 'Access not authorized')
     try:
         rows = summary_feedback.list_user_comments(str(user_row['id']))
     except Exception:
@@ -825,7 +833,7 @@ def admin_list_summary_feedback():
     """Every summary comment with its author, plus review counts (admin only). ?status=open|resolved|all."""
     status = request.args.get('status', 'open')
     if status not in summary_feedback.STATUSES:
-        return jsonify({'error': {'message': 'status must be one of: open, resolved, all'}}), 400
+        return api_error(400, 'invalid_request', 'status must be one of: open, resolved, all')
     try:
         data = summary_feedback.list_feedback(status)
     except Exception:
@@ -843,21 +851,42 @@ def admin_resolve_summary_comment(comment_id):
     """Mark a summary comment resolved or open again (admin only). Body: {"resolved": true|false}."""
     data = request.get_json(silent=True) or {}
     if not isinstance(data.get('resolved'), bool):
-        return jsonify({'error': {'message': 'resolved must be true or false'}}), 400
+        return api_error(400, 'invalid_request', 'resolved must be true or false')
     admin_row = _current_users_row()
     try:
         row = summary_feedback.set_resolved(comment_id, data['resolved'], str(admin_row['id']) if admin_row else None)
     except Exception:
         return _internal_error()
     if not row:
-        return jsonify({'error': {'message': 'Comment not found'}}), 404
+        return api_error(404, 'not_found', 'Comment not found')
     return jsonify(_comment_response(row)), 200
 
 
-@main.route('/test')
-def test_cors():
-    """Test endpoint to verify CORS."""
-    return jsonify({'message': 'Yep, it\'s on.'})
+@main.route('/health')
+@main.route('/test')  # old name, kept for anything still calling it
+def health():
+    """Liveness check: no auth, no database. Also handy to wake the machine before a demo."""
+    return jsonify({'status': 'ok', 'version': get_app_version()})
+
+
+# Paths from before /v1, kept working. Responses on them say they're deprecated and where they moved
+# (Deprecation, RFC 9745: deprecated since 2026-10-12; Link rel="successor-version").
+LEGACY_PATHS = {
+    '/run': '/v1/checks',
+    '/summary': '/v1/checks/summary',
+    '/run-and-download-xml': '/v1/checks/xml',
+    '/test': '/health',
+}
+_DEPRECATED_SINCE = '@1791763200'  # 2026-10-12T00:00:00Z
+
+
+@main.after_request
+def mark_legacy_paths(response):
+    successor = LEGACY_PATHS.get(request.path)
+    if successor:
+        response.headers['Deprecation'] = _DEPRECATED_SINCE
+        response.headers['Link'] = f'<{successor}>; rel="successor-version"'
+    return response
 
 
 def _require_upload(zip_only=False):
@@ -876,27 +905,51 @@ def _require_upload(zip_only=False):
     return decorator
 
 
+def _run_and_respond(respond):
+    """Store the upload, run the check, and build the response from its outcome. Cleans up either way."""
+    checker = FrontifyChecker()
+    try:
+        source_type, run_user_id = _run_source_and_user_id()
+        upload_result = upload_file()
+        if upload_result['status'] != 'success':
+            return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
+        try:
+            outcome = run_check(checker, upload_result['path'], source_type, user_id=run_user_id)
+        except CheckFailed:
+            return api_error(
+                500, 'check_failed', 'The template couldn\'t be checked. Try again, or contact us with the request ID.')
+        return respond(outcome, checker)
+    finally:
+        checker_cleanup(checker)
+
+
+@main.route('/v1/checks', methods=['POST'])
+@require_auth(allow_api_key=True)
+@_require_upload()
+@limit_checks
+def create_check():
+    """Check an uploaded template package and return every result.
+
+    Response 200: {run_id, status: "completed" | "rejected", results}. A package that couldn't be checked (not a
+    valid ZIP, no .idml...) is "rejected", with the reason in the results.
+    """
+    return _run_and_respond(lambda outcome, _: jsonify({
+        'run_id': outcome.run_id,
+        'status': 'completed' if outcome.completed else 'rejected',
+        'results': outcome.results,
+    }))
+
+
 @main.route('/run', methods=['POST'])
 @require_auth(allow_api_key=True)
 @_require_upload()
 @limit_checks
 def run_checker():
-    """Endpoint to run the checker and return results."""
-    checker = FrontifyChecker()
-    try:
-        source_type, run_user_id = _run_source_and_user_id()
-
-        upload_result = upload_file()
-        if upload_result['status'] != 'success':
-            return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
-
-        upload_path = upload_result['path']
-        results, status_code = start_check(checker, upload_path, source_type, user_id=run_user_id)
-        return results, status_code
-    finally:
-        checker_cleanup(checker)
+    """Deprecated: POST /v1/checks. Same check, results wrapped as {type: "data", content: {results}}."""
+    return _run_and_respond(lambda outcome, _: jsonify({'type': 'data', 'content': {'results': outcome.results}}))
 
 
+@main.route('/v1/checks/summary', methods=['POST'])
 @main.route('/summary', methods=['POST'])
 @require_auth(allow_api_key=True)
 @_require_upload(zip_only=True)
@@ -910,119 +963,62 @@ def customer_summary():
     Errors: {error: {code, message, request_id}}; see docs/API.md for the codes.
     Counts toward the same per-user check limits as /run.
     """
-    upload = request.files['file']
-    checker = FrontifyChecker()
-    try:
-        source_type, run_user_id = _run_source_and_user_id()
+    filename = request.files['file'].filename
 
-        upload_result = upload_file()
-        if upload_result['status'] != 'success':
-            return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
-
-        try:
-            outcome = run_check(checker, upload_result['path'], source_type, user_id=run_user_id)
-        except CheckFailed:
-            return api_error(
-                500, 'check_failed', 'The template couldn\'t be checked. Try again, or contact us with the request ID.')
-
+    def respond(outcome, _):
         if not outcome.completed:
             # Rejection reasons are written by the checker for users: not a valid ZIP, no .idml file, too many files...
             reason = first_error_message(outcome.results)
             message = f'The file couldn\'t be checked: {reason}' if reason else 'The file couldn\'t be checked.'
             return api_error(422, 'template_not_checkable', message)
-
         if outcome.summary is None:
             return api_error(
                 500, 'summary_failed', 'The summary couldn\'t be written. Try again, or contact us with the request ID.')
-
-        template_name = display_template_name(outcome.results.get('template_name') or upload.filename)
         response = jsonify({
             'run_id': outcome.run_id,
-            'template_name': template_name,
+            'template_name': display_template_name(outcome.results.get('template_name') or filename),
             **summary_payload(outcome.summary, include_sections=False),
         })
         # The summary names the customer's template and content: don't let proxies or browsers keep a copy.
         response.headers['Cache-Control'] = 'no-store'
         return response
-    finally:
-        checker_cleanup(checker)
+
+    return _run_and_respond(respond)
 
 
 _EXPORT_FAILED = 'The XML export couldn\'t be created. Try again, or contact us with the request ID.'
 
 
+@main.route('/v1/checks/xml', methods=['POST'])
 @main.route('/run-and-download-xml', methods=['POST'])
 @require_auth(allow_api_key=True)
 @_require_upload()
 @limit_checks
 def run_checker_and_download():
-    """Endpoint to run the checker and download the resulting ZIP file."""
-    checker = FrontifyChecker()
-    zip_file_path = None
-    try:
-        source_type, run_user_id = _run_source_and_user_id()
-
-        upload_result = upload_file()
-        if upload_result['status'] != 'success':
-            return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
-
-        upload_path = upload_result['path']
-        results, status_code = start_check(checker, upload_path, source_type, user_id=run_user_id)
-        if status_code != 200:
-            return results, status_code
-
-        template_name = checker.get_template_name()
-        zip_file_path = checker.zip_idml_output_folder()
-
-        if not zip_file_path or not os.path.isfile(zip_file_path):
-            current_app.logger.error('XML export ZIP missing: %s', zip_file_path)
+    """Check an uploaded template package and download its generated XML as a ZIP."""
+    def respond(outcome, checker):
+        zip_path = checker.zip_idml_output_folder()
+        if not zip_path or not os.path.isfile(zip_path):
+            current_app.logger.error('XML export ZIP missing: %s', zip_path)
             return api_error(500, 'export_failed', _EXPORT_FAILED)
 
-        print(f"ZIP FILE PATH: {zip_file_path}, EXISTS: {os.path.exists(zip_file_path)}, SIZE: {os.path.getsize(zip_file_path) if os.path.exists(zip_file_path) else 0}")
-
-        # Store zip_file_path in a way that cleanup function can access it
-        # Using closure to capture zip_file_path
-        zip_path_for_cleanup = zip_file_path
-
         @after_this_request
-        def cleanup(response):
-            # Cleanup checker resources (unzipped files, uploaded files)
-            checker_cleanup(checker)
-            # Also cleanup the ZIP file from temp directory after response is sent
-            if zip_path_for_cleanup and os.path.exists(zip_path_for_cleanup):
-                try:
-                    os.remove(zip_path_for_cleanup)
-                    print(f"Cleaned up ZIP file: {zip_path_for_cleanup}")
-                except Exception as e:
-                    print(f'Failed to delete ZIP file {zip_path_for_cleanup}. Reason: {e}')
+        def remove_zip(response):
+            # The upload and unzipped files are removed by _run_and_respond; the export ZIP once it has been sent.
+            try:
+                os.remove(zip_path)
+            except OSError:
+                current_app.logger.warning('Could not remove XML export %s', zip_path)
             return response
 
         try:
-            return send_file(
-                path_or_file=zip_file_path,
-                mimetype='application/zip',
-                as_attachment=True,
-                download_name=f"{template_name}.zip"
-            )
-        except Exception as e:
-            print(f"Error sending file: {e}")
-            # Cleanup ZIP file on exception (before @after_this_request runs)
-            if zip_file_path and os.path.exists(zip_file_path):
-                try:
-                    os.remove(zip_file_path)
-                    print(f"Cleaned up ZIP file in exception handler: {zip_file_path}")
-                except Exception as e2:
-                    print(f'Failed to delete ZIP file in exception handler: {e2}')
-            current_app.logger.exception('Failed to send the ZIP file')
+            return send_file(zip_path, mimetype='application/zip', as_attachment=True,
+                             download_name=f'{checker.get_template_name()}.zip')
+        except Exception:
+            current_app.logger.exception('Failed to send the XML export')
             return api_error(500, 'export_failed', _EXPORT_FAILED)
-    finally:
-        # Always cleanup checker resources (unzipped files, uploaded files)
-        # This handles early returns where @after_this_request never runs
-        checker_cleanup(checker)
-        # Note: We DON'T delete zip_file_path here because:
-        # 1. @after_this_request handles cleanup after successful file send
-        # 2. Exception handler handles cleanup if send_file fails
-        # 3. If we delete here, it happens BEFORE send_file finishes streaming, causing failures
+
+    return _run_and_respond(respond)
 
 
 def _analytics_period():
@@ -1046,7 +1042,7 @@ def _bad_analytics_request(error):
     """400 for invalid analytics parameters. The specific reason is logged, not echoed back: exception text
     never goes into a response (CodeQL py/stack-trace-exposure), and our own frontend validates first anyway."""
     current_app.logger.info('Rejected analytics request: %s', error)
-    return jsonify({'error': {'message': 'Invalid analytics request. Check the date range and filters.'}}), 400
+    return api_error(400, 'invalid_request', 'Invalid analytics request. Check the date range and filters.')
 
 
 def _analytics_response(load):
@@ -1059,7 +1055,7 @@ def _analytics_response(load):
         return _internal_error('Failed to load analytics')
     if isinstance(data, dict) and 'error' in data:
         current_app.logger.error('Analytics unavailable: %s', data['error'])
-        return jsonify({'error': {'message': 'Failed to load analytics'}}), 500
+        return api_error(500, 'internal_error', 'Failed to load analytics')
     return jsonify(data), 200
 
 
@@ -1113,7 +1109,7 @@ def analytics_runs_csv():
         return _internal_error('Failed to export analytics')
     if 'error' in export:
         current_app.logger.error('Analytics unavailable: %s', export['error'])
-        return jsonify({'error': {'message': 'Failed to export analytics'}}), 500
+        return api_error(500, 'internal_error', 'Failed to export analytics')
     filename = f"template-checks-{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"
     return Response(
         export['csv'],

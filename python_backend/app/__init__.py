@@ -32,12 +32,15 @@ def create_app():
     # Get frontend URL from environment variable, with fallback
     frontend_url = os.getenv('FRONTEND_URL', 'https://template-checker.fly.dev')
 
-    allowed_origins = [
+    web_app_origins = [
         frontend_url,  # Frontend URL from environment
         'https://template-checker.fly.dev',  # Production frontend (fallback)
         'http://localhost:3000',  # React development server
-        'http://localhost:8000',  # Local Flask server (for testing)
     ]
+    allowed_origins = web_app_origins + ['http://localhost:8000']  # Local Flask server (for testing)
+
+    # Checks sent from the web app's origins are recorded as coming from it (see routes._run_source).
+    app.config['WEB_APP_ORIGINS'] = tuple(o for o in web_app_origins if o)
 
     CORS(app,
          origins=allowed_origins,

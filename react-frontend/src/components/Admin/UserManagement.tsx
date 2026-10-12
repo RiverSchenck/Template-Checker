@@ -427,7 +427,8 @@ export function UserManagement() {
         headers: getAuthHeaders(token),
       });
       const who = deleteTarget.email || deleteTarget.display_name || 'this user';
-      if (res.status === 403) {
+      // 409: you can't remove yourself (older backends answered 403).
+      if (res.status === 409 || res.status === 403) {
         notify.error(await responseError(res, `You can't remove ${who}.`));
         setDeleteTarget(null);
         return;
