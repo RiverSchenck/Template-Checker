@@ -6,7 +6,7 @@ import ChangesPanel from './ChangesPanel';
 import ProblemList from './ProblemList';
 import PageViewer from './PageViewer';
 import { buildReport, compareReports, type Problem } from './buildReport';
-import { buildCustomerSummaryDocument } from './customerSummary';
+import { toSummaryDocument, type SummaryDocument } from './customerSummary';
 import {
   ReviewToolbar,
   SummaryReviewDocument,
@@ -21,6 +21,9 @@ type ReportViewProps = {
   previous?: ValidationResult | null;
 };
 
+/** Stands in when results have no summary, so the review hooks still have a document; review can't be opened. */
+const NO_SUMMARY: SummaryDocument = { text: '', html: '', plainText: '', sections: [] };
+
 const firstPageOf = (problem: Problem) =>
   problem.subjects.flatMap((s) => s.places).find((p) => p.bounds)?.bounds?.page_id ?? null;
 
@@ -30,7 +33,9 @@ function ReportView({ result, previous }: ReportViewProps) {
   const previousReport = useMemo(() => (previous ? buildReport(previous) : null), [previous]);
   const comparison = useMemo(() => (previousReport ? compareReports(previousReport, report) : null), [previousReport, report]);
   const templateName = result.template_name || 'Untitled template';
-  const summaryDoc = useMemo(() => buildCustomerSummaryDocument(report, templateName), [report, templateName]);
+  // The backend writes the summary; results from before it did (or where it failed) have none.
+  const summary = result.customer_summary;
+  const summaryDoc = useMemo(() => (summary ? toSummaryDocument(summary) : NO_SUMMARY), [summary]);
   const pageLayouts = result.page_layouts ?? [];
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -177,7 +182,7 @@ function ReportView({ result, previous }: ReportViewProps) {
         onJumpTo={(severity) =>
           document.getElementById(`report-section-${severity}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
-        onReviewSummary={() => setMode(true)}
+        onReviewSummary={summary ? () => setMode(true) : undefined}
         summaryCopied={summaryCopied}
         draftCount={drafts.length}
         rawResult={result}

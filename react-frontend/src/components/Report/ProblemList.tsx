@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Check, ChevronRight, ExternalLink } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
-import { CheckDefinition } from '../../types';
 import { cn } from '../../lib/utils';
 import { severityStyles } from './pages/PageCanvas';
-import { describeWhere, formatPages, SEVERITIES, SEVERITY_INFO, type Problem, type ReportComparison, type Subject } from './buildReport';
-import { getCheckGuide } from './checkGuide';
+import { describeWhere, formatPages, SEVERITIES, SEVERITY_INFO, type Problem, type Report, type ReportComparison, type Subject } from './buildReport';
 
 type ProblemListProps = {
   problems: Problem[];
@@ -14,7 +12,7 @@ type ProblemListProps = {
   onSelectProblem: (id: string | null) => void;
   onSelectPlace: (problemId: string, placeKey: string) => void;
   comparison: ReportComparison | null;
-  passedChecks: CheckDefinition[];
+  passedChecks: Report['passedChecks'];
   checked: { label: string; count: number }[];
 };
 
@@ -208,7 +206,7 @@ function ProblemList({
   const [passedOpen, setPassedOpen] = useState(false);
   // Several checks share a plain-language title (e.g. image vs. frame flips).
   const passedTitles = Array.from(
-    new Set(passedChecks.map((c) => getCheckGuide(c.severity, c.key, c.label, c.message).title))
+    new Set(passedChecks.map((c) => c.guide.title))
   );
 
   const total = problems.length;

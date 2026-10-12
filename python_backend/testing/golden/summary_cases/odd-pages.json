@@ -1,0 +1,169 @@
+{
+  "results": {
+    "template_name": "No Name",
+    "checks": [
+      {
+        "key": "KERNING",
+        "severity": "errors",
+        "label": "Kerning",
+        "message": "Kerning must be 'Metrics'",
+        "help_article": "https://help/kerning?a=1&b=\"2\"",
+        "category": "par_styles"
+      },
+      {
+        "key": "OVERRIDE",
+        "severity": "warnings",
+        "label": "Override",
+        "message": "Overrides",
+        "help_article": null,
+        "category": "text_boxes"
+      }
+    ],
+    "page_layouts": [
+      {
+        "page_id": "pA",
+        "name": "A",
+        "index": 1,
+        "spread_id": "s1",
+        "width": 600,
+        "height": 400,
+        "preview": null,
+        "frames": []
+      },
+      {
+        "page_id": "pB",
+        "name": "B",
+        "index": 2,
+        "spread_id": "s1",
+        "width": 600,
+        "height": 400,
+        "preview": null,
+        "frames": []
+      },
+      {
+        "page_id": "p3",
+        "name": "3",
+        "index": 3,
+        "spread_id": "s1",
+        "width": 600,
+        "height": 400,
+        "preview": null,
+        "frames": []
+      }
+    ],
+    "text_boxes": {
+      "details": {
+        "s1": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "OVERRIDE",
+              "context": "",
+              "identifier": "s1",
+              "page_id": "pB",
+              "page_name": "B",
+              "spread_id": "s1",
+              "data_id": "f1",
+              "bounds": {
+                "page_id": "pB",
+                "kind": "TextFrame",
+                "x": 10,
+                "y": 10,
+                "width": 100,
+                "height": 20
+              }
+            },
+            {
+              "validationClassifier": "OVERRIDE",
+              "context": "",
+              "identifier": "s1",
+              "page_id": "pA",
+              "page_name": "A",
+              "spread_id": "s1",
+              "data_id": "f1",
+              "bounds": {
+                "page_id": "pA",
+                "kind": "TextFrame",
+                "x": 10,
+                "y": 10,
+                "width": 100,
+                "height": 20
+              }
+            }
+          ],
+          "infos": []
+        },
+        "s2": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "OVERRIDE",
+              "context": "",
+              "identifier": "s2",
+              "page_id": "gone",
+              "page_name": "7",
+              "spread_id": "s1",
+              "data_id": "f2"
+            }
+          ],
+          "infos": []
+        },
+        "s3": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "OVERRIDE",
+              "context": "",
+              "identifier": "s3",
+              "page_id": "p3",
+              "page_name": "3",
+              "spread_id": "s1",
+              "data_id": "null",
+              "bounds": {
+                "page_id": "p3",
+                "kind": "TextFrame",
+                "x": 10,
+                "y": 5,
+                "width": 100,
+                "height": 20
+              }
+            }
+          ],
+          "infos": []
+        },
+        "s4": {
+          "errors": [],
+          "warnings": [],
+          "infos": [
+            {
+              "validationClassifier": "EMPTY_TEXT_FRAME",
+              "context": "",
+              "identifier": "s4",
+              "page_id": "p3",
+              "page_name": "",
+              "spread_id": "s1",
+              "data_id": "f4",
+              "bounds": {
+                "page_id": "p3",
+                "kind": "TextFrame",
+                "x": 10,
+                "y": 9,
+                "width": 100,
+                "height": 20
+              }
+            }
+          ]
+        }
+      },
+      "total_count": 0
+    },
+    "text_box_data": {
+      "s1": {
+        "content": "Same text"
+      },
+      "s2": {
+        "content": "Same text"
+      }
+    }
+  }
+}

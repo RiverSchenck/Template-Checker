@@ -1,0 +1,134 @@
+{
+  "results": {
+    "template_name": "Rounding.idml",
+    "page_layouts": [
+      {
+        "page_id": "p1",
+        "name": "1",
+        "index": 1,
+        "spread_id": "s1",
+        "width": 600,
+        "height": 400,
+        "preview": null,
+        "frames": []
+      }
+    ],
+    "general": {
+      "details": {
+        "document": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "DOCUMENT_BLEED",
+              "context": "top: 0.7086614173228347pt, bottom: 2.125pt, inside: 0.36pt, outside: 9pt.",
+              "identifier": "document",
+              "page_id": "",
+              "page_name": "",
+              "spread_id": "s1",
+              "data_id": "null"
+            }
+          ],
+          "infos": []
+        }
+      },
+      "total_count": 0
+    },
+    "images": {
+      "details": {
+        "a.png": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "IMAGE_TRANSFORMATION_CONTAINER",
+              "context": "Image Container has been rotated by 89.50 degrees.",
+              "identifier": "a.png",
+              "page_id": "p1",
+              "page_name": "1",
+              "spread_id": "s1",
+              "data_id": "i1",
+              "bounds": {
+                "page_id": "p1",
+                "kind": "Rectangle",
+                "x": 10,
+                "y": 10,
+                "width": 100,
+                "height": 20
+              }
+            }
+          ],
+          "infos": []
+        },
+        "b.png": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "IMAGE_TRANSFORMATION_CONTAINER",
+              "context": "Image Container has been rotated by -0.50 degrees.",
+              "identifier": "b.png",
+              "page_id": "p1",
+              "page_name": "1",
+              "spread_id": "s1",
+              "data_id": "i2",
+              "bounds": {
+                "page_id": "p1",
+                "kind": "Rectangle",
+                "x": 10,
+                "y": 30,
+                "width": 100,
+                "height": 20
+              }
+            }
+          ],
+          "infos": []
+        },
+        "c.png": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "IMAGE_TRANSFORMATION_CONTAINER",
+              "context": "Image Container has been rotated by -90.50 degrees.",
+              "identifier": "c.png",
+              "page_id": "p1",
+              "page_name": "1",
+              "spread_id": "s1",
+              "data_id": "i3",
+              "bounds": {
+                "page_id": "p1",
+                "kind": "Rectangle",
+                "x": 10,
+                "y": 50,
+                "width": 100,
+                "height": 20
+              }
+            }
+          ],
+          "infos": []
+        },
+        "d.png": {
+          "errors": [],
+          "warnings": [],
+          "infos": [
+            {
+              "validationClassifier": "LARGE_IMAGE",
+              "context": "Image d.png is 15.25MB.",
+              "identifier": "d.png",
+              "page_id": "p1",
+              "page_name": "1",
+              "spread_id": "s1",
+              "data_id": "i4",
+              "bounds": {
+                "page_id": "p1",
+                "kind": "Rectangle",
+                "x": 10,
+                "y": 70,
+                "width": 100,
+                "height": 20
+              }
+            }
+          ]
+        }
+      },
+      "total_count": 0
+    }
+  }
+}

@@ -167,7 +167,7 @@ def log_analytics_to_supabase(
     status: str = 'completed',
     stopped_at_stage: Optional[str] = None,
     error_message: Optional[str] = None,
-) -> bool:
+) -> Optional[str]:
     """
     Log analytics data to Supabase.
 
@@ -183,12 +183,12 @@ def log_analytics_to_supabase(
         error_message: Why a rejected or failed run didn't complete
 
     Returns:
-        True if successful, False otherwise
+        The new run's id if successful, None otherwise
     """
     try:
         supabase = get_supabase_client()
         if not supabase:
-            return False
+            return None
 
         # Extract validation counts
         counts = extract_validation_counts(results_json or {})
@@ -216,12 +216,12 @@ def log_analytics_to_supabase(
 
         if not run_response.data:
             logger.error("Failed to insert run record to Supabase")
-            return False
+            return None
 
         run_id = run_response.data[0].get('id')
         if not run_id:
             logger.error("No run ID returned from Supabase insert")
-            return False
+            return None
 
         # Extract and insert individual validations
         validations = extract_individual_validations(results_json or {})
@@ -242,8 +242,8 @@ def log_analytics_to_supabase(
             logger.info(f"No validations to log for run {run_id}")
 
         logger.info(f"Successfully logged analytics for run {run_id}")
-        return True
+        return str(run_id)
 
     except Exception as e:
         logger.error(f"Error logging analytics to Supabase: {e}", exc_info=True)
-        return False
+        return None
