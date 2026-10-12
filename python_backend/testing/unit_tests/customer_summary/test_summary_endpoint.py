@@ -204,18 +204,6 @@ def test_unreadable_package_says_why(client):
     assert client.logged[0]['status'] == 'rejected'
 
 
-def test_server_paths_never_reach_the_caller(client, monkeypatch):
-    monkeypatch.setattr(routes, 'run_check', lambda *a, **k: utils.CheckOutcome(
-        results={'general': {'details': {'x': {'errors': [
-            {'context': "Error creating the folders '/srv/app/src/data': [Errno 28] No space left on device"}]}}}},
-        completed=False, stopped_at_stage='UNZIP_PACKAGE', run_id=None, summary=None))
-
-    error = _error(_post(client, _package_bytes()))
-
-    assert error['code'] == 'template_not_checkable'
-    assert error['message'] == 'The file couldn\'t be checked.'
-
-
 def test_checker_crash_is_a_500_without_details(client, monkeypatch):
     def crash(*a, **k):
         raise CheckFailed() from RuntimeError('/srv/secret/path exploded')

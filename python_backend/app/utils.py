@@ -8,6 +8,7 @@ from flask import request, current_app, jsonify, g
 from werkzeug.utils import secure_filename
 from src.classes.States import States
 from .analytics import log_analytics_to_supabase, first_error_message
+from .errors import api_error
 from .customer_summary import CustomerSummary, build_customer_summary, check_guides_payload, summary_payload
 
 
@@ -132,7 +133,8 @@ def start_check(checker, file_path: str, source_type: str = 'api', user_id: Opti
     try:
         outcome = run_check(checker, file_path, source_type, user_id)
     except CheckFailed:
-        return jsonify({'error': 'An error occurred during the check.'}), 500
+        message = 'The template couldn\'t be checked. Try again, or contact us with the request ID.'
+        return api_error(500, 'check_failed', message), 500
     return jsonify({'type': 'data', 'content': {'results': outcome.results}}), 200
 
 

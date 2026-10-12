@@ -1,8 +1,10 @@
 """Shared fakes for auth / API key / rate limit route tests: an in-memory Supabase and a client with a stubbed checker."""
+import io
 import uuid
 from datetime import datetime, timezone
 
 import pytest
+from flask.testing import FlaskClient
 from run import app as flask_app
 import app.routes as routes
 import app.api_keys as api_keys
@@ -74,6 +76,19 @@ class FakeSupabase:
         return FakeQuery(self.db, name)
 
 
+CHECK_PATHS = ('/run', '/run-and-download-xml', '/summary')
+
+
+class UploadingClient(FlaskClient):
+    """Posts to the check endpoints carry a small .zip unless the test sends its own body (they reject a missing file)."""
+
+    def post(self, path, *args, **kwargs):
+        if path in CHECK_PATHS and 'data' not in kwargs:
+            kwargs['data'] = {'file': (io.BytesIO(b'zip'), 'package.zip')}
+            kwargs['content_type'] = 'multipart/form-data'
+        return super().post(path, *args, **kwargs)
+
+
 @pytest.fixture
 def fake_db(monkeypatch):
     sb = FakeSupabase()
@@ -107,6 +122,6 @@ def client(monkeypatch, fake_db):
     monkeypatch.setattr(routes, 'start_check', fake_start_check)
     monkeypatch.setattr(routes, 'checker_cleanup', lambda checker: None)
 
-    c = flask_app.test_client()
+    c = UploadingClient(flask_app, flask_app.response_class, use_cookies=True)
     c.run_calls = calls
     return c
