@@ -1,9 +1,10 @@
 """Checks on text: paragraph and character styles, overrides, kerning, composer, tables."""
 from typing import Dict, List, Union
 
+from src.checks._report import at_story, inherited, report, text_list
 from src.document import ParsedDocument
 from src.error_handling.ErrorHandling import ValidationResult
-from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning, ValidationInfo
+from src.error_handling.ValidationClassifier import ValidationError, ValidationInfo, ValidationWarning
 
 
 def format_overrides(overrides: Dict[str, str]) -> str:
@@ -14,6 +15,7 @@ def format_overrides(overrides: Dict[str, str]) -> str:
 
 
 def generate_context_message(content: str, items: Union[List[List['StoryParagraphData']], List[List['StoryCharacterData']]], index: int):
+    """For text that's only whitespace, say where it is: next to which neighbouring text."""
     def get_content_from_item(item):
         # Extract content from a single item or a group of items
         if isinstance(item, list):
@@ -42,359 +44,145 @@ def par_style_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Text without a paragraph style. Error when a whole text frame uses only a default style ([No
     paragraph style] / [Basic Paragraph]); otherwise an error per run of default-styled text
     (consecutive ranges with the same style are grouped). Info for empty text frames."""
-    # doc.stories_parser.print_stories_data()  # Debug Print
-    # Currently master page par styles are checked too, as text frames are a story. Might want to change in a phase 2.
-
+    # Master-page text frames are stories too, so they're checked as well.
     for story in doc.stories_parser.get_stories_data():
-        page_id = story.get_page()  # page Self
-        story_content = story.get_story_text_content()
         story_id = story.get_story_id()
-        data_id = story.get_parent_text_frame_id()
-        if not story_content or story_content == '' or story_content == ' ':
-            results.add_info(
-                context=None,
-                info_type=ValidationInfo.EMPTY_TEXT_FRAME,
-                page_id=page_id,
-                identifier=story_id,
-                data_id=data_id
-            )
-            continue
-        grouped_paragraph_styles = story.get_grouped_paragraph_styles()
-
-        if len(grouped_paragraph_styles) == 1 and grouped_paragraph_styles[0][0].get_style_id() in doc.default_par_styles:
-            # Process single default paragraph style differently
-            # Only one style in a text box
-            content = grouped_paragraph_styles[0][0].get_content()
-            context_message = generate_context_message(
-                content, grouped_paragraph_styles, 0)
-            results.add_error(
-                context=None,
-                error_type=ValidationError.PARAGRAPH_STYLE_TEXT_BOX,
-                page_id=page_id,
-                identifier=story_id,
-                data_id=data_id
-            )
+        story_content = story.get_story_text_content()
+        if not story_content or story_content == ' ':
+            report(results, ValidationInfo.EMPTY_TEXT_FRAME, **at_story(story, story_id))
             continue
 
-        # Need index for content context
-        for i, grouped_styles in enumerate(grouped_paragraph_styles):
-            grouped_style_id = grouped_styles[0].get_style_id()
-            normalized_style_id = grouped_styles[0].get_normalized_style_id()
+        grouped = story.get_grouped_paragraph_styles()
+        if len(grouped) == 1 and grouped[0][0].get_style_id() in doc.default_par_styles:
+            report(results, ValidationError.PARAGRAPH_STYLE_TEXT_BOX, **at_story(story, story_id))
+            continue
 
-            # Check if default paragraph styles were used
-            if grouped_style_id in doc.default_par_styles:
-
-                # Group the content of the grouped styles
-                content = ''.join(par_style.get_content()
-                                  for par_style in grouped_styles)
-                # Check if content is empty or just space, we need more context as to where the issue is for end user
-                context_message = generate_context_message(
-                    content, grouped_paragraph_styles, i)
-                message = f"{content} {context_message}"
-                # Add text content so multiple occurrences are merged with text_content arrays combined
-                text_content = [content] if content else None
-
-                results.add_error(
-                    context=message,
-                    error_type=ValidationError.PARAGRAPH_STYLE,
-                    page_id=page_id,
-                    identifier=normalized_style_id,
-                    data_id=data_id,
-                    text_content=text_content
-                )
+        for i, group in enumerate(grouped):
+            if group[0].get_style_id() in doc.default_par_styles:
+                content = ''.join(par_style.get_content() for par_style in group)
+                # Whitespace-only text needs its neighbours to be findable.
+                message = f"{content} {generate_context_message(content, grouped, i)}"
+                report(results, ValidationError.PARAGRAPH_STYLE, message,
+                       text_content=text_list(content), **at_story(story, group[0].get_normalized_style_id()))
 
 
 def hyphenation_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Warning for each paragraph whose style (through BasedOn) has hyphenation on. Default styles
     are skipped."""
-    hyphenated_default_styles = set()
-
     for story in doc.stories_parser.get_stories_data():
-        page_id = story.get_page()  # page Self
-        data_id = story.get_parent_text_frame_id()
         for par_style in story.get_paragraph_styles():
+            if par_style.has_hyphenation() and par_style.get_style_id() not in doc.default_par_styles:
+                context, details = inherited(par_style.get_hyphenation_obj())
+                report(results, ValidationWarning.HYPHENATION, context, text_content=text_list(par_style.get_content()),
+                       context_details=details, **at_story(story, par_style.get_normalized_style_id()))
 
-            style_id = par_style.get_style_id()
-            normalized_style_id = par_style.get_normalized_style_id()
-            has_hyphenation = par_style.has_hyphenation()
 
-            # Collect hyphenated default styles
-            if (style_id in doc.default_par_styles) and has_hyphenation:
-                hyphenated_default_styles.add(style_id)
-                continue
+def _remember_frame_text(results: ValidationResult, story, frame_id) -> None:
+    """Override issues are grouped by text frame; the frontend shows that frame's full text from text_box_data."""
+    if frame_id and frame_id != 'null' and frame_id not in results.text_box_data:
+        page_id = story.get_page_id()
+        results.text_box_data[frame_id] = {
+            "identifier": frame_id,
+            "content": story.get_content(),
+            "page_id": page_id if page_id is not None else "",
+            "frame_id": frame_id,
+        }
 
-            if has_hyphenation:
-                # Format message with inheritance
-                par_style_hyph_obj = par_style.get_hyphenation_obj()
-                inherited_from = par_style_hyph_obj.get_inherited_from_value()
-                inherited_message = f'Inherited from: {inherited_from}' if inherited_from else ''
-                # Add text content so multiple occurrences are merged with text_content arrays combined
-                text_content = [par_style.get_content()] if par_style.get_content() else None
 
-                results.add_warning(
-                    context=inherited_message,
-                    warning_type=ValidationWarning.HYPHENATION,
-                    page_id=page_id,
-                    identifier=normalized_style_id,
-                    data_id=data_id,
-                    text_content=text_content,
-                    context_details={"inheritedFrom": inherited_from} if inherited_from else None
-                )
-
-    # if hyphenated_default_styles:
-    #     results.add_warning(
-    #         context='',
-    #         warning_type=ValidationWarning.HYPHENATION,
-    #         page=None,
-    #         identifier=normalized_style_id)
+def _report_override(results: ValidationResult, story, item, siblings, index) -> None:
+    """One override warning for a character or paragraph range, grouped under its text frame."""
+    frame_id = story.get_parent_text_frame_id()
+    content = item.get_content()
+    text_part = f"Text: {content} {generate_context_message(content, siblings, index)}".strip()
+    overrides_str = format_overrides(item.get_overrides())
+    message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
+    _remember_frame_text(results, story, frame_id)
+    report(results, ValidationWarning.OVERRIDE, message,
+           page_id=story.get_page(),
+           identifier=frame_id if frame_id and frame_id != 'null' else 'null',
+           data_id=frame_id,
+           text_content=text_list(content),
+           context_details={"text": content or "", "overrides": item.get_overrides()})
 
 
 def overrides_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Warning for text formatted outside its style: character-level overrides, or paragraph-level
     ones when the paragraph has none at character level (to avoid reporting both)."""
-    # Many overrides occur from the last or first char having an override, so showing the content isnt helpful.
-    # Would be great to figure out a way to have better context in these situations
-    overrides_default_par = False
-
-    # Need index for content context
     for story in doc.stories_parser.get_stories_data():
-        page_id = story.get_page()  # page Self
-        story_id = story.get_story_id()
-        # Normalize story_id to ensure it's not None (convert to 'null' if None)
-        story_id = story_id if story_id is not None else 'null'
-        paragraph_styles = story.get_paragraph_styles()
-        data_id = story.get_parent_text_frame_id()
-        for par_idx, par_style in enumerate(paragraph_styles):
-
-            has_overrides = par_style.has_overrides()
-            style_id = par_style.get_style_id()
-            if (style_id in doc.default_par_styles) and has_overrides:
-                overrides_default_par = True
-
-            # Check character overrides first to see if there are individual occurrences
-            char_styles = par_style.get_child_char_styles()
-            has_char_overrides = False
-            for char_idx, char_style in enumerate(char_styles):
-                if char_style.has_overrides():
-                    has_char_overrides = True
-                    content = char_style.get_content()
-
-                    context_message = generate_context_message(
-                        content, char_styles, char_idx)
-                    overrides_str = format_overrides(char_style.get_overrides())
-                    text_part = f"Text: {content} {context_message}".strip()
-                    message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
-                    text_content = [content] if content else None
-                    # Use data_id (text frame ID) as identifier to group overrides by text frame
-                    # Also ensure text_box_data is populated with data_id for frontend to find story content
-                    if data_id and data_id != 'null' and data_id not in results.text_box_data:
-                        # Extract story content keyed by data_id so frontend can find it
-                        story_content = story.get_content()
-                        story_page_id = story.get_page_id()
-                        results.text_box_data[data_id] = {
-                            "identifier": data_id,
-                            "content": story_content,
-                            "page_id": story_page_id if story_page_id is not None else "",
-                            "frame_id": data_id,
-                        }
-
-                    results.add_warning(
-                        context=message,
-                        warning_type=ValidationWarning.OVERRIDE,
-                        page_id=page_id,
-                        identifier=data_id if data_id and data_id != 'null' else 'null',
-                        data_id=data_id,
-                        text_content=text_content,
-                        context_details={"text": content or "", "overrides": char_style.get_overrides()}
-                    )
-
-            # Only report paragraph-level overrides if there are no character-level overrides
-            # This prevents duplicate warnings (one for full item, then individual areas)
-            if has_overrides and not has_char_overrides:
-                content = par_style.get_content()
-                context_message = generate_context_message(
-                    content, paragraph_styles, par_idx)
-                overrides_str = format_overrides(par_style.get_overrides())
-                text_part = f"Text: {content} {context_message}".strip()
-                message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
-                # Check if content is empty or just space, we need more context as to where the issue is for end user
-                text_content = [content] if content else None
-                # Use data_id (text frame ID) as identifier to group overrides by text frame
-                # Also ensure text_box_data is populated with data_id for frontend to find story content
-                if data_id and data_id != 'null' and data_id not in results.text_box_data:
-                    # Extract story content keyed by data_id so frontend can find it
-                    story_content = story.get_content()
-                    story_page_id = story.get_page_id()
-                    results.text_box_data[data_id] = {
-                        "identifier": data_id,
-                        "content": story_content,
-                        "page_id": story_page_id if story_page_id is not None else "",
-                        "frame_id": data_id,
-                    }
-
-                results.add_warning(
-                    context=message,
-                    warning_type=ValidationWarning.OVERRIDE,
-                    page_id=page_id,
-                    identifier=data_id if data_id and data_id != 'null' else 'null',
-                    data_id=data_id,
-                    text_content=text_content,
-                    context_details={"text": content or "", "overrides": par_style.get_overrides()}
-                )
-
-    # if overrides_default_par:
-    #     results.add_warning(
-    #         "Many overrides due to no paragraph style applied to text.",
-    #         ValidationWarning.OVERRIDE
-    #     )
+        paragraphs = story.get_paragraph_styles()
+        for par_idx, par_style in enumerate(paragraphs):
+            runs = par_style.get_child_char_styles()
+            overridden_runs = [(i, run) for i, run in enumerate(runs) if run.has_overrides()]
+            for char_idx, run in overridden_runs:
+                _report_override(results, story, run, runs, char_idx)
+            if par_style.has_overrides() and not overridden_runs:
+                _report_override(results, story, par_style, paragraphs, par_idx)
 
 
 def kerning_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error when a paragraph style or character style (through BasedOn) uses kerning other than
     Metrics. Kerning set directly on text is an override, reported by overrides_check."""
-
-    # Need index for content context
     for story in doc.stories_parser.get_stories_data():
-        page_id = story.get_page()  # page Self
-        paragraph_styles = story.get_paragraph_styles()
-        data_id = story.get_parent_text_frame_id()
-        for i, par_style in enumerate(paragraph_styles):
-
-            par_kerning_obj = par_style.get_kerning()
-            par_kerning_val = par_kerning_obj.get_property_value()
-            if par_kerning_val and (par_kerning_val != "Metrics"):
-                normalized_style_id = par_style.get_normalized_style_id()
-                inherited_from = par_kerning_obj.get_inherited_from_value()
-                inherited_message = f'Inherited from: {inherited_from}' if inherited_from else ''
-                text_content = [par_style.get_content()] if par_style.get_content() else None
-
-                results.add_error(
-                    context=inherited_message,
-                    error_type=ValidationError.KERNING,
-                    page_id=page_id,
-                    identifier=normalized_style_id,
-                    data_id=data_id,
-                    text_content=text_content,
-                    context_details={"inheritedFrom": inherited_from} if inherited_from else None
-                )
-
-            # Now check character overrides
-            char_styles = par_style.get_child_char_styles()
-
-            for i, char_style in enumerate(char_styles):
-                char_kerning_obj = char_style.get_kerning()
-                char_kerning_val = char_kerning_obj.get_property_value()
-                if char_kerning_val and (char_kerning_val != "Metrics"):
-                    char_normalized_style_id = char_style.get_normalized_style_id()
-                    inherited_from = char_kerning_obj.get_inherited_from_value()
-                    inherited_message = f'Inherited from: {inherited_from}' if inherited_from else ''
-                    text_content = [char_style.get_content()] if char_style.get_content() else None
-
-                    results.add_error(
-                        context=inherited_message,
-                        error_type=ValidationError.KERNING_CHAR,
-                        page_id=page_id,
-                        identifier=char_normalized_style_id,
-                        data_id=data_id,
-                        text_content=text_content,
-                        context_details={"inheritedFrom": inherited_from} if inherited_from else None
-                    )
+        for par_style in story.get_paragraph_styles():
+            for classifier, item in [(ValidationError.KERNING, par_style)] + \
+                                    [(ValidationError.KERNING_CHAR, run) for run in par_style.get_child_char_styles()]:
+                kerning = item.get_kerning()
+                value = kerning.get_property_value()
+                if value and value != "Metrics":
+                    context, details = inherited(kerning)
+                    report(results, classifier, context, text_content=text_list(item.get_content()),
+                           context_details=details, **at_story(story, item.get_normalized_style_id()))
 
 
 def table_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each table in a story (reported against the story's text frame)."""
     for story in doc.stories_parser.get_stories_data():
-        for char_style in story.get_character_styles():
-            if char_style.has_table():
-                data_id = story.get_parent_text_frame_id()
-                story_id = story.get_story_id()
-                page_id = story.get_page()  # page Self
-                results.add_error(
-                    context=None,
-                    error_type=ValidationError.TABLE,
-                    page_id=page_id,
-                    identifier=story_id,
-                    data_id=data_id
-                )
+        for run in story.get_character_styles():
+            if run.has_table():
+                report(results, ValidationError.TABLE, **at_story(story, story.get_story_id()))
+
+
+def _once_per_style(doc: ParsedDocument, results: ValidationResult, classifier, is_issue, prop_of, context_of) -> None:
+    """Report each paragraph style at most once, at the first story that uses it."""
+    reported = set()
+    for story in doc.stories_parser.get_stories_data():
+        for par_style in story.get_paragraph_styles():
+            style = par_style.get_normalized_style_id()
+            if style not in reported and is_issue(par_style):
+                reported.add(style)
+                prop = prop_of(par_style)
+                _, details = inherited(prop)
+                report(results, classifier, context_of(par_style, prop), context_details=details,
+                       **at_story(story, style))
 
 
 def grid_alignment_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error, once per paragraph style, when its style (through BasedOn) aligns to the baseline
     grid."""
-    styles_with_errors = set()  # Only throw 1 error for a paragraph style
-    for story in doc.stories_parser.get_stories_data():
-        page_id = story.get_page()  # page Self
-        for par_style in story.get_paragraph_styles():
-            grid_alignment = par_style.get_grid_alignment()
-            normalized_style_id = par_style.get_normalized_style_id()
-            if grid_alignment not in (None, 'None') and normalized_style_id not in styles_with_errors:
-                styles_with_errors.add(normalized_style_id)
-                data_id = story.get_parent_text_frame_id()
-                # Format message with inheritance
-                par_style_grid_align_obj = par_style.get_grid_alignment_obj()
-                inherited_from = par_style_grid_align_obj.get_inherited_from_value()
-                inherited_message = f'Inherited from: {inherited_from}' if inherited_from else ''
-
-                results.add_error(
-                    context=inherited_message,
-                    error_type=ValidationError.GRID_ALIGNMENT,
-                    page_id=page_id,
-                    identifier=normalized_style_id,
-                    data_id=data_id,
-                    context_details={"inheritedFrom": inherited_from} if inherited_from else None
-                )
+    _once_per_style(doc, results, ValidationError.GRID_ALIGNMENT,
+                    is_issue=lambda p: p.get_grid_alignment() not in (None, 'None'),
+                    prop_of=lambda p: p.get_grid_alignment_obj(),
+                    context_of=lambda p, prop: inherited(prop)[0])
 
 
 def composer_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Warning, once per paragraph style, when its style (through BasedOn) uses a composer other
     than Adobe Single-line (HL Single)."""
-    styles_with_errors = set()  # Only throw 1 error for a paragraph style
-    for story in doc.stories_parser.get_stories_data():
-        page_id = story.get_page()  # page Self
-        for par_style in story.get_paragraph_styles():
-            composer = par_style.get_composer()
-            normalized_style_id = par_style.get_normalized_style_id()
-            if composer != 'HL Single' and normalized_style_id not in styles_with_errors:
-                styles_with_errors.add(normalized_style_id)
-                data_id = story.get_parent_text_frame_id()
-                # Format message with inheritance
-                par_style_composer_obj = par_style.get_composer_obj()
-                inherited_from = par_style_composer_obj.get_inherited_from_value()
-                inherited_message = f'Inherited from: {inherited_from}' if inherited_from else ''
-
-                results.add_warning(
-                    context=inherited_message,
-                    warning_type=ValidationWarning.COMPOSER,
-                    page_id=page_id,
-                    identifier=normalized_style_id,
-                    data_id=data_id,
-                    context_details={"inheritedFrom": inherited_from} if inherited_from else None
-                )
+    _once_per_style(doc, results, ValidationWarning.COMPOSER,
+                    is_issue=lambda p: p.get_composer() != 'HL Single',
+                    prop_of=lambda p: p.get_composer_obj(),
+                    context_of=lambda p, prop: inherited(prop)[0])
 
 
 def other_checks(doc: ParsedDocument, results: ValidationResult) -> None:
     """Fill tint: error, once per paragraph style, when its style's fill tint is set to anything but
     100% (-1 and unset mean the default, 100%)."""
-    styles_with_errors = set()  # Only throw 1 error for a paragraph style
-    for story in doc.stories_parser.get_stories_data():
-        page_id = story.get_page()  # page Self
-        for par_style in story.get_paragraph_styles():
-            filltint = par_style.get_filltint()
-            normalized_style_id = par_style.get_normalized_style_id()
-            if filltint not in [None, '-1', '100'] and normalized_style_id not in styles_with_errors:
-                styles_with_errors.add(normalized_style_id)
-                data_id = story.get_parent_text_frame_id()
-                par_style_filltint_obj = par_style.get_filltint_obj()
-                inherited_from = par_style_filltint_obj.get_inherited_from_value()
-                context_message = f'Fill Tint is: {filltint}'
-                if inherited_from:
-                    context_message = f'{context_message}; Inherited from: {inherited_from}'
+    def context_of(par_style, prop):
+        source = prop.get_inherited_from_value()
+        message = f'Fill Tint is: {par_style.get_filltint()}'
+        return f'{message}; Inherited from: {source}' if source else message
 
-                results.add_error(
-                    context=context_message,
-                    error_type=ValidationError.FILL_TINT,
-                    page_id=page_id,
-                    identifier=normalized_style_id,
-                    data_id=data_id,
-                    context_details={"inheritedFrom": inherited_from} if inherited_from else None
-                )
+    _once_per_style(doc, results, ValidationError.FILL_TINT,
+                    is_issue=lambda p: p.get_filltint() not in [None, '-1', '100'],
+                    prop_of=lambda p: p.get_filltint_obj(),
+                    context_of=context_of)
