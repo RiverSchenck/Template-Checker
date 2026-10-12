@@ -26,6 +26,8 @@ master page items.
 
 ## Basis in Frontify's code
 
+*Checking or adding rules against Frontify's code? Start with [frontify-rule-checks.md](frontify-rule-checks.md).*
+
 **Philosophy:** the checker flags anything in the InDesign file that won't look or behave the same once imported
 into Frontify, so the designer can change the InDesign file to match what Frontify will do. When Frontify always
 behaves one way (e.g. it never wraps width-auto-sized text, or always renders Metrics kerning), the InDesign file
