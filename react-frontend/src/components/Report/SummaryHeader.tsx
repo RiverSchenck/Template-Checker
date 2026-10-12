@@ -16,8 +16,11 @@ type SummaryHeaderProps = {
   /** Counts from the previous upload, when comparing. */
   previousCounts: Record<ValidationType, number> | null;
   onJumpTo: (severity: ValidationType) => void;
-  /** Opens the review of the customer summary (it's copied from there, after review). */
-  onReviewSummary: () => void;
+  /**
+   * Opens the review of the customer summary (it's copied from there, after review). Missing when these results
+   * have no summary (the backend couldn't write it, or they're from before it did).
+   */
+  onReviewSummary?: () => void;
   /** Briefly true after the summary was copied, to confirm it on the button. */
   summaryCopied: boolean;
   /** Comments drafted in an unfinished review, so the button can offer to continue it. */
@@ -65,6 +68,27 @@ function SummaryHeader({
     report.checked.length ? `${report.checked.map((c) => `${c.count} ${c.label}`).join(', ')} checked` : null,
   ].filter(Boolean);
 
+  const copyButton = (
+    <Button
+      size="sm"
+      className="h-8 min-w-[14rem] gap-1.5"
+      onClick={onReviewSummary}
+      disabled={!onReviewSummary}
+      aria-live="polite"
+    >
+      {summaryCopied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
+      {summaryCopied
+        ? 'Copied'
+        : draftCount > 0
+          ? `Continue review · ${draftCount} ${draftCount === 1 ? 'comment' : 'comments'}`
+          : 'Copy customer summary'}
+      {/* Readable on the primary button in both themes: light text on dark, dark text on light. */}
+      <span className="ml-0.5 rounded-full bg-amber-300/20 px-1.5 py-px text-[10px] font-semibold uppercase leading-4 tracking-wide text-amber-200 ring-1 ring-inset ring-amber-300/40 dark:bg-amber-400/25 dark:text-amber-900 dark:ring-amber-600/30">
+        Beta
+      </span>
+    </Button>
+  );
+
   const downloadJson = () => {
     const blob = new Blob([JSON.stringify(rawResult, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -98,18 +122,17 @@ function SummaryHeader({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button size="sm" className="h-8 min-w-[14rem] gap-1.5" onClick={onReviewSummary} aria-live="polite">
-            {summaryCopied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
-            {summaryCopied
-              ? 'Copied'
-              : draftCount > 0
-                ? `Continue review · ${draftCount} ${draftCount === 1 ? 'comment' : 'comments'}`
-                : 'Copy customer summary'}
-            {/* Readable on the primary button in both themes: light text on dark, dark text on light. */}
-            <span className="ml-0.5 rounded-full bg-amber-300/20 px-1.5 py-px text-[10px] font-semibold uppercase leading-4 tracking-wide text-amber-200 ring-1 ring-inset ring-amber-300/40 dark:bg-amber-400/25 dark:text-amber-900 dark:ring-amber-600/30">
-              Beta
-            </span>
-          </Button>
+          {onReviewSummary ? (
+            copyButton
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                {/* Disabled buttons don't fire hover events, so the tooltip hangs off a wrapper. */}
+                <span tabIndex={0}>{copyButton}</span>
+              </TooltipTrigger>
+              <TooltipContent>The customer summary isn’t available for this check. Upload the file again.</TooltipContent>
+            </Tooltip>
+          )}
         </div>
       </div>
 

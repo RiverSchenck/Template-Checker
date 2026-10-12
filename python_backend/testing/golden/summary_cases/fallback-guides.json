@@ -1,0 +1,48 @@
+{
+  "results": {
+    "template_name": "",
+    "checks": [],
+    "validation_classifiers": {
+      "ZIP": {
+        "label": "ZIP file error",
+        "message": "Bad zip. Try again.",
+        "help_article": "https://help/zip"
+      },
+      "NEW_CHECK": {
+        "label": null,
+        "message": null,
+        "help_article": null
+      }
+    },
+    "general": {
+      "details": {
+        "null": {
+          "errors": [
+            {
+              "validationClassifier": "ZIP",
+              "context": "The file is not a valid ZIP archive.",
+              "identifier": "null",
+              "page_id": "",
+              "page_name": "",
+              "spread_id": "s1",
+              "data_id": "null"
+            }
+          ],
+          "warnings": [],
+          "infos": [
+            {
+              "validationClassifier": "NEW_CHECK",
+              "context": "",
+              "identifier": "null",
+              "page_id": "",
+              "page_name": "",
+              "spread_id": "s1",
+              "data_id": "null"
+            }
+          ]
+        }
+      },
+      "total_count": 0
+    }
+  }
+}

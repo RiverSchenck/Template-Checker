@@ -1,11 +1,15 @@
 """Shared fakes for auth / API key / rate limit route tests: an in-memory Supabase and a client with a stubbed checker."""
+import io
 import uuid
 from datetime import datetime, timezone
 
 import pytest
+from flask.testing import FlaskClient
 from run import app as flask_app
 import app.routes as routes
 import app.api_keys as api_keys
+from app.customer_summary import build_customer_summary
+from app.utils import CheckOutcome
 
 APPROVED = {'id': 'user-1', 'email': 'approved@example.com'}
 OTHER = {'id': 'user-2', 'email': 'other@example.com'}
@@ -68,10 +72,23 @@ class FakeQuery:
 
 class FakeSupabase:
     def __init__(self):
-        self.db = {'api_keys': [], 'users': [dict(APPROVED), dict(OTHER)]}
+        self.db = {'api_keys': [], 'users': [dict(APPROVED), dict(OTHER)], 'access_requests': []}
 
     def table(self, name):
         return FakeQuery(self.db, name)
+
+
+CHECK_PATHS = ('/run', '/run-and-download-xml', '/summary', '/v1/checks', '/v1/checks/summary', '/v1/checks/xml')
+
+
+class UploadingClient(FlaskClient):
+    """Posts to the check endpoints carry a small .zip unless the test sends its own body (they reject a missing file)."""
+
+    def post(self, path, *args, **kwargs):
+        if path in CHECK_PATHS and 'data' not in kwargs:
+            kwargs['data'] = {'file': (io.BytesIO(b'zip'), 'package.zip')}
+            kwargs['content_type'] = 'multipart/form-data'
+        return super().post(path, *args, **kwargs)
 
 
 @pytest.fixture
@@ -100,13 +117,14 @@ def client(monkeypatch, fake_db):
     # Don't run the real checker; just record who the run was attributed to.
     calls = []
 
-    def fake_start_check(checker, path, source_type='api', user_id=None):
+    def fake_run_check(checker, path, source_type='api', user_id=None):
         calls.append({'source_type': source_type, 'user_id': user_id})
-        return {'ok': True}, 200
+        results = {'template_name': 'x.zip'}
+        return CheckOutcome(results, True, None, 'run-1', build_customer_summary(results))
     monkeypatch.setattr(routes, 'upload_file', lambda: {'status': 'success', 'path': '/tmp/x.zip'})
-    monkeypatch.setattr(routes, 'start_check', fake_start_check)
+    monkeypatch.setattr(routes, 'run_check', fake_run_check)
     monkeypatch.setattr(routes, 'checker_cleanup', lambda checker: None)
 
-    c = flask_app.test_client()
+    c = UploadingClient(flask_app, flask_app.response_class, use_cookies=True)
     c.run_calls = calls
     return c
