@@ -7,7 +7,9 @@ from datetime import datetime, timezone
 from functools import wraps
 from flask import Blueprint, Response, jsonify, send_file, after_this_request, request, current_app, g
 from src.classes.FrontifyChecker import FrontifyChecker
-from .utils import upload_file, start_check, checker_cleanup
+from .utils import CheckFailed, upload_file, run_check, start_check, checker_cleanup
+from .analytics import first_error_message
+from .customer_summary import display_template_name, summary_payload
 from .analytics_api import (
     AnalyticsQueryError, analytics_period, export_runs_csv, get_issue_detail, get_overview, get_runs,
     get_supabase_client, run_filters,
@@ -877,6 +879,89 @@ def run_checker():
         upload_path = upload_result['path']
         results, status_code = start_check(checker, upload_path, source_type, user_id=run_user_id)
         return results, status_code
+    finally:
+        checker_cleanup(checker)
+
+
+def _summary_error(status, code, message):
+    """Error response for /summary: a stable machine-readable code, a message for people, and the request id."""
+    response = jsonify({'error': {'code': code, 'message': message, 'request_id': g.get('request_id')}})
+    response.status_code = status
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+
+def _customer_safe_reason(results):
+    """Why an upload was rejected, in words the checker wrote for users (bad ZIP, no IDML, too many files...).
+
+    A server-side folder error includes a filesystem path and exception text, so that one is never passed on.
+    """
+    reason = first_error_message(results)
+    if not reason or reason.startswith('Error creating the folders'):
+        return None
+    return reason
+
+
+def _require_zip_upload(f):
+    """Reject a missing or non-.zip upload before the rate limiter, so a bad request doesn't use up a check."""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        upload = request.files.get('file')
+        if upload is None or not upload.filename:
+            return _summary_error(400, 'missing_file', 'Attach the packaged template as a .zip file in the "file" field.')
+        if not upload.filename.lower().endswith('.zip'):
+            return _summary_error(
+                400, 'unsupported_file_type', 'Upload the packaged template as a .zip file (InDesign: File > Package).')
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@main.route('/summary', methods=['POST'])
+@require_auth(allow_api_key=True)
+@_require_zip_upload
+@limit_checks
+def customer_summary():
+    """Check an uploaded template package and return the customer summary, ready to review and paste into Intercom.
+
+    Request: multipart/form-data with the packaged template as a .zip in the `file` field.
+    Response 200: {run_id, template_name, summary_version, counts: {blockers, warnings, infos}, html, text}.
+    `html` pastes with formatting into Intercom; `text` is the same message as plain text with links written out.
+    Errors: {error: {code, message, request_id}}; see docs/API.md for the codes.
+    Counts toward the same per-user check limits as /run.
+    """
+    upload = request.files['file']
+    checker = FrontifyChecker()
+    try:
+        source_type, run_user_id = _run_source_and_user_id()
+
+        upload_result = upload_file()
+        if upload_result['status'] != 'success':
+            return _summary_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
+
+        try:
+            outcome = run_check(checker, upload_result['path'], source_type, user_id=run_user_id)
+        except CheckFailed:
+            return _summary_error(
+                500, 'check_failed', 'The template couldn\'t be checked. Try again, or contact us with the request ID.')
+
+        if not outcome.completed:
+            reason = _customer_safe_reason(outcome.results)
+            message = f'The file couldn\'t be checked: {reason}' if reason else 'The file couldn\'t be checked.'
+            return _summary_error(422, 'template_not_checkable', message)
+
+        if outcome.summary is None:
+            return _summary_error(
+                500, 'summary_failed', 'The summary couldn\'t be written. Try again, or contact us with the request ID.')
+
+        template_name = display_template_name(outcome.results.get('template_name') or upload.filename)
+        response = jsonify({
+            'run_id': outcome.run_id,
+            'template_name': template_name,
+            **summary_payload(outcome.summary, include_sections=False),
+        })
+        # The summary names the customer's template and content: don't let proxies or browsers keep a copy.
+        response.headers['Cache-Control'] = 'no-store'
+        return response
     finally:
         checker_cleanup(checker)
 

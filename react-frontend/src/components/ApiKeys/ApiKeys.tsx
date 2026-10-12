@@ -66,6 +66,11 @@ const EXAMPLES = {
     path: '/run',
     note: 'Returns the validation report as JSON.',
   },
+  summary: {
+    label: 'Customer summary',
+    path: '/summary',
+    note: 'Returns a message for the customer, as HTML (pastes with formatting into Intercom) and plain text.',
+  },
   xml: {
     label: 'ZIP output',
     path: '/run-and-download-xml',

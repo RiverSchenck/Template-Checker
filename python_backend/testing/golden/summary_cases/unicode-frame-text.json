@@ -1,0 +1,134 @@
+{
+  "results": {
+    "template_name": "Unicode",
+    "checks": [
+      {
+        "key": "KERNING",
+        "severity": "errors",
+        "label": "Kerning",
+        "message": "Kerning must be 'Metrics'",
+        "help_article": "https://help/kerning?a=1&b=\"2\"",
+        "category": "par_styles"
+      },
+      {
+        "key": "OVERRIDE",
+        "severity": "warnings",
+        "label": "Override",
+        "message": "Overrides",
+        "help_article": null,
+        "category": "text_boxes"
+      }
+    ],
+    "page_layouts": [
+      {
+        "page_id": "p1",
+        "name": "1",
+        "index": 1,
+        "spread_id": "s1",
+        "width": 600,
+        "height": 400,
+        "preview": null,
+        "frames": []
+      }
+    ],
+    "text_boxes": {
+      "details": {
+        "s1": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "OVERRIDE",
+              "context": "",
+              "identifier": "s1",
+              "page_id": "p1",
+              "page_name": "1",
+              "spread_id": "s1",
+              "data_id": "f1",
+              "bounds": {
+                "page_id": "p1",
+                "kind": "TextFrame",
+                "x": 10,
+                "y": 10,
+                "width": 100,
+                "height": 20
+              },
+              "context_details": {
+                "overrides": {
+                  "PointSize": "12"
+                }
+              }
+            }
+          ],
+          "infos": []
+        },
+        "s2": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "OVERRIDE",
+              "context": "",
+              "identifier": "s2",
+              "page_id": "p1",
+              "page_name": "1",
+              "spread_id": "s1",
+              "data_id": "f2",
+              "bounds": {
+                "page_id": "p1",
+                "kind": "TextFrame",
+                "x": 10,
+                "y": 20,
+                "width": 100,
+                "height": 20
+              },
+              "context_details": {
+                "overrides": {
+                  "AppliedFont": "A",
+                  "FontStyle": "B",
+                  "Tracking": "1",
+                  "Leading": "2",
+                  "FillColor": "c"
+                }
+              }
+            }
+          ],
+          "infos": []
+        },
+        "s3": {
+          "errors": [],
+          "warnings": [
+            {
+              "validationClassifier": "OVERRIDE",
+              "context": "",
+              "identifier": "s3",
+              "page_id": "p1",
+              "page_name": "1",
+              "spread_id": "s1",
+              "data_id": "f3",
+              "bounds": {
+                "page_id": "p1",
+                "kind": "TextFrame",
+                "x": 10,
+                "y": 30,
+                "width": 100,
+                "height": 20
+              }
+            }
+          ],
+          "infos": []
+        }
+      },
+      "total_count": 0
+    },
+    "text_box_data": {
+      "s1": {
+        "content": "Sale 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 ends soon"
+      },
+      "s2": {
+        "content": " ﻿  Hello world　  "
+      },
+      "s3": {
+        "content": "﻿ "
+      }
+    }
+  }
+}
