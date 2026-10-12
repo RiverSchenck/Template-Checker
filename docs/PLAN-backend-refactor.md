@@ -224,4 +224,5 @@ src/
 | 4 | Phase 1: B2, B4, B5, B7 (visible fixes) + spot checks | Yes, documented |
 | 5 | Phase 2: runner + move all checks (one PR, mechanical move verified by goldens) — **done** | No |
 | 9 | Phase 3: de-duplication | No |
-| 10+ | Phase 4: dataclasses, logging, cleanup | No |
+| 10 | Phase 4a: logging, dead code — **done** (#51) | No |
+| 11 | Phase 4b: attributes instead of trivial getters, B8 fix — **done** | B8 only |
