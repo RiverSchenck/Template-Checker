@@ -21,8 +21,9 @@ class StoryData:
             styles_parser, fonts_parser, story_element)
         self.grouped_paragraph_styles: List[List[StoryParagraphData]
                                             ] = self._extract_grouped_styles()
+        # Self of the first page of the spread this story's frame is on (the item's own page comes from
+        # page geometry when results are built).
         self.page: str = spreads_parser.get_page_by_story_id(self.story_id)
-        self.page_id: str = spreads_parser.get_page_id_by_story_id(self.story_id)
 
     # ---------------- Private Setters------------------
 
@@ -96,7 +97,7 @@ class StoryData:
         return self.page
 
     def get_page_id(self) -> str:
-        return self.page_id
+        return self.page
 
     def get_all_fonts(self) -> List[str]:
         return [char_style.applied_font for char_style in self.character_styles if char_style.applied_font]

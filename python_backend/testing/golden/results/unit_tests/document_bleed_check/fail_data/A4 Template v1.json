@@ -473,10 +473,7 @@
         "x": 81.26,
         "y": 130.39
        },
-       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
-       "context_details": {
-        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
-       },
+       "context": "",
        "data_id": "u100",
        "identifier": "Bold_positive",
        "page_id": "ud5",
@@ -505,26 +502,26 @@
    "u1a7": {
     "content": "Bereit.\n",
     "identifier": "u1a7",
-    "page_id": "2",
-    "page_name": ""
+    "page_id": "u153",
+    "page_name": "2"
    },
    "u1aa": {
     "content": "Bereit.\n",
     "identifier": "u1aa",
-    "page_id": "2",
-    "page_name": ""
+    "page_id": "u153",
+    "page_name": "2"
    },
    "u21b": {
     "content": "Bereit. Im Netz für die Schweiz.\n",
     "identifier": "u21b",
-    "page_id": "3",
-    "page_name": ""
+    "page_id": "u1ed",
+    "page_name": "3"
    },
    "u21e": {
     "content": "Bereit. Im Netz für die Schweiz.\n",
     "identifier": "u21e",
-    "page_id": "3",
-    "page_name": ""
+    "page_id": "u1ed",
+    "page_name": "3"
    }
   },
   "text_boxes": {

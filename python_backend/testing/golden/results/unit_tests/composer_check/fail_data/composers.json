@@ -522,10 +522,7 @@
         "x": 329.76,
         "y": 463.68
        },
-       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
-       "context_details": {
-        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
-       },
+       "context": "",
        "data_id": "u159",
        "identifier": "Paragraph Style 4",
        "page_id": "ud3",

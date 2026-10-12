@@ -58,3 +58,37 @@ Highlight bounds: `page1`, (50, 60, 200, 100) ✅. Issue's page: `page0` / "1" �
 
 A valid IDML without master spreads (allowed by InDesign) crashes at `MASTERPAGE_CHECK` with `AttributeError`
 ❌ **B1** (`testing/fixtures/test_known_bugs.py`).
+
+---
+
+## Phase 1 verification (B2, B4, B5, B7)
+
+Golden results changed in 110 of 187 packages. Every change was accounted for, order-independently:
+980 `text_box_data` page fields (B4), 18 composer contexts (B2), 33 rotation warnings → flip errors
+(19 frames, 14 images; B7), 4 issues moved to the facing page (B5). Nothing else changed. The oracle agrees with
+the checker on all 10 checks, all packages.
+
+### B5 — *Brochure_Bad.zip*, frame `u17a` (paragraph style + override issues)
+
+| | By hand | Before | After |
+|-|---------|--------|-------|
+| Frame | `ItemTransform 1 0 0 1 148.0 −93.7`, anchors x −67.2…162.4 → spread x **80.8…310.4** | | |
+| Page `u138` "2" | translate −1626.1, bounds left/right 1030.9/1626.1 → spread x −595.3…0 (left page) | ← reported here | |
+| Page `u139` "3" | translate −1030.9 → spread x 0…595.3 (right page) | | ← reported here ✅ |
+
+### B4 — *All_err_and_warn.zip*, text box data
+
+Spread page `<Page Self="ud3" Name="1">`. Before: `page_id: "1", page_name: ""` (name in the id field).
+After: `page_id: "ud3", page_name: "1"` ✅
+
+### B2 — composer context
+
+*Full coverage errors Folder*: `NormalParagraphStyle` has no `Composer`; `BasedOn` → `[No paragraph style]`, which
+sets `Composer="HL Composer"`. After: "Inherited from: ParagraphStyle/$ID/[No paragraph style]" ✅ (was empty).
+
+### B7 — flips
+
+*Full coverage errors Folder* frame `u17f` (`−1 0 0 1`, rendered above): now "Image Container has a horizontal flip
+transformation." (error) ✅. *Master Page.zip* images `0 −s −s 0` (mirrored + turned): now "has a flip
+transformation." (error) ✅. Guards: `1 0 0 −1` stays "vertical flip"; `−1 0 0 −1` (a real 180° turn) stays a
+rotation warning (`testing/fixtures/test_visible_fixes.py`).

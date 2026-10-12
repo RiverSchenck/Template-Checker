@@ -228,12 +228,12 @@ class ValidationResult():
         story = self.stories_parser.get_story_by_id(identifier)
         if story:
             content = story.get_content()  # Get full story content
-            page_id = story.get_page_id()  # Get page_id (page Self) for mapping to page_name later
-            # Ensure page_id is not None - convert to empty string if needed
+            page_id = story.get_page_id()  # spread's first page; refined from the frame's position when building JSON
             page_id = page_id if page_id is not None else ""
             # page_name will be mapped later in JSON generation
             self.text_box_data[identifier] = {
-                "identifier": identifier, "content": content, "page_id": page_id}
+                "identifier": identifier, "content": content, "page_id": page_id,
+                "frame_id": story.get_parent_text_frame_id()}
 
     def _build_spread_to_pages_mapping(self):
         """Build mapping of spread Self to list of page Selfs."""
@@ -264,12 +264,19 @@ class ValidationResult():
                 if page_self:
                     self.pages[page_self] = page_name
 
+    @staticmethod
+    def _page_of(bounds, fallback_page_id) -> str:
+        """The page an item is on: from its position when known (right page of a spread), else the fallback."""
+        if bounds and bounds.get("page_id"):
+            return bounds["page_id"]
+        return fallback_page_id if fallback_page_id is not None else ""
+
     def _build_validation_item_json(self, item: ValidationContext, category_key: str, page_to_spread: dict) -> dict:
         """Build JSON representation of a validation item, including text_content when applicable."""
         from src.error_handling.ValidationClassifier import ValidationWarning
 
-        # Ensure page_id is not None for dictionary lookups
-        page_id = item.get_page_id() if item.get_page_id() is not None else ""
+        bounds = self.page_geometry.get_bounds(item.get_data_id()) if self.page_geometry else None
+        page_id = self._page_of(bounds, item.get_page_id())
 
         base_item = {
             "validationClassifier": item.classifier_type,
@@ -281,7 +288,6 @@ class ValidationResult():
             "data_id": item.get_data_id()
         }
 
-        bounds = self.page_geometry.get_bounds(item.get_data_id()) if self.page_geometry else None
         if bounds:
             base_item["bounds"] = bounds
 
@@ -365,9 +371,8 @@ class ValidationResult():
         # Map page_id to page_name in text_box_data
         mapped_text_box_data = {}
         for identifier, text_box in self.text_box_data.items():
-            page_id = text_box.get("page_id", "")
-            # Ensure page_id is not None for dictionary lookup
-            page_id = page_id if page_id is not None else ""
+            frame_bounds = self.page_geometry.get_bounds(text_box.get("frame_id")) if self.page_geometry else None
+            page_id = self._page_of(frame_bounds, text_box.get("page_id"))
             page_name = self.pages.get(page_id, "") if page_id else ""
             # Ensure identifier is not None
             safe_identifier = identifier if identifier is not None else 'null'

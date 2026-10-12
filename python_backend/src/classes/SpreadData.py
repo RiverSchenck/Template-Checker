@@ -1,7 +1,10 @@
+import logging
 from xml.etree.ElementTree import Element
 from typing import List, Dict, Any
 from src.classes.TextFrame import TextFrame
 from src.classes.Link import Link
+
+logger = logging.getLogger(__name__)
 
 
 def _xml_local_tag(tag: str) -> str:
@@ -24,8 +27,8 @@ _PAGE_ITEM_TRANSFORM_TAGS = frozenset(
 class SpreadData:
     def __init__(self, root: Element):
         self.spread_self: str = ''
-        self.page_name: str = ''  # First page Self (for backward compatibility)
-        self.page_id: str = ''  # First page Name (for backward compatibility)
+        self.first_page_self: str = ''  # Self (id) of the spread's first page
+        self.first_page_name: str = ''  # Name (e.g. "1") of the spread's first page
         self.pages: List[Dict[str, str]] = []  # List of pages with Self and Name
         self.child_stories: List['StoryData'] = []
         self.links_obj_list: List[Link] = []
@@ -59,8 +62,8 @@ class SpreadData:
         # Set first page for backward compatibility
         if pages and len(pages) > 0:
             first_page = pages[0]
-            self.page_name = first_page.get("Self", '')
-            self.page_id = first_page.get("Name", '')
+            self.first_page_self = first_page.get("Self", '')
+            self.first_page_name = first_page.get("Name", '')
             # Set Geometric bounds from first page
             self.geometric_bounds = first_page.get("GeometricBounds", '')
 
@@ -138,10 +141,9 @@ class SpreadData:
         links_obj_list = []
         for link_element in root.findall(".//Link"):
             try:
-                link_obj = Link(link_element)
-            except Exception as e:
-                print(f"Link data error: {e}")
-            links_obj_list.append(link_obj)
+                links_obj_list.append(Link(link_element))
+            except Exception:
+                logger.warning('Skipping unreadable link %s', link_element.get('Self'), exc_info=True)
 
         return links_obj_list
 
@@ -160,11 +162,11 @@ class SpreadData:
 
     # ----------------Getters------------------
 
-    def get_page_name(self) -> str:
-        return self.page_name
+    def get_first_page_self(self) -> str:
+        return self.first_page_self
 
-    def get_page_id(self) -> str:
-        return self.page_id
+    def get_first_page_name(self) -> str:
+        return self.first_page_name
 
     def get_geographic_bounds(self) -> str:
         return self.geometric_bounds
@@ -198,4 +200,4 @@ class SpreadData:
     # ----------------String Method------------------
     def __str__(self):
         link_names = [link.link_name for link in self.links_obj_list]
-        return f"Page Name: {self.page_name}, Stories: {', '.join(self.child_stories)}, Links: {', '.join(link_names)}"
+        return f"First page: {self.first_page_name}, Stories: {', '.join(self.child_stories)}, Links: {', '.join(link_names)}"

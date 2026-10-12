@@ -52,12 +52,14 @@ class PackageBuilder:
     name: str = 'Template'
     pages: int = 1                      # 2 = one facing-page spread
     master_spreads: bool = True
+    masters: int = 1                    # number of master spread files
     bleed: str = '0'
     _paragraph_styles: Dict[str, Dict] = field(default_factory=dict)
     _character_styles: Dict[str, Dict] = field(default_factory=dict)
     _stories: Dict[str, List[_Paragraph]] = field(default_factory=dict)
     _items: List[str] = field(default_factory=list)
     _links: Dict[str, bytes] = field(default_factory=dict)
+    _master_items: Dict[int, List[str]] = field(default_factory=dict)
     _next_id: int = 0x100
 
     def __post_init__(self):
@@ -105,17 +107,23 @@ class PackageBuilder:
     def image(self, file_name: str, page: int = 0, at=(72, 300, 200, 150), *, include_in_links: bool = True,
               embedded: bool = False, image_transform: str = '1 0 0 1 0 0', frame_transform: Optional[str] = None,
               frame_style: str = DEFAULT_GRAPHIC_STYLE, image_style: str = DEFAULT_GRAPHIC_STYLE,
-              size_bytes: int = 1024) -> str:
+              size_bytes: int = 1024, master: Optional[int] = None, broken_link: bool = False) -> str:
+        """A placed image. master=N puts it on master spread N instead of the page; broken_link omits the
+        link's LinkResourceURI (a malformed export)."""
         frame_id, image_id, link_id = self._id(), self._id(), self._id()
         if include_in_links:
             self._links[file_name] = b'\0' * size_bytes
         stored = 'Embedded' if embedded else 'Normal'
-        self._items.append(
-            f'<Rectangle {_attrs({"Self": frame_id, "ContentType": "GraphicType", "AppliedObjectStyle": frame_style, "ItemTransform": frame_transform or self._page_transform(page)})}>'
-            f'{_rect_path(*at)}'
-            f'<Image {_attrs({"Self": image_id, "AppliedObjectStyle": image_style, "ItemTransform": image_transform})}>'
-            f'<Link {_attrs({"Self": link_id, "LinkResourceURI": f"file:/Users/designer/{self.name}/Links/{file_name}", "StoredState": stored})}/>'
-            f'</Image></Rectangle>')
+        uri = None if broken_link else f'file:/Users/designer/{self.name}/Links/{file_name}'
+        xml = (f'<Rectangle {_attrs({"Self": frame_id, "ContentType": "GraphicType", "AppliedObjectStyle": frame_style, "ItemTransform": frame_transform or self._page_transform(page)})}>'
+               f'{_rect_path(*at)}'
+               f'<Image {_attrs({"Self": image_id, "AppliedObjectStyle": image_style, "ItemTransform": image_transform})}>'
+               f'<Link {_attrs({"Self": link_id, "LinkResourceURI": uri, "StoredState": stored})}/>'
+               f'</Image></Rectangle>')
+        if master is None:
+            self._items.append(xml)
+        else:
+            self._master_items.setdefault(master, []).append(xml)
         return frame_id
 
     def _page_transform(self, page: int) -> str:
@@ -164,7 +172,8 @@ class PackageBuilder:
         files = {
             'mimetype': 'application/vnd.adobe.indesign-idml-package',
             'designmap.xml': f'<Document {NS}>'
-                             + ('<idPkg:MasterSpread src="MasterSpreads/MasterSpread_m1.xml"/>' if self.master_spreads else '')
+                             + ''.join(f'<idPkg:MasterSpread src="MasterSpreads/MasterSpread_m{m + 1}.xml"/>'
+                                       for m in range(self.masters if self.master_spreads else 0))
                              + '<idPkg:Spread src="Spreads/Spread_spread1.xml"/>'
                              + ''.join(f'<idPkg:Story src="Stories/Story_{s}.xml"/>' for s in self._stories)
                              + '</Document>',
@@ -175,9 +184,10 @@ class PackageBuilder:
                                          + '/></idPkg:Preferences>',
             'Spreads/Spread_spread1.xml': self._spread_xml(),
         }
-        if self.master_spreads:
-            files['MasterSpreads/MasterSpread_m1.xml'] = (
-                f'<idPkg:MasterSpread {NS}><MasterSpread Self="m1"><Properties/><Page Self="mpage1"/></MasterSpread></idPkg:MasterSpread>')
+        for m in range(self.masters if self.master_spreads else 0):
+            items = ''.join(self._master_items.get(m, []))
+            files[f'MasterSpreads/MasterSpread_m{m + 1}.xml'] = (
+                f'<idPkg:MasterSpread {NS}><MasterSpread Self="m{m + 1}"><Properties/><Page Self="mpage{m + 1}"/>{items}</MasterSpread></idPkg:MasterSpread>')
         for story_id, paragraphs in self._stories.items():
             files[f'Stories/Story_{story_id}.xml'] = self._story_xml(story_id, paragraphs)
         buf = io.BytesIO()

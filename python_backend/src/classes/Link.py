@@ -40,12 +40,10 @@ class Link:
         self.item_transform = parent_element.get("ItemTransform")
 
         grandparent_element = parent_element.getparent()
-        self.container_object_style = grandparent_element.get(
-            "AppliedObjectStyle")
-        self.container_item_transform = grandparent_element.get(
-            "ItemTransform") if grandparent_element is not None else None
-        self.grandparent_link_id = grandparent_element.get(
-            "Self")
+        has_grandparent = grandparent_element is not None
+        self.container_object_style = grandparent_element.get("AppliedObjectStyle") if has_grandparent else None
+        self.container_item_transform = grandparent_element.get("ItemTransform") if has_grandparent else None
+        self.grandparent_link_id = grandparent_element.get("Self") if has_grandparent else None
 
         # # Extract the coordinates from the PathPointType elements of the rectangle
         # path_points = grandparent_element.findall(".//PathPointType")
