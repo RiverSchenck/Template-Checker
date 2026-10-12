@@ -1,106 +1,64 @@
 """Checks on page layout: master pages, page items, bleed, text frames, object styles."""
 
+from src.checks._report import at_frame, at_link, first_page_id, report
 from src.document import ParsedDocument
 from src.error_handling.ErrorHandling import ValidationResult
 from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning
-from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform, TransformKind
+from src.helpers.page_item_transform import TransformKind, classify_page_item_transform, parse_item_transform
 
 
 def masterpage_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error when a master spread holds anything besides its pages and properties (items on a master
     page)."""
-    # doc.masterspreads_parser.print_unexpected_elements()  # Debug Print
     unexpected_elements = doc.masterspreads_parser.get_unexpected_elements()
-    message = ''
     if unexpected_elements:
-        message = 'Elements: ' + ', '.join(unexpected_elements)
-
-        results.add_error(
-            context=message,
-            error_type=ValidationError.MASTERPAGE,
-            page_id='',
-            identifier=None,
-            data_id='null'
-        )
+        report(results, ValidationError.MASTERPAGE, 'Elements: ' + ', '.join(unexpected_elements), identifier=None)
 
 
 def page_item_transformation_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Same end-state rule as image_transformation_check, for text frames, image-less rectangles,
     ovals, polygons and groups: flip or skew -> error, rotation only -> warning."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
-        pages = spread.get_pages()
-        spread_page_id = pages[0].get("self", '') if pages and len(pages) > 0 else ''
         for cand in spread.get_page_item_transform_candidates():
             tag = cand.get('tag') or 'Item'
             self_id = cand.get('self_id') or ''
-            raw = cand.get('item_transform') or ''
-            parsed = parse_item_transform(raw)
+            parsed = parse_item_transform(cand.get('item_transform') or '')
             if parsed is None:
                 continue
-            a, b, c, d, _e, _f = parsed
-            page_id = doc.find_page_id_from_data_id(self_id) if self_id else spread_page_id
-            classification = classify_page_item_transform(a, b, c, d)
+            classification = classify_page_item_transform(*parsed[:4])
             if classification.kind == TransformKind.NONE:
                 continue
-            identifier = f"{tag}:{self_id}" if self_id else tag
-            message = f"{tag} {classification.message}"
-            if classification.is_error:
-                results.add_error(
-                    context=message,
-                    error_type=ValidationError.PAGE_ITEM_TRANSFORMATION,
-                    page_id=page_id,
-                    identifier=identifier,
-                    data_id=self_id or 'null',
-                )
-            elif classification.kind == TransformKind.ROTATION:
-                results.add_warning(
-                    context=message,
-                    warning_type=ValidationWarning.PAGE_ITEM_TRANSFORMATION,
-                    page_id=page_id,
-                    identifier=identifier,
-                    data_id=self_id or 'null',
-                )
+            # Flips and skews are errors; what's left is a rotation, a warning.
+            classifier = (ValidationError.PAGE_ITEM_TRANSFORMATION if classification.is_error
+                          else ValidationWarning.PAGE_ITEM_TRANSFORMATION)
+            report(results, classifier, f"{tag} {classification.message}",
+                   page_id=doc.find_page_id_from_data_id(self_id) if self_id else first_page_id(spread),
+                   identifier=f"{tag}:{self_id}" if self_id else tag,
+                   data_id=self_id or 'null')
 
 
 def pasted_graphics_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each spread with graphics pasted into the document (PDF/EPS/image content without a
     link)."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
-        num_pasted_graphics = spread.get_pasted_graphics_num()
-        if num_pasted_graphics > 0:
-            # Get first page's Self from spread
-            pages = spread.get_pages()
-            page_id = pages[0].get("self", '') if pages and len(pages) > 0 else ''
-            for _ in range(num_pasted_graphics):
-                message = f"{spread.get_pasted_graphics_num()} pasted graphics found."
-                results.add_error(
-                    context=message,
-                    error_type=ValidationError.PASTED_GRAPHICS,
-                    page_id=page_id,
-                    identifier=None
-                )
-                break
+        count = spread.get_pasted_graphics_num()
+        if count > 0:
+            report(results, ValidationError.PASTED_GRAPHICS, f"{count} pasted graphics found.",
+                   page_id=first_page_id(spread), identifier=None)
 
 
 def document_bleed_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """One warning when any document bleed offset isn't 0."""
     bleed_values = doc.preferences_parser.get_document_bleed()
-    print(bleed_values)
-    if bleed_values is not None:
-        for _, value in bleed_values.items():
-            if value != '0':
-                bleed_descriptions = ', '.join(
-                    f"{k}: {v}pt" for k, v in bleed_values.items())
-                message = f"{bleed_descriptions}."
-                results.add_warning(
-                    context=message,
-                    warning_type=ValidationWarning.DOCUMENT_BLEED,
-                    page_id='',
-                    identifier=None,
-                    data_id='null'
-                )
-                # Only need one warning
-                break
+    if bleed_values is not None and any(value != '0' for value in bleed_values.values()):
+        descriptions = ', '.join(f"{k}: {v}pt" for k, v in bleed_values.items())
+        report(results, ValidationWarning.DOCUMENT_BLEED, f"{descriptions}.", identifier=None)
+
+
+# Reference points each auto-size type may grow from.
+_HEIGHT_ONLY_POINTS = ['TopCenterPoint', 'BottomCenterPoint']
+_WIDTH_ONLY_POINTS = ['LeftCenterPoint', 'RightCenterPoint']
+_CORNER_POINTS = ['TopLeftPoint', 'BottomLeftPoint', 'BottomRightPoint', 'TopRightPoint']
 
 
 def auto_size_text_box_check(doc: ParsedDocument, results: ValidationResult) -> None:
@@ -109,87 +67,34 @@ def auto_size_text_box_check(doc: ParsedDocument, results: ValidationResult) -> 
     left/right center or a corner respectively."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
         for text_frame in spread.get_text_frame_obj_list():
-            if text_frame.get_is_auto_size():
-                # Verify not auto sizing from center
-                story_id, story_page_id = doc.frame_story_and_page(text_frame)
-                data_id = text_frame.get_frame_id()
-                use_line_breaks = text_frame.get_use_no_line_breaks()
-                if text_frame.get_auto_sizing_type() == 'HeightOnly':
-                    if text_frame.get_auto_sizing_reference_point() not in ['TopCenterPoint', 'BottomCenterPoint']:
-                        message = "HeightOnly cannot autosize from center."
-                        results.add_error(
-                            context=message,
-                            error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
-                            page_id=story_page_id,
-                            identifier=story_id,
-                            data_id=data_id
-                        )
-                elif text_frame.get_auto_sizing_type() == 'WidthOnly':
-                    if not use_line_breaks or use_line_breaks == 'false':
-                        message = "'No Line Breaks' must be checked."
-                        results.add_error(
-                            context=message,
-                            error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
-                            page_id=story_page_id,
-                            identifier=story_id,
-                            data_id=data_id)
-                        # InDesign has weird behavior, and changes the reference point if 'No Line Breaks' is not checked. So we will just break here.
-                        continue
-                    if text_frame.get_auto_sizing_reference_point() not in ['LeftCenterPoint', 'RightCenterPoint']:
-                        message = "WidthOnly cannot autosize from center."
-                        results.add_error(
-                            context=message,
-                            error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
-                            page_id=story_page_id,
-                            identifier=story_id,
-                            data_id=data_id
-                        )
-                elif text_frame.get_auto_sizing_type() == 'HeightAndWidth':
-                    if not use_line_breaks or use_line_breaks == 'false':
-                        message = "'No Line Breaks' must be checked."
-                        results.add_error(
-                            context=message,
-                            error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
-                            page_id=story_page_id,
-                            identifier=story_id,
-                            data_id=data_id
-                        )
-                        # InDesign has weird behavior, and changes the reference point if 'No Line Breaks' is not checked. So we will just break here.
-                        continue
-                    if text_frame.get_auto_sizing_reference_point() not in ['TopLeftPoint', 'BottomLeftPoint', 'BottomRightPoint', 'TopRightPoint']:
-                        message = "HeightAndWidth must auto size from corners."
-                        results.add_error(
-                            context=message,
-                            error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
-                            page_id=story_page_id,
-                            identifier=story_id,
-                            data_id=data_id)
-                else:
-                    message = "Only width, height, and WidthAndHeight are supported."
-                    results.add_error(
-                        context=message,
-                        error_type=ValidationError.AUTO_SIZE_TEXT_BOX,
-                        page_id=story_page_id,
-                        identifier=story_id,
-                        data_id=data_id
-                    )
+            if not text_frame.get_is_auto_size():
+                continue
+            sizing = text_frame.get_auto_sizing_type()
+            point = text_frame.get_auto_sizing_reference_point()
+            no_line_breaks = text_frame.get_use_no_line_breaks()
+            # InDesign moves the reference point when 'No Line Breaks' is off, so that's the only thing reported then.
+            needs_no_line_breaks = sizing in ('WidthOnly', 'HeightAndWidth')
+            if sizing == 'HeightOnly':
+                message = "HeightOnly cannot autosize from center." if point not in _HEIGHT_ONLY_POINTS else None
+            elif needs_no_line_breaks and (not no_line_breaks or no_line_breaks == 'false'):
+                message = "'No Line Breaks' must be checked."
+            elif sizing == 'WidthOnly':
+                message = "WidthOnly cannot autosize from center." if point not in _WIDTH_ONLY_POINTS else None
+            elif sizing == 'HeightAndWidth':
+                message = "HeightAndWidth must auto size from corners." if point not in _CORNER_POINTS else None
+            else:
+                message = "Only width, height, and WidthAndHeight are supported."
+            if message:
+                report(results, ValidationError.AUTO_SIZE_TEXT_BOX, message, **at_frame(doc, text_frame))
 
 
 def text_columns_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each text frame with more than one column."""
-    # Just checking columns, not fixed width column settings
     for spread in doc.spreads_parser.get_spreads_obj_list():
         for text_frame in spread.get_text_frame_obj_list():
-            if text_frame.get_text_column_count() and text_frame.get_text_column_count() != '1':
-                story_id, story_page_id = doc.frame_story_and_page(text_frame)
-                data_id = text_frame.get_frame_id()
-                results.add_error(
-                    context=None,
-                    error_type=ValidationError.TEXT_COLUMNS,
-                    page_id=story_page_id,
-                    identifier=story_id,
-                    data_id=data_id
-                )
+            columns = text_frame.get_text_column_count()
+            if columns and columns != '1':
+                report(results, ValidationError.TEXT_COLUMNS, **at_frame(doc, text_frame))
 
 
 def text_wrap_check(doc: ParsedDocument, results: ValidationResult) -> None:
@@ -197,19 +102,10 @@ def text_wrap_check(doc: ParsedDocument, results: ValidationResult) -> None:
     (InDesign's default)."""
     for spread in doc.spreads_parser.get_spreads_obj_list():
         for text_frame in spread.get_text_frame_obj_list():
-            text_wrap_mode = text_frame.get_text_wrap_mode()
-            # No TextWrapPreference means InDesign's default: no wrap.
-            if text_wrap_mode not in (None, 'None'):
-                story_id, story_page_id = doc.frame_story_and_page(text_frame)
-                data_id = text_frame.get_frame_id()
-                message = f"Text box wrap is '{text_wrap_mode}' not None."
-                results.add_error(
-                    context=message,
-                    error_type=ValidationError.TEXT_WRAP,
-                    page_id=story_page_id,
-                    identifier=story_id,
-                    data_id=data_id
-                )
+            mode = text_frame.get_text_wrap_mode()
+            if mode not in (None, 'None'):
+                report(results, ValidationError.TEXT_WRAP, f"Text box wrap is '{mode}' not None.",
+                       **at_frame(doc, text_frame))
 
 
 def linked_text_frame_check(doc: ParsedDocument, results: ValidationResult) -> None:
@@ -217,59 +113,20 @@ def linked_text_frame_check(doc: ParsedDocument, results: ValidationResult) -> N
     for spread in doc.spreads_parser.get_spreads_obj_list():
         for text_frame in spread.get_text_frame_obj_list():
             if text_frame.get_is_linked_text_frame():
-                story_id, story_page_id = doc.frame_story_and_page(text_frame)
-                data_id = text_frame.get_frame_id()
-                results.add_error(
-                    context=None,
-                    error_type=ValidationError.LINKED_TEXT_FRAME,
-                    page_id=story_page_id,
-                    identifier=story_id,
-                    data_id=data_id
-                )
+                report(results, ValidationError.LINKED_TEXT_FRAME, **at_frame(doc, text_frame))
 
 
 def object_style_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Error for each text frame, and each placed image or its frame, using an object style other
     than InDesign's defaults."""
-    # ONLY CHECKS TEXT FRAMES AND IMAGES
-
-    # Check Text Frames
     for spread in doc.spreads_parser.get_spreads_obj_list():
         for text_frame in spread.get_text_frame_obj_list():
             if text_frame.get_applied_object_style() not in doc.default_object_styles:
-                _, story_page_id = doc.frame_story_and_page(text_frame)
-                data_id = text_frame.get_frame_id()
-                results.add_error(
-                    context=None,
-                    error_type=ValidationError.OBJECT_STYLE_TEXT,
-                    page_id=story_page_id,
-                    identifier=None,
-                    data_id=data_id
-                )
+                report(results, ValidationError.OBJECT_STYLE_TEXT, **{**at_frame(doc, text_frame), 'identifier': None})
 
     for spread in doc.spreads_parser.get_spreads_obj_list():
-        # Get first page's Self from spread
-        pages = spread.get_pages()
-        spread_page_id = pages[0].get("self", '') if pages and len(pages) > 0 else ''
         for link in spread.get_links_obj_list():
-            rectangle_id = link.get_rectangle_link_id()
-            # Try to find the specific page_id from data_id, fallback to spread's first page
-            page_id = doc.find_page_id_from_data_id(rectangle_id) if rectangle_id else spread_page_id
-            if link.get_image_object_style() not in doc.default_object_styles:
-                image_name = link.get_image_name()
-                results.add_error(
-                    context=None,
-                    error_type=ValidationError.OBJECT_STYLE_IMAGE,
-                    page_id=page_id,
-                    identifier=image_name,
-                    data_id=rectangle_id
-                )
-            if link.get_container_object_style() not in doc.default_object_styles:
-                image_name = link.get_image_name()
-                results.add_error(
-                    context=None,
-                    error_type=ValidationError.OBJECT_STYLE_IMAGE,
-                    page_id=page_id,
-                    identifier=image_name,
-                    data_id=rectangle_id
-                )
+            # The image and its frame each count: one error for each that has a custom object style.
+            for style in (link.get_image_object_style(), link.get_container_object_style()):
+                if style not in doc.default_object_styles:
+                    report(results, ValidationError.OBJECT_STYLE_IMAGE, **at_link(doc, spread, link))
