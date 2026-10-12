@@ -192,10 +192,6 @@ class SpreadData:
     def get_page_item_transform_candidates(self) -> List[Dict[str, Any]]:
         return self.page_item_transform_candidates
 
-    # ---------------- Debug Prints ------------------
-    def print_links_data(self):
-        for link_data in self.links_obj_list:
-            print(link_data)
 
     # ----------------String Method------------------
     def __str__(self):

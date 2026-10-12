@@ -60,8 +60,3 @@ class StylesParser:
 
     def find_char_property(self, key: str):
         return self.character_styles.get(key, None)
-
-    # ----------------Debug Prints------------------
-    def print_par_style_names(self):
-        for style_name in self.paragraph_styles.keys():
-            print(style_name)

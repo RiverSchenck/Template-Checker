@@ -64,13 +64,3 @@ class MasterPageParser:
 
     def get_links_objs(self) -> List[Link]:
         return self.links_obj_list
-
-    # ----------------Debug Prints------------------
-    def print_unexpected_elements(self):
-        if self.unexpected_elements:
-            print("Unexpected Elements Found:")
-            # Using set to remove duplicates
-            for element in set(self.unexpected_elements):
-                print(f"  - {element}")
-        else:
-            print("No unexpected elements found.")

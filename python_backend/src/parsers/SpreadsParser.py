@@ -48,8 +48,3 @@ class SpreadsParser:
 
     def get_page_by_story_id(self, story_id: str):
         return self.story_id_to_page.get(story_id)
-
-    # ----------------Debug Prints------------------
-    def print_spreads_obj_list(self):
-        for spread_data in self.spreads_obj_list:
-            print(spread_data)

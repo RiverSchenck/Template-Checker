@@ -84,8 +84,3 @@ class MetadataParser:
             if preview.page == page_number:
                 return preview
         return None
-
-    # ----------------Debug Prints------------------
-    def print_all_previews(self):
-        for preview in self.previews_objs_list:
-            print(preview)

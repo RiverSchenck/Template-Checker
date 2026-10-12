@@ -1,9 +1,9 @@
-import zipfile
+import logging
 import os
-import uuid
 import shutil
-import sys
-import traceback
+import tempfile
+import uuid
+import zipfile
 from typing import Callable, Dict, List, Optional, Tuple
 from src.error_handling.ErrorHandling import ValidationResult
 from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning, ValidationInfo
@@ -23,14 +23,15 @@ from src.helpers.package_zip import (
 from src.helpers.page_geometry import PageGeometryIndex
 from src.helpers.pdf_previews import find_package_pdf, render_pdf_previews
 
+logger = logging.getLogger(__name__)
 
-# *****************************************************************************************
-# Class: FrontifyChecker
-# Description: This class does the actual comparisions to execute checks. Each state is a
-# single check. Parser classes do the actual parsing of XML. Here is this class is where
-# the check occurs for if a state throws an error or warning.
-# *****************************************************************************************
+# Each check unzips into its own folder here; FrontifyChecker.delete_unzipped_root_path removes it.
+DATA_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'data')
+
+
 class FrontifyChecker:
+    """Checks one uploaded template package: unzip it, parse the IDML, run every check (src/checks), count
+    totals. Results collect in self.results; app/ calls run_state_machine() and reads them."""
     def __init__(self):
         # Source ZIP
         self.source_file_path: str = ''
@@ -44,7 +45,6 @@ class FrontifyChecker:
         self.idml_path: str = ''
         self.idml_problem: Optional[str] = None
         self.package_links: List[Tuple[str, int]] = []  # (file name, size) in Links/
-        self.spreads_dir: str = ''
         # XML Data
         self.stories_parser: StoriesParser = None
         self.masterspreads_parser: MasterPageParser = None
@@ -54,7 +54,6 @@ class FrontifyChecker:
         self.preferences_parser: PreferencesParser = None
         self.stories_exist: bool = True
         self.metadata_xml_path: bool = False
-        # Initial State for State Machine, through GUI we already called States.GET_ZIP
         self.current_state: States = States.UNZIP_PACKAGE
         # Last state run_state_machine ran; RESULTS once every check finished
         self.last_state: Optional[States] = None
@@ -99,15 +98,8 @@ class FrontifyChecker:
             return
         check.run(self.document, self.results)
 
-    # ========================================================================================
-    # State: GET_ZIP
-    # PASS Next State Transition: NA
-    # FAIL States Transition: NA
-    # Description: GUI acts as an event handler and calls this function.
-    # ========================================================================================
     def get_zip_state(self) -> bool:
-        # source_file_path = filedialog.askopenfilename(
-        #     filetypes=[("Zip files", "*.zip")])
+        """The upload must be a .zip; otherwise report it."""
         if self.source_file_path and self.source_file_path.endswith('.zip'):
             self.template_name = os.path.basename(self.source_file_path)
             return True
@@ -116,25 +108,10 @@ class FrontifyChecker:
                 "File uploaded is not ZIP", ValidationError.ZIP, page_id='', identifier='null', data_id='null')
             return False
 
-    # ========================================================================================
-    # State: UNZIP_PACKAGE
-    # PASS Next State Transition: UNZIP_IDML
-    # FAIL States Transition: RESULTS
-    # Description: Deletes 'data' folder, then create 'data' folder
-    # ========================================================================================
     def unzip_package_state(self) -> States:
+        """UNZIP_PACKAGE: check it's a zip, make this run's folder, extract what the checks read."""
         self.results.add_template_name(os.path.basename(self.source_file_path))
-        # current_dir = os.getcwd()
-        # self.data_folder = os.path.join(current_dir, 'data')
-        if getattr(sys, 'frozen', False):
-            # The application is frozen (packaged by PyInstaller)
-            current_dir = os.path.dirname(sys.executable)
-        else:
-            # The application is not frozen (running as a script)
-            script_dir = os.path.dirname(__file__)
-            current_dir = os.path.join(script_dir, '..')
-
-        self.data_folder = os.path.join(current_dir, 'data')
+        self.data_folder = DATA_FOLDER
         if not self.get_zip_state():
             return States.EXIT
 
@@ -146,44 +123,23 @@ class FrontifyChecker:
 
         return States.UNZIP_IDML
 
-    # ---------------------------------------------------
-    # Function: cleanup_data_folder
-    # Description: Deletes 'data' folder if it exists,
-    # then creates a new 'data' folder. Then create a
-    # unique folder for unzipping package too.
-    # ---------------------------------------------------
     def cleanup_data_folder(self) -> bool:
+        """Create this run's own folder (unzipped_root_path) inside the data folder."""
         try:
-            # Ensure the base data folder exists
-            if not os.path.exists(self.data_folder):
-                os.makedirs(self.data_folder)
-
-            # Generate a unique folder name using UUID
-            unique_folder_name = str(uuid.uuid4())
-            unique_folder_path = os.path.join(
-                self.data_folder, unique_folder_name)
-
-            # Create the unique folder
-            os.makedirs(unique_folder_path)
-
-            # Save the unique folder path to self.unzipped_root_path
-            self.unzipped_root_path = unique_folder_path
-
+            os.makedirs(self.data_folder, exist_ok=True)
+            self.unzipped_root_path = os.path.join(self.data_folder, str(uuid.uuid4()))
+            os.makedirs(self.unzipped_root_path)
             return True
         except Exception:
-            traceback.print_exc()
+            logger.exception("Couldn't create the folder for this upload")
             self.results.add_custom_error(
                 "The server couldn't prepare the upload. Try again.", ValidationError.ERROR)
             return False
 
-    # ---------------------------------------------------
-    # Function: extract_zip_to_data_folder
-    # Description: Validates the package from the zip's directory, then
-    # extracts only what the checks read (.idml, Document Fonts, package
-    # PDF) into the unique folder. Links are listed, not extracted.
-    # A missing or duplicate .idml is reported by the UNZIP_IDML state.
-    # ---------------------------------------------------
     def extract_zip_to_data_folder(self) -> bool:
+        """Validate the package from the zip's directory, then extract only what the checks read (.idml,
+        Document Fonts, package PDF). Links are listed, not extracted. A missing or duplicate .idml is
+        reported by UNZIP_IDML."""
         self.idml_path = ''
         self.package_links = []
         self.idml_problem = None
@@ -206,19 +162,14 @@ class FrontifyChecker:
                 "The file is not a valid ZIP archive. Please zip the package folder again and re-upload.", ValidationError.ERROR)
             return False
         except Exception:
-            traceback.print_exc()
+            logger.exception('Failed to unzip the package')
             self.results.add_custom_error(
                 "Failed to unzip the file.", ValidationError.ERROR)
             return False
         return True
 
-    # ========================================================================================
-    # State: UNZIP_IDML
-    # PASS Next State Transition: PARSE_XML
-    # FAIL States Transition: RESULTS
-    # Description: Reports a missing or duplicate .idml, otherwise unarchives it.
-    # ========================================================================================
     def unzip_idml_state(self) -> States:
+        """UNZIP_IDML: report a missing or duplicate .idml, otherwise unpack it."""
         if self.idml_problem or not self.idml_path:
             self.results.add_error(
                 self.idml_problem or NoIdmlError().args[0], ValidationError.IDML, page_id='', identifier='null', data_id='null')
@@ -227,15 +178,8 @@ class FrontifyChecker:
             return States.EXIT
         return States.PARSE_XML
 
-    # ---------------------------------------------------
-    # Function: unarchive_idml_files
-    # Description: Unarchives the provided .idml file into a designated output folder.
-    # If there's an error during unarchiving, an error message is added to the results.
-    # Args:
-    #       idml_path: Path to the .idml file to be unarchived.
-    # Returns: True if unarchiving is successful, False otherwise.
-    # ---------------------------------------------------
-    def unarchive_idml_files(self, idml_path: str):
+    def unarchive_idml_files(self, idml_path: str) -> bool:
+        """Unpack the .idml (a zip of XML files) into 'Source XML'; report and return False if it can't be."""
         self.idml_output_folder = os.path.join(
             self.unzipped_root_path, 'Source XML')
         os.makedirs(self.idml_output_folder, exist_ok=True)
@@ -247,18 +191,14 @@ class FrontifyChecker:
             self.results.add_custom_error(str(e), ValidationError.ERROR)
             return False
         except Exception:
-            traceback.print_exc()
+            logger.exception('Failed to unzip the .idml')
             self.results.add_custom_error(
                 "Failed to unzip the .idml file.", ValidationError.ERROR)
             return False
 
-    # ========================================================================================
-    # State: PARSE_XML
-    # PASS Next State Transition:
-    # FAIL States Transition: RESULTS
-    # Description: Parses the XML to extract story data and paragraph styles.
-    # ========================================================================================
     def parse_xml(self) -> States:
+        """PARSE_XML: read the IDML's XML (spreads, fonts, styles, stories, masters, preferences) into
+        self.document. Returns the first check's state, or EXIT if a required file is missing."""
         # -----------------------------
         # Source Folders (Links, Document Fonts)
         # Init: SourceFoldersParser
@@ -425,9 +365,9 @@ class FrontifyChecker:
                         previews[page_id] = ''.join(preview.get_base_64().split())
             previews.update(self._render_package_pdf_previews(page_geometry))
             self.results.set_page_previews(previews)
-        except Exception as e:
+        except Exception:
             # Highlighting is a nice-to-have; never fail the check because of it.
-            print(f"Page highlighting data error: {e}")
+            logger.warning('Page highlighting data unavailable', exc_info=True)
 
     def _render_package_pdf_previews(self, page_geometry) -> dict:
         """Sharp page previews from the package PDF, when it matches the document page for page.
@@ -440,12 +380,12 @@ class FrontifyChecker:
             if not pdf_path:
                 return {}
             return render_pdf_previews(pdf_path, page_geometry.get_pages())
-        except Exception as e:
-            print(f"PDF preview rendering skipped: {e}")
+        except Exception:
+            logger.warning('PDF preview rendering skipped', exc_info=True)
             return {}
 
     def ensure_folder_exists(self, path, folder_name):
-        # Convert all folder names in the unzipped folder path to lowercase and check if the lowercase version of the target folder exists
+        """The folder_name subfolder of path, matched case-insensitively; created if it doesn't exist."""
         folder_names = sorted(f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f)))
         folder_paths = [os.path.join(path, f) for f in folder_names]
         folder_names_lowercase = [f.lower() for f in folder_names]
@@ -455,16 +395,12 @@ class FrontifyChecker:
             # If the folder does not exist (regardless of case), create it
             target_folder_path = os.path.join(path, folder_name)
             os.makedirs(target_folder_path)
-            # print(f"Folder '{folder_name}' created at {target_folder_path}")
             return target_folder_path
         else:
             # If it exists, find the actual path to use it (maintaining the original case)
             actual_folder_index = folder_names_lowercase.index(
                 target_folder_name_lowercase)
-            actual_folder_path = folder_paths[actual_folder_index]
-            # print(
-            #     f"Folder '{folder_name}' already exists at {actual_folder_path}")
-            return actual_folder_path
+            return folder_paths[actual_folder_index]
 
     def results_analytics(self):
         """Totals per category (how many styles, text boxes, fonts and images the document has)."""
@@ -496,10 +432,6 @@ class FrontifyChecker:
             images_count += spread.get_pasted_graphics_num()
         self.results.set_images_total_count(images_count)
 
-    # ========================================================================================
-    # Helper methods
-    # ========================================================================================
-
     def calculate_style_total_count(self, style_type='paragraph'):
         """Fetch all styles from documents and count unique instances."""
         unique_styles = set()
@@ -519,9 +451,6 @@ class FrontifyChecker:
                     unique_styles.add(style_id)
 
         return len(unique_styles)
-
-    def set_current_state(self, state: 'States'):
-        self.current_state = state
 
     def get_errors(self) -> List['Error']:
         return self.results.get_errors()
@@ -547,65 +476,28 @@ class FrontifyChecker:
     def get_template_name(self):
         return self.template_name
 
-    def get_unarchived_idml_path(self):
-        return self.idml_output_folder
-
-    def delete_unzipped_root_path(self):
+    def delete_unzipped_root_path(self) -> bool:
+        """Remove this run's unzip folder. True if it was removed."""
+        if not os.path.isdir(self.unzipped_root_path):
+            return False
         try:
-            # Check if the path exists and is a directory
-            if os.path.isdir(self.unzipped_root_path):
-                # Delete the directory and all its contents
-                shutil.rmtree(self.unzipped_root_path)
-                return True
-            else:
-                return False, "Path does not exist or is not a directory."
-        except Exception as e:
-            # Return False and the error message if something goes wrong
-            return False, f"An error occurred: {str(e)}"
+            shutil.rmtree(self.unzipped_root_path)
+            return True
+        except OSError:
+            logger.warning("Couldn't remove %s", self.unzipped_root_path, exc_info=True)
+            return False
 
-    def zip_idml_output_folder(self):
+    def zip_idml_output_folder(self) -> Optional[str]:
+        """Zip the unpacked IDML XML (the "download XML" feature) into the system temp folder, outside this
+        run's folder so cleanup can't race the download. Returns the zip's path, or None if it failed."""
         try:
-            import tempfile
-            import time
-            zip_file_name = "xml_output.zip"
-
-            # Create ZIP in temp directory (outside of unzipped_root_path) to avoid cleanup conflicts
-            temp_dir = tempfile.gettempdir()
-            zip_file_path = os.path.join(temp_dir, f"{uuid.uuid4()}_{zip_file_name}")
-
-            # Ensure the output folder exists
-            if not os.path.exists(self.idml_output_folder):
-                raise FileNotFoundError(
-                    f"IDML output folder does not exist: {self.idml_output_folder}")
-
-            # Create a zip file containing all the files in the specified folder
-            # make_archive creates file with .zip extension automatically
-            archive_base = zip_file_path.replace('.zip', '')
-            shutil.make_archive(archive_base, 'zip', self.idml_output_folder)
-
-            # Verify the ZIP file is created and has content
-            max_retries = 5
-            retry_count = 0
-            while retry_count < max_retries:
-                if os.path.isfile(zip_file_path) and os.path.getsize(zip_file_path) > 0:
-                    break
-                time.sleep(0.1)  # Small delay to allow file system to catch up
-                retry_count += 1
-
-            if not os.path.isfile(zip_file_path):
-                raise FileNotFoundError(
-                    f"ZIP file was not created: {zip_file_path}")
-
+            if not os.path.isdir(self.idml_output_folder):
+                raise FileNotFoundError(f"IDML output folder does not exist: {self.idml_output_folder}")
+            archive_base = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}_xml_output")
+            zip_file_path = shutil.make_archive(archive_base, 'zip', self.idml_output_folder)
             if os.path.getsize(zip_file_path) == 0:
-                raise FileNotFoundError(
-                    f"ZIP file is empty: {zip_file_path}")
-
-            print(f"ZIP created successfully: {zip_file_path}, Size: {os.path.getsize(zip_file_path)} bytes")
-            # Return the path to the created zip file
+                raise FileNotFoundError(f"ZIP file is empty: {zip_file_path}")
             return zip_file_path
-        except Exception as e:
-            # Log the error
-            print(f"Error creating ZIP file: {e}")
-            import traceback
-            traceback.print_exc()
+        except Exception:
+            logger.exception('Creating the XML zip failed')
             return None

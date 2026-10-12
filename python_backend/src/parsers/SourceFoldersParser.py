@@ -40,11 +40,3 @@ class SourceFoldersParser:
 
     def get_images_obj_list(self):
         return self.images_obj_list
-
-    # ----------------Debug Prints------------------
-    def print_images_obj_list(self):
-        for image_data in self.images_obj_list:
-            print(image_data)
-
-    def print_document_fonts(self):
-        print("\n".join(font.fontFamily for font in self.document_fonts))
