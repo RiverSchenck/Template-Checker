@@ -28,36 +28,29 @@ class PropertyBase:
         return value
 
     def _par_resolve_inheritance(self, style_id: str, styles_parser: 'StylesParser') -> str:
-        inherited_value = styles_parser.get_all_properties(
-            style_id).get(self.property_name)
-        inherited_value = self._normalize_value(inherited_value)
-
-        if not inherited_value:
-            base_style = styles_parser.get_all_properties(
-                style_id).get("BasedOn")
-            if base_style:
-                # Normalize the style_id
-                if base_style.startswith("$ID/"):
-                    base_style = "ParagraphStyle/" + base_style
-                self.inherited_from = base_style
-                return self._par_resolve_inheritance(base_style, styles_parser)
-        return inherited_value
+        return self._follow_based_on(style_id, 'ParagraphStyle', styles_parser.get_all_properties)
 
     def _char_resolve_inheritance(self, style_id: str, styles_parser: 'StylesParser') -> str:
-        inherited_value = styles_parser.get_all_char_properties(
-            style_id).get(self.property_name)
-        inherited_value = self._normalize_value(inherited_value)
+        return self._follow_based_on(style_id, 'CharacterStyle', styles_parser.get_all_char_properties)
 
-        if not inherited_value:
-            base_style = styles_parser.get_all_char_properties(
-                style_id).get("BasedOn")
-            if base_style:
-                # Normalize the style_id
-                if base_style.startswith("$ID/"):
-                    base_style = "CharacterStyle/" + base_style
-                self.inherited_from = base_style
-                return self._char_resolve_inheritance(base_style, styles_parser)
-        return inherited_value
+    def _follow_based_on(self, style_id: str, kind: str, properties_of) -> str:
+        """Walk the BasedOn chain until a style sets the property. inherited_from ends up as the last style
+        visited (the one the value came from). A cyclic chain stops instead of recursing forever."""
+        visited = set()
+        while style_id not in visited:
+            visited.add(style_id)
+            properties = properties_of(style_id)
+            value = self._normalize_value(properties.get(self.property_name))
+            if value:
+                return value
+            base_style = properties.get("BasedOn")
+            if not base_style:
+                return value
+            if base_style.startswith("$ID/"):
+                base_style = f"{kind}/{base_style}"
+            self.inherited_from = base_style
+            style_id = base_style
+        return None
 
     # ----------------Getters------------------
     def get_property_value(self) -> str:
