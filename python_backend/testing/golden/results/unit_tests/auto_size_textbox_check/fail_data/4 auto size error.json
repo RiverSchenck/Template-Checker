@@ -483,23 +483,6 @@
        "page_name": "1",
        "spread_id": "uce",
        "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      },
-      {
-       "bounds": {
-        "height": 8.72,
-        "kind": "TextFrame",
-        "page_id": "ud3",
-        "width": 45.54,
-        "x": 55.16,
-        "y": 309.6
-       },
-       "context": "HeightAndWidth must auto size from corners.",
-       "data_id": "u128",
-       "identifier": "u12b",
-       "page_id": "ud3",
-       "page_name": "1",
-       "spread_id": "uce",
-       "validationClassifier": "AUTO_SIZE_TEXT_BOX"
       }
      ],
      "infos": [],

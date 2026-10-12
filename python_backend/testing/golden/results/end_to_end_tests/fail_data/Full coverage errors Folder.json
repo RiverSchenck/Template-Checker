@@ -871,23 +871,6 @@
         "x": 103.75,
         "y": 247.68
        },
-       "context": "WidthOnly cannot autosize from center.",
-       "data_id": "u151",
-       "identifier": "u13f",
-       "page_id": "ud3",
-       "page_name": "1",
-       "spread_id": "uce",
-       "validationClassifier": "AUTO_SIZE_TEXT_BOX"
-      },
-      {
-       "bounds": {
-        "height": 92.16,
-        "kind": "TextFrame",
-        "page_id": "ud3",
-        "width": 27.22,
-        "x": 103.75,
-        "y": 247.68
-       },
        "context": "",
        "data_id": "u151",
        "identifier": "u13f",
@@ -992,11 +975,6 @@
    "total_count": 5
   },
   "validation_classifiers": {
-   "AUTO_SIZE_TEXT_BOX": {
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
-    "label": "Auto Sizing Text Box",
-    "message": "Auto-size text boxes were not set up properly"
-   },
    "COMPOSER": {
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
     "label": "Composer",

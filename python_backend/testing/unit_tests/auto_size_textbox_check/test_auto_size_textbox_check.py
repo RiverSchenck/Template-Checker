@@ -38,14 +38,14 @@ EXPECTED_OUTCOMES = {
         "errors": [
             f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
             f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
-            f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
+            # Auto size (HeightOnly from center) is no longer an error: Frontify supports every reference point.
         ],
         "warnings": [
         ]
     },
     "Auto Size Text Boxes.zip": {
         "errors": [
-            f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
+            # Auto size (WidthOnly from center) is no longer an error: Frontify supports every reference point.
         ],
         "warnings": [
         ]
@@ -65,7 +65,7 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
             f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
             f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
-            f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
+            # Auto size (HeightAndWidth not from a corner) is no longer an error: Frontify supports every reference point.
         ],
         "warnings": [
         ]

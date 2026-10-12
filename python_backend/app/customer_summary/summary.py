@@ -47,8 +47,6 @@ def _round_half_up(value: float, places: int = 0) -> str:
 
 _AUTO_SIZE_SETTINGS = (
     (re.compile('no line breaks', re.I), 'turn on No Line Breaks'),
-    (re.compile('widthonly.*center', re.I), 'Width Only can’t grow from the center, pick a left or right reference point'),
-    (re.compile('heightonly.*center', re.I), 'Height Only can’t grow from the center, pick a top or bottom reference point'),
 )
 _ROTATION_KEYS = ('IMAGE_TRANSFORMATION', 'IMAGE_TRANSFORMATION_IMAGE', 'IMAGE_TRANSFORMATION_CONTAINER', 'PAGE_ITEM_TRANSFORMATION')
 
