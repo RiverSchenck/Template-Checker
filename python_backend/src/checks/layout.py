@@ -55,33 +55,20 @@ def document_bleed_check(doc: ParsedDocument, results: ValidationResult) -> None
         report(results, ValidationWarning.DOCUMENT_BLEED, f"{descriptions}.", identifier=None)
 
 
-# Reference points each auto-size type may grow from.
-_HEIGHT_ONLY_POINTS = ['TopCenterPoint', 'BottomCenterPoint']
-_WIDTH_ONLY_POINTS = ['LeftCenterPoint', 'RightCenterPoint']
-_CORNER_POINTS = ['TopLeftPoint', 'BottomLeftPoint', 'BottomRightPoint', 'TopRightPoint']
-
-
 def auto_size_text_box_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Error for auto-sizing text frames Frontify can't reproduce: HeightOnly must grow from the top
-    or bottom center; WidthOnly and HeightAndWidth need "No Line Breaks", and grow from the
-    left/right center or a corner respectively."""
+    """Error for auto-sizing text frames that won't behave the same in Frontify. Frontify always treats
+    WidthOnly and HeightAndWidth as "No Line Breaks", so the InDesign frame must have it on to match.
+    Every reference point is supported by Frontify, so it isn't checked (docs/checker-rules.md)."""
     for spread in doc.spreads_parser.spreads_obj_list:
         for text_frame in spread.text_frame_obj_list:
             if not text_frame.is_auto_size:
                 continue
             sizing = text_frame.auto_sizing_type
-            point = text_frame.auto_sizing_reference_point
             no_line_breaks = text_frame.use_no_line_breaks
-            # InDesign moves the reference point when 'No Line Breaks' is off, so that's the only thing reported then.
-            needs_no_line_breaks = sizing in ('WidthOnly', 'HeightAndWidth')
-            if sizing == 'HeightOnly':
-                message = "HeightOnly cannot autosize from center." if point not in _HEIGHT_ONLY_POINTS else None
-            elif needs_no_line_breaks and (not no_line_breaks or no_line_breaks == 'false'):
-                message = "'No Line Breaks' must be checked."
-            elif sizing == 'WidthOnly':
-                message = "WidthOnly cannot autosize from center." if point not in _WIDTH_ONLY_POINTS else None
-            elif sizing == 'HeightAndWidth':
-                message = "HeightAndWidth must auto size from corners." if point not in _CORNER_POINTS else None
+            if sizing in ('WidthOnly', 'HeightAndWidth'):
+                message = "'No Line Breaks' must be checked." if not no_line_breaks or no_line_breaks == 'false' else None
+            elif sizing == 'HeightOnly':
+                message = None
             else:
                 message = "Only width, height, and WidthAndHeight are supported."
             if message:

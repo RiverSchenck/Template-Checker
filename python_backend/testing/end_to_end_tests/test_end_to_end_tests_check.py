@@ -50,7 +50,7 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Horizontal flip (frame u17f, -1 0 0 1)
             f"{ValidationError.TABLE.value}",
             f"{ValidationError.PASTED_GRAPHICS.value}",
-            f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
+            # Auto size (WidthOnly from center) is no longer an error: Frontify supports every reference point.
             f"{ValidationError.TEXT_COLUMNS.value}",
             f"{ValidationError.LINKED_TEXT_FRAME.value}",
             f"{ValidationError.LINKED_TEXT_FRAME.value}",
@@ -180,7 +180,7 @@ EXPECTED_OUTCOMES = {
     "RollUp_Bad.zip": {
         "errors": [
             f"{ValidationError.IMAGE_TRANSFORMATION.value}",
-            f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
+            # Auto size (HeightOnly from center) is no longer an error: Frontify supports every reference point.
             f"{ValidationError.PASTED_GRAPHICS.value}",
             f"{ValidationError.PARAGRAPH_STYLE_TEXT_BOX.value}",
             f"{ValidationError.PARAGRAPH_STYLE_TEXT_BOX.value}",

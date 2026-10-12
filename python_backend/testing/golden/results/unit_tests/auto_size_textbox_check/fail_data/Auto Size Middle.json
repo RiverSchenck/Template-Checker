@@ -512,23 +512,6 @@
        "page_name": "1",
        "spread_id": "uce",
        "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      },
-      {
-       "bounds": {
-        "height": 657.14,
-        "kind": "TextFrame",
-        "page_id": "ud3",
-        "width": 152.82,
-        "x": 530.0,
-        "y": 952.0
-       },
-       "context": "HeightOnly cannot autosize from center.",
-       "data_id": "u187",
-       "identifier": "u18a",
-       "page_id": "ud3",
-       "page_name": "1",
-       "spread_id": "uce",
-       "validationClassifier": "AUTO_SIZE_TEXT_BOX"
       }
      ],
      "infos": [],
