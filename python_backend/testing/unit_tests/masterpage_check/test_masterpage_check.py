@@ -1,6 +1,6 @@
 import pytest
 import os
-from src.classes.FrontifyChecker import FrontifyChecker
+from testing.checker_setup import setup_instance
 from src.error_handling.ValidationClassifier import ValidationError
 from collections import Counter
 
@@ -64,17 +64,6 @@ EXPECTED_OUTCOMES = {
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FAIL_DATA_DIR = os.path.join(BASE_DIR, 'fail_data')
 PASS_DATA_DIR = os.path.join(BASE_DIR, 'pass_data')
-
-
-def setup_instance(source_file_path):
-    checkerInstance = FrontifyChecker()
-    checkerInstance.set_source_file_path(source_file_path)
-    checkerInstance.unzip_package_state()
-    checkerInstance.cleanup_data_folder()
-    checkerInstance.extract_zip_to_data_folder()
-    checkerInstance.unzip_idml_state()
-    checkerInstance.parse_xml()
-    return checkerInstance
 
 
 @pytest.mark.parametrize('testcase_zip', [os.path.join(FAIL_DATA_DIR, f) for f in os.listdir(FAIL_DATA_DIR) if f.endswith('.zip')])
