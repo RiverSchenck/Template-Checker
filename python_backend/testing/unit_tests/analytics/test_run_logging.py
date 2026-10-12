@@ -6,6 +6,7 @@ from run import app as flask_app
 import app.analytics as analytics
 import app.utils as utils
 from src.classes.FrontifyChecker import FrontifyChecker
+from src.checks import Check
 from src.classes.States import States
 
 PASS_ZIP = os.path.join(os.path.dirname(__file__), '..', 'par_check', 'pass_data', 'Blank.zip')
@@ -62,9 +63,9 @@ def test_upload_that_is_not_a_zip_is_logged_as_rejected(logged, tmp_path):
 def test_checker_crash_is_logged_as_failed(logged):
     checker = FrontifyChecker()
 
-    def crash():
+    def crash(doc, results):
         raise KeyError('Self')
-    checker.states[States.MASTERPAGE_CHECK] = crash
+    checker.checks[0] = Check(States.MASTERPAGE_CHECK, crash)
 
     assert run_check(checker, PASS_ZIP) == 500
 

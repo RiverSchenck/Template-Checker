@@ -2,8 +2,9 @@ import pytest
 from lxml import etree as ET
 
 from src.classes.SpreadData import SpreadData
-from src.classes.FrontifyChecker import FrontifyChecker
-from src.classes.States import States
+from src.checks.layout import page_item_transformation_check
+from src.document import ParsedDocument
+from src.error_handling.ErrorHandling import ValidationResult
 from src.parsers.SpreadsParser import SpreadsParser
 from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning
 from src.helpers.page_item_transform import (
@@ -78,12 +79,10 @@ def test_page_item_transformation_check_skew_textframe(tmp_path):
 </Root>"""
     (spreads_dir / "Spread_uc0.xml").write_bytes(xml)
 
-    checker = FrontifyChecker()
-    checker.spreads_parser = SpreadsParser(str(spreads_dir))
-    checker._build_data_id_to_page_id_mapping()
-    next_state = checker.page_item_transformation_check()
+    # A check runs on a parsed document directly: no package to unzip.
+    results = ValidationResult()
+    page_item_transformation_check(ParsedDocument(spreads_parser=SpreadsParser(str(spreads_dir))), results)
 
-    assert next_state == States.TABLE_CHECK
-    errors = checker.get_error_types()
+    errors = results.get_error_types()
     assert errors.count(ValidationError.PAGE_ITEM_TRANSFORMATION.value) == 1
-    assert ValidationWarning.PAGE_ITEM_TRANSFORMATION.value not in checker.get_warning_types()
+    assert ValidationWarning.PAGE_ITEM_TRANSFORMATION.value not in results.get_warning_types()

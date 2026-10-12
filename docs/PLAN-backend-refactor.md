@@ -222,6 +222,6 @@ src/
 | 2 | Phase 0.3–0.5: oracle, fixture builder, shared test fixture | No |
 | 3 | Phase 1: B1, L1–L6 (crash and latent fixes) | No |
 | 4 | Phase 1: B2, B4, B5, B7 (visible fixes) + spot checks | Yes, documented |
-| 5–8 | Phase 2: runner + move checks, one theme per PR | No |
+| 5 | Phase 2: runner + move all checks (one PR, mechanical move verified by goldens) — **done** | No |
 | 9 | Phase 3: de-duplication | No |
 | 10+ | Phase 4: dataclasses, logging, cleanup | No |

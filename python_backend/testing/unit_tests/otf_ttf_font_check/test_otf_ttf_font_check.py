@@ -1,6 +1,7 @@
 import pytest
 import os
 from testing.checker_setup import setup_instance
+from src.classes.States import States
 from src.error_handling.ValidationClassifier import ValidationError
 from collections import Counter
 
@@ -61,7 +62,7 @@ def test_zip_check_fail(testcase_zip):
     # Setup
     checker = setup_instance(testcase_zip)
     # Execute
-    print(checker.otf_ttf_font_check())
+    print(checker.run_check(States.OTF_TTF_FONT_CHECK))
     # Cleanup files
     checker.delete_unzipped_root_path()
 
@@ -121,7 +122,7 @@ def test_zip_check_pass(testcase_zip):
     # Setup
     checker = setup_instance(testcase_zip)
     # Exuecute
-    checker.otf_ttf_font_check()
+    checker.run_check(States.OTF_TTF_FONT_CHECK)
     # Cleanup files
     checker.delete_unzipped_root_path()
 
@@ -144,7 +145,7 @@ def test_zip_check_pass(testcase_zip):
     # Setup
     checker = setup_instance(testcase_zip)
     # Exuecute
-    checker.otf_ttf_font_check()
+    checker.run_check(States.OTF_TTF_FONT_CHECK)
     # Cleanup files
     checker.delete_unzipped_root_path()
 
