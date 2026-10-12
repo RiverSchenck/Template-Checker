@@ -16,7 +16,6 @@ class Image:
         self.image_size_bytes: int = size_bytes
         self.image_size_MB: int = self._convert_bytes_to_MB()
         self.parent_link_data_id: str = ''
-        print(self.image_name)
 
     # ---------------- Private Setters------------------
     def _convert_bytes_to_MB(self) -> float:

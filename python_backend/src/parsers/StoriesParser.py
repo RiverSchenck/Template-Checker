@@ -46,10 +46,3 @@ class StoriesParser:
 
     def get_stories_length(self):
         return len(self.stories_data_list)
-
-    # ----------------Debug Prints------------------
-    def print_stories_data(self):
-        """Prints the extracted story data for debugging purposes."""
-        for story_data in self.stories_data_list:
-            print(story_data)
-            print("="*50)

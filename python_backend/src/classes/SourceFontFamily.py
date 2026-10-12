@@ -1,8 +1,11 @@
+import logging
 from typing import List
 import os
 from lxml import etree as ET
 from src.classes.FontFamily import FontFamily
 from fontTools.ttLib import TTFont
+
+logger = logging.getLogger(__name__)
 
 # **********************************************************
 # Class: Font
@@ -94,7 +97,7 @@ class SourceFontFamily(FontFamily):
         self.font_type = "UNSUPPORTED FONT"
         self.variable_font = False
         self.set_font_error()
-        print(f"Error processing font: {e} file: {file_name}")
+        logger.warning("Unreadable font %s: %s", file_name, e)
 
     # ---------------- External Setters------------------
     def set_font_error(self):

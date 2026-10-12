@@ -138,21 +138,6 @@ class ValidationResult():
     def add_idml_output_folder(self, idml_output_folder: str):
         self.idml_output_folder = idml_output_folder
 
-    def add_files_from_folder(self, base_folder: str) -> Dict[str, List[Dict[str, str]]]:
-        files_data = defaultdict(list)
-        folders_of_interest = ['MasterSpreads', 'META-INF',
-                               'Resources', 'Spreads', 'Stories', 'XML']
-        for folder in folders_of_interest:
-            folder_path = os.path.join(base_folder, folder)
-            if os.path.exists(folder_path):
-                for root, _, files in os.walk(folder_path):
-                    for file in files:
-                        if file.endswith('.xml'):  # Filter for .xml files
-                            files_data[folder].append({
-                                'name': file,
-                                'path': os.path.join(root, file),
-                            })
-        return files_data
     # -------------------------------External Setters-------------------------------
 
     def set_stories_parser(self, stories_parser):

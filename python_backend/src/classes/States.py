@@ -9,7 +9,6 @@ from enum import Enum, auto
 # Description: Declares the state machine states.
 # **********************************************************
 class States(Enum):
-    GET_ZIP = auto()
     UNZIP_PACKAGE = auto()
     UNZIP_IDML = auto()
     PARSE_XML = auto()
@@ -38,5 +37,4 @@ class States(Enum):
     COMPOSER_CHECK = auto()
     OTHER_CHECKS = auto()
     RESULTS = auto()
-    IDLE = auto()
     EXIT = auto()

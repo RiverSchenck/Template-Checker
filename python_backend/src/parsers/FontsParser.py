@@ -55,11 +55,3 @@ class FontsParser:
 
     def get_used_font_families_count(self):
         return len(self.used_font_families)
-
-    # ----------------Debug Prints------------------
-    def print_used_font_families(self):
-        print("\n".join(str(font_family)
-              for font_family in self.used_font_families))
-
-    def print_font_families_from_xml(self):
-        print("\n".join(str(font) for font in self.font_families_from_xml))

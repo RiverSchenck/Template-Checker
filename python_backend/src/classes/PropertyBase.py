@@ -1,3 +1,8 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 # **********************************************************
 # Class: PropertyBase
 # Init Locations: ParagraphStyle
@@ -18,7 +23,7 @@ class PropertyBase:
             return self._par_resolve_inheritance(style_id, styles_parser)
         if "CharacterStyle" in style_id:
             return self._char_resolve_inheritance(style_id, styles_parser)
-        print(f"PropertyBase: Unexpected style type for {style_id}")
+        logger.warning("PropertyBase: unexpected style type for %s", style_id)
         return ''
 
     def _normalize_value(self, value: str) -> str:
