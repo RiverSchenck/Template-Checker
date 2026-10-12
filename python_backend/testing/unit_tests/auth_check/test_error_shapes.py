@@ -76,3 +76,24 @@ def test_xml_export_failure_hides_server_paths(client, monkeypatch):
     error = _error(r)
     assert error['code'] == 'export_failed'
     assert '/srv' not in r.get_data(as_text=True)
+
+
+def test_xml_export_is_named_after_the_template(client, monkeypatch, tmp_path):
+    export = tmp_path / 'export.zip'
+    export.write_bytes(b'PK')
+
+    class Checker:
+        def get_template_name(self):
+            return 'Flyer-Sales_Bad.zip'  # the checker keeps the upload's extension
+
+        def zip_idml_output_folder(self):
+            return str(export)
+
+        def delete_unzipped_root_path(self):
+            pass
+    monkeypatch.setattr(routes, 'FrontifyChecker', Checker)
+
+    r = client.post('/v1/checks/xml', headers=USER)
+
+    assert r.status_code == 200
+    assert r.headers['Content-Disposition'] == 'attachment; filename=Flyer-Sales_Bad-xml.zip'
