@@ -141,7 +141,7 @@ def test_lock_is_released_after_a_check(client):
 def test_lock_is_released_when_the_check_crashes(client, monkeypatch):
     def crash(*a, **k):
         raise RuntimeError('boom')
-    monkeypatch.setattr(routes, 'start_check', crash)
+    monkeypatch.setattr(routes, 'run_check', crash)
     assert client.post('/run', headers=USER).status_code == 500
     lock = rate_limit.acquire('checks:user:user-1')
     assert lock is not None
@@ -165,7 +165,7 @@ def test_limiter_failure_refuses_access_requests(client, monkeypatch):
     monkeypatch.setattr(routes, 'get_supabase_client', lambda: inserts.append(1))
     r = client.post('/access-requests', json={'email': 'a@b.com', 'why_need_access': 'support'})
     assert r.status_code == 503
-    assert r.get_json()['error']['code'] == 'temporarily_unavailable'
+    assert r.get_json()['error']['code'] == 'service_unavailable'
     assert r.headers['Retry-After'] == '60'
     assert inserts == []
 

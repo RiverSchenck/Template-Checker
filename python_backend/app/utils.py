@@ -2,11 +2,13 @@ import os
 import shutil
 import time
 import uuid
+from dataclasses import dataclass
 from typing import Optional
-from flask import request, current_app, jsonify, g
+from flask import request, current_app, g
 from werkzeug.utils import secure_filename
 from src.classes.States import States
 from .analytics import log_analytics_to_supabase, first_error_message
+from .customer_summary import CustomerSummary, build_customer_summary, check_guides_payload, summary_payload
 
 
 def upload_file():
@@ -32,19 +34,37 @@ def upload_file():
         return {'status': 'error', 'error': {'message': 'An error occurred during processing.'}}
 
 
-def _log_run(**kwargs):
-    """Log a run to analytics without ever failing the check because of it."""
+def _log_run(**kwargs) -> Optional[str]:
+    """Log a run to analytics without ever failing the check because of it. Returns the run id when logged."""
     try:
-        log_analytics_to_supabase(**kwargs)
+        return log_analytics_to_supabase(**kwargs)
     except Exception:
         current_app.logger.exception('Failed to log analytics to Supabase')
+        return None
 
 
-def start_check(checker, file_path: str, source_type: str = 'api', user_id: Optional[str] = None):
-    """Run the checker on the uploaded file and return the results.
+class CheckFailed(Exception):
+    """The checker crashed. The failure is already logged (server log and analytics); callers return a 500."""
+
+
+@dataclass(frozen=True)
+class CheckOutcome:
+    results: dict
+    """The checker's results JSON (what /run returns under content.results)."""
+    completed: bool
+    """True when every check ran; False when the upload was rejected (results explain why)."""
+    stopped_at_stage: Optional[str]
+    run_id: Optional[str]
+    """The analytics run id, or None if logging is off or failed."""
+    summary: Optional[CustomerSummary]
+    """The customer summary, or None if it couldn't be written (logged)."""
+
+
+def run_check(checker, file_path: str, source_type: str = 'api', user_id: Optional[str] = None) -> CheckOutcome:
+    """Run the checker on the uploaded file. Raises CheckFailed if it crashes.
 
     Every attempt is logged to analytics: 'completed' when all checks ran, 'rejected' when the upload couldn't be
-    checked (the user still gets the results explaining why), and 'failed' when the checker crashed.
+    checked (the results explain why), and 'failed' when the checker crashed.
     """
     start_time = time.time()
     file_size_bytes = os.path.getsize(file_path) if os.path.exists(file_path) else 0
@@ -69,24 +89,22 @@ def start_check(checker, file_path: str, source_type: str = 'api', user_id: Opti
             'file_size_bytes': file_size_bytes
         }
 
+        # What the web app shows next to the results: the per-check copy, and the summary for the customer.
+        checker_json['check_guides'] = check_guides_payload(checker_json)
+        summary = _build_summary(checker_json)
+        checker_json['customer_summary'] = summary_payload(summary, include_sections=True) if summary else None
+
         # The state machine only reaches RESULTS when every check ran; otherwise it exited early on a bad upload.
         completed = checker.last_state == States.RESULTS
-        _log_run(
+        stopped_at_stage = None if completed else _state_name(checker.last_state)
+        run_id = _log_run(
             **{**run_info, 'template_name': checker_json.get('template_name') or run_info['template_name']},
             duration_ms=duration_ms,
             results_json=checker_json,
             status='completed' if completed else 'rejected',
-            stopped_at_stage=None if completed else _state_name(checker.last_state),
+            stopped_at_stage=stopped_at_stage,
             error_message=None if completed else first_error_message(checker_json),
         )
-
-        result_json = {
-            "type": "data",
-            "content": {
-                "results": checker_json,
-            }
-        }
-        return jsonify(result_json), 200
     except Exception as e:
         current_app.logger.exception('Template check failed')
         _log_run(
@@ -96,7 +114,17 @@ def start_check(checker, file_path: str, source_type: str = 'api', user_id: Opti
             stopped_at_stage=_state_name(getattr(checker, 'last_state', None)),
             error_message=f'{type(e).__name__}: {e}',
         )
-        return jsonify({'error': 'An error occurred during the check.'}), 500
+        raise CheckFailed() from e
+    return CheckOutcome(checker_json, completed, stopped_at_stage, run_id, summary)
+
+
+def _build_summary(results: dict) -> Optional[CustomerSummary]:
+    """The customer summary, or None (logged) if writing it fails: the check results are still worth returning."""
+    try:
+        return build_customer_summary(results)
+    except Exception:
+        current_app.logger.exception('Failed to build the customer summary')
+        return None
 
 
 def _state_name(state) -> Optional[str]:

@@ -73,7 +73,8 @@ export type Report = {
   problems: Problem[];
   problemCounts: Record<ValidationType, number>;
   placeCounts: Record<ValidationType, number>;
-  passedChecks: CheckDefinition[];
+  /** Checks that found nothing, with their plain-language copy. */
+  passedChecks: (CheckDefinition & { guide: CheckGuide })[];
   /** How many of each thing were checked, e.g. 14 paragraph styles. */
   checked: { label: string; count: number }[];
 };
@@ -162,7 +163,7 @@ export function buildReport(result: ValidationResult): Report {
               id,
               key,
               severity,
-              guide: getCheckGuide(severity, key, label, message),
+              guide: getCheckGuide(result.check_guides, severity, key, label, message),
               label,
               message,
               helpArticle: check?.help_article ?? classifier?.help_article ?? null,
@@ -251,7 +252,9 @@ export function buildReport(result: ValidationResult): Report {
     problems: sorted,
     problemCounts,
     placeCounts,
-    passedChecks: checks.filter((check) => !problems.has(`${check.severity}:${check.key}`)),
+    passedChecks: checks
+      .filter((check) => !problems.has(`${check.severity}:${check.key}`))
+      .map((check) => ({ ...check, guide: getCheckGuide(result.check_guides, check.severity, check.key, check.label, check.message) })),
     checked,
   };
 }

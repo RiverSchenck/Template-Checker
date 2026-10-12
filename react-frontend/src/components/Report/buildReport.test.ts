@@ -1,6 +1,5 @@
-import { CategoryDetail, CheckDefinition, ValidationItem, ValidationResult } from '../../types';
+import { CategoryDetail, CheckDefinition, CheckGuide, ValidationItem, ValidationResult } from '../../types';
 import { buildReport, compareReports, describeWhere, formatPages } from './buildReport';
-import { buildCustomerSummary, buildCustomerSummaryDocument } from './customerSummary';
 
 const item = (overrides: Partial<ValidationItem>): ValidationItem => ({
   validationClassifier: 'KERNING',
@@ -23,6 +22,18 @@ const checks: CheckDefinition[] = [
   { key: 'COMPOSER', severity: 'warnings', label: 'Composer', message: 'Use single-line', help_article: null, category: 'par_styles' },
   { key: 'TABLE', severity: 'errors', label: 'Table', message: 'No tables', help_article: null, category: 'text_boxes' },
 ];
+
+/** The copy the backend sends with results (results.check_guides); only `subject` matters for grouping here. */
+const guide = (title: string, subject: CheckGuide['subject']): CheckGuide => ({ title, why: '', fix: [], subject });
+const checkGuides: ValidationResult['check_guides'] = {
+  errors: {
+    KERNING: guide('Kerning isn’t set to Metrics', 'paragraph-style'),
+    AUTO_SIZE_TEXT_BOX: guide('Auto-size text frame set up incorrectly', 'frame'),
+    FONTS_INCLUDED: guide('Font missing from the package', 'font'),
+    TABLE: guide('Table in a text frame', 'frame'),
+  },
+  warnings: { COMPOSER: guide('Paragraph Composer used', 'paragraph-style') },
+};
 
 const bounds = (page_id: string, y: number) => ({ page_id, kind: 'TextFrame', x: 10, y, width: 100, height: 20 });
 
@@ -83,6 +94,7 @@ function makeResult(overrides: Partial<ValidationResult> = {}): ValidationResult
       frames: [],
     })),
     checks,
+    check_guides: checkGuides,
     ...overrides,
   };
 }
@@ -176,166 +188,14 @@ describe('formatPages', () => {
   });
 });
 
-describe('buildCustomerSummary', () => {
-  it('lists blockers with why, where and how, without internal ids', () => {
-    const summary = buildCustomerSummary(buildReport(makeResult()), 'Sample');
-    expect(summary).toContain(
-      'We checked “Sample” and found 3 issues in the InDesign file that are likely causing the problems in Frontify, plus 1 that may change how it looks.'
-    );
-    expect(summary).toContain('Likely causing the problems\n\n1. Kerning isn’t set to Metrics\nFrontify spaces letters');
-    expect(summary).toContain('Where: paragraph styles “Headline” and “Body”, used on pages 1–3');
-    expect(summary).toContain('• In the paragraph style, go to Basic Character Formats and set Kerning to Metrics.');
-    expect(summary).toContain('Where: the text frame “AI-generated” (page 1, turn on No Line Breaks)');
-    expect(summary).toContain('\nLearn more\n');
-    // Numbering continues across groups so the customer can refer to an item by number.
-    expect(summary).toContain('May change how it looks\n\n4. Paragraph Composer used');
-    expect(summary).toContain('upload it to Frontify');
-    expect(summary).not.toMatch(/send us/i);
-    expect(summary).not.toMatch(/\bf[1-5]\b|KERNING|story1/);
-  });
-
-  it('lists the same frame on several pages once, and drops the file extension', () => {
-    const frame = (page: string) =>
-      item({ validationClassifier: 'AUTO_SIZE_TEXT_BOX', identifier: 'story1', data_id: `f-${page}`, page_id: page, bounds: bounds(page, 80) });
-    const summary = buildCustomerSummary(
-      buildReport(
-        makeResult({
-          par_styles: category({}),
-          fonts: category({}),
-          text_boxes: category({ story1: { ...empty, errors: ['p1', 'p2', 'p3'].map(frame) } }),
-        })
-      ),
-      'Sample.zip'
-    );
-    expect(summary).toContain('We checked “Sample” and found one issue in the InDesign file that is likely causing');
-    expect(summary).toContain('Where: the text frame “AI-generated” (pages 1–3)');
-    // A single group needs no heading.
-    expect(summary).not.toContain('Likely causing the problems');
-  });
-
-  it('names frames on the same page once, and puts checker details in plain words', () => {
-    const textFrame = (id: string, text: string) => {
-      const data = { identifier: id, content: text, page_id: 'p1', page_name: '1' };
-      return [item({ validationClassifier: 'OVERRIDE', identifier: id, data_id: id, bounds: bounds('p1', 10) }), data] as const;
-    };
-    const frames = [textFrame('s1', 'Title'), textFrame('s2', 'Intro')];
-    const summary = buildCustomerSummary(
-      buildReport(
-        makeResult({
-          par_styles: category({
-            NormalParagraphStyle: { ...empty, warnings: [item({ validationClassifier: 'COMPOSER', identifier: 'NormalParagraphStyle', bounds: bounds('p1', 10) })] },
-          }),
-          fonts: category({}),
-          text_boxes: category(Object.fromEntries(frames.map(([i]) => [i.identifier, { ...empty, warnings: [i] }]))),
-          general: category({
-            document: {
-              ...empty,
-              warnings: [
-                item({
-                  validationClassifier: 'DOCUMENT_BLEED',
-                  identifier: 'document',
-                  page_id: '',
-                  page_name: '',
-                  context: 'top: 8.503937007874017pt, bottom: 8.503937007874017pt, inside: 8.503937007874017pt, outside: 8.503937007874017pt.',
-                }),
-              ],
-            },
-          }),
-          text_box_data: Object.fromEntries(frames.map(([, d]) => [d.identifier, d])),
-          checks: [],
-        })
-      ),
-      'Sample'
-    );
-    expect(summary).toContain('Where: text frames “Intro”, “Title” (page 1)');
-    expect(summary).toContain('Where: the paragraph style “[Basic Paragraph]”, used on page 1');
-    expect(summary).toContain('Current bleed: 3 mm on all sides');
-    expect(summary).not.toMatch(/8\.50|NormalParagraphStyle/);
-  });
-});
-
-describe('buildCustomerSummary overrides', () => {
-  it('says which formatting was changed, in InDesign’s words', () => {
-    const override = (overrides: Record<string, string>) =>
-      item({ validationClassifier: 'OVERRIDE', identifier: 'story1', data_id: 'f5', bounds: bounds('p1', 80), context_details: { overrides } });
-    const summary = buildCustomerSummary(
-      buildReport(
-        makeResult({
-          par_styles: category({}),
-          fonts: category({}),
-          text_boxes: category({
-            story1: { ...empty, warnings: [override({ AppliedFont: 'Arial', MiterLimit: '4' }), override({ FontStyle: 'Bold', PointSize: '12' })] },
-          }),
-        })
-      ),
-      'Sample'
-    );
-    expect(summary).toContain('Where: the text frame “AI-generated” (page 1, font and size changed)');
-    expect(summary).toContain('• To remove it, select the text and click Clear Overrides');
-  });
-});
-
-describe('buildCustomerSummary severities', () => {
-  it('covers warning-only templates and lists infos as worth a check', () => {
-    const summary = buildCustomerSummary(
-      buildReport(
-        makeResult({
-          par_styles: category({
-            Headline: {
-              ...empty,
-              warnings: [item({ validationClassifier: 'COMPOSER', identifier: 'Headline', data_id: 'f1', bounds: bounds('p1', 10) })],
-            },
-          }),
-          text_boxes: category({
-            story1: { ...empty, infos: [item({ validationClassifier: 'EMPTY_TEXT_FRAME', identifier: 'story1', data_id: 'f5', bounds: bounds('p1', 80) })] },
-          }),
-          fonts: category({}),
-        })
-      ),
-      'Sample'
-    );
-    expect(summary).toContain('We checked “Sample” and didn’t find anything that should stop it from working in Frontify, but one issue may make it look different');
-    expect(summary).toContain('Worth a quick check (often fine as is)\n\n2. Empty text frame');
-    expect(summary).toContain('Once that’s done, package the document again');
-  });
-});
-
-describe('buildCustomerSummaryDocument', () => {
-  it('splits the summary into sections whose offsets point at their text', () => {
+describe('check guides', () => {
+  it('uses the copy the backend sent, and falls back to the check label without it', () => {
     const report = buildReport(makeResult());
-    const doc = buildCustomerSummaryDocument(report, 'Sample');
-    expect(doc.text).toBe(buildCustomerSummary(report, 'Sample'));
-    for (const section of doc.sections) {
-      expect(doc.text.slice(section.start, section.end)).toBe(section.text);
-    }
-    expect(doc.sections[0].key).toBe('intro');
-    expect(doc.sections.at(-1)?.key).toBe('closing');
-    const issueKeys = doc.sections.filter((s) => !['intro', 'closing'].includes(s.key)).map((s) => s.key);
-    expect(issueKeys).toEqual(report.problems.map((p) => p.key));
-  });
+    expect(report.problems.find((p) => p.key === 'KERNING')!.guide.title).toBe('Kerning isn’t set to Metrics');
+    expect(report.passedChecks.map((c) => c.guide.title)).toEqual(['Table in a text frame']);
 
-  it('has an HTML version for pasting into Intercom, with escaped text and linked help articles', () => {
-    const doc = buildCustomerSummaryDocument(buildReport(makeResult()), 'A <b> & “quotes”');
-    expect(doc.html).toContain('<p><strong>Likely causing the problems</strong></p>');
-    expect(doc.html).toContain('<p><strong>1. Kerning isn’t set to Metrics</strong><br>Frontify spaces letters');
-    expect(doc.html).toContain('<ul><li>In the paragraph style, go to Basic Character Formats and set Kerning to Metrics.</li></ul>');
-    expect(doc.html).toContain('<a href="https://help/kerning">Learn more</a>');
-    expect(doc.html).toContain('A &lt;b&gt; &amp; “quotes”');
-  });
-
-  it('reviews the same words it copies: links read “Learn more”, written out only in the plain-text copy', () => {
-    const doc = buildCustomerSummaryDocument(buildReport(makeResult()), 'Sample');
-    expect(doc.text).toContain('\nLearn more\n');
-    expect(doc.text).not.toContain('https://help/kerning');
-    expect(doc.plainText).toContain('Learn more: https://help/kerning');
-    expect(doc.plainText.replace(/Learn more: \S+/g, 'Learn more')).toBe(doc.text);
-    const htmlText = doc.html.replace(/<li>/g, '• ').replace(/<br>|<\/p>|<\/li>/g, ' ').replace(/<[^>]+>/g, '').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
-    expect(htmlText.replace(/\s+/g, ' ').trim()).toBe(doc.text.replace(/\s+/g, ' ').trim());
-  });
-
-  it('is a single intro section when nothing was found', () => {
-    const doc = buildCustomerSummaryDocument(buildReport({ ...makeResult(), par_styles: category({}) } as never), 'X');
-    expect(doc.sections.length).toBeGreaterThan(0);
-    expect(doc.text.slice(doc.sections[0].start, doc.sections[0].end)).toBe(doc.sections[0].text);
+    const older = buildReport(makeResult({ check_guides: undefined }));
+    const kerning = older.problems.find((p) => p.key === 'KERNING')!;
+    expect(kerning.guide).toEqual({ title: 'Kerning', why: "Kerning must be 'Metrics'", fix: [], subject: 'document' });
   });
 });

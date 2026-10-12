@@ -13,6 +13,12 @@ from app.analytics_api import AnalyticsQueryError, analytics_period
 NOW = datetime(2026, 10, 10, 14, 30, tzinfo=timezone.utc)
 
 
+def _without_request_id(error):
+    """Error bodies carry a per-request id; compare the rest."""
+    assert error.pop('request_id')
+    return error
+
+
 def test_period_starts_at_local_midnight():
     period = analytics_period(7, 'America/New_York', now=NOW)
     assert period['start'] == '2026-10-04T00:00:00-04:00'
@@ -188,14 +194,14 @@ def test_overview_endpoint(client, fake_rpc):
 
 
 def test_bad_parameters_are_a_generic_400_and_the_reason_is_only_logged(client, fake_rpc, caplog):
-    generic = {'error': {'message': 'Invalid analytics request. Check the date range and filters.'}}
+    generic = {'code': 'invalid_request', 'message': 'Invalid analytics request. Check the date range and filters.'}
     with caplog.at_level('INFO'):
         r = client.get('/analytics/overview?days=9999', headers=AUTH)
-    assert (r.status_code, r.get_json()) == (400, generic)
+    assert (r.status_code, _without_request_id(r.get_json()['error'])) == (400, generic)
     assert 'days must be between' in caplog.text
     for path in ('/analytics/runs?status=nope', '/analytics/issues/bad-type!', '/analytics/runs.csv?status=nope'):
         r = client.get(path, headers=AUTH)
-        assert (r.status_code, r.get_json()) == (400, generic)
+        assert (r.status_code, _without_request_id(r.get_json()['error'])) == (400, generic)
     assert fake_rpc.calls == []
 
 
@@ -203,7 +209,7 @@ def test_database_errors_are_a_generic_500(client, fake_rpc):
     fake_rpc.error = RuntimeError('relation "runs" does not exist')
     r = client.get('/analytics/runs?days=7', headers=AUTH)
     assert r.status_code == 500
-    assert r.get_json() == {'error': {'message': 'Failed to load analytics'}}
+    assert _without_request_id(r.get_json()['error']) == {'code': 'internal_error', 'message': 'Failed to load analytics'}
 
 
 def test_analytics_requires_sign_in(client):
