@@ -13,7 +13,6 @@ from typing import Dict, Any, Optional
 from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from src.results import catalogue
-from src.results.serialize import SEVERITY
 
 logger = logging.getLogger(__name__)
 
@@ -163,7 +162,7 @@ def describe_issue(validation_type: str, severity: Optional[str] = None) -> Dict
     stored under the transformation names) gets a label made from its name.
     """
     entry = catalogue.BY_KEY.get(validation_type)
-    if entry is None or (severity and SEVERITY[entry.severity] != severity):
+    if entry is None or (severity and entry.severity != severity):
         return {'label': validation_type.replace('_', ' ').title(), 'message': None, 'help_article': None}
     return {'label': entry.title, 'message': entry.why or None, 'help_article': entry.help_article}
 

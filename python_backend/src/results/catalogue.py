@@ -4,15 +4,15 @@ One entry per check (v2 keys, plan §3.1): how severe it is, what kinds of thing
 matters in Frontify, how to fix it in InDesign (per kind of thing when the steps differ), and its help article.
 Results v2 lists them (`checks`), and the customer summary, the web app and analytics read it.
 
-Checks still report v1 classifiers (src/results/classifiers.py); V1_KEYS maps each to its entry and the kind of
-thing it's about.
+Checks report issues by key (`report(results, 'KERNING', ...)`).
 """
 from dataclasses import dataclass
-from typing import Dict, Mapping, Optional, Tuple, Type
+from typing import Dict, Literal, Mapping, Optional, Tuple, Type
 
-from src.results.classifiers import Severity
 from src.results.facts import (AutoSizeFacts, BleedFacts, Facts, InheritedFacts, MasterPageFacts, MissingFontFacts,
                                 OverrideFacts, ParagraphStyleFacts, SizeFacts, TransformationFacts)
+
+Severity = Literal['error', 'warning', 'info']
 
 HELP_ARTICLE = 'https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates'
 
@@ -33,17 +33,24 @@ class Entry:
     help_article: Optional[str] = None
     is_check: bool = True           # False for package and parsing failures: not listed among the checks a template passed
     facts: Optional[Type[Facts]] = None  # the model of the facts its issues record (src/results/facts.py), if any
+    one_per_range: bool = False     # reported once per text range (overrides): never merged, always with its text
 
     def fix_for(self, kind: str) -> Tuple[str, ...]:
         return self.fix.get(kind) or self.fix.get('*') or ()
 
+    @property
+    def shows_text(self) -> bool:
+        """Whether its issues carry the text they're about: style checks, and checks per text range."""
+        return self.subject_kinds[0] in ('paragraph_style', 'character_style') or self.one_per_range
 
-def _entry(key, severity, kinds, title, why, fix, help_article=None, is_check=True, facts=None) -> Entry:
+
+def _entry(key, severity, kinds, title, why, fix, help_article=None, is_check=True, facts=None,
+           one_per_range=False) -> Entry:
     return Entry(key, severity, tuple(kinds.split()), title, why, fix if isinstance(fix, dict) else {'*': fix},
-                 help_article, is_check, facts)
+                 help_article, is_check, facts, one_per_range)
 
 
-E, W, I = Severity.ERROR, Severity.WARNING, Severity.INFO
+E, W, I = 'error', 'warning', 'info'
 _CLEAR_TRANSFORMATIONS = 'choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip).'
 
 ENTRIES: Tuple[Entry, ...] = (
@@ -166,7 +173,7 @@ ENTRIES: Tuple[Entry, ...] = (
            ('Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.',
             'To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.',
             'To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.'),
-           article('h_68e2603775'), facts=OverrideFacts),
+           article('h_68e2603775'), facts=OverrideFacts, one_per_range=True),
     _entry('UNUSED_IMAGE', W, 'image', 'Unused images in the package',
            'These files aren’t used in the document and only make the package bigger.',
            ('Delete the unused files from the Links folder before zipping the package.',),
@@ -197,24 +204,3 @@ ENTRIES: Tuple[Entry, ...] = (
 )
 
 BY_KEY: Dict[str, Entry] = {entry.key: entry for entry in ENTRIES}
-
-# v1 classifier -> (catalogue entry, the kind of thing it reports). Only the merged checks (plan §3.1) differ.
-V1_KEYS: Dict[str, Tuple[str, str]] = {
-    'TEXT_WRAP': ('TEXT_WRAP', 'text_frame'),
-    'TEXT_WRAP_ITEM': ('TEXT_WRAP', 'page_item'),
-    'OBJECT_STYLE_TEXT': ('OBJECT_STYLE', 'text_frame'),
-    'OBJECT_STYLE_IMAGE': ('OBJECT_STYLE', 'image'),
-    'IMAGE_TRANSFORMATION_IMAGE': ('TRANSFORMATION', 'image'),
-    'IMAGE_TRANSFORMATION_CONTAINER': ('TRANSFORMATION', 'image_frame'),
-    'PAGE_ITEM_TRANSFORMATION': ('TRANSFORMATION', 'page_item'),
-    'PARAGRAPH_STYLE': ('PARAGRAPH_STYLE', 'text_frame'),
-    'PARAGRAPH_STYLE_TEXT_BOX': ('PARAGRAPH_STYLE', 'text_frame'),
-    **{entry.key: (entry.key, entry.subject_kinds[0]) for entry in ENTRIES
-       if entry.key not in ('TEXT_WRAP', 'OBJECT_STYLE', 'TRANSFORMATION', 'PARAGRAPH_STYLE')},
-}
-
-
-def for_v1(name: str) -> Optional[Tuple[Entry, str]]:
-    """(entry, subject kind) for a v1 classifier name, or None for one that no longer exists."""
-    key, kind = V1_KEYS.get(name, (None, None))
-    return (BY_KEY[key], kind) if key else None

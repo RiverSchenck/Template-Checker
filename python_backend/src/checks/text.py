@@ -6,7 +6,6 @@ from src.checks._report import at_story, at_style, inherited, report, text_list
 from src.model import subject as subjects
 from src.model.document import NO_CHARACTER_STYLE, Document, short_style_id
 from src.results.results import Results
-from src.results.classifiers import ValidationError, ValidationInfo, ValidationWarning
 
 
 def format_overrides(overrides: Dict[str, str]) -> str:
@@ -49,12 +48,12 @@ def par_style_check(doc: Document, results: Results) -> None:
     for story in doc.stories or ():
         story_content = ''.join(run.text for _, run in doc.runs(story))
         if not story_content or story_content == ' ':
-            report(results, ValidationInfo.EMPTY_TEXT_FRAME, **at_story(doc, story))
+            report(results, 'EMPTY_TEXT_FRAME', **at_story(doc, story))
             continue
 
         grouped = _grouped(doc.paragraphs(story))
         if len(grouped) == 1 and grouped[0][0].style in doc.default_par_styles:
-            report(results, ValidationError.PARAGRAPH_STYLE_TEXT_BOX, **at_story(doc, story),
+            report(results, 'PARAGRAPH_STYLE', **at_story(doc, story),
                    context_details={'whole_frame': True, 'whitespace_only': not story_content.strip()})
             continue
 
@@ -64,9 +63,7 @@ def par_style_check(doc: Document, results: Results) -> None:
                 content = texts[i]
                 # Whitespace-only text needs its neighbours to be findable. One line: line breaks show as spaces.
                 message = f"{content.replace(chr(10), ' ')} {generate_context_message(content, texts, i)}"
-                # About the frame (v2); v1 groups it under the default style it uses.
-                where = {**at_story(doc, story), 'identifier': short_style_id(group[0].style)}
-                report(results, ValidationError.PARAGRAPH_STYLE, message, text_content=text_list(content), **where,
+                report(results, 'PARAGRAPH_STYLE', message, text_content=text_list(content), **at_story(doc, story),
                        context_details={'whole_frame': False, 'whitespace_only': not content.strip()})
 
 
@@ -78,7 +75,7 @@ def hyphenation_check(doc: Document, results: Results) -> None:
             hyphenation = doc.styles.resolve(paragraph.style, 'Hyphenation')
             if hyphenation.value == 'true' and paragraph.style not in doc.default_par_styles:
                 context, details = inherited(hyphenation, paragraph.style)
-                report(results, ValidationWarning.HYPHENATION, context, text_content=text_list(paragraph.text),
+                report(results, 'HYPHENATION', context, text_content=text_list(paragraph.text),
                        context_details=details, **at_style(doc, story, 'paragraph_style', paragraph.style))
 
 
@@ -91,9 +88,8 @@ def _report_override(doc: Document, results: Results, story, content: str, overr
     text_part = f"Text: {content.replace(chr(10), ' ')} {generate_context_message(content, neighbours, index)}".strip()
     overrides_str = format_overrides(overrides)
     message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
-    report(results, ValidationWarning.OVERRIDE, message,
+    report(results, 'OVERRIDE', message,
            page_id=doc.story_page.get(story.id),
-           identifier=frame_id if frame_id and frame_id != 'null' else 'null',
            data_id=frame_id,
            text_content=text_list(content),
            context_details={"text": content or "", "overrides": overrides},
@@ -120,13 +116,13 @@ def kerning_check(doc: Document, results: Results) -> None:
     Metrics. Kerning set directly on text is an override, reported by overrides_check."""
     for story in doc.stories or ():
         for paragraph in doc.paragraphs(story):
-            for classifier, kind, style, text in \
-                    [(ValidationError.KERNING, 'paragraph_style', paragraph.style, paragraph.text)] + \
-                    [(ValidationError.KERNING_CHAR, 'character_style', run.style, run.text) for run in paragraph.runs]:
+            for check, kind, style, text in \
+                    [('KERNING', 'paragraph_style', paragraph.style, paragraph.text)] + \
+                    [('KERNING_CHAR', 'character_style', run.style, run.text) for run in paragraph.runs]:
                 kerning = doc.styles.resolve(style, 'KerningMethod')
                 if kerning.value and kerning.value != "Metrics":
                     context, details = inherited(kerning, style)
-                    report(results, classifier, context, text_content=text_list(text),
+                    report(results, check, context, text_content=text_list(text),
                            context_details=details, **at_style(doc, story, kind, style))
 
 
@@ -135,10 +131,10 @@ def table_check(doc: Document, results: Results) -> None:
     for story in doc.stories or ():
         for _, run in doc.runs(story):
             if run.has_table:
-                report(results, ValidationError.TABLE, **at_story(doc, story))
+                report(results, 'TABLE', **at_story(doc, story))
 
 
-def _once_per_style(doc: Document, results: Results, classifier, prop: str, is_issue, context_of) -> None:
+def _once_per_style(doc: Document, results: Results, check: str, prop: str, is_issue, context_of) -> None:
     """Report each paragraph style at most once, at the first story that uses it."""
     reported = set()
     for story in doc.stories or ():
@@ -148,14 +144,14 @@ def _once_per_style(doc: Document, results: Results, classifier, prop: str, is_i
             if style not in reported and is_issue(resolved.value):
                 reported.add(style)
                 _, details = inherited(resolved, paragraph.style)
-                report(results, classifier, context_of(resolved, paragraph.style), context_details=details,
+                report(results, check, context_of(resolved, paragraph.style), context_details=details,
                        **at_style(doc, story, 'paragraph_style', paragraph.style))
 
 
 def grid_alignment_check(doc: Document, results: Results) -> None:
     """Error, once per paragraph style, when its style (through BasedOn) aligns to the baseline
     grid."""
-    _once_per_style(doc, results, ValidationError.GRID_ALIGNMENT, 'GridAlignment',
+    _once_per_style(doc, results, 'GRID_ALIGNMENT', 'GridAlignment',
                     is_issue=lambda value: value not in (None, 'None'),
                     context_of=lambda resolved, style: inherited(resolved, style)[0])
 
@@ -168,7 +164,7 @@ SINGLE_LINE_COMPOSERS = ('HL Single', 'HL Single Optyca')
 def composer_check(doc: Document, results: Results) -> None:
     """Warning, once per paragraph style, when its style (through BasedOn) uses a composer other
     than a single-line one (Adobe or World-Ready Single-line)."""
-    _once_per_style(doc, results, ValidationWarning.COMPOSER, 'Composer',
+    _once_per_style(doc, results, 'COMPOSER', 'Composer',
                     is_issue=lambda value: value not in SINGLE_LINE_COMPOSERS,
                     context_of=lambda resolved, style: inherited(resolved, style)[0])
 
@@ -186,7 +182,7 @@ def other_checks(doc: Document, results: Results) -> None:
     """Fill tint: error, once per paragraph style and once per character style, when the style's fill
     tint (through BasedOn) is set to anything but 100% (-1 and unset mean the default, 100%). Frontify
     shows text colours untinted; a tint swatch works."""
-    _once_per_style(doc, results, ValidationError.FILL_TINT, 'FillTint',
+    _once_per_style(doc, results, 'FILL_TINT', 'FillTint',
                     is_issue=lambda value: value not in DEFAULT_TINTS, context_of=_tint_context)
 
     reported = set()
@@ -200,7 +196,7 @@ def other_checks(doc: Document, results: Results) -> None:
                 continue
             reported.add(style)
             _, details = inherited(tint, style)
-            report(results, ValidationError.FILL_TINT_CHAR, _tint_context(tint, style),
+            report(results, 'FILL_TINT_CHAR', _tint_context(tint, style),
                    context_details=details, **at_style(doc, story, 'character_style', style))
 
 
@@ -221,12 +217,12 @@ def position_check(doc: Document, results: Results) -> None:
             where = at_style(doc, story, 'character_style', run.style)
             position, source = doc.effective(paragraph, run, "Position")
             if position and position != 'Normal':
-                report(results, ValidationError.TEXT_POSITION, _position_context('Position', position, source),
+                report(results, 'TEXT_POSITION', _position_context('Position', position, source),
                        text_content=text_list(content),
                        context_details={'inherited_from': source} if source else None, **where)
             shift, source = doc.effective(paragraph, run, "BaselineShift")
             if shift and _non_zero(shift):
-                report(results, ValidationWarning.BASELINE_SHIFT,
+                report(results, 'BASELINE_SHIFT',
                        _position_context('Baseline Shift', f'{shift}pt', source), text_content=text_list(content),
                        context_details={'inherited_from': source} if source else None, **where)
 

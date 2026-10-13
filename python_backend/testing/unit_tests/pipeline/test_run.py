@@ -44,7 +44,7 @@ def test_rejected_run_says_where_it_stopped(tmp_path):
     with run_workspace() as workspace:
         outcome = run(str(not_a_zip), workspace)
     assert (outcome.completed, outcome.stage) == (False, States.UNZIP_PACKAGE)
-    assert [issue.classifier.name for issue in outcome.results] == ['ZIP']
+    assert [issue.check for issue in outcome.results] == ['ZIP']
 
 
 def test_a_crashing_check_raises_with_its_stage():

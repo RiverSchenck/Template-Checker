@@ -3,7 +3,6 @@
 from src.checks._report import at_frame, at_item, at_link, first_page_id, report
 from src.model.document import Document
 from src.results.results import Results
-from src.results.classifiers import ValidationError, ValidationWarning
 from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform, transform_facts
 from src.model.layout import GRAPHIC_FRAME_TAGS
 
@@ -18,7 +17,7 @@ def masterpage_check(doc: Document, results: Results) -> None:
     if unexpected_elements:
         # A list, in the order they're found: JSON objects don't keep their keys' order.
         counts = [{'kind': tag, 'count': unexpected_elements.count(tag)} for tag in dict.fromkeys(unexpected_elements)]
-        report(results, ValidationError.MASTERPAGE, 'Elements: ' + ', '.join(unexpected_elements), identifier=None,
+        report(results, 'MASTERPAGE', 'Elements: ' + ', '.join(unexpected_elements),
                context_details={'elements': counts})
 
 
@@ -34,7 +33,7 @@ def page_item_transformation_check(doc: Document, results: Results) -> None:
             continue
         classification = classify_page_item_transform(*parsed[:4])
         if classification.is_error:
-            report(results, ValidationError.PAGE_ITEM_TRANSFORMATION, f"{item.kind} {classification.message}",
+            report(results, 'TRANSFORMATION', f"{item.kind} {classification.message}",
                    context_details=transform_facts(classification, *parsed[:2]), **at_item(doc, spread, item))
 
 
@@ -45,8 +44,8 @@ def pasted_graphics_check(doc: Document, results: Results) -> None:
     for spread in doc.spreads:
         count = pasted.count(spread)
         if count > 0:
-            report(results, ValidationError.PASTED_GRAPHICS, f"{count} pasted graphics found.",
-                   page_id=first_page_id(spread), identifier=None)
+            report(results, 'PASTED_GRAPHICS', f"{count} pasted graphics found.",
+                   page_id=first_page_id(spread))
 
 
 def _points(value):
@@ -62,7 +61,7 @@ def document_bleed_check(doc: Document, results: Results) -> None:
     bleed_values = doc.bleed
     if bleed_values is not None and any(value != '0' for value in bleed_values.values()):
         descriptions = ', '.join(f"{k}: {v}pt" for k, v in bleed_values.items())
-        report(results, ValidationWarning.DOCUMENT_BLEED, f"{descriptions}.", identifier=None,
+        report(results, 'DOCUMENT_BLEED', f"{descriptions}.",
                context_details={'bleed': {side: _points(value) for side, value in bleed_values.items()}})
 
 
@@ -82,7 +81,7 @@ def auto_size_text_box_check(doc: Document, results: Results) -> None:
         else:
             message = "Only width, height, and WidthAndHeight are supported."
         if message:
-            report(results, ValidationError.AUTO_SIZE_TEXT_BOX, message, **at_frame(doc, frame),
+            report(results, 'AUTO_SIZE_TEXT_BOX', message, **at_frame(doc, frame),
                    context_details={'auto_size': sizing, 'no_line_breaks': no_line_breaks == 'true'})
 
 
@@ -90,7 +89,7 @@ def text_columns_check(doc: Document, results: Results) -> None:
     """Error for each text frame with more than one column."""
     for _, frame in doc.text_frames():
         if frame.columns and frame.columns != '1':
-            report(results, ValidationError.TEXT_COLUMNS, **at_frame(doc, frame))
+            report(results, 'TEXT_COLUMNS', **at_frame(doc, frame))
 
 
 def text_wrap_check(doc: Document, results: Results) -> None:
@@ -99,11 +98,11 @@ def text_wrap_check(doc: Document, results: Results) -> None:
     object. An item without wrap settings has none (InDesign's default)."""
     for _, frame in doc.text_frames():
         if frame.wrap not in (None, 'None'):
-            report(results, ValidationError.TEXT_WRAP, f"Text box wrap is '{frame.wrap}' not None.",
+            report(results, 'TEXT_WRAP', f"Text box wrap is '{frame.wrap}' not None.",
                    **at_frame(doc, frame))
     for spread, item in doc.page_items():
         if item.kind in WRAP_ITEM_KINDS and item.wrap not in (None, 'None'):
-            report(results, ValidationError.TEXT_WRAP_ITEM, f"{item.kind} wrap is '{item.wrap}' not None.",
+            report(results, 'TEXT_WRAP', f"{item.kind} wrap is '{item.wrap}' not None.",
                    **at_item(doc, spread, item))
 
 
@@ -112,7 +111,7 @@ def linked_text_frame_check(doc: Document, results: Results) -> None:
     without the attributes used to count as linked)."""
     for _, frame in doc.text_frames():
         if frame.previous_frame not in (None, 'n') or frame.next_frame not in (None, 'n'):
-            report(results, ValidationError.LINKED_TEXT_FRAME, **at_frame(doc, frame))
+            report(results, 'LINKED_TEXT_FRAME', **at_frame(doc, frame))
 
 
 def object_style_check(doc: Document, results: Results) -> None:
@@ -120,10 +119,10 @@ def object_style_check(doc: Document, results: Results) -> None:
     than InDesign's defaults."""
     for _, frame in doc.text_frames():
         if frame.object_style not in doc.default_object_styles:
-            report(results, ValidationError.OBJECT_STYLE_TEXT, **{**at_frame(doc, frame), 'identifier': None})
+            report(results, 'OBJECT_STYLE', **at_frame(doc, frame))
 
     for spread, link in doc.links():
         # The image and its frame each count: one error for each that has a custom object style.
         for style in (link.graphic_object_style, link.frame_object_style):
             if style not in doc.default_object_styles:
-                report(results, ValidationError.OBJECT_STYLE_IMAGE, **at_link(doc, spread, link))
+                report(results, 'OBJECT_STYLE', **at_link(doc, spread, link))

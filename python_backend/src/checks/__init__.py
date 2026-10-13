@@ -1,9 +1,9 @@
 """Every template check, in the order they run.
 
 To add a check: write `def my_check(doc: Document, results: Results) -> None` in the module for its theme, add a
-member for it to States (src/checks/stages.py), and add it to CHECKS; the rest (catalogue entry, classifier,
-regenerated docs and contract) is in docs/checks.md. The state name is stored in analytics as the step a run stopped
-at (runs.stopped_at_stage), so never rename an existing one.
+member for it to States (src/checks/stages.py), and add it to CHECKS; the rest (catalogue entry, regenerated docs and
+contract) is in docs/checks.md. The state name is stored in analytics as the step a run stopped at
+(runs.stopped_at_stage), so never rename an existing one.
 """
 from dataclasses import dataclass
 from typing import Callable

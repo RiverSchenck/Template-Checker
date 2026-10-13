@@ -37,7 +37,7 @@ def package(tmp_path, edit=lambda name, data: data, name='Template.zip', corrupt
 def check(path):
     with run_workspace() as workspace, contextlib.redirect_stdout(io.StringIO()):
         outcome = run(path, workspace)
-    return outcome.stage.name, [issue.context for issue in outcome.results if issue.classifier.name == 'ERROR']
+    return outcome.stage.name, [issue.context for issue in outcome.results if issue.check == 'ERROR']
 
 
 def test_a_complete_package_is_checked(tmp_path):

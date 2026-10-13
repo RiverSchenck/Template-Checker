@@ -9,25 +9,20 @@ from typing import Dict, List, Optional
 
 from src.results import catalogue
 from src.results.catalogue import Entry
-from src.results.classifiers import Category, Severity
 from src.results.issue import Issue
 from src.results.layout import DocumentLayout
 from src.results.results import Results
 
-SEVERITY = {Severity.ERROR: 'error', Severity.WARNING: 'warning', Severity.INFO: 'info'}
-# What the document has of each kind of subject, from the totals per v1 section.
-SUBJECT_TOTALS = {Category.PAR_STYLE: 'paragraph_style', Category.CHAR_STYLE: 'character_style',
-                  Category.TEXT_BOX: 'text_frame', Category.FONTS: 'font', Category.IMAGES: 'image'}
 
 
 def results_v2(results: Results, layout: DocumentLayout, *, template_name: Optional[str],
-               totals: Dict[Category, int]) -> dict:
-    """Results v2. totals: how many styles, text boxes, fonts and images the document has, per v1 section."""
+               totals: Dict[str, int]) -> dict:
+    """Results v2. totals: how many of each kind of subject the document has (pipeline.run.count_totals)."""
     return {
         'schema_version': 2,
         'template_name': template_name or 'No Name',
         'issues': [_issue(issue, layout) for issue in results],
-        'subjects_checked': {SUBJECT_TOTALS[c]: n for c, n in totals.items() if c in SUBJECT_TOTALS},
+        'subjects_checked': dict(totals),
         'pages': [{'id': page['page_id'], 'name': page['name'], 'index': page['index'],
                    'spread_id': page['spread_id'] or None, 'width': page['width'], 'height': page['height'],
                    'preview': page['preview'], 'frames': page['frames']} for page in _page_layouts(layout)],
@@ -37,18 +32,18 @@ def results_v2(results: Results, layout: DocumentLayout, *, template_name: Optio
 
 
 def _issue(issue: Issue, layout: DocumentLayout) -> dict:
-    entry, _ = catalogue.for_v1(issue.classifier.name)
+    entry = catalogue.BY_KEY[issue.check]
     page_id = layout.page_of(issue.data_id, issue.page_id) or None
     subject = issue.subject
     return {
         'check': entry.key,
-        'severity': SEVERITY[issue.classifier.severity],
+        'severity': entry.severity,
         'subject': {'kind': subject.kind, 'id': subject.id, 'name': subject.name},
         'location': {'page_id': page_id, 'page_name': layout.pages.get(page_id),
                      'spread_id': layout.spread_of(page_id or '') or None, 'item_id': issue.data_id or None,
                      'bounds': layout.bounds(issue.data_id)},
         'facts': issue.context_details,
-        'text': issue.text_content if issue.classifier.shows_text and issue.text_content else None,
+        'text': issue.text_content if entry.shows_text and issue.text_content else None,
         'detail': issue.context or None,
     }
 
@@ -66,7 +61,7 @@ def _text_boxes(results: Results, layout: DocumentLayout) -> Dict[str, dict]:
 
 def check_json(entry: Entry) -> dict:
     """A catalogue entry as results v2 lists it."""
-    return {'key': entry.key, 'severity': SEVERITY[entry.severity], 'subject_kinds': list(entry.subject_kinds),
+    return {'key': entry.key, 'severity': entry.severity, 'subject_kinds': list(entry.subject_kinds),
             'title': entry.title, 'why': entry.why,
             'fix': {kind: list(entry.fix_for(kind)) for kind in entry.subject_kinds},
             'help_article': entry.help_article, 'is_check': entry.is_check}

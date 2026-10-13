@@ -1,15 +1,11 @@
-"""The analytics migration to results v2 (migrations/011_results_v2.sql, 012_results_v2_finish.sql) rewrites stored
-v1 rows with a mapping written out in SQL: it must say what the catalogue says. (The migrations themselves were run
-on a local Postgres copy of the schema for PR 5.4; see the PR.)"""
+"""The analytics migration to results v2 (migrations/011_results_v2.sql, 012_results_v2_finish.sql, both run in
+production for PR 5.4): stored categories end as results v2's subject kinds, and retired types stay readable."""
 import os
 import re
 import typing
 
 from app import analytics_api
-from src.results import catalogue
-from src.results.classifiers import all_classifiers
 from src.results.models import SubjectKind
-from src.results.serialize import SEVERITY
 
 MIGRATIONS = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'migrations')
 
@@ -17,12 +13,6 @@ MIGRATIONS = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'migratio
 def _read(name: str) -> str:
     with open(os.path.join(MIGRATIONS, name), encoding='utf-8') as f:
         return f.read()
-
-
-def test_every_v1_classifier_maps_to_its_check_and_kind_at_its_severity():
-    rows = re.findall(r"\('(\w+)', '(\w+)', '(\w+)', '(\w+)'\)", _read('011_results_v2.sql'))
-    expected = [(c.name, SEVERITY[c.severity], *catalogue.V1_KEYS[c.name]) for c in all_classifiers()]
-    assert rows == expected
 
 
 def test_categories_end_as_the_subject_kinds_of_results_v2():

@@ -1,15 +1,5 @@
 """src/results/catalogue.py: one entry per check with the only copy of its wording (plan PR 5.1, D2, D3)."""
-import collections
-
 from src.results import catalogue
-from src.results.classifiers import all_classifiers
-
-
-def test_every_v1_classifier_has_an_entry_of_its_severity():
-    for classifier in all_classifiers():
-        entry, kind = catalogue.for_v1(classifier.name)
-        assert entry.severity == classifier.severity, classifier.name
-        assert kind in entry.subject_kinds, classifier.name
 
 
 def test_every_check_says_why_and_how_to_fix_it_for_each_kind():
@@ -21,18 +11,15 @@ def test_every_check_says_why_and_how_to_fix_it_for_each_kind():
 
 
 def test_merged_checks_follow_the_plan():
-    merged = collections.defaultdict(set)
-    for name, (key, _) in catalogue.V1_KEYS.items():
-        merged[key].add(name)
-    assert {key: names for key, names in merged.items() if len(names) > 1} == {
-        'TEXT_WRAP': {'TEXT_WRAP', 'TEXT_WRAP_ITEM'},
-        'OBJECT_STYLE': {'OBJECT_STYLE_TEXT', 'OBJECT_STYLE_IMAGE'},
-        'TRANSFORMATION': {'IMAGE_TRANSFORMATION_IMAGE', 'IMAGE_TRANSFORMATION_CONTAINER', 'PAGE_ITEM_TRANSFORMATION'},
-        'PARAGRAPH_STYLE': {'PARAGRAPH_STYLE', 'PARAGRAPH_STYLE_TEXT_BOX'},
+    # Same fix, one check over the kinds of thing it's about (plan §3.1).
+    assert {key: catalogue.BY_KEY[key].subject_kinds for key in ('TEXT_WRAP', 'OBJECT_STYLE', 'TRANSFORMATION')} == {
+        'TEXT_WRAP': ('text_frame', 'page_item'),
+        'OBJECT_STYLE': ('text_frame', 'image'),
+        'TRANSFORMATION': ('image', 'image_frame', 'page_item'),
     }
     # Separate fixes, separate checks (KERNING vs KERNING_CHAR, FILL_TINT vs FILL_TINT_CHAR).
-    assert catalogue.for_v1('KERNING_CHAR')[0].key == 'KERNING_CHAR'
-    assert catalogue.for_v1('FILL_TINT_CHAR')[0].key == 'FILL_TINT_CHAR'
+    assert catalogue.BY_KEY['KERNING_CHAR'].subject_kinds == catalogue.BY_KEY['FILL_TINT_CHAR'].subject_kinds == (
+        'character_style',)
 
 
 def test_a_merged_check_fixes_each_kind_its_own_way():

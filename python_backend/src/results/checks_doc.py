@@ -8,16 +8,15 @@ import os
 from typing import List
 
 from src.results.catalogue import ENTRIES, Entry
-from src.results.classifiers import Severity
 
 DOC_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'docs', 'checks.md')
 
 KINDS = {'paragraph_style': 'paragraph style', 'character_style': 'character style', 'text_frame': 'text frame',
          'image': 'image', 'image_frame': 'image frame', 'font': 'font', 'page_item': 'page item',
          'document': 'document'}
-GROUPS = [(Severity.ERROR, 'Blocker', 'Break the template, or will very likely make it look different.'),
-          (Severity.WARNING, 'Warning', 'May make the template look different than expected.'),
-          (Severity.INFO, 'Info', 'A heads up: worth a check, but often fine.')]
+GROUPS = [('error', 'Blocker', 'Break the template, or will very likely make it look different.'),
+          ('warning', 'Warning', 'May make the template look different than expected.'),
+          ('info', 'Info', 'A heads up: worth a check, but often fine.')]
 LEVEL = {severity: name for severity, name, _ in GROUPS}
 
 INTRO = '''# Checks
@@ -34,8 +33,8 @@ ADDING = '''## Adding a check
 1. Write the check in the `src/checks/` module for its theme and register it (`src/checks/__init__.py` says how).
 2. Add its entry to the catalogue (`src/results/catalogue.py`): key, severity, what it's about, title, why, fix steps
    and help article, and the facts model its issues record (`src/results/facts.py`), if any.
-3. Add its classifier to `src/results/classifiers.py` (the class for its severity), and report it with the subject
-   it's about (`report(..., subject=...)`, or the `at_*` helpers in `src/checks/_report.py`).
+3. Report it from the check by its key, with the subject it's about: `report(results, 'MY_CHECK', ...,
+   subject=...)`, or the `at_*` helpers in `src/checks/_report.py`.
 4. Regenerate what's built from the catalogue and the results, in this order, and review each diff:
    - in `python_backend`: `python -m src.results.checks_doc` (this page), `python -m src.results.models`
      (`schema/results-v2.json`), `python -m testing.golden --update` and

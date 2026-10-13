@@ -11,13 +11,13 @@ from typing import Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, ConfigDict
 
 from src.results import catalogue
+from src.results.catalogue import Severity
 from src.results.facts import (AutoSizeFacts, BleedFacts, InheritedFacts, MasterPageFacts, MissingFontFacts,
                                OverrideFacts, ParagraphStyleFacts, SizeFacts, TransformationFacts)
 
 SCHEMA_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'schema', 'results-v2.json')
 
 CheckKey = Literal[tuple(catalogue.BY_KEY)]
-Severity = Literal['error', 'warning', 'info']
 SubjectKind = Literal['paragraph_style', 'character_style', 'text_frame', 'image', 'image_frame', 'font', 'page_item',
                       'document']
 AnyFacts = Union[InheritedFacts, AutoSizeFacts, SizeFacts, MasterPageFacts, BleedFacts, ParagraphStyleFacts,

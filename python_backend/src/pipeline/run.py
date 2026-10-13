@@ -21,7 +21,6 @@ from src.model.load import load_document
 from src.pipeline.intake import Intake, Rejected, unpack_idml, unpack_package
 from src.pipeline.previews import page_previews
 from src.pipeline.workspace import Workspace
-from src.results.classifiers import Category, ValidationError, ValidationWarning
 from src.results.layout import DocumentLayout, pages_from_spreads, text_boxes_from_stories
 from src.results.results import Results
 from src.results.serialize import results_v2
@@ -57,19 +56,19 @@ def load(intake: Intake, results: Results, *, previews: bool) -> Loaded:
                           ("font list (Resources/Fonts.xml)", os.path.join(resources, 'Fonts.xml')),
                           ("styles (Resources/Styles.xml)", os.path.join(resources, 'Styles.xml'))):
         if not os.path.exists(path):
-            raise Rejected(States.PARSE_XML, ValidationError.ERROR, incomplete_idml(missing))
+            raise Rejected(States.PARSE_XML, 'ERROR', incomplete_idml(missing))
     if not os.path.exists(os.path.join(folder, 'MasterSpreads')):
         # No master spreads is valid (only the [None] master); checks see no master items.
-        results.add(ValidationWarning.WARNING, "MasterSpreads directory does not exist")
+        results.add('WARNING', "MasterSpreads directory does not exist")
     if not os.path.exists(os.path.join(resources, 'Preferences.xml')):
-        raise Rejected(States.PARSE_XML, ValidationError.ERROR, incomplete_idml("document settings (Resources/Preferences.xml)"))
+        raise Rejected(States.PARSE_XML, 'ERROR', incomplete_idml("document settings (Resources/Preferences.xml)"))
     try:
         document = load_document(folder, intake.package.link_files, intake.package.fonts_folder)
     except safe_xml.TooLargeError:
-        raise Rejected(States.PARSE_XML, ValidationError.ERROR, IDML_TOO_LARGE)
+        raise Rejected(States.PARSE_XML, 'ERROR', IDML_TOO_LARGE)
     except (etree.XMLSyntaxError, safe_xml.UnsafeXMLError):
         logger.info('Damaged XML in the .idml', exc_info=True)
-        raise Rejected(States.PARSE_XML, ValidationError.ERROR, DAMAGED_IDML)
+        raise Rejected(States.PARSE_XML, 'ERROR', DAMAGED_IDML)
     layout = pages_from_spreads(document)
     layout.text_boxes = text_boxes_from_stories(document)
     layout.geometry = document.geometry
@@ -84,17 +83,17 @@ def run_check(check: Check, document: Document, results: Results) -> None:
     check.run(document, results)
 
 
-def count_totals(document: Document) -> Dict[Category, int]:
-    """Per results section: how many styles, text boxes, fonts and images the document has."""
-    totals: Dict[Category, int] = {}
+def count_totals(document: Document) -> Dict[str, int]:
+    """Per kind of subject: how many styles, text frames, fonts and images the document has."""
+    totals: Dict[str, int] = {}
     if document.stories_exist:
-        totals[Category.PAR_STYLE] = len({short_style_id(paragraph.style)
-                                          for story in document.stories for paragraph in document.paragraphs(story)})
-        totals[Category.CHAR_STYLE] = len({short_style_id(run.style)
-                                           for story in document.stories for _, run in document.runs(story)})
-        totals[Category.TEXT_BOX] = len(document.stories)
-    totals[Category.FONTS] = len(document.used_fonts) + len(document.packaged_fonts)
-    totals[Category.IMAGES] = len(document.links()) + sum(1 for _, item in document.page_items() if item.pasted)
+        totals['paragraph_style'] = len({short_style_id(paragraph.style)
+                                         for story in document.stories for paragraph in document.paragraphs(story)})
+        totals['character_style'] = len({short_style_id(run.style)
+                                         for story in document.stories for _, run in document.runs(story)})
+        totals['text_frame'] = len(document.stories)
+    totals['font'] = len(document.used_fonts) + len(document.packaged_fonts)
+    totals['image'] = len(document.links()) + sum(1 for _, item in document.page_items() if item.pasted)
     return totals
 
 
@@ -104,7 +103,7 @@ class RunOutcome:
     stage: States                           # RESULTS when every check ran, else the stage it was rejected at
     results: Results
     layout: DocumentLayout = field(default_factory=DocumentLayout)
-    totals: Dict[Category, int] = field(default_factory=dict)
+    totals: Dict[str, int] = field(default_factory=dict)
     document: Optional[Document] = None
     idml_folder: Optional[str] = None       # the unpacked .idml (for the XML export), once intake got that far
 
@@ -131,7 +130,7 @@ def run(zip_path: str, workspace: Workspace, *, previews: bool = True, checks: I
         tracker.stage = States.PARSE_XML
         loaded = load(intake, results, previews=previews)
     except Rejected as rejected:
-        results.add(rejected.classifier, rejected.reason)
+        results.add(rejected.check, rejected.reason)
         return RunOutcome(template_name, rejected.stage, results, idml_folder=intake.idml_folder if intake else None)
     for check in checks:
         tracker.stage = check.state

@@ -477,8 +477,8 @@ Reported when a package can't be checked (`ERROR`, `IDML`, `ZIP`, `WARNING`); th
 1. Write the check in the `src/checks/` module for its theme and register it (`src/checks/__init__.py` says how).
 2. Add its entry to the catalogue (`src/results/catalogue.py`): key, severity, what it's about, title, why, fix steps
    and help article, and the facts model its issues record (`src/results/facts.py`), if any.
-3. Add its classifier to `src/results/classifiers.py` (the class for its severity), and report it with the subject
-   it's about (`report(..., subject=...)`, or the `at_*` helpers in `src/checks/_report.py`).
+3. Report it from the check by its key, with the subject it's about: `report(results, 'MY_CHECK', ...,
+   subject=...)`, or the `at_*` helpers in `src/checks/_report.py`.
 4. Regenerate what's built from the catalogue and the results, in this order, and review each diff:
    - in `python_backend`: `python -m src.results.checks_doc` (this page), `python -m src.results.models`
      (`schema/results-v2.json`), `python -m testing.golden --update` and

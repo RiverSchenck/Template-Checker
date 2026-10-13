@@ -5,7 +5,6 @@ from src.checks.layout import page_item_transformation_check
 from src.model.document import Document
 from src.model.layout import load_layout, read_spread
 from src.results.results import Results
-from src.results.classifiers import Severity, ValidationError
 from src.helpers.page_item_transform import (
     parse_item_transform,
     classify_page_item_transform,
@@ -59,7 +58,7 @@ def test_page_items_are_checked_but_a_linked_rectangle_is_left_to_the_image_chec
     spread = read_spread(ET.fromstring(xml).find('Spread'))
     results = Results()
     page_item_transformation_check(Document(spreads=(spread,)), results)
-    reported = {issue.identifier for issue in results}
+    reported = {f'{issue.subject.name}:{issue.subject.id}' for issue in results}
     assert reported == {"TextFrame:tf1", "Rectangle:plainRect", "Group:g1"}
 
 
@@ -79,6 +78,4 @@ def test_page_item_transformation_check_skew_textframe(tmp_path):
     results = Results()
     page_item_transformation_check(Document(spreads=load_layout(str(tmp_path)).spreads), results)
 
-    errors = results.names(Severity.ERROR)
-    assert errors.count(ValidationError.PAGE_ITEM_TRANSFORMATION.value) == 1
-    assert results.names(Severity.WARNING) == []
+    assert [(issue.check, issue.subject.kind) for issue in results] == [('TRANSFORMATION', 'page_item')]
