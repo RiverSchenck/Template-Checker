@@ -68,7 +68,7 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 | Error name | Level | Description | Help article | FrontifyChecker |
 |------------|-------|-------------|--------------|-----------------|
 | `FONTS_INCLUDED` | error | Package is missing fonts (whole family, or the styles named in the context). | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
-| `ADOBE_FONT` | error | Adobe Fonts must be packaged. Frontify only loads fonts included in the package. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes — Adobe Fonts styles not in Document fonts |
+| `ADOBE_FONT` | error | Adobe Fonts are not supported. Use a desktop version of the font (OTF or TTF) instead. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes — Adobe Fonts styles not in Document fonts |
 | `OTF_TTF_FONT` | error | Only OTF or TTF fonts are supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
 | `VARIABLE_FONT` | error | Variable fonts are not supported | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
 

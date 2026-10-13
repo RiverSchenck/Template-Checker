@@ -248,11 +248,11 @@ GUIDES: dict[str, dict[str, CheckGuide]] = {
             subject='character-style',
         ),
         'ADOBE_FONT': CheckGuide(
-            title='Adobe Font missing from the package',
-            why='Frontify only uses fonts included in the package; it can’t load Adobe Fonts from your Adobe account. Without the font files the template falls back to another font.',
+            title='Adobe Font used',
+            why='Adobe Fonts aren’t supported in Frontify templates (for licensing reasons), so the template falls back to another font.',
             fix=(
-                'Package again with File > Package and "Copy Fonts" checked, and check that the font’s files are in "Document fonts".',
-                'If InDesign won’t copy the Adobe Font, use a licensed desktop copy of the font (or another font) instead.',
+                'Install a desktop version of the font (OTF or TTF) that you’re licensed to use, and switch the text to it: Type > Find/Change Font, or update the paragraph and character styles.',
+                'Package again with "Copy Fonts" checked, and zip the whole folder, including "Document fonts".',
             ),
             subject='font',
         ),
