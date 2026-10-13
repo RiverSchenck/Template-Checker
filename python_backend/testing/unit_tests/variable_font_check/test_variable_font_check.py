@@ -95,9 +95,9 @@ def test_zip_check_fail(testcase_zip):
 
     # Extract expected outcomes for the current testcase_zip
     filename = os.path.basename(testcase_zip)
-    # If the expected outcome for the file is not found, skip the test
+    # Every package needs an expected outcome
     if filename not in EXPECTED_OUTCOMES:
-        pytest.skip(f"Expected outcome for {filename} not found")
+        pytest.fail(f"No expected outcome for {filename}: add it to EXPECTED_OUTCOMES")
     expected_errors = EXPECTED_OUTCOMES[filename].get("errors", [])
     expected_warnings = EXPECTED_OUTCOMES[filename].get("warnings", [])
     expected_infos = EXPECTED_OUTCOMES[filename].get("infos", [])
@@ -151,30 +151,6 @@ def test_zip_check_pass(testcase_zip):
     actual_errors = checker.get_error_types()
     actual_warnings = checker.get_warning_types()
     actual_infos = checker.get_info_types()
-
-    # Assert
-    assert not actual_errors
-
-    assert not actual_warnings
-
-    assert not actual_infos
-
-
-@pytest.mark.parametrize('testcase_zip', [os.path.join(PASS_DATA_DIR, f) for f in os.listdir(PASS_DATA_DIR) if f.endswith('.zip')])
-def test_zip_check_pass(testcase_zip):
-    print(f"Running PASS test with {testcase_zip}")
-    # Setup
-    checker = setup_instance(testcase_zip)
-    # Exuecute
-    checker.run_check(States.VARIABLE_FONT_CHECK)
-    # Cleanup files
-    checker.delete_unzipped_root_path()
-
-    # Extract Error and Warnings
-    actual_errors = checker.get_error_types()
-    actual_warnings = checker.get_warning_types()
-    actual_infos = checker.get_info_types()
-
 
     # Assert
     assert not actual_errors
