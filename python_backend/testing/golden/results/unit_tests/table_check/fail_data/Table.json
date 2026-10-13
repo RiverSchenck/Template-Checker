@@ -296,6 +296,14 @@
      "errors": [
       {
        "context": "Elements: TextFrame",
+       "context_details": {
+        "elements": [
+         {
+          "count": 1,
+          "kind": "TextFrame"
+         }
+        ]
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -403,6 +411,10 @@
         "y": 88.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u12a",
        "identifier": "u118",
        "page_id": "ud3",

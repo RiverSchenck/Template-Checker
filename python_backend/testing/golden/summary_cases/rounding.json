@@ -21,6 +21,7 @@
             {
               "validationClassifier": "DOCUMENT_BLEED",
               "context": "top: 0.7086614173228347pt, bottom: 2.125pt, inside: 0.36pt, outside: 9pt.",
+              "context_details": {"bleed": {"top": 0.7086614173228347, "bottom": 2.125, "inside": 0.36, "outside": 9}},
               "identifier": "document",
               "page_id": "",
               "page_name": "",
@@ -111,6 +112,7 @@
             {
               "validationClassifier": "LARGE_IMAGE",
               "context": "Image d.png is 15.25MB.",
+              "context_details": {"size_mb": 15.25},
               "identifier": "d.png",
               "page_id": "p1",
               "page_name": "1",

@@ -542,6 +542,10 @@
         "y": 115.2
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "uf0",
        "identifier": "ude",
        "page_id": "ud3",
@@ -582,6 +586,10 @@
         "y": 234.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u10e",
        "identifier": "ufc",
        "page_id": "ud3",

@@ -307,6 +307,12 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Regular"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Minion Pro",
        "page_id": "",
@@ -322,6 +328,12 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Black"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Playfair Display",
        "page_id": "",
@@ -357,6 +369,14 @@
      "errors": [
       {
        "context": "Elements: TextFrame, TextFrame",
+       "context_details": {
+        "elements": [
+         {
+          "count": 2,
+          "kind": "TextFrame"
+         }
+        ]
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -369,6 +389,14 @@
      "warnings": [
       {
        "context": "top: 72pt, bottom: 72pt, inside: 72pt, outside: 72pt.",
+       "context_details": {
+        "bleed": {
+         "bottom": 72.0,
+         "inside": 72.0,
+         "outside": 72.0,
+         "top": 72.0
+        }
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -437,6 +465,9 @@
         "y": 111.38
        },
        "context": "Image iStock-1226023798.jpg is 15.25MB.",
+       "context_details": {
+        "size_mb": 15.25
+       },
        "data_id": "u16b",
        "identifier": "iStock-1226023798.jpg",
        "page_id": "ud3",
@@ -497,6 +528,10 @@
         "y": 465.62
        },
        "context": "Image Container has skew transformations. Skew factors: b=0.0, c=-0.36397023426620234",
+       "context_details": {
+        "kind": "skew",
+        "rotation_deg": 0.0
+       },
        "data_id": "u188",
        "identifier": "logo_Push_Button_charcoal.png",
        "page_id": "ud3",
@@ -520,6 +555,10 @@
         "y": 360.5
        },
        "context": "Image Container has a horizontal flip transformation.",
+       "context_details": {
+        "kind": "flip",
+        "rotation_deg": null
+       },
        "data_id": "u17f",
        "identifier": "logo_Yatta_Studio_original.png",
        "page_id": "ud3",
@@ -799,6 +838,10 @@
         "y": 47.52
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u127",
        "identifier": "u115",
        "page_id": "ud3",
@@ -945,6 +988,10 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "",
        "identifier": "ue5",
        "page_id": "",
@@ -960,6 +1007,10 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "",
        "identifier": "ufc",
        "page_id": "",

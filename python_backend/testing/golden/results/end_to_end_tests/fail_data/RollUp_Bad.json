@@ -314,6 +314,14 @@
      "warnings": [
       {
        "context": "top: 2.8346456692913384pt, bottom: 2.8346456692913384pt, inside: 2.8346456692913384pt, outside: 2.8346456692913384pt.",
+       "context_details": {
+        "bleed": {
+         "bottom": 2.8346456692913384,
+         "inside": 2.8346456692913384,
+         "outside": 2.8346456692913384,
+         "top": 2.8346456692913384
+        }
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -364,6 +372,9 @@
         "y": 1086.17
        },
        "context": "Image iStock-1226023798.jpg is 15.25MB.",
+       "context_details": {
+        "size_mb": 15.25
+       },
        "data_id": "u3f0",
        "identifier": "iStock-1226023798.jpg",
        "page_id": "ud3",
@@ -386,6 +397,10 @@
         "y": 448.37
        },
        "context": "Image Container has skew transformations. Skew factors: b=0.0, c=-0.36397023426620234",
+       "context_details": {
+        "kind": "skew",
+        "rotation_deg": 0.0
+       },
        "data_id": "u3e4",
        "identifier": "monobrand-text-logo-black.png",
        "page_id": "ud3",
@@ -613,6 +628,10 @@
         "y": 236.69
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u154",
        "identifier": "u142",
        "page_id": "ud3",
@@ -676,6 +695,10 @@
         "y": 73.7
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u42a",
        "identifier": "u418",
        "page_id": "ud3",

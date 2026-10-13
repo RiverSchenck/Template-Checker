@@ -296,6 +296,14 @@
      "errors": [
       {
        "context": "Elements: TextFrame",
+       "context_details": {
+        "elements": [
+         {
+          "count": 1,
+          "kind": "TextFrame"
+         }
+        ]
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -443,6 +451,10 @@
         "y": 256.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u151",
        "identifier": "u13f",
        "page_id": "ud3",
@@ -499,6 +511,10 @@
         "y": 468.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u168",
        "identifier": "u156",
        "page_id": "ud3",
@@ -588,6 +604,10 @@
         "y": 720.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u16e",
        "identifier": "u171",
        "page_id": "ud3",

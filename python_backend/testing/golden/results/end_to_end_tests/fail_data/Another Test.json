@@ -296,6 +296,14 @@
      "errors": [
       {
        "context": "Elements: Rectangle",
+       "context_details": {
+        "elements": [
+         {
+          "count": 1,
+          "kind": "Rectangle"
+         }
+        ]
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -308,6 +316,14 @@
      "warnings": [
       {
        "context": "top: 2pt, bottom: 2pt, inside: 2pt, outside: 2pt.",
+       "context_details": {
+        "bleed": {
+         "bottom": 2.0,
+         "inside": 2.0,
+         "outside": 2.0,
+         "top": 2.0
+        }
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -542,6 +558,10 @@
         "y": 52.5
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u17f",
        "identifier": "u16d",
        "page_id": "ud3",

@@ -298,6 +298,14 @@
      "warnings": [
       {
        "context": "top: 70.86614173228347pt, bottom: 70.86614173228347pt, inside: 70.86614173228347pt, outside: 70.86614173228347pt.",
+       "context_details": {
+        "bleed": {
+         "bottom": 70.86614173228347,
+         "inside": 70.86614173228347,
+         "outside": 70.86614173228347,
+         "top": 70.86614173228347
+        }
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -941,6 +949,10 @@
         "y": 2569.37
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u1332",
        "identifier": "u1335",
        "page_id": "u16d",
@@ -964,6 +976,10 @@
         "y": 1252.91
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u1d56",
        "identifier": "u1d44",
        "page_id": "ud5",
@@ -1019,6 +1035,10 @@
         "y": 3332.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u1d6d",
        "identifier": "u1d5b",
        "page_id": "u16d",

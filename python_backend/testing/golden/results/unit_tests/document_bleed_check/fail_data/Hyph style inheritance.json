@@ -296,6 +296,14 @@
      "errors": [
       {
        "context": "Elements: Group, Group, Group, Group, Group, Group",
+       "context_details": {
+        "elements": [
+         {
+          "count": 6,
+          "kind": "Group"
+         }
+        ]
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -308,6 +316,14 @@
      "warnings": [
       {
        "context": "top: 9pt, bottom: 9pt, inside: 9pt, outside: 9pt.",
+       "context_details": {
+        "bleed": {
+         "bottom": 9.0,
+         "inside": 9.0,
+         "outside": 9.0,
+         "top": 9.0
+        }
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",

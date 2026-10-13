@@ -409,6 +409,10 @@
         "y": 469.44
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u128",
        "identifier": "u116",
        "page_id": "ud3",
@@ -449,6 +453,10 @@
         "y": 103.68
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "uf0",
        "identifier": "ude",
        "page_id": "ud3",
@@ -489,6 +497,10 @@
         "y": 266.4
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u10f",
        "identifier": "ufd",
        "page_id": "ud3",

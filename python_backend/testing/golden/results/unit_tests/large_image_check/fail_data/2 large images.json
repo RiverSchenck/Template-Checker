@@ -309,6 +309,9 @@
         "y": -94.26
        },
        "context": "Image PHONE_SHAPE.psd is 55.59MB.",
+       "context_details": {
+        "size_mb": 55.59
+       },
        "data_id": "u23d",
        "identifier": "PHONE_SHAPE.psd",
        "page_id": "ud3",
@@ -332,6 +335,9 @@
         "y": 52.72
        },
        "context": "Image Screen2.psd is 37.45MB.",
+       "context_details": {
+        "size_mb": 37.45
+       },
        "data_id": "u25d",
        "identifier": "Screen2.psd",
        "page_id": "ud3",

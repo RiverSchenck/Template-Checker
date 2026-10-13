@@ -53,7 +53,8 @@ def par_style_check(doc: Document, results: Results) -> None:
 
         grouped = _grouped(doc.paragraphs(story))
         if len(grouped) == 1 and grouped[0][0].style in doc.default_par_styles:
-            report(results, ValidationError.PARAGRAPH_STYLE_TEXT_BOX, **at_story(doc, story, story.id))
+            report(results, ValidationError.PARAGRAPH_STYLE_TEXT_BOX, **at_story(doc, story, story.id),
+                   context_details={'whole_frame': True, 'whitespace_only': not story_content.strip()})
             continue
 
         texts = [''.join(paragraph.text for paragraph in group) for group in grouped]
@@ -63,7 +64,8 @@ def par_style_check(doc: Document, results: Results) -> None:
                 # Whitespace-only text needs its neighbours to be findable. One line: line breaks show as spaces.
                 message = f"{content.replace(chr(10), ' ')} {generate_context_message(content, texts, i)}"
                 report(results, ValidationError.PARAGRAPH_STYLE, message,
-                       text_content=text_list(content), **at_story(doc, story, short_style_id(group[0].style)))
+                       text_content=text_list(content), **at_story(doc, story, short_style_id(group[0].style)),
+                       context_details={'whole_frame': False, 'whitespace_only': not content.strip()})
 
 
 def hyphenation_check(doc: Document, results: Results) -> None:

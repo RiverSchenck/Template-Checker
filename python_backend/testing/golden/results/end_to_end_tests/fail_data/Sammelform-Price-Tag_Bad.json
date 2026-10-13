@@ -292,6 +292,12 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Regular"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Minion Pro",
        "page_id": "",
@@ -2916,6 +2922,10 @@
         "y": 153.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u2ec",
        "identifier": "u2ef",
        "page_id": "u192",
@@ -2973,6 +2983,10 @@
         "y": 269.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u303",
        "identifier": "u306",
        "page_id": "u192",
@@ -3031,6 +3045,10 @@
         "y": 108.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u31a",
        "identifier": "u31d",
        "page_id": "u192",
@@ -3088,6 +3106,10 @@
         "y": 153.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u43d",
        "identifier": "u440",
        "page_id": "u192",
@@ -3145,6 +3167,10 @@
         "y": 269.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u454",
        "identifier": "u457",
        "page_id": "u192",
@@ -3203,6 +3229,10 @@
         "y": 108.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u46b",
        "identifier": "u46e",
        "page_id": "u192",
@@ -3260,6 +3290,10 @@
         "y": 153.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u489",
        "identifier": "u48c",
        "page_id": "u192",
@@ -3317,6 +3351,10 @@
         "y": 269.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u4a0",
        "identifier": "u4a3",
        "page_id": "u192",
@@ -3375,6 +3413,10 @@
         "y": 108.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u4b7",
        "identifier": "u4bb",
        "page_id": "u192",
@@ -3432,6 +3474,10 @@
         "y": 153.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u4d7",
        "identifier": "u4da",
        "page_id": "u192",
@@ -3489,6 +3535,10 @@
         "y": 269.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u4ee",
        "identifier": "u4f1",
        "page_id": "u192",
@@ -3547,6 +3597,10 @@
         "y": 108.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u505",
        "identifier": "u508",
        "page_id": "u192",
@@ -3604,6 +3658,10 @@
         "y": 153.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u525",
        "identifier": "u528",
        "page_id": "u192",
@@ -3661,6 +3719,10 @@
         "y": 269.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u53c",
        "identifier": "u53f",
        "page_id": "u192",
@@ -3719,6 +3781,10 @@
         "y": 108.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u553",
        "identifier": "u556",
        "page_id": "u192",
@@ -3776,6 +3842,10 @@
         "y": 153.68
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u578",
        "identifier": "u57b",
        "page_id": "u192",
@@ -3833,6 +3903,10 @@
         "y": 269.45
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u58f",
        "identifier": "u592",
        "page_id": "u192",
@@ -3891,6 +3965,10 @@
         "y": 108.58
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u5a6",
        "identifier": "u5a9",
        "page_id": "u192",
@@ -3948,6 +4026,10 @@
         "y": 153.68
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u5c4",
        "identifier": "u5c7",
        "page_id": "u192",
@@ -4005,6 +4087,10 @@
         "y": 269.45
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u5db",
        "identifier": "u5de",
        "page_id": "u192",
@@ -4063,6 +4149,10 @@
         "y": 108.58
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u5f2",
        "identifier": "u5f5",
        "page_id": "u192",
@@ -4120,6 +4210,10 @@
         "y": 402.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u682",
        "identifier": "u686",
        "page_id": "u192",
@@ -4177,6 +4271,10 @@
         "y": 518.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u69a",
        "identifier": "u69d",
        "page_id": "u192",
@@ -4235,6 +4333,10 @@
         "y": 357.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u6b1",
        "identifier": "u6b4",
        "page_id": "u192",
@@ -4292,6 +4394,10 @@
         "y": 402.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u6ec",
        "identifier": "u6ef",
        "page_id": "u192",
@@ -4349,6 +4455,10 @@
         "y": 402.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u703",
        "identifier": "u706",
        "page_id": "u192",
@@ -4406,6 +4516,10 @@
         "y": 402.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u71a",
        "identifier": "u71d",
        "page_id": "u192",
@@ -4463,6 +4577,10 @@
         "y": 402.49
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u731",
        "identifier": "u734",
        "page_id": "u192",
@@ -4520,6 +4638,10 @@
         "y": 402.68
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u748",
        "identifier": "u74b",
        "page_id": "u192",
@@ -4577,6 +4699,10 @@
         "y": 402.68
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u75f",
        "identifier": "u762",
        "page_id": "u192",
@@ -4634,6 +4760,10 @@
         "y": 518.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u776",
        "identifier": "u779",
        "page_id": "u192",
@@ -4691,6 +4821,10 @@
         "y": 518.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u78d",
        "identifier": "u790",
        "page_id": "u192",
@@ -4748,6 +4882,10 @@
         "y": 518.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u7a4",
        "identifier": "u7a7",
        "page_id": "u192",
@@ -4805,6 +4943,10 @@
         "y": 518.0
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u7bb",
        "identifier": "u7be",
        "page_id": "u192",
@@ -4862,6 +5004,10 @@
         "y": 518.45
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u7d2",
        "identifier": "u7d5",
        "page_id": "u192",
@@ -4919,6 +5065,10 @@
         "y": 518.45
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u7e9",
        "identifier": "u7ec",
        "page_id": "u192",
@@ -4977,6 +5127,10 @@
         "y": 357.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u800",
        "identifier": "u803",
        "page_id": "u192",
@@ -5035,6 +5189,10 @@
         "y": 357.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u817",
        "identifier": "u81a",
        "page_id": "u192",
@@ -5093,6 +5251,10 @@
         "y": 357.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u82e",
        "identifier": "u831",
        "page_id": "u192",
@@ -5151,6 +5313,10 @@
         "y": 357.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u845",
        "identifier": "u849",
        "page_id": "u192",
@@ -5209,6 +5375,10 @@
         "y": 357.58
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u85d",
        "identifier": "u860",
        "page_id": "u192",
@@ -5267,6 +5437,10 @@
         "y": 357.58
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u874",
        "identifier": "u878",
        "page_id": "u192",
@@ -5324,6 +5498,10 @@
         "y": 651.94
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u8a5",
        "identifier": "u8a8",
        "page_id": "u192",
@@ -5381,6 +5559,10 @@
         "y": 767.45
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u8bc",
        "identifier": "u8bf",
        "page_id": "u192",
@@ -5439,6 +5621,10 @@
         "y": 606.58
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u8d3",
        "identifier": "u8d7",
        "page_id": "u192",
@@ -5496,6 +5682,10 @@
         "y": 651.94
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u90c",
        "identifier": "u90f",
        "page_id": "u192",
@@ -5553,6 +5743,10 @@
         "y": 651.94
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u923",
        "identifier": "u926",
        "page_id": "u192",
@@ -5610,6 +5804,10 @@
         "y": 651.94
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u93a",
        "identifier": "u93d",
        "page_id": "u192",
@@ -5667,6 +5865,10 @@
         "y": 651.94
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u951",
        "identifier": "u955",
        "page_id": "u192",
@@ -5724,6 +5926,10 @@
         "y": 652.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u969",
        "identifier": "u96c",
        "page_id": "u192",
@@ -5781,6 +5987,10 @@
         "y": 652.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u980",
        "identifier": "u983",
        "page_id": "u192",
@@ -5838,6 +6048,10 @@
         "y": 767.45
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u997",
        "identifier": "u99a",
        "page_id": "u192",
@@ -5895,6 +6109,10 @@
         "y": 767.45
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u9ae",
        "identifier": "u9b1",
        "page_id": "u192",
@@ -5952,6 +6170,10 @@
         "y": 767.45
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u9c5",
        "identifier": "u9c9",
        "page_id": "u192",
@@ -6009,6 +6231,10 @@
         "y": 767.45
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u9dd",
        "identifier": "u9e0",
        "page_id": "u192",
@@ -6066,6 +6292,10 @@
         "y": 767.9
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u9f4",
        "identifier": "u9f7",
        "page_id": "u192",
@@ -6123,6 +6353,10 @@
         "y": 767.9
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "ua0b",
        "identifier": "ua0f",
        "page_id": "u192",
@@ -6181,6 +6415,10 @@
         "y": 606.58
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "ua23",
        "identifier": "ua26",
        "page_id": "u192",
@@ -6239,6 +6477,10 @@
         "y": 606.58
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "ua3a",
        "identifier": "ua3d",
        "page_id": "u192",
@@ -6297,6 +6539,10 @@
         "y": 606.58
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "ua51",
        "identifier": "ua54",
        "page_id": "u192",
@@ -6355,6 +6601,10 @@
         "y": 606.58
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "ua68",
        "identifier": "ua6b",
        "page_id": "u192",
@@ -6413,6 +6663,10 @@
         "y": 607.03
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "ua7f",
        "identifier": "ua82",
        "page_id": "u192",
@@ -6471,6 +6725,10 @@
         "y": 607.03
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "ua96",
        "identifier": "ua99",
        "page_id": "u192",

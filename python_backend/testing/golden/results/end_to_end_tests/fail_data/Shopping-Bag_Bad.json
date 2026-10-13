@@ -307,6 +307,12 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Bold"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Playfair Display",
        "page_id": "",
@@ -340,6 +346,9 @@
         "y": 98.3
        },
        "context": "Image iStock-1226023798.jpg is 15.25MB.",
+       "context_details": {
+        "size_mb": 15.25
+       },
        "data_id": "u149",
        "identifier": "iStock-1226023798.jpg",
        "page_id": "uec",
@@ -587,6 +596,10 @@
         "y": 710.83
        },
        "context": "'No Line Breaks' must be checked.",
+       "context_details": {
+        "auto_size": "HeightAndWidth",
+        "no_line_breaks": false
+       },
        "data_id": "u118",
        "identifier": "u106",
        "page_id": "uec",

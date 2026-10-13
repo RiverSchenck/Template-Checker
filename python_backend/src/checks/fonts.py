@@ -38,11 +38,13 @@ def _report_missing(doc: Document, results: Results, classifier, adobe: bool) ->
         if absent:
             family_is_adobe = any(_is_adobe(font, style) for style in missing)
             if family_is_adobe == adobe:
-                report(results, classifier, identifier=font.name)
+                report(results, classifier, identifier=font.name,
+                       context_details={'missing_styles': missing, 'whole_family': True})
             continue
         styles = [style for style in missing if _is_adobe(font, style) == adobe]
         if styles:
-            report(results, classifier, f"Missing styles: {', '.join(styles)}", identifier=font.name)
+            report(results, classifier, f"Missing styles: {', '.join(styles)}", identifier=font.name,
+                   context_details={'missing_styles': styles, 'whole_family': False})
 
 
 def fonts_included_check(doc: Document, results: Results) -> None:

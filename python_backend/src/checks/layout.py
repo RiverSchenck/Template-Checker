@@ -4,7 +4,7 @@ from src.checks._report import at_frame, at_item, at_link, first_page_id, report
 from src.model.document import Document
 from src.results.results import Results
 from src.results.classifiers import ValidationError, ValidationWarning
-from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform
+from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform, transform_facts
 from src.model.layout import GRAPHIC_FRAME_TAGS
 
 TRANSFORMED_KINDS = frozenset({'TextFrame', 'Rectangle', 'Oval', 'Polygon', 'Group'})
@@ -16,7 +16,10 @@ def masterpage_check(doc: Document, results: Results) -> None:
     page)."""
     unexpected_elements = [tag for master in doc.masters for tag in master.child_tags if tag not in ('Properties', 'Page')]
     if unexpected_elements:
-        report(results, ValidationError.MASTERPAGE, 'Elements: ' + ', '.join(unexpected_elements), identifier=None)
+        # A list, in the order they're found: JSON objects don't keep their keys' order.
+        counts = [{'kind': tag, 'count': unexpected_elements.count(tag)} for tag in dict.fromkeys(unexpected_elements)]
+        report(results, ValidationError.MASTERPAGE, 'Elements: ' + ', '.join(unexpected_elements), identifier=None,
+               context_details={'elements': counts})
 
 
 def page_item_transformation_check(doc: Document, results: Results) -> None:
@@ -32,7 +35,7 @@ def page_item_transformation_check(doc: Document, results: Results) -> None:
         classification = classify_page_item_transform(*parsed[:4])
         if classification.is_error:
             report(results, ValidationError.PAGE_ITEM_TRANSFORMATION, f"{item.kind} {classification.message}",
-                   **at_item(doc, spread, item))
+                   context_details=transform_facts(classification, *parsed[:2]), **at_item(doc, spread, item))
 
 
 def pasted_graphics_check(doc: Document, results: Results) -> None:
@@ -46,12 +49,21 @@ def pasted_graphics_check(doc: Document, results: Results) -> None:
                    page_id=first_page_id(spread), identifier=None)
 
 
+def _points(value):
+    """A bleed offset in points (may be negative), None when it isn't a number."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def document_bleed_check(doc: Document, results: Results) -> None:
     """One warning when any document bleed offset isn't 0."""
     bleed_values = doc.bleed
     if bleed_values is not None and any(value != '0' for value in bleed_values.values()):
         descriptions = ', '.join(f"{k}: {v}pt" for k, v in bleed_values.items())
-        report(results, ValidationWarning.DOCUMENT_BLEED, f"{descriptions}.", identifier=None)
+        report(results, ValidationWarning.DOCUMENT_BLEED, f"{descriptions}.", identifier=None,
+               context_details={'bleed': {side: _points(value) for side, value in bleed_values.items()}})
 
 
 def auto_size_text_box_check(doc: Document, results: Results) -> None:
@@ -70,7 +82,8 @@ def auto_size_text_box_check(doc: Document, results: Results) -> None:
         else:
             message = "Only width, height, and WidthAndHeight are supported."
         if message:
-            report(results, ValidationError.AUTO_SIZE_TEXT_BOX, message, **at_frame(doc, frame))
+            report(results, ValidationError.AUTO_SIZE_TEXT_BOX, message, **at_frame(doc, frame),
+                   context_details={'auto_size': sizing, 'no_line_breaks': no_line_breaks == 'true'})
 
 
 def text_columns_check(doc: Document, results: Results) -> None:

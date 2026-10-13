@@ -292,6 +292,15 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Bold",
+         "Condensed ExtraBold",
+         "Medium",
+         "Medium Italic"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Futura",
        "page_id": "",

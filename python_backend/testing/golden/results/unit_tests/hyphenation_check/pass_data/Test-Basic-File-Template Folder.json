@@ -292,6 +292,13 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Bold",
+         "Regular"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Public Sans",
        "page_id": "",
