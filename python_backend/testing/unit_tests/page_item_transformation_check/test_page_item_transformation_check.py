@@ -4,9 +4,9 @@ from lxml import etree as ET
 from src.classes.SpreadData import SpreadData
 from src.checks.layout import page_item_transformation_check
 from src.document import ParsedDocument
-from src.error_handling.ErrorHandling import ValidationResult
+from src.results.results import ValidationResult
 from src.parsers.SpreadsParser import SpreadsParser
-from src.error_handling.ValidationClassifier import ValidationError
+from src.results.classifiers import ValidationError
 from src.helpers.page_item_transform import (
     parse_item_transform,
     classify_page_item_transform,

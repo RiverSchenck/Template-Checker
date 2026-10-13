@@ -5,8 +5,8 @@ from src.checks._report import at_story, inherited, report, text_list
 from src.classes.PropertyBase import PropertyBase
 from src.classes.StoryCharacterData import NO_CHARACTER_STYLE
 from src.document import ParsedDocument
-from src.error_handling.ErrorHandling import ValidationResult
-from src.error_handling.ValidationClassifier import ValidationError, ValidationInfo, ValidationWarning
+from src.results.results import ValidationResult
+from src.results.classifiers import ValidationError, ValidationInfo, ValidationWarning
 
 
 def format_overrides(overrides: Dict[str, str]) -> str:

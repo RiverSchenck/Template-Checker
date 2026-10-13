@@ -4,8 +4,8 @@ from typing import List, Tuple
 
 from src.checks._report import report
 from src.document import ParsedDocument
-from src.error_handling.ErrorHandling import ValidationResult
-from src.error_handling.ValidationClassifier import ValidationError
+from src.results.results import ValidationResult
+from src.results.classifiers import ValidationError
 
 
 def _missing_styles(doc: ParsedDocument, font) -> Tuple[bool, List[str]]:

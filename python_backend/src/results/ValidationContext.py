@@ -7,10 +7,6 @@ class ValidationContext:
         self.page_id = page_id if page_id is not None else ''  # page Self (page identifier)
         self.context = context if context is not None else ''
         self.identifier = identifier if identifier is not None else 'null'
-        self.help_article = None
         self.data_id = data_id if data_id is not None else 'null'
         self.text_content = text_content if text_content is not None else []
         self.context_details = context_details
-
-    def get_formatted_message(self):
-        return f"{self.context}"

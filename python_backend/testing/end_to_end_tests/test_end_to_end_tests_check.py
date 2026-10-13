@@ -1,7 +1,7 @@
 import pytest
 import os
 from src.classes.FrontifyChecker import FrontifyChecker
-from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning, ValidationInfo
+from src.results.classifiers import ValidationError, ValidationWarning, ValidationInfo
 from collections import Counter
 
 

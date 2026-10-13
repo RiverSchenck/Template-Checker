@@ -5,8 +5,8 @@ warning, a ValidationInfo as an info.
 """
 from typing import Optional, Tuple
 
-from src.error_handling.ErrorHandling import ValidationResult
-from src.error_handling.ValidationClassifier import ValidationError, ValidationInfo, ValidationWarning
+from src.results.results import ValidationResult
+from src.results.classifiers import ValidationError, ValidationInfo, ValidationWarning
 
 
 def report(results: ValidationResult, classifier, context: Optional[str] = None, *, page_id: str = '',

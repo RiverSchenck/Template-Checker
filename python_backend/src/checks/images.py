@@ -2,8 +2,8 @@
 
 from src.checks._report import at_link, report
 from src.document import ParsedDocument
-from src.error_handling.ErrorHandling import ValidationResult
-from src.error_handling.ValidationClassifier import ValidationError, ValidationInfo, ValidationWarning
+from src.results.results import ValidationResult
+from src.results.classifiers import ValidationError, ValidationInfo, ValidationWarning
 from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform
 
 

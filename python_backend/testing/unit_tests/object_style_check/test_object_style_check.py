@@ -2,7 +2,7 @@ import pytest
 import os
 from testing.checker_setup import setup_instance
 from src.classes.States import States
-from src.error_handling.ValidationClassifier import ValidationError
+from src.results.classifiers import ValidationError
 from collections import Counter
 
 def format_counter_diff(expected: Counter, actual: Counter, label: str) -> tuple:
