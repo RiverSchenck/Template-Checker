@@ -86,7 +86,7 @@ def test_not_a_zip_is_rejected_at_unzip_package(tmp_path, work):
     path.write_bytes(b'%PDF')
     with pytest.raises(Rejected) as rejected:
         open_package(str(path), Workspace.create())
-    assert (rejected.value.stage, rejected.value.classifier.name, rejected.value.reason) == \
+    assert (rejected.value.stage, rejected.value.check, rejected.value.reason) == \
         (States.UNZIP_PACKAGE, 'ZIP', 'File uploaded is not ZIP')
 
 
@@ -104,7 +104,7 @@ def test_package_without_an_idml_is_rejected_at_unzip_idml(tmp_path, work):
         z.writestr('Template/Links/photo.jpg', b'x')
     with pytest.raises(Rejected) as rejected:
         open_package(str(path), Workspace.create())
-    assert (rejected.value.stage, rejected.value.classifier.name) == (States.UNZIP_IDML, 'IDML')
+    assert (rejected.value.stage, rejected.value.check) == (States.UNZIP_IDML, 'IDML')
 
 
 # --- the app ---------------------------------------------------------------------------------------------------

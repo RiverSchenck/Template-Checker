@@ -1,13 +1,14 @@
 """Every check attempt is logged to analytics with its outcome: completed, rejected (bad upload) or failed (crash)."""
+import functools
 import os
 
 import pytest
 from run import app as flask_app
 import app.analytics as analytics
 import app.utils as utils
-from src.classes.FrontifyChecker import FrontifyChecker
-from src.checks import Check
+from src.checks import CHECKS, Check
 from src.checks.stages import States
+from src.pipeline.workspace import run_workspace
 
 PASS_ZIP = os.path.join(os.path.dirname(__file__), '..', 'par_check', 'pass_data', 'Blank.zip')
 
@@ -20,20 +21,18 @@ def logged(monkeypatch):
     return calls
 
 
-def run_check(checker, path):
+def run_check(path):
     """200 if the check ran (completed or rejected), 500 if it crashed, like the check endpoints."""
-    with flask_app.test_request_context():
+    with flask_app.test_request_context(), run_workspace() as workspace:
         try:
-            utils.run_check(checker, path, 'react-frontend', user_id='user-1')
+            utils.run_check(path, workspace, 'react-frontend', user_id='user-1')
             return 200
         except utils.CheckFailed:
             return 500
-        finally:
-            checker.delete_unzipped_root_path()
 
 
 def test_completed_run_is_logged_as_completed(logged):
-    assert run_check(FrontifyChecker(), PASS_ZIP) == 200
+    assert run_check(PASS_ZIP) == 200
 
     [call] = logged
     assert call['status'] == 'completed'
@@ -51,7 +50,7 @@ def test_upload_that_is_not_a_zip_is_logged_as_rejected(logged, tmp_path):
     not_a_zip.write_bytes(b'%PDF-1.7')
 
     # The user still gets results explaining the problem, so the request itself succeeds.
-    assert run_check(FrontifyChecker(), str(not_a_zip)) == 200
+    assert run_check(str(not_a_zip)) == 200
 
     [call] = logged
     assert call['status'] == 'rejected'
@@ -60,14 +59,13 @@ def test_upload_that_is_not_a_zip_is_logged_as_rejected(logged, tmp_path):
     assert call['template_name'] == 'brief.pdf'
 
 
-def test_checker_crash_is_logged_as_failed(logged):
-    checker = FrontifyChecker()
-
+def test_checker_crash_is_logged_as_failed(logged, monkeypatch):
     def crash(doc, results):
         raise KeyError('Self')
-    checker.checks[0] = Check(States.MASTERPAGE_CHECK, crash)
+    checks = [Check(States.MASTERPAGE_CHECK, crash), *CHECKS[1:]]
+    monkeypatch.setattr(utils, 'run', functools.partial(utils.run, checks=checks))
 
-    assert run_check(checker, PASS_ZIP) == 500
+    assert run_check(PASS_ZIP) == 500
 
     [call] = logged
     assert call['status'] == 'failed'
@@ -82,7 +80,7 @@ def test_analytics_failure_does_not_fail_the_check(monkeypatch):
         raise RuntimeError('supabase down')
     monkeypatch.setattr(utils, 'log_analytics_to_supabase', broken)
 
-    assert run_check(FrontifyChecker(), PASS_ZIP) == 200
+    assert run_check(PASS_ZIP) == 200
 
 
 class FakeSupabase:

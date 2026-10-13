@@ -6,6 +6,7 @@ crashes) raises; the StageTracker passed in says which stage it happened in.
 """
 import logging
 import os
+import shutil
 from dataclasses import dataclass, field
 from typing import Dict, Iterable, Optional
 
@@ -20,8 +21,6 @@ from src.model.load import load_document
 from src.pipeline.intake import Intake, Rejected, unpack_idml, unpack_package
 from src.pipeline.previews import page_previews
 from src.pipeline.workspace import Workspace
-from src.results.classifiers import Category, ValidationError, ValidationWarning
-from src.results.layout import DocumentLayout, pages_from_spreads, text_boxes_from_stories
 from src.results.results import Results
 from src.results.serialize import results_v2
 
@@ -44,7 +43,7 @@ class StageTracker:
 @dataclass(frozen=True)
 class Loaded:
     document: Document
-    layout: DocumentLayout      # pages, geometry, text boxes and (when asked) previews for the results
+    previews: Dict[str, str]    # page Self -> base64 JPEG, when asked for
 
 
 def load(intake: Intake, results: Results, *, previews: bool) -> Loaded:
@@ -56,25 +55,20 @@ def load(intake: Intake, results: Results, *, previews: bool) -> Loaded:
                           ("font list (Resources/Fonts.xml)", os.path.join(resources, 'Fonts.xml')),
                           ("styles (Resources/Styles.xml)", os.path.join(resources, 'Styles.xml'))):
         if not os.path.exists(path):
-            raise Rejected(States.PARSE_XML, ValidationError.ERROR, incomplete_idml(missing))
+            raise Rejected(States.PARSE_XML, 'ERROR', incomplete_idml(missing))
     if not os.path.exists(os.path.join(folder, 'MasterSpreads')):
         # No master spreads is valid (only the [None] master); checks see no master items.
-        results.add(ValidationWarning.WARNING, "MasterSpreads directory does not exist")
+        results.add('WARNING', "MasterSpreads directory does not exist")
     if not os.path.exists(os.path.join(resources, 'Preferences.xml')):
-        raise Rejected(States.PARSE_XML, ValidationError.ERROR, incomplete_idml("document settings (Resources/Preferences.xml)"))
+        raise Rejected(States.PARSE_XML, 'ERROR', incomplete_idml("document settings (Resources/Preferences.xml)"))
     try:
         document = load_document(folder, intake.package.link_files, intake.package.fonts_folder)
     except safe_xml.TooLargeError:
-        raise Rejected(States.PARSE_XML, ValidationError.ERROR, IDML_TOO_LARGE)
+        raise Rejected(States.PARSE_XML, 'ERROR', IDML_TOO_LARGE)
     except (etree.XMLSyntaxError, safe_xml.UnsafeXMLError):
         logger.info('Damaged XML in the .idml', exc_info=True)
-        raise Rejected(States.PARSE_XML, ValidationError.ERROR, DAMAGED_IDML)
-    layout = pages_from_spreads(document)
-    layout.text_boxes = text_boxes_from_stories(document)
-    layout.geometry = document.geometry
-    if previews:
-        layout.previews = page_previews(document, intake)
-    return Loaded(document, layout)
+        raise Rejected(States.PARSE_XML, 'ERROR', DAMAGED_IDML)
+    return Loaded(document, page_previews(document, intake) if previews else {})
 
 
 def run_check(check: Check, document: Document, results: Results) -> None:
@@ -83,17 +77,17 @@ def run_check(check: Check, document: Document, results: Results) -> None:
     check.run(document, results)
 
 
-def count_totals(document: Document) -> Dict[Category, int]:
-    """Per results section: how many styles, text boxes, fonts and images the document has."""
-    totals: Dict[Category, int] = {}
+def count_totals(document: Document) -> Dict[str, int]:
+    """Per kind of subject: how many styles, text frames, fonts and images the document has."""
+    totals: Dict[str, int] = {}
     if document.stories_exist:
-        totals[Category.PAR_STYLE] = len({short_style_id(paragraph.style)
-                                          for story in document.stories for paragraph in document.paragraphs(story)})
-        totals[Category.CHAR_STYLE] = len({short_style_id(run.style)
-                                           for story in document.stories for _, run in document.runs(story)})
-        totals[Category.TEXT_BOX] = len(document.stories)
-    totals[Category.FONTS] = len(document.used_fonts) + len(document.packaged_fonts)
-    totals[Category.IMAGES] = len(document.links()) + sum(1 for _, item in document.page_items() if item.pasted)
+        totals['paragraph_style'] = len({short_style_id(paragraph.style)
+                                         for story in document.stories for paragraph in document.paragraphs(story)})
+        totals['character_style'] = len({short_style_id(run.style)
+                                         for story in document.stories for _, run in document.runs(story)})
+        totals['text_frame'] = len(document.stories)
+    totals['font'] = len(document.used_fonts) + len(document.packaged_fonts)
+    totals['image'] = len(document.links()) + sum(1 for _, item in document.page_items() if item.pasted)
     return totals
 
 
@@ -102,10 +96,10 @@ class RunOutcome:
     template_name: str
     stage: States                           # RESULTS when every check ran, else the stage it was rejected at
     results: Results
-    layout: DocumentLayout = field(default_factory=DocumentLayout)
-    totals: Dict[Category, int] = field(default_factory=dict)
+    totals: Dict[str, int] = field(default_factory=dict)
     document: Optional[Document] = None
     idml_folder: Optional[str] = None       # the unpacked .idml (for the XML export), once intake got that far
+    previews: Dict[str, str] = field(default_factory=dict)  # page Self -> base64 JPEG, when asked for
 
     @property
     def completed(self) -> bool:
@@ -113,7 +107,8 @@ class RunOutcome:
 
     def json(self) -> dict:
         """Results v2: every issue, with what the frontend needs to show and highlight it."""
-        return results_v2(self.results, self.layout, template_name=self.template_name, totals=self.totals)
+        return results_v2(self.results, self.document, template_name=self.template_name, totals=self.totals,
+                          previews=self.previews)
 
 
 def run(zip_path: str, workspace: Workspace, *, previews: bool = True, checks: Iterable[Check] = CHECKS,
@@ -130,11 +125,26 @@ def run(zip_path: str, workspace: Workspace, *, previews: bool = True, checks: I
         tracker.stage = States.PARSE_XML
         loaded = load(intake, results, previews=previews)
     except Rejected as rejected:
-        results.add(rejected.classifier, rejected.reason)
+        results.add(rejected.check, rejected.reason)
         return RunOutcome(template_name, rejected.stage, results, idml_folder=intake.idml_folder if intake else None)
     for check in checks:
         tracker.stage = check.state
         run_check(check, loaded.document, results)
     tracker.stage = States.RESULTS
-    return RunOutcome(template_name, States.RESULTS, results, loaded.layout, count_totals(loaded.document),
-                      loaded.document, intake.idml_folder)
+    return RunOutcome(template_name, States.RESULTS, results, count_totals(loaded.document), loaded.document,
+                      intake.idml_folder, loaded.previews)
+
+
+def zip_idml(idml_folder: Optional[str], workspace: Workspace) -> Optional[str]:
+    """The unpacked .idml's XML as a zip in the run's folder (the "download XML" feature): its path, or None if it
+    couldn't be made (logged). The app sends it before the run's folder is removed."""
+    try:
+        if not idml_folder or not os.path.isdir(idml_folder):
+            raise FileNotFoundError(f"IDML output folder does not exist: {idml_folder}")
+        zip_path = shutil.make_archive(os.path.join(workspace.folder('export'), 'xml'), 'zip', idml_folder)
+        if os.path.getsize(zip_path) == 0:
+            raise FileNotFoundError(f"ZIP file is empty: {zip_path}")
+        return zip_path
+    except Exception:
+        logger.exception('Creating the XML zip failed')
+        return None

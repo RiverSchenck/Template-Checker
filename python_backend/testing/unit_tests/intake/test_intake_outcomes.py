@@ -5,8 +5,11 @@ import zipfile
 
 import pytest
 
-from src.classes.FrontifyChecker import DAMAGED_IDML, IDML_TOO_LARGE, NOT_A_ZIP, FrontifyChecker
 from src.helpers import safe_xml
+from src.helpers.package_zip import DAMAGED_IDML
+from src.pipeline.intake import NOT_A_ZIP
+from src.pipeline.run import IDML_TOO_LARGE, StageTracker, run
+from src.pipeline.workspace import Workspace, run_workspace
 from testing.fixtures.idml_builder import PackageBuilder
 
 
@@ -32,14 +35,9 @@ def package(tmp_path, edit=lambda name, data: data, name='Template.zip', corrupt
 
 
 def check(path):
-    checker = FrontifyChecker()
-    checker.set_source_file_path(path)
-    try:
-        with contextlib.redirect_stdout(io.StringIO()):
-            checker.run_state_machine()
-        return checker.last_state.name, [issue.context for issue in checker.results if issue.classifier.name == 'ERROR']
-    finally:
-        checker.delete_unzipped_root_path()
+    with run_workspace() as workspace, contextlib.redirect_stdout(io.StringIO()):
+        outcome = run(path, workspace)
+    return outcome.stage.name, [issue.context for issue in outcome.results if issue.check == 'ERROR']
 
 
 def test_a_complete_package_is_checked(tmp_path):
@@ -92,12 +90,12 @@ def test_damaged_zip_entry_is_rejected(tmp_path):
 
 
 def test_server_fault_is_not_blamed_on_the_upload(tmp_path, monkeypatch):
-    blocker = tmp_path / 'not-a-folder'
-    blocker.write_text('')
-    monkeypatch.setenv('WORK_DIR', str(blocker / 'work'))
-    checker = FrontifyChecker()
-    checker.set_source_file_path(package(tmp_path))
-    with pytest.raises(OSError):
-        checker.run_state_machine()
-    assert checker.last_state.name == 'UNZIP_PACKAGE'
-    assert not list(checker.results)
+    path = package(tmp_path)
+
+    def no_space(self, name):
+        raise OSError('No space left on device')
+    monkeypatch.setattr(Workspace, 'folder', no_space)  # the run can't make the folder to unpack into
+    tracker = StageTracker()
+    with pytest.raises(OSError), run_workspace() as workspace:
+        run(path, workspace, tracker=tracker)
+    assert tracker.stage.name == 'UNZIP_PACKAGE'

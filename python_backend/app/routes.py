@@ -6,10 +6,10 @@ import urllib.request
 from datetime import datetime, timezone
 from functools import wraps
 from flask import Blueprint, Response, jsonify, send_file, request, current_app, g
-from src.classes.FrontifyChecker import FrontifyChecker
+from src.pipeline.run import zip_idml
 from src.pipeline.workspace import run_workspace
 from .errors import api_error, error_body
-from .utils import CheckFailed, upload_file, run_check, checker_cleanup
+from .utils import CheckFailed, upload_file, run_check
 from .analytics import first_error_message, get_app_version
 from .customer_summary import display_template_name, summary_payload
 from .analytics_api import (
@@ -919,22 +919,17 @@ def _run_and_respond(respond, previews: bool = False):
     (upload, unpacked package, XML export) is in one run folder, removed either way."""
     with run_workspace() as workspace:
         g.workspace = workspace
-        checker = FrontifyChecker()
-        checker.workspace = workspace
-        checker.previews = previews  # page previews are most of a run's time; only rendered when shown (plan D6)
+        source_type, run_user_id = _run_source_and_user_id()
+        upload_result = upload_file()
+        if upload_result['status'] != 'success':
+            return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
         try:
-            source_type, run_user_id = _run_source_and_user_id()
-            upload_result = upload_file()
-            if upload_result['status'] != 'success':
-                return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
-            try:
-                outcome = run_check(checker, upload_result['path'], source_type, user_id=run_user_id)
-            except CheckFailed:
-                return api_error(
-                    500, 'check_failed', 'The template couldn\'t be checked. Try again, or contact us with the request ID.')
-            return respond(outcome, checker)
-        finally:
-            checker_cleanup(checker)
+            # Page previews are most of a run's time; only rendered when shown (plan D6).
+            outcome = run_check(upload_result['path'], workspace, source_type, user_id=run_user_id, previews=previews)
+        except CheckFailed:
+            return api_error(
+                500, 'check_failed', 'The template couldn\'t be checked. Try again, or contact us with the request ID.')
+        return respond(outcome, workspace)
 
 
 @main.route('/v1/checks', methods=['POST'])
@@ -1009,10 +1004,10 @@ _EXPORT_FAILED = 'The XML export couldn\'t be created. Try again, or contact us 
 @limit_checks
 def run_checker_and_download():
     """Check an uploaded template package and download its generated XML as a ZIP."""
-    def respond(outcome, checker):
+    def respond(outcome, workspace):
         if not outcome.completed:
             return _not_checkable(outcome)
-        zip_path = checker.zip_idml_output_folder()
+        zip_path = zip_idml(outcome.idml_folder, workspace)
         if not zip_path or not os.path.isfile(zip_path):
             current_app.logger.error('XML export ZIP missing: %s', zip_path)
             return api_error(500, 'export_failed', _EXPORT_FAILED)
@@ -1020,7 +1015,7 @@ def run_checker_and_download():
         try:
             # send_file opens the zip now, so it's still sent after _run_and_respond removes the run folder.
             return send_file(zip_path, mimetype='application/zip', as_attachment=True,
-                             download_name=f'{display_template_name(checker.get_template_name() or "template")}-xml.zip')
+                             download_name=f'{display_template_name(outcome.results.get("template_name") or "template")}-xml.zip')
         except Exception:
             current_app.logger.exception('Failed to send the XML export')
             return api_error(500, 'export_failed', _EXPORT_FAILED)

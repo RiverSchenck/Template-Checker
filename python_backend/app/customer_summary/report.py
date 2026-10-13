@@ -7,7 +7,7 @@ from src.results import catalogue
 from src.results.serialize import check_json
 
 SEVERITIES = ('errors', 'warnings', 'infos')
-# Severity in results v2 -> the list name the summary (and the web app's check guides) group by.
+# Severity in results v2 -> how the summary groups problems (the web app's report does the same).
 SEVERITY_LIST = {'error': 'errors', 'warning': 'warnings', 'info': 'infos'}
 
 SubjectKind = Literal['paragraph-style', 'character-style', 'font', 'image', 'frame', 'document']

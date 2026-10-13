@@ -2,13 +2,13 @@
 from typing import Iterator, List, Optional
 
 from src.model.subject import DOCUMENT, Subject
-from src.results.classifiers import Classifier, Severity
+from src.results.catalogue import BY_KEY
 from src.results.issue import Issue
 
 
 def _none_if_null(value: Optional[str]) -> Optional[str]:
-    """Checks write "nothing" as None or 'null'; store one form, so the two never become separate groups."""
-    return None if value in (None, 'null') else value
+    """Checks write "no item" as None, '' or 'null'; store one form."""
+    return None if value in (None, '', 'null') else value
 
 
 class Results:
@@ -17,32 +17,25 @@ class Results:
     def __init__(self):
         self._issues: List[Issue] = []
 
-    def add(self, classifier: Classifier, context: Optional[str] = '', *, page_id: Optional[str] = '',
-            identifier: Optional[str] = None, data_id: Optional[str] = None, text_content: Optional[list] = None,
-            context_details: Optional[dict] = None, subject: Subject = DOCUMENT) -> None:
-        """Record an issue. Its severity comes from the classifier.
+    def add(self, check: str, context: Optional[str] = '', *, page_id: Optional[str] = '',
+            data_id: Optional[str] = None, text_content: Optional[list] = None, context_details: Optional[dict] = None,
+            subject: Subject = DOCUMENT) -> None:
+        """Record an issue of a check (a catalogue key, which gives its severity).
 
-        An issue with text at the same place as an earlier one (same classifier, identifier, page and item) only
-        adds its text to that one, so a style used in many runs of one frame is reported once. Classifiers marked
-        one_per_range (overrides) are never merged.
+        An issue with text about the same thing at the same place as an earlier one (same check, subject, page and
+        item) only adds its text to that one, so a style used in many runs of one frame is reported once. Checks
+        marked one_per_range (overrides) are never merged.
         """
-        issue = Issue(classifier, context or '', page_id or '', _none_if_null(identifier), _none_if_null(data_id),
-                      subject, list(text_content or []), context_details)
-        if issue.text_content and not classifier.one_per_range:
-            earlier = next((i for i in self._issues if (i.classifier, i.identifier, i.page_id, i.data_id) ==
-                            (classifier, issue.identifier, issue.page_id, issue.data_id)), None)
+        entry = BY_KEY[check]
+        issue = Issue(check, context or '', page_id or '', _none_if_null(data_id), subject, list(text_content or []),
+                      context_details)
+        if issue.text_content and not entry.one_per_range:
+            earlier = next((i for i in self._issues if (i.check, i.subject, i.page_id, i.data_id) ==
+                            (check, subject, issue.page_id, issue.data_id)), None)
             if earlier:
                 earlier.text_content = list(dict.fromkeys(earlier.text_content + issue.text_content))
                 return
         self._issues.append(issue)
-
-    def issues(self, severity: Optional[Severity] = None) -> List[Issue]:
-        """Every issue (of one severity, if given), in the order reported."""
-        return [i for i in self._issues if severity in (None, i.classifier.severity)]
-
-    def names(self, severity: Severity) -> List[str]:
-        """The classifier name of every issue of this severity, one per issue."""
-        return [i.classifier.name for i in self.issues(severity)]
 
     def __iter__(self) -> Iterator[Issue]:
         return iter(self._issues)

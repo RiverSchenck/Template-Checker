@@ -2,7 +2,7 @@
 import pytest
 
 import app.routes as routes
-from app.utils import CheckFailed
+from app.utils import CheckFailed, CheckOutcome
 
 USER = {'Authorization': 'Bearer valid-approved@example.com'}
 CHECK_PATHS = ['/run', '/run-and-download-xml', '/summary']
@@ -58,17 +58,14 @@ def test_checker_crash(client, monkeypatch, path):
     assert _error(r)['code'] == 'check_failed'
 
 
+def checked(template_name):
+    """A completed check of this template (what run_check returns)."""
+    return lambda *a, **k: CheckOutcome({'template_name': template_name}, True, None, 'run-1', None)
+
+
 def test_xml_export_failure_hides_server_paths(client, monkeypatch):
-    class Checker:
-        def get_template_name(self):
-            return 'Brochure'
-
-        def zip_idml_output_folder(self):
-            return '/srv/app/src/data/missing.zip'
-
-        def delete_unzipped_root_path(self):
-            pass
-    monkeypatch.setattr(routes, 'FrontifyChecker', Checker)
+    monkeypatch.setattr(routes, 'run_check', checked('Brochure'))
+    monkeypatch.setattr(routes, 'zip_idml', lambda idml_folder, workspace: '/srv/app/src/data/missing.zip')
 
     r = client.post('/run-and-download-xml', headers=USER)
 
@@ -82,16 +79,8 @@ def test_xml_export_is_named_after_the_template(client, monkeypatch, tmp_path):
     export = tmp_path / 'export.zip'
     export.write_bytes(b'PK')
 
-    class Checker:
-        def get_template_name(self):
-            return 'Flyer-Sales_Bad.zip'  # the checker keeps the upload's extension
-
-        def zip_idml_output_folder(self):
-            return str(export)
-
-        def delete_unzipped_root_path(self):
-            pass
-    monkeypatch.setattr(routes, 'FrontifyChecker', Checker)
+    monkeypatch.setattr(routes, 'run_check', checked('Flyer-Sales_Bad.zip'))  # the checker keeps the upload's extension
+    monkeypatch.setattr(routes, 'zip_idml', lambda idml_folder, workspace: str(export))
 
     r = client.post('/v1/checks/xml', headers=USER)
 
