@@ -72,14 +72,6 @@
    {
     "category": "images",
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION",
-    "label": "Image Transformation",
-    "message": "Image transformations are not supported.",
-    "severity": "errors"
-   },
-   {
-    "category": "images",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
     "key": "IMAGE_TRANSFORMATION_IMAGE",
     "label": "Image Transformation (Image)",
     "message": "Image transformations are not supported.",
@@ -254,38 +246,6 @@
     "severity": "warnings"
    },
    {
-    "category": "images",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION",
-    "label": "Image Transformation",
-    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
-    "severity": "warnings"
-   },
-   {
-    "category": "images",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION_IMAGE",
-    "label": "Image Transformation (Image)",
-    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
-    "severity": "warnings"
-   },
-   {
-    "category": "images",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION_CONTAINER",
-    "label": "Image Transformation (Container)",
-    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
-    "severity": "warnings"
-   },
-   {
-    "category": "general",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "PAGE_ITEM_TRANSFORMATION",
-    "label": "Page Item Transformation",
-    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
-    "severity": "warnings"
-   },
-   {
     "category": "general",
     "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
     "key": "DOCUMENT_BLEED",
@@ -347,31 +307,7 @@
    "total_count": 2
   },
   "general": {
-   "details": {
-    "TextFrame:u14d": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 49.18,
-        "kind": "TextFrame",
-        "page_id": "ueb",
-        "width": 25.55,
-        "x": 563.53,
-        "y": 777.05
-       },
-       "context": "TextFrame has been rotated by -90.00 degrees.",
-       "data_id": "u14d",
-       "identifier": "TextFrame:u14d",
-       "page_id": "ueb",
-       "page_name": "1",
-       "spread_id": "ue6",
-       "validationClassifier": "PAGE_ITEM_TRANSFORMATION"
-      }
-     ]
-    }
-   },
+   "details": {},
    "total_count": 0
   },
   "images": {
@@ -649,11 +585,6 @@
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
     "label": "Adobe Font",
     "message": "Adobe Fonts are not supported. Use a desktop version of the font (OTF or TTF) instead."
-   },
-   "PAGE_ITEM_TRANSFORMATION": {
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "label": "Page Item Transformation",
-    "message": "Page item has been rotated. You may see slight discrepencies between export and editing."
    }
   }
  },

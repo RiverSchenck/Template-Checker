@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Optional
 
-from .report import Place, Problem, Subject, build_problems, format_pages, page_number, unique
+from .report import Place, Problem, Subject, build_problems, format_pages, unique
 
 MAX_LISTED = 3
 
@@ -48,11 +48,10 @@ def _round_half_up(value: float, places: int = 0) -> str:
 _AUTO_SIZE_SETTINGS = (
     (re.compile('no line breaks', re.I), 'turn on No Line Breaks'),
 )
-_ROTATION_KEYS = ('IMAGE_TRANSFORMATION', 'IMAGE_TRANSFORMATION_IMAGE', 'IMAGE_TRANSFORMATION_CONTAINER', 'PAGE_ITEM_TRANSFORMATION')
 
 
 def _place_detail(problem: Problem, place: Place) -> Optional[str]:
-    """A short note about one place, e.g. "rotated 90°" or "15.25 MB". Raw checker values (skew factors, link ids)
+    """A short note about one place, e.g. "turn on No Line Breaks" or "15.25 MB". Raw checker values (skew factors, link ids)
     are left out."""
     context = place.context
     if not context:
@@ -63,10 +62,6 @@ def _place_detail(problem: Problem, place: Place) -> Optional[str]:
     if problem.key == 'LARGE_IMAGE':
         match = re.search(r'([\d.]+)\s*MB', context, re.I)
         return f'{match.group(1)} MB' if match else None
-    if problem.key in _ROTATION_KEYS:
-        match = re.search(r'rotated by (-?[\d.]+) degrees', context, re.I)
-        degrees = page_number(match.group(1)) if match else math.nan
-        return f'rotated {_round_half_up(degrees)}°' if math.isfinite(degrees) else None
     return None
 
 

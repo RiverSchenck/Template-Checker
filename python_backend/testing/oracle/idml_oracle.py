@@ -135,7 +135,7 @@ def _classify(transform: Optional[str]) -> Optional[str]:
       '-1 0 0 -1' is a 180 degree turn, not a flip);
     - otherwise the y axis should point 90 degrees from the x axis; if it doesn't, the item is skewed,
       rotated or not (Frontify mispositions rotated items that are skewed);
-    - otherwise the angle of the x axis, atan2(b, a), is the rotation.
+    - otherwise it's at most rotated, which is fine: Frontify carries rotation over.
     """
     if not transform:
         return None
@@ -146,8 +146,6 @@ def _classify(transform: Optional[str]) -> Optional[str]:
     between_axes = (math.degrees(math.atan2(d, c)) - x_angle) % 360
     if abs(between_axes - 90) > 0.5:
         return 'skew'
-    if abs(x_angle) > 0.01:
-        return f'rotation {x_angle:.2f}'
     return None
 
 

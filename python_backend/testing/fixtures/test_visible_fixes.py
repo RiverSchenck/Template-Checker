@@ -80,9 +80,9 @@ def test_b7_vertical_flip_unchanged(tmp_path):
         ('errors', 'IMAGE_TRANSFORMATION_IMAGE', 'Image inside Container has a vertical flip transformation.')]
 
 
-def test_b7_a_real_180_degree_turn_is_still_a_rotation_warning(tmp_path):
-    assert _transform_issues(tmp_path, image='-1 0 0 -1 0 0') == [
-        ('warnings', 'IMAGE_TRANSFORMATION_IMAGE', 'Image inside Container has been rotated by 180.00 degrees.')]
+def test_b7_a_real_180_degree_turn_is_not_an_issue(tmp_path):
+    """'-1 0 0 -1' is a 180 degree turn, not a flip, and rotation is fine (Frontify carries it over)."""
+    assert _transform_issues(tmp_path, image='-1 0 0 -1 0 0') == []
 
 
 def test_b7_page_items_use_the_same_rule(tmp_path):

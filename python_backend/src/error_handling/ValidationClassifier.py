@@ -59,10 +59,6 @@ class ValidationError(Enum):
                       "Embedded images are not supported.",
                       "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
                       "Embedded Image", ValidationCategory.IMAGES)
-    IMAGE_TRANSFORMATION = (auto(),
-                            "Image transformations are not supported.",
-                            "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-                            "Image Transformation", ValidationCategory.IMAGES)
     IMAGE_TRANSFORMATION_IMAGE = (auto(),
                                   "Image transformations are not supported.",
                                   "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
@@ -167,22 +163,6 @@ class ValidationWarning(Enum):
                     "Image(s) in package are unused making the package larger in size.",
                     "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
                     "Unused Image", ValidationCategory.IMAGES)
-    IMAGE_TRANSFORMATION = (auto(),
-                            "Element has been rotated. You may see slight discrepencies between export and editing.",
-                            "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-                            "Image Transformation", ValidationCategory.IMAGES)
-    IMAGE_TRANSFORMATION_IMAGE = (auto(),
-                                  "Image has been rotated. You may see slight discrepencies between export and editing.",
-                                  "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-                                  "Image Transformation (Image)", ValidationCategory.IMAGES)
-    IMAGE_TRANSFORMATION_CONTAINER = (auto(),
-                                       "Image container has been rotated. You may see slight discrepencies between export and editing.",
-                                       "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-                                       "Image Transformation (Container)", ValidationCategory.IMAGES)
-    PAGE_ITEM_TRANSFORMATION = (auto(),
-                                "Page item has been rotated. You may see slight discrepencies between export and editing.",
-                                "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-                                "Page Item Transformation", ValidationCategory.GENERAL)
     DOCUMENT_BLEED = (auto(),
                       "InDesign defined bleed is applied.",
                       "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",

@@ -4,7 +4,7 @@ from src.checks._report import at_frame, at_link, first_page_id, report
 from src.document import ParsedDocument
 from src.error_handling.ErrorHandling import ValidationResult
 from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning
-from src.helpers.page_item_transform import TransformKind, classify_page_item_transform, parse_item_transform
+from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform
 
 
 def masterpage_check(doc: ParsedDocument, results: ValidationResult) -> None:
@@ -17,7 +17,7 @@ def masterpage_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 def page_item_transformation_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Same end-state rule as image_transformation_check, for text frames, image-less rectangles,
-    ovals, polygons and groups: flip or skew -> error, rotation only -> warning."""
+    ovals, polygons and groups: flip or skew -> error; rotation is fine."""
     for spread in doc.spreads_parser.spreads_obj_list:
         for cand in spread.get_page_item_transform_candidates():
             tag = cand.get('tag') or 'Item'
@@ -26,12 +26,9 @@ def page_item_transformation_check(doc: ParsedDocument, results: ValidationResul
             if parsed is None:
                 continue
             classification = classify_page_item_transform(*parsed[:4])
-            if classification.kind == TransformKind.NONE:
+            if not classification.is_error:
                 continue
-            # Flips and skews are errors; what's left is a rotation, a warning.
-            classifier = (ValidationError.PAGE_ITEM_TRANSFORMATION if classification.is_error
-                          else ValidationWarning.PAGE_ITEM_TRANSFORMATION)
-            report(results, classifier, f"{tag} {classification.message}",
+            report(results, ValidationError.PAGE_ITEM_TRANSFORMATION, f"{tag} {classification.message}",
                    page_id=doc.find_page_id_from_data_id(self_id) if self_id else first_page_id(spread),
                    identifier=f"{tag}:{self_id}" if self_id else tag,
                    data_id=self_id or 'null')

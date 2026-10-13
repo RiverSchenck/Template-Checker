@@ -33,6 +33,10 @@ def format_counter_diff(expected: Counter, actual: Counter, label: str) -> tuple
     summary = f"DIFF: {', '.join(summary_parts)}"
     return (detailed, summary)
 
+# Image and frame issues are counted together under this name (see combine_image_transformation_counts).
+IMAGE_TRANSFORMATION = 'IMAGE_TRANSFORMATION'
+
+# Rotations are fine (Frontify carries them over), so rotated items no longer raise warnings.
 EXPECTED_OUTCOMES = {
     "Full coverage errors Folder.zip": {
         "errors": [
@@ -47,8 +51,8 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.VARIABLE_FONT.value}",
             f"{ValidationError.IMAGE_INCLUDED.value}",
             f"{ValidationError.EMBEDDED_IMAGE.value}",
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Skew (frame u188)
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Horizontal flip (frame u17f, -1 0 0 1)
+            IMAGE_TRANSFORMATION,  # Skew (frame u188)
+            IMAGE_TRANSFORMATION,  # Horizontal flip (frame u17f, -1 0 0 1)
             f"{ValidationError.TABLE.value}",
             f"{ValidationError.PASTED_GRAPHICS.value}",
             # Auto size (WidthOnly from center) is no longer an error: Frontify supports every reference point.
@@ -88,7 +92,6 @@ EXPECTED_OUTCOMES = {
             f"{ValidationWarning.COMPOSER.value}",
             # f"{ValidationWarning.HYPHENATION.value}",
             f"{ValidationWarning.HYPHENATION.value}",
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",
             f"{ValidationWarning.OVERRIDE.value}",
             f"{ValidationWarning.DOCUMENT_BLEED.value}",
         ]
@@ -99,7 +102,7 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.TEXT_COLUMNS.value}",
             f"{ValidationError.PARAGRAPH_STYLE_TEXT_BOX.value}",
             f"{ValidationError.VARIABLE_FONT.value}",
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",
+            IMAGE_TRANSFORMATION,
             f"{ValidationError.EMBEDDED_IMAGE.value}",
             f"{ValidationError.TABLE.value}",
             f"{ValidationError.GRID_ALIGNMENT.value}",
@@ -128,7 +131,6 @@ EXPECTED_OUTCOMES = {
             f"{ValidationWarning.HYPHENATION.value}",
             f"{ValidationWarning.OVERRIDE.value}",
             f"{ValidationWarning.OVERRIDE.value}",
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",
         ],
         "infos": [
             f"{ValidationInfo.EMPTY_TEXT_FRAME.value}",
@@ -149,7 +151,6 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.ADOBE_FONT.value}",
         ],
         "warnings": [
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",
             # f"{ValidationWarning.HYPHENATION.value}",
             f"{ValidationWarning.COMPOSER.value}",
             f"{ValidationWarning.OVERRIDE.value}",
@@ -181,7 +182,7 @@ EXPECTED_OUTCOMES = {
     },
     "RollUp_Bad.zip": {
         "errors": [
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",
+            IMAGE_TRANSFORMATION,
             # Auto size (HeightOnly from center) is no longer an error: Frontify supports every reference point.
             f"{ValidationError.PASTED_GRAPHICS.value}",
             f"{ValidationError.PARAGRAPH_STYLE_TEXT_BOX.value}",
@@ -194,7 +195,6 @@ EXPECTED_OUTCOMES = {
 
         ],
         "warnings": [
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",
             f"{ValidationWarning.DOCUMENT_BLEED.value}",
             # f"{ValidationWarning.HYPHENATION.value}",
             f"{ValidationWarning.COMPOSER.value}",
@@ -495,7 +495,6 @@ EXPECTED_OUTCOMES = {
             f"{ValidationWarning.COMPOSER.value}",
             f"{ValidationWarning.COMPOSER.value}",
             f"{ValidationWarning.COMPOSER.value}",
-            f"{ValidationWarning.PAGE_ITEM_TRANSFORMATION.value}",
         ]
     },
     "Flyer-Sales_Bad.zip": {
@@ -556,7 +555,6 @@ EXPECTED_OUTCOMES = {
             # f"{ValidationWarning.HYPHENATION.value}",
             f"{ValidationWarning.COMPOSER.value}",
             f"{ValidationWarning.DOCUMENT_BLEED.value}",
-            f"{ValidationWarning.PAGE_ITEM_TRANSFORMATION.value}",
         ]
     },
     "All_err_and_warn.zip": {
@@ -566,7 +564,7 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.VARIABLE_FONT.value}",
             f"{ValidationError.IMAGE_INCLUDED.value}",
             f"{ValidationError.EMBEDDED_IMAGE.value}",
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",
+            IMAGE_TRANSFORMATION,
             f"{ValidationError.TABLE.value}",
             f"{ValidationError.PASTED_GRAPHICS.value}",
             f"{ValidationError.AUTO_SIZE_TEXT_BOX.value}",
@@ -580,7 +578,6 @@ EXPECTED_OUTCOMES = {
         ],
         "warnings": [
             f"{ValidationWarning.OVERRIDE.value}",
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",
             # f"{ValidationWarning.HYPHENATION.value}",
             f"{ValidationWarning.HYPHENATION.value}",
             f"{ValidationWarning.COMPOSER.value}",
@@ -620,14 +617,8 @@ PASS_EXPECTED_ERRORS = {
     ],
 }
 
-PASS_EXPECTED_WARNINGS = {
-    "Fact-Sheet-Images_Good.zip": [
-        f"{ValidationWarning.PAGE_ITEM_TRANSFORMATION.value}",
-    ],
-    "Lookbook_Good.zip": [
-        f"{ValidationWarning.PAGE_ITEM_TRANSFORMATION.value}",
-    ],
-}
+# Warnings a "Good" package may still have (none: their rotations are fine now).
+PASS_EXPECTED_WARNINGS = {}
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -666,7 +657,7 @@ def test_zip_check_fail(testcase_zip):
     expected_infos = EXPECTED_OUTCOMES[filename].get("infos", [])
 
     # Combine IMAGE_TRANSFORMATION_IMAGE and IMAGE_TRANSFORMATION_CONTAINER counts
-    # for comparison with expected outcomes (which use the old IMAGE_TRANSFORMATION type)
+    # for comparison with expected outcomes
     def combine_image_transformation_counts(counter):
         combined = Counter()
         image_transformation_total = 0
@@ -677,26 +668,13 @@ def test_zip_check_fail(testcase_zip):
             else:
                 combined[key] = value
         if image_transformation_total > 0:
-            combined[ValidationError.IMAGE_TRANSFORMATION.value] = image_transformation_total
-        return combined
-
-    def combine_image_transformation_warning_counts(counter):
-        combined = Counter()
-        image_transformation_total = 0
-        for key, value in counter.items():
-            if key in [ValidationWarning.IMAGE_TRANSFORMATION_IMAGE.value,
-                       ValidationWarning.IMAGE_TRANSFORMATION_CONTAINER.value]:
-                image_transformation_total += value
-            else:
-                combined[key] = value
-        if image_transformation_total > 0:
-            combined[ValidationWarning.IMAGE_TRANSFORMATION.value] = image_transformation_total
+            combined[IMAGE_TRANSFORMATION] = image_transformation_total
         return combined
 
     actual_errors_count = combine_image_transformation_counts(Counter(actual_errors))
     expected_errors_count = Counter(expected_errors)
 
-    actual_warnings_count = combine_image_transformation_warning_counts(Counter(actual_warnings))
+    actual_warnings_count = Counter(actual_warnings)
     expected_warnings_count = Counter(expected_warnings)
 
     actual_infos_count = Counter(actual_infos)

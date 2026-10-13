@@ -4,7 +4,7 @@ from src.checks._report import at_link, report
 from src.document import ParsedDocument
 from src.error_handling.ErrorHandling import ValidationResult
 from src.error_handling.ValidationClassifier import ValidationError, ValidationInfo, ValidationWarning
-from src.helpers.page_item_transform import TransformKind, classify_page_item_transform, parse_item_transform
+from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform
 
 
 def images_included_check(doc: ParsedDocument, results: ValidationResult) -> None:
@@ -64,7 +64,7 @@ def embedded_image_check(doc: ParsedDocument, results: ValidationResult) -> None
 
 def image_transformation_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """The placed image and its frame are each judged by their end state (docs/checker-rules.md):
-    mirrored -> flip error, skewed -> error, rotated only -> warning."""
+    mirrored -> flip error, skewed -> error. Rotation is fine: Frontify carries it over."""
     for spread in doc.spreads_parser.spreads_obj_list:
         for link in spread.links_obj_list:
             where = at_link(doc, spread, link)
@@ -73,11 +73,8 @@ def image_transformation_check(doc: ParsedDocument, results: ValidationResult) -
                 if parsed is None:
                     continue
                 classification = classify_page_item_transform(*parsed[:4])
-                if classification.kind == TransformKind.NONE:
+                if not classification.is_error:
                     continue
                 subject = "Image inside Container" if is_image else "Image Container"
-                if classification.is_error:
-                    classifier = ValidationError.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationError.IMAGE_TRANSFORMATION_CONTAINER
-                else:
-                    classifier = ValidationWarning.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationWarning.IMAGE_TRANSFORMATION_CONTAINER
+                classifier = ValidationError.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationError.IMAGE_TRANSFORMATION_CONTAINER
                 report(results, classifier, f"{subject} {classification.message}", **where)

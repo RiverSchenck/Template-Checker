@@ -227,9 +227,16 @@ def test_issues_get_labels_from_the_checker_classifiers(fake_rpc):
     assert issues[1] == {'validation_type': 'SOMETHING_NEW', 'label': 'Something New', 'message': None, 'help_article': None}
 
 
-def test_issue_description_follows_severity_when_a_type_is_both_error_and_warning():
-    assert analytics_api.describe_issue('IMAGE_TRANSFORMATION', 'error')['message'] == 'Image transformations are not supported.'
-    assert analytics_api.describe_issue('IMAGE_TRANSFORMATION', 'warning')['message'].startswith('Element has been rotated')
+def test_issue_description_comes_from_the_classifier():
+    # Rotation warnings are gone (rotation is fine), so transformation names only mean flip/skew errors.
+    assert analytics_api.describe_issue('IMAGE_TRANSFORMATION_IMAGE', 'error')['message'] == 'Image transformations are not supported.'
+    assert analytics_api.describe_issue('PAGE_ITEM_TRANSFORMATION')['label'] == 'Page Item Transformation'
+
+
+def test_issue_description_for_a_retired_type_falls_back_to_its_name():
+    # Older runs stored rotation warnings that no longer exist.
+    assert analytics_api.describe_issue('IMAGE_TRANSFORMATION', 'warning') == {
+        'label': 'Image Transformation', 'message': None, 'help_article': None}
 
 
 def test_csv_endpoint_downloads_with_row_counts(client, fake_rpc):

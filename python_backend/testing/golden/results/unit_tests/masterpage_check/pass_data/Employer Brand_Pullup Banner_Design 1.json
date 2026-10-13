@@ -72,14 +72,6 @@
    {
     "category": "images",
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION",
-    "label": "Image Transformation",
-    "message": "Image transformations are not supported.",
-    "severity": "errors"
-   },
-   {
-    "category": "images",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
     "key": "IMAGE_TRANSFORMATION_IMAGE",
     "label": "Image Transformation (Image)",
     "message": "Image transformations are not supported.",
@@ -251,38 +243,6 @@
     "key": "UNUSED_IMAGE",
     "label": "Unused Image",
     "message": "Image(s) in package are unused making the package larger in size.",
-    "severity": "warnings"
-   },
-   {
-    "category": "images",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION",
-    "label": "Image Transformation",
-    "message": "Element has been rotated. You may see slight discrepencies between export and editing.",
-    "severity": "warnings"
-   },
-   {
-    "category": "images",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION_IMAGE",
-    "label": "Image Transformation (Image)",
-    "message": "Image has been rotated. You may see slight discrepencies between export and editing.",
-    "severity": "warnings"
-   },
-   {
-    "category": "images",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION_CONTAINER",
-    "label": "Image Transformation (Container)",
-    "message": "Image container has been rotated. You may see slight discrepencies between export and editing.",
-    "severity": "warnings"
-   },
-   {
-    "category": "general",
-    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "PAGE_ITEM_TRANSFORMATION",
-    "label": "Page Item Transformation",
-    "message": "Page item has been rotated. You may see slight discrepencies between export and editing.",
     "severity": "warnings"
    },
    {
@@ -492,126 +452,6 @@
      ],
      "infos": [],
      "warnings": []
-    },
-    "Simple_CMYK_Gradients_Fuschia copy.ai": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 5811.02,
-        "kind": "Rectangle",
-        "page_id": "u2be",
-        "width": 2551.18,
-        "x": -70.87,
-        "y": -70.87
-       },
-       "context": "Image inside Container has been rotated by 90.00 degrees.",
-       "data_id": "u2bf",
-       "identifier": "Simple_CMYK_Gradients_Fuschia copy.ai",
-       "page_id": "u2be",
-       "page_name": "8",
-       "spread_id": "u2b3",
-       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
-      },
-      {
-       "bounds": {
-        "height": 5811.02,
-        "kind": "Rectangle",
-        "page_id": "ud5",
-        "width": 2551.18,
-        "x": -70.87,
-        "y": -70.87
-       },
-       "context": "Image inside Container has been rotated by 90.00 degrees.",
-       "data_id": "u10f",
-       "identifier": "Simple_CMYK_Gradients_Fuschia copy.ai",
-       "page_id": "ud5",
-       "page_name": "1",
-       "spread_id": "ud0",
-       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
-      }
-     ]
-    },
-    "Simple_CMYK_Gradients_Violet copy.ai": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 5811.02,
-        "kind": "Rectangle",
-        "page_id": "u16d",
-        "width": 2551.18,
-        "x": -70.87,
-        "y": -70.87
-       },
-       "context": "Image inside Container has been rotated by 90.00 degrees.",
-       "data_id": "u16e",
-       "identifier": "Simple_CMYK_Gradients_Violet copy.ai",
-       "page_id": "u16d",
-       "page_name": "2",
-       "spread_id": "u162",
-       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
-      },
-      {
-       "bounds": {
-        "height": 5811.02,
-        "kind": "Rectangle",
-        "page_id": "u2f9",
-        "width": 2551.18,
-        "x": -70.87,
-        "y": -70.87
-       },
-       "context": "Image inside Container has been rotated by 90.00 degrees.",
-       "data_id": "u2fa",
-       "identifier": "Simple_CMYK_Gradients_Violet copy.ai",
-       "page_id": "u2f9",
-       "page_name": "9",
-       "spread_id": "u2ee",
-       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
-      }
-     ]
-    },
-    "Simple_CMYK_Gradients_Violet_Fuschia copy.ai": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 5811.02,
-        "kind": "Rectangle",
-        "page_id": "u19f",
-        "width": 2551.18,
-        "x": -70.87,
-        "y": -70.87
-       },
-       "context": "Image inside Container has been rotated by 90.00 degrees.",
-       "data_id": "u1a0",
-       "identifier": "Simple_CMYK_Gradients_Violet_Fuschia copy.ai",
-       "page_id": "u19f",
-       "page_name": "3",
-       "spread_id": "u194",
-       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
-      },
-      {
-       "bounds": {
-        "height": 5811.02,
-        "kind": "Rectangle",
-        "page_id": "u335",
-        "width": 2551.18,
-        "x": -70.87,
-        "y": -70.87
-       },
-       "context": "Image inside Container has been rotated by 90.00 degrees.",
-       "data_id": "u336",
-       "identifier": "Simple_CMYK_Gradients_Violet_Fuschia copy.ai",
-       "page_id": "u335",
-       "page_name": "10",
-       "spread_id": "u32a",
-       "validationClassifier": "IMAGE_TRANSFORMATION_IMAGE"
-      }
-     ]
     },
     "null": {
      "errors": [
@@ -6941,7 +6781,7 @@
    "IMAGE_TRANSFORMATION_IMAGE": {
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
     "label": "Image Transformation (Image)",
-    "message": "Image has been rotated. You may see slight discrepencies between export and editing."
+    "message": "Image transformations are not supported."
    },
    "OVERRIDE": {
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",

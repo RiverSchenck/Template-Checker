@@ -1,6 +1,5 @@
 """Line the oracle up against the checker's golden results, check by check."""
 import functools
-import re
 from typing import Dict
 
 from testing.golden.golden import TESTING_DIR, load
@@ -21,9 +20,6 @@ def checker_items(results: dict, *classifiers: str):
 def _transform_kind(context: str) -> str:
     if 'flip' in context:
         return 'flip'
-    rotated = re.search(r'rotated by (-?[\d.]+) degrees', context)
-    if rotated:
-        return f'rotation {float(rotated.group(1)):.2f}'
     return 'skew' if 'skew' in context else context
 
 
