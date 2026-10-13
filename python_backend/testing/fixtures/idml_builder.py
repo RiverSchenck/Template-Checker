@@ -13,7 +13,7 @@ import io
 import os
 import zipfile
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple, Union
 from xml.sax.saxutils import quoteattr, escape
 
 PAGE_W, PAGE_H = 612, 792
@@ -89,7 +89,7 @@ class PackageBuilder:
     bleed: str = '0'
     _paragraph_styles: Dict[str, Dict] = field(default_factory=dict)
     _character_styles: Dict[str, Dict] = field(default_factory=dict)
-    _stories: Dict[str, List[_Paragraph]] = field(default_factory=dict)
+    _stories: Dict[str, Union[List[_Paragraph], str]] = field(default_factory=dict)  # str: raw_story
     _items: List[str] = field(default_factory=list)
     _links: Dict[str, bytes] = field(default_factory=dict)
     _master_items: Dict[int, List[str]] = field(default_factory=dict)
@@ -134,6 +134,13 @@ class PackageBuilder:
         self._stories[story_id] = parsed
         return story_id
 
+    def raw_story(self, body: str, story_id: Optional[str] = None) -> str:
+        """A story whose <Story> content is written as IDML, for what story() can't express: hyperlinks, tagged
+        text, tracked changes, notes, footnotes, tables, inline and anchored objects."""
+        story_id = story_id or self._id()
+        self._stories[story_id] = body
+        return story_id
+
     def text_frame(self, story_id: str, page: int = 0, at=(72, 72, 200, 100), *, columns: int = 1,
                    wrap: Optional[str] = 'None', object_style: str = DEFAULT_TEXT_FRAME_STYLE,
                    auto_size: Optional[str] = None, reference_point: Optional[str] = None,
@@ -148,6 +155,16 @@ class PackageBuilder:
             f'<TextFrame {_attrs({"Self": frame_id, "ParentStory": story_id, "PreviousTextFrame": previous, "NextTextFrame": next, "AppliedObjectStyle": object_style, "ItemTransform": transform or self._page_transform(page)})}>'
             f'{_rect_path(*at)}<TextFramePreference {pref}/>{wrap_xml}</TextFrame>')
         return frame_id
+
+    def anchored_text_frame(self, story_id: str, **kwargs) -> str:
+        """A text frame's IDML for placing inside a story run (anchored or inline), not on the page."""
+        self.text_frame(story_id, transform='1 0 0 1 0 0', **kwargs)
+        return self._items.pop()
+
+    def inline_image(self, file_name: str, **kwargs) -> str:
+        """A placed image's IDML for placing inside a story run (inline or anchored), not on the page."""
+        self.image(file_name, frame_transform='1 0 0 1 0 0', **kwargs)
+        return self._items.pop()
 
     def image(self, file_name: str, page: int = 0, at=(72, 300, 200, 150), *, include_in_links: bool = True,
               embedded: bool = False, image_transform: str = '1 0 0 1 0 0', frame_transform: Optional[str] = None,
@@ -230,7 +247,9 @@ class PackageBuilder:
             for i, (family, faces) in enumerate(self._font_families.items()))
         return f'<idPkg:Fonts {NS}>{families}</idPkg:Fonts>'
 
-    def _story_xml(self, story_id: str, paragraphs: List[_Paragraph]) -> str:
+    def _story_xml(self, story_id: str, paragraphs) -> str:
+        if isinstance(paragraphs, str):  # raw_story
+            return f'<idPkg:Story {NS}><Story Self="{story_id}">{paragraphs}</Story></idPkg:Story>'
         body = ''
         for p in paragraphs:
             style = p.style if p.style.startswith('$ID/') else p.style
