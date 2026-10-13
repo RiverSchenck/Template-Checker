@@ -914,13 +914,14 @@ def _not_checkable(outcome):
     return api_error(422, 'template_not_checkable', message)
 
 
-def _run_and_respond(respond):
+def _run_and_respond(respond, previews: bool = False):
     """Store the upload, run the check, and build the response from its outcome. Everything the run writes
     (upload, unpacked package, XML export) is in one run folder, removed either way."""
     with run_workspace() as workspace:
         g.workspace = workspace
         checker = FrontifyChecker()
         checker.workspace = workspace
+        checker.previews = previews  # page previews are most of a run's time; only rendered when shown (plan D6)
         try:
             source_type, run_user_id = _run_source_and_user_id()
             upload_result = upload_file()
@@ -950,7 +951,7 @@ def create_check():
         'run_id': outcome.run_id,
         'status': 'completed' if outcome.completed else 'rejected',
         'results': outcome.results,
-    }))
+    }), previews=request.args.get('previews') == '1')
 
 
 @main.route('/run', methods=['POST'])
@@ -959,7 +960,8 @@ def create_check():
 @limit_checks
 def run_checker():
     """Deprecated: POST /v1/checks. Same check, results wrapped as {type: "data", content: {results}}."""
-    return _run_and_respond(lambda outcome, _: jsonify({'type': 'data', 'content': {'results': outcome.results}}))
+    return _run_and_respond(lambda outcome, _: jsonify({'type': 'data', 'content': {'results': outcome.results}}),
+                            previews=True)
 
 
 @main.route('/v1/checks/summary', methods=['POST'])

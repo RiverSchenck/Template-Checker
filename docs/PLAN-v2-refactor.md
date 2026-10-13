@@ -348,6 +348,9 @@ until PR 3.2.
 `with run_workspace()`; per-endpoint `previews`. `FrontifyChecker` becomes a thin facade for tests, then is deleted
 when `testing/checker_setup.py` / `checker_run.py` move to `run()`. Golden diff: 0 (goldens run with previews on).
 Measure before/after on the 5 largest packages; record in the PR.
+*Done (2026-10-13):* the web app calls `/v1/checks` (not `/run`), so it asks with `?previews=1`; `/run` keeps
+previews, `/v1/checks` without the parameter, `/v1/checks/summary` and `/v1/checks/xml` skip them. `FrontifyChecker`
+is a thin wrapper over the pipeline for the app and the tests (River): it goes in PR 6.1 with `checker_setup.py`.
 
 ### Phase 4 — Checks emit structured facts (additive to v1)
 

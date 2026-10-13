@@ -188,7 +188,8 @@ export function TemplateUploader({
           xhr.addEventListener('error', () => reject(new Error("Couldn't reach the checker. Check your connection and try again.")));
           xhr.addEventListener('abort', () => resolve(null));
 
-          xhr.open('POST', downloadXML ? `${baseURL}/v1/checks/xml` : `${baseURL}/v1/checks`);
+          // The report shows each page, so it asks for page previews (the API leaves them out by default).
+          xhr.open('POST', downloadXML ? `${baseURL}/v1/checks/xml` : `${baseURL}/v1/checks?previews=1`);
           xhr.responseType = downloadXML ? 'blob' : 'text';
           Object.entries(headers).forEach(([key, value]) => xhr.setRequestHeader(key, value));
           xhr.send(formData);

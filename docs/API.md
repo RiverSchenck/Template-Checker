@@ -120,6 +120,10 @@ uses:
 - `check_guides`: the plain-language copy for each check that ran or found something, as
   `{severity: {check key: {title, why, fix, subject}}}`.
 
+Page previews (`results.page_layouts[].preview`, a base64 JPEG per page) are left out unless you ask with
+`?previews=1` (`POST /v1/checks?previews=1`): rendering them is most of a check's time. Without it, `preview` is
+`null`; the page sizes and frame outlines are always there.
+
 ## `POST /v1/checks/xml`
 
 Same request. Runs the same check, then returns the template's generated XML as a ZIP download

@@ -215,7 +215,7 @@ export const ENDPOINTS: EndpointDoc[] = [
     path: '/v1/checks',
     name: 'Run a check',
     summary: 'Checks a packaged template and returns the complete results as JSON, grouped by category and severity.',
-    note: 'A package that cannot be checked is not reported as an error. The response is `200` with `status` set to `rejected`, and the reason is included in `results`.',
+    note: 'A package that cannot be checked is not reported as an error. The response is `200` with `status` set to `rejected`, and the reason is included in `results`. Page previews (`results.page_layouts[].preview`) are only rendered when you add `?previews=1`; otherwise they are `null`.',
     output: 'json',
     response: {
       status: '200 OK',
