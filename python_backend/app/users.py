@@ -49,11 +49,6 @@ def get_user_by_auth_id(auth_user_id: str) -> Optional[dict[str, Any]]:
     return None
 
 
-def is_user_allowed(email: str) -> bool:
-    """True if there is a users row for this email (approved to sign in)."""
-    return get_user_by_email(email) is not None
-
-
 def is_admin(email: Optional[str] = None, auth_user_id: Optional[str] = None) -> bool:
     """True if user has role admin. Look up by email or auth_user_id."""
     row = None

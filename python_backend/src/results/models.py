@@ -63,7 +63,7 @@ class Issue(Model):
     subject: Subject
     location: Location
     facts: Optional[AnyFacts]
-    """The check's facts model (catalogue), or None."""
+    """The check's facts (its facts model in the catalogue), or null."""
     text: Optional[List[str]]
     """The text it's about, when relevant."""
     detail: Optional[str]

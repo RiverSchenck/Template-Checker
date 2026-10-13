@@ -11,7 +11,7 @@ from src.checks.stages import States
 from src.helpers.package_zip import DAMAGED_IDML  # noqa: F401 (tests import the rejection reasons from here)
 from src.model.document import Document
 from src.pipeline.intake import NOT_A_ZIP, Intake, Package, Rejected, unpack_idml, unpack_package  # noqa: F401
-from src.pipeline.run import IDML_TOO_LARGE, StageTracker, count_totals, load, run, run_check  # noqa: F401
+from src.pipeline.run import IDML_TOO_LARGE, StageTracker, load, run, run_check  # noqa: F401
 from src.pipeline.workspace import Workspace
 from src.results.classifiers import Category, Severity
 from src.results.layout import DocumentLayout
@@ -88,9 +88,6 @@ class FrontifyChecker:
     def run_check(self, state: States):
         """Run one check on the parsed document (after parse_xml), e.g. from a test."""
         run_check(CHECKS_BY_STATE[state], self.document, self.results)
-
-    def results_analytics(self):
-        self.totals = count_totals(self.document)
 
     # --- results and files ---------------------------------------------------------------------------------------
 
