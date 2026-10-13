@@ -6,7 +6,7 @@ import uuid
 import zipfile
 from typing import Callable, Dict, List, Optional, Tuple
 from src.results.results import ValidationResult
-from src.results.classifiers import ValidationError, ValidationWarning, ValidationInfo
+from src.results.classifiers import Severity, ValidationError, ValidationWarning
 from src.parsers.SourceFoldersParser import SourceFoldersParser
 from src.parsers.SpreadsParser import SpreadsParser
 from src.parsers.FontsParser import FontsParser
@@ -104,8 +104,7 @@ class FrontifyChecker:
             self.template_name = os.path.basename(self.source_file_path)
             return True
         else:
-            self.results.add_error(
-                "File uploaded is not ZIP", ValidationError.ZIP, page_id='', identifier='null', data_id='null')
+            self.results.add(ValidationError.ZIP, "File uploaded is not ZIP")
             return False
 
     def unzip_package_state(self) -> States:
@@ -132,8 +131,7 @@ class FrontifyChecker:
             return True
         except Exception:
             logger.exception("Couldn't create the folder for this upload")
-            self.results.add_custom_error(
-                "The server couldn't prepare the upload. Try again.", ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR, "The server couldn't prepare the upload. Try again.")
             return False
 
     def extract_zip_to_data_folder(self) -> bool:
@@ -155,24 +153,22 @@ class FrontifyChecker:
                     zip_ref, package, self.unzipped_root_path)
                 self.package_links = package.links
         except PackageError as e:
-            self.results.add_custom_error(str(e), ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR, str(e))
             return False
         except zipfile.BadZipFile:
-            self.results.add_custom_error(
-                "The file is not a valid ZIP archive. Please zip the package folder again and re-upload.", ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR,
+                             "The file is not a valid ZIP archive. Please zip the package folder again and re-upload.")
             return False
         except Exception:
             logger.exception('Failed to unzip the package')
-            self.results.add_custom_error(
-                "Failed to unzip the file.", ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR, "Failed to unzip the file.")
             return False
         return True
 
     def unzip_idml_state(self) -> States:
         """UNZIP_IDML: report a missing or duplicate .idml, otherwise unpack it."""
         if self.idml_problem or not self.idml_path:
-            self.results.add_error(
-                self.idml_problem or NoIdmlError().args[0], ValidationError.IDML, page_id='', identifier='null', data_id='null')
+            self.results.add(ValidationError.IDML, self.idml_problem or NoIdmlError().args[0])
             return States.EXIT
         if not self.unarchive_idml_files(self.idml_path):
             return States.EXIT
@@ -188,12 +184,11 @@ class FrontifyChecker:
             self.results.idml_output_folder = self.idml_output_folder
             return True
         except PackageError as e:
-            self.results.add_custom_error(str(e), ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR, str(e))
             return False
         except Exception:
             logger.exception('Failed to unzip the .idml')
-            self.results.add_custom_error(
-                "Failed to unzip the .idml file.", ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR, "Failed to unzip the .idml file.")
             return False
 
     def parse_xml(self) -> States:
@@ -213,8 +208,7 @@ class FrontifyChecker:
         spreads_dir = os.path.join(
             self.idml_output_folder, 'Spreads')
         if not os.path.exists(spreads_dir):
-            self.results.add_custom_error(
-                "Spreads directory does not exist", ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR, "Spreads directory does not exist")
             return States.EXIT
 
         self.spreads_parser = SpreadsParser(
@@ -227,8 +221,7 @@ class FrontifyChecker:
         fonts_xml_path = os.path.join(
             self.idml_output_folder, 'Resources', 'Fonts.xml')
         if not os.path.exists(fonts_xml_path):
-            self.results.add_custom_error(
-                "Fonts.XML does not exist", ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR, "Fonts.XML does not exist")
             return States.EXIT
         self.fonts_parser = FontsParser(
             fonts_xml_path)
@@ -238,8 +231,7 @@ class FrontifyChecker:
         styles_xml_path = os.path.join(
             self.idml_output_folder, 'Resources', 'Styles.xml')
         if not os.path.exists(styles_xml_path):
-            self.results.add_custom_error(
-                "Styles.xml file does not exist", ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR, "Styles.xml file does not exist")
             return States.EXIT
         # Initialize the StylesParser
         styles_parser = StylesParser(styles_xml_path)
@@ -287,8 +279,7 @@ class FrontifyChecker:
         masterspreads_dir = os.path.join(
             self.idml_output_folder, 'MasterSpreads')
         if not os.path.exists(masterspreads_dir):
-            self.results.add_warning(
-                "MasterSpreads directory does not exist", ValidationWarning.WARNING, page_id='', identifier='null', data_id='null')
+            self.results.add(ValidationWarning.WARNING, "MasterSpreads directory does not exist")
             # No master spreads is valid (only the [None] master); checks see an empty master page.
             self.masterspreads_parser = MasterPageParser(None)
         else:
@@ -315,8 +306,7 @@ class FrontifyChecker:
         preferences_xml_path = os.path.join(
             self.idml_output_folder, 'Resources', 'Preferences.xml')
         if not os.path.exists(preferences_xml_path):
-            self.results.add_custom_error(
-                "Preferences.xml file does not exist", ValidationError.ERROR)
+            self.results.add(ValidationError.ERROR, "Preferences.xml file does not exist")
             return States.EXIT
         # Initialize the StylesParser
         self.preferences_parser = PreferencesParser(preferences_xml_path)
@@ -430,14 +420,14 @@ class FrontifyChecker:
 
         return len(unique_styles)
 
-    def get_error_types(self) -> List['ValidationError']:
-        return self.results.get_error_types()
+    def get_error_types(self) -> List[str]:
+        return self.results.names(Severity.ERROR)
 
-    def get_warning_types(self) -> List['ValidationWarning']:
-        return self.results.get_warning_types()
+    def get_warning_types(self) -> List[str]:
+        return self.results.names(Severity.WARNING)
 
-    def get_info_types(self) -> List['ValidationInfo']:
-        return self.results.get_info_types()
+    def get_info_types(self) -> List[str]:
+        return self.results.names(Severity.INFO)
 
     def set_source_file_path(self, source_path: str):
         self.source_file_path = source_path

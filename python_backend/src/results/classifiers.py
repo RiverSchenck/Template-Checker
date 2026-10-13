@@ -1,215 +1,229 @@
-from enum import Enum, auto
+"""Every issue the checker can report: how severe it is, which results section it's listed in, and its copy.
+
+To add one, write a line in the class for its severity below, then add its guide (title, why, fix) to
+app/customer_summary/check_guides.py. Nothing else keys off the list: the results JSON, the list of checks the
+frontend shows and analytics all read the classifier.
+
+    TEXT_WRAP = _issue(Category.TEXT_BOX, 'Text Wrap', 'Text Wrap is not supported.', article('h_0882abae12'))
+
+reads as: report it under Text Boxes, labelled "Text Wrap", with that message and a link to that section of the
+help article. Checks report it with `report(results, ValidationError.TEXT_WRAP, ...)`.
+"""
+from dataclasses import dataclass, replace
+from enum import Enum
+from typing import Iterator, List, Optional
+
+HELP_ARTICLE = 'https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates'
 
 
-class ValidationCategory(Enum):
-    PAR_STYLE = (auto(), "Paragraph Styles")
-    CHAR_STYLE = (auto(), "Character Styles")
-    TEXT_BOX = (auto(), "Text Boxes")
-    FONTS = (auto(), "Fonts")
-    IMAGES = (auto(), "Images")
-    GENERAL = (auto(), "General")
-
-    def __init__(self, value, label=None):
-        self._value_ = value
-        self.label = label
+def article(anchor: str) -> str:
+    """A section of the "Prepare InDesign documents for templates" help article."""
+    return f'{HELP_ARTICLE}#{anchor}'
 
 
-class ValidationError(Enum):
-    ERROR = (auto(),
-             "Error",
-             None, 'Error', ValidationCategory.GENERAL)
-    IDML = (auto(),
-            "IDML error",
-            None, 'IDML', ValidationCategory.GENERAL)
-    ZIP = (auto(),
-           "ZIP file error",
-           "https://help.frontify.com/en/articles/5306557-what-input-formats-do-digital-and-print-templates-support", None, ValidationCategory.GENERAL)
-    MASTERPAGE = (auto(),
-                  "Master Page can't be used.",
-                  "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
-                  "Masterpage", ValidationCategory.GENERAL)
-    PARAGRAPH_STYLE = (auto(),
-                       "Text found missing paragraph styles.",
-                       "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-                       "Paragraph Style", ValidationCategory.TEXT_BOX)
-    PARAGRAPH_STYLE_TEXT_BOX = (auto(),
-                                "No paragraph styles were used.",
-                                "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-                                "Paragraph Style", ValidationCategory.TEXT_BOX)
-    FONTS_INCLUDED = (auto(),
-                      "Package is missing fonts.",
-                      "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
-                      "Fonts Included", ValidationCategory.FONTS)
-    OTF_TTF_FONT = (auto(),
-                    "Only OTF or TTF fonts are supported.",
-                    "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
-                    "OTF/TTF Font", ValidationCategory.FONTS)
-    VARIABLE_FONT = (auto(),
-                     "Variable fonts are not supported",
-                     "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
-                     "Variable Font", ValidationCategory.FONTS)
-    IMAGE_INCLUDED = (auto(),
-                      "Package missing image link.",
-                      "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
-                      "Images Included", ValidationCategory.IMAGES)
-    EMBEDDED_IMAGE = (auto(),
-                      "Embedded images are not supported.",
-                      "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
-                      "Embedded Image", ValidationCategory.IMAGES)
-    IMAGE_TRANSFORMATION_IMAGE = (auto(),
-                                  "Image transformations are not supported.",
-                                  "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-                                  "Image Transformation (Image)", ValidationCategory.IMAGES)
-    IMAGE_TRANSFORMATION_CONTAINER = (auto(),
-                                      "Image transformations are not supported.",
-                                      "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-                                      "Image Transformation (Container)", ValidationCategory.IMAGES)
-    PAGE_ITEM_TRANSFORMATION = (auto(),
-                                "Page item transformations (flip/skew) are not supported.",
-                                "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-                                "Page Item Transformation", ValidationCategory.GENERAL)
-    TABLE = (auto(),
-             "Tables are not supported",
-             "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
-             "Table", ValidationCategory.TEXT_BOX)
-    PASTED_GRAPHICS = (auto(),
-                       "Pasted graphics are not supported",
-                       "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
-                       "Pasted Graphics", ValidationCategory.IMAGES)
-    AUTO_SIZE_TEXT_BOX = (auto(),
-                          "Auto-size text boxes were not set up properly",
-                          "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
-                          "Auto Sizing Text Box", ValidationCategory.TEXT_BOX)
-    TEXT_COLUMNS = (auto(),
-                    "Text columns are not supported",
-                    "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
-                    "Text Column", ValidationCategory.TEXT_BOX)
-    LINKED_TEXT_FRAME = (auto(),
-                         "Linked (threaded) text frames are not supported.",
-                         "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
-                         "Linked Text Frame", ValidationCategory.TEXT_BOX)
-    OBJECT_STYLE_TEXT = (auto(),
-                         "Object styles are not supported.",
-                         "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
-                         "Object Style", ValidationCategory.TEXT_BOX)
-
-    OBJECT_STYLE_IMAGE = (auto(),
-                          "Object styles are not supported.",
-                          "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
-                          "Object Style", ValidationCategory.IMAGES)
-
-    GRID_ALIGNMENT = (auto(),
-                      "Grid alignment is not supported",
-                      "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
-                      "Grid Alignment", ValidationCategory.PAR_STYLE)
-    KERNING = (auto(),
-               "Kerning must be 'Metrics'",
-               "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
-               "Kerning", ValidationCategory.PAR_STYLE)
-    KERNING_CHAR = (auto(),
-                    "Kerning must be 'Metrics'",
-                    "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
-                    "Kerning", ValidationCategory.CHAR_STYLE)
-
-    TEXT_WRAP = (auto(),
-                 "Text Wrap is not supported.",
-                 "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12",
-                 "Text Wrap", ValidationCategory.TEXT_BOX)
-
-    FILL_TINT = (auto(),
-                 "Fill Tint must be 100. (This may be inaccurate, testing currently)",
-                 "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf",
-                 "Color Fill Tint (Beta)", ValidationCategory.PAR_STYLE)
-    FILL_TINT_CHAR = (auto(),
-                      "Fill Tint must be 100. Frontify shows text colours without their tint.",
-                      "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf",
-                      "Color Fill Tint", ValidationCategory.CHAR_STYLE)
-    TEXT_WRAP_ITEM = (auto(),
-                      "Text Wrap is not supported.",
-                      "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12",
-                      "Text Wrap (Object)", ValidationCategory.GENERAL)
-    TEXT_POSITION = (auto(),
-                     "Superscript and subscript are not supported.",
-                     "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
-                     "Superscript/Subscript", ValidationCategory.CHAR_STYLE)
-    ADOBE_FONT = (auto(),
-                  "Adobe Fonts are not supported. Use a desktop version of the font (OTF or TTF) instead.",
-                  "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
-                  "Adobe Font", ValidationCategory.FONTS)
-
-    def __new__(cls, _, message=None, help_article=None, label=None, category=ValidationCategory.GENERAL):
-        member = object.__new__(cls)
-        member.message = message
-        member.help_article = help_article
-        member.label = label
-        member.category = category
-        return member
+class Severity(Enum):
+    """How serious an issue is. The value is the issue list it's reported in."""
+    ERROR = 'errors'
+    WARNING = 'warnings'
+    INFO = 'infos'
 
 
-class ValidationWarning(Enum):
-    WARNING = auto()
-    HYPHENATION = (auto(),
-                   "Hyphenation is not supported.",
-                   "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
-                   "Hyphenation", ValidationCategory.PAR_STYLE)
-    OVERRIDE = (auto(),
-                "Overrides are not supported.",
-                "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-                "Override", ValidationCategory.TEXT_BOX)
-    UNUSED_IMAGE = (auto(),
-                    "Image(s) in package are unused making the package larger in size.",
-                    "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
-                    "Unused Image", ValidationCategory.IMAGES)
-    DOCUMENT_BLEED = (auto(),
-                      "InDesign defined bleed is applied.",
-                      "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
-                      "Document Bleed", ValidationCategory.GENERAL)
-    COMPOSER = (auto(),
-                "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
-                "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
-                "Composer", ValidationCategory.PAR_STYLE)
-    BASELINE_SHIFT = (auto(),
-                      "Baseline shift is not supported. Shifted text sits on the baseline in Frontify.",
-                      "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
-                      "Baseline Shift", ValidationCategory.CHAR_STYLE)
-
-    def __new__(cls, _, message=None, help_article=None, label=None, category=ValidationCategory.GENERAL):
-        member = object.__new__(cls)
-        member.message = message
-        member.help_article = help_article
-        member.label = label
-        member.category = category
-        return member
+class Category(Enum):
+    """What an issue is about. The value is its section in the results JSON."""
+    PAR_STYLE = 'par_styles'
+    CHAR_STYLE = 'char_styles'
+    TEXT_BOX = 'text_boxes'
+    FONTS = 'fonts'
+    IMAGES = 'images'
+    GENERAL = 'general'
 
 
-class ValidationInfo(Enum):
-    EMPTY_TEXT_FRAME = (auto(),
-                        "Empty text frame found.",
-                        "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-                        "Empty Text Frames", ValidationCategory.TEXT_BOX)
-    LARGE_IMAGE = (auto(),
-                   "Image is large. Verify that this large of an image is needed.",
-                   "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
-                   "Large Image", ValidationCategory.IMAGES)
+@dataclass(frozen=True)
+class Classifier:
+    name: str
+    severity: Severity
+    category: Category
+    label: Optional[str]
+    message: Optional[str]
+    help_article: Optional[str] = None
+    is_check: bool = True
+    """False for package and parsing failures: they aren't listed among the checks a template passed."""
+    one_per_range: bool = False
+    """Reported once per text range (overrides): never merged with another issue at the same place, and the
+    results show the range's text."""
 
-    def __new__(cls, _, message=None, help_article=None, label=None, category=ValidationCategory.GENERAL):
-        member = object.__new__(cls)
-        member.message = message
-        member.help_article = help_article
-        member.label = label
-        member.category = category
-        return member
+    @property
+    def value(self) -> str:
+        """The name the results JSON and analytics use for it."""
+        return self.name
+
+    @property
+    def shows_text(self) -> bool:
+        """Whether its results entries carry the text they're about (styles, and per-range issues)."""
+        return self.category in (Category.PAR_STYLE, Category.CHAR_STYLE) or self.one_per_range
 
 
-# This ensures that the enum name is the same as its value
-for classifier in ValidationError:
-    classifier._value_ = classifier.name
+def _issue(category: Category, label: Optional[str], message: Optional[str], help_article: Optional[str] = None, *,
+           is_check: bool = True, one_per_range: bool = False) -> Classifier:
+    """One classifier. Its name and severity are filled in by @_severity from the class it's defined in."""
+    return Classifier('', Severity.ERROR, category, label, message, help_article, is_check, one_per_range)
 
-for classifier in ValidationWarning:
-    classifier._value_ = classifier.name
 
-for classifier in ValidationInfo:
-    classifier._value_ = classifier.name
+_ALL: List[Classifier] = []
 
-for classifier in ValidationCategory:
-    classifier._value_ = classifier.name
+
+def _severity(severity: Severity):
+    """Give every classifier in the class its attribute name and this severity, and register it."""
+    def decorate(cls):
+        for name, value in list(vars(cls).items()):
+            if isinstance(value, Classifier):
+                classifier = replace(value, name=name, severity=severity)
+                setattr(cls, name, classifier)
+                _ALL.append(classifier)
+        return cls
+    return decorate
+
+
+def all_classifiers() -> Iterator[Classifier]:
+    """Every classifier: errors, then warnings, then infos, each in the order defined below."""
+    return iter(_ALL)
+
+
+def find(name: str, severity: Optional[Severity] = None) -> Optional[Classifier]:
+    """The classifier with this name (and severity, if given), or None for a name that no longer exists."""
+    return next((c for c in _ALL if c.name == name and severity in (None, c.severity)), None)
+
+
+@_severity(Severity.ERROR)
+class ValidationError:
+    """Problems that break the template or clearly won't match in Frontify (shown as "Blockers")."""
+
+    # Package and parsing failures, not template checks.
+    ERROR = _issue(Category.GENERAL, 'Error', 'Error', is_check=False)
+    IDML = _issue(Category.GENERAL, 'IDML', 'IDML error', is_check=False)
+    ZIP = _issue(
+        Category.GENERAL,
+        None,
+        'ZIP file error',
+        'https://help.frontify.com/en/articles/5306557-what-input-formats-do-digital-and-print-templates-support',
+        is_check=False)
+
+    MASTERPAGE = _issue(Category.GENERAL, 'Masterpage', "Master Page can't be used.", article('h_4bef512504'))
+    PARAGRAPH_STYLE = _issue(
+        Category.TEXT_BOX, 'Paragraph Style', 'Text found missing paragraph styles.', article('h_68e2603775'))
+    PARAGRAPH_STYLE_TEXT_BOX = _issue(
+        Category.TEXT_BOX, 'Paragraph Style', 'No paragraph styles were used.', article('h_68e2603775'))
+    FONTS_INCLUDED = _issue(Category.FONTS, 'Fonts Included', 'Package is missing fonts.', article('h_a3094cd981'))
+    OTF_TTF_FONT = _issue(
+        Category.FONTS, 'OTF/TTF Font', 'Only OTF or TTF fonts are supported.', article('h_a3094cd981'))
+    VARIABLE_FONT = _issue(
+        Category.FONTS, 'Variable Font', 'Variable fonts are not supported', article('h_a3094cd981'))
+    IMAGE_INCLUDED = _issue(
+        Category.IMAGES, 'Images Included', 'Package missing image link.', article('h_eba8d9b8c1'))
+    EMBEDDED_IMAGE = _issue(
+        Category.IMAGES, 'Embedded Image', 'Embedded images are not supported.', article('h_889cff064d'))
+    IMAGE_TRANSFORMATION_IMAGE = _issue(
+        Category.IMAGES,
+        'Image Transformation (Image)',
+        'Image transformations are not supported.',
+        article('h_1205c11ca4'))
+    IMAGE_TRANSFORMATION_CONTAINER = _issue(
+        Category.IMAGES,
+        'Image Transformation (Container)',
+        'Image transformations are not supported.',
+        article('h_1205c11ca4'))
+    PAGE_ITEM_TRANSFORMATION = _issue(
+        Category.GENERAL,
+        'Page Item Transformation',
+        'Page item transformations (flip/skew) are not supported.',
+        article('h_1205c11ca4'))
+    TABLE = _issue(Category.TEXT_BOX, 'Table', 'Tables are not supported', article('h_b333040b53'))
+    PASTED_GRAPHICS = _issue(
+        Category.IMAGES, 'Pasted Graphics', 'Pasted graphics are not supported', article('h_889cff064d'))
+    AUTO_SIZE_TEXT_BOX = _issue(
+        Category.TEXT_BOX,
+        'Auto Sizing Text Box',
+        'Auto-size text boxes were not set up properly',
+        article('h_e69bd3114b'))
+    TEXT_COLUMNS = _issue(Category.TEXT_BOX, 'Text Column', 'Text columns are not supported', article('h_2ea0534af5'))
+    LINKED_TEXT_FRAME = _issue(
+        Category.TEXT_BOX,
+        'Linked Text Frame',
+        'Linked (threaded) text frames are not supported.',
+        article('h_befb8c0698'))
+    OBJECT_STYLE_TEXT = _issue(
+        Category.TEXT_BOX, 'Object Style', 'Object styles are not supported.', article('h_a92f4cebdf'))
+    OBJECT_STYLE_IMAGE = _issue(
+        Category.IMAGES, 'Object Style', 'Object styles are not supported.', article('h_a92f4cebdf'))
+    GRID_ALIGNMENT = _issue(
+        Category.PAR_STYLE, 'Grid Alignment', 'Grid alignment is not supported', article('h_f6aa8d5242'))
+    KERNING = _issue(Category.PAR_STYLE, 'Kerning', "Kerning must be 'Metrics'", article('h_270ad57d8d'))
+    KERNING_CHAR = _issue(Category.CHAR_STYLE, 'Kerning', "Kerning must be 'Metrics'", article('h_270ad57d8d'))
+    TEXT_WRAP = _issue(Category.TEXT_BOX, 'Text Wrap', 'Text Wrap is not supported.', article('h_0882abae12'))
+    FILL_TINT = _issue(
+        Category.PAR_STYLE,
+        'Color Fill Tint (Beta)',
+        'Fill Tint must be 100. (This may be inaccurate, testing currently)',
+        article('h_5cc6e214cf'))
+    FILL_TINT_CHAR = _issue(
+        Category.CHAR_STYLE,
+        'Color Fill Tint',
+        'Fill Tint must be 100. Frontify shows text colours without their tint.',
+        article('h_5cc6e214cf'))
+    TEXT_WRAP_ITEM = _issue(
+        Category.GENERAL, 'Text Wrap (Object)', 'Text Wrap is not supported.', article('h_0882abae12'))
+    TEXT_POSITION = _issue(
+        Category.CHAR_STYLE,
+        'Superscript/Subscript',
+        'Superscript and subscript are not supported.',
+        article('h_85811f039b'))
+    ADOBE_FONT = _issue(
+        Category.FONTS,
+        'Adobe Font',
+        'Adobe Fonts are not supported. Use a desktop version of the font (OTF or TTF) instead.',
+        article('h_a3094cd981'))
+
+
+@_severity(Severity.WARNING)
+class ValidationWarning:
+    """Things that may look different in Frontify."""
+
+    # Package and parsing failures, not template checks.
+    WARNING = _issue(Category.GENERAL, None, None, is_check=False)
+
+    HYPHENATION = _issue(Category.PAR_STYLE, 'Hyphenation', 'Hyphenation is not supported.', article('h_55fa4b04cf'))
+    OVERRIDE = _issue(
+        Category.TEXT_BOX, 'Override', 'Overrides are not supported.', article('h_68e2603775'), one_per_range=True)
+    UNUSED_IMAGE = _issue(
+        Category.IMAGES,
+        'Unused Image',
+        'Image(s) in package are unused making the package larger in size.',
+        article('h_66fcd1c2c2'))
+    DOCUMENT_BLEED = _issue(
+        Category.GENERAL,
+        'Document Bleed',
+        'InDesign defined bleed is applied.',
+        'https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based')
+    COMPOSER = _issue(
+        Category.PAR_STYLE,
+        'Composer',
+        "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+        article('h_bfdd4bceb0'))
+    BASELINE_SHIFT = _issue(
+        Category.CHAR_STYLE,
+        'Baseline Shift',
+        'Baseline shift is not supported. Shifted text sits on the baseline in Frontify.',
+        article('h_85811f039b'))
+
+
+@_severity(Severity.INFO)
+class ValidationInfo:
+    """Things worth a check."""
+
+    EMPTY_TEXT_FRAME = _issue(
+        Category.TEXT_BOX, 'Empty Text Frames', 'Empty text frame found.', article('h_68e2603775'))
+    LARGE_IMAGE = _issue(
+        Category.IMAGES,
+        'Large Image',
+        'Image is large. Verify that this large of an image is needed.',
+        article('h_66fcd1c2c2'))

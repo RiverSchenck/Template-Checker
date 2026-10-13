@@ -12,7 +12,7 @@ import re
 from typing import Dict, Any, Optional
 from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
-from src.results.classifiers import ValidationError, ValidationWarning, ValidationInfo
+from src.results.classifiers import Severity, find
 
 logger = logging.getLogger(__name__)
 
@@ -158,21 +158,15 @@ def analytics_period(
 def describe_issue(validation_type: str, severity: Optional[str] = None) -> Dict[str, Optional[str]]:
     """Display label, message and help article for a validation type, from the checker's own classifiers.
 
-    A few types exist as both an error and a warning with different messages; severity picks the right one.
+    severity ('error', 'warning' or 'info') picks the classifier when given; a type that no longer exists (e.g. a
+    retired check in older runs) gets a label made from its name.
     """
-    enums = (ValidationError, ValidationWarning, ValidationInfo)
-    preferred = {'error': ValidationError, 'warning': ValidationWarning, 'info': ValidationInfo}.get(severity)
-    if preferred:
-        enums = (preferred,) + tuple(e for e in enums if e is not preferred)
-    for enum in enums:
-        classifier = enum.__members__.get(validation_type)
-        if classifier is not None:
-            return {
-                'label': classifier.label or validation_type.replace('_', ' ').title(),
-                'message': classifier.message,
-                'help_article': classifier.help_article,
-            }
-    return {'label': validation_type.replace('_', ' ').title(), 'message': None, 'help_article': None}
+    wanted = {'error': Severity.ERROR, 'warning': Severity.WARNING, 'info': Severity.INFO}.get(severity)
+    classifier = find(validation_type, wanted) or find(validation_type)
+    label = validation_type.replace('_', ' ').title()
+    if classifier is None:
+        return {'label': label, 'message': None, 'help_article': None}
+    return {'label': classifier.label or label, 'message': classifier.message, 'help_article': classifier.help_article}
 
 
 def _rpc(name: str, params: Dict[str, Any]) -> Dict[str, Any]:

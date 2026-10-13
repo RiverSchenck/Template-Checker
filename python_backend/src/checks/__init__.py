@@ -1,8 +1,10 @@
 """Every template check, in the order they run.
 
 To add a check: write `def my_check(doc: ParsedDocument, results: ValidationResult) -> None` in the
-module for its theme, add a States member for it, and add it to CHECKS. The state name is stored in
-analytics as the step a run stopped at (runs.stopped_at_stage), so never rename an existing one.
+module for its theme, add a States member for it, and add it to CHECKS. The issues it reports are
+classifiers in src/results/classifiers.py (adding one is a single line there plus its guide; see
+docs/validation-classifier-reference.md). The state name is stored in analytics as the step a run
+stopped at (runs.stopped_at_stage), so never rename an existing one.
 """
 from dataclasses import dataclass
 from typing import Callable

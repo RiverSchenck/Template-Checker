@@ -25,8 +25,8 @@ def images_included_check(doc: ParsedDocument, results: ValidationResult) -> Non
 
     for image in images:
         if image.image_size_bytes == 0:
-            results.add_custom_error(
-                f"Image '{image.get_image_name()}' has zero size. Likely a corrupted image.", ValidationError.ERROR)
+            report(results, ValidationError.ERROR,
+                   f"Image '{image.get_image_name()}' has zero size. Likely a corrupted image.")
 
     for missing_image in sorted(set(link_name_to_id) - image_names):
         link_id = link_name_to_id[missing_image]
