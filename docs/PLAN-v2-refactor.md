@@ -434,6 +434,14 @@ v2 checks and subjects directly, `results/layout.py` (results_v2 reads the Docum
 issues as (check, subject name, page, key facts). Unknown packages fail. Delete `format_counter_diff` copies and
 `checker_setup.py`. Every deleted test is covered by goldens + table + PackageBuilder tests (show the mapping).
 Also (moved from PR 5.5): `testing/fixtures/checker_run.py` reads v2, then the v1 leftovers listed under PR 5.5 go.
+*Done (2026-10-13):* `testing/packages/expected.py` has two tables: `CHECKS` (per package, the issues of the checks it
+exists to test, one entry each as 'subject @ page (key fact)') and `ALL_ISSUES` (e2e packages: issues per check on a
+full run). Built from today's output with the old tests' comments; a script compared all 187 old expectations, mapped
+to v2 keys, with the table (0 differ). `checker_run.py` runs the pipeline and reads v2; the v1 serializer is gone.
+Also in this PR (River): the report's "checked" line in the singular for one, finished plans in `docs/archive/`, the
+analytics sample data worded from the catalogue. **Split off to PR 6.1b (River):** the app calls the pipeline (and
+`FrontifyChecker` goes, with the tests that fake it); checks report v2 checks and subjects, so `results/layout.py`,
+`Category`, the v1 parts of `classifiers.py` and `catalogue.V1_KEYS` go and issues merge on the subject.
 
 **PR 6.2 Corpus dedupe (S).** Move unique zips to `testing/packages/` (77 duplicates removed, ~400 MB working tree,
 ~40% golden time); goldens keyed by package; update references. Golden diff: file moves only.
