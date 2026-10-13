@@ -214,8 +214,9 @@ V1_KEYS: Dict[str, Tuple[str, str]] = {
 }
 
 
-# Until results v2 merges them (plan PR 5.2), the split v1 keys of a merged check are separate problems in the
-# summary; they keep their own titles so a summary never lists the same title twice (River, 2026-10-13).
+# The web app (results v1 until plan PR 5.3) and analytics (v1 keys until PR 5.4) still list the split v1 keys of a
+# merged check as separate problems; they keep their own titles there so nothing lists the same title twice
+# (River, 2026-10-13). The customer summary reads v2, where they're one check.
 _V1_TITLES = {
     'PARAGRAPH_STYLE_TEXT_BOX': 'Text frame has no paragraph style',
     'OBJECT_STYLE_TEXT': 'Object style on a text frame',
@@ -229,6 +230,20 @@ def for_v1(name: str) -> Optional[Tuple[Entry, str]]:
     """(entry, subject kind) for a v1 classifier name, or None for one that no longer exists."""
     key, kind = V1_KEYS.get(name, (None, None))
     return (BY_KEY[key], kind) if key else None
+
+
+def v1_names(key: str) -> Tuple[str, ...]:
+    """The v1 classifiers a check was split into (or its own name), for what still speaks v1."""
+    return tuple(name for name, (entry_key, _) in V1_KEYS.items() if entry_key == key)
+
+
+def v1_name(key: str, kind: str, facts: Optional[dict] = None) -> str:
+    """The v1 classifier a v2 issue was reported as: its check and the kind of thing it's about tell them apart,
+    and for PARAGRAPH_STYLE (both about text frames) whether the whole frame is unstyled. A key the catalogue
+    doesn't know is its own name."""
+    if key == 'PARAGRAPH_STYLE':
+        return 'PARAGRAPH_STYLE_TEXT_BOX' if (facts or {}).get('whole_frame') else 'PARAGRAPH_STYLE'
+    return next((name for name, found in V1_KEYS.items() if found == (key, kind)), key)
 
 
 def v1_title(name: str) -> str:

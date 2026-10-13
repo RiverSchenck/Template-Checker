@@ -1,27 +1,103 @@
 {
   "results": {
+    "schema_version": 2,
     "template_name": "Unicode",
-    "checks": [
+    "issues": [
       {
-        "key": "KERNING",
-        "severity": "errors",
-        "label": "Kerning",
-        "message": "Kerning must be 'Metrics'",
-        "help_article": "https://help/kerning?a=1&b=\"2\"",
-        "category": "par_styles"
+        "check": "OVERRIDE",
+        "severity": "warning",
+        "subject": {
+          "kind": "text_frame",
+          "id": "f1",
+          "name": null
+        },
+        "location": {
+          "page_id": "p1",
+          "page_name": "1",
+          "spread_id": "s1",
+          "item_id": "f1",
+          "bounds": {
+            "page_id": "p1",
+            "kind": "TextFrame",
+            "x": 10,
+            "y": 10,
+            "width": 100,
+            "height": 20
+          }
+        },
+        "facts": {
+          "overrides": {
+            "PointSize": "12"
+          }
+        },
+        "text": null,
+        "detail": null
       },
       {
-        "key": "OVERRIDE",
-        "severity": "warnings",
-        "label": "Override",
-        "message": "Overrides",
-        "help_article": null,
-        "category": "text_boxes"
+        "check": "OVERRIDE",
+        "severity": "warning",
+        "subject": {
+          "kind": "text_frame",
+          "id": "f2",
+          "name": null
+        },
+        "location": {
+          "page_id": "p1",
+          "page_name": "1",
+          "spread_id": "s1",
+          "item_id": "f2",
+          "bounds": {
+            "page_id": "p1",
+            "kind": "TextFrame",
+            "x": 10,
+            "y": 20,
+            "width": 100,
+            "height": 20
+          }
+        },
+        "facts": {
+          "overrides": {
+            "AppliedFont": "A",
+            "FontStyle": "B",
+            "Tracking": "1",
+            "Leading": "2",
+            "FillColor": "c"
+          }
+        },
+        "text": null,
+        "detail": null
+      },
+      {
+        "check": "OVERRIDE",
+        "severity": "warning",
+        "subject": {
+          "kind": "text_frame",
+          "id": "f3",
+          "name": null
+        },
+        "location": {
+          "page_id": "p1",
+          "page_name": "1",
+          "spread_id": "s1",
+          "item_id": "f3",
+          "bounds": {
+            "page_id": "p1",
+            "kind": "TextFrame",
+            "x": 10,
+            "y": 30,
+            "width": 100,
+            "height": 20
+          }
+        },
+        "facts": null,
+        "text": null,
+        "detail": null
       }
     ],
-    "page_layouts": [
+    "subjects_checked": {},
+    "pages": [
       {
-        "page_id": "p1",
+        "id": "p1",
         "name": "1",
         "index": 1,
         "spread_id": "s1",
@@ -32,103 +108,38 @@
       }
     ],
     "text_boxes": {
-      "details": {
-        "s1": {
-          "errors": [],
-          "warnings": [
-            {
-              "validationClassifier": "OVERRIDE",
-              "context": "",
-              "identifier": "s1",
-              "page_id": "p1",
-              "page_name": "1",
-              "spread_id": "s1",
-              "data_id": "f1",
-              "bounds": {
-                "page_id": "p1",
-                "kind": "TextFrame",
-                "x": 10,
-                "y": 10,
-                "width": 100,
-                "height": 20
-              },
-              "context_details": {
-                "overrides": {
-                  "PointSize": "12"
-                }
-              }
-            }
-          ],
-          "infos": []
-        },
-        "s2": {
-          "errors": [],
-          "warnings": [
-            {
-              "validationClassifier": "OVERRIDE",
-              "context": "",
-              "identifier": "s2",
-              "page_id": "p1",
-              "page_name": "1",
-              "spread_id": "s1",
-              "data_id": "f2",
-              "bounds": {
-                "page_id": "p1",
-                "kind": "TextFrame",
-                "x": 10,
-                "y": 20,
-                "width": 100,
-                "height": 20
-              },
-              "context_details": {
-                "overrides": {
-                  "AppliedFont": "A",
-                  "FontStyle": "B",
-                  "Tracking": "1",
-                  "Leading": "2",
-                  "FillColor": "c"
-                }
-              }
-            }
-          ],
-          "infos": []
-        },
-        "s3": {
-          "errors": [],
-          "warnings": [
-            {
-              "validationClassifier": "OVERRIDE",
-              "context": "",
-              "identifier": "s3",
-              "page_id": "p1",
-              "page_name": "1",
-              "spread_id": "s1",
-              "data_id": "f3",
-              "bounds": {
-                "page_id": "p1",
-                "kind": "TextFrame",
-                "x": 10,
-                "y": 30,
-                "width": 100,
-                "height": 20
-              }
-            }
-          ],
-          "infos": []
-        }
+      "f1": {
+        "content": "Sale 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 ends soon",
+        "page_id": null
       },
-      "total_count": 0
-    },
-    "text_box_data": {
-      "s1": {
-        "content": "Sale 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 ends soon"
+      "f2": {
+        "content": " ﻿  Hello world　  ",
+        "page_id": null
       },
-      "s2": {
-        "content": " ﻿  Hello world　  "
-      },
-      "s3": {
-        "content": "﻿ "
+      "f3": {
+        "content": "﻿ ",
+        "page_id": null
       }
-    }
+    },
+    "checks": [
+      {
+        "key": "OVERRIDE",
+        "severity": "warning",
+        "subject_kinds": [
+          "text_frame"
+        ],
+        "title": "Text formatted outside its paragraph style",
+        "why": "Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.",
+        "fix": {
+          "text_frame": [
+            "Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.",
+            "To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.",
+            "To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words."
+          ]
+        },
+        "help_article": null,
+        "is_check": true
+      }
+    ]
   }
 }

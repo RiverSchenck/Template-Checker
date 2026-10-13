@@ -1,27 +1,169 @@
 {
   "results": {
+    "schema_version": 2,
     "template_name": "Café <Menu> & \"Specials\".zip",
-    "checks": [
+    "issues": [
       {
-        "key": "KERNING",
-        "severity": "errors",
-        "label": "Kerning",
-        "message": "Kerning must be 'Metrics'",
-        "help_article": "https://help/kerning?a=1&b=\"2\"",
-        "category": "par_styles"
+        "check": "KERNING",
+        "severity": "error",
+        "subject": {
+          "kind": "paragraph_style",
+          "id": "ParagraphStyle/Zeta",
+          "name": "Zeta"
+        },
+        "location": {
+          "page_id": "p1",
+          "page_name": "1",
+          "spread_id": "s1",
+          "item_id": "f1",
+          "bounds": {
+            "page_id": "p1",
+            "kind": "TextFrame",
+            "x": 10,
+            "y": 10,
+            "width": 100,
+            "height": 20
+          }
+        },
+        "facts": null,
+        "text": null,
+        "detail": null
       },
       {
-        "key": "OVERRIDE",
-        "severity": "warnings",
-        "label": "Override",
-        "message": "Overrides",
-        "help_article": null,
-        "category": "text_boxes"
+        "check": "KERNING",
+        "severity": "error",
+        "subject": {
+          "kind": "paragraph_style",
+          "id": "ParagraphStyle/10",
+          "name": "10"
+        },
+        "location": {
+          "page_id": "p1",
+          "page_name": "1",
+          "spread_id": "s1",
+          "item_id": "f2",
+          "bounds": {
+            "page_id": "p2",
+            "kind": "TextFrame",
+            "x": 10,
+            "y": 10,
+            "width": 100,
+            "height": 20
+          }
+        },
+        "facts": null,
+        "text": null,
+        "detail": null
+      },
+      {
+        "check": "KERNING",
+        "severity": "error",
+        "subject": {
+          "kind": "paragraph_style",
+          "id": "ParagraphStyle/2",
+          "name": "2"
+        },
+        "location": {
+          "page_id": "p1",
+          "page_name": "1",
+          "spread_id": "s1",
+          "item_id": "f3",
+          "bounds": {
+            "page_id": "p1",
+            "kind": "TextFrame",
+            "x": 10,
+            "y": 30,
+            "width": 100,
+            "height": 20
+          }
+        },
+        "facts": null,
+        "text": null,
+        "detail": null
+      },
+      {
+        "check": "KERNING",
+        "severity": "error",
+        "subject": {
+          "kind": "paragraph_style",
+          "id": "ParagraphStyle/élan",
+          "name": "élan"
+        },
+        "location": {
+          "page_id": "p1",
+          "page_name": "1",
+          "spread_id": "s1",
+          "item_id": "f4",
+          "bounds": {
+            "page_id": "p1",
+            "kind": "TextFrame",
+            "x": 10,
+            "y": 50,
+            "width": 100,
+            "height": 20
+          }
+        },
+        "facts": null,
+        "text": null,
+        "detail": null
+      },
+      {
+        "check": "KERNING",
+        "severity": "error",
+        "subject": {
+          "kind": "paragraph_style",
+          "id": "ParagraphStyle/Alpha",
+          "name": "Alpha"
+        },
+        "location": {
+          "page_id": "p1",
+          "page_name": "1",
+          "spread_id": "s1",
+          "item_id": "f5",
+          "bounds": {
+            "page_id": "p1",
+            "kind": "TextFrame",
+            "x": 10,
+            "y": 70,
+            "width": 100,
+            "height": 20
+          }
+        },
+        "facts": null,
+        "text": null,
+        "detail": null
+      },
+      {
+        "check": "KERNING",
+        "severity": "error",
+        "subject": {
+          "kind": "paragraph_style",
+          "id": "ParagraphStyle/01",
+          "name": "01"
+        },
+        "location": {
+          "page_id": "p1",
+          "page_name": "1",
+          "spread_id": "s1",
+          "item_id": "f6",
+          "bounds": {
+            "page_id": "p1",
+            "kind": "TextFrame",
+            "x": 10,
+            "y": 90,
+            "width": 100,
+            "height": 20
+          }
+        },
+        "facts": null,
+        "text": null,
+        "detail": null
       }
     ],
-    "page_layouts": [
+    "subjects_checked": {},
+    "pages": [
       {
-        "page_id": "p1",
+        "id": "p1",
         "name": "1",
         "index": 1,
         "spread_id": "s1",
@@ -31,7 +173,7 @@
         "frames": []
       },
       {
-        "page_id": "p2",
+        "id": "p2",
         "name": "2",
         "index": 2,
         "spread_id": "s1",
@@ -41,148 +183,24 @@
         "frames": []
       }
     ],
-    "par_styles": {
-      "details": {
-        "Zeta": {
-          "errors": [
-            {
-              "validationClassifier": "KERNING",
-              "context": "",
-              "identifier": "Zeta",
-              "page_id": "p1",
-              "page_name": "1",
-              "spread_id": "s1",
-              "data_id": "f1",
-              "bounds": {
-                "page_id": "p1",
-                "kind": "TextFrame",
-                "x": 10,
-                "y": 10,
-                "width": 100,
-                "height": 20
-              }
-            }
-          ],
-          "warnings": [],
-          "infos": []
+    "text_boxes": {},
+    "checks": [
+      {
+        "key": "KERNING",
+        "severity": "error",
+        "subject_kinds": [
+          "paragraph_style"
+        ],
+        "title": "Kerning isn’t set to Metrics",
+        "why": "Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited.",
+        "fix": {
+          "paragraph_style": [
+            "In the paragraph style, go to Basic Character Formats and set Kerning to Metrics."
+          ]
         },
-        "10": {
-          "errors": [
-            {
-              "validationClassifier": "KERNING",
-              "context": "",
-              "identifier": "10",
-              "page_id": "p1",
-              "page_name": "1",
-              "spread_id": "s1",
-              "data_id": "f2",
-              "bounds": {
-                "page_id": "p2",
-                "kind": "TextFrame",
-                "x": 10,
-                "y": 10,
-                "width": 100,
-                "height": 20
-              }
-            }
-          ],
-          "warnings": [],
-          "infos": []
-        },
-        "2": {
-          "errors": [
-            {
-              "validationClassifier": "KERNING",
-              "context": "",
-              "identifier": "2",
-              "page_id": "p1",
-              "page_name": "1",
-              "spread_id": "s1",
-              "data_id": "f3",
-              "bounds": {
-                "page_id": "p1",
-                "kind": "TextFrame",
-                "x": 10,
-                "y": 30,
-                "width": 100,
-                "height": 20
-              }
-            }
-          ],
-          "warnings": [],
-          "infos": []
-        },
-        "élan": {
-          "errors": [
-            {
-              "validationClassifier": "KERNING",
-              "context": "",
-              "identifier": "élan",
-              "page_id": "p1",
-              "page_name": "1",
-              "spread_id": "s1",
-              "data_id": "f4",
-              "bounds": {
-                "page_id": "p1",
-                "kind": "TextFrame",
-                "x": 10,
-                "y": 50,
-                "width": 100,
-                "height": 20
-              }
-            }
-          ],
-          "warnings": [],
-          "infos": []
-        },
-        "Alpha": {
-          "errors": [
-            {
-              "validationClassifier": "KERNING",
-              "context": "",
-              "identifier": "Alpha",
-              "page_id": "p1",
-              "page_name": "1",
-              "spread_id": "s1",
-              "data_id": "f5",
-              "bounds": {
-                "page_id": "p1",
-                "kind": "TextFrame",
-                "x": 10,
-                "y": 70,
-                "width": 100,
-                "height": 20
-              }
-            }
-          ],
-          "warnings": [],
-          "infos": []
-        },
-        "01": {
-          "errors": [
-            {
-              "validationClassifier": "KERNING",
-              "context": "",
-              "identifier": "01",
-              "page_id": "p1",
-              "page_name": "1",
-              "spread_id": "s1",
-              "data_id": "f6",
-              "bounds": {
-                "page_id": "p1",
-                "kind": "TextFrame",
-                "x": 10,
-                "y": 90,
-                "width": 100,
-                "height": 20
-              }
-            }
-          ],
-          "warnings": [],
-          "infos": []
-        }
-      },
-      "total_count": 0
-    }
+        "help_article": "https://help/kerning?a=1&b=\"2\"",
+        "is_check": true
+      }
+    ]
   }
 }

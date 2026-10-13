@@ -950,7 +950,7 @@ def create_check():
     return _run_and_respond(lambda outcome, _: jsonify({
         'run_id': outcome.run_id,
         'status': 'completed' if outcome.completed else 'rejected',
-        'results': outcome.results,
+        'results': outcome.response_results,
     }), previews=request.args.get('previews') == '1')
 
 
@@ -960,8 +960,8 @@ def create_check():
 @limit_checks
 def run_checker():
     """Deprecated: POST /v1/checks. Same check, results wrapped as {type: "data", content: {results}}."""
-    return _run_and_respond(lambda outcome, _: jsonify({'type': 'data', 'content': {'results': outcome.results}}),
-                            previews=True)
+    return _run_and_respond(
+        lambda outcome, _: jsonify({'type': 'data', 'content': {'results': outcome.response_results}}), previews=True)
 
 
 @main.route('/v1/checks/summary', methods=['POST'])

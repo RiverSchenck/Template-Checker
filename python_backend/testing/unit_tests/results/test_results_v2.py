@@ -8,6 +8,7 @@ from src.results import catalogue
 from src.results.models import SCHEMA_PATH, Results, schema_json
 from src.results.serialize import results_v2
 from testing.fixtures.idml_builder import PackageBuilder
+from testing.golden.golden import load, packages
 
 FLIP = '-1 0 0 1 0 -396'
 
@@ -84,3 +85,13 @@ def test_every_check_is_listed_with_its_steps_per_subject_kind(tmp_path):
 def test_committed_schema_is_up_to_date():
     with open(SCHEMA_PATH, encoding='utf-8') as f:
         assert f.read() == schema_json(), 'run: python -m src.results.models'
+
+
+def test_every_golden_validates():
+    for package in packages():
+        results = load(package)['results']
+        Results.model_validate(results)
+        for issue in results['issues']:
+            entry = catalogue.BY_KEY[issue['check']]
+            assert issue['subject']['kind'] in entry.subject_kinds, (package, issue)
+            assert (issue['facts'] is None) or entry.facts.model_validate(issue['facts']), (package, issue)

@@ -21,7 +21,7 @@ BLANK = os.path.join(TESTING_DIR, 'end_to_end_tests', 'pass_data', 'Blank.zip') 
 
 def without_previews(results: dict) -> dict:
     results = copy.deepcopy(results)
-    for page in results.get('page_layouts', []):
+    for page in results.get('pages', []):
         page['preview'] = None
     return results
 
@@ -32,10 +32,10 @@ def test_completed_run_with_and_without_previews():
     with run_workspace() as workspace:
         plain = run(BLANK, workspace, previews=False)
     assert with_previews.completed and plain.completed and plain.stage == States.RESULTS
-    assert [page['preview'] is not None for page in with_previews.json()['page_layouts']] == [True]
-    assert [page['preview'] for page in plain.json()['page_layouts']] == [None]
+    assert [page['preview'] is not None for page in with_previews.json()['pages']] == [True]
+    assert [page['preview'] for page in plain.json()['pages']] == [None]
     # Everything else is the same.
-    assert without_previews(with_previews.json()) == {**plain.json(), 'output_folder': with_previews.json()['output_folder']}
+    assert without_previews(with_previews.json()) == plain.json()
 
 
 def test_rejected_run_says_where_it_stopped(tmp_path):

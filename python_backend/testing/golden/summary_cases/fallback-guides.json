@@ -1,48 +1,65 @@
 {
   "results": {
+    "schema_version": 2,
     "template_name": "",
-    "checks": [],
-    "validation_classifiers": {
-      "ZIP": {
-        "label": "ZIP file error",
-        "message": "Bad zip. Try again.",
-        "help_article": "https://help/zip"
+    "issues": [
+      {
+        "check": "ZIP",
+        "severity": "error",
+        "subject": {
+          "kind": "document",
+          "id": null,
+          "name": null
+        },
+        "location": {
+          "page_id": null,
+          "page_name": null,
+          "spread_id": "s1",
+          "item_id": null,
+          "bounds": null
+        },
+        "facts": null,
+        "text": null,
+        "detail": "The file is not a valid ZIP archive."
       },
-      "NEW_CHECK": {
-        "label": null,
-        "message": null,
-        "help_article": null
+      {
+        "check": "NEW_CHECK",
+        "severity": "info",
+        "subject": {
+          "kind": "document",
+          "id": null,
+          "name": null
+        },
+        "location": {
+          "page_id": null,
+          "page_name": null,
+          "spread_id": "s1",
+          "item_id": null,
+          "bounds": null
+        },
+        "facts": null,
+        "text": null,
+        "detail": null
       }
-    },
-    "general": {
-      "details": {
-        "null": {
-          "errors": [
-            {
-              "validationClassifier": "ZIP",
-              "context": "The file is not a valid ZIP archive.",
-              "identifier": "null",
-              "page_id": "",
-              "page_name": "",
-              "spread_id": "s1",
-              "data_id": "null"
-            }
-          ],
-          "warnings": [],
-          "infos": [
-            {
-              "validationClassifier": "NEW_CHECK",
-              "context": "",
-              "identifier": "null",
-              "page_id": "",
-              "page_name": "",
-              "spread_id": "s1",
-              "data_id": "null"
-            }
-          ]
-        }
-      },
-      "total_count": 0
-    }
+    ],
+    "subjects_checked": {},
+    "pages": [],
+    "text_boxes": {},
+    "checks": [
+      {
+        "key": "ZIP",
+        "severity": "error",
+        "subject_kinds": [
+          "document"
+        ],
+        "title": "ZIP file error",
+        "why": "ZIP file error",
+        "fix": {
+          "document": []
+        },
+        "help_article": "https://help/zip",
+        "is_check": false
+      }
+    ]
   }
 }

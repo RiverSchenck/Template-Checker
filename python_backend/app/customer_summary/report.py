@@ -1,13 +1,30 @@
-"""Groups checker results into problems: one per check, each listing what to fix and where."""
+"""Groups checker results (v2) into problems: one per check, each listing what to fix and where."""
 import math
 from dataclasses import dataclass, field
-from typing import Any, Iterable, Optional
+from typing import Any, Iterable, Literal, Optional
 
-from .check_guides import CheckGuide, SubjectKind, get_check_guide
+from src.results import catalogue
+from src.results.serialize import check_json
 
 SEVERITIES = ('errors', 'warnings', 'infos')
-CATEGORY_KEYS = ('par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general')
-_TEXT_CATEGORIES = ('text_boxes', 'par_styles', 'char_styles')
+# Severity in results v2 -> the list name the summary (and the web app's check guides) group by.
+SEVERITY_LIST = {'error': 'errors', 'warning': 'warnings', 'info': 'infos'}
+
+SubjectKind = Literal['paragraph-style', 'character-style', 'font', 'image', 'frame', 'document']
+
+# Subject kinds (v2) -> how the summary groups a problem's places.
+_SUBJECT = {'paragraph_style': 'paragraph-style', 'character_style': 'character-style', 'font': 'font',
+            'image': 'image', 'image_frame': 'image', 'text_frame': 'frame', 'page_item': 'frame',
+            'document': 'document'}
+_TEXT_KINDS = ('text_frame', 'paragraph_style', 'character_style')
+_IMAGE_KINDS = ('image', 'image_frame')
+
+# When a problem's places are of several kinds whose fix differs, each kind's steps start with what they're for.
+FIX_LEADS = {'text_frame': 'Text frames', 'image': 'Images', 'image_frame': 'Image frames',
+             'page_item': 'Other items', 'paragraph_style': 'Paragraph styles',
+             'character_style': 'Character styles', 'font': 'Fonts', 'document': 'Document'}
+# An object style is applied to the image's frame, so its steps are for image frames (River, 2026-10-13).
+_FIX_LEAD_OF = {('OBJECT_STYLE', 'image'): 'Image frames'}
 
 SUBJECT_LABELS: dict[str, str] = {
     'paragraph-style': 'Paragraph style',
@@ -19,11 +36,20 @@ SUBJECT_LABELS: dict[str, str] = {
 }
 
 
+@dataclass(frozen=True)
+class Guide:
+    title: str
+    """Short plain-language name of the problem."""
+    why: str
+    """What goes wrong in Frontify, in a sentence or two."""
+    fix: tuple[str, ...]
+    """How the template author fixes it in InDesign."""
+
+
 @dataclass
 class Place:
     """One occurrence of a problem: usually a frame on a page."""
-    item: dict
-    category: str
+    issue: dict
     bounds: Optional[dict]
     page_name: Optional[str]
     frame_text: Optional[str]
@@ -48,7 +74,8 @@ class Problem:
     id: str
     key: str
     severity: str
-    guide: CheckGuide
+    """errors, warnings or infos"""
+    guide: Guide
     help_article: Optional[str]
     subjects: list[Subject] = field(default_factory=list)
     place_count: int = 0
@@ -80,108 +107,111 @@ def page_number(name: Any) -> float:
         return math.nan
 
 
-def _is_named(identifier: Any) -> bool:
-    return bool(identifier) and identifier != 'null'
-
-
-def _frame_label(bounds: Optional[dict], category: str) -> str:
+def _frame_label(bounds: Optional[dict], subject_kind: str) -> str:
     kind = (bounds or {}).get('kind')
-    if kind == 'TextFrame' or category in _TEXT_CATEGORIES:
+    if kind == 'TextFrame' or subject_kind in _TEXT_KINDS:
         return 'Text frame'
     if kind == 'Group':
         return 'Group'
-    if category == 'images':
+    if subject_kind in _IMAGE_KINDS:
         return 'Image frame'
     if kind == 'GraphicLine':
         return 'Line'
     return 'Frame'
 
 
-def _frame_text(item: dict, result: dict) -> Optional[str]:
-    story_id = (item.get('identifier') or '').split('_par_')[0]
-    story = (result.get('text_box_data') or {}).get(story_id) or {}
-    text = collapse_whitespace(story.get('content'))
-    if text is not None:
-        return text
-    first = next((t for t in item.get('text_content') or [] if isinstance(t, str) and t.strip()), None)
+def _frame_text(issue: dict, result: dict) -> Optional[str]:
+    subject = issue['subject']
+    if subject['kind'] == 'text_frame':
+        box = (result.get('text_boxes') or {}).get(subject['id']) or {}
+        text = collapse_whitespace(box.get('content'))
+        if text is not None:
+            return text
+    first = next((t for t in issue.get('text') or [] if isinstance(t, str) and t.strip()), None)
     return collapse_whitespace(first)
 
 
 def _subject_for(kind: SubjectKind, place: Place) -> tuple[str, Optional[str], str]:
     """(key, name, label) of the thing to fix for this place."""
-    item = place.item
-    identifier = item.get('identifier')
-    if kind in ('paragraph-style', 'character-style', 'font', 'image') and _is_named(identifier):
-        return f'{kind}:{identifier}', identifier, f'{SUBJECT_LABELS[kind]} “{identifier}”'
+    subject, location = place.issue['subject'], place.issue['location']
+    name = subject.get('name')
+    if kind in ('paragraph-style', 'character-style', 'font', 'image') and name:
+        return f'{kind}:{name}', name, f'{SUBJECT_LABELS[kind]} “{name}”'
     if kind == 'document' and not place.bounds:
         return 'document', None, 'Document'
     # Frame-level: each frame is its own thing to fix.
-    data_id = item.get('data_id')
-    frame_id = data_id if _is_named(data_id) else f"{identifier}:{item.get('page_id')}"
+    frame_id = location.get('item_id') or f"{subject.get('id')}:{location.get('page_id')}"
     label = f'{place.frame_label} “{place.frame_text}”' if place.frame_text else place.frame_label
     return f'frame:{frame_id}', place.frame_text, label
 
 
-def _first_not_none(*values):
-    return next((v for v in values if v is not None), None)
+def _check(result: dict, key: str) -> dict:
+    """The check as the result lists it; from the catalogue for results that don't; else made from its key (a
+    check this checker no longer has)."""
+    listed = next((c for c in result.get('checks') or [] if c.get('key') == key), None)
+    if listed is not None:
+        return listed
+    entry = catalogue.BY_KEY.get(key)
+    return check_json(entry) if entry else {'title': key, 'why': '', 'fix': {}, 'subject_kinds': []}
+
+
+def _guide(check: dict, kinds: list[str]) -> Guide:
+    """The check's wording; when its places are of several kinds with different steps, each kind's steps, led by
+    what they're for."""
+    fix = check.get('fix') or {}
+    present = [kind for kind in check.get('subject_kinds') or [] if kind in kinds and kind in fix]
+    steps = [tuple(fix[kind]) for kind in present]
+    title, why = check.get('title') or '', check.get('why') or ''
+    if len(set(steps)) <= 1:
+        return Guide(title, why, steps[0] if steps else ())
+    return Guide(title, why, tuple(
+        f"{_FIX_LEAD_OF.get((check.get('key'), kind)) or FIX_LEADS[kind]}: {step}" if i == 0 else step
+        for kind, kind_steps in zip(present, steps) for i, step in enumerate(kind_steps)))
 
 
 def build_problems(result: dict) -> list[Problem]:
-    """The problems in a checker result, blockers first, then by how widespread they are."""
-    page_index: dict[Any, dict] = {page.get('page_id'): page for page in result.get('page_layouts') or []}
-    checks = result.get('checks') or []
-    classifiers = result.get('validation_classifiers') or {}
-
-    def check_for(severity: str, key: str) -> dict:
-        return next((c for c in checks if c.get('severity') == severity and c.get('key') == key), {})
+    """The problems in a checker result (results v2), blockers first, then by how widespread they are."""
+    page_index: dict[Any, dict] = {page.get('id'): page for page in result.get('pages') or []}
 
     problems: dict[str, Problem] = {}
-    for category in CATEGORY_KEYS:
-        details = (result.get(category) or {}).get('details') or {}
-        for entries in details.values():
-            for severity in SEVERITIES:
-                for item in entries.get(severity) or []:
-                    key = item.get('validationClassifier')
-                    problem_id = f'{severity}:{key}'
-                    problem = problems.get(problem_id)
-                    if problem is None:
-                        check = check_for(severity, key)
-                        classifier = classifiers.get(key) or {}
-                        problem = problems[problem_id] = Problem(
-                            id=problem_id,
-                            key=key,
-                            severity=severity,
-                            guide=get_check_guide(
-                                severity, key,
-                                label=_first_not_none(check.get('label'), classifier.get('label'), key),
-                                message=_first_not_none(check.get('message'), classifier.get('message'), ''),
-                            ),
-                            help_article=_first_not_none(check.get('help_article'), classifier.get('help_article')),
-                        )
+    kinds: dict[str, list[str]] = {}
+    for issue in result.get('issues') or []:
+        key, severity = issue.get('check'), SEVERITY_LIST[issue.get('severity')]
+        problem_id = f'{severity}:{key}'
+        problem = problems.get(problem_id)
+        if problem is None:
+            problem = problems[problem_id] = Problem(
+                id=problem_id, key=key, severity=severity, guide=Guide(key, '', ()),
+                help_article=_check(result, key).get('help_article'))
+        subject_kind = issue['subject']['kind']
+        kinds.setdefault(problem_id, []).append(subject_kind)
 
-                    raw_bounds = item.get('bounds')
-                    bounds = raw_bounds if raw_bounds and raw_bounds.get('page_id') in page_index else None
-                    page_id = bounds['page_id'] if bounds else item.get('page_id')
-                    page_name = ((page_index.get(page_id) or {}).get('name') or item.get('page_name') or None) if page_id else None
-                    place = Place(
-                        item=item,
-                        category=category,
-                        bounds=bounds,
-                        page_name=page_name,
-                        frame_text=_frame_text(item, result),
-                        frame_label=_frame_label(bounds, category),
-                        context=item.get('context') or '',
-                        context_details=item.get('context_details'),
-                    )
+        location = issue.get('location') or {}
+        raw_bounds = location.get('bounds')
+        bounds = raw_bounds if raw_bounds and raw_bounds.get('page_id') in page_index else None
+        page_id = bounds['page_id'] if bounds else location.get('page_id')
+        page_name = ((page_index.get(page_id) or {}).get('name') or location.get('page_name') or None) if page_id else None
+        place = Place(
+            issue=issue,
+            bounds=bounds,
+            page_name=page_name,
+            frame_text=_frame_text(issue, result),
+            frame_label=_frame_label(bounds, subject_kind),
+            context=issue.get('detail') or '',
+            context_details=issue.get('facts'),
+        )
 
-                    subject_key, name, label = _subject_for(problem.guide.subject, place)
-                    subject = next((s for s in problem.subjects if s.key == subject_key), None)
-                    if subject is None:
-                        kind = 'frame' if subject_key.startswith('frame:') else problem.guide.subject
-                        subject = Subject(key=subject_key, kind=kind, name=name, label=label)
-                        problem.subjects.append(subject)
-                    subject.places.append(place)
-                    problem.place_count += 1
+        kind = _SUBJECT.get(subject_kind, 'document')
+        subject_key, name, label = _subject_for(kind, place)
+        subject = next((s for s in problem.subjects if s.key == subject_key), None)
+        if subject is None:
+            subject = Subject(key=subject_key, kind='frame' if subject_key.startswith('frame:') else kind,
+                              name=name, label=label)
+            problem.subjects.append(subject)
+        subject.places.append(place)
+        problem.place_count += 1
+    for problem_id, problem in problems.items():
+        problem.guide = _guide(_check(result, problem.key), kinds[problem_id])
 
     pages_by_name = {}
     for page in page_index.values():
@@ -195,7 +225,7 @@ def build_problems(result: dict) -> list[Problem]:
         return number if math.isfinite(number) else math.inf
 
     def place_order(place: Place) -> float:
-        page_id = place.bounds['page_id'] if place.bounds else place.item.get('page_id')
+        page_id = place.bounds['page_id'] if place.bounds else (place.issue.get('location') or {}).get('page_id')
         index = (page_index.get(page_id) or {}).get('index')
         return index if index is not None else math.inf
 

@@ -51,9 +51,7 @@ def test_order_and_display_fields_dont_matter():
 def test_every_issue_in_every_golden_is_projected():
     for package in packages():
         data = load(package)['results']
-        items = sum(len(items) for cat in ('par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general')
-                    for by_severity in data[cat]['details'].values() for items in by_severity.values())
-        assert sum(project(data).values()) == items, package
+        assert sum(project(data).values()) == len(data['issues']), package
 
 
 def v2_issue(check, kind, subject_id, item_id=None, page_id=None, facts=None, detail=None, severity='error'):

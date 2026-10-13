@@ -128,9 +128,9 @@ def test_failed_run_row_has_outcome_and_no_validations(fake_supabase):
 
 def test_completed_run_row_defaults(fake_supabase, monkeypatch):
     monkeypatch.setenv('APP_VERSION', 'abc123')
-    results = {'fonts': {'details': {'Helvetica': {'errors': [
-        {'validationClassifier': 'FONTS_INCLUDED', 'identifier': 'Helvetica', 'context': 'Package is missing fonts.'},
-    ]}}}}
+    results = {'issues': [
+        _issue('FONTS_INCLUDED', 'error', 'font', 'Helvetica', detail='Package is missing fonts.'),
+    ]}
 
     assert analytics.log_analytics_to_supabase(
         template_name='Ok.zip', source_type='react-frontend', duration_ms=1, file_size_bytes=1, results_json=results,
@@ -146,30 +146,37 @@ def test_completed_run_row_defaults(fake_supabase, monkeypatch):
 
 
 def test_first_error_message():
-    results = {
-        'fonts': {'details': {'x': {'errors': [], 'warnings': [{'context': 'a warning'}]}}},
-        'general': {'details': {'null': {'errors': [{'context': 'No IDML file found'}]}}},
-    }
+    results = {'issues': [
+        _issue('FONTS_INCLUDED', 'warning', 'font', 'x', detail='a warning'),
+        _issue('IDML', 'error', 'document', None, detail='No IDML file found'),
+    ]}
     assert analytics.first_error_message(results) == 'No IDML file found'
     assert analytics.first_error_message({}) is None
 
 
-def _results_with(**lists):
-    return {'images': {'details': {'photo.jpg': {'errors': [], 'warnings': [], 'infos': [], **lists}}}}
+def _issue(check, severity, kind, name, detail=None):
+    """An issue in results v2."""
+    return {'check': check, 'severity': severity, 'subject': {'kind': kind, 'id': name, 'name': name},
+            'location': {'page_id': None, 'page_name': None, 'spread_id': None, 'item_id': None, 'bounds': None},
+            'facts': None, 'text': None, 'detail': detail}
+
+
+def _results_with(*issues):
+    return {'issues': list(issues)}
 
 
 def test_severity_comes_from_the_list_an_issue_is_in():
     """The classifier name alone doesn't give the severity: it is the list (errors/warnings/infos) the issue sits in."""
     results = _results_with(
-        errors=[{'validationClassifier': 'IMAGE_TRANSFORMATION_IMAGE', 'identifier': 'photo.jpg'}],
-        warnings=[{'validationClassifier': 'UNUSED_IMAGE', 'identifier': 'photo.jpg'}],
-        infos=[{'validationClassifier': 'LARGE_IMAGE', 'identifier': 'photo.jpg'}])
+        _issue('TRANSFORMATION', 'error', 'image', 'photo.jpg'),
+        _issue('UNUSED_IMAGE', 'warning', 'image', 'photo.jpg'),
+        _issue('LARGE_IMAGE', 'info', 'image', 'photo.jpg'))
     assert [(v['validation_type'], v['severity']) for v in analytics.extract_individual_validations(results)] == [
         ('IMAGE_TRANSFORMATION_IMAGE', 'error'), ('UNUSED_IMAGE', 'warning'), ('LARGE_IMAGE', 'info')]
     assert analytics.extract_validation_counts(results) == {'total_errors': 1, 'total_warnings': 1, 'total_infos': 1}
 
 
 def test_a_new_classifier_needs_no_analytics_change():
-    results = _results_with(warnings=[{'validationClassifier': 'SOME_NEW_WARNING', 'identifier': None}])
+    results = _results_with(_issue('SOME_NEW_WARNING', 'warning', 'image', None))
     assert analytics.extract_individual_validations(results) == [
         {'validation_type': 'SOME_NEW_WARNING', 'severity': 'warning', 'category': 'images', 'identifier': ''}]

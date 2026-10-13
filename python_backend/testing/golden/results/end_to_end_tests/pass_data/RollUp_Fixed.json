@@ -1,304 +1,571 @@
 {
  "results": {
-  "char_styles": {
-   "details": {},
-   "total_count": 1
-  },
   "checks": [
    {
-    "category": "general",
+    "fix": {
+     "document": []
+    },
+    "help_article": null,
+    "is_check": false,
+    "key": "ERROR",
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "Error",
+    "why": "Error"
+   },
+   {
+    "fix": {
+     "document": []
+    },
+    "help_article": null,
+    "is_check": false,
+    "key": "IDML",
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "IDML",
+    "why": "IDML error"
+   },
+   {
+    "fix": {
+     "document": []
+    },
+    "help_article": "https://help.frontify.com/en/articles/5306557-what-input-formats-do-digital-and-print-templates-support",
+    "is_check": false,
+    "key": "ZIP",
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "ZIP file error",
+    "why": "ZIP file error"
+   },
+   {
+    "fix": {
+     "document": []
+    },
+    "help_article": null,
+    "is_check": false,
+    "key": "WARNING",
+    "severity": "warning",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "WARNING",
+    "why": ""
+   },
+   {
+    "fix": {
+     "document": [
+      "In the Pages panel, open the master (parent) page and move its items onto the document pages, or delete them."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "is_check": true,
     "key": "MASTERPAGE",
-    "label": "Items on a master page",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "Items on a master page",
+    "why": "Frontify only reads items on the document pages, so anything on a master page (called a parent page in newer InDesign versions) is ignored or breaks the template."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style])."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "is_check": true,
     "key": "PARAGRAPH_STYLE",
-    "label": "Text without a paragraph style",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Text without a paragraph style",
+    "why": "Frontify uses paragraph styles to format text and decide what can be edited. Text set to [Basic Paragraph] or [No Paragraph Style] has nothing to follow."
    },
    {
-    "category": "text_boxes",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-    "key": "PARAGRAPH_STYLE_TEXT_BOX",
-    "label": "Text frame has no paragraph style",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "fonts",
+    "fix": {
+     "font": [
+      "Make sure the font is installed or activated on your computer.",
+      "Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\"."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "is_check": true,
     "key": "FONTS_INCLUDED",
-    "label": "Font missing from the package",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "font"
+    ],
+    "title": "Font missing from the package",
+    "why": "Frontify needs the font files to render the text, otherwise the template falls back to another font."
    },
    {
-    "category": "fonts",
+    "fix": {
+     "font": [
+      "Get an OTF or TTF version from the font vendor and swap it in with Type > Find/Replace Font."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "is_check": true,
     "key": "OTF_TTF_FONT",
-    "label": "Unsupported font format",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "font"
+    ],
+    "title": "Unsupported font format",
+    "why": "Frontify can only use OpenType (.otf) and TrueType (.ttf) fonts. Other formats, such as Type 1, can’t be loaded."
    },
    {
-    "category": "fonts",
+    "fix": {
+     "font": [
+      "Install the static (non-variable) version of the font and swap it in with Type > Find/Replace Font."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "is_check": true,
     "key": "VARIABLE_FONT",
-    "label": "Variable font used",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "font"
+    ],
+    "title": "Variable font used",
+    "why": "Frontify doesn’t support variable fonts, so text using them won’t render correctly."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "Relink any missing images in Window > Links.",
+      "Package again with File > Package with \"Copy Linked Graphics\" checked."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "is_check": true,
     "key": "IMAGE_INCLUDED",
-    "label": "Linked image missing from the package",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "image"
+    ],
+    "title": "Linked image missing from the package",
+    "why": "The document links to an image that isn’t in the package, so Frontify can’t show it."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "In Window > Links, select the image and choose Unembed Link from the panel menu.",
+      "Save it into the Links folder and package again."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "is_check": true,
     "key": "EMBEDDED_IMAGE",
-    "label": "Embedded image",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "image"
+    ],
+    "title": "Embedded image",
+    "why": "Frontify needs images as separate linked files and can’t read images embedded in the document."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "Double-click to select the image inside the frame, then choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip).",
+      "If you need the flipped look, save a flipped copy of the image file instead."
+     ],
+     "image_frame": [
+      "Select the image frame and choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip)."
+     ],
+     "page_item": [
+      "Select the item and choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip)."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION_IMAGE",
-    "label": "Image is flipped or skewed",
-    "message": "",
-    "severity": "errors"
+    "is_check": true,
+    "key": "TRANSFORMATION",
+    "severity": "error",
+    "subject_kinds": [
+     "image",
+     "image_frame",
+     "page_item"
+    ],
+    "title": "Item is flipped or skewed",
+    "why": "Frontify can’t reproduce flipped or skewed items, so they’ll look different or break when edited."
    },
    {
-    "category": "images",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION_CONTAINER",
-    "label": "Image frame is flipped or skewed",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "general",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "PAGE_ITEM_TRANSFORMATION",
-    "label": "Item is flipped or skewed",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Click into the table and choose Table > Convert Table to Text, or rebuild it with separate text frames."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "is_check": true,
     "key": "TABLE",
-    "label": "Table in a text frame",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Table in a text frame",
+    "why": "Frontify doesn’t support InDesign tables."
    },
    {
-    "category": "images",
+    "fix": {
+     "document": [
+      "Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "is_check": true,
     "key": "PASTED_GRAPHICS",
-    "label": "Pasted graphic",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "Pasted graphic",
+    "why": "Graphics pasted straight into InDesign aren’t linked files, so Frontify can’t read them."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "For each frame, open Object > Text Frame Options > Auto-Size and make the change noted next to it."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "is_check": true,
     "key": "AUTO_SIZE_TEXT_BOX",
-    "label": "Auto-size text frame set up incorrectly",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Auto-size text frame set up incorrectly",
+    "why": "Frontify grows auto-size frames as people type, and can’t match how these settings resize the frame."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Set Columns to 1 in Object > Text Frame Options. Use separate text frames if you need columns."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "is_check": true,
     "key": "TEXT_COLUMNS",
-    "label": "Text frame has columns",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Text frame has columns",
+    "why": "Frontify doesn’t support multiple columns inside one text frame."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Turn on View > Extras > Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "is_check": true,
     "key": "LINKED_TEXT_FRAME",
-    "label": "Threaded (linked) text frames",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Threaded (linked) text frames",
+    "why": "Frontify doesn’t support text flowing from one frame into another."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "image": [
+      "Select the frame and apply [None] or [Basic Graphics Frame] in Window > Styles > Object Styles, then re-apply any formatting you need directly."
+     ],
+     "text_frame": [
+      "Select the frame and apply [None] or [Basic Text Frame] in Window > Styles > Object Styles, then re-apply any formatting you need directly."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
-    "key": "OBJECT_STYLE_TEXT",
-    "label": "Object style on a text frame",
-    "message": "",
-    "severity": "errors"
+    "is_check": true,
+    "key": "OBJECT_STYLE",
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame",
+     "image"
+    ],
+    "title": "Object style applied",
+    "why": "Frontify doesn’t apply object styles, so the frame will look different."
    },
    {
-    "category": "images",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
-    "key": "OBJECT_STYLE_IMAGE",
-    "label": "Object style on an image frame",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Indents and Spacing and set Align to Grid to None."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "is_check": true,
     "key": "GRID_ALIGNMENT",
-    "label": "Text aligned to the baseline grid",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Text aligned to the baseline grid",
+    "why": "Frontify doesn’t use InDesign’s baseline grid, so line spacing will change."
    },
    {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Basic Character Formats and set Kerning to Metrics."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "is_check": true,
     "key": "KERNING",
-    "label": "Kerning isn’t set to Metrics",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Kerning isn’t set to Metrics",
+    "why": "Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited."
    },
    {
-    "category": "char_styles",
+    "fix": {
+     "character_style": [
+      "In the character style, go to Basic Character Formats and set Kerning to Metrics."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "is_check": true,
     "key": "KERNING_CHAR",
-    "label": "Kerning isn’t set to Metrics",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "character_style"
+    ],
+    "title": "Kerning isn’t set to Metrics",
+    "why": "Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "page_item": [
+      "Select the image, shape or group and choose No Text Wrap in Window > Text Wrap.",
+      "Then make room for it with the text frame’s size or insets instead."
+     ],
+     "text_frame": [
+      "Select the frame and choose No Text Wrap in Window > Text Wrap."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12",
+    "is_check": true,
     "key": "TEXT_WRAP",
-    "label": "Text wrap applied",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame",
+     "page_item"
+    ],
+    "title": "Text wrap applied",
+    "why": "Frontify doesn’t support text wrap, so text won’t flow around objects and will run underneath them."
    },
    {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Character Color and set Tint to 100%."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf",
+    "is_check": true,
     "key": "FILL_TINT",
-    "label": "Text color tint isn’t 100%",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Text color tint isn’t 100%",
+    "why": "Frontify shows text colors at full strength, so tinted text will look darker."
    },
    {
-    "category": "char_styles",
+    "fix": {
+     "character_style": [
+      "In the character style, go to Character Color and set Tint to 100%.",
+      "To keep the lighter color, make a tint swatch (Swatches panel > New Tint Swatch) and apply that instead."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf",
+    "is_check": true,
     "key": "FILL_TINT_CHAR",
-    "label": "Text color tint isn’t 100%",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "character_style"
+    ],
+    "title": "Text color tint isn’t 100%",
+    "why": "Frontify shows text colors at full strength, so tinted text will look darker."
    },
    {
-    "category": "general",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12",
-    "key": "TEXT_WRAP_ITEM",
-    "label": "Text wrap applied",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "char_styles",
+    "fix": {
+     "character_style": [
+      "Set Position to Normal in the character style (Basic Character Formats) or in the Character panel.",
+      "For symbols like ® or ™, use a smaller point size in a character style instead, or a font’s superscript glyphs."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
+    "is_check": true,
     "key": "TEXT_POSITION",
-    "label": "Superscript or subscript text",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "character_style"
+    ],
+    "title": "Superscript or subscript text",
+    "why": "Frontify doesn’t support superscript or subscript, so the text shows at full size on the baseline (for example ® or a footnote number)."
    },
    {
-    "category": "fonts",
+    "fix": {
+     "font": [
+      "Install a desktop version of the font (OTF or TTF) that you’re licensed to use, and switch the text to it: Type > Find/Change Font, or update the paragraph and character styles.",
+      "Package again with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\"."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "is_check": true,
     "key": "ADOBE_FONT",
-    "label": "Adobe Font used",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "font"
+    ],
+    "title": "Adobe Font used",
+    "why": "Adobe Fonts aren’t supported in Frontify templates (for licensing reasons), so the template falls back to another font."
    },
    {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Hyphenation and uncheck Hyphenate."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "is_check": true,
     "key": "HYPHENATION",
-    "label": "Hyphenation is on",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Hyphenation is on",
+    "why": "Browsers hyphenate differently from InDesign, so lines may break in different places."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.",
+      "To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.",
+      "To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "is_check": true,
     "key": "OVERRIDE",
-    "label": "Text formatted outside its paragraph style",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Text formatted outside its paragraph style",
+    "why": "Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "Delete the unused files from the Links folder before zipping the package."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "is_check": true,
     "key": "UNUSED_IMAGE",
-    "label": "Unused images in the package",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "image"
+    ],
+    "title": "Unused images in the package",
+    "why": "These files aren’t used in the document and only make the package bigger."
    },
    {
-    "category": "general",
+    "fix": {
+     "document": [
+      "For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "is_check": true,
     "key": "DOCUMENT_BLEED",
-    "label": "Document has bleed",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "Document has bleed",
+    "why": "Bleed is added to every export, which is right for print templates but usually unwanted for digital ones."
    },
    {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "is_check": true,
     "key": "COMPOSER",
-    "label": "Paragraph Composer used",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Paragraph Composer used",
+    "why": "The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify."
    },
    {
-    "category": "char_styles",
+    "fix": {
+     "character_style": [
+      "Set Baseline Shift to 0 pt in the character style (Advanced Character Formats) or in the Character panel."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
+    "is_check": true,
     "key": "BASELINE_SHIFT",
-    "label": "Baseline shift used",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "character_style"
+    ],
+    "title": "Baseline shift used",
+    "why": "Frontify doesn’t support baseline shift, so shifted text sits on the baseline."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Delete the frame if it isn’t needed."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "is_check": true,
     "key": "EMPTY_TEXT_FRAME",
-    "label": "Empty text frame",
-    "message": "",
-    "severity": "infos"
+    "severity": "info",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Empty text frame",
+    "why": "Empty frames are allowed, but are often left over by accident."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "Reduce the image’s pixel size or file size if it doesn’t need to be this large."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "is_check": true,
     "key": "LARGE_IMAGE",
-    "label": "Large image",
-    "message": "",
-    "severity": "infos"
+    "severity": "info",
+    "subject_kinds": [
+     "image"
+    ],
+    "title": "Large image",
+    "why": "Very large images slow down editing and exporting in Frontify."
    }
   ],
-  "fonts": {
-   "details": {},
-   "total_count": 4
-  },
-  "general": {
-   "details": {},
-   "total_count": 0
-  },
-  "images": {
-   "details": {},
-   "total_count": 2
-  },
-  "page_layouts": [
+  "issues": [],
+  "pages": [
    {
     "frames": [
      {
@@ -351,33 +618,24 @@
      }
     ],
     "height": 1445.6692913386,
+    "id": "ud3",
     "index": 1,
     "name": "1",
-    "page_id": "ud3",
     "preview": "image:JPEG 550x1400",
     "spread_id": "uce",
     "width": 566.9291338583
    }
   ],
-  "pages": {
-   "ud3": "1"
-  },
-  "par_styles": {
-   "details": {},
-   "total_count": 4
-  },
-  "spread_to_pages": {
-   "uce": [
-    "ud3"
-   ]
+  "schema_version": 2,
+  "subjects_checked": {
+   "character_style": 1,
+   "font": 4,
+   "image": 2,
+   "paragraph_style": 4,
+   "text_frame": 4
   },
   "template_name": "RollUp_Fixed.zip",
-  "text_box_data": {},
-  "text_boxes": {
-   "details": {},
-   "total_count": 4
-  },
-  "validation_classifiers": {}
+  "text_boxes": {}
  },
  "stopped_at": "RESULTS"
 }

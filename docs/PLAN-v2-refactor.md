@@ -376,6 +376,16 @@ committed `schema/results-v2.json`; test: every golden validates. Projection tes
 **old** golden == projection of the **new** output, modulo the documented key merges (D3) — for all 187 packages.
 Then regenerate goldens once in v2. Customer summary and analytics read v2 (analytics `_issues` becomes a
 loop over `issues`; `first_error_message` reads `issues`). Summary goldens unchanged.
+*Done (2026-10-13):* checks report a `Subject` (`model/subject.py`); `results/models.py` (pydantic) is the contract,
+`schema/results-v2.json` is generated from it, each catalogue entry names its facts model (`results/facts.py`). With
+River: the web API keeps sending v1 until PR 5.3 (the deployed app reads v1), so `results_json` (v1) stays until then,
+with `_V1_TITLES`; analytics reads v2 but keeps writing v1 `validation_type`/`category` (`catalogue.v1_name`) until
+PR 5.4 (`validations.category` has a CHECK on the six v1 sections); `identifier` stores the subject. Text-frame
+subjects are the frame (the story when it's in no frame); style subjects show InDesign's name ("body copy:body text");
+`inheritedFrom` is `inherited_from`. Projection, v1 goldens -> v2: +141 -141, all override warnings in stories in no
+frame (v1 subject "null", v2 the story). Summary: 102 goldens change (merged titles; 20 merges, with per-kind steps
+led by "Text frames:", "Images:", "Image frames:"; text frames named by their text; style names); summary sections of
+merged checks don't link to the web app's v1 problems until PR 5.3.
 
 **PR 5.3 Frontend on v2 (L).** Generated TS types from the schema; `buildReport.ts` becomes a thin grouping
 (check → subject.id), no `_par_` splitting, no `text_box_data` lookups; `PageViewer`/`PageCanvas` read

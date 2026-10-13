@@ -1,12 +1,14 @@
 """JSON for API responses: the summary, and the per-check copy the web app shows next to the results."""
 from dataclasses import asdict
 
+from src.results import catalogue
+
 from .check_guides import GUIDES
-from .report import CATEGORY_KEYS, SEVERITIES
+from .report import SEVERITY_LIST
 from .summary import CustomerSummary
 
 # Bump when the wording or structure changes, so a stored or forwarded summary can be traced to the copy it used.
-SUMMARY_VERSION = '2026-10-12'
+SUMMARY_VERSION = '2026-10-13'
 
 
 def summary_payload(summary: CustomerSummary, *, include_sections: bool) -> dict:
@@ -27,15 +29,15 @@ def summary_payload(summary: CustomerSummary, *, include_sections: bool) -> dict
 
 
 def check_guides_payload(results: dict) -> dict:
-    """Plain-language copy for every check that ran or found something: {severity: {check key: guide}}.
+    """Plain-language copy for every check that ran or found something, per v1 key as the web app reads it until
+    it reads results v2 (plan PR 5.3): {severity: {check key: guide}}.
 
     Checks without written copy (package and parsing errors) are left out; the web app falls back to their label.
     """
-    keys = {(c.get('severity'), c.get('key')) for c in results.get('checks') or []}
-    for category in CATEGORY_KEYS:
-        for entries in ((results.get(category) or {}).get('details') or {}).values():
-            for severity in SEVERITIES:
-                keys.update((severity, item.get('validationClassifier')) for item in entries.get(severity) or [])
+    found = [(c.get('severity'), c.get('key')) for c in results.get('checks') or []]
+    found += [(i.get('severity'), i.get('check')) for i in results.get('issues') or []]
+    keys = {(SEVERITY_LIST.get(severity, severity), name) for severity, key in found
+            for name in catalogue.v1_names(key) or (key,)}
     guides: dict[str, dict] = {}
     for severity, key in sorted(keys, key=lambda k: (str(k[0]), str(k[1]))):
         guide = GUIDES.get(severity, {}).get(key)

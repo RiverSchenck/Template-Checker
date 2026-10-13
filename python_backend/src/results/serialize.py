@@ -43,7 +43,7 @@ def results_v2(results: Results, layout: DocumentLayout, *, template_name: Optio
                    'spread_id': page['spread_id'] or None, 'width': page['width'], 'height': page['height'],
                    'preview': page['preview'], 'frames': page['frames']} for page in _page_layouts(layout)],
         'text_boxes': _text_boxes_v2(results, layout),
-        'checks': [_check_v2(entry) for entry in catalogue.ENTRIES],
+        'checks': [check_json(entry) for entry in catalogue.ENTRIES],
     }
 
 
@@ -75,7 +75,8 @@ def _text_boxes_v2(results: Results, layout: DocumentLayout) -> Dict[str, dict]:
     return data
 
 
-def _check_v2(entry: Entry) -> dict:
+def check_json(entry: Entry) -> dict:
+    """A catalogue entry as results v2 lists it."""
     return {'key': entry.key, 'severity': SEVERITY[entry.severity], 'subject_kinds': list(entry.subject_kinds),
             'title': entry.title, 'why': entry.why,
             'fix': {kind: list(entry.fix_for(kind)) for kind in entry.subject_kinds},
