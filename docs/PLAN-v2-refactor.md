@@ -405,6 +405,15 @@ PR 6.1; `_V1_TITLES` for analytics until PR 5.4.
 **PR 5.4 Analytics migration (S, data).** Supabase migration `011_results_v2.sql`: backup table, rewrite old
 `validation_type` → new keys and `category` → subject kind per D4 (mapping in the migration), update the CHECK
 constraint and RPCs that group by category. Run on staging/copy first; River runs it in production.
+*Done (2026-10-13):* two steps (River), so no run's issues are lost while the deploy rolls out: `011_results_v2.sql`
+before the deploy (backup of `(id, validation_type, category)`, CHECK widened to old sections + subject kinds, rows
+rewritten), `012_results_v2_finish.sql` after it (rewrites what the old backend wrote meanwhile, CHECK on subject
+kinds only); both idempotent. Only current v1 classifiers at their own severity are renamed, so retired types
+(`IMAGE_TRANSFORMATION`, `FOLDER`, rotation warnings stored under the transformation names) keep their name and take
+their old section's kind; old `identifier` values stay. No staging project: tested on a local Postgres copy of the
+schema with synthetic rows (PR). The RPCs needed no change (they group by the column, whatever its values).
+`catalogue.v1_name`, `v1_title` and `_V1_TITLES` are gone. River ran 011 in production before the merge: 17,544
+rows rewritten, every category a subject kind afterwards.
 
 **PR 5.5 Delete v1 leftovers (S).** `results/layout.py`, `classifiers.py` remnants, `validation_classifiers`,
 `check_guides.py` (moved into the catalogue), old docs; update `docs/API.md`, `apiReference.ts`,

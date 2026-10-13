@@ -13,7 +13,7 @@ from typing import Dict, Any, Optional
 from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from src.results import catalogue
-from src.results.classifiers import Severity, find
+from src.results.serialize import SEVERITY
 
 logger = logging.getLogger(__name__)
 
@@ -157,17 +157,15 @@ def analytics_period(
 
 
 def describe_issue(validation_type: str, severity: Optional[str] = None) -> Dict[str, Optional[str]]:
-    """Display label (title), message (why) and help article for a validation type, from the catalogue.
+    """Display label (title), message (why) and help article for a validation type (a check key), from the catalogue.
 
-    severity ('error', 'warning' or 'info') picks the classifier when given; a type that no longer exists (e.g. a
-    retired check in older runs) gets a label made from its name.
+    A type the catalogue doesn't have at that severity (e.g. a retired check, or the rotation warnings older runs
+    stored under the transformation names) gets a label made from its name.
     """
-    wanted = {'error': Severity.ERROR, 'warning': Severity.WARNING, 'info': Severity.INFO}.get(severity)
-    classifier = find(validation_type, wanted) or find(validation_type)
-    if classifier is None:
+    entry = catalogue.BY_KEY.get(validation_type)
+    if entry is None or (severity and SEVERITY[entry.severity] != severity):
         return {'label': validation_type.replace('_', ' ').title(), 'message': None, 'help_article': None}
-    entry, _ = catalogue.for_v1(classifier.name)
-    return {'label': catalogue.v1_title(classifier.name), 'message': entry.why or None, 'help_article': entry.help_article}
+    return {'label': entry.title, 'message': entry.why or None, 'help_article': entry.help_article}
 
 
 def _rpc(name: str, params: Dict[str, Any]) -> Dict[str, Any]:

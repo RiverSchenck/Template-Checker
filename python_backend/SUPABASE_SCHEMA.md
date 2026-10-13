@@ -81,10 +81,10 @@ Stores each individual error, warning, or info found during validation. This all
 | ----------------- | ------------------------------------ | --------------------------------------------------------------------------------------------- |
 | `id`              | `uuid` (primary key, auto-generated) | Unique validation identifier                                                                  |
 | `run_id`          | `uuid` (foreign key → `runs.id`)     | Reference to the run                                                                          |
-| `validation_type` | `text`                               | Validation type (e.g., `'PARAGRAPH_STYLE'`, `'HYPHENATION'`, `'EMBEDDED_IMAGE'`)              |
+| `validation_type` | `text`                               | The check (results v2 key, e.g. `'PARAGRAPH_STYLE'`, `'TRANSFORMATION'`); retired types in older runs keep their name |
 | `severity`        | `text`                               | Severity level: `'error'`, `'warning'`, or `'info'`                                           |
-| `category`        | `text`                               | Category: `'par_styles'`, `'char_styles'`, `'text_boxes'`, `'fonts'`, `'images'`, `'general'` |
-| `identifier`      | `text`                               | Identifier (e.g., story_id, font name, style name)                                            |
+| `category`        | `text`                               | What the issue is about (results v2 subject kind): `'paragraph_style'`, `'character_style'`, `'text_frame'`, `'image'`, `'image_frame'`, `'font'`, `'page_item'`, `'document'` |
+| `identifier`      | `text`                               | The subject's name or id (e.g. font, style or file name, frame id); older runs hold v1 identifiers |
 | `created_at`      | `timestamptz`                        | When the validation was recorded (defaults to NOW())                                          |
 
 ## SQL to Create Tables
@@ -110,7 +110,7 @@ CREATE TABLE validations (
     run_id UUID NOT NULL REFERENCES runs(id) ON DELETE CASCADE,
     validation_type TEXT NOT NULL,
     severity TEXT NOT NULL CHECK (severity IN ('error', 'warning', 'info')),
-    category TEXT NOT NULL CHECK (category IN ('par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general')),
+    category TEXT NOT NULL,  -- CHECK on the subject kinds: migrations/011_results_v2.sql, 012_results_v2_finish.sql
     identifier TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
