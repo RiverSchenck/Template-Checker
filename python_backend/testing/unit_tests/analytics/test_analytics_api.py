@@ -217,20 +217,21 @@ def test_analytics_requires_sign_in(client):
         assert client.get(path).status_code == 401
 
 
-def test_issues_get_labels_from_the_checker_classifiers(fake_rpc):
+def test_issues_get_labels_from_the_checker_catalogue(fake_rpc):
     fake_rpc.result = {'issues': [{'validation_type': 'FONTS_INCLUDED'}, {'validation_type': 'SOMETHING_NEW'}]}
     issues = analytics_api.get_overview(PERIOD)['issues']
-    assert issues[0]['label'] == 'Fonts Included'
-    assert issues[0]['message'] == 'Package is missing fonts.'
+    assert issues[0]['label'] == 'Font missing from the package'
+    assert issues[0]['message'] == 'Frontify needs the font files to render the text, otherwise the template falls back to another font.'
     assert issues[0]['help_article'].startswith('http')
     # A type the classifiers don't know (e.g. one removed since) still gets a readable label.
     assert issues[1] == {'validation_type': 'SOMETHING_NEW', 'label': 'Something New', 'message': None, 'help_article': None}
 
 
-def test_issue_description_comes_from_the_classifier():
+def test_issue_description_comes_from_the_catalogue():
     # Rotation warnings are gone (rotation is fine), so transformation names only mean flip/skew errors.
-    assert analytics_api.describe_issue('IMAGE_TRANSFORMATION_IMAGE', 'error')['message'] == 'Image transformations are not supported.'
-    assert analytics_api.describe_issue('PAGE_ITEM_TRANSFORMATION')['label'] == 'Page Item Transformation'
+    assert analytics_api.describe_issue('IMAGE_TRANSFORMATION_IMAGE', 'error')['message'] == \
+        'Frontify can’t reproduce flipped or skewed items, so they’ll look different or break when edited.'
+    assert analytics_api.describe_issue('PAGE_ITEM_TRANSFORMATION')['label'] == 'Item is flipped or skewed'
 
 
 def test_issue_description_for_a_retired_type_falls_back_to_its_name():

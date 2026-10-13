@@ -2,8 +2,8 @@
 
 To add a check: write `def my_check(doc: Document, results: Results) -> None` in the
 module for its theme, add a member for it to States (src/checks/stages.py), and add it to CHECKS. The issues it reports are
-classifiers in src/results/classifiers.py (adding one is a single line there plus its guide; see
-docs/validation-classifier-reference.md). The state name is stored in analytics as the step a run
+classifiers in src/results/classifiers.py (a single line there), and their wording is in the catalogue
+(src/results/catalogue.py). The state name is stored in analytics as the step a run
 stopped at (runs.stopped_at_stage), so never rename an existing one.
 """
 from dataclasses import dataclass

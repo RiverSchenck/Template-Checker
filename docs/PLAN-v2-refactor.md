@@ -367,6 +367,9 @@ is `None` for a flip. Two summary unit tests and `summary_cases/rounding.json` g
 **PR 5.1 Catalogue (M).** `results/catalogue.py` from classifiers + guides (D2), with the merged keys from §3.1
 (merged guides' wording drafted in the PR for River). `describe_issue`, check guides payload and API docs read it. Copy differences between guide
 and classifier message listed in the PR for River. Golden diff: `checks`/`validation_classifiers` copy only.
+*Done (2026-10-13):* merged wording approved by River; the split v1 keys keep their own titles until PR 5.2 merges
+them (no summary lists a title twice). `check_guides.py` is a v1 view of the catalogue until PR 5.5. Summary goldens
+change only in the approved merged why/fix lines.
 
 **PR 5.2 v2 serializer + contract (L).** Pydantic models for §4.3; `results/serialize.py` emits v2;
 committed `schema/results-v2.json`; test: every golden validates. Projection test (PR 0.4): projection of each

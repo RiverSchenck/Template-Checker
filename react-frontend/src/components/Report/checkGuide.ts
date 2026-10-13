@@ -3,7 +3,7 @@ import type { CheckGuide, ValidationResult, ValidationType } from '../../types';
 export type { CheckGuide, SubjectKind } from '../../types';
 
 /**
- * The plain-language copy for a check. The backend writes it (python_backend/app/customer_summary/check_guides.py)
+ * The plain-language copy for a check. The backend writes it (python_backend/src/results/catalogue.py)
  * and sends it with the results; package and parsing errors, and results from older backends, fall back to the
  * check's label and message.
  */
