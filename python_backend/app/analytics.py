@@ -33,103 +33,40 @@ def get_supabase_client():
         return None
 
 
-def determine_severity(validation_type: str) -> str:
-    """Determine severity from validation type."""
-    # Warning types
-    warning_types = [
-        'HYPHENATION', 'OVERRIDE', 'UNUSED_IMAGE', 'DOCUMENT_BLEED', 'COMPOSER', 'BASELINE_SHIFT'
-    ]
-
-    # Info types
-    info_types = ['EMPTY_TEXT_FRAME', 'LARGE_IMAGE']
-
-    if validation_type in warning_types or validation_type.startswith('WARNING'):
-        return 'warning'
-    elif validation_type in info_types or validation_type.startswith('INFO'):
-        return 'info'
-    else:
-        return 'error'
+# Each issue list in the results JSON, and the severity analytics stores for its issues.
+SEVERITY_OF_LIST = {'errors': 'error', 'warnings': 'warning', 'infos': 'info'}
 
 
-def extract_validation_counts(results_json: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Extract validation counts from results JSON.
-
-    Returns:
-        Dictionary with:
-        - total_errors, total_warnings, total_infos
-    """
-    total_errors = 0
-    total_warnings = 0
-    total_infos = 0
-
+def _issues(results_json: Dict[str, Any]):
+    """(category, list name, issue) for every issue in results JSON. The list an issue is in is its severity:
+    a classifier name alone doesn't say it, and names once existed as both an error and a warning."""
     for category_key in VALIDATION_CATEGORIES:
-        category_data = results_json.get(category_key, {})
-        details = category_data.get('details', {})
+        details = results_json.get(category_key, {}).get('details', {})
+        for by_list in details.values():
+            for list_name in SEVERITY_OF_LIST:
+                for issue in by_list.get(list_name, []):
+                    yield category_key, list_name, issue
 
-        for identifier, type_dict in details.items():
-            errors = type_dict.get('errors', [])
-            warnings = type_dict.get('warnings', [])
-            infos = type_dict.get('infos', [])
 
-            total_errors += len(errors)
-            total_warnings += len(warnings)
-            total_infos += len(infos)
-
-    return {
-        'total_errors': total_errors,
-        'total_warnings': total_warnings,
-        'total_infos': total_infos
-    }
+def extract_validation_counts(results_json: Dict[str, Any]) -> Dict[str, int]:
+    """total_errors, total_warnings and total_infos in results JSON."""
+    counts = {f'total_{list_name}': 0 for list_name in SEVERITY_OF_LIST}
+    for _, list_name, _ in _issues(results_json):
+        counts[f'total_{list_name}'] += 1
+    return counts
 
 
 def extract_individual_validations(results_json: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """
-    Extract all individual validations from results JSON.
-
-    Returns:
-        List of validation dictionaries ready for database insertion
-    """
-    validations = []
-    for category_key in VALIDATION_CATEGORIES:
-        category_data = results_json.get(category_key, {})
-        details = category_data.get('details', {})
-
-        for identifier, type_dict in details.items():
-            # Process errors
-            for error in type_dict.get('errors', []):
-                validation_type = error.get('validationClassifier', 'UNKNOWN')
-
-                validations.append({
-                    'validation_type': validation_type,
-                    'severity': determine_severity(validation_type),
-                    'category': category_key,
-                    'identifier': error.get('identifier', '') or ''
-                })
-
-            # Process warnings
-            for warning in type_dict.get('warnings', []):
-                validation_type = warning.get('validationClassifier', 'UNKNOWN')
-
-                validations.append({
-                    'validation_type': validation_type,
-                    'severity': determine_severity(validation_type),
-                    'category': category_key,
-                    'identifier': warning.get('identifier', '') or ''
-                })
-
-            # Process infos
-            for info in type_dict.get('infos', []):
-                validation_type = info.get('validationClassifier', 'UNKNOWN')
-
-                validations.append({
-                    'validation_type': validation_type,
-                    'severity': determine_severity(validation_type),
-                    'category': category_key,
-                    'identifier': info.get('identifier', '') or ''
-                })
-
-    return validations
+    """One row per issue in results JSON, ready for the validations table."""
+    return [
+        {
+            'validation_type': issue.get('validationClassifier', 'UNKNOWN'),
+            'severity': SEVERITY_OF_LIST[list_name],
+            'category': category_key,
+            'identifier': issue.get('identifier', '') or '',
+        }
+        for category_key, list_name, issue in _issues(results_json)
+    ]
 
 
 def get_app_version() -> Optional[str]:
@@ -145,13 +82,8 @@ def get_app_version() -> Optional[str]:
 
 def first_error_message(results_json: Dict[str, Any]) -> Optional[str]:
     """The first error's message in results JSON (for a rejected upload, the reason it was rejected)."""
-    for category_key in VALIDATION_CATEGORIES:
-        details = results_json.get(category_key, {}).get('details', {})
-        for type_dict in details.values():
-            for error in type_dict.get('errors', []):
-                if error.get('context'):
-                    return error['context']
-    return None
+    return next((issue['context'] for _, list_name, issue in _issues(results_json)
+                 if list_name == 'errors' and issue.get('context')), None)
 
 
 def log_analytics_to_supabase(
