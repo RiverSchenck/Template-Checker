@@ -392,6 +392,15 @@ merged checks don't link to the web app's v1 problems until PR 5.3.
 `pages` + `location.bounds`; `ValidationCount`, `FileUpload` updated; delete the classic view and dead component
 (D5); fixtures generated from goldens by a script (`npm run fixtures`). Tests: adapter/grouping, `placeOnPage`,
 one ReportView render on a generated fixture. Visual check in the browser (screenshots in the PR) — River signs off.
+*Done (2026-10-13):* with River: `/v1/checks` returns `{run_id, status, results, customer_summary}` (`results` is
+exactly v2; the summary beside it), `check_guides` and its code are gone, and `docs/API.md`/`apiReference.ts` are
+updated here rather than in 5.5. `buildReport.ts` ports the summary's grouping (`report.py`), not a bare
+check → subject.id grouping, so the report and the summary agree and summary sections select their problem (also for
+merged checks). Types: `npm run types` (`scripts/resultsTypes.mjs`); fixtures: `npm run fixtures` builds
+`src/fixtures/*.json` from the result and summary goldens (summary goldens now keep `sections`, §6.3); tests fail when
+either is stale. Sample mode (`npm run dev:sample`) answers `/v1/checks` from those fixtures, for visual checks without
+the backend (which logs to production). `results_json` (v1) stays only for `testing/fixtures/checker_run.py` until
+PR 6.1; `_V1_TITLES` for analytics until PR 5.4.
 
 **PR 5.4 Analytics migration (S, data).** Supabase migration `011_results_v2.sql`: backup table, rewrite old
 `validation_type` → new keys and `category` → subject kind per D4 (mapping in the migration), update the CHECK

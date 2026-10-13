@@ -1,14 +1,14 @@
 import React from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { TooltipProvider } from '../ui/tooltip';
-import type { ValidationResult } from '../../types';
+import type { CheckResult } from '../../types';
 import ReportView from './ReportView';
-// A real /run result (Flyer-Sales_Bad test package), including the summary and check guides the backend adds.
-import flyer from './__fixtures__/flyer-sales-results.json';
+// A real /v1/checks response (Flyer-Sales_Bad test package), built from the backend's goldens (npm run fixtures).
+import flyer from '../../fixtures/flyer-sales.json';
 
-const result = flyer as unknown as ValidationResult;
+const result = flyer as unknown as CheckResult;
 
-const renderReport = (r: ValidationResult) =>
+const renderReport = (r: CheckResult) =>
   render(
     <TooltipProvider>
       <ReportView result={r} />
@@ -30,11 +30,11 @@ describe('ReportView customer summary', () => {
 
   it('uses the backend’s plain-language titles in the issue list', () => {
     renderReport(result);
-    expect(screen.getAllByText('Text frame has no paragraph style').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Text without a paragraph style').length).toBeGreaterThan(0);
   });
 
   it('turns the copy button off for results without a summary', () => {
-    renderReport({ ...result, customer_summary: undefined });
+    renderReport({ ...result, customer_summary: null });
     expect(screen.getByRole('button', { name: /copy customer summary/i })).toBeDisabled();
   });
 });

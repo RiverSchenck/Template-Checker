@@ -214,8 +214,8 @@ export const ENDPOINTS: EndpointDoc[] = [
     method: 'POST',
     path: '/v1/checks',
     name: 'Run a check',
-    summary: 'Checks a packaged template and returns the complete results as JSON, grouped by category and severity.',
-    note: 'A package that cannot be checked is not reported as an error. The response is `200` with `status` set to `rejected`, and the reason is included in `results`. Page previews (`results.page_layouts[].preview`) are only rendered when you add `?previews=1`; otherwise they are `null`.',
+    summary: 'Checks a packaged template and returns every issue found as JSON, with the customer summary.',
+    note: 'A package that cannot be checked is not reported as an error. The response is `200` with `status` set to `rejected`, and the reason is included in `results`. Page previews (`results.pages[].preview`) are only rendered when you add `?previews=1`; otherwise they are `null`. The JSON Schema of `results` is `schema/results-v2.json` in the repository.',
     output: 'json',
     response: {
       status: '200 OK',
@@ -224,11 +224,25 @@ export const ENDPOINTS: EndpointDoc[] = [
         run_id: '6f1c2b9e-0d4a-4c1e-9a51-3b2f7c8d9e10',
         status: 'completed',
         results: {
+          schema_version: 2,
           template_name: 'Brochure.zip',
-          fonts: { details: {}, total_count: 3 },
-          check_guides: {},
-          customer_summary: {},
+          issues: [
+            {
+              check: 'FONTS_INCLUDED',
+              severity: 'error',
+              subject: { kind: 'font', id: 'Minion Pro', name: 'Minion Pro' },
+              location: { page_id: null, page_name: null, spread_id: null, item_id: null, bounds: null },
+              facts: { missing_styles: ['Bold'], whole_family: false },
+              text: null,
+              detail: 'Missing styles: Bold',
+            },
+          ],
+          checks: [],
+          pages: [],
+          text_boxes: {},
+          subjects_checked: { font: 3 },
         },
+        customer_summary: {},
       }),
     },
     fields: [
@@ -241,20 +255,28 @@ export const ENDPOINTS: EndpointDoc[] = [
       {
         name: 'results',
         type: 'object',
-        description: 'The check results.',
+        description: 'The check results (results v2).',
         children: [
-          { name: '<category>', type: 'object', description: 'Issues found in each category, keyed by severity.' },
           {
-            name: 'check_guides',
-            type: 'object',
-            description: 'Plain-language title, explanation and fix for each check that ran.',
+            name: 'issues',
+            type: 'array',
+            description:
+              'Every issue, in the order found: `check`, `severity` (`error`, `warning` or `info`), `subject` (what to fix: `kind`, `id`, `name`), `location` (page, item and its position), `facts` (the check’s structured data) and `detail` (display text; don’t parse it).',
           },
           {
-            name: 'customer_summary',
-            type: 'object | null',
-            description: 'The same summary returned by Create a summary, or `null` if it could not be generated.',
+            name: 'checks',
+            type: 'array',
+            description: 'Every check, with its plain-language title, explanation, fix steps per kind of subject and help article.',
           },
+          { name: 'pages', type: 'array', description: 'The pages in document order, with size, preview and frame outlines.' },
+          { name: 'text_boxes', type: 'object', description: 'The text of each text frame an issue is about.' },
+          { name: 'subjects_checked', type: 'object', description: 'How many styles, text frames, fonts and images were checked.' },
         ],
+      },
+      {
+        name: 'customer_summary',
+        type: 'object | null',
+        description: 'The same summary returned by Create a summary, with its sections, or `null` if it could not be generated.',
       },
     ],
     errors: [

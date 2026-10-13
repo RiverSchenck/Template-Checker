@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { Separator } from './ui/separator';
 import { SidebarTrigger } from './ui/sidebar';
-import ReuploadButton from './Stat Group/ReuploadButton';
-import { ValidationResult } from '../types';
+import ReuploadButton from './File Upload/ReuploadButton';
+import { CheckResult } from '../types';
 
 function getPageTitle(pathname: string, templateName?: string | null): React.ReactNode {
   if (pathname === '/' || pathname === '') return 'Check Template';
@@ -26,8 +26,8 @@ function getPageTitle(pathname: string, templateName?: string | null): React.Rea
 
 type SiteHeaderProps = {
   templateName?: string | null;
-  checkerResults?: ValidationResult | null;
-  checkerResponse?: (jsonResponse: ValidationResult, keepCurrentAsPrevious?: boolean) => void;
+  checkerResults?: CheckResult | null;
+  checkerResponse?: (jsonResponse: CheckResult, keepCurrentAsPrevious?: boolean) => void;
 };
 
 export function SiteHeader({ templateName, checkerResults, checkerResponse }: SiteHeaderProps) {

@@ -108,13 +108,13 @@ def test_removes_the_upload_afterwards(client):
     assert set(os.listdir(upload_root)) == before
 
 
-def test_run_includes_the_summary_and_check_guides_for_the_web_app(client):
+def test_run_includes_the_summary_and_the_checks_for_the_web_app(client):
     r = client.post('/run', data={'file': (io.BytesIO(_package_bytes()), 'Brochure_Bad.zip')}, headers=AUTH,
                     content_type='multipart/form-data')
 
     assert r.status_code == 200
-    results = r.get_json()['content']['results']
-    summary = results['customer_summary']
+    content = r.get_json()['content']
+    results, summary = content['results'], content['customer_summary']
     expected = _expected_summary()
     assert summary['html'] == expected['html']
     assert summary['text'] == expected['plain_text']
@@ -122,7 +122,8 @@ def test_run_includes_the_summary_and_check_guides_for_the_web_app(client):
     review_text = '\n\n'.join('\n'.join(('• ' if l['kind'] == 'step' else '') + l['text'] for l in s['lines'])
                                for s in summary['sections'])
     assert review_text == expected['text']
-    assert results['check_guides']['errors']['FONTS_INCLUDED']['title'] == 'Font missing from the package'
+    fonts, = [check for check in results['checks'] if check['key'] == 'FONTS_INCLUDED']
+    assert fonts['title'] == 'Font missing from the package'
     assert len(client.logged) == 1  # built once, checked once
 
 
@@ -135,9 +136,9 @@ def test_run_still_returns_results_when_the_summary_fails(client, monkeypatch):
                     content_type='multipart/form-data')
 
     assert r.status_code == 200
-    results = r.get_json()['content']['results']
-    assert results['customer_summary'] is None
-    assert results['par_styles']['details']
+    content = r.get_json()['content']
+    assert content['customer_summary'] is None
+    assert content['results']['issues']
 
 
 # --- request ids ---------------------------------------------------------------------------------------------------

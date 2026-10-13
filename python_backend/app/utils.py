@@ -6,7 +6,7 @@ from flask import request, current_app, g
 from werkzeug.utils import secure_filename
 from src.checks.stages import States
 from .analytics import log_analytics_to_supabase, first_error_message
-from .customer_summary import CustomerSummary, build_customer_summary, check_guides_payload, summary_payload
+from .customer_summary import CustomerSummary, build_customer_summary, summary_payload
 
 
 def upload_file():
@@ -53,13 +53,12 @@ class CheckOutcome:
     """The analytics run id, or None if logging is off or failed."""
     summary: Optional[CustomerSummary]
     """The customer summary, or None if it couldn't be written (logged)."""
-    response: Optional[dict] = None
-    """What /v1/checks and /run send under `results`: results v1 until the web app reads v2 (plan PR 5.3);
-    results when None."""
 
-    @property
-    def response_results(self) -> dict:
-        return self.results if self.response is None else self.response
+    def response(self) -> dict:
+        """What /v1/checks and /run send: the results (v2) and, next to them, the customer summary (with its
+        sections, for the web app's review view)."""
+        return {'results': self.results,
+                'customer_summary': summary_payload(self.summary, include_sections=True) if self.summary else None}
 
 
 def run_check(checker, file_path: str, source_type: str = 'api', user_id: Optional[str] = None) -> CheckOutcome:
@@ -83,19 +82,7 @@ def run_check(checker, file_path: str, source_type: str = 'api', user_id: Option
         duration_ms = int((time.time() - start_time) * 1000)
 
         results = checker.results_v2()
-        checker_json = checker.results_json()
-
-        # Add analytics data to the response
-        checker_json['analytics'] = {
-            'duration_ms': duration_ms,
-            'source_type': source_type,
-            'file_size_bytes': file_size_bytes
-        }
-
-        # What the web app shows next to the results: the per-check copy, and the summary for the customer.
-        checker_json['check_guides'] = check_guides_payload(results)
         summary = _build_summary(results)
-        checker_json['customer_summary'] = summary_payload(summary, include_sections=True) if summary else None
 
         # The state machine only reaches RESULTS when every check ran; otherwise it exited early on a bad upload.
         completed = checker.last_state == States.RESULTS
@@ -118,7 +105,7 @@ def run_check(checker, file_path: str, source_type: str = 'api', user_id: Option
             error_message=f'{type(e).__name__}: {e}',
         )
         raise CheckFailed() from e
-    return CheckOutcome(results, completed, stopped_at_stage, run_id, summary, response=checker_json)
+    return CheckOutcome(results, completed, stopped_at_stage, run_id, summary)
 
 
 def _build_summary(results: dict) -> Optional[CustomerSummary]:

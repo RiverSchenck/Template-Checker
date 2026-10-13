@@ -87,5 +87,5 @@ def test_previews_are_rendered_only_where_asked(client, path, previews):
     assert r.status_code == 200
     assert client.rendered == ([1] if previews else [])
     if path.startswith('/v1/checks') and 'summary' not in path and 'xml' not in path:
-        pages = r.get_json()['results']['page_layouts']
+        pages = r.get_json()['results']['pages']
         assert [page['preview'] is not None for page in pages] == [previews]

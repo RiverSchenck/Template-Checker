@@ -1,7 +1,7 @@
 """What the customer summary says, on small hand-built results. The goldens cover real packages."""
 import re
 
-from app.customer_summary import build_customer_summary, check_guides_payload, summary_payload
+from app.customer_summary import build_customer_summary, summary_payload
 from app.customer_summary.report import format_pages
 from src.results.catalogue import BY_KEY
 from src.results.serialize import check_json
@@ -175,20 +175,6 @@ def test_sections_carry_the_structure_the_web_app_reviews():
     assert issues[0]['lines'][0] == {'kind': 'title', 'text': '1. Kerning isn’t set to Metrics'}
     assert issues[0]['lines'][-1] == {'kind': 'link', 'text': 'Learn more', 'href': 'https://help/kerning'}
     assert 'sections' not in summary_payload(summary, include_sections=False)
-
-
-def test_check_guides_cover_every_check_that_ran_or_found_something():
-    guides = check_guides_payload(make_result())
-
-    assert set(guides['errors']) == {'KERNING', 'AUTO_SIZE_TEXT_BOX', 'FONTS_INCLUDED', 'TABLE'}
-    assert set(guides['warnings']) == {'COMPOSER'}
-    assert guides['errors']['KERNING'] == {
-        'title': 'Kerning isn’t set to Metrics',
-        'why': 'Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited.',
-        'fix': ['In the paragraph style, go to Basic Character Formats and set Kerning to Metrics.'],
-        'subject': 'paragraph-style',
-    }
-    assert check_guides_payload({}) == {}
 
 
 def test_format_pages():

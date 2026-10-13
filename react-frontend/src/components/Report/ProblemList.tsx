@@ -95,7 +95,7 @@ function ProblemDetails({
   const [showTech, setShowTech] = useState(false);
   const subjects = showAll ? problem.subjects : problem.subjects.slice(0, MAX_SUBJECTS);
   const ids = Array.from(
-    new Set(problem.subjects.flatMap((s) => s.places.map((p) => p.item.data_id)).filter((id) => id && id !== 'null'))
+    new Set(problem.subjects.flatMap((s) => s.places.map((p) => p.issue.location.item_id)).filter((id): id is string => !!id))
   );
 
   return (
@@ -173,12 +173,6 @@ function ProblemDetails({
             <>
               <dt className="text-muted-foreground">Why</dt>
               <dd>{problem.guide.why}</dd>
-            </>
-          )}
-          {problem.message && (
-            <>
-              <dt className="text-muted-foreground">Checker</dt>
-              <dd>{problem.message}</dd>
             </>
           )}
           {ids.length > 0 && (

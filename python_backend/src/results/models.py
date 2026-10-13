@@ -25,7 +25,7 @@ AnyFacts = Union[InheritedFacts, AutoSizeFacts, SizeFacts, MasterPageFacts, Blee
 
 
 class Model(BaseModel):
-    model_config = ConfigDict(extra='forbid')
+    model_config = ConfigDict(extra='forbid', use_attribute_docstrings=True)
 
 
 class Subject(Model):

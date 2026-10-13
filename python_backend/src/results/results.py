@@ -1,4 +1,4 @@
-"""The issues a run found. Checks add to it; serialize.results_json turns it into the response."""
+"""The issues a run found. Checks add to it; serialize.results_v2 turns it into the results JSON."""
 from typing import Iterator, List, Optional
 
 from src.model.subject import DOCUMENT, Subject

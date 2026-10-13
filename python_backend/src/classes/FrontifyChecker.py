@@ -95,12 +95,12 @@ class FrontifyChecker:
     # --- results and files ---------------------------------------------------------------------------------------
 
     def results_json(self) -> dict:
-        """The response: every issue found, with what the frontend needs to show and highlight it."""
+        """Results v1, which only testing/fixtures/checker_run.py still reads (until plan PR 6.1)."""
         return results_json(self.results, self.layout, template_name=self.template_name,
                             output_folder=self.output_folder, totals=self.totals)
 
     def results_v2(self) -> dict:
-        """Results v2 (plan §4.3)."""
+        """Results v2 (plan §4.3): what the web API sends."""
         return results_v2(self.results, self.layout, template_name=self.template_name, totals=self.totals)
 
     def get_error_types(self) -> List[str]:

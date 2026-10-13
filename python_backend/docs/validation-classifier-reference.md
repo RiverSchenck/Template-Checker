@@ -8,10 +8,8 @@ Every issue the checker can report, as defined in [`classifiers.py`](../src/resu
 
 ## Adding a classifier
 
-1. Add one line to the class for its severity in `classifiers.py`, e.g.
-   `TEXT_WRAP = _issue(Category.TEXT_BOX, 'Text Wrap', 'Text Wrap is not supported.', article('h_0882abae12'))`.
-   `article(anchor)` links a section of the InDesign help article.
-2. Add its guide (title, why, fix) to `app/customer_summary/check_guides.py`, under the same severity.
+1. Add its entry (title, why, fix, help article, facts model) to the catalogue, `src/results/catalogue.py`.
+2. Add one line to the class for its severity in `classifiers.py`, e.g. `TEXT_WRAP = _issue(Category.TEXT_BOX)`.
 3. Report it from a check: `report(results, ValidationError.TEXT_WRAP, context, ...)`.
 4. Add a row to this page.
 

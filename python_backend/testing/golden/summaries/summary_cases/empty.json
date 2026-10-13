@@ -1,5 +1,18 @@
 {
   "text": "We checked “Clean” and didn’t find anything in the InDesign file that would cause problems in Frontify.",
   "html": "<p>We checked “Clean” and didn’t find anything in the InDesign file that would cause problems in Frontify.</p>",
-  "plain_text": "We checked “Clean” and didn’t find anything in the InDesign file that would cause problems in Frontify."
+  "plain_text": "We checked “Clean” and didn’t find anything in the InDesign file that would cause problems in Frontify.",
+  "sections": [
+    {
+      "key": "intro",
+      "title": "Introduction",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "text",
+          "text": "We checked “Clean” and didn’t find anything in the InDesign file that would cause problems in Frontify."
+        }
+      ]
+    }
+  ]
 }

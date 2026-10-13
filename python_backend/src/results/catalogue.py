@@ -2,10 +2,10 @@
 
 One entry per check (v2 keys, plan §3.1): how severe it is, what kinds of thing it's about, a short title, why it
 matters in Frontify, how to fix it in InDesign (per kind of thing when the steps differ), and its help article.
-The customer summary, the web app (check guides), the results' list of checks and analytics all read it.
+Results v2 lists them (`checks`), and the customer summary, the web app and analytics read it.
 
-Until results v2 (plan PR 5.2) checks report v1 classifiers (src/results/classifiers.py); V1_KEYS maps each to its
-entry and the kind of thing it's about.
+Checks still report v1 classifiers (src/results/classifiers.py); V1_KEYS maps each to its entry and the kind of
+thing it's about.
 """
 from dataclasses import dataclass
 from typing import Dict, Mapping, Optional, Tuple, Type
@@ -214,9 +214,8 @@ V1_KEYS: Dict[str, Tuple[str, str]] = {
 }
 
 
-# The web app (results v1 until plan PR 5.3) and analytics (v1 keys until PR 5.4) still list the split v1 keys of a
-# merged check as separate problems; they keep their own titles there so nothing lists the same title twice
-# (River, 2026-10-13). The customer summary reads v2, where they're one check.
+# Analytics (v1 keys until plan PR 5.4) still lists the split v1 keys of a merged check as separate issues; they keep
+# their own titles there so it never lists the same title twice (River, 2026-10-13). Results v2 has one check.
 _V1_TITLES = {
     'PARAGRAPH_STYLE_TEXT_BOX': 'Text frame has no paragraph style',
     'OBJECT_STYLE_TEXT': 'Object style on a text frame',
@@ -230,11 +229,6 @@ def for_v1(name: str) -> Optional[Tuple[Entry, str]]:
     """(entry, subject kind) for a v1 classifier name, or None for one that no longer exists."""
     key, kind = V1_KEYS.get(name, (None, None))
     return (BY_KEY[key], kind) if key else None
-
-
-def v1_names(key: str) -> Tuple[str, ...]:
-    """The v1 classifiers a check was split into (or its own name), for what still speaks v1."""
-    return tuple(name for name, (entry_key, _) in V1_KEYS.items() if entry_key == key)
 
 
 def v1_name(key: str, kind: str, facts: Optional[dict] = None) -> str:

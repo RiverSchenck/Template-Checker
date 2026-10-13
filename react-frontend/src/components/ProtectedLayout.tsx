@@ -6,22 +6,19 @@ import { PageSkeleton } from './layout/PageSkeleton';
 import { SiteHeader } from './site-header';
 import Login from './Login/Login';
 import { useAuth } from './AuthContext';
-import { ValidationResult } from '../types';
+import { CheckResult } from '../types';
 import '../App.css';
 
 export type ProtectedLayoutOutletContext = {
-  checkerResults: ValidationResult | null;
-  previousCheckerResults: ValidationResult | null;
-  seeDetails: boolean;
-  checkerResponse: (jsonResponse: ValidationResult, keepCurrentAsPrevious?: boolean) => void;
-  setSeeDetails: (value: boolean) => void;
+  checkerResults: CheckResult | null;
+  previousCheckerResults: CheckResult | null;
+  checkerResponse: (jsonResponse: CheckResult, keepCurrentAsPrevious?: boolean) => void;
   navigateToResults: () => void;
 };
 
 export default function ProtectedLayout() {
-  const [checkerResults, setCheckerResults] = useState<ValidationResult | null>(null);
-  const [seeDetails, setSeeDetails] = useState<boolean>(false);
-  const [previousCheckerResults, setPreviousCheckerResults] = useState<ValidationResult | null>(null);
+  const [checkerResults, setCheckerResults] = useState<CheckResult | null>(null);
+  const [previousCheckerResults, setPreviousCheckerResults] = useState<CheckResult | null>(null);
   const { session, loading, loadingRole, currentUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -44,8 +41,7 @@ export default function ProtectedLayout() {
     return <Login />;
   }
 
-  const checkerResponse = (jsonResponse: ValidationResult, keepCurrentAsPrevious: boolean = false) => {
-    setSeeDetails(false);
+  const checkerResponse = (jsonResponse: CheckResult, keepCurrentAsPrevious: boolean = false) => {
     setCheckerResults((current) => {
       if (keepCurrentAsPrevious && current) {
         setPreviousCheckerResults(current);
@@ -56,10 +52,6 @@ export default function ProtectedLayout() {
     });
   };
 
-  const handleSeeDetails = (value: boolean) => {
-    setSeeDetails(value);
-  };
-
   const isAnalytics = location.pathname === '/analytics' || location.pathname.startsWith('/analytics');
   const contentWrapperClass = isAnalytics
     ? 'flex min-w-0 w-full flex-1 flex-col items-stretch justify-center overflow-x-hidden'
@@ -68,9 +60,7 @@ export default function ProtectedLayout() {
   const outletContext: ProtectedLayoutOutletContext = {
     checkerResults,
     previousCheckerResults,
-    seeDetails,
     checkerResponse,
-    setSeeDetails: handleSeeDetails,
     navigateToResults: () => navigate('/results'),
   };
 
@@ -80,7 +70,7 @@ export default function ProtectedLayout() {
         <SidebarMenuComponent checkerResults={checkerResults} />
         <SidebarInset className="min-w-0">
           <SiteHeader
-            templateName={checkerResults?.template_name}
+            templateName={checkerResults?.results.template_name}
             checkerResults={checkerResults}
             checkerResponse={checkerResponse}
           />

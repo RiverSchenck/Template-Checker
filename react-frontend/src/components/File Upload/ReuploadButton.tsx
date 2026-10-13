@@ -7,11 +7,11 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { Button } from '../ui/button';
-import { TemplateUploader } from '../File Upload/FileUpload';
-import { ValidationResult } from '../../types';
+import { TemplateUploader } from './FileUpload';
+import { CheckResult } from '../../types';
 
 interface ReuploadButtonProps {
-  checkerResponse: (jsonResponse: ValidationResult) => void;
+  checkerResponse: (jsonResponse: CheckResult) => void;
   className?: string;
 }
 

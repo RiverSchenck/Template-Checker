@@ -1,8 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { notify } from '../../lib/notify';
 import { AlertCircle, Check, FileCheck2, X } from 'lucide-react';
-import { ValidationResult } from '../../types';
-import countValidationIssues from '../ValidationCount';
+import { CheckResult } from '../../types';
 import SuccessModal from './SuccessModal';
 import { Button } from '../ui/button';
 import { Segmented } from '../layout/page-kit';
@@ -19,10 +18,9 @@ type Phase = 'idle' | 'uploading' | 'checking' | 'done';
 const DONE_PAUSE_MS = 600;
 
 interface TemplateUploaderProps {
-  checkerResponse: (jsonResponse: ValidationResult, setPrevious?: boolean) => void;
+  checkerResponse: (response: CheckResult, setPrevious?: boolean) => void;
   setPrevious?: boolean;
   onUploadComplete?: () => void;
-  seeDetails?: (value: boolean) => void;
   navigateToResults?: () => void;
   /** Center the output toggle and hint under the drop area (the page layout). */
   centered?: boolean;
@@ -128,7 +126,6 @@ export function TemplateUploader({
   checkerResponse,
   setPrevious = false,
   onUploadComplete,
-  seeDetails,
   navigateToResults,
   centered = false,
   className,
@@ -226,11 +223,10 @@ export function TemplateUploader({
           notify.success('XML download started');
         } else {
           const text = typeof result.body === 'string' ? result.body : await (result.body as Blob).text();
-          const results: ValidationResult = JSON.parse(text)?.results;
-          checkerResponse(results, setPrevious);
+          const { results, customer_summary }: CheckResult = JSON.parse(text);
+          checkerResponse({ results, customer_summary }, setPrevious);
           onUploadComplete?.();
-          const { totalErrors, totalWarnings, totalInfos } = countValidationIssues(results);
-          if (totalErrors === 0 && totalWarnings === 0 && totalInfos === 0) {
+          if (results.issues.length === 0) {
             setShowSuccessModal(true);
           } else {
             navigateToResults?.();
@@ -284,7 +280,6 @@ export function TemplateUploader({
       <SuccessModal
         open={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}
-        seeDetails={seeDetails}
         navigateToResults={navigateToResults}
       />
 

@@ -1,101 +1,81 @@
-import { CategoryDetail, CheckDefinition, CheckGuide, ValidationItem, ValidationResult } from '../../types';
+import type { Check, CheckResult, Issue, Results } from '../../types';
 import { buildReport, compareReports, describeWhere, formatPages } from './buildReport';
 
-const item = (overrides: Partial<ValidationItem>): ValidationItem => ({
-  validationClassifier: 'KERNING',
-  context: '',
-  identifier: 'null',
-  page_id: 'p1',
-  page_name: '1',
-  spread_id: 's1',
-  data_id: 'null',
-  ...overrides,
+type Kind = Issue['subject']['kind'];
+
+/** A check as results v2 lists it; only the title, kinds and steps matter here. */
+const check = (key: Check['key'], severity: Check['severity'], title: string, fix: Partial<Record<Kind, string[]>>): Check => ({
+  key,
+  severity,
+  subject_kinds: Object.keys(fix) as Kind[],
+  title,
+  why: '',
+  fix: fix as Record<string, string[]>,
+  help_article: key === 'KERNING' ? 'https://help/kerning' : null,
+  is_check: true,
 });
 
-const category = (details: CategoryDetail['details'], total_count = 0): CategoryDetail => ({ details, total_count });
-const empty = { errors: [], warnings: [], infos: [] };
-
-const checks: CheckDefinition[] = [
-  { key: 'KERNING', severity: 'errors', label: 'Kerning', message: "Kerning must be 'Metrics'", help_article: 'https://help/kerning', category: 'par_styles' },
-  { key: 'AUTO_SIZE_TEXT_BOX', severity: 'errors', label: 'Auto Sizing Text Box', message: 'Auto-size wrong', help_article: null, category: 'text_boxes' },
-  { key: 'FONTS_INCLUDED', severity: 'errors', label: 'Fonts Included', message: 'Missing fonts', help_article: null, category: 'fonts' },
-  { key: 'COMPOSER', severity: 'warnings', label: 'Composer', message: 'Use single-line', help_article: null, category: 'par_styles' },
-  { key: 'TABLE', severity: 'errors', label: 'Table', message: 'No tables', help_article: null, category: 'text_boxes' },
+const checks: Check[] = [
+  check('KERNING', 'error', 'Kerning isn’t set to Metrics', { paragraph_style: ['Set Kerning to Metrics.'] }),
+  check('AUTO_SIZE_TEXT_BOX', 'error', 'Auto-size text frame set up incorrectly', { text_frame: ['Fix auto-size.'] }),
+  check('FONTS_INCLUDED', 'error', 'Font missing from the package', { font: ['Package the fonts.'] }),
+  check('COMPOSER', 'warning', 'Paragraph Composer used', { paragraph_style: ['Use single-line.'] }),
+  check('TABLE', 'error', 'Table in a text frame', { text_frame: ['Convert the table.'] }),
 ];
 
-/** The copy the backend sends with results (results.check_guides); only `subject` matters for grouping here. */
-const guide = (title: string, subject: CheckGuide['subject']): CheckGuide => ({ title, why: '', fix: [], subject });
-const checkGuides: ValidationResult['check_guides'] = {
-  errors: {
-    KERNING: guide('Kerning isn’t set to Metrics', 'paragraph-style'),
-    AUTO_SIZE_TEXT_BOX: guide('Auto-size text frame set up incorrectly', 'frame'),
-    FONTS_INCLUDED: guide('Font missing from the package', 'font'),
-    TABLE: guide('Table in a text frame', 'frame'),
-  },
-  warnings: { COMPOSER: guide('Paragraph Composer used', 'paragraph-style') },
-};
+const style = (name: string) => ({ kind: 'paragraph_style' as const, id: `ParagraphStyle/${name}`, name });
+const frame = (id: string) => ({ kind: 'text_frame' as const, id, name: null });
+
+const issue = (
+  checkKey: Issue['check'],
+  subject: Issue['subject'],
+  { severity = 'error', item_id = null, page_id = 'p1', page_name = '1', bounds = null, text = null, detail = null }: Partial<
+    Pick<Issue, 'severity' | 'text' | 'detail'> & Issue['location']
+  > = {}
+): Issue => ({
+  check: checkKey,
+  severity,
+  subject,
+  location: { page_id, page_name, spread_id: 's1', item_id, bounds },
+  facts: null,
+  text,
+  detail,
+});
 
 const bounds = (page_id: string, y: number) => ({ page_id, kind: 'TextFrame', x: 10, y, width: 100, height: 20 });
 
-function makeResult(overrides: Partial<ValidationResult> = {}): ValidationResult {
+const ISSUES: Issue[] = [
+  issue('KERNING', style('Headline'), { item_id: 'f1', text: ['Big title'], bounds: bounds('p1', 10) }),
+  issue('KERNING', style('Headline'), { item_id: 'f2', page_id: 'p2', page_name: '2', bounds: bounds('p2', 10) }),
+  issue('KERNING', style('Headline'), { item_id: 'f3', page_id: 'p3', page_name: '3', bounds: bounds('p3', 10) }),
+  issue('COMPOSER', style('Headline'), { severity: 'warning', item_id: 'f1', bounds: bounds('p1', 10) }),
+  issue('KERNING', style('Body'), { item_id: 'f4', bounds: bounds('p1', 50) }),
+  issue('AUTO_SIZE_TEXT_BOX', frame('f5'), { item_id: 'f5', detail: "'No Line Breaks' must be checked.", bounds: bounds('p1', 80) }),
+  issue('FONTS_INCLUDED', { kind: 'font', id: 'Pangea Bold', name: 'Pangea Bold' }, { page_id: null, page_name: null }),
+];
+
+function makeResult(overrides: Partial<Results> = {}): CheckResult {
   return {
-    template_name: 'Sample',
-    output_folder: '',
-    par_styles: category(
-      {
-        Headline: {
-          ...empty,
-          errors: [
-            item({ identifier: 'Headline', data_id: 'f1', text_content: ['Big title'], bounds: bounds('p1', 10) }),
-            item({ identifier: 'Headline', data_id: 'f2', page_id: 'p2', page_name: '2', bounds: bounds('p2', 10) }),
-            item({ identifier: 'Headline', data_id: 'f3', page_id: 'p3', page_name: '3', bounds: bounds('p3', 10) }),
-          ],
-          warnings: [item({ validationClassifier: 'COMPOSER', identifier: 'Headline', data_id: 'f1', bounds: bounds('p1', 10) })],
-        },
-        Body: { ...empty, errors: [item({ identifier: 'Body', data_id: 'f4', bounds: bounds('p1', 50) })] },
-      },
-      4
-    ),
-    char_styles: category({}),
-    text_boxes: category(
-      {
-        story1: {
-          ...empty,
-          errors: [
-            item({
-              validationClassifier: 'AUTO_SIZE_TEXT_BOX',
-              identifier: 'story1',
-              data_id: 'f5',
-              context: "'No Line Breaks' must be checked.",
-              bounds: bounds('p1', 80),
-            }),
-          ],
-        },
-      },
-      6
-    ),
-    fonts: category({
-      'Pangea Bold': { ...empty, errors: [item({ validationClassifier: 'FONTS_INCLUDED', identifier: 'Pangea Bold', page_id: '', page_name: '' })] },
-    }),
-    images: category({}),
-    general: category({}),
-    validation_classifiers: {},
-    text_box_data: { story1: { identifier: 'story1', content: 'AI-generated', page_id: 'p1', page_name: '1' } },
-    spread_to_pages: {},
-    pages: {},
-    page_layouts: ['p1', 'p2', 'p3'].map((page_id, i) => ({
-      page_id,
-      name: String(i + 1),
-      index: i + 1,
-      spread_id: 's1',
-      width: 600,
-      height: 400,
-      preview: null,
-      frames: [],
-    })),
-    checks,
-    check_guides: checkGuides,
-    ...overrides,
+    results: {
+      schema_version: 2,
+      template_name: 'Sample',
+      issues: ISSUES,
+      subjects_checked: { paragraph_style: 4, text_frame: 6 },
+      pages: ['p1', 'p2', 'p3'].map((id, i) => ({
+        id,
+        name: String(i + 1),
+        index: i + 1,
+        spread_id: 's1',
+        width: 600,
+        height: 400,
+        preview: null,
+        frames: [],
+      })),
+      text_boxes: { f5: { content: 'AI-generated', page_id: 'p1' } },
+      checks,
+      ...overrides,
+    },
+    customer_summary: null,
   };
 }
 
@@ -145,9 +125,7 @@ describe('buildReport', () => {
   });
 
   it('marks every check as passed when nothing is found', () => {
-    const report = buildReport(
-      makeResult({ par_styles: category({}), text_boxes: category({}), fonts: category({}) })
-    );
+    const report = buildReport(makeResult({ issues: [] }));
     expect(report.problems).toEqual([]);
     expect(report.passedChecks).toHaveLength(checks.length);
   });
@@ -158,17 +136,11 @@ describe('compareReports', () => {
     const before = buildReport(makeResult());
     const after = buildReport(
       makeResult({
-        par_styles: category({
-          Headline: { ...empty, errors: [item({ identifier: 'Headline', data_id: 'f1', bounds: bounds('p1', 10) })] },
-        }),
-        fonts: category({}),
-        text_boxes: category({
-          story2: { ...empty, errors: [item({ validationClassifier: 'TABLE', identifier: 'story2', data_id: 'f9' })] },
-          story1: {
-            ...empty,
-            errors: [item({ validationClassifier: 'AUTO_SIZE_TEXT_BOX', identifier: 'story1', data_id: 'f5', bounds: bounds('p1', 80) })],
-          },
-        }),
+        issues: [
+          issue('KERNING', style('Headline'), { item_id: 'f1', bounds: bounds('p1', 10) }),
+          issue('TABLE', frame('f9'), { item_id: 'f9' }),
+          issue('AUTO_SIZE_TEXT_BOX', frame('f5'), { item_id: 'f5', bounds: bounds('p1', 80) }),
+        ],
       })
     );
     const diff = compareReports(before, after);
@@ -189,13 +161,35 @@ describe('formatPages', () => {
 });
 
 describe('check guides', () => {
-  it('uses the copy the backend sent, and falls back to the check label without it', () => {
+  it('uses the copy in the results’ checks, and names a check it doesn’t list by its key', () => {
     const report = buildReport(makeResult());
     expect(report.problems.find((p) => p.key === 'KERNING')!.guide.title).toBe('Kerning isn’t set to Metrics');
     expect(report.passedChecks.map((c) => c.guide.title)).toEqual(['Table in a text frame']);
 
-    const older = buildReport(makeResult({ check_guides: undefined }));
+    const older = buildReport(makeResult({ checks: checks.filter((c) => c.key !== 'KERNING') }));
     const kerning = older.problems.find((p) => p.key === 'KERNING')!;
-    expect(kerning.guide).toEqual({ title: 'Kerning', why: "Kerning must be 'Metrics'", fix: [], subject: 'document' });
+    expect(kerning.guide).toEqual({ title: 'KERNING', why: '', fix: [] });
+  });
+
+  it('shows a merged check as one problem, with each kind’s steps when they differ (like the customer summary)', () => {
+    const objectStyle = check('OBJECT_STYLE', 'error', 'Object style applied', {
+      text_frame: ['Apply [Basic Text Frame].'],
+      image: ['Apply [Basic Graphics Frame].'],
+    });
+    const report = buildReport(
+      makeResult({
+        checks: [objectStyle],
+        issues: [
+          issue('OBJECT_STYLE', frame('f5'), { item_id: 'f5', bounds: bounds('p1', 80) }),
+          issue('OBJECT_STYLE', { kind: 'image', id: 'logo.png', name: 'logo.png' }, { item_id: 'f6', bounds: bounds('p1', 10) }),
+        ],
+      })
+    );
+    expect(report.problems.map((p) => p.id)).toEqual(['errors:OBJECT_STYLE']);
+    expect(report.problems[0].subjects.map((s) => s.label)).toEqual(['Image “logo.png”', 'Text frame “AI-generated”']);
+    expect(report.problems[0].guide.fix).toEqual([
+      'Text frames: Apply [Basic Text Frame].',
+      'Image frames: Apply [Basic Graphics Frame].',
+    ]);
   });
 });
