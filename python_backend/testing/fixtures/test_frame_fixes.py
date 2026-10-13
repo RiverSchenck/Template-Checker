@@ -27,3 +27,20 @@ def test_flipped_empty_frame_is_still_a_page_item(tmp_path):
     ids = {}
     issues = transform_issues(tmp_path, lambda pkg: ids.setdefault('frame', pkg.shape('Oval', transform=FLIPPED)))
     assert issues == [('PAGE_ITEM_TRANSFORMATION', ids['frame'])]
+
+
+def linked_frames(tmp_path, **thread):
+    pkg = PackageBuilder()
+    frame = pkg.text_frame(pkg.story([('Body', 'Hello')]), **thread)
+    return frame, [i.data_id for i in run_checker(pkg.write(tmp_path)).of('LINKED_TEXT_FRAME')]
+
+
+@pytest.mark.parametrize('thread', [dict(previous='n', next='n'), dict(previous=None, next=None)], ids=['n', 'missing'])
+def test_unthreaded_frame_is_not_linked(tmp_path, thread):
+    assert linked_frames(tmp_path, **thread)[1] == []
+
+
+@pytest.mark.parametrize('thread', [dict(previous='u5', next='n'), dict(previous=None, next='u6')], ids=['previous', 'next'])
+def test_threaded_frame_is_linked(tmp_path, thread):
+    frame, linked = linked_frames(tmp_path, **thread)
+    assert linked == [frame]

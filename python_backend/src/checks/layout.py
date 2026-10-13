@@ -96,9 +96,10 @@ def text_wrap_check(doc: Document, results: Results) -> None:
 
 
 def linked_text_frame_check(doc: Document, results: Results) -> None:
-    """Error for each text frame threaded to a previous or next frame."""
+    """Error for each text frame threaded to a previous or next frame. 'n' or no attribute means none (B8: a frame
+    without the attributes used to count as linked)."""
     for _, frame in doc.text_frames():
-        if frame.previous_frame != 'n' or frame.next_frame != 'n':
+        if frame.previous_frame not in (None, 'n') or frame.next_frame not in (None, 'n'):
             report(results, ValidationError.LINKED_TEXT_FRAME, **at_frame(doc, frame))
 
 
