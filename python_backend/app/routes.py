@@ -905,6 +905,14 @@ def _require_upload(zip_only=False):
     return decorator
 
 
+def _not_checkable(outcome):
+    """422 for an upload the checker rejected, with its reason. Rejection reasons are written by the checker for
+    users: not a valid ZIP, no .idml file, too many files..."""
+    reason = first_error_message(outcome.results)
+    message = f'The file couldn\'t be checked: {reason}' if reason else 'The file couldn\'t be checked.'
+    return api_error(422, 'template_not_checkable', message)
+
+
 def _run_and_respond(respond):
     """Store the upload, run the check, and build the response from its outcome. Cleans up either way."""
     checker = FrontifyChecker()
@@ -967,10 +975,7 @@ def customer_summary():
 
     def respond(outcome, _):
         if not outcome.completed:
-            # Rejection reasons are written by the checker for users: not a valid ZIP, no .idml file, too many files...
-            reason = first_error_message(outcome.results)
-            message = f'The file couldn\'t be checked: {reason}' if reason else 'The file couldn\'t be checked.'
-            return api_error(422, 'template_not_checkable', message)
+            return _not_checkable(outcome)
         if outcome.summary is None:
             return api_error(
                 500, 'summary_failed', 'The summary couldn\'t be written. Try again, or contact us with the request ID.')
@@ -997,6 +1002,8 @@ _EXPORT_FAILED = 'The XML export couldn\'t be created. Try again, or contact us 
 def run_checker_and_download():
     """Check an uploaded template package and download its generated XML as a ZIP."""
     def respond(outcome, checker):
+        if not outcome.completed:
+            return _not_checkable(outcome)
         zip_path = checker.zip_idml_output_folder()
         if not zip_path or not os.path.isfile(zip_path):
             current_app.logger.error('XML export ZIP missing: %s', zip_path)

@@ -20,12 +20,25 @@ from src.parsers.MetadataParser import MetadataParser
 from src.classes.States import States
 from src.checks import CHECKS, CHECKS_BY_STATE, Check
 from src.document import ParsedDocument
+from lxml import etree
+
+from src.helpers import safe_xml
 from src.helpers.package_zip import (
-    MultipleIdmlError, NoIdmlError, PackageError, extract_idml, extract_package, read_package)
+    DAMAGED_ARCHIVE_ERRORS, DAMAGED_IDML, MultipleIdmlError, NoIdmlError, PackageError, extract_idml,
+    extract_package, read_package)
 from src.helpers.page_geometry import PageGeometryIndex
 from src.helpers.pdf_previews import find_package_pdf, render_pdf_previews
 
 logger = logging.getLogger(__name__)
+
+# Why an upload was rejected, in words for the person who uploaded it.
+NOT_A_ZIP = "The file is not a valid ZIP archive. Please zip the package folder again and re-upload."
+IDML_TOO_LARGE = (f"The .idml file is too large to check: a spread is over {safe_xml.MAX_LARGE_FILE_BYTES // 2 ** 20} MB, "
+                  "usually because of pasted graphics. Place them as linked images and export the .idml again.")
+
+
+def incomplete_idml(missing: str) -> str:
+    return f"The .idml file is incomplete: it has no {missing}. Please export it again from InDesign."
 
 # Each check unzips into its own folder here; FrontifyChecker.delete_unzipped_root_path removes it.
 DATA_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'data')
@@ -105,7 +118,7 @@ class FrontifyChecker:
 
     def get_zip_state(self) -> bool:
         """The upload must be a .zip; otherwise report it."""
-        if self.source_file_path and self.source_file_path.endswith('.zip'):
+        if self.source_file_path and self.source_file_path.lower().endswith('.zip'):
             return True
         else:
             self.results.add(ValidationError.ZIP, "File uploaded is not ZIP")
@@ -127,16 +140,12 @@ class FrontifyChecker:
         return States.UNZIP_IDML
 
     def cleanup_data_folder(self) -> bool:
-        """Create this run's own folder (unzipped_root_path) inside the data folder."""
-        try:
-            os.makedirs(self.data_folder, exist_ok=True)
-            self.unzipped_root_path = os.path.join(self.data_folder, str(uuid.uuid4()))
-            os.makedirs(self.unzipped_root_path)
-            return True
-        except Exception:
-            logger.exception("Couldn't create the folder for this upload")
-            self.results.add(ValidationError.ERROR, "The server couldn't prepare the upload. Try again.")
-            return False
+        """Create this run's own folder (unzipped_root_path) inside the data folder. A failure here is the
+        server's, not the upload's, so it raises (the run is logged as failed)."""
+        os.makedirs(self.data_folder, exist_ok=True)
+        self.unzipped_root_path = os.path.join(self.data_folder, str(uuid.uuid4()))
+        os.makedirs(self.unzipped_root_path)
+        return True
 
     def extract_zip_to_data_folder(self) -> bool:
         """Validate the package from the zip's directory, then extract only what the checks read (.idml,
@@ -159,14 +168,10 @@ class FrontifyChecker:
         except PackageError as e:
             self.results.add(ValidationError.ERROR, str(e))
             return False
-        except zipfile.BadZipFile:
-            self.results.add(ValidationError.ERROR,
-                             "The file is not a valid ZIP archive. Please zip the package folder again and re-upload.")
+        except DAMAGED_ARCHIVE_ERRORS:
+            self.results.add(ValidationError.ERROR, NOT_A_ZIP)
             return False
-        except Exception:
-            logger.exception('Failed to unzip the package')
-            self.results.add(ValidationError.ERROR, "Failed to unzip the file.")
-            return False
+        # Anything else (disk full, permissions...) is a server fault: it raises and the run is logged as failed.
         return True
 
     def unzip_idml_state(self) -> States:
@@ -190,14 +195,21 @@ class FrontifyChecker:
         except PackageError as e:
             self.results.add(ValidationError.ERROR, str(e))
             return False
-        except Exception:
-            logger.exception('Failed to unzip the .idml')
-            self.results.add(ValidationError.ERROR, "Failed to unzip the .idml file.")
-            return False
 
     def parse_xml(self) -> States:
         """PARSE_XML: read the IDML's XML (spreads, fonts, styles, stories, masters, preferences) into
-        self.document. Returns the first check's state, or EXIT if a required file is missing."""
+        self.document. Returns the first check's state, or EXIT if a required file is missing or the XML is
+        damaged (malformed, a DTD, over the size cap)."""
+        try:
+            return self._parse_xml()
+        except safe_xml.TooLargeError:
+            self.results.add(ValidationError.ERROR, IDML_TOO_LARGE)
+        except (etree.XMLSyntaxError, safe_xml.UnsafeXMLError):
+            logger.info('Damaged XML in the .idml', exc_info=True)
+            self.results.add(ValidationError.ERROR, DAMAGED_IDML)
+        return States.EXIT
+
+    def _parse_xml(self) -> States:
         # Source Folders (Links, Document Fonts)
         # Init: SourceFoldersParser
         # Check if 'Document Fonts' exists, if not create it to continue code flow
@@ -212,7 +224,7 @@ class FrontifyChecker:
         spreads_dir = os.path.join(
             self.idml_output_folder, 'Spreads')
         if not os.path.exists(spreads_dir):
-            self.results.add(ValidationError.ERROR, "Spreads directory does not exist")
+            self.results.add(ValidationError.ERROR, incomplete_idml("pages (Spreads folder)"))
             return States.EXIT
 
         self.spreads_parser = SpreadsParser(
@@ -224,7 +236,7 @@ class FrontifyChecker:
         fonts_xml_path = os.path.join(
             self.idml_output_folder, 'Resources', 'Fonts.xml')
         if not os.path.exists(fonts_xml_path):
-            self.results.add(ValidationError.ERROR, "Fonts.XML does not exist")
+            self.results.add(ValidationError.ERROR, incomplete_idml("font list (Resources/Fonts.xml)"))
             return States.EXIT
         self.fonts_parser = FontsParser(
             fonts_xml_path)
@@ -234,7 +246,7 @@ class FrontifyChecker:
         styles_xml_path = os.path.join(
             self.idml_output_folder, 'Resources', 'Styles.xml')
         if not os.path.exists(styles_xml_path):
-            self.results.add(ValidationError.ERROR, "Styles.xml file does not exist")
+            self.results.add(ValidationError.ERROR, incomplete_idml("styles (Resources/Styles.xml)"))
             return States.EXIT
         # Initialize the StylesParser
         styles_parser = StylesParser(styles_xml_path)
@@ -306,7 +318,7 @@ class FrontifyChecker:
         preferences_xml_path = os.path.join(
             self.idml_output_folder, 'Resources', 'Preferences.xml')
         if not os.path.exists(preferences_xml_path):
-            self.results.add(ValidationError.ERROR, "Preferences.xml file does not exist")
+            self.results.add(ValidationError.ERROR, incomplete_idml("document settings (Resources/Preferences.xml)"))
             return States.EXIT
         # Initialize the StylesParser
         self.preferences_parser = PreferencesParser(preferences_xml_path)

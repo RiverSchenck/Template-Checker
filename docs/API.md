@@ -145,7 +145,7 @@ Branch on `code`; `message` is written for people and may change. `request_id` m
 | 401 | `unauthorized` | Missing, invalid, expired or revoked token or key. |
 | 403 | `access_denied` | Signed in, but not an approved Template Checker user. |
 | 413 | `file_too_large` | Upload over 200 MB. |
-| 422 | `template_not_checkable` | `/v1/checks/summary` only: the package couldn't be checked (not a valid ZIP, no `.idml` file, password-protected…). `message` says why; pass it on to the customer. `/v1/checks` returns 200 with `status: "rejected"` instead. |
+| 422 | `template_not_checkable` | `/v1/checks/summary` and `/v1/checks/xml`: the package couldn't be checked (not a valid ZIP, no `.idml` file, password-protected, damaged `.idml`…). `message` says why; pass it on to the customer. `/v1/checks` returns 200 with `status: "rejected"` instead. |
 | 429 | `check_in_progress` | You already have a check running. |
 | 429 | `rate_limited` | Hourly limit reached; see `Retry-After`. |
 | 500 | `upload_failed` | The upload couldn't be stored. Retry. |

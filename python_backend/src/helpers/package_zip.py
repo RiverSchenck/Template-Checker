@@ -16,6 +16,7 @@ import posixpath
 import shutil
 import unicodedata
 import zipfile
+import zlib
 from dataclasses import dataclass, field
 from typing import List, Tuple
 
@@ -28,6 +29,11 @@ MAX_IDML_ENTRIES = 20_000
 MAX_IDML_EXTRACTED_BYTES = 512 * 1024 ** 2  # 512 MiB of XML is far beyond any real document
 
 _COPY_CHUNK = 1024 * 1024
+
+# What reading a damaged archive, or one using a compression method Python can't read, raises. The user's
+# file is the problem, so these are rejections; any other error while unpacking is a server fault.
+DAMAGED_ARCHIVE_ERRORS = (zipfile.BadZipFile, zlib.error, EOFError, NotImplementedError)
+DAMAGED_IDML = 'The .idml file is damaged and cannot be opened. Please export it again from InDesign.'
 
 
 class PackageError(Exception):
@@ -150,5 +156,5 @@ def extract_idml(idml_path: str, dest: str):
             _check_size([info for info, _ in files], MAX_IDML_EXTRACTED_BYTES, '.idml file')
             for info, parts in files:
                 _extract(zf, info, parts, dest)
-    except zipfile.BadZipFile:
-        raise PackageError('The .idml file is damaged and cannot be opened. Please export it again from InDesign.')
+    except DAMAGED_ARCHIVE_ERRORS:
+        raise PackageError(DAMAGED_IDML)
