@@ -573,7 +573,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt."
+        "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -596,7 +596,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "Reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. "
+        "Reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -665,7 +665,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. "
+        "reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -688,7 +688,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "quiaestrum quoditem quist qui quibea voluptatur adipiendi blabo. Evenis apid et facimagnisim ilita cuptate delibus nusci bea nobis ium autectatet volestr umendit."
+        "quiaestrum quoditem quist qui quibea voluptatur adipiendi blabo. Evenis apid et facimagnisim ilita cuptate delibus nusci bea nobis ium autectatet volestr umendit.\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -734,7 +734,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt."
+        "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -783,7 +783,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "Materials"
+        "Materials\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -806,7 +806,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "Sizes"
+        "Sizes\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -829,7 +829,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "PACKAGING"
+        "PACKAGING\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -852,7 +852,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "DELIVERY"
+        "DELIVERY\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -875,7 +875,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "PRODUCT CARE"
+        "PRODUCT CARE\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -898,7 +898,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "Recycling"
+        "Recycling\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -921,7 +921,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "Sources"
+        "Sources\n"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -993,7 +993,7 @@
     "page_name": "1"
    },
    "u3f4": {
-    "content": "Materials\nIcatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.\n\n",
+    "content": "Materials\n\nIcatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.\n\n\n\n",
     "identifier": "u3f4",
     "page_id": "u3dc",
     "page_name": "1"
@@ -1011,19 +1011,19 @@
     "page_name": "1"
    },
    "u47d": {
-    "content": "Sizes\nReptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n\n",
+    "content": "Sizes\n\nReptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n\n\n\n",
     "identifier": "u47d",
     "page_id": "u3dc",
     "page_name": "1"
    },
    "u4df": {
-    "content": "PRODUCT CARE\nreptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n",
+    "content": "PRODUCT CARE\n\nreptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n\n",
     "identifier": "u4df",
     "page_id": "u3dc",
     "page_name": "1"
    },
    "u4f6": {
-    "content": "Recycling\nquiaestrum quoditem quist qui quibea voluptatur adipiendi blabo. Evenis apid et facimagnisim ilita cuptate delibus nusci bea nobis ium autectatet volestr umendit.\n",
+    "content": "Recycling\n\nquiaestrum quoditem quist qui quibea voluptatur adipiendi blabo. Evenis apid et facimagnisim ilita cuptate delibus nusci bea nobis ium autectatet volestr umendit.\n\n",
     "identifier": "u4f6",
     "page_id": "u3dc",
     "page_name": "1"
@@ -1041,19 +1041,19 @@
     "page_name": "1"
    },
    "u5ce": {
-    "content": "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n",
+    "content": "\nIcatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles \nserectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quodita\necullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n\n\n",
     "identifier": "u5ce",
     "page_id": "u3dc",
     "page_name": "1"
    },
    "u5d1": {
-    "content": "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n",
+    "content": "\nIcatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles \nserectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quodita\necullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n\n\n",
     "identifier": "u5d1",
     "page_id": "u3dc",
     "page_name": "1"
    },
    "ud61": {
-    "content": "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.\n\n",
+    "content": "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.\n\n\n\n",
     "identifier": "ud61",
     "page_id": "u3dc",
     "page_name": "1"
@@ -1072,7 +1072,7 @@
         "x": 109.44,
         "y": 303.45
        },
-       "context": " Whitespace after text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.",
+       "context": "  Whitespace after text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.",
        "data_id": "u3f4",
        "identifier": "NormalParagraphStyle",
        "page_id": "u3dc",
@@ -1089,7 +1089,7 @@
         "x": 109.44,
         "y": 371.19
        },
-       "context": " Whitespace after text: Reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga.",
+       "context": "  Whitespace after text: Reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga.",
        "data_id": "u47d",
        "identifier": "NormalParagraphStyle",
        "page_id": "u3dc",
@@ -1106,7 +1106,7 @@
         "x": 109.61,
         "y": 315.35
        },
-       "context": " Whitespace after text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.",
+       "context": "  Whitespace after text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.",
        "data_id": "ud61",
        "identifier": "NormalParagraphStyle",
        "page_id": "u3dc",
@@ -1193,20 +1193,23 @@
         "x": 109.44,
         "y": 303.45
        },
-       "context": "Text:  Whitespace — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
+       "context": "Text:   Whitespace — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "Leading": "12",
          "PointSize": "8"
         },
-        "text": ""
+        "text": "\n"
        },
        "data_id": "u3f4",
        "identifier": "u3f4",
        "page_id": "u3dc",
        "page_name": "1",
        "spread_id": "u3d7",
+       "text_content": [
+        "\n"
+       ],
        "validationClassifier": "OVERRIDE"
       }
      ]
@@ -1286,20 +1289,23 @@
         "x": 109.44,
         "y": 371.19
        },
-       "context": "Text:  Whitespace — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
+       "context": "Text:   Whitespace — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "Leading": "12",
          "PointSize": "8"
         },
-        "text": ""
+        "text": "\n"
        },
        "data_id": "u47d",
        "identifier": "u47d",
        "page_id": "u3dc",
        "page_name": "1",
        "spread_id": "u3d7",
+       "text_content": [
+        "\n"
+       ],
        "validationClassifier": "OVERRIDE"
       }
      ]
@@ -1317,18 +1323,21 @@
         "x": 363.12,
         "y": 303.45
        },
-       "context": "Text:  Whitespace after text: PRODUCT CARE — Overrides: FontStyle: Medium",
+       "context": "Text:   Whitespace after text: PRODUCT CARE — Overrides: FontStyle: Medium",
        "context_details": {
         "overrides": {
          "FontStyle": "Medium"
         },
-        "text": ""
+        "text": "\n"
        },
        "data_id": "u4df",
        "identifier": "u4df",
        "page_id": "u3dc",
        "page_name": "1",
        "spread_id": "u3d7",
+       "text_content": [
+        "\n"
+       ],
        "validationClassifier": "OVERRIDE"
       }
      ]
@@ -1346,18 +1355,21 @@
         "x": 363.12,
         "y": 371.19
        },
-       "context": "Text:  Whitespace after text: Recycling — Overrides: FontStyle: Medium",
+       "context": "Text:   Whitespace after text: Recycling — Overrides: FontStyle: Medium",
        "context_details": {
         "overrides": {
          "FontStyle": "Medium"
         },
-        "text": ""
+        "text": "\n"
        },
        "data_id": "u4f6",
        "identifier": "u4f6",
        "page_id": "u3dc",
        "page_name": "1",
        "spread_id": "u3d7",
+       "text_content": [
+        "\n"
+       ],
        "validationClassifier": "OVERRIDE"
       }
      ]
@@ -1432,14 +1444,14 @@
         "x": 136.45,
         "y": 196.52
        },
-       "context": "Text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
+       "context": "Text:  Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles  serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. — Overrides: Leading: 12, AppliedFont: Montserrat, PointSize: 8",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "Leading": "12",
          "PointSize": "8"
         },
-        "text": "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. "
+        "text": "\nIcatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles \nserectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quodita\necullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n\n"
        },
        "data_id": "u5ce",
        "identifier": "u5ce",
@@ -1447,7 +1459,7 @@
        "page_name": "1",
        "spread_id": "u3d7",
        "text_content": [
-        "Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quoditaecullabo. Nam in ne pra demporem netur? Modita sedignam fuga. "
+        "\nIcatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles \nserectur, sunt.Reptata tquodit iusciatia dolorum aperrum quo od quodita\necullabo. Nam in ne pra demporem netur? Modita sedignam fuga. \n\n"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -1489,7 +1501,7 @@
         "x": 109.61,
         "y": 315.35
        },
-       "context": "Text:  Whitespace — Overrides: Leading: 12, AppliedFont: Montserrat, FontStyle: Regular, PointSize: 8",
+       "context": "Text:   Whitespace — Overrides: Leading: 12, AppliedFont: Montserrat, FontStyle: Regular, PointSize: 8",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
@@ -1497,13 +1509,16 @@
          "Leading": "12",
          "PointSize": "8"
         },
-        "text": ""
+        "text": "\n"
        },
        "data_id": "ud61",
        "identifier": "ud61",
        "page_id": "u3dc",
        "page_name": "1",
        "spread_id": "u3d7",
+       "text_content": [
+        "\n"
+       ],
        "validationClassifier": "OVERRIDE"
       }
      ]

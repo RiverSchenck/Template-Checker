@@ -1,6 +1,6 @@
 from typing import Dict, Optional, Tuple
-from xml.etree.ElementTree import Element
 from src.classes.PropertyBase import PropertyBase
+from src.model.text import Run
 
 # What InDesign uses when nothing in the chain sets a value.
 NO_CHARACTER_STYLE = "CharacterStyle/$ID/[No character style]"
@@ -9,7 +9,7 @@ NO_CHARACTER_STYLE = "CharacterStyle/$ID/[No character style]"
 class StoryCharacterData:
     """One CharacterStyleRange in a story: its character style, text, font and overrides. Stored on the
     paragraph (StoryParagraphData) it belongs to."""
-    def __init__(self, char_style_range: Element, fonts_parser: 'FontsParser', styles_parser: 'StylesParser'):
+    def __init__(self, char_style_range: Run, fonts_parser: 'FontsParser', styles_parser: 'StylesParser'):
         self.style_id: str = ''
         self.normalized_style_id: str = ''
         self.content: str = ''
@@ -25,32 +25,14 @@ class StoryCharacterData:
         self.kerning_obj: PropertyBase = PropertyBase(
             self.style_id, styles_parser, "KerningMethod")
 
-    def _extract_character_data(self, char_style_range: Element):
-        self.style_id = char_style_range.get(
-            "AppliedCharacterStyle")
+    def _extract_character_data(self, run: Run):
+        self.style_id = run.style
         self.normalized_style_id = self.normalize_style_id(self.style_id)
-        content = ""
-
-        for content_element in char_style_range.findall("Content"):
-            content_text = content_element.text if content_element.text is not None else ""
-            content += content_text
-        self.content = content
-
-        applied_font_element = char_style_range.find(
-            "Properties/AppliedFont")
-        self.applied_font = applied_font_element.text if applied_font_element is not None else None
-        # Extracting attribute overrides
-        for attr, value in char_style_range.attrib.items():
-            if attr != "AppliedCharacterStyle":
-                self.overrides[attr] = value
-            # Extracting child element overrides under Properties
-            properties_element = char_style_range.find(
-                "Properties")
-            if properties_element is not None:
-                for prop_child in properties_element:
-                    self.overrides[prop_child.tag] = prop_child.text
-        table_element = char_style_range.find("Table")
-        if table_element is not None:
+        self.content = run.text
+        self.applied_font = run.properties.get("AppliedFont")
+        # Formatting set on the text: its Properties (B6: always read), then the range's attributes (which win)
+        self.overrides = {**run.properties, **run.attrs}
+        if run.has_table:
             self.add_table()
 
     def _add_used_character_font(self, fonts_parser: 'FontsParser'):

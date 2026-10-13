@@ -558,7 +558,7 @@
        "page_name": "1",
        "spread_id": "ufb",
        "text_content": [
-        "Position Abteilung BereichDivision"
+        "Position Abteilung Bereich\nDivision"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -604,7 +604,7 @@
        "page_name": "1",
        "spread_id": "ufb",
        "text_content": [
-        "Voith GmbH & Co. KGaASt. Pöltener Straße 4389522 Heidenheim, GermanyTelefon +49 7321 37 0000Mobil +49 151 26430000Fax +49 7321 37 0000wolfgang.mustermann-langname@voith.com"
+        "Voith GmbH & Co. KGaA\nSt. Pöltener Straße 43\n89522 Heidenheim, Germany\nTelefon +49 7321 37 0000\nMobil +49 151 26430000\nFax +49 7321 37 0000\nwolfgang.mustermann-langname@voith.com"
        ],
        "validationClassifier": "HYPHENATION"
       },
@@ -887,13 +887,13 @@
     "page_name": "1"
    },
    "u130": {
-    "content": "Position Abteilung BereichDivision\n",
+    "content": "Position Abteilung Bereich\nDivision\n",
     "identifier": "u130",
     "page_id": "u100",
     "page_name": "1"
    },
    "u179": {
-    "content": "Voith GmbH & Co. KGaASt. Pöltener Straße 4389522 Heidenheim, GermanyTelefon +49 7321 37 0000Mobil +49 151 26430000Fax +49 7321 37 0000wolfgang.mustermann-langname@voith.com\n",
+    "content": "Voith GmbH & Co. KGaA\nSt. Pöltener Straße 43\n89522 Heidenheim, Germany\nTelefon +49 7321 37 0000\nMobil +49 151 26430000\nFax +49 7321 37 0000\nwolfgang.mustermann-langname@voith.com\n",
     "identifier": "u179",
     "page_id": "u100",
     "page_name": "1"

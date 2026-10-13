@@ -745,13 +745,13 @@
   "template_name": "NewEmployeeFolder1.zip",
   "text_box_data": {
    "u193": {
-    "content": "Welcome to the team\n",
+    "content": "Welcome to the team\n\n",
     "identifier": "u193",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u1a5": {
-    "content": "Welcome to the team\n",
+    "content": "Welcome to the team\n\n",
     "identifier": "u1a5",
     "page_id": "ud3",
     "page_name": "1"
@@ -825,7 +825,7 @@
          "Leading": "Auto",
          "PointSize": "65"
         },
-        "text": "Welcome to the team"
+        "text": "Welcome to the team\n"
        },
        "data_id": "u1a5",
        "identifier": "u1a5",
@@ -833,7 +833,7 @@
        "page_name": "1",
        "spread_id": "uce",
        "text_content": [
-        "Welcome to the team"
+        "Welcome to the team\n"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -852,7 +852,7 @@
         "x": 626.0,
         "y": 590.91
        },
-       "context": "Text: Ben jonsen — Overrides: FontStyle: Black, AppliedFont: Locator Display, Leading: 48, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
+       "context": "Text: Ben jonsen — Overrides: AppliedFont: Locator Display, Leading: 48, FontStyle: Black, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
        "context_details": {
         "overrides": {
          "AppliedFont": "Locator Display",
@@ -912,7 +912,7 @@
         "x": 626.0,
         "y": 642.97
        },
-       "context": "Text: Process Engineer — Overrides: FontStyle: Light, AppliedFont: Locator Display, Leading: 48, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
+       "context": "Text: Process Engineer — Overrides: AppliedFont: Locator Display, Leading: 48, FontStyle: Light, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
        "context_details": {
         "overrides": {
          "AppliedFont": "Locator Display",

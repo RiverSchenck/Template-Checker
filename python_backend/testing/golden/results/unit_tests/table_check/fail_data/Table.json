@@ -350,13 +350,13 @@
   "template_name": "Table.zip",
   "text_box_data": {
    "u118": {
-    "content": "Hello this is some test\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "content": "Hello this is some test\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
     "identifier": "u118",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u12a": {
-    "content": "Hello this is some test\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "content": "Hello this is some test\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
     "identifier": "u12a",
     "page_id": "ud3",
     "page_name": "1"
@@ -450,7 +450,7 @@
          "OTFContextualAlternate": "false",
          "PointSize": "72"
         },
-        "text": "Hello this is some test"
+        "text": "Hello this is some test\n"
        },
        "data_id": "u12a",
        "identifier": "u12a",
@@ -458,7 +458,7 @@
        "page_name": "1",
        "spread_id": "uce",
        "text_content": [
-        "Hello this is some test"
+        "Hello this is some test\n"
        ],
        "validationClassifier": "OVERRIDE"
       },

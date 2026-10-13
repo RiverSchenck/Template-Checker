@@ -1,7 +1,8 @@
-"""Story content the checker misses today (B1-B4 in docs/PLAN-v2-refactor.md, fixed in PR 2.3).
+"""Story content the checker used to miss (B1-B4 in docs/PLAN-v2-refactor.md). B1, B2 and B4 were fixed in PR 2.3; B3
+(objects placed in text) is fixed in PR 2.4.
 
 Each case builds the same content twice: placed plainly (the control, which passes today) and nested the way
-InDesign writes it. Only the nested form is marked xfail(strict=True), so when PR 2.3 fixes it the test
+InDesign writes it. A nested form not handled yet is marked xfail(strict=True), so when it's fixed the test
 XPASSes and fails until the mark is removed. Decided with River (2026-10-13): notes and pending deletions are
 skipped; footnotes and table cells are checked as text. (Frontify itself drops all of these; see "Possible
 future checks" in docs/checker-rules.md.)
@@ -11,7 +12,7 @@ import pytest
 from testing.fixtures.checker_run import run_checker
 from testing.fixtures.idml_builder import PackageBuilder
 
-NOT_YET = 'fixed in PR 2.3 (docs/PLAN-v2-refactor.md)'
+NOT_YET = 'fixed in PR 2.4 (docs/PLAN-v2-refactor.md)'
 
 
 def para(style, inner):
@@ -48,11 +49,11 @@ def frame_text(tmp_path, body):
     pytest.param(para('Body', run(content('Visit us'))), id='plain'),
     pytest.param(para('Body', run('<HyperlinkTextSource Self="h1" Name="Website" Hidden="false">'
                                   f'{content("Visit us")}</HyperlinkTextSource>')),
-                 id='hyperlink', marks=pytest.mark.xfail(strict=True, reason=f'B2: {NOT_YET}')),
+                 id='hyperlink'),
     pytest.param(para('Body', run(f'<Change Self="c1" ChangeType="InsertedText">{content("Visit us")}</Change>')),
-                 id='tracked-insertion', marks=pytest.mark.xfail(strict=True, reason=f'B2: {NOT_YET}')),
+                 id='tracked-insertion'),
     pytest.param(para('Body', f'<XMLElement Self="x1" MarkupTag="XMLTag/span">{run(content("Visit us"))}</XMLElement>'),
-                 id='tagged-run', marks=pytest.mark.xfail(strict=True, reason=f'B1: {NOT_YET}')),
+                 id='tagged-run'),
 ])
 def test_frame_text_is_read(tmp_path, body):
     result, text = frame_text(tmp_path, body)
@@ -60,7 +61,6 @@ def test_frame_text_is_read(tmp_path, body):
     assert result.of('EMPTY_TEXT_FRAME') == []
 
 
-@pytest.mark.xfail(strict=True, reason=f'B2: {NOT_YET}')
 def test_text_after_a_special_character_is_read(tmp_path):
     # <?ACE 18?> is InDesign's current page number marker.
     _, text = frame_text(tmp_path, para('Body', run('<Content>Page <?ACE 18?> of 5</Content>')))
@@ -76,7 +76,7 @@ def test_pending_deletion_is_not_text(tmp_path):
 @pytest.mark.parametrize('body', [
     pytest.param(para('Body', run(content('Hello'), 'Emphasis')), id='plain'),
     pytest.param(para('Body', f'<XMLElement Self="x1" MarkupTag="XMLTag/span">{run(content("Hello"), "Emphasis")}</XMLElement>'),
-                 id='tagged-run', marks=pytest.mark.xfail(strict=True, reason=f'B1: {NOT_YET}')),
+                 id='tagged-run'),
 ])
 def test_character_style_of_a_run_is_checked(tmp_path, body):
     result = check(tmp_path, lambda pkg: pkg.text_frame(pkg.raw_story(body)))
@@ -155,6 +155,5 @@ def test_paragraph_is_checked(tmp_path, build):
     assert [i.identifier for i in check(tmp_path, build).of('KERNING')] == ['Heading']
 
 
-@pytest.mark.xfail(strict=True, reason=f'B4: {NOT_YET}')
 def test_note_is_not_checked(tmp_path):
     assert check(tmp_path, _heading_inside('<Note>{}</Note>'.format)).of('KERNING') == []

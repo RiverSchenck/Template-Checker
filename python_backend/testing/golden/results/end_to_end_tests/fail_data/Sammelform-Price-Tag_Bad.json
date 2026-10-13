@@ -2112,13 +2112,13 @@
   "template_name": "Sammelform-Price-Tag_Bad.zip",
   "text_box_data": {
    "u2ec": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u2ec",
     "page_id": "u192",
     "page_name": "1"
    },
    "u2ef": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u2ef",
     "page_id": "u192",
     "page_name": "1"
@@ -2148,13 +2148,13 @@
     "page_name": "1"
    },
    "u43d": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u43d",
     "page_id": "u192",
     "page_name": "1"
    },
    "u440": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u440",
     "page_id": "u192",
     "page_name": "1"
@@ -2184,13 +2184,13 @@
     "page_name": "1"
    },
    "u489": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u489",
     "page_id": "u192",
     "page_name": "1"
    },
    "u48c": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u48c",
     "page_id": "u192",
     "page_name": "1"
@@ -2220,13 +2220,13 @@
     "page_name": "1"
    },
    "u4d7": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u4d7",
     "page_id": "u192",
     "page_name": "1"
    },
    "u4da": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u4da",
     "page_id": "u192",
     "page_name": "1"
@@ -2256,13 +2256,13 @@
     "page_name": "1"
    },
    "u525": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u525",
     "page_id": "u192",
     "page_name": "1"
    },
    "u528": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u528",
     "page_id": "u192",
     "page_name": "1"
@@ -2292,13 +2292,13 @@
     "page_name": "1"
    },
    "u578": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u578",
     "page_id": "u192",
     "page_name": "1"
    },
    "u57b": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u57b",
     "page_id": "u192",
     "page_name": "1"
@@ -2328,13 +2328,13 @@
     "page_name": "1"
    },
    "u5c4": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u5c4",
     "page_id": "u192",
     "page_name": "1"
    },
    "u5c7": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u5c7",
     "page_id": "u192",
     "page_name": "1"
@@ -2364,13 +2364,13 @@
     "page_name": "1"
    },
    "u682": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u682",
     "page_id": "u192",
     "page_name": "1"
    },
    "u686": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u686",
     "page_id": "u192",
     "page_name": "1"
@@ -2400,73 +2400,73 @@
     "page_name": "1"
    },
    "u6ec": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u6ec",
     "page_id": "u192",
     "page_name": "1"
    },
    "u6ef": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u6ef",
     "page_id": "u192",
     "page_name": "1"
    },
    "u703": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u703",
     "page_id": "u192",
     "page_name": "1"
    },
    "u706": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u706",
     "page_id": "u192",
     "page_name": "1"
    },
    "u71a": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u71a",
     "page_id": "u192",
     "page_name": "1"
    },
    "u71d": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u71d",
     "page_id": "u192",
     "page_name": "1"
    },
    "u731": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u731",
     "page_id": "u192",
     "page_name": "1"
    },
    "u734": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u734",
     "page_id": "u192",
     "page_name": "1"
    },
    "u748": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u748",
     "page_id": "u192",
     "page_name": "1"
    },
    "u74b": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u74b",
     "page_id": "u192",
     "page_name": "1"
    },
    "u75f": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u75f",
     "page_id": "u192",
     "page_name": "1"
    },
    "u762": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u762",
     "page_id": "u192",
     "page_name": "1"
@@ -2616,13 +2616,13 @@
     "page_name": "1"
    },
    "u8a5": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u8a5",
     "page_id": "u192",
     "page_name": "1"
    },
    "u8a8": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u8a8",
     "page_id": "u192",
     "page_name": "1"
@@ -2652,73 +2652,73 @@
     "page_name": "1"
    },
    "u90c": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u90c",
     "page_id": "u192",
     "page_name": "1"
    },
    "u90f": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u90f",
     "page_id": "u192",
     "page_name": "1"
    },
    "u923": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u923",
     "page_id": "u192",
     "page_name": "1"
    },
    "u926": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u926",
     "page_id": "u192",
     "page_name": "1"
    },
    "u93a": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u93a",
     "page_id": "u192",
     "page_name": "1"
    },
    "u93d": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u93d",
     "page_id": "u192",
     "page_name": "1"
    },
    "u951": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u951",
     "page_id": "u192",
     "page_name": "1"
    },
    "u955": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u955",
     "page_id": "u192",
     "page_name": "1"
    },
    "u969": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u969",
     "page_id": "u192",
     "page_name": "1"
    },
    "u96c": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u96c",
     "page_id": "u192",
     "page_name": "1"
    },
    "u980": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u980",
     "page_id": "u192",
     "page_name": "1"
    },
    "u983": {
-    "content": "JACKETSIZE: MCOLOR: BLACK\n",
+    "content": "JACKET\nSIZE: M\nCOLOR: BLACK\n",
     "identifier": "u983",
     "page_id": "u192",
     "page_name": "1"
@@ -2883,14 +2883,14 @@
         "x": 52.71,
         "y": 153.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u2ec",
        "identifier": "u2ec",
@@ -2898,7 +2898,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -3055,14 +3055,14 @@
         "x": 211.75,
         "y": 153.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u43d",
        "identifier": "u43d",
@@ -3070,7 +3070,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -3227,14 +3227,14 @@
         "x": 370.04,
         "y": 153.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u489",
        "identifier": "u489",
@@ -3242,7 +3242,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -3399,14 +3399,14 @@
         "x": 528.78,
         "y": 153.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u4d7",
        "identifier": "u4d7",
@@ -3414,7 +3414,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -3571,14 +3571,14 @@
         "x": 687.52,
         "y": 153.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u525",
        "identifier": "u525",
@@ -3586,7 +3586,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -3743,14 +3743,14 @@
         "x": 846.26,
         "y": 153.68
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u578",
        "identifier": "u578",
@@ -3758,7 +3758,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -3915,14 +3915,14 @@
         "x": 1005.0,
         "y": 153.68
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u5c4",
        "identifier": "u5c4",
@@ -3930,7 +3930,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -4087,14 +4087,14 @@
         "x": 52.71,
         "y": 402.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u682",
        "identifier": "u682",
@@ -4102,7 +4102,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -4259,14 +4259,14 @@
         "x": 211.75,
         "y": 402.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u6ec",
        "identifier": "u6ec",
@@ -4274,7 +4274,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -4316,14 +4316,14 @@
         "x": 370.04,
         "y": 402.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u703",
        "identifier": "u703",
@@ -4331,7 +4331,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -4373,14 +4373,14 @@
         "x": 528.78,
         "y": 402.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u71a",
        "identifier": "u71a",
@@ -4388,7 +4388,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -4430,14 +4430,14 @@
         "x": 687.52,
         "y": 402.49
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u731",
        "identifier": "u731",
@@ -4445,7 +4445,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -4487,14 +4487,14 @@
         "x": 846.26,
         "y": 402.68
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u748",
        "identifier": "u748",
@@ -4502,7 +4502,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -4544,14 +4544,14 @@
         "x": 1005.0,
         "y": 402.68
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u75f",
        "identifier": "u75f",
@@ -4559,7 +4559,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -5291,14 +5291,14 @@
         "x": 52.71,
         "y": 651.94
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u8a5",
        "identifier": "u8a5",
@@ -5306,7 +5306,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -5463,14 +5463,14 @@
         "x": 211.75,
         "y": 651.94
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u90c",
        "identifier": "u90c",
@@ -5478,7 +5478,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -5520,14 +5520,14 @@
         "x": 370.04,
         "y": 651.94
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u923",
        "identifier": "u923",
@@ -5535,7 +5535,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -5577,14 +5577,14 @@
         "x": 528.78,
         "y": 651.94
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u93a",
        "identifier": "u93a",
@@ -5592,7 +5592,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -5634,14 +5634,14 @@
         "x": 687.52,
         "y": 651.94
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u951",
        "identifier": "u951",
@@ -5649,7 +5649,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -5691,14 +5691,14 @@
         "x": 846.26,
         "y": 652.13
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u969",
        "identifier": "u969",
@@ -5706,7 +5706,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -5748,14 +5748,14 @@
         "x": 1005.0,
         "y": 652.13
        },
-       "context": "Text: JACKETSIZE: MCOLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
+       "context": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
          "PointSize": "9",
          "Tracking": "50"
         },
-        "text": "JACKETSIZE: MCOLOR: BLACK"
+        "text": "JACKET\nSIZE: M\nCOLOR: BLACK"
        },
        "data_id": "u980",
        "identifier": "u980",
@@ -5763,7 +5763,7 @@
        "page_name": "1",
        "spread_id": "u18d",
        "text_content": [
-        "JACKETSIZE: MCOLOR: BLACK"
+        "JACKET\nSIZE: M\nCOLOR: BLACK"
        ],
        "validationClassifier": "OVERRIDE"
       }

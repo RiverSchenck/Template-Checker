@@ -374,49 +374,49 @@
   "template_name": "H&W auto-size corners Folder.zip",
   "text_box_data": {
    "u18a": {
-    "content": "H&WTOP LEFT\n",
+    "content": "H&W\nTOP LEFT\n",
     "identifier": "u18a",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u19c": {
-    "content": "H&WTOP LEFT\n",
+    "content": "H&W\nTOP LEFT\n",
     "identifier": "u19c",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u1b7": {
-    "content": "H&WTOP RIGHT\n",
+    "content": "H&W\nTOP RIGHT\n",
     "identifier": "u1b7",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u1ba": {
-    "content": "H&WTOP RIGHT\n",
+    "content": "H&W\nTOP RIGHT\n",
     "identifier": "u1ba",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u1d1": {
-    "content": "H&WBOTTOM LEFT\n",
+    "content": "H&W\nBOTTOM LEFT\n",
     "identifier": "u1d1",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u1d4": {
-    "content": "H&WBOTTOM LEFT\n",
+    "content": "H&W\nBOTTOM LEFT\n",
     "identifier": "u1d4",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u1e8": {
-    "content": "H&WBOTTOM RIGHT\n",
+    "content": "H&W\nBOTTOM RIGHT\n",
     "identifier": "u1e8",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u1eb": {
-    "content": "H&WBOTTOM RIGHT\n",
+    "content": "H&W\nBOTTOM RIGHT\n",
     "identifier": "u1eb",
     "page_id": "ud3",
     "page_name": "1"
@@ -504,13 +504,13 @@
         "x": 382.0,
         "y": 874.0
        },
-       "context": "Text: H&WTOP LEFT — Overrides: PointSize: 36, OTFContextualAlternate: false",
+       "context": "Text: H&W TOP LEFT — Overrides: PointSize: 36, OTFContextualAlternate: false",
        "context_details": {
         "overrides": {
          "OTFContextualAlternate": "false",
          "PointSize": "36"
         },
-        "text": "H&WTOP LEFT"
+        "text": "H&W\nTOP LEFT"
        },
        "data_id": "u19c",
        "identifier": "u19c",
@@ -518,7 +518,7 @@
        "page_name": "1",
        "spread_id": "uce",
        "text_content": [
-        "H&WTOP LEFT"
+        "H&W\nTOP LEFT"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -537,13 +537,13 @@
         "x": 543.47,
         "y": 874.0
        },
-       "context": "Text: H&WTOP RIGHT — Overrides: PointSize: 36, OTFContextualAlternate: false",
+       "context": "Text: H&W TOP RIGHT — Overrides: PointSize: 36, OTFContextualAlternate: false",
        "context_details": {
         "overrides": {
          "OTFContextualAlternate": "false",
          "PointSize": "36"
         },
-        "text": "H&WTOP RIGHT"
+        "text": "H&W\nTOP RIGHT"
        },
        "data_id": "u1b7",
        "identifier": "u1b7",
@@ -551,7 +551,7 @@
        "page_name": "1",
        "spread_id": "uce",
        "text_content": [
-        "H&WTOP RIGHT"
+        "H&W\nTOP RIGHT"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -610,13 +610,13 @@
         "x": 730.79,
         "y": 830.8
        },
-       "context": "Text: H&WBOTTOM LEFT — Overrides: PointSize: 36, OTFContextualAlternate: false",
+       "context": "Text: H&W BOTTOM LEFT — Overrides: PointSize: 36, OTFContextualAlternate: false",
        "context_details": {
         "overrides": {
          "OTFContextualAlternate": "false",
          "PointSize": "36"
         },
-        "text": "H&WBOTTOM LEFT"
+        "text": "H&W\nBOTTOM LEFT"
        },
        "data_id": "u1d1",
        "identifier": "u1d1",
@@ -624,7 +624,7 @@
        "page_name": "1",
        "spread_id": "uce",
        "text_content": [
-        "H&WBOTTOM LEFT"
+        "H&W\nBOTTOM LEFT"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -683,13 +683,13 @@
         "x": 885.91,
         "y": 830.8
        },
-       "context": "Text: H&WBOTTOM RIGHT — Overrides: PointSize: 36, OTFContextualAlternate: false",
+       "context": "Text: H&W BOTTOM RIGHT — Overrides: PointSize: 36, OTFContextualAlternate: false",
        "context_details": {
         "overrides": {
          "OTFContextualAlternate": "false",
          "PointSize": "36"
         },
-        "text": "H&WBOTTOM RIGHT"
+        "text": "H&W\nBOTTOM RIGHT"
        },
        "data_id": "u1e8",
        "identifier": "u1e8",
@@ -697,7 +697,7 @@
        "page_name": "1",
        "spread_id": "uce",
        "text_content": [
-        "H&WBOTTOM RIGHT"
+        "H&W\nBOTTOM RIGHT"
        ],
        "validationClassifier": "OVERRIDE"
       }

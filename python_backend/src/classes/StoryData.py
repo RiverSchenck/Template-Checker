@@ -1,18 +1,18 @@
 from typing import List
-from xml.etree.ElementTree import Element
 from src.classes.StoryParagraphData import StoryParagraphData
 from src.classes.StoryCharacterData import StoryCharacterData
+from src.model.text import Story
 
 
 class StoryData:
     """A class to hold and manage story data."""
-    def __init__(self, spreads_parser: 'SpreadsParser', styles_parser: 'StylesParser', fonts_parser: 'FontsParser', story_element: Element):
+    def __init__(self, spreads_parser: 'SpreadsParser', styles_parser: 'StylesParser', fonts_parser: 'FontsParser', story: Story):
         self.story_id: str = ''
         self.paragraph_styles: List[StoryParagraphData] = []
         self.character_styles: List[StoryCharacterData] = []
         self.parent_text_frame_id: str = ''
         self._extract_story_data(
-            styles_parser, fonts_parser, story_element)
+            styles_parser, fonts_parser, story)
         self.grouped_paragraph_styles: List[List[StoryParagraphData]
                                             ] = self._extract_grouped_styles()
         # Self of the first page of the spread this story's frame is on (the item's own page comes from
@@ -20,21 +20,20 @@ class StoryData:
         self.page_id: str = spreads_parser.get_page_by_story_id(self.story_id)
 
 
-    def _extract_story_data(self, styles_parser: 'StylesParser', fonts_parser: 'FontsParser', story_element: Element):
-        self.story_id = story_element.get("Self")
+    def _extract_story_data(self, styles_parser: 'StylesParser', fonts_parser: 'FontsParser', story: Story):
+        self.story_id = story.id
 
-        # Extract Paragraph Styles
-        index = 0
-        for par_style_range in story_element.findall(".//ParagraphStyleRange"):
+        # Notes are editorial (never printed): their text isn't checked (decided 2026-10-13).
+        paragraphs = [paragraph for paragraph in story.paragraphs if paragraph.container != 'note']
+        for index, paragraph in enumerate(paragraphs):
             par_style = StoryParagraphData(
-                index, par_style_range, styles_parser, fonts_parser)
+                index, paragraph, styles_parser, fonts_parser)
             self.add_paragraph_style(par_style)
-            index += 1
 
             # Extract Character Styles within the Paragraph Style
-            for char_style_range in par_style_range.findall("CharacterStyleRange"):
+            for run in paragraph.runs:
                 char_style = StoryCharacterData(
-                    char_style_range, fonts_parser, styles_parser)
+                    run, fonts_parser, styles_parser)
                 self.add_character_style(char_style)
                 par_style.add_child_char_style(char_style)
                 # The font the text is set in, wherever it comes from (text, character style, paragraph).

@@ -550,13 +550,13 @@
   "template_name": "4 err 2 warn transformations.zip",
   "text_box_data": {
    "u108": {
-    "content": "Image in frame rotationand frame rotation\n",
+    "content": "Image in frame rotation\nand frame rotation\n",
     "identifier": "u108",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u132": {
-    "content": "in frame flip verticalimage only dlip verticle\n",
+    "content": "in frame flip vertical\nimage only dlip verticle\n",
     "identifier": "u132",
     "page_id": "u125",
     "page_name": "2"

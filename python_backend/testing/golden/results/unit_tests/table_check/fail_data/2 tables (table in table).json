@@ -513,7 +513,7 @@
        "page_name": "1",
        "spread_id": "uf2",
        "text_content": [
-        "Rue Jules Cockx 8-10 - 1160 Brussels - Belgiumstanleystella.com"
+        "Rue Jules Cockx 8-10 - 1160 Brussels - Belgium\nstanleystella.com"
        ],
        "validationClassifier": "HYPHENATION"
       }
@@ -617,7 +617,7 @@
   "template_name": "2 tables (table in table).zip",
   "text_box_data": {
    "u10b": {
-    "content": "Rue Jules Cockx 8-10 - 1160 Brussels - Belgiumstanleystella.com\n",
+    "content": "Rue Jules Cockx 8-10 - 1160 Brussels - Belgium\nstanleystella.com\n",
     "identifier": "u10b",
     "page_id": "uf7",
     "page_name": "1"
@@ -674,12 +674,12 @@
         "x": 38.71,
         "y": 118.07
        },
-       "context": "Text: Rue Jules Cockx 8-10 - 1160 Brussels - Belgiumstanleystella.com — Overrides: Hyphenation: false",
+       "context": "Text: Rue Jules Cockx 8-10 - 1160 Brussels - Belgium stanleystella.com — Overrides: Hyphenation: false",
        "context_details": {
         "overrides": {
          "Hyphenation": "false"
         },
-        "text": "Rue Jules Cockx 8-10 - 1160 Brussels - Belgiumstanleystella.com"
+        "text": "Rue Jules Cockx 8-10 - 1160 Brussels - Belgium\nstanleystella.com"
        },
        "data_id": "u10b",
        "identifier": "u10b",
@@ -687,7 +687,7 @@
        "page_name": "1",
        "spread_id": "uf2",
        "text_content": [
-        "Rue Jules Cockx 8-10 - 1160 Brussels - Belgiumstanleystella.com"
+        "Rue Jules Cockx 8-10 - 1160 Brussels - Belgium\nstanleystella.com"
        ],
        "validationClassifier": "OVERRIDE"
       }

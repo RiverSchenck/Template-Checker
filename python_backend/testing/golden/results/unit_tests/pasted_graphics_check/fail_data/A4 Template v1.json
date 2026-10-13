@@ -512,13 +512,13 @@
     "page_name": "2"
    },
    "u21b": {
-    "content": "Bereit. Im Netz für die Schweiz.\n",
+    "content": "Bereit. \nIm Netz für die Schweiz.\n",
     "identifier": "u21b",
     "page_id": "u1ed",
     "page_name": "3"
    },
    "u21e": {
-    "content": "Bereit. Im Netz für die Schweiz.\n",
+    "content": "Bereit. \nIm Netz für die Schweiz.\n",
     "identifier": "u21e",
     "page_id": "u1ed",
     "page_name": "3"
@@ -600,7 +600,7 @@
         "x": 258.9,
         "y": 543.42
        },
-       "context": "Text: Bereit. Im Netz für die Schweiz. — Overrides: Leading: 66.07157051672317, AppliedFont: TheSans, FillColor: Color/SC White RGB, FontStyle: B3 Light, PointSize: 56.488808964060034, StrokeWeight: 0.9414801494010006, Tracking: -20, AppliedLanguage: $ID/English: UK, MiterLimit: 3.765920597604002, RubyFontSize: -0.9414801494010006, KentenFontSize: -0.9414801494010006",
+       "context": "Text: Bereit.  Im Netz für die Schweiz. — Overrides: Leading: 66.07157051672317, AppliedFont: TheSans, FillColor: Color/SC White RGB, FontStyle: B3 Light, PointSize: 56.488808964060034, StrokeWeight: 0.9414801494010006, Tracking: -20, AppliedLanguage: $ID/English: UK, MiterLimit: 3.765920597604002, RubyFontSize: -0.9414801494010006, KentenFontSize: -0.9414801494010006",
        "context_details": {
         "overrides": {
          "AppliedFont": "TheSans",
@@ -615,7 +615,7 @@
          "StrokeWeight": "0.9414801494010006",
          "Tracking": "-20"
         },
-        "text": "Bereit. Im Netz für die Schweiz."
+        "text": "Bereit. \nIm Netz für die Schweiz."
        },
        "data_id": "u21b",
        "identifier": "u21b",
@@ -623,7 +623,7 @@
        "page_name": "3",
        "spread_id": "u1e2",
        "text_content": [
-        "Bereit. Im Netz für die Schweiz."
+        "Bereit. \nIm Netz für die Schweiz."
        ],
        "validationClassifier": "OVERRIDE"
       }
