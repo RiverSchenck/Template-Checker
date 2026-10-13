@@ -48,8 +48,7 @@ export const ERRORS: ApiErrorDoc[] = [
     status: 422,
     code: 'template_not_checkable',
     retry: 'no',
-    hint: 'The package could not be checked, for example because it contains no `.idml` file. `message` states the reason and is suitable to show to the customer.',
-    only: '/v1/checks/summary',
+    hint: 'The package could not be checked, for example because it contains no `.idml` file. `message` states the reason and is suitable to show to the customer. Returned by `/v1/checks/summary` and `/v1/checks/xml`; `/v1/checks` returns 200 with `status: "rejected"` instead.',
   },
   {
     status: 429,
@@ -287,6 +286,7 @@ export const ENDPOINTS: EndpointDoc[] = [
       'unauthorized',
       'access_denied',
       'file_too_large',
+      'template_not_checkable',
       'check_in_progress',
       'rate_limited',
       'upload_failed',
