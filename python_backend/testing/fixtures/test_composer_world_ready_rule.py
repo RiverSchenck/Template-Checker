@@ -20,4 +20,4 @@ def test_single_line_composers_are_fine(tmp_path, composer):
 
 @pytest.mark.parametrize('composer', ['HL Composer', 'HL Composer Optyca'])
 def test_paragraph_composers_are_a_warning(tmp_path, composer):
-    assert [i.severity for i in composer_warnings(tmp_path, composer)] == ['warnings']
+    assert [i.severity for i in composer_warnings(tmp_path, composer)] == ['warning']

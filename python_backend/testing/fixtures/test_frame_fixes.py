@@ -14,26 +14,26 @@ def transform_issues(tmp_path, build):
     pkg.text_frame(pkg.story([('Body', 'Hello')]))
     build(pkg)
     run = run_checker(pkg.write(tmp_path))
-    return sorted((i.classifier, i.data_id) for i in run.issues if 'TRANSFORMATION' in i.classifier)
+    return sorted((i.kind, i.item_id) for i in run.of('TRANSFORMATION'))
 
 
 @pytest.mark.parametrize('frame', ['Rectangle', 'Oval', 'Polygon'])
 def test_flipped_image_frame_is_reported_once(tmp_path, frame):
     ids = {}
     issues = transform_issues(tmp_path, lambda pkg: ids.setdefault('frame', pkg.image('a.jpg', frame=frame, frame_transform=FLIPPED)))
-    assert issues == [('IMAGE_TRANSFORMATION_CONTAINER', ids['frame'])]
+    assert issues == [('image_frame', ids['frame'])]
 
 
 def test_flipped_empty_frame_is_still_a_page_item(tmp_path):
     ids = {}
     issues = transform_issues(tmp_path, lambda pkg: ids.setdefault('frame', pkg.shape('Oval', transform=FLIPPED)))
-    assert issues == [('PAGE_ITEM_TRANSFORMATION', ids['frame'])]
+    assert issues == [('page_item', ids['frame'])]
 
 
 def linked_frames(tmp_path, **thread):
     pkg = PackageBuilder()
     frame = pkg.text_frame(pkg.story([('Body', 'Hello')]), **thread)
-    return frame, [i.data_id for i in run_checker(pkg.write(tmp_path)).of('LINKED_TEXT_FRAME')]
+    return frame, [i.item_id for i in run_checker(pkg.write(tmp_path)).of('LINKED_TEXT_FRAME')]
 
 
 @pytest.mark.parametrize('thread', [dict(previous='n', next='n'), dict(previous=None, next=None)], ids=['n', 'missing'])
@@ -54,6 +54,6 @@ def test_image_placed_in_text_is_located_on_its_story_frame_page(tmp_path):
                           f'AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">{image}</CharacterStyleRange>'
                           '</ParagraphStyleRange>')
     pkg.text_frame(story, page=1)
-    [issue] = [i for i in run_checker(pkg.write(tmp_path)).issues if i.classifier == 'IMAGE_TRANSFORMATION_IMAGE']
+    [issue] = run_checker(pkg.write(tmp_path)).of('TRANSFORMATION', 'image')
     frame_id = image.split('Self="', 1)[1].split('"', 1)[0]
-    assert (issue.identifier, issue.data_id, issue.page_id) == ('photo.jpg', frame_id, 'page1')
+    assert (issue.subject, issue.item_id, issue.page_id) == ('photo.jpg', frame_id, 'page1')

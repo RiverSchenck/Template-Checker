@@ -38,7 +38,7 @@ def frame_text(tmp_path, body):
     """The text the checker reads from a two-column frame holding this story (two columns gives the frame a
     text box issue, which is what puts its text in the results)."""
     result = check(tmp_path, lambda pkg: pkg.text_frame(pkg.raw_story(body), columns=2))
-    return result, ''.join(box['content'] for box in result.results['text_box_data'].values())
+    return result, ''.join(box['content'] for box in result.results['text_boxes'].values())
 
 
 # --- B1/B2: text and runs inside hyperlinks, tracked changes, tags and special characters -----------------
@@ -78,7 +78,7 @@ def test_pending_deletion_is_not_text(tmp_path):
 ])
 def test_character_style_of_a_run_is_checked(tmp_path, body):
     result = check(tmp_path, lambda pkg: pkg.text_frame(pkg.raw_story(body)))
-    assert [(i.classifier, i.identifier) for i in result.of('KERNING_CHAR')] == [('KERNING_CHAR', 'Emphasis')]
+    assert [(i.check, i.subject) for i in result.of('KERNING_CHAR')] == [('KERNING_CHAR', 'Emphasis')]
 
 
 # --- B3: inline and anchored objects ------------------------------------------------------------------------
@@ -109,7 +109,7 @@ def test_placed_image_is_not_unused(tmp_path, build):
     pytest.param(_inline_image(image_transform='-1 0 0 1 0 0'), id='inline'),
 ])
 def test_flipped_image_is_reported(tmp_path, build):
-    assert len(check(tmp_path, build).of('IMAGE_TRANSFORMATION_IMAGE')) == 1
+    assert len(check(tmp_path, build).of('TRANSFORMATION', 'image')) == 1
 
 
 def _anchored_frame(pkg):
@@ -149,7 +149,7 @@ TABLE = ('<Table Self="t1" HeaderRowCount="0" FooterRowCount="0" BodyRowCount="1
     pytest.param(_heading_inside(TABLE.format), id='table-cell'),
 ])
 def test_paragraph_is_checked(tmp_path, build):
-    assert [i.identifier for i in check(tmp_path, build).of('KERNING')] == ['Heading']
+    assert [i.subject for i in check(tmp_path, build).of('KERNING')] == ['Heading']
 
 
 def test_note_is_not_checked(tmp_path):

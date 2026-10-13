@@ -23,26 +23,26 @@ def position_issues(tmp_path, paragraphs, char_styles=(), paragraph_styles=()):
 def test_superscript_from_character_style(tmp_path):
     position, shift = position_issues(tmp_path, [('Body', [('Brand', {}), ('®', SUP)])],
                                       char_styles=[('Sup', None, {'Position': 'Superscript'})])
-    assert [(i.severity, i.identifier, i.context) for i in position] == [
-        ('errors', 'Sup', 'Position is: Superscript; Inherited from: CharacterStyle/Sup')]
+    assert [(i.severity, i.subject, i.detail) for i in position] == [
+        ('error', 'Sup', 'Position is: Superscript; Inherited from: CharacterStyle/Sup')]
     assert shift == []
 
 
 def test_superscript_through_based_on(tmp_path):
     position, _ = position_issues(tmp_path, [('Body', [('1', SUP)])],
                                   char_styles=[('Base', None, {'Position': 'OTSuperscript'}), ('Sup', 'Base', {})])
-    assert [i.context for i in position] == ['Position is: OTSuperscript; Inherited from: CharacterStyle/Base']
+    assert [i.detail for i in position] == ['Position is: OTSuperscript; Inherited from: CharacterStyle/Base']
 
 
 def test_subscript_set_on_the_text(tmp_path):
     position, _ = position_issues(tmp_path, [('Body', [('CO', {}), ('2', {'Position': 'Subscript'})])])
-    assert [i.context for i in position] == ['Position is: Subscript']
+    assert [i.detail for i in position] == ['Position is: Subscript']
 
 
 def test_subscript_from_paragraph_style(tmp_path):
     position, _ = position_issues(tmp_path, [('Small', 'Footnote text')],
                                   paragraph_styles=[('Small', None, {'Position': 'Subscript'})])
-    assert [i.context for i in position] == ['Position is: Subscript; Inherited from: ParagraphStyle/Small']
+    assert [i.detail for i in position] == ['Position is: Subscript; Inherited from: ParagraphStyle/Small']
 
 
 def test_character_style_normal_overrides_paragraph(tmp_path):
@@ -55,7 +55,7 @@ def test_character_style_normal_overrides_paragraph(tmp_path):
 def test_baseline_shift_is_a_warning(tmp_path):
     position, shift = position_issues(tmp_path, [('Body', [('Price', {}), ('€', {'BaselineShift': '3'})])])
     assert position == []
-    assert [(i.severity, i.context) for i in shift] == [('warnings', 'Baseline Shift is: 3pt')]
+    assert [(i.severity, i.detail) for i in shift] == [('warning', 'Baseline Shift is: 3pt')]
 
 
 @pytest.mark.parametrize('attrs', [{}, {'Position': 'Normal'}, {'BaselineShift': '0'}])

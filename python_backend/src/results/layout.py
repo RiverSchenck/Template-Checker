@@ -38,9 +38,6 @@ class DocumentLayout:
             return bounds['page_id']
         return fallback_page_id or ''
 
-    def page_name(self, page_id: str) -> str:
-        return self.pages.get(page_id, '') if page_id else ''
-
     def spread_of(self, page_id: str) -> str:
         return next((spread for spread, pages in self.spread_to_pages.items() if page_id in pages), '') \
             if page_id else ''

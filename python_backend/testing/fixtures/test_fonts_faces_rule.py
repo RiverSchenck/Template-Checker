@@ -34,22 +34,22 @@ def test_all_faces_packaged(tmp_path):
 
 def test_missing_bold_used_through_character_style(tmp_path):
     issues = font_issues(tmp_path, files=('Regular',))
-    assert [(i.identifier, i.context) for i in issues] == [('Brand', 'Missing styles: Bold')]
+    assert [(i.subject, i.detail) for i in issues] == [('Brand', 'Missing styles: Bold')]
 
 
 def test_missing_bold_set_on_the_text(tmp_path):
     issues = font_issues(tmp_path, files=('Regular',), bold_via='text')
-    assert [i.context for i in issues] == ['Missing styles: Bold']
+    assert [i.detail for i in issues] == ['Missing styles: Bold']
 
 
 def test_family_with_no_files_reported_without_styles(tmp_path):
     issues = font_issues(tmp_path, files=())
-    assert [(i.identifier, i.context) for i in issues] == [('Brand', '')]
+    assert [(i.subject, i.detail) for i in issues] == [('Brand', '')]
 
 
 def test_family_used_only_through_a_character_style(tmp_path):
     issues = font_issues(tmp_path, accent_family='Accent')
-    assert [i.identifier for i in issues] == ['Accent']
+    assert [i.subject for i in issues] == ['Accent']
 
 
 def test_face_without_postscript_name_falls_back_to_family(tmp_path):

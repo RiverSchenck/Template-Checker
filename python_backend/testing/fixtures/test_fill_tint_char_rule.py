@@ -19,13 +19,13 @@ def tint_issues(tmp_path, *char_styles, runs=None):
 
 def test_character_style_tint_is_reported_once(tmp_path):
     char, par = tint_issues(tmp_path, ('Caption', None, {'FillTint': '60'}))
-    assert [(i.severity, i.identifier, i.context) for i in char] == [('errors', 'Caption', 'Fill Tint is: 60')]
+    assert [(i.severity, i.subject, i.detail) for i in char] == [('error', 'Caption', 'Fill Tint is: 60')]
     assert par == []
 
 
 def test_tint_inherited_through_based_on(tmp_path):
     char, _ = tint_issues(tmp_path, ('Base', None, {'FillTint': '40'}), ('Caption', 'Base', {}))
-    assert [i.context for i in char] == ['Fill Tint is: 40; Inherited from: CharacterStyle/Base']
+    assert [i.detail for i in char] == ['Fill Tint is: 40; Inherited from: CharacterStyle/Base']
 
 
 @pytest.mark.parametrize('tint', ['100', '-1'])

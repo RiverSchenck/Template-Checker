@@ -29,7 +29,7 @@ def test_each_knob_produces_exactly_its_issue(tmp_path):
         pkg = clean_package()
         change(pkg)
         run = run_checker(pkg.write(tmp_path))
-        assert set(run.classifiers()) == {expected}, (expected, run.classifiers())
+        assert set(run.checks()) == {expected}, (expected, run.checks())
 
 
 def test_issues_point_at_the_built_items(tmp_path):
@@ -37,7 +37,7 @@ def test_issues_point_at_the_built_items(tmp_path):
     frame = pkg.text_frame(pkg.story([('Body', 'Linked')]), next='u999')
     run = run_checker(pkg.write(tmp_path))
     [issue] = run.of('LINKED_TEXT_FRAME')
-    assert issue.data_id == frame
+    assert issue.item_id == frame
     assert issue.page_name == '1'
 
 
@@ -48,13 +48,13 @@ def test_style_inheritance(tmp_path):
     pkg.text_frame(pkg.story([('Heading', 'Title')]))
     run = run_checker(pkg.write(tmp_path))
     [issue] = run.of('COMPOSER')
-    assert issue.identifier == 'Heading'
+    assert issue.subject == 'Heading'
 
 
 def test_frame_positions_round_trip_through_page_geometry(tmp_path):
     pkg = PackageBuilder(pages=2)
     frame = pkg.text_frame(pkg.story([('Body', 'Right page')]), page=1, at=(50, 60, 200, 100), next='u999')
     run = run_checker(pkg.write(tmp_path))
-    [issue] = run.of('LINKED_TEXT_FRAME')
-    bounds = next(item for item in run.results['text_boxes']['details'][issue.identifier]['errors'])['bounds']
+    [issue] = [i for i in run.results['issues'] if i['check'] == 'LINKED_TEXT_FRAME']
+    bounds = issue['location']['bounds']
     assert (bounds['page_id'], bounds['x'], bounds['y'], bounds['width'], bounds['height']) == ('page1', 50, 60, 200, 100)

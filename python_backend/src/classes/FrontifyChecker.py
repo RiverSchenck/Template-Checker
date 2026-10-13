@@ -16,7 +16,7 @@ from src.pipeline.workspace import Workspace
 from src.results.classifiers import Category
 from src.results.layout import DocumentLayout
 from src.results.results import Results
-from src.results.serialize import results_json, results_v2
+from src.results.serialize import results_v2
 
 logger = logging.getLogger(__name__)
 
@@ -52,11 +52,6 @@ class FrontifyChecker:
         self.document, self.output_folder = outcome.document, outcome.idml_folder
 
     # --- results and files ---------------------------------------------------------------------------------------
-
-    def results_json(self) -> dict:
-        """Results v1, which only testing/fixtures/checker_run.py still reads (until plan PR 6.1)."""
-        return results_json(self.results, self.layout, template_name=self.template_name,
-                            output_folder=self.output_folder, totals=self.totals)
 
     def results_v2(self) -> dict:
         """Results v2 (plan §4.3): what the web API sends."""
