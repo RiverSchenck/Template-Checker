@@ -19,7 +19,7 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 | `MASTERPAGE` | error | Master Page can't be used. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504 | Yes |
 | `WARNING` | warning | *(No default message on this member; call site supplies text.)* | — | Yes — e.g. missing `MasterSpreads` directory |
 | `DOCUMENT_BLEED` | warning | InDesign defined bleed is applied. | https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based | Yes |
-| `TEXT_WRAP_ITEM` | error | Text Wrap is not supported. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates | Yes — images, shapes, lines and groups with wrap |
+| `TEXT_WRAP_ITEM` | error | Text Wrap is not supported. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12 | Yes — images, shapes, lines and groups with wrap |
 
 ---
 
@@ -29,7 +29,7 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 |------------|-------|-------------|--------------|-----------------|
 | `GRID_ALIGNMENT` | error | Grid alignment is not supported | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242 | Yes |
 | `KERNING` | error | Kerning must be 'Metrics' | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d | Yes — paragraph style |
-| `FILL_TINT` | error | Fill Tint must be 100. (This may be inaccurate, testing currently) | https://help.frontify.com | Yes |
+| `FILL_TINT` | error | Fill Tint must be 100. (This may be inaccurate, testing currently) | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf | Yes |
 | `HYPHENATION` | warning | Hyphenation is not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf | Yes |
 | `COMPOSER` | warning | We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0 | Yes |
 
@@ -40,9 +40,9 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 | Error name | Level | Description | Help article | FrontifyChecker |
 |------------|-------|-------------|--------------|-----------------|
 | `KERNING_CHAR` | error | Kerning must be 'Metrics' | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d | Yes — character style |
-| `FILL_TINT_CHAR` | error | Fill Tint must be 100. Frontify shows text colours without their tint. | https://help.frontify.com | Yes — character style |
-| `TEXT_POSITION` | error | Superscript and subscript are not supported. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates | Yes — per text run |
-| `BASELINE_SHIFT` | warning | Baseline shift is not supported. Shifted text sits on the baseline in Frontify. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates | Yes — per text run |
+| `FILL_TINT_CHAR` | error | Fill Tint must be 100. Frontify shows text colours without their tint. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf | Yes — character style |
+| `TEXT_POSITION` | error | Superscript and subscript are not supported. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b | Yes — per text run |
+| `BASELINE_SHIFT` | warning | Baseline shift is not supported. Shifted text sits on the baseline in Frontify. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b | Yes — per text run |
 
 ---
 
@@ -57,7 +57,7 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 | `TEXT_COLUMNS` | error | Text columns are not supported | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5 | Yes |
 | `LINKED_TEXT_FRAME` | error | Linked (threaded) text frames are not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698 | Yes |
 | `OBJECT_STYLE_TEXT` | error | Object styles are not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf | Yes |
-| `TEXT_WRAP` | error | Text Wrap is not supported. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates | Yes |
+| `TEXT_WRAP` | error | Text Wrap is not supported. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12 | Yes |
 | `OVERRIDE` | warning | Overrides are not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775 | Yes |
 | `EMPTY_TEXT_FRAME` | info | Empty text frame found. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775 | Yes |
 
@@ -68,7 +68,7 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 | Error name | Level | Description | Help article | FrontifyChecker |
 |------------|-------|-------------|--------------|-----------------|
 | `FONTS_INCLUDED` | error | Package is missing fonts (whole family, or the styles named in the context). | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
-| `ADOBE_FONT` | error | Adobe Fonts must be packaged. Frontify only loads fonts included in the package. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates | Yes — Adobe Fonts styles not in Document fonts |
+| `ADOBE_FONT` | error | Adobe Fonts must be packaged. Frontify only loads fonts included in the package. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes — Adobe Fonts styles not in Document fonts |
 | `OTF_TTF_FONT` | error | Only OTF or TTF fonts are supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
 | `VARIABLE_FONT` | error | Variable fonts are not supported | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
 
