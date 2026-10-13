@@ -51,7 +51,9 @@ def _element_transform(el) -> Matrix:
 class PageGeometryIndex:
     """Resolves page item Self ids to bounding boxes in page coordinates (points, origin top-left of
     the page) so the frontend can draw issue highlights over page previews."""
-    def __init__(self, idml_output_folder: str):
+    def __init__(self, idml_output_folder: Optional[str] = None, *, spreads=()):
+        """From the IDML folder (reads designmap.xml and the spreads), or from spread elements already parsed
+        in document order (spreads=...)."""
         # Pages in document order: {self, name, index, width, height, spread_id}
         self.pages: List[Dict] = []
         # page Self -> (inverse page transform, left, top, width, height)
@@ -61,7 +63,10 @@ class PageGeometryIndex:
         # element Self -> element (spread items only)
         self._elements: Dict[str, object] = {}
         self._bounds_cache: Dict[str, Optional[Dict]] = {}
-        self._parse(idml_output_folder)
+        if idml_output_folder is not None:
+            self._parse(idml_output_folder)
+        for spread in spreads:
+            self._add_spread(spread)
 
     def _spread_paths_in_order(self, idml_output_folder: str) -> List[str]:
         designmap = os.path.join(idml_output_folder, 'designmap.xml')
@@ -82,16 +87,19 @@ class PageGeometryIndex:
             if not os.path.exists(path):
                 continue
             spread = safe_xml.parse(path, large=True).getroot().find('.//Spread')
-            if spread is None:
-                continue
-            spread_id = spread.get('Self', '')
-            self._spread_pages[spread_id] = []
-            for page in spread.findall('Page'):
-                self._add_page(page, spread_id)
-            for el in spread.iter():
-                self_id = el.get('Self') if isinstance(el.tag, str) else None
-                if self_id and _local_tag(el.tag) != 'Page':
-                    self._elements[self_id] = el
+            if spread is not None:
+                self._add_spread(spread)
+
+    def _add_spread(self, spread):
+        """Index one <Spread> element: its pages and every element with a Self."""
+        spread_id = spread.get('Self', '')
+        self._spread_pages[spread_id] = []
+        for page in spread.findall('Page'):
+            self._add_page(page, spread_id)
+        for el in spread.iter():
+            self_id = el.get('Self') if isinstance(el.tag, str) else None
+            if self_id and _local_tag(el.tag) != 'Page':
+                self._elements[self_id] = el
 
     def _add_page(self, page, spread_id: str):
         page_id = page.get('Self')
