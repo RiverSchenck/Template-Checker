@@ -140,3 +140,29 @@ Frontify only loads fonts from a folder named exactly `Document fonts` that are 
 template falls back to another font even though the files are in the package. To be agreed: which cases to flag
 (folder named differently, e.g. `Document Fonts` on a case-sensitive server; no `.lst` index; a font file missing
 from the index) and the severity.
+
+### Possible future checks: story content Frontify drops (not built)
+
+Frontify's IDML import reads a story's text only from `Content` and `Br` elements that sit directly inside a
+`CharacterStyleRange`. Paragraph and character ranges may be wrapped in `XMLElement`, but nothing else is looked
+through (`app-server/application/utility/Idml/Story.php:293-365`). Page items are read only as direct children of
+a spread (`Spread.php:60-69`). Everything else in a story is dropped silently, so a template can lose content that
+the checker doesn't mention today. Found while planning PR 0.3 of the v2 refactor (2026-10-13), from reading the
+code; worth confirming with a test import.
+
+The checker keeps checking this content as text, as planned: the coverage fixes B1–B4 in
+[PLAN-v2-refactor.md](PLAN-v2-refactor.md). Notes and pending deletions are skipped; footnotes and table cells are
+checked. These checks would be added on top of that:
+
+| Content | In Frontify | Possible check | Why |
+|---------|-------------|----------------|-----|
+| Hyperlink text (`HyperlinkTextSource`) | Text disappears | Error: link text is lost; remove the hyperlink | The words are missing from the template. |
+| Tracked changes not yet accepted (`Change`) | Inserted and deleted text both disappear | Error: accept or reject all changes | Inserted text is missing from the template. |
+| Footnotes (`Footnote`) | Disappear | Error or warning | Footnote text is missing. |
+| Inline and anchored objects (images, frames, groups in a story) | Not imported | Error: unanchor them | The image or frame is missing; an anchored text frame's text is too. |
+| Table cells | Disappear | Already covered: tables are an error | — |
+| Notes (`Note`) | Disappear | None | Editorial only; never printed. |
+| Special characters (`<?ACE n?>`: page number, tab, indent to here…) | Become nothing; the rest of the text is kept | Maybe info, for auto page numbers | A page number marker shows nothing. |
+| `XMLElement` inside a character range (tagged run) | Text disappears | Error, if it occurs in real templates | Only tags around paragraphs and runs are read. |
+
+To be agreed: which of these to build, their severity and copy.
