@@ -152,3 +152,24 @@ def test_first_error_message():
     }
     assert analytics.first_error_message(results) == 'No IDML file found'
     assert analytics.first_error_message({}) is None
+
+
+def _results_with(**lists):
+    return {'images': {'details': {'photo.jpg': {'errors': [], 'warnings': [], 'infos': [], **lists}}}}
+
+
+def test_severity_comes_from_the_list_an_issue_is_in():
+    """The classifier name alone doesn't give the severity: it is the list (errors/warnings/infos) the issue sits in."""
+    results = _results_with(
+        errors=[{'validationClassifier': 'IMAGE_TRANSFORMATION_IMAGE', 'identifier': 'photo.jpg'}],
+        warnings=[{'validationClassifier': 'UNUSED_IMAGE', 'identifier': 'photo.jpg'}],
+        infos=[{'validationClassifier': 'LARGE_IMAGE', 'identifier': 'photo.jpg'}])
+    assert [(v['validation_type'], v['severity']) for v in analytics.extract_individual_validations(results)] == [
+        ('IMAGE_TRANSFORMATION_IMAGE', 'error'), ('UNUSED_IMAGE', 'warning'), ('LARGE_IMAGE', 'info')]
+    assert analytics.extract_validation_counts(results) == {'total_errors': 1, 'total_warnings': 1, 'total_infos': 1}
+
+
+def test_a_new_classifier_needs_no_analytics_change():
+    results = _results_with(warnings=[{'validationClassifier': 'SOME_NEW_WARNING', 'identifier': None}])
+    assert analytics.extract_individual_validations(results) == [
+        {'validation_type': 'SOME_NEW_WARNING', 'severity': 'warning', 'category': 'images', 'identifier': ''}]
