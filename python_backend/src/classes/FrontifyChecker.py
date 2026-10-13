@@ -1,19 +1,19 @@
 """FrontifyChecker: the check run (src/pipeline/run.py) behind the interface the app and the tests have always used.
-New code calls the pipeline. This wrapper goes when the per-check tests and their helpers are replaced (plan PR 6.1).
+New code calls the pipeline. This wrapper goes when the app calls the pipeline itself (plan PR 6.1b).
 """
 import logging
 import os
 import shutil
 from typing import Dict, List, Optional
 
-from src.checks import CHECKS, CHECKS_BY_STATE, Check
+from src.checks import CHECKS, Check
 from src.checks.stages import States
 from src.helpers.package_zip import DAMAGED_IDML  # noqa: F401 (tests import the rejection reasons from here)
 from src.model.document import Document
-from src.pipeline.intake import NOT_A_ZIP, Intake, Package, Rejected, unpack_idml, unpack_package  # noqa: F401
-from src.pipeline.run import IDML_TOO_LARGE, StageTracker, load, run, run_check  # noqa: F401
+from src.pipeline.intake import NOT_A_ZIP  # noqa: F401
+from src.pipeline.run import IDML_TOO_LARGE, StageTracker, run  # noqa: F401
 from src.pipeline.workspace import Workspace
-from src.results.classifiers import Category, Severity
+from src.results.classifiers import Category
 from src.results.layout import DocumentLayout
 from src.results.results import Results
 from src.results.serialize import results_json, results_v2
@@ -32,8 +32,6 @@ class FrontifyChecker:
         self.previews: bool = True
         self.checks: List[Check] = list(CHECKS)  # an instance copy, so a test can swap one out
         self._tracker = StageTracker()
-        self.package: Optional[Package] = None
-        self.intake: Optional[Intake] = None
         self.document: Optional[Document] = None
         self.results: Results = Results()
         self.layout: DocumentLayout = DocumentLayout()
@@ -53,42 +51,6 @@ class FrontifyChecker:
         self.results, self.layout, self.totals = outcome.results, outcome.layout, outcome.totals
         self.document, self.output_folder = outcome.document, outcome.idml_folder
 
-    # --- one stage at a time (testing/checker_setup.py) ---------------------------------------------------------
-
-    def unzip_package_state(self) -> Optional[States]:
-        self.template_name = os.path.basename(self.source_file_path)
-        self._tracker.stage = States.UNZIP_PACKAGE
-        try:
-            self.package = unpack_package(self.source_file_path, self._workspace())
-        except Rejected as rejected:
-            self.results.add(rejected.classifier, rejected.reason)
-            return None
-        return States.UNZIP_IDML
-
-    def unzip_idml_state(self) -> Optional[States]:
-        self._tracker.stage = States.UNZIP_IDML
-        try:
-            self.intake = unpack_idml(self.package, self._workspace())
-        except Rejected as rejected:
-            self.results.add(rejected.classifier, rejected.reason)
-            return None
-        self.output_folder = self.intake.idml_folder
-        return States.PARSE_XML
-
-    def parse_xml(self) -> Optional[States]:
-        self._tracker.stage = States.PARSE_XML
-        try:
-            loaded = load(self.intake, self.results, previews=self.previews)
-        except Rejected as rejected:
-            self.results.add(rejected.classifier, rejected.reason)
-            return None
-        self.document, self.layout = loaded.document, loaded.layout
-        return States.MASTERPAGE_CHECK
-
-    def run_check(self, state: States):
-        """Run one check on the parsed document (after parse_xml), e.g. from a test."""
-        run_check(CHECKS_BY_STATE[state], self.document, self.results)
-
     # --- results and files ---------------------------------------------------------------------------------------
 
     def results_json(self) -> dict:
@@ -99,15 +61,6 @@ class FrontifyChecker:
     def results_v2(self) -> dict:
         """Results v2 (plan §4.3): what the web API sends."""
         return results_v2(self.results, self.layout, template_name=self.template_name, totals=self.totals)
-
-    def get_error_types(self) -> List[str]:
-        return self.results.names(Severity.ERROR)
-
-    def get_warning_types(self) -> List[str]:
-        return self.results.names(Severity.WARNING)
-
-    def get_info_types(self) -> List[str]:
-        return self.results.names(Severity.INFO)
 
     def set_source_file_path(self, source_path: str):
         self.source_file_path = source_path
