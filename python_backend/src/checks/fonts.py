@@ -3,6 +3,7 @@
 from typing import List, Tuple
 
 from src.checks._report import report
+from src.model import subject as subjects
 from src.model.assets import FontFamily
 from src.model.document import Document
 from src.results.results import Results
@@ -38,12 +39,13 @@ def _report_missing(doc: Document, results: Results, classifier, adobe: bool) ->
         if absent:
             family_is_adobe = any(_is_adobe(font, style) for style in missing)
             if family_is_adobe == adobe:
-                report(results, classifier, identifier=font.name,
+                report(results, classifier, identifier=font.name, subject=subjects.font(font.name),
                        context_details={'missing_styles': missing, 'whole_family': True})
             continue
         styles = [style for style in missing if _is_adobe(font, style) == adobe]
         if styles:
             report(results, classifier, f"Missing styles: {', '.join(styles)}", identifier=font.name,
+                   subject=subjects.font(font.name),
                    context_details={'missing_styles': styles, 'whole_family': False})
 
 
@@ -66,11 +68,12 @@ def otf_ttf_font_check(doc: Document, results: Results) -> None:
     """Error for each file in Document Fonts that isn't .otf or .ttf."""
     for font in doc.packaged_fonts:
         if font.extension.lower() not in ['.otf', '.ttf']:
-            report(results, ValidationError.OTF_TTF_FONT, f"Font is {font.extension}", identifier=font.family)
+            report(results, ValidationError.OTF_TTF_FONT, f"Font is {font.extension}", identifier=font.family,
+                   subject=subjects.font(font.family))
 
 
 def variable_font_check(doc: Document, results: Results) -> None:
     """Error for each variable font family the document uses."""
     for font in doc.used_fonts:
         if font.variable:
-            report(results, ValidationError.VARIABLE_FONT, identifier=font.name)
+            report(results, ValidationError.VARIABLE_FONT, identifier=font.name, subject=subjects.font(font.name))

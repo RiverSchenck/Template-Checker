@@ -6,9 +6,16 @@ import logging
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timezone
 
+from src.results import catalogue
+from src.results.classifiers import Classifier, Severity, find
+
 logger = logging.getLogger(__name__)
 
-VALIDATION_CATEGORIES = ['par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general']
+# Severity in results v2 -> the classifier severity it was reported with.
+SEVERITY = {'error': Severity.ERROR, 'warning': Severity.WARNING, 'info': Severity.INFO}
+# The v1 results section (validations.category) for a check analytics doesn't know, by what it's about.
+CATEGORY_OF_KIND = {'paragraph_style': 'par_styles', 'character_style': 'char_styles', 'text_frame': 'text_boxes',
+                    'font': 'fonts', 'image': 'images', 'image_frame': 'images'}
 MAX_ERROR_MESSAGE_LENGTH = 1000
 
 
@@ -33,40 +40,40 @@ def get_supabase_client():
         return None
 
 
-# Each issue list in the results JSON, and the severity analytics stores for its issues.
-SEVERITY_OF_LIST = {'errors': 'error', 'warnings': 'warning', 'infos': 'info'}
+def _v1_classifier(issue: Dict[str, Any]) -> Optional[Classifier]:
+    """The v1 classifier a v2 issue was reported as. Stored rows keep v1's validation_type and category until the
+    analytics migration (plan PR 5.4): validations.category only allows v1's six results sections."""
+    name = catalogue.v1_name(issue.get('check'), (issue.get('subject') or {}).get('kind'), issue.get('facts'))
+    return find(name, SEVERITY.get(issue.get('severity')))
 
 
 def _issues(results_json: Dict[str, Any]):
-    """(category, list name, issue) for every issue in results JSON. The list an issue is in is its severity:
-    a classifier name alone doesn't say it, and names once existed as both an error and a warning."""
-    for category_key in VALIDATION_CATEGORIES:
-        details = results_json.get(category_key, {}).get('details', {})
-        for by_list in details.values():
-            for list_name in SEVERITY_OF_LIST:
-                for issue in by_list.get(list_name, []):
-                    yield category_key, list_name, issue
+    """Every issue in results v2."""
+    return results_json.get('issues') or []
 
 
 def extract_validation_counts(results_json: Dict[str, Any]) -> Dict[str, int]:
     """total_errors, total_warnings and total_infos in results JSON."""
-    counts = {f'total_{list_name}': 0 for list_name in SEVERITY_OF_LIST}
-    for _, list_name, _ in _issues(results_json):
-        counts[f'total_{list_name}'] += 1
+    counts = {f'total_{severity}s': 0 for severity in SEVERITY}
+    for issue in _issues(results_json):
+        counts[f"total_{issue['severity']}s"] += 1
     return counts
 
 
 def extract_individual_validations(results_json: Dict[str, Any]) -> List[Dict[str, Any]]:
     """One row per issue in results JSON, ready for the validations table."""
-    return [
-        {
-            'validation_type': issue.get('validationClassifier', 'UNKNOWN'),
-            'severity': SEVERITY_OF_LIST[list_name],
-            'category': category_key,
-            'identifier': issue.get('identifier', '') or '',
-        }
-        for category_key, list_name, issue in _issues(results_json)
-    ]
+    rows = []
+    for issue in _issues(results_json):
+        classifier = _v1_classifier(issue)
+        subject = issue.get('subject') or {}
+        category = classifier.category.value if classifier else CATEGORY_OF_KIND.get(subject.get('kind'), 'general')
+        rows.append({
+            'validation_type': classifier.name if classifier else issue.get('check', 'UNKNOWN'),
+            'severity': issue['severity'],
+            'category': category,
+            'identifier': subject.get('name') or subject.get('id') or '',
+        })
+    return rows
 
 
 def get_app_version() -> Optional[str]:
@@ -82,8 +89,8 @@ def get_app_version() -> Optional[str]:
 
 def first_error_message(results_json: Dict[str, Any]) -> Optional[str]:
     """The first error's message in results JSON (for a rejected upload, the reason it was rejected)."""
-    return next((issue['context'] for _, list_name, issue in _issues(results_json)
-                 if list_name == 'errors' and issue.get('context')), None)
+    return next((issue['detail'] for issue in _issues(results_json)
+                 if issue.get('severity') == 'error' and issue.get('detail')), None)
 
 
 def log_analytics_to_supabase(

@@ -1,0 +1,831 @@
+{
+  "$defs": {
+    "AutoSizeFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "auto_size": {
+          "title": "Auto Size",
+          "type": "string"
+        },
+        "no_line_breaks": {
+          "title": "No Line Breaks",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "auto_size",
+        "no_line_breaks"
+      ],
+      "title": "AutoSizeFacts",
+      "type": "object"
+    },
+    "Bleed": {
+      "additionalProperties": false,
+      "description": "Offsets in points (may be negative); None when InDesign's value isn't a number.",
+      "properties": {
+        "top": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Top"
+        },
+        "bottom": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Bottom"
+        },
+        "inside": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Inside"
+        },
+        "outside": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Outside"
+        }
+      },
+      "required": [
+        "top",
+        "bottom",
+        "inside",
+        "outside"
+      ],
+      "title": "Bleed",
+      "type": "object"
+    },
+    "BleedFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "bleed": {
+          "$ref": "#/$defs/Bleed"
+        }
+      },
+      "required": [
+        "bleed"
+      ],
+      "title": "BleedFacts",
+      "type": "object"
+    },
+    "Bounds": {
+      "additionalProperties": false,
+      "description": "Where an item is on its page, in points from the page's top left.",
+      "properties": {
+        "page_id": {
+          "title": "Page Id",
+          "type": "string"
+        },
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        },
+        "width": {
+          "title": "Width",
+          "type": "number"
+        },
+        "height": {
+          "title": "Height",
+          "type": "number"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "page_id",
+        "x",
+        "y",
+        "width",
+        "height",
+        "kind"
+      ],
+      "title": "Bounds",
+      "type": "object"
+    },
+    "Check": {
+      "additionalProperties": false,
+      "description": "A catalogue entry: the only copy of a check's wording.",
+      "properties": {
+        "key": {
+          "enum": [
+            "ERROR",
+            "IDML",
+            "ZIP",
+            "WARNING",
+            "MASTERPAGE",
+            "PARAGRAPH_STYLE",
+            "FONTS_INCLUDED",
+            "OTF_TTF_FONT",
+            "VARIABLE_FONT",
+            "IMAGE_INCLUDED",
+            "EMBEDDED_IMAGE",
+            "TRANSFORMATION",
+            "TABLE",
+            "PASTED_GRAPHICS",
+            "AUTO_SIZE_TEXT_BOX",
+            "TEXT_COLUMNS",
+            "LINKED_TEXT_FRAME",
+            "OBJECT_STYLE",
+            "GRID_ALIGNMENT",
+            "KERNING",
+            "KERNING_CHAR",
+            "TEXT_WRAP",
+            "FILL_TINT",
+            "FILL_TINT_CHAR",
+            "TEXT_POSITION",
+            "ADOBE_FONT",
+            "HYPHENATION",
+            "OVERRIDE",
+            "UNUSED_IMAGE",
+            "DOCUMENT_BLEED",
+            "COMPOSER",
+            "BASELINE_SHIFT",
+            "EMPTY_TEXT_FRAME",
+            "LARGE_IMAGE"
+          ],
+          "title": "Key",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "subject_kinds": {
+          "items": {
+            "enum": [
+              "paragraph_style",
+              "character_style",
+              "text_frame",
+              "image",
+              "image_frame",
+              "font",
+              "page_item",
+              "document"
+            ],
+            "type": "string"
+          },
+          "title": "Subject Kinds",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "why": {
+          "title": "Why",
+          "type": "string"
+        },
+        "fix": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "paragraph_style",
+              "character_style",
+              "text_frame",
+              "image",
+              "image_frame",
+              "font",
+              "page_item",
+              "document"
+            ]
+          },
+          "title": "Fix",
+          "type": "object"
+        },
+        "help_article": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Help Article"
+        },
+        "is_check": {
+          "title": "Is Check",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "key",
+        "severity",
+        "subject_kinds",
+        "title",
+        "why",
+        "fix",
+        "help_article",
+        "is_check"
+      ],
+      "title": "Check",
+      "type": "object"
+    },
+    "InheritedFacts": {
+      "additionalProperties": false,
+      "description": "A style setting that comes from a style it's based on.",
+      "properties": {
+        "inherited_from": {
+          "title": "Inherited From",
+          "type": "string"
+        }
+      },
+      "required": [
+        "inherited_from"
+      ],
+      "title": "InheritedFacts",
+      "type": "object"
+    },
+    "Issue": {
+      "additionalProperties": false,
+      "properties": {
+        "check": {
+          "enum": [
+            "ERROR",
+            "IDML",
+            "ZIP",
+            "WARNING",
+            "MASTERPAGE",
+            "PARAGRAPH_STYLE",
+            "FONTS_INCLUDED",
+            "OTF_TTF_FONT",
+            "VARIABLE_FONT",
+            "IMAGE_INCLUDED",
+            "EMBEDDED_IMAGE",
+            "TRANSFORMATION",
+            "TABLE",
+            "PASTED_GRAPHICS",
+            "AUTO_SIZE_TEXT_BOX",
+            "TEXT_COLUMNS",
+            "LINKED_TEXT_FRAME",
+            "OBJECT_STYLE",
+            "GRID_ALIGNMENT",
+            "KERNING",
+            "KERNING_CHAR",
+            "TEXT_WRAP",
+            "FILL_TINT",
+            "FILL_TINT_CHAR",
+            "TEXT_POSITION",
+            "ADOBE_FONT",
+            "HYPHENATION",
+            "OVERRIDE",
+            "UNUSED_IMAGE",
+            "DOCUMENT_BLEED",
+            "COMPOSER",
+            "BASELINE_SHIFT",
+            "EMPTY_TEXT_FRAME",
+            "LARGE_IMAGE"
+          ],
+          "title": "Check",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "subject": {
+          "$ref": "#/$defs/Subject"
+        },
+        "location": {
+          "$ref": "#/$defs/Location"
+        },
+        "facts": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InheritedFacts"
+            },
+            {
+              "$ref": "#/$defs/AutoSizeFacts"
+            },
+            {
+              "$ref": "#/$defs/SizeFacts"
+            },
+            {
+              "$ref": "#/$defs/MasterPageFacts"
+            },
+            {
+              "$ref": "#/$defs/BleedFacts"
+            },
+            {
+              "$ref": "#/$defs/ParagraphStyleFacts"
+            },
+            {
+              "$ref": "#/$defs/OverrideFacts"
+            },
+            {
+              "$ref": "#/$defs/MissingFontFacts"
+            },
+            {
+              "$ref": "#/$defs/TransformationFacts"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Facts"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Text"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Detail"
+        }
+      },
+      "required": [
+        "check",
+        "severity",
+        "subject",
+        "location",
+        "facts",
+        "text",
+        "detail"
+      ],
+      "title": "Issue",
+      "type": "object"
+    },
+    "Location": {
+      "additionalProperties": false,
+      "properties": {
+        "page_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Page Id"
+        },
+        "page_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Page Name"
+        },
+        "spread_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Spread Id"
+        },
+        "item_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Item Id"
+        },
+        "bounds": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Bounds"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "page_id",
+        "page_name",
+        "spread_id",
+        "item_id",
+        "bounds"
+      ],
+      "title": "Location",
+      "type": "object"
+    },
+    "MasterElement": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "count": {
+          "title": "Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "count"
+      ],
+      "title": "MasterElement",
+      "type": "object"
+    },
+    "MasterPageFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "elements": {
+          "items": {
+            "$ref": "#/$defs/MasterElement"
+          },
+          "title": "Elements",
+          "type": "array"
+        }
+      },
+      "required": [
+        "elements"
+      ],
+      "title": "MasterPageFacts",
+      "type": "object"
+    },
+    "MissingFontFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "missing_styles": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Styles",
+          "type": "array"
+        },
+        "whole_family": {
+          "title": "Whole Family",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "missing_styles",
+        "whole_family"
+      ],
+      "title": "MissingFontFacts",
+      "type": "object"
+    },
+    "OverrideFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Overrides",
+          "type": "object"
+        }
+      },
+      "required": [
+        "text",
+        "overrides"
+      ],
+      "title": "OverrideFacts",
+      "type": "object"
+    },
+    "Page": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "spread_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Spread Id"
+        },
+        "width": {
+          "title": "Width",
+          "type": "number"
+        },
+        "height": {
+          "title": "Height",
+          "type": "number"
+        },
+        "preview": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Preview"
+        },
+        "frames": {
+          "items": {
+            "$ref": "#/$defs/Bounds"
+          },
+          "title": "Frames",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "index",
+        "spread_id",
+        "width",
+        "height",
+        "preview",
+        "frames"
+      ],
+      "title": "Page",
+      "type": "object"
+    },
+    "ParagraphStyleFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "whole_frame": {
+          "title": "Whole Frame",
+          "type": "boolean"
+        },
+        "whitespace_only": {
+          "title": "Whitespace Only",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "whole_frame",
+        "whitespace_only"
+      ],
+      "title": "ParagraphStyleFacts",
+      "type": "object"
+    },
+    "SizeFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "size_mb": {
+          "title": "Size Mb",
+          "type": "number"
+        }
+      },
+      "required": [
+        "size_mb"
+      ],
+      "title": "SizeFacts",
+      "type": "object"
+    },
+    "Subject": {
+      "additionalProperties": false,
+      "description": "What the issue is about. Styles: id is the style's Self, name as InDesign shows it. Text frames and image\nframes: the frame's Self (a story's Self for text not in a frame). Images and fonts: the file or family name.\nPage items: Self, named by kind. The document: no id.",
+      "properties": {
+        "kind": {
+          "enum": [
+            "paragraph_style",
+            "character_style",
+            "text_frame",
+            "image",
+            "image_frame",
+            "font",
+            "page_item",
+            "document"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Id"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Name"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "name"
+      ],
+      "title": "Subject",
+      "type": "object"
+    },
+    "TextBox": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "title": "Content",
+          "type": "string"
+        },
+        "page_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Page Id"
+        }
+      },
+      "required": [
+        "content",
+        "page_id"
+      ],
+      "title": "TextBox",
+      "type": "object"
+    },
+    "TransformationFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "flip",
+            "skew"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "rotation_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rotation Deg"
+        }
+      },
+      "required": [
+        "kind",
+        "rotation_deg"
+      ],
+      "title": "TransformationFacts",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "template_name": {
+      "title": "Template Name",
+      "type": "string"
+    },
+    "issues": {
+      "items": {
+        "$ref": "#/$defs/Issue"
+      },
+      "title": "Issues",
+      "type": "array"
+    },
+    "subjects_checked": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "propertyNames": {
+        "enum": [
+          "paragraph_style",
+          "character_style",
+          "text_frame",
+          "image",
+          "image_frame",
+          "font",
+          "page_item",
+          "document"
+        ]
+      },
+      "title": "Subjects Checked",
+      "type": "object"
+    },
+    "pages": {
+      "items": {
+        "$ref": "#/$defs/Page"
+      },
+      "title": "Pages",
+      "type": "array"
+    },
+    "text_boxes": {
+      "additionalProperties": {
+        "$ref": "#/$defs/TextBox"
+      },
+      "title": "Text Boxes",
+      "type": "object"
+    },
+    "checks": {
+      "items": {
+        "$ref": "#/$defs/Check"
+      },
+      "title": "Checks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "template_name",
+    "issues",
+    "subjects_checked",
+    "pages",
+    "text_boxes",
+    "checks"
+  ],
+  "title": "Results",
+  "type": "object"
+}

@@ -45,7 +45,7 @@ class CheckFailed(Exception):
 @dataclass(frozen=True)
 class CheckOutcome:
     results: dict
-    """The checker's results JSON (what /run returns under content.results)."""
+    """The checker's results (v2): what the summary, analytics and rejection reasons are read from."""
     completed: bool
     """True when every check ran; False when the upload was rejected (results explain why)."""
     stopped_at_stage: Optional[str]
@@ -53,6 +53,13 @@ class CheckOutcome:
     """The analytics run id, or None if logging is off or failed."""
     summary: Optional[CustomerSummary]
     """The customer summary, or None if it couldn't be written (logged)."""
+    response: Optional[dict] = None
+    """What /v1/checks and /run send under `results`: results v1 until the web app reads v2 (plan PR 5.3);
+    results when None."""
+
+    @property
+    def response_results(self) -> dict:
+        return self.results if self.response is None else self.response
 
 
 def run_check(checker, file_path: str, source_type: str = 'api', user_id: Optional[str] = None) -> CheckOutcome:
@@ -75,9 +82,10 @@ def run_check(checker, file_path: str, source_type: str = 'api', user_id: Option
 
         duration_ms = int((time.time() - start_time) * 1000)
 
+        results = checker.results_v2()
         checker_json = checker.results_json()
 
-        # Add analytics data to results
+        # Add analytics data to the response
         checker_json['analytics'] = {
             'duration_ms': duration_ms,
             'source_type': source_type,
@@ -85,20 +93,20 @@ def run_check(checker, file_path: str, source_type: str = 'api', user_id: Option
         }
 
         # What the web app shows next to the results: the per-check copy, and the summary for the customer.
-        checker_json['check_guides'] = check_guides_payload(checker_json)
-        summary = _build_summary(checker_json)
+        checker_json['check_guides'] = check_guides_payload(results)
+        summary = _build_summary(results)
         checker_json['customer_summary'] = summary_payload(summary, include_sections=True) if summary else None
 
         # The state machine only reaches RESULTS when every check ran; otherwise it exited early on a bad upload.
         completed = checker.last_state == States.RESULTS
         stopped_at_stage = None if completed else _state_name(checker.last_state)
         run_id = _log_run(
-            **{**run_info, 'template_name': checker_json.get('template_name') or run_info['template_name']},
+            **{**run_info, 'template_name': results.get('template_name') or run_info['template_name']},
             duration_ms=duration_ms,
-            results_json=checker_json,
+            results_json=results,
             status='completed' if completed else 'rejected',
             stopped_at_stage=stopped_at_stage,
-            error_message=None if completed else first_error_message(checker_json),
+            error_message=None if completed else first_error_message(results),
         )
     except Exception as e:
         current_app.logger.exception('Template check failed')
@@ -110,7 +118,7 @@ def run_check(checker, file_path: str, source_type: str = 'api', user_id: Option
             error_message=f'{type(e).__name__}: {e}',
         )
         raise CheckFailed() from e
-    return CheckOutcome(checker_json, completed, stopped_at_stage, run_id, summary)
+    return CheckOutcome(results, completed, stopped_at_stage, run_id, summary, response=checker_json)
 
 
 def _build_summary(results: dict) -> Optional[CustomerSummary]:

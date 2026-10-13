@@ -59,7 +59,8 @@ def pages_from_spreads(doc) -> DocumentLayout:
 
 
 def text_boxes_from_stories(doc) -> Dict[str, TextBox]:
-    """Each story's text, by story Self and by the Self of the frame it's in."""
+    """Each story's text, by story Self and by the Self of every frame it's in (a threaded story's frames all
+    show its whole text)."""
     boxes: Dict[str, TextBox] = {}
     for story in doc.stories or ():
         frame_id = doc.story_frame.get(story.id) or None
@@ -67,4 +68,8 @@ def text_boxes_from_stories(doc) -> Dict[str, TextBox]:
         boxes[story.id] = box
         if frame_id and frame_id != 'null':
             boxes.setdefault(frame_id, box)
+    for _, frame in doc.text_frames():
+        story = doc.story_of_frame(frame)
+        if story is not None and frame.id:
+            boxes.setdefault(frame.id, TextBox(boxes[story.id].content, doc.page_of_item(frame.id), frame.id))
     return boxes

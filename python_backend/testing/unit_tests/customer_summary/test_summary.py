@@ -3,30 +3,30 @@ import re
 
 from app.customer_summary import build_customer_summary, check_guides_payload, summary_payload
 from app.customer_summary.report import format_pages
+from src.results.catalogue import BY_KEY
+from src.results.serialize import check_json
 
-EMPTY = {'errors': [], 'warnings': [], 'infos': []}
-
-CHECKS = [
-    {'key': 'KERNING', 'severity': 'errors', 'label': 'Kerning', 'message': "Kerning must be 'Metrics'",
-     'help_article': 'https://help/kerning', 'category': 'par_styles'},
-    {'key': 'AUTO_SIZE_TEXT_BOX', 'severity': 'errors', 'label': 'Auto Sizing Text Box', 'message': 'Auto-size wrong',
-     'help_article': None, 'category': 'text_boxes'},
-    {'key': 'FONTS_INCLUDED', 'severity': 'errors', 'label': 'Fonts Included', 'message': 'Missing fonts',
-     'help_article': None, 'category': 'fonts'},
-    {'key': 'COMPOSER', 'severity': 'warnings', 'label': 'Composer', 'message': 'Use single-line',
-     'help_article': None, 'category': 'par_styles'},
-    {'key': 'TABLE', 'severity': 'errors', 'label': 'Table', 'message': 'No tables', 'help_article': None,
-     'category': 'text_boxes'},
-]
+# The checks as results v2 lists them (the catalogue's wording), with made-up help links.
+CHECKS = [{**check_json(BY_KEY[key]), 'help_article': help_article} for key, help_article in [
+    ('KERNING', 'https://help/kerning'), ('AUTO_SIZE_TEXT_BOX', None), ('FONTS_INCLUDED', None), ('COMPOSER', None),
+    ('TABLE', None)]]
 
 
-def item(**overrides):
-    return {'validationClassifier': 'KERNING', 'context': '', 'identifier': 'null', 'page_id': 'p1', 'page_name': '1',
-            'spread_id': 's1', 'data_id': 'null', **overrides}
+def style(name):
+    return {'kind': 'paragraph_style', 'id': f'ParagraphStyle/{name}', 'name': name}
 
 
-def category(details, total_count=0):
-    return {'details': details, 'total_count': total_count}
+def frame(frame_id):
+    return {'kind': 'text_frame', 'id': frame_id, 'name': None}
+
+
+def issue(check='KERNING', severity='error', subject=None, item_id=None, page_id='p1', page_name='1', bounds=None,
+          facts=None, text=None, detail=None):
+    """An issue in results v2."""
+    return {'check': check, 'severity': severity, 'subject': subject or {'kind': 'document', 'id': None, 'name': None},
+            'location': {'page_id': page_id, 'page_name': page_name, 'spread_id': 's1', 'item_id': item_id,
+                         'bounds': bounds},
+            'facts': facts, 'text': text, 'detail': detail}
 
 
 def bounds(page_id, y):
@@ -35,31 +35,23 @@ def bounds(page_id, y):
 
 def make_result(**overrides):
     return {
+        'schema_version': 2,
         'template_name': 'Sample',
-        'par_styles': category({
-            'Headline': {**EMPTY,
-                         'errors': [item(identifier='Headline', data_id='f1', text_content=['Big title'], bounds=bounds('p1', 10)),
-                                    item(identifier='Headline', data_id='f2', page_id='p2', page_name='2', bounds=bounds('p2', 10)),
-                                    item(identifier='Headline', data_id='f3', page_id='p3', page_name='3', bounds=bounds('p3', 10))],
-                         'warnings': [item(validationClassifier='COMPOSER', identifier='Headline', data_id='f1', bounds=bounds('p1', 10))]},
-            'Body': {**EMPTY, 'errors': [item(identifier='Body', data_id='f4', bounds=bounds('p1', 50))]},
-        }, 4),
-        'char_styles': category({}),
-        'text_boxes': category({
-            'story1': {**EMPTY, 'errors': [item(validationClassifier='AUTO_SIZE_TEXT_BOX', identifier='story1', data_id='f5',
-                                                context="'No Line Breaks' must be checked.", bounds=bounds('p1', 80),
-                                                context_details={'auto_size': 'WidthOnly', 'no_line_breaks': False})]},
-        }, 6),
-        'fonts': category({
-            'Pangea Bold': {**EMPTY, 'errors': [item(validationClassifier='FONTS_INCLUDED', identifier='Pangea Bold',
-                                                     page_id='', page_name='')]},
-        }),
-        'images': category({}),
-        'general': category({}),
-        'validation_classifiers': {},
-        'text_box_data': {'story1': {'identifier': 'story1', 'content': 'AI-generated', 'page_id': 'p1', 'page_name': '1'}},
-        'page_layouts': [{'page_id': p, 'name': str(i + 1), 'index': i + 1, 'spread_id': 's1', 'width': 600,
-                          'height': 400, 'preview': None, 'frames': []} for i, p in enumerate(['p1', 'p2', 'p3'])],
+        'issues': [
+            issue(subject=style('Headline'), item_id='f1', text=['Big title'], bounds=bounds('p1', 10)),
+            issue(subject=style('Headline'), item_id='f2', page_id='p2', page_name='2', bounds=bounds('p2', 10)),
+            issue(subject=style('Headline'), item_id='f3', page_id='p3', page_name='3', bounds=bounds('p3', 10)),
+            issue('COMPOSER', 'warning', style('Headline'), item_id='f1', bounds=bounds('p1', 10)),
+            issue(subject=style('Body'), item_id='f4', bounds=bounds('p1', 50)),
+            issue('AUTO_SIZE_TEXT_BOX', subject=frame('f5'), item_id='f5', detail="'No Line Breaks' must be checked.",
+                  bounds=bounds('p1', 80), facts={'auto_size': 'WidthOnly', 'no_line_breaks': False}),
+            issue('FONTS_INCLUDED', subject={'kind': 'font', 'id': 'Pangea Bold', 'name': 'Pangea Bold'}, page_id=None,
+                  page_name=None),
+        ],
+        'subjects_checked': {'paragraph_style': 4, 'text_frame': 6},
+        'pages': [{'id': p, 'name': str(i + 1), 'index': i + 1, 'spread_id': 's1', 'width': 600, 'height': 400,
+                   'preview': None, 'frames': []} for i, p in enumerate(['p1', 'p2', 'p3'])],
+        'text_boxes': {'f5': {'content': 'AI-generated', 'page_id': 'p1'}},
         'checks': CHECKS,
         **overrides,
     }
@@ -82,11 +74,11 @@ def test_lists_blockers_with_why_where_and_how_without_internal_ids():
 
 
 def test_lists_the_same_frame_on_several_pages_once_and_drops_the_file_extension():
-    frames = [item(validationClassifier='AUTO_SIZE_TEXT_BOX', identifier='story1', data_id=f'f-{p}', page_id=p,
-                   bounds=bounds(p, 80)) for p in ('p1', 'p2', 'p3')]
+    frames = [issue('AUTO_SIZE_TEXT_BOX', subject=frame(f'f-{p}'), item_id=f'f-{p}', page_id=p, bounds=bounds(p, 80))
+              for p in ('p1', 'p2', 'p3')]
     text = build_customer_summary(make_result(
-        template_name='Sample.zip', par_styles=category({}), fonts=category({}),
-        text_boxes=category({'story1': {**EMPTY, 'errors': frames}}),
+        template_name='Sample.zip', issues=frames,
+        text_boxes={f'f-{p}': {'content': 'AI-generated', 'page_id': p} for p in ('p1', 'p2', 'p3')},
     )).review_text
 
     assert 'We checked “Sample” and found one issue in the InDesign file that is likely causing' in text
@@ -96,17 +88,16 @@ def test_lists_the_same_frame_on_several_pages_once_and_drops_the_file_extension
 
 def test_names_frames_on_the_same_page_once_and_puts_checker_details_in_plain_words():
     text = build_customer_summary(make_result(
-        par_styles=category({'NormalParagraphStyle': {**EMPTY, 'warnings': [
-            item(validationClassifier='COMPOSER', identifier='NormalParagraphStyle', bounds=bounds('p1', 10))]}}),
-        fonts=category({}),
-        text_boxes=category({sid: {**EMPTY, 'warnings': [
-            item(validationClassifier='OVERRIDE', identifier=sid, data_id=sid, bounds=bounds('p1', 10))]} for sid in ('s1', 's2')}),
-        general=category({'document': {**EMPTY, 'warnings': [item(
-            validationClassifier='DOCUMENT_BLEED', identifier='document', page_id='', page_name='',
-            context='top: 8.503937007874017pt, bottom: 8.503937007874017pt, inside: 8.503937007874017pt, '
-                    'outside: 8.503937007874017pt.',
-            context_details={'bleed': {side: 8.503937007874017 for side in ('top', 'bottom', 'inside', 'outside')}})]}}),
-        text_box_data={'s1': {'content': 'Title'}, 's2': {'content': 'Intro'}},
+        issues=[
+            issue('COMPOSER', 'warning', {'kind': 'paragraph_style', 'id': 'ParagraphStyle/$ID/NormalParagraphStyle',
+                                          'name': 'NormalParagraphStyle'}, bounds=bounds('p1', 10)),
+            *(issue('OVERRIDE', 'warning', frame(sid), item_id=sid, bounds=bounds('p1', 10)) for sid in ('s1', 's2')),
+            issue('DOCUMENT_BLEED', 'warning', page_id=None, page_name=None,
+                  detail='top: 8.503937007874017pt, bottom: 8.503937007874017pt, inside: 8.503937007874017pt, '
+                         'outside: 8.503937007874017pt.',
+                  facts={'bleed': {side: 8.503937007874017 for side in ('top', 'bottom', 'inside', 'outside')}}),
+        ],
+        text_boxes={'s1': {'content': 'Title', 'page_id': 'p1'}, 's2': {'content': 'Intro', 'page_id': 'p1'}},
         checks=[],
     )).review_text
 
@@ -117,12 +108,10 @@ def test_names_frames_on_the_same_page_once_and_puts_checker_details_in_plain_wo
 
 
 def test_says_which_formatting_was_overridden_in_indesigns_words():
-    override = lambda o: item(validationClassifier='OVERRIDE', identifier='story1', data_id='f5', bounds=bounds('p1', 80),
-                              context_details={'overrides': o})
+    override = lambda o: issue('OVERRIDE', 'warning', frame('f5'), item_id='f5', bounds=bounds('p1', 80),
+                               facts={'overrides': o})
     text = build_customer_summary(make_result(
-        par_styles=category({}), fonts=category({}),
-        text_boxes=category({'story1': {**EMPTY, 'warnings': [override({'AppliedFont': 'Arial', 'MiterLimit': '4'}),
-                                                              override({'FontStyle': 'Bold', 'PointSize': '12'})]}}),
+        issues=[override({'AppliedFont': 'Arial', 'MiterLimit': '4'}), override({'FontStyle': 'Bold', 'PointSize': '12'})],
     )).review_text
 
     assert 'Where: the text frame “AI-generated” (page 1, font and size changed)' in text
@@ -131,11 +120,8 @@ def test_says_which_formatting_was_overridden_in_indesigns_words():
 
 def test_covers_warning_only_templates_and_lists_infos_as_worth_a_check():
     text = build_customer_summary(make_result(
-        par_styles=category({'Headline': {**EMPTY, 'warnings': [
-            item(validationClassifier='COMPOSER', identifier='Headline', data_id='f1', bounds=bounds('p1', 10))]}}),
-        text_boxes=category({'story1': {**EMPTY, 'infos': [
-            item(validationClassifier='EMPTY_TEXT_FRAME', identifier='story1', data_id='f5', bounds=bounds('p1', 80))]}}),
-        fonts=category({}),
+        issues=[issue('COMPOSER', 'warning', style('Headline'), item_id='f1', bounds=bounds('p1', 10)),
+                issue('EMPTY_TEXT_FRAME', 'info', frame('f5'), item_id='f5', bounds=bounds('p1', 80))],
     )).review_text
 
     assert ('We checked “Sample” and didn’t find anything that should stop it from working in Frontify, but one issue '

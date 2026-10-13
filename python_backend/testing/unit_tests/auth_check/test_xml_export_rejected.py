@@ -6,7 +6,7 @@ from app.utils import CheckOutcome
 
 USER = {'Authorization': 'Bearer valid-approved@example.com'}
 REASON = 'No .idml file found in the provided package.'
-REJECTED = {'general': {'details': {'ERROR': {'errors': [{'context': REASON}], 'warnings': [], 'infos': []}}}}
+REJECTED = {'issues': [{'check': 'ERROR', 'severity': 'error', 'detail': REASON}]}
 
 
 @pytest.mark.parametrize('path', ['/v1/checks/xml', '/run-and-download-xml'])

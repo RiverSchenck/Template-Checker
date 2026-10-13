@@ -23,7 +23,7 @@ from src.pipeline.workspace import Workspace
 from src.results.classifiers import Category, ValidationError, ValidationWarning
 from src.results.layout import DocumentLayout, pages_from_spreads, text_boxes_from_stories
 from src.results.results import Results
-from src.results.serialize import results_json
+from src.results.serialize import results_v2
 
 logger = logging.getLogger(__name__)
 
@@ -112,9 +112,8 @@ class RunOutcome:
         return self.stage == States.RESULTS
 
     def json(self) -> dict:
-        """The results response: every issue, with what the frontend needs to show and highlight it."""
-        return results_json(self.results, self.layout, template_name=self.template_name,
-                            output_folder=self.idml_folder, totals=self.totals)
+        """Results v2: every issue, with what the frontend needs to show and highlight it."""
+        return results_v2(self.results, self.layout, template_name=self.template_name, totals=self.totals)
 
 
 def run(zip_path: str, workspace: Workspace, *, previews: bool = True, checks: Iterable[Check] = CHECKS,

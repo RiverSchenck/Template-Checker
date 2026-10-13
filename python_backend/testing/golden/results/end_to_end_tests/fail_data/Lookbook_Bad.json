@@ -1,350 +1,1439 @@
 {
  "results": {
-  "char_styles": {
-   "details": {},
-   "total_count": 1
-  },
   "checks": [
    {
-    "category": "general",
+    "fix": {
+     "document": []
+    },
+    "help_article": null,
+    "is_check": false,
+    "key": "ERROR",
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "Error",
+    "why": "Error"
+   },
+   {
+    "fix": {
+     "document": []
+    },
+    "help_article": null,
+    "is_check": false,
+    "key": "IDML",
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "IDML",
+    "why": "IDML error"
+   },
+   {
+    "fix": {
+     "document": []
+    },
+    "help_article": "https://help.frontify.com/en/articles/5306557-what-input-formats-do-digital-and-print-templates-support",
+    "is_check": false,
+    "key": "ZIP",
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "ZIP file error",
+    "why": "ZIP file error"
+   },
+   {
+    "fix": {
+     "document": []
+    },
+    "help_article": null,
+    "is_check": false,
+    "key": "WARNING",
+    "severity": "warning",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "WARNING",
+    "why": ""
+   },
+   {
+    "fix": {
+     "document": [
+      "In the Pages panel, open the master (parent) page and move its items onto the document pages, or delete them."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "is_check": true,
     "key": "MASTERPAGE",
-    "label": "Items on a master page",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "Items on a master page",
+    "why": "Frontify only reads items on the document pages, so anything on a master page (called a parent page in newer InDesign versions) is ignored or breaks the template."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style])."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "is_check": true,
     "key": "PARAGRAPH_STYLE",
-    "label": "Text without a paragraph style",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Text without a paragraph style",
+    "why": "Frontify uses paragraph styles to format text and decide what can be edited. Text set to [Basic Paragraph] or [No Paragraph Style] has nothing to follow."
    },
    {
-    "category": "text_boxes",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-    "key": "PARAGRAPH_STYLE_TEXT_BOX",
-    "label": "Text frame has no paragraph style",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "fonts",
+    "fix": {
+     "font": [
+      "Make sure the font is installed or activated on your computer.",
+      "Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\"."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "is_check": true,
     "key": "FONTS_INCLUDED",
-    "label": "Font missing from the package",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "font"
+    ],
+    "title": "Font missing from the package",
+    "why": "Frontify needs the font files to render the text, otherwise the template falls back to another font."
    },
    {
-    "category": "fonts",
+    "fix": {
+     "font": [
+      "Get an OTF or TTF version from the font vendor and swap it in with Type > Find/Replace Font."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "is_check": true,
     "key": "OTF_TTF_FONT",
-    "label": "Unsupported font format",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "font"
+    ],
+    "title": "Unsupported font format",
+    "why": "Frontify can only use OpenType (.otf) and TrueType (.ttf) fonts. Other formats, such as Type 1, can’t be loaded."
    },
    {
-    "category": "fonts",
+    "fix": {
+     "font": [
+      "Install the static (non-variable) version of the font and swap it in with Type > Find/Replace Font."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "is_check": true,
     "key": "VARIABLE_FONT",
-    "label": "Variable font used",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "font"
+    ],
+    "title": "Variable font used",
+    "why": "Frontify doesn’t support variable fonts, so text using them won’t render correctly."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "Relink any missing images in Window > Links.",
+      "Package again with File > Package with \"Copy Linked Graphics\" checked."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
+    "is_check": true,
     "key": "IMAGE_INCLUDED",
-    "label": "Linked image missing from the package",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "image"
+    ],
+    "title": "Linked image missing from the package",
+    "why": "The document links to an image that isn’t in the package, so Frontify can’t show it."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "In Window > Links, select the image and choose Unembed Link from the panel menu.",
+      "Save it into the Links folder and package again."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "is_check": true,
     "key": "EMBEDDED_IMAGE",
-    "label": "Embedded image",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "image"
+    ],
+    "title": "Embedded image",
+    "why": "Frontify needs images as separate linked files and can’t read images embedded in the document."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "Double-click to select the image inside the frame, then choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip).",
+      "If you need the flipped look, save a flipped copy of the image file instead."
+     ],
+     "image_frame": [
+      "Select the image frame and choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip)."
+     ],
+     "page_item": [
+      "Select the item and choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip)."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION_IMAGE",
-    "label": "Image is flipped or skewed",
-    "message": "",
-    "severity": "errors"
+    "is_check": true,
+    "key": "TRANSFORMATION",
+    "severity": "error",
+    "subject_kinds": [
+     "image",
+     "image_frame",
+     "page_item"
+    ],
+    "title": "Item is flipped or skewed",
+    "why": "Frontify can’t reproduce flipped or skewed items, so they’ll look different or break when edited."
    },
    {
-    "category": "images",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "IMAGE_TRANSFORMATION_CONTAINER",
-    "label": "Image frame is flipped or skewed",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "general",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "key": "PAGE_ITEM_TRANSFORMATION",
-    "label": "Item is flipped or skewed",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Click into the table and choose Table > Convert Table to Text, or rebuild it with separate text frames."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "is_check": true,
     "key": "TABLE",
-    "label": "Table in a text frame",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Table in a text frame",
+    "why": "Frontify doesn’t support InDesign tables."
    },
    {
-    "category": "images",
+    "fix": {
+     "document": [
+      "Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "is_check": true,
     "key": "PASTED_GRAPHICS",
-    "label": "Pasted graphic",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "Pasted graphic",
+    "why": "Graphics pasted straight into InDesign aren’t linked files, so Frontify can’t read them."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "For each frame, open Object > Text Frame Options > Auto-Size and make the change noted next to it."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "is_check": true,
     "key": "AUTO_SIZE_TEXT_BOX",
-    "label": "Auto-size text frame set up incorrectly",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Auto-size text frame set up incorrectly",
+    "why": "Frontify grows auto-size frames as people type, and can’t match how these settings resize the frame."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Set Columns to 1 in Object > Text Frame Options. Use separate text frames if you need columns."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "is_check": true,
     "key": "TEXT_COLUMNS",
-    "label": "Text frame has columns",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Text frame has columns",
+    "why": "Frontify doesn’t support multiple columns inside one text frame."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Turn on View > Extras > Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "is_check": true,
     "key": "LINKED_TEXT_FRAME",
-    "label": "Threaded (linked) text frames",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Threaded (linked) text frames",
+    "why": "Frontify doesn’t support text flowing from one frame into another."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "image": [
+      "Select the frame and apply [None] or [Basic Graphics Frame] in Window > Styles > Object Styles, then re-apply any formatting you need directly."
+     ],
+     "text_frame": [
+      "Select the frame and apply [None] or [Basic Text Frame] in Window > Styles > Object Styles, then re-apply any formatting you need directly."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
-    "key": "OBJECT_STYLE_TEXT",
-    "label": "Object style on a text frame",
-    "message": "",
-    "severity": "errors"
+    "is_check": true,
+    "key": "OBJECT_STYLE",
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame",
+     "image"
+    ],
+    "title": "Object style applied",
+    "why": "Frontify doesn’t apply object styles, so the frame will look different."
    },
    {
-    "category": "images",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
-    "key": "OBJECT_STYLE_IMAGE",
-    "label": "Object style on an image frame",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Indents and Spacing and set Align to Grid to None."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "is_check": true,
     "key": "GRID_ALIGNMENT",
-    "label": "Text aligned to the baseline grid",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Text aligned to the baseline grid",
+    "why": "Frontify doesn’t use InDesign’s baseline grid, so line spacing will change."
    },
    {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Basic Character Formats and set Kerning to Metrics."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "is_check": true,
     "key": "KERNING",
-    "label": "Kerning isn’t set to Metrics",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Kerning isn’t set to Metrics",
+    "why": "Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited."
    },
    {
-    "category": "char_styles",
+    "fix": {
+     "character_style": [
+      "In the character style, go to Basic Character Formats and set Kerning to Metrics."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "is_check": true,
     "key": "KERNING_CHAR",
-    "label": "Kerning isn’t set to Metrics",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "character_style"
+    ],
+    "title": "Kerning isn’t set to Metrics",
+    "why": "Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "page_item": [
+      "Select the image, shape or group and choose No Text Wrap in Window > Text Wrap.",
+      "Then make room for it with the text frame’s size or insets instead."
+     ],
+     "text_frame": [
+      "Select the frame and choose No Text Wrap in Window > Text Wrap."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12",
+    "is_check": true,
     "key": "TEXT_WRAP",
-    "label": "Text wrap applied",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "text_frame",
+     "page_item"
+    ],
+    "title": "Text wrap applied",
+    "why": "Frontify doesn’t support text wrap, so text won’t flow around objects and will run underneath them."
    },
    {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Character Color and set Tint to 100%."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf",
+    "is_check": true,
     "key": "FILL_TINT",
-    "label": "Text color tint isn’t 100%",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Text color tint isn’t 100%",
+    "why": "Frontify shows text colors at full strength, so tinted text will look darker."
    },
    {
-    "category": "char_styles",
+    "fix": {
+     "character_style": [
+      "In the character style, go to Character Color and set Tint to 100%.",
+      "To keep the lighter color, make a tint swatch (Swatches panel > New Tint Swatch) and apply that instead."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf",
+    "is_check": true,
     "key": "FILL_TINT_CHAR",
-    "label": "Text color tint isn’t 100%",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "character_style"
+    ],
+    "title": "Text color tint isn’t 100%",
+    "why": "Frontify shows text colors at full strength, so tinted text will look darker."
    },
    {
-    "category": "general",
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12",
-    "key": "TEXT_WRAP_ITEM",
-    "label": "Text wrap applied",
-    "message": "",
-    "severity": "errors"
-   },
-   {
-    "category": "char_styles",
+    "fix": {
+     "character_style": [
+      "Set Position to Normal in the character style (Basic Character Formats) or in the Character panel.",
+      "For symbols like ® or ™, use a smaller point size in a character style instead, or a font’s superscript glyphs."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
+    "is_check": true,
     "key": "TEXT_POSITION",
-    "label": "Superscript or subscript text",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "character_style"
+    ],
+    "title": "Superscript or subscript text",
+    "why": "Frontify doesn’t support superscript or subscript, so the text shows at full size on the baseline (for example ® or a footnote number)."
    },
    {
-    "category": "fonts",
+    "fix": {
+     "font": [
+      "Install a desktop version of the font (OTF or TTF) that you’re licensed to use, and switch the text to it: Type > Find/Change Font, or update the paragraph and character styles.",
+      "Package again with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\"."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "is_check": true,
     "key": "ADOBE_FONT",
-    "label": "Adobe Font used",
-    "message": "",
-    "severity": "errors"
+    "severity": "error",
+    "subject_kinds": [
+     "font"
+    ],
+    "title": "Adobe Font used",
+    "why": "Adobe Fonts aren’t supported in Frontify templates (for licensing reasons), so the template falls back to another font."
    },
    {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Hyphenation and uncheck Hyphenate."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "is_check": true,
     "key": "HYPHENATION",
-    "label": "Hyphenation is on",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Hyphenation is on",
+    "why": "Browsers hyphenate differently from InDesign, so lines may break in different places."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.",
+      "To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.",
+      "To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "is_check": true,
     "key": "OVERRIDE",
-    "label": "Text formatted outside its paragraph style",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Text formatted outside its paragraph style",
+    "why": "Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "Delete the unused files from the Links folder before zipping the package."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "is_check": true,
     "key": "UNUSED_IMAGE",
-    "label": "Unused images in the package",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "image"
+    ],
+    "title": "Unused images in the package",
+    "why": "These files aren’t used in the document and only make the package bigger."
    },
    {
-    "category": "general",
+    "fix": {
+     "document": [
+      "For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
+    "is_check": true,
     "key": "DOCUMENT_BLEED",
-    "label": "Document has bleed",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "document"
+    ],
+    "title": "Document has bleed",
+    "why": "Bleed is added to every export, which is right for print templates but usually unwanted for digital ones."
    },
    {
-    "category": "par_styles",
+    "fix": {
+     "paragraph_style": [
+      "In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "is_check": true,
     "key": "COMPOSER",
-    "label": "Paragraph Composer used",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "paragraph_style"
+    ],
+    "title": "Paragraph Composer used",
+    "why": "The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify."
    },
    {
-    "category": "char_styles",
+    "fix": {
+     "character_style": [
+      "Set Baseline Shift to 0 pt in the character style (Advanced Character Formats) or in the Character panel."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
+    "is_check": true,
     "key": "BASELINE_SHIFT",
-    "label": "Baseline shift used",
-    "message": "",
-    "severity": "warnings"
+    "severity": "warning",
+    "subject_kinds": [
+     "character_style"
+    ],
+    "title": "Baseline shift used",
+    "why": "Frontify doesn’t support baseline shift, so shifted text sits on the baseline."
    },
    {
-    "category": "text_boxes",
+    "fix": {
+     "text_frame": [
+      "Delete the frame if it isn’t needed."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "is_check": true,
     "key": "EMPTY_TEXT_FRAME",
-    "label": "Empty text frame",
-    "message": "",
-    "severity": "infos"
+    "severity": "info",
+    "subject_kinds": [
+     "text_frame"
+    ],
+    "title": "Empty text frame",
+    "why": "Empty frames are allowed, but are often left over by accident."
    },
    {
-    "category": "images",
+    "fix": {
+     "image": [
+      "Reduce the image’s pixel size or file size if it doesn’t need to be this large."
+     ]
+    },
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "is_check": true,
     "key": "LARGE_IMAGE",
-    "label": "Large image",
-    "message": "",
-    "severity": "infos"
+    "severity": "info",
+    "subject_kinds": [
+     "image"
+    ],
+    "title": "Large image",
+    "why": "Very large images slow down editing and exporting in Frontify."
    }
   ],
-  "fonts": {
-   "details": {
-    "Minion Pro": {
-     "errors": [
-      {
-       "context": "",
-       "context_details": {
-        "missing_styles": [
-         "Regular"
-        ],
-        "whole_family": true
-       },
-       "data_id": "null",
-       "identifier": "Minion Pro",
-       "page_id": "",
-       "page_name": "",
-       "spread_id": "",
-       "validationClassifier": "FONTS_INCLUDED"
-      }
+  "issues": [
+   {
+    "check": "PARAGRAPH_STYLE",
+    "detail": null,
+    "facts": {
+     "whitespace_only": false,
+     "whole_frame": true
+    },
+    "location": {
+     "bounds": {
+      "height": 185.53,
+      "kind": "TextFrame",
+      "page_id": "ue7",
+      "width": 502.09,
+      "x": 51.41,
+      "y": 406.77
+     },
+     "item_id": "u1f7",
+     "page_id": "ue7",
+     "page_name": "1",
+     "spread_id": "ue2"
+    },
+    "severity": "error",
+    "subject": {
+     "id": "u1f7",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": null
+   },
+   {
+    "check": "PARAGRAPH_STYLE",
+    "detail": null,
+    "facts": {
+     "whitespace_only": false,
+     "whole_frame": true
+    },
+    "location": {
+     "bounds": {
+      "height": 57.05,
+      "kind": "TextFrame",
+      "page_id": "ue7",
+      "width": 523.28,
+      "x": 36.0,
+      "y": 718.58
+     },
+     "item_id": "u218",
+     "page_id": "ue7",
+     "page_name": "1",
+     "spread_id": "ue2"
+    },
+    "severity": "error",
+    "subject": {
+     "id": "u218",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": null
+   },
+   {
+    "check": "PARAGRAPH_STYLE",
+    "detail": null,
+    "facts": {
+     "whitespace_only": false,
+     "whole_frame": true
+    },
+    "location": {
+     "bounds": {
+      "height": 34.23,
+      "kind": "TextFrame",
+      "page_id": "ue7",
+      "width": 523.28,
+      "x": 36.0,
+      "y": 760.32
+     },
+     "item_id": "u22f",
+     "page_id": "ue7",
+     "page_name": "1",
+     "spread_id": "ue2"
+    },
+    "severity": "error",
+    "subject": {
+     "id": "u22f",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": null
+   },
+   {
+    "check": "PARAGRAPH_STYLE",
+    "detail": null,
+    "facts": {
+     "whitespace_only": false,
+     "whole_frame": true
+    },
+    "location": {
+     "bounds": {
+      "height": 49.18,
+      "kind": "TextFrame",
+      "page_id": "ue7",
+      "width": 25.55,
+      "x": 563.53,
+      "y": 777.05
+     },
+     "item_id": "u28d",
+     "page_id": "ue7",
+     "page_name": "1",
+     "spread_id": "ue2"
+    },
+    "severity": "error",
+    "subject": {
+     "id": "u28d",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": null
+   },
+   {
+    "check": "PARAGRAPH_STYLE",
+    "detail": null,
+    "facts": {
+     "whitespace_only": false,
+     "whole_frame": true
+    },
+    "location": {
+     "bounds": {
+      "height": 58.82,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 523.28,
+      "x": -699.02,
+      "y": 502.44
+     },
+     "item_id": "u2c5",
+     "page_id": "u192",
+     "page_name": "2",
+     "spread_id": "u18d"
+    },
+    "severity": "error",
+    "subject": {
+     "id": "u2c5",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": null
+   },
+   {
+    "check": "PARAGRAPH_STYLE",
+    "detail": null,
+    "facts": {
+     "whitespace_only": false,
+     "whole_frame": true
+    },
+    "location": {
+     "bounds": {
+      "height": 132.53,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 595.28,
+      "x": 0.0,
+      "y": 709.36
+     },
+     "item_id": "u311",
+     "page_id": "u192",
+     "page_name": "2",
+     "spread_id": "u18d"
+    },
+    "severity": "error",
+    "subject": {
+     "id": "u311",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": null
+   },
+   {
+    "check": "PARAGRAPH_STYLE",
+    "detail": null,
+    "facts": {
+     "whitespace_only": false,
+     "whole_frame": true
+    },
+    "location": {
+     "bounds": {
+      "height": 34.23,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 523.28,
+      "x": -746.93,
+      "y": 766.77
+     },
+     "item_id": "u332",
+     "page_id": "u192",
+     "page_name": "2",
+     "spread_id": "u18d"
+    },
+    "severity": "error",
+    "subject": {
+     "id": "u332",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": null
+   },
+   {
+    "check": "PARAGRAPH_STYLE",
+    "detail": null,
+    "facts": {
+     "whitespace_only": false,
+     "whole_frame": true
+    },
+    "location": {
+     "bounds": {
+      "height": 132.53,
+      "kind": "TextFrame",
+      "page_id": "u418",
+      "width": 595.28,
+      "x": 0.0,
+      "y": 748.35
+     },
+     "item_id": "u433",
+     "page_id": "u418",
+     "page_name": "6",
+     "spread_id": "u413"
+    },
+    "severity": "error",
+    "subject": {
+     "id": "u433",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": null
+   },
+   {
+    "check": "PARAGRAPH_STYLE",
+    "detail": null,
+    "facts": {
+     "whitespace_only": false,
+     "whole_frame": true
+    },
+    "location": {
+     "bounds": {
+      "height": 94.82,
+      "kind": "TextFrame",
+      "page_id": "u456",
+      "width": 523.28,
+      "x": 36.0,
+      "y": 724.96
+     },
+     "item_id": "u457",
+     "page_id": "u456",
+     "page_name": "8",
+     "spread_id": "u451"
+    },
+    "severity": "error",
+    "subject": {
+     "id": "u457",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": null
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: AutumN Lookbook — Overrides: Leading: 57.50563265573572, AppliedFont: Playfair Display, FillColor: Color/Paper, FontStyle: Black, PointSize: 65.17305034316715, StrokeWeight: 0.30939180481438927, Capitalization: AllCaps, OTFContextualAlternate: false, MiterLimit: 1.237567219257557, RubyFontSize: -0.30939180481438927, KentenFontSize: -0.30939180481438927",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "Capitalization": "AllCaps",
+      "FillColor": "Color/Paper",
+      "FontStyle": "Black",
+      "KentenFontSize": "-0.30939180481438927",
+      "Leading": "57.50563265573572",
+      "MiterLimit": "1.237567219257557",
+      "OTFContextualAlternate": "false",
+      "PointSize": "65.17305034316715",
+      "RubyFontSize": "-0.30939180481438927",
+      "StrokeWeight": "0.30939180481438927"
+     },
+     "text": "AutumN\nLookbook"
+    },
+    "location": {
+     "bounds": {
+      "height": 185.53,
+      "kind": "TextFrame",
+      "page_id": "ue7",
+      "width": 502.09,
+      "x": 51.41,
+      "y": 406.77
+     },
+     "item_id": "u1f7",
+     "page_id": "ue7",
+     "page_name": "1",
+     "spread_id": "ue2"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u1f7",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "AutumN\nLookbook"
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: PICASSO — Overrides: AppliedFont: Playfair Display, PointSize: 25, StrokeWeight: 0.32244888188967313, Tracking: 200, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "25",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "200"
+     },
+     "text": "PICASSO"
+    },
+    "location": {
+     "bounds": {
+      "height": 57.05,
+      "kind": "TextFrame",
+      "page_id": "ue7",
+      "width": 523.28,
+      "x": 36.0,
+      "y": 718.58
+     },
+     "item_id": "u218",
+     "page_id": "ue7",
+     "page_name": "1",
+     "spread_id": "ue2"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u218",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "PICASSO"
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: new collection inspired by artists — Overrides: AppliedFont: Playfair Display, PointSize: 15, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "15",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "-5"
+     },
+     "text": "new collection inspired by artists"
+    },
+    "location": {
+     "bounds": {
+      "height": 34.23,
+      "kind": "TextFrame",
+      "page_id": "ue7",
+      "width": 523.28,
+      "x": 36.0,
+      "y": 760.32
+     },
+     "item_id": "u22f",
+     "page_id": "ue7",
+     "page_name": "1",
+     "spread_id": "ue2"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u22f",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "new collection inspired by artists"
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: 2020 — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "10",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "-5"
+     },
+     "text": "2020"
+    },
+    "location": {
+     "bounds": {
+      "height": 49.18,
+      "kind": "TextFrame",
+      "page_id": "ue7",
+      "width": 25.55,
+      "x": 563.53,
+      "y": 777.05
+     },
+     "item_id": "u28d",
+     "page_id": "ue7",
+     "page_name": "1",
+     "spread_id": "ue2"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u28d",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "2020"
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: mustard linen pants combined with  smokin hot biker boots — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "10",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "-5"
+     },
+     "text": "mustard linen pants combined with \nsmokin hot biker boots\n"
+    },
+    "location": {
+     "bounds": {
+      "height": 58.82,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 523.28,
+      "x": -699.02,
+      "y": 502.44
+     },
+     "item_id": "u2c5",
+     "page_id": "u192",
+     "page_name": "2",
+     "spread_id": "u18d"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u2c5",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "mustard linen pants combined with \nsmokin hot biker boots\n"
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: monobrand — Overrides: AppliedFont: Playfair Display, FontStyle: Bold, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "FontStyle": "Bold",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "10",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "-5"
+     },
+     "text": "monobrand"
+    },
+    "location": {
+     "bounds": {
+      "height": 58.82,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 523.28,
+      "x": -699.02,
+      "y": 502.44
+     },
+     "item_id": "u2c5",
+     "page_id": "u192",
+     "page_name": "2",
+     "spread_id": "u18d"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u2c5",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "monobrand"
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text:   Whitespace after text: monobrand — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, ParagraphBreakType: NextColumn, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "ParagraphBreakType": "NextColumn",
+      "PointSize": "10",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "-5"
+     },
+     "text": "\n"
+    },
+    "location": {
+     "bounds": {
+      "height": 58.82,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 523.28,
+      "x": -699.02,
+      "y": 502.44
+     },
+     "item_id": "u2c5",
+     "page_id": "u192",
+     "page_name": "2",
+     "spread_id": "u18d"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u2c5",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "\n"
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: yes. you care. — Overrides: AppliedFont: Playfair Display, PointSize: 25, StrokeWeight: 0.32244888188967313, Tracking: 200, Capitalization: AllCaps, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "Capitalization": "AllCaps",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "25",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "200"
+     },
+     "text": "yes. you care."
+    },
+    "location": {
+     "bounds": {
+      "height": 132.53,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 595.28,
+      "x": 0.0,
+      "y": 709.36
+     },
+     "item_id": "u311",
+     "page_id": "u192",
+     "page_name": "2",
+     "spread_id": "u18d"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u311",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "yes. you care."
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: light linen shirt matched  with a fancy apron  mono — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "10",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "-5"
+     },
+     "text": "light linen shirt matched \nwith a fancy apron \nmono"
+    },
+    "location": {
+     "bounds": {
+      "height": 34.23,
+      "kind": "TextFrame",
+      "page_id": "u192",
+      "width": 523.28,
+      "x": -746.93,
+      "y": 766.77
+     },
+     "item_id": "u332",
+     "page_id": "u192",
+     "page_name": "2",
+     "spread_id": "u18d"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u332",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "light linen shirt matched \nwith a fancy apron \nmono"
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: let it flow. — Overrides: AppliedFont: Playfair Display, PointSize: 25, StrokeWeight: 0.32244888188967313, Tracking: 200, Capitalization: AllCaps, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "Capitalization": "AllCaps",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "25",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "200"
+     },
+     "text": "let it flow."
+    },
+    "location": {
+     "bounds": {
+      "height": 132.53,
+      "kind": "TextFrame",
+      "page_id": "u418",
+      "width": 595.28,
+      "x": 0.0,
+      "y": 748.35
+     },
+     "item_id": "u433",
+     "page_id": "u418",
+     "page_name": "6",
+     "spread_id": "u413"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u433",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "let it flow."
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: Monobrand offers fashion and  quality at the best price in a sustainable way. — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "10",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "-5"
+     },
+     "text": "Monobrand offers fashion and \nquality at the best price in a sustainable way.\n"
+    },
+    "location": {
+     "bounds": {
+      "height": 94.82,
+      "kind": "TextFrame",
+      "page_id": "u456",
+      "width": 523.28,
+      "x": 36.0,
+      "y": 724.96
+     },
+     "item_id": "u457",
+     "page_id": "u456",
+     "page_name": "8",
+     "spread_id": "u451"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u457",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "Monobrand offers fashion and \nquality at the best price in a sustainable way.\n"
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: Monobrand HQ — Overrides: AppliedFont: Playfair Display, FontStyle: Bold, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "FontStyle": "Bold",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "10",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "-5"
+     },
+     "text": "Monobrand HQ "
+    },
+    "location": {
+     "bounds": {
+      "height": 94.82,
+      "kind": "TextFrame",
+      "page_id": "u456",
+      "width": 523.28,
+      "x": 36.0,
+      "y": 724.96
+     },
+     "item_id": "u457",
+     "page_id": "u456",
+     "page_name": "8",
+     "spread_id": "u451"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u457",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "Monobrand HQ "
+    ]
+   },
+   {
+    "check": "OVERRIDE",
+    "detail": "Text: Paradise Street 15 8080 Big City  monobrand.com — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+    "facts": {
+     "overrides": {
+      "AppliedFont": "Playfair Display",
+      "KentenFontSize": "-0.32244888188967313",
+      "MiterLimit": "1.2897955275586925",
+      "OTFContextualAlternate": "false",
+      "PointSize": "10",
+      "RubyFontSize": "-0.32244888188967313",
+      "StrokeWeight": "0.32244888188967313",
+      "Tracking": "-5"
+     },
+     "text": "Paradise Street 15\n8080 Big City\n\nmonobrand.com\n"
+    },
+    "location": {
+     "bounds": {
+      "height": 94.82,
+      "kind": "TextFrame",
+      "page_id": "u456",
+      "width": 523.28,
+      "x": 36.0,
+      "y": 724.96
+     },
+     "item_id": "u457",
+     "page_id": "u456",
+     "page_name": "8",
+     "spread_id": "u451"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "u457",
+     "kind": "text_frame",
+     "name": null
+    },
+    "text": [
+     "Paradise Street 15\n8080 Big City\n\nmonobrand.com\n"
+    ]
+   },
+   {
+    "check": "FONTS_INCLUDED",
+    "detail": null,
+    "facts": {
+     "missing_styles": [
+      "Regular"
      ],
-     "infos": [],
-     "warnings": []
-    }
+     "whole_family": true
+    },
+    "location": {
+     "bounds": null,
+     "item_id": null,
+     "page_id": null,
+     "page_name": null,
+     "spread_id": null
+    },
+    "severity": "error",
+    "subject": {
+     "id": "Minion Pro",
+     "kind": "font",
+     "name": "Minion Pro"
+    },
+    "text": null
    },
-   "total_count": 5
-  },
-  "general": {
-   "details": {
-    "null": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "context": "top: 8.503937007874017pt, bottom: 8.503937007874017pt, inside: 8.503937007874017pt, outside: 8.503937007874017pt.",
-       "context_details": {
-        "bleed": {
-         "bottom": 8.503937007874017,
-         "inside": 8.503937007874017,
-         "outside": 8.503937007874017,
-         "top": 8.503937007874017
-        }
-       },
-       "data_id": "null",
-       "identifier": "null",
-       "page_id": "",
-       "page_name": "",
-       "spread_id": "",
-       "validationClassifier": "DOCUMENT_BLEED"
-      }
-     ]
-    }
+   {
+    "check": "DOCUMENT_BLEED",
+    "detail": "top: 8.503937007874017pt, bottom: 8.503937007874017pt, inside: 8.503937007874017pt, outside: 8.503937007874017pt.",
+    "facts": {
+     "bleed": {
+      "bottom": 8.503937007874017,
+      "inside": 8.503937007874017,
+      "outside": 8.503937007874017,
+      "top": 8.503937007874017
+     }
+    },
+    "location": {
+     "bounds": null,
+     "item_id": null,
+     "page_id": null,
+     "page_name": null,
+     "spread_id": null
+    },
+    "severity": "warning",
+    "subject": {
+     "id": null,
+     "kind": "document",
+     "name": null
+    },
+    "text": null
    },
-   "total_count": 0
-  },
-  "images": {
-   "details": {},
-   "total_count": 10
-  },
-  "page_layouts": [
+   {
+    "check": "COMPOSER",
+    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
+    "facts": {
+     "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
+    },
+    "location": {
+     "bounds": {
+      "height": 185.53,
+      "kind": "TextFrame",
+      "page_id": "ue7",
+      "width": 502.09,
+      "x": 51.41,
+      "y": 406.77
+     },
+     "item_id": "u1f7",
+     "page_id": "ue7",
+     "page_name": "1",
+     "spread_id": "ue2"
+    },
+    "severity": "warning",
+    "subject": {
+     "id": "ParagraphStyle/$ID/NormalParagraphStyle",
+     "kind": "paragraph_style",
+     "name": "NormalParagraphStyle"
+    },
+    "text": null
+   }
+  ],
+  "pages": [
    {
     "frames": [
      {
@@ -397,9 +1486,9 @@
      }
     ],
     "height": 841.889763778,
+    "id": "ue7",
     "index": 1,
     "name": "1",
-    "page_id": "ue7",
     "preview": "image:JPEG 180x256",
     "spread_id": "ue2",
     "width": 595.2755905510003
@@ -440,9 +1529,9 @@
      }
     ],
     "height": 841.889763778,
+    "id": "u192",
     "index": 2,
     "name": "2",
-    "page_id": "u192",
     "preview": "image:JPEG 180x256",
     "spread_id": "u18d",
     "width": 595.2755905510003
@@ -459,9 +1548,9 @@
      }
     ],
     "height": 841.889763778,
+    "id": "u193",
     "index": 3,
     "name": "3",
-    "page_id": "u193",
     "preview": null,
     "spread_id": "u18d",
     "width": 595.2755905510003
@@ -478,9 +1567,9 @@
      }
     ],
     "height": 841.889763778,
+    "id": "u351",
     "index": 4,
     "name": "4",
-    "page_id": "u351",
     "preview": null,
     "spread_id": "u34c",
     "width": 595.2755905510003
@@ -505,9 +1594,9 @@
      }
     ],
     "height": 841.889763778,
+    "id": "u352",
     "index": 5,
     "name": "5",
-    "page_id": "u352",
     "preview": null,
     "spread_id": "u34c",
     "width": 595.2755905510003
@@ -532,9 +1621,9 @@
      }
     ],
     "height": 841.889763778,
+    "id": "u418",
     "index": 6,
     "name": "6",
-    "page_id": "u418",
     "preview": null,
     "spread_id": "u413",
     "width": 595.2755905510003
@@ -551,9 +1640,9 @@
      }
     ],
     "height": 841.889763778,
+    "id": "u419",
     "index": 7,
     "name": "7",
-    "page_id": "u419",
     "preview": null,
     "spread_id": "u413",
     "width": 595.2755905510003
@@ -578,950 +1667,59 @@
      }
     ],
     "height": 841.889763778,
+    "id": "u456",
     "index": 8,
     "name": "8",
-    "page_id": "u456",
     "preview": null,
     "spread_id": "u451",
     "width": 595.2755905510003
    }
   ],
-  "pages": {
-   "u192": "2",
-   "u193": "3",
-   "u351": "4",
-   "u352": "5",
-   "u418": "6",
-   "u419": "7",
-   "u456": "8",
-   "ue7": "1"
-  },
-  "par_styles": {
-   "details": {
-    "NormalParagraphStyle": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 185.53,
-        "kind": "TextFrame",
-        "page_id": "ue7",
-        "width": 502.09,
-        "x": 51.41,
-        "y": 406.77
-       },
-       "context": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
-       "context_details": {
-        "inheritedFrom": "ParagraphStyle/$ID/[No paragraph style]"
-       },
-       "data_id": "u1f7",
-       "identifier": "NormalParagraphStyle",
-       "page_id": "ue7",
-       "page_name": "1",
-       "spread_id": "ue2",
-       "validationClassifier": "COMPOSER"
-      }
-     ]
-    }
-   },
-   "total_count": 1
-  },
-  "spread_to_pages": {
-   "u18d": [
-    "u192",
-    "u193"
-   ],
-   "u34c": [
-    "u351",
-    "u352"
-   ],
-   "u413": [
-    "u418",
-    "u419"
-   ],
-   "u451": [
-    "u456"
-   ],
-   "ue2": [
-    "ue7"
-   ]
+  "schema_version": 2,
+  "subjects_checked": {
+   "character_style": 1,
+   "font": 5,
+   "image": 10,
+   "paragraph_style": 1,
+   "text_frame": 9
   },
   "template_name": "Lookbook_Bad.zip",
-  "text_box_data": {
+  "text_boxes": {
    "u1f7": {
     "content": "AutumN\nLookbook\n",
-    "identifier": "u1f7",
-    "page_id": "ue7",
-    "page_name": "1"
-   },
-   "u1fa": {
-    "content": "AutumN\nLookbook\n",
-    "identifier": "u1fa",
-    "page_id": "ue7",
-    "page_name": "1"
+    "page_id": "ue7"
    },
    "u218": {
     "content": "PICASSO\n",
-    "identifier": "u218",
-    "page_id": "ue7",
-    "page_name": "1"
-   },
-   "u21b": {
-    "content": "PICASSO\n",
-    "identifier": "u21b",
-    "page_id": "ue7",
-    "page_name": "1"
+    "page_id": "ue7"
    },
    "u22f": {
     "content": "new collection inspired by artists\n",
-    "identifier": "u22f",
-    "page_id": "ue7",
-    "page_name": "1"
-   },
-   "u232": {
-    "content": "new collection inspired by artists\n",
-    "identifier": "u232",
-    "page_id": "ue7",
-    "page_name": "1"
+    "page_id": "ue7"
    },
    "u28d": {
     "content": "2020\n",
-    "identifier": "u28d",
-    "page_id": "ue7",
-    "page_name": "1"
-   },
-   "u290": {
-    "content": "2020\n",
-    "identifier": "u290",
-    "page_id": "ue7",
-    "page_name": "1"
+    "page_id": "ue7"
    },
    "u2c5": {
     "content": "mustard linen pants combined with \nsmokin hot biker boots\nmonobrand\n\n",
-    "identifier": "u2c5",
-    "page_id": "u192",
-    "page_name": "2"
-   },
-   "u2c8": {
-    "content": "mustard linen pants combined with \nsmokin hot biker boots\nmonobrand\n\n",
-    "identifier": "u2c8",
-    "page_id": "u192",
-    "page_name": "2"
+    "page_id": "u192"
    },
    "u311": {
     "content": "yes. you care.\n",
-    "identifier": "u311",
-    "page_id": "u192",
-    "page_name": "2"
-   },
-   "u314": {
-    "content": "yes. you care.\n",
-    "identifier": "u314",
-    "page_id": "u192",
-    "page_name": "2"
+    "page_id": "u192"
    },
    "u332": {
     "content": "light linen shirt matched \nwith a fancy apron \nmono\n",
-    "identifier": "u332",
-    "page_id": "u192",
-    "page_name": "2"
-   },
-   "u335": {
-    "content": "light linen shirt matched \nwith a fancy apron \nmono\n",
-    "identifier": "u335",
-    "page_id": "u192",
-    "page_name": "2"
+    "page_id": "u192"
    },
    "u433": {
     "content": "let it flow.\n",
-    "identifier": "u433",
-    "page_id": "u418",
-    "page_name": "6"
-   },
-   "u436": {
-    "content": "let it flow.\n",
-    "identifier": "u436",
-    "page_id": "u418",
-    "page_name": "6"
+    "page_id": "u418"
    },
    "u457": {
     "content": "Monobrand offers fashion and \nquality at the best price in a sustainable way.\nMonobrand HQ Paradise Street 15\n8080 Big City\n\nmonobrand.com\n\n",
-    "identifier": "u457",
-    "page_id": "u456",
-    "page_name": "8"
-   },
-   "u45a": {
-    "content": "Monobrand offers fashion and \nquality at the best price in a sustainable way.\nMonobrand HQ Paradise Street 15\n8080 Big City\n\nmonobrand.com\n\n",
-    "identifier": "u45a",
-    "page_id": "u456",
-    "page_name": "8"
-   }
-  },
-  "text_boxes": {
-   "details": {
-    "u1f7": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 185.53,
-        "kind": "TextFrame",
-        "page_id": "ue7",
-        "width": 502.09,
-        "x": 51.41,
-        "y": 406.77
-       },
-       "context": "Text: AutumN Lookbook — Overrides: Leading: 57.50563265573572, AppliedFont: Playfair Display, FillColor: Color/Paper, FontStyle: Black, PointSize: 65.17305034316715, StrokeWeight: 0.30939180481438927, Capitalization: AllCaps, OTFContextualAlternate: false, MiterLimit: 1.237567219257557, RubyFontSize: -0.30939180481438927, KentenFontSize: -0.30939180481438927",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "Capitalization": "AllCaps",
-         "FillColor": "Color/Paper",
-         "FontStyle": "Black",
-         "KentenFontSize": "-0.30939180481438927",
-         "Leading": "57.50563265573572",
-         "MiterLimit": "1.237567219257557",
-         "OTFContextualAlternate": "false",
-         "PointSize": "65.17305034316715",
-         "RubyFontSize": "-0.30939180481438927",
-         "StrokeWeight": "0.30939180481438927"
-        },
-        "text": "AutumN\nLookbook"
-       },
-       "data_id": "u1f7",
-       "identifier": "u1f7",
-       "page_id": "ue7",
-       "page_name": "1",
-       "spread_id": "ue2",
-       "text_content": [
-        "AutumN\nLookbook"
-       ],
-       "validationClassifier": "OVERRIDE"
-      }
-     ]
-    },
-    "u1fa": {
-     "errors": [
-      {
-       "bounds": {
-        "height": 185.53,
-        "kind": "TextFrame",
-        "page_id": "ue7",
-        "width": 502.09,
-        "x": 51.41,
-        "y": 406.77
-       },
-       "context": "",
-       "context_details": {
-        "whitespace_only": false,
-        "whole_frame": true
-       },
-       "data_id": "u1f7",
-       "identifier": "u1fa",
-       "page_id": "ue7",
-       "page_name": "1",
-       "spread_id": "ue2",
-       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      }
-     ],
-     "infos": [],
-     "warnings": []
-    },
-    "u218": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 57.05,
-        "kind": "TextFrame",
-        "page_id": "ue7",
-        "width": 523.28,
-        "x": 36.0,
-        "y": 718.58
-       },
-       "context": "Text: PICASSO — Overrides: AppliedFont: Playfair Display, PointSize: 25, StrokeWeight: 0.32244888188967313, Tracking: 200, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "25",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "200"
-        },
-        "text": "PICASSO"
-       },
-       "data_id": "u218",
-       "identifier": "u218",
-       "page_id": "ue7",
-       "page_name": "1",
-       "spread_id": "ue2",
-       "text_content": [
-        "PICASSO"
-       ],
-       "validationClassifier": "OVERRIDE"
-      }
-     ]
-    },
-    "u21b": {
-     "errors": [
-      {
-       "bounds": {
-        "height": 57.05,
-        "kind": "TextFrame",
-        "page_id": "ue7",
-        "width": 523.28,
-        "x": 36.0,
-        "y": 718.58
-       },
-       "context": "",
-       "context_details": {
-        "whitespace_only": false,
-        "whole_frame": true
-       },
-       "data_id": "u218",
-       "identifier": "u21b",
-       "page_id": "ue7",
-       "page_name": "1",
-       "spread_id": "ue2",
-       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      }
-     ],
-     "infos": [],
-     "warnings": []
-    },
-    "u22f": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 34.23,
-        "kind": "TextFrame",
-        "page_id": "ue7",
-        "width": 523.28,
-        "x": 36.0,
-        "y": 760.32
-       },
-       "context": "Text: new collection inspired by artists — Overrides: AppliedFont: Playfair Display, PointSize: 15, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "15",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "-5"
-        },
-        "text": "new collection inspired by artists"
-       },
-       "data_id": "u22f",
-       "identifier": "u22f",
-       "page_id": "ue7",
-       "page_name": "1",
-       "spread_id": "ue2",
-       "text_content": [
-        "new collection inspired by artists"
-       ],
-       "validationClassifier": "OVERRIDE"
-      }
-     ]
-    },
-    "u232": {
-     "errors": [
-      {
-       "bounds": {
-        "height": 34.23,
-        "kind": "TextFrame",
-        "page_id": "ue7",
-        "width": 523.28,
-        "x": 36.0,
-        "y": 760.32
-       },
-       "context": "",
-       "context_details": {
-        "whitespace_only": false,
-        "whole_frame": true
-       },
-       "data_id": "u22f",
-       "identifier": "u232",
-       "page_id": "ue7",
-       "page_name": "1",
-       "spread_id": "ue2",
-       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      }
-     ],
-     "infos": [],
-     "warnings": []
-    },
-    "u28d": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 49.18,
-        "kind": "TextFrame",
-        "page_id": "ue7",
-        "width": 25.55,
-        "x": 563.53,
-        "y": 777.05
-       },
-       "context": "Text: 2020 — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "10",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "-5"
-        },
-        "text": "2020"
-       },
-       "data_id": "u28d",
-       "identifier": "u28d",
-       "page_id": "ue7",
-       "page_name": "1",
-       "spread_id": "ue2",
-       "text_content": [
-        "2020"
-       ],
-       "validationClassifier": "OVERRIDE"
-      }
-     ]
-    },
-    "u290": {
-     "errors": [
-      {
-       "bounds": {
-        "height": 49.18,
-        "kind": "TextFrame",
-        "page_id": "ue7",
-        "width": 25.55,
-        "x": 563.53,
-        "y": 777.05
-       },
-       "context": "",
-       "context_details": {
-        "whitespace_only": false,
-        "whole_frame": true
-       },
-       "data_id": "u28d",
-       "identifier": "u290",
-       "page_id": "ue7",
-       "page_name": "1",
-       "spread_id": "ue2",
-       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      }
-     ],
-     "infos": [],
-     "warnings": []
-    },
-    "u2c5": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 58.82,
-        "kind": "TextFrame",
-        "page_id": "u192",
-        "width": 523.28,
-        "x": -699.02,
-        "y": 502.44
-       },
-       "context": "Text: mustard linen pants combined with  smokin hot biker boots — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "10",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "-5"
-        },
-        "text": "mustard linen pants combined with \nsmokin hot biker boots\n"
-       },
-       "data_id": "u2c5",
-       "identifier": "u2c5",
-       "page_id": "u192",
-       "page_name": "2",
-       "spread_id": "u18d",
-       "text_content": [
-        "mustard linen pants combined with \nsmokin hot biker boots\n"
-       ],
-       "validationClassifier": "OVERRIDE"
-      },
-      {
-       "bounds": {
-        "height": 58.82,
-        "kind": "TextFrame",
-        "page_id": "u192",
-        "width": 523.28,
-        "x": -699.02,
-        "y": 502.44
-       },
-       "context": "Text: monobrand — Overrides: AppliedFont: Playfair Display, FontStyle: Bold, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "FontStyle": "Bold",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "10",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "-5"
-        },
-        "text": "monobrand"
-       },
-       "data_id": "u2c5",
-       "identifier": "u2c5",
-       "page_id": "u192",
-       "page_name": "2",
-       "spread_id": "u18d",
-       "text_content": [
-        "monobrand"
-       ],
-       "validationClassifier": "OVERRIDE"
-      },
-      {
-       "bounds": {
-        "height": 58.82,
-        "kind": "TextFrame",
-        "page_id": "u192",
-        "width": 523.28,
-        "x": -699.02,
-        "y": 502.44
-       },
-       "context": "Text:   Whitespace after text: monobrand — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, ParagraphBreakType: NextColumn, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "ParagraphBreakType": "NextColumn",
-         "PointSize": "10",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "-5"
-        },
-        "text": "\n"
-       },
-       "data_id": "u2c5",
-       "identifier": "u2c5",
-       "page_id": "u192",
-       "page_name": "2",
-       "spread_id": "u18d",
-       "text_content": [
-        "\n"
-       ],
-       "validationClassifier": "OVERRIDE"
-      }
-     ]
-    },
-    "u2c8": {
-     "errors": [
-      {
-       "bounds": {
-        "height": 58.82,
-        "kind": "TextFrame",
-        "page_id": "u192",
-        "width": 523.28,
-        "x": -699.02,
-        "y": 502.44
-       },
-       "context": "",
-       "context_details": {
-        "whitespace_only": false,
-        "whole_frame": true
-       },
-       "data_id": "u2c5",
-       "identifier": "u2c8",
-       "page_id": "u192",
-       "page_name": "2",
-       "spread_id": "u18d",
-       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      }
-     ],
-     "infos": [],
-     "warnings": []
-    },
-    "u311": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 132.53,
-        "kind": "TextFrame",
-        "page_id": "u192",
-        "width": 595.28,
-        "x": 0.0,
-        "y": 709.36
-       },
-       "context": "Text: yes. you care. — Overrides: AppliedFont: Playfair Display, PointSize: 25, StrokeWeight: 0.32244888188967313, Tracking: 200, Capitalization: AllCaps, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "Capitalization": "AllCaps",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "25",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "200"
-        },
-        "text": "yes. you care."
-       },
-       "data_id": "u311",
-       "identifier": "u311",
-       "page_id": "u192",
-       "page_name": "2",
-       "spread_id": "u18d",
-       "text_content": [
-        "yes. you care."
-       ],
-       "validationClassifier": "OVERRIDE"
-      }
-     ]
-    },
-    "u314": {
-     "errors": [
-      {
-       "bounds": {
-        "height": 132.53,
-        "kind": "TextFrame",
-        "page_id": "u192",
-        "width": 595.28,
-        "x": 0.0,
-        "y": 709.36
-       },
-       "context": "",
-       "context_details": {
-        "whitespace_only": false,
-        "whole_frame": true
-       },
-       "data_id": "u311",
-       "identifier": "u314",
-       "page_id": "u192",
-       "page_name": "2",
-       "spread_id": "u18d",
-       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      }
-     ],
-     "infos": [],
-     "warnings": []
-    },
-    "u332": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 34.23,
-        "kind": "TextFrame",
-        "page_id": "u192",
-        "width": 523.28,
-        "x": -746.93,
-        "y": 766.77
-       },
-       "context": "Text: light linen shirt matched  with a fancy apron  mono — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "10",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "-5"
-        },
-        "text": "light linen shirt matched \nwith a fancy apron \nmono"
-       },
-       "data_id": "u332",
-       "identifier": "u332",
-       "page_id": "u192",
-       "page_name": "2",
-       "spread_id": "u18d",
-       "text_content": [
-        "light linen shirt matched \nwith a fancy apron \nmono"
-       ],
-       "validationClassifier": "OVERRIDE"
-      }
-     ]
-    },
-    "u335": {
-     "errors": [
-      {
-       "bounds": {
-        "height": 34.23,
-        "kind": "TextFrame",
-        "page_id": "u192",
-        "width": 523.28,
-        "x": -746.93,
-        "y": 766.77
-       },
-       "context": "",
-       "context_details": {
-        "whitespace_only": false,
-        "whole_frame": true
-       },
-       "data_id": "u332",
-       "identifier": "u335",
-       "page_id": "u192",
-       "page_name": "2",
-       "spread_id": "u18d",
-       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      }
-     ],
-     "infos": [],
-     "warnings": []
-    },
-    "u433": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 132.53,
-        "kind": "TextFrame",
-        "page_id": "u418",
-        "width": 595.28,
-        "x": 0.0,
-        "y": 748.35
-       },
-       "context": "Text: let it flow. — Overrides: AppliedFont: Playfair Display, PointSize: 25, StrokeWeight: 0.32244888188967313, Tracking: 200, Capitalization: AllCaps, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "Capitalization": "AllCaps",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "25",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "200"
-        },
-        "text": "let it flow."
-       },
-       "data_id": "u433",
-       "identifier": "u433",
-       "page_id": "u418",
-       "page_name": "6",
-       "spread_id": "u413",
-       "text_content": [
-        "let it flow."
-       ],
-       "validationClassifier": "OVERRIDE"
-      }
-     ]
-    },
-    "u436": {
-     "errors": [
-      {
-       "bounds": {
-        "height": 132.53,
-        "kind": "TextFrame",
-        "page_id": "u418",
-        "width": 595.28,
-        "x": 0.0,
-        "y": 748.35
-       },
-       "context": "",
-       "context_details": {
-        "whitespace_only": false,
-        "whole_frame": true
-       },
-       "data_id": "u433",
-       "identifier": "u436",
-       "page_id": "u418",
-       "page_name": "6",
-       "spread_id": "u413",
-       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      }
-     ],
-     "infos": [],
-     "warnings": []
-    },
-    "u457": {
-     "errors": [],
-     "infos": [],
-     "warnings": [
-      {
-       "bounds": {
-        "height": 94.82,
-        "kind": "TextFrame",
-        "page_id": "u456",
-        "width": 523.28,
-        "x": 36.0,
-        "y": 724.96
-       },
-       "context": "Text: Monobrand offers fashion and  quality at the best price in a sustainable way. — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "10",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "-5"
-        },
-        "text": "Monobrand offers fashion and \nquality at the best price in a sustainable way.\n"
-       },
-       "data_id": "u457",
-       "identifier": "u457",
-       "page_id": "u456",
-       "page_name": "8",
-       "spread_id": "u451",
-       "text_content": [
-        "Monobrand offers fashion and \nquality at the best price in a sustainable way.\n"
-       ],
-       "validationClassifier": "OVERRIDE"
-      },
-      {
-       "bounds": {
-        "height": 94.82,
-        "kind": "TextFrame",
-        "page_id": "u456",
-        "width": 523.28,
-        "x": 36.0,
-        "y": 724.96
-       },
-       "context": "Text: Monobrand HQ — Overrides: AppliedFont: Playfair Display, FontStyle: Bold, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "FontStyle": "Bold",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "10",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "-5"
-        },
-        "text": "Monobrand HQ "
-       },
-       "data_id": "u457",
-       "identifier": "u457",
-       "page_id": "u456",
-       "page_name": "8",
-       "spread_id": "u451",
-       "text_content": [
-        "Monobrand HQ "
-       ],
-       "validationClassifier": "OVERRIDE"
-      },
-      {
-       "bounds": {
-        "height": 94.82,
-        "kind": "TextFrame",
-        "page_id": "u456",
-        "width": 523.28,
-        "x": 36.0,
-        "y": 724.96
-       },
-       "context": "Text: Paradise Street 15 8080 Big City  monobrand.com — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
-       "context_details": {
-        "overrides": {
-         "AppliedFont": "Playfair Display",
-         "KentenFontSize": "-0.32244888188967313",
-         "MiterLimit": "1.2897955275586925",
-         "OTFContextualAlternate": "false",
-         "PointSize": "10",
-         "RubyFontSize": "-0.32244888188967313",
-         "StrokeWeight": "0.32244888188967313",
-         "Tracking": "-5"
-        },
-        "text": "Paradise Street 15\n8080 Big City\n\nmonobrand.com\n"
-       },
-       "data_id": "u457",
-       "identifier": "u457",
-       "page_id": "u456",
-       "page_name": "8",
-       "spread_id": "u451",
-       "text_content": [
-        "Paradise Street 15\n8080 Big City\n\nmonobrand.com\n"
-       ],
-       "validationClassifier": "OVERRIDE"
-      }
-     ]
-    },
-    "u45a": {
-     "errors": [
-      {
-       "bounds": {
-        "height": 94.82,
-        "kind": "TextFrame",
-        "page_id": "u456",
-        "width": 523.28,
-        "x": 36.0,
-        "y": 724.96
-       },
-       "context": "",
-       "context_details": {
-        "whitespace_only": false,
-        "whole_frame": true
-       },
-       "data_id": "u457",
-       "identifier": "u45a",
-       "page_id": "u456",
-       "page_name": "8",
-       "spread_id": "u451",
-       "validationClassifier": "PARAGRAPH_STYLE_TEXT_BOX"
-      }
-     ],
-     "infos": [],
-     "warnings": []
-    }
-   },
-   "total_count": 9
-  },
-  "validation_classifiers": {
-   "COMPOSER": {
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
-    "label": "Paragraph Composer used",
-    "message": ""
-   },
-   "DOCUMENT_BLEED": {
-    "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
-    "label": "Document has bleed",
-    "message": ""
-   },
-   "FONTS_INCLUDED": {
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
-    "label": "Font missing from the package",
-    "message": ""
-   },
-   "OVERRIDE": {
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-    "label": "Text formatted outside its paragraph style",
-    "message": ""
-   },
-   "PARAGRAPH_STYLE_TEXT_BOX": {
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-    "label": "Text frame has no paragraph style",
-    "message": ""
+    "page_id": "u456"
    }
   }
  },
