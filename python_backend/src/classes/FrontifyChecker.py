@@ -281,8 +281,7 @@ class FrontifyChecker:
                                                     for story in doc.stories for _, run in doc.runs(story)})
             self.totals[Category.TEXT_BOX] = len(doc.stories)
         self.totals[Category.FONTS] = len(doc.used_fonts) + len(doc.packaged_fonts)
-        self.totals[Category.IMAGES] = sum(len(spread.links) + sum(1 for item in spread.items if item.pasted)
-                                           for spread in doc.spreads)
+        self.totals[Category.IMAGES] = len(doc.links()) + sum(1 for _, item in doc.page_items() if item.pasted)
 
     def results_json(self) -> dict:
         """The response: every issue found, with what the frontend needs to show and highlight it."""

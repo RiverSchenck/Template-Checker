@@ -1,5 +1,6 @@
 """Frame bugs fixed when checks moved to the Document (plan PR 2.4): B5 (an image frame flipped or skewed was
-reported twice) and B8 (a text frame without thread attributes counted as linked)."""
+reported twice), B8 (a text frame without thread attributes counted as linked) and where B3's items placed in
+text are located (tests/fixtures/test_story_coverage.py checks that they're seen)."""
 import pytest
 
 from testing.fixtures.checker_run import run_checker
@@ -44,3 +45,15 @@ def test_unthreaded_frame_is_not_linked(tmp_path, thread):
 def test_threaded_frame_is_linked(tmp_path, thread):
     frame, linked = linked_frames(tmp_path, **thread)
     assert linked == [frame]
+
+
+def test_image_placed_in_text_is_located_on_its_story_frame_page(tmp_path):
+    pkg = PackageBuilder(pages=2)
+    image = pkg.inline_image('photo.jpg', image_transform=FLIPPED)
+    story = pkg.raw_story('<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Body"><CharacterStyleRange '
+                          f'AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">{image}</CharacterStyleRange>'
+                          '</ParagraphStyleRange>')
+    pkg.text_frame(story, page=1)
+    [issue] = [i for i in run_checker(pkg.write(tmp_path)).issues if i.classifier == 'IMAGE_TRANSFORMATION_IMAGE']
+    frame_id = image.split('Self="', 1)[1].split('"', 1)[0]
+    assert (issue.identifier, issue.data_id, issue.page_id) == ('photo.jpg', frame_id, 'page1')

@@ -34,8 +34,9 @@ def at_frame(doc: Document, frame) -> dict:
 
 
 def first_page_id(spread) -> str:
-    """Self of the spread's first page (the fallback location for items without one of their own)."""
-    return spread.pages[0].id if spread.pages else ''
+    """Self of the spread's first page (the fallback location for items without one of their own); '' for an
+    item placed in a story that isn't on a spread (spread None)."""
+    return spread.pages[0].id if spread and spread.pages else ''
 
 
 def at_item(doc: Document, spread, item) -> dict:

@@ -23,24 +23,24 @@ def page_item_transformation_check(doc: Document, results: Results) -> None:
     """Same end-state rule as image_transformation_check, for text frames, image-less rectangles,
     ovals and polygons, and groups: flip or skew -> error; rotation is fine. A frame holding an image is
     left to image_transformation_check (B5: it was reported twice)."""
-    for spread in doc.spreads:
-        for item in spread.items:
-            if item.kind not in TRANSFORMED_KINDS or (item.kind in GRAPHIC_FRAME_TAGS and item.has_link):
-                continue
-            parsed = parse_item_transform(item.transform or '')
-            if parsed is None:
-                continue
-            classification = classify_page_item_transform(*parsed[:4])
-            if classification.is_error:
-                report(results, ValidationError.PAGE_ITEM_TRANSFORMATION, f"{item.kind} {classification.message}",
-                       **at_item(doc, spread, item))
+    for spread, item in doc.page_items():
+        if item.kind not in TRANSFORMED_KINDS or (item.kind in GRAPHIC_FRAME_TAGS and item.has_link):
+            continue
+        parsed = parse_item_transform(item.transform or '')
+        if parsed is None:
+            continue
+        classification = classify_page_item_transform(*parsed[:4])
+        if classification.is_error:
+            report(results, ValidationError.PAGE_ITEM_TRANSFORMATION, f"{item.kind} {classification.message}",
+                   **at_item(doc, spread, item))
 
 
 def pasted_graphics_check(doc: Document, results: Results) -> None:
     """Error for each spread with graphics pasted into the document (PDF/EPS/image content without a
     link)."""
+    pasted = [spread for spread, item in doc.page_items() if item.pasted]
     for spread in doc.spreads:
-        count = sum(1 for item in spread.items if item.pasted)
+        count = pasted.count(spread)
         if count > 0:
             report(results, ValidationError.PASTED_GRAPHICS, f"{count} pasted graphics found.",
                    page_id=first_page_id(spread), identifier=None)
@@ -84,15 +84,14 @@ def text_wrap_check(doc: Document, results: Results) -> None:
     """Error for each item with text wrap on: text frames (TEXT_WRAP), and images, shapes, lines and groups
     (TEXT_WRAP_ITEM), which is where wrap is usually set. Frontify ignores wrap, so text runs under the
     object. An item without wrap settings has none (InDesign's default)."""
-    for spread in doc.spreads:
-        for frame in spread.text_frames:
-            if frame.wrap not in (None, 'None'):
-                report(results, ValidationError.TEXT_WRAP, f"Text box wrap is '{frame.wrap}' not None.",
-                       **at_frame(doc, frame))
-        for item in spread.items:
-            if item.kind in WRAP_ITEM_KINDS and item.wrap not in (None, 'None'):
-                report(results, ValidationError.TEXT_WRAP_ITEM, f"{item.kind} wrap is '{item.wrap}' not None.",
-                       **at_item(doc, spread, item))
+    for _, frame in doc.text_frames():
+        if frame.wrap not in (None, 'None'):
+            report(results, ValidationError.TEXT_WRAP, f"Text box wrap is '{frame.wrap}' not None.",
+                   **at_frame(doc, frame))
+    for spread, item in doc.page_items():
+        if item.kind in WRAP_ITEM_KINDS and item.wrap not in (None, 'None'):
+            report(results, ValidationError.TEXT_WRAP_ITEM, f"{item.kind} wrap is '{item.wrap}' not None.",
+                   **at_item(doc, spread, item))
 
 
 def linked_text_frame_check(doc: Document, results: Results) -> None:

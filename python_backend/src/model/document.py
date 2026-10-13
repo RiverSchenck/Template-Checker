@@ -56,6 +56,8 @@ class Document:
     used_fonts: Tuple[FontFamily, ...] = field(init=False, repr=False, default=())
     _used_faces: Mapping[str, Set[str]] = field(init=False, repr=False, default=None)
     _paragraph_faces: Mapping[str, Set[str]] = field(init=False, repr=False, default=None)
+    _placed: Mapping[Optional[str], List] = field(init=False, repr=False, default=None)
+    _placed_links: Mapping[Optional[str], List[Link]] = field(init=False, repr=False, default=None)
 
     def __post_init__(self):
         item_page: Dict[str, str] = {}
@@ -72,6 +74,32 @@ class Document:
             for link in spread.links:
                 if link.frame_id:
                     item_page[link.frame_id] = page_id
+        # Items placed in a story's text (inline or anchored) belong to the spread and page of the story's frame.
+        story_spread = {story_id: spread for spread in self.spreads for frame in spread.text_frames
+                        if (story_id := frame.story_id)}
+        placed: Dict[Optional[str], List] = {}
+        placed_links: Dict[Optional[str], List[Link]] = {}
+        for story in self.stories or ():
+            spread = story_spread.get(story.id)
+            # The page the story's frame is on (from its position when known), else its spread's first page.
+            bounds = self.geometry.get_bounds(story_frame.get(story.id)) if self.geometry else None
+            page_id = bounds['page_id'] if bounds else story_page.get(story.id, '')
+            for _, run in self.runs(story):
+                for item in run.items:
+                    placed.setdefault(spread.id if spread else None, []).append(item)
+                    if item.id:
+                        item_page[item.id] = page_id
+                    if isinstance(item, TextFrame) and item.story_id:
+                        story_page[item.story_id] = page_id
+                        story_frame[item.story_id] = item.id
+                        if spread is not None:
+                            story_spread[item.story_id] = spread
+                for link in run.links:
+                    placed_links.setdefault(spread.id if spread else None, []).append(link)
+                    if link.frame_id:
+                        item_page[link.frame_id] = page_id
+        object.__setattr__(self, '_placed', placed)
+        object.__setattr__(self, '_placed_links', placed_links)
         object.__setattr__(self, 'item_page', item_page)
         object.__setattr__(self, 'story_page', story_page)
         object.__setattr__(self, 'story_frame', story_frame)
@@ -127,13 +155,23 @@ class Document:
     def story_of_frame(self, frame: TextFrame) -> Optional[Story]:
         return self.stories_by_id.get(frame.story_id) if frame.story_id else None
 
+    def page_items(self):
+        """(spread, item) for every page item: on the spreads, then placed in each spread's stories (inline or
+        anchored), then placed in stories that aren't on a spread (spread None)."""
+        return [(spread, item) for spread in self._containers()
+                for item in (spread.items if spread else ()) + tuple(self._placed.get(spread.id if spread else None, ()))]
+
     def text_frames(self):
-        """(spread, text frame) for every text frame, in report order."""
-        return [(spread, frame) for spread in self.spreads for frame in spread.text_frames]
+        """(spread, text frame) for every text frame, in report order (page_items, text frames only)."""
+        return [(spread, item) for spread, item in self.page_items() if isinstance(item, TextFrame)]
 
     def links(self):
-        """(spread, link) for every placed file on the pages, in report order."""
-        return [(spread, link) for spread in self.spreads for link in spread.links]
+        """(spread, link) for every placed file outside master pages, in report order (like page_items)."""
+        return [(spread, link) for spread in self._containers()
+                for link in (spread.links if spread else ()) + tuple(self._placed_links.get(spread.id if spread else None, ()))]
+
+    def _containers(self):
+        return list(self.spreads) + ([None] if None in self._placed or None in self._placed_links else [])
 
     def frame_of_image(self, image_name: str) -> Optional[str]:
         """The frame of the (last) placed link with this file name; '' when no link places it."""
