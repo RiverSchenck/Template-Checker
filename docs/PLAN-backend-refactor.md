@@ -53,7 +53,7 @@ Everything below was confirmed against the code on `main` and, where marked, by 
    guard (12 occurrences).
 4. **Java-style data classes.** 120 `get_x()` methods; big banner comments that drift.
 5. **`'null'` vs `None`.** 31 `'null'` string sentinels mixed with `None`/`''` for "no value".
-6. **Results object holds parsers.** `ValidationResult` keeps `stories_parser`/`spreads_parser` and reaches into
+6. **Results object holds parsers.** *(Done 2026-10-12: `src/results/` — `Results` only collects issues; `DocumentLayout` is built from the parsers once; `serialize.results_json` builds the JSON.)* `ValidationResult` kept `stories_parser`/`spreads_parser` and reaches into
    them while building JSON, so reporting depends on parsing internals.
 7. **Leftovers.** PyInstaller/desktop path logic writes unzip folders into `src/data/` inside the code tree
    (`FrontifyChecker.py:143-160`); unused `GET_ZIP`/`IDLE` states; commented-out checks; 26 `print()` calls
@@ -201,7 +201,7 @@ src/
 
 - Convert data classes to `@dataclass` with plain attributes; delete getters as call sites move. One class per PR.
 - Standardise "no value" on `None` internally; only the JSON layer emits `'null'` where the contract needs it.
-- `ValidationResult` receives plain lookups (page names, story texts) instead of holding parsers.
+- ~~`ValidationResult` receives plain lookups (page names, story texts) instead of holding parsers.~~ Done: see `src/results/`.
 - Replace `print()` with `logging`; drop per-image/per-link prints.
 - Unzip into `tempfile.mkdtemp()` instead of `src/data/`; delete the PyInstaller branch, `GET_ZIP`/`IDLE`,
   commented-out checks, stale banner comments, and the sleep/retry loop in `zip_idml_output_folder`.

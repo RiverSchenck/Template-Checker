@@ -1,6 +1,6 @@
 """Every template check, in the order they run.
 
-To add a check: write `def my_check(doc: ParsedDocument, results: ValidationResult) -> None` in the
+To add a check: write `def my_check(doc: ParsedDocument, results: Results) -> None` in the
 module for its theme, add a States member for it, and add it to CHECKS. The issues it reports are
 classifiers in src/results/classifiers.py (adding one is a single line there plus its guide; see
 docs/validation-classifier-reference.md). The state name is stored in analytics as the step a run
@@ -12,13 +12,13 @@ from typing import Callable
 from src.checks import fonts, images, layout, text
 from src.classes.States import States
 from src.document import ParsedDocument
-from src.results.results import ValidationResult
+from src.results.results import Results
 
 
 @dataclass(frozen=True)
 class Check:
     state: States
-    run: Callable[[ParsedDocument, ValidationResult], None]
+    run: Callable[[ParsedDocument, Results], None]
     needs_stories: bool = False  # skipped when the IDML has no Stories/ folder
 
 

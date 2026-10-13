@@ -80,7 +80,7 @@ def run_check(checker, file_path: str, source_type: str = 'api', user_id: Option
 
         duration_ms = int((time.time() - start_time) * 1000)
 
-        checker_json = checker.results.get_formatted_results_json()
+        checker_json = checker.results_json()
 
         # Add analytics data to results
         checker_json['analytics'] = {
