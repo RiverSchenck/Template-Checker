@@ -5,6 +5,7 @@ from src.model.document import Document
 from src.results.results import Results
 from src.results.classifiers import ValidationError, ValidationWarning
 from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform
+from src.model.layout import GRAPHIC_FRAME_TAGS
 
 TRANSFORMED_KINDS = frozenset({'TextFrame', 'Rectangle', 'Oval', 'Polygon', 'Group'})
 WRAP_ITEM_KINDS = frozenset({'Rectangle', 'Oval', 'Polygon', 'GraphicLine', 'Group'})
@@ -20,10 +21,11 @@ def masterpage_check(doc: Document, results: Results) -> None:
 
 def page_item_transformation_check(doc: Document, results: Results) -> None:
     """Same end-state rule as image_transformation_check, for text frames, image-less rectangles,
-    ovals, polygons and groups: flip or skew -> error; rotation is fine."""
+    ovals and polygons, and groups: flip or skew -> error; rotation is fine. A frame holding an image is
+    left to image_transformation_check (B5: it was reported twice)."""
     for spread in doc.spreads:
         for item in spread.items:
-            if item.kind not in TRANSFORMED_KINDS or (item.kind == 'Rectangle' and item.has_link):
+            if item.kind not in TRANSFORMED_KINDS or (item.kind in GRAPHIC_FRAME_TAGS and item.has_link):
                 continue
             parsed = parse_item_transform(item.transform or '')
             if parsed is None:
