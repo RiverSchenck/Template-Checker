@@ -20,8 +20,6 @@ jobs:
           cache: pip
           cache-dependency-path: python_backend/requirements.txt
       - run: pip install -r requirements.txt
-      # git doesn't track empty folders; remove once the kerning test has fail packages (plan PR 0.2).
-      - run: mkdir -p testing/unit_tests/kerning_check/fail_data
       - run: python -m pytest -q -p no:cacheprovider
 
   frontend:

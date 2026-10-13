@@ -34,36 +34,13 @@ def format_counter_diff(expected: Counter, actual: Counter, label: str) -> tuple
     return (detailed, summary)
 
 EXPECTED_OUTCOMES = {
-    "Variable Font Example.zip": {
+    # Paragraph style H4 uses Optical kerning (Styles.xml: KerningMethod="$ID/Optical"); one error per
+    # story that uses H4 (3 stories). Character-style kerning has no package: see testing/fixtures/test_kerning_rule.py.
+    "1023_SEMCO_OTHER_3984112_Overview_FS_TEMP_RES_PRINT.zip": {
         "errors": [
-            f"{ValidationError.VARIABLE_FONT.value}",
-        ],
-        "warnings": [
-        ]
-    },
-    "3 variable fonts with multiple weights Folder.zip": {
-        "errors": [
-            f"{ValidationError.VARIABLE_FONT.value}",
-            f"{ValidationError.VARIABLE_FONT.value}",
-            f"{ValidationError.VARIABLE_FONT.value}",
-        ],
-        "warnings": [
-        ]
-    },
-    "2 var fonts.zip": {  # Used 2 variable Fonts, but we are checking Font Family so only 1 error expected
-        "errors": [
-            f"{ValidationError.VARIABLE_FONT.value}",
-            # f"{ValidationError.VARIABLE_FONT.value}",
-        ],
-        "warnings": [
-        ]
-    },
-    "4 var fonts Folder.zip": {
-        "errors": [
-            f"{ValidationError.VARIABLE_FONT.value}",
-            f"{ValidationError.VARIABLE_FONT.value}",
-            f"{ValidationError.VARIABLE_FONT.value}",
-            f"{ValidationError.VARIABLE_FONT.value}",
+            f"{ValidationError.KERNING.value}",
+            f"{ValidationError.KERNING.value}",
+            f"{ValidationError.KERNING.value}",
         ],
         "warnings": [
         ]
@@ -83,7 +60,7 @@ def test_zip_check_fail(testcase_zip):
     checker = setup_instance(testcase_zip)
 
     # Execute
-    checker.run_check(States.VARIABLE_FONT_CHECK)
+    checker.run_check(States.KERNING_CHECK)
     # Cleanup files
     checker.delete_unzipped_root_path()
 
@@ -95,9 +72,9 @@ def test_zip_check_fail(testcase_zip):
 
     # Extract expected outcomes for the current testcase_zip
     filename = os.path.basename(testcase_zip)
-    # If the expected outcome for the file is not found, skip the test
+    # Every package needs an expected outcome
     if filename not in EXPECTED_OUTCOMES:
-        pytest.skip(f"Expected outcome for {filename} not found")
+        pytest.fail(f"No expected outcome for {filename}: add it to EXPECTED_OUTCOMES")
     expected_errors = EXPECTED_OUTCOMES[filename].get("errors", [])
     expected_warnings = EXPECTED_OUTCOMES[filename].get("warnings", [])
     expected_infos = EXPECTED_OUTCOMES[filename].get("infos", [])
@@ -151,30 +128,6 @@ def test_zip_check_pass(testcase_zip):
     actual_errors = checker.get_error_types()
     actual_warnings = checker.get_warning_types()
     actual_infos = checker.get_info_types()
-
-    # Assert
-    assert not actual_errors
-
-    assert not actual_warnings
-
-    assert not actual_infos
-
-
-@pytest.mark.parametrize('testcase_zip', [os.path.join(PASS_DATA_DIR, f) for f in os.listdir(PASS_DATA_DIR) if f.endswith('.zip')])
-def test_zip_check_pass(testcase_zip):
-    print(f"Running PASS test with {testcase_zip}")
-    # Setup
-    checker = setup_instance(testcase_zip)
-    # Exuecute
-    checker.run_check(States.VARIABLE_FONT_CHECK)
-    # Cleanup files
-    checker.delete_unzipped_root_path()
-
-    # Extract Error and Warnings
-    actual_errors = checker.get_error_types()
-    actual_warnings = checker.get_warning_types()
-    actual_infos = checker.get_info_types()
-
 
     # Assert
     assert not actual_errors
