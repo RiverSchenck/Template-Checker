@@ -330,6 +330,8 @@ is left to PR 5.2, where v2 needs it.
 **PR 2.5 Delete the old model (M).** Remove `classes/` (except what moved), `parsers/`, old `document.py`,
 `PropertyBase`, MetadataParser disk writes (S4-adjacent), dead code from §2.3; move `States` to
 `checks/stages.py` with explicit string values + a test pinning the names (D10). Golden diff: 0.
+*Done (2026-10-13):* also removed `EXIT` (D10; intake returns None). `FrontifyChecker` stays in `classes/` until PR 3.2.
+XMP thumbnails are read in memory (`helpers/pdf_previews.xmp_thumbnails`); PR 3.2 moves them to `pipeline/previews.py`.
 
 ### Phase 3 — Pipeline
 

@@ -5,21 +5,21 @@ import zipfile
 import pytest
 from lxml import etree as ET
 
-from src.classes.Image import Image
-from src.classes.Link import Link
 from src.helpers.file_names import normalize_file_name, unquote_uri
 from src.helpers.package_zip import read_package
+from src.model.assets import packaged_images
+from src.model.layout import Link, read_link
 
 NAME = 'logo_Förderturm_original.png'
 
 
 def make_link(resource_uri: str) -> Link:
-    # Link reads attributes off its parent (image) and grandparent (frame).
+    # A link reads attributes off its parent (image) and grandparent (frame).
     rect = ET.Element('Rectangle', Self='u1')
     image = ET.SubElement(rect, 'Image', Self='u2')
     link = ET.SubElement(image, 'Link', Self='u3',
                          LinkResourceURI=resource_uri, StoredState='Normal')
-    return Link(link)
+    return read_link(link)
 
 
 @pytest.mark.parametrize('uri', [
@@ -33,7 +33,7 @@ def make_link(resource_uri: str) -> Link:
     'file:/Users/me/Folder/Links/' + unicodedata.normalize('NFD', NAME),
 ])
 def test_link_name_round_trips(uri):
-    assert make_link(uri).get_image_name() == NAME
+    assert make_link(uri).name == NAME
 
 
 def test_plain_latin1_name_is_left_alone():
@@ -63,6 +63,6 @@ def test_zip_without_utf8_flag_lists_link_under_real_name():
         package = read_package(zf)
 
     assert package.links == [(NAME, 3)]
-    image = Image(*package.links[0])
+    [image] = packaged_images(package.links)
     link = make_link('file:/Users/me/Pkg%20Folder/Links/logo_F%C3%B6rderturm_original.png')
-    assert image.get_image_name() == link.get_image_name() == NAME
+    assert image.name == link.name == NAME

@@ -1,7 +1,7 @@
 """Every template check, in the order they run.
 
 To add a check: write `def my_check(doc: Document, results: Results) -> None` in the
-module for its theme, add a States member for it, and add it to CHECKS. The issues it reports are
+module for its theme, add a member for it to States (src/checks/stages.py), and add it to CHECKS. The issues it reports are
 classifiers in src/results/classifiers.py (adding one is a single line there plus its guide; see
 docs/validation-classifier-reference.md). The state name is stored in analytics as the step a run
 stopped at (runs.stopped_at_stage), so never rename an existing one.
@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from src.checks import fonts, images, layout, text
-from src.classes.States import States
+from src.checks.stages import States
 from src.model.document import Document
 from src.results.results import Results
 

@@ -1,10 +1,9 @@
 import pytest
 from lxml import etree as ET
 
-from src.classes.SpreadData import SpreadData
 from src.checks.layout import page_item_transformation_check
 from src.model.document import Document
-from src.model.layout import load_layout
+from src.model.layout import load_layout, read_spread
 from src.results.results import Results
 from src.results.classifiers import Severity, ValidationError
 from src.helpers.page_item_transform import (
@@ -44,27 +43,24 @@ def test_classify_none_identity():
     assert c.kind == TransformKind.NONE
 
 
-def test_spread_data_collects_candidates_and_skips_linked_rectangle():
+def test_page_items_are_checked_but_a_linked_rectangle_is_left_to_the_image_check():
     xml = b"""<?xml version="1.0" encoding="UTF-8"?>
 <Root>
   <Spread Self="spread1">
     <Page Self="page1" Name="1"/>
-    <TextFrame Self="tf1" ItemTransform="1 0 0 1 0 0"/>
-    <Rectangle Self="linkedRect" ItemTransform="1 0 0 1 0 0">
+    <TextFrame Self="tf1" ItemTransform="1 0 0.15 1 0 0"/>
+    <Rectangle Self="linkedRect" ItemTransform="1 0 0.15 1 0 0">
       <Link Self="l1" LinkResourceURI="file:///dummy.png" StoredState="Normal"/>
     </Rectangle>
-    <Rectangle Self="plainRect" ItemTransform="1 0 0 1 0 0"/>
-    <Group Self="g1" ItemTransform="1 0 0 1 0 0"/>
+    <Rectangle Self="plainRect" ItemTransform="1 0 0.15 1 0 0"/>
+    <Group Self="g1" ItemTransform="1 0 0.15 1 0 0"/>
   </Spread>
 </Root>"""
-    root = ET.fromstring(xml)
-    sd = SpreadData(root)
-    cands = sd.get_page_item_transform_candidates()
-    tags_self = {(c["tag"], c["self_id"]) for c in cands}
-    assert ("TextFrame", "tf1") in tags_self
-    assert ("Rectangle", "plainRect") in tags_self
-    assert ("Group", "g1") in tags_self
-    assert ("Rectangle", "linkedRect") not in tags_self
+    spread = read_spread(ET.fromstring(xml).find('Spread'))
+    results = Results()
+    page_item_transformation_check(Document(spreads=(spread,)), results)
+    reported = {issue.identifier for issue in results}
+    assert reported == {"TextFrame:tf1", "Rectangle:plainRect", "Group:g1"}
 
 
 def test_page_item_transformation_check_skew_textframe(tmp_path):

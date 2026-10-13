@@ -9,8 +9,7 @@ from src.results.classifiers import Category, Severity, ValidationError, Validat
 from src.results.layout import DocumentLayout, pages_from_spreads, text_boxes_from_stories
 from src.results.results import Results
 from src.results.serialize import results_json
-from src.parsers.MetadataParser import MetadataParser
-from src.classes.States import States
+from src.checks.stages import States
 from src.checks import CHECKS, CHECKS_BY_STATE, Check
 from src.model.document import Document, short_style_id
 from src.model.load import load_document
@@ -20,7 +19,7 @@ from src.helpers import safe_xml
 from src.helpers.package_zip import (
     DAMAGED_ARCHIVE_ERRORS, DAMAGED_IDML, MultipleIdmlError, NoIdmlError, PackageError, extract_idml,
     extract_package, read_package)
-from src.helpers.pdf_previews import find_package_pdf, render_pdf_previews
+from src.helpers.pdf_previews import find_package_pdf, render_pdf_previews, xmp_thumbnails
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +60,7 @@ class FrontifyChecker:
         self.document: Optional[Document] = None
         # The checks, in order (an instance copy, so a test can swap one out)
         self.checks: List[Check] = list(CHECKS)
-        # Intake: unzip, unpack the IDML, parse it. Each returns the next state, or EXIT on a bad upload.
+        # Intake: unzip, unpack the IDML, parse it. Each returns the next state, or None on a bad upload.
         self.states: Dict[States, Callable[[], States]] = {
             States.UNZIP_PACKAGE: self.unzip_package_state,
             States.UNZIP_IDML: self.unzip_idml_state,
@@ -82,7 +81,7 @@ class FrontifyChecker:
         while self.current_state in self.states:
             self.last_state = self.current_state
             self.current_state = self.states[self.current_state]()
-            if self.current_state == States.EXIT:
+            if self.current_state is None:  # the upload was rejected; the results say why
                 return
         if self.document is None:  # intake stopped without parsing (shouldn't happen: every path returns a state)
             return
@@ -109,18 +108,18 @@ class FrontifyChecker:
             self.results.add(ValidationError.ZIP, "File uploaded is not ZIP")
             return False
 
-    def unzip_package_state(self) -> States:
+    def unzip_package_state(self) -> Optional[States]:
         """UNZIP_PACKAGE: check it's a zip, make this run's folder, extract what the checks read."""
         self.template_name = os.path.basename(self.source_file_path)
         self.data_folder = DATA_FOLDER
         if not self.get_zip_state():
-            return States.EXIT
+            return None
 
         if not self.cleanup_data_folder():
-            return States.EXIT
+            return None
 
         if not self.extract_zip_to_data_folder():
-            return States.EXIT
+            return None
 
         return States.UNZIP_IDML
 
@@ -159,13 +158,13 @@ class FrontifyChecker:
         # Anything else (disk full, permissions...) is a server fault: it raises and the run is logged as failed.
         return True
 
-    def unzip_idml_state(self) -> States:
+    def unzip_idml_state(self) -> Optional[States]:
         """UNZIP_IDML: report a missing or duplicate .idml, otherwise unpack it."""
         if self.idml_problem or not self.idml_path:
             self.results.add(ValidationError.IDML, self.idml_problem or NoIdmlError().args[0])
-            return States.EXIT
+            return None
         if not self.unarchive_idml_files(self.idml_path):
-            return States.EXIT
+            return None
         return States.PARSE_XML
 
     def unarchive_idml_files(self, idml_path: str) -> bool:
@@ -181,9 +180,9 @@ class FrontifyChecker:
             self.results.add(ValidationError.ERROR, str(e))
             return False
 
-    def parse_xml(self) -> States:
+    def parse_xml(self) -> Optional[States]:
         """PARSE_XML: read the IDML's XML (spreads, fonts, styles, stories, masters, preferences) into
-        self.document. Returns the first check's state, or EXIT if a required file is missing or the XML is
+        self.document. Returns the first check's state, or None if a required file is missing or the XML is
         damaged (malformed, a DTD, over the size cap)."""
         try:
             return self._parse_xml()
@@ -192,9 +191,9 @@ class FrontifyChecker:
         except (etree.XMLSyntaxError, safe_xml.UnsafeXMLError):
             logger.info('Damaged XML in the .idml', exc_info=True)
             self.results.add(ValidationError.ERROR, DAMAGED_IDML)
-        return States.EXIT
+        return None
 
-    def _parse_xml(self) -> States:
+    def _parse_xml(self) -> Optional[States]:
         document_fonts_folder_path = self.ensure_folder_exists(self.unzipped_folder_path, 'Document Fonts')
         resources = os.path.join(self.idml_output_folder, 'Resources')
         for missing, path in (("pages (Spreads folder)", os.path.join(self.idml_output_folder, 'Spreads')),
@@ -202,13 +201,13 @@ class FrontifyChecker:
                               ("styles (Resources/Styles.xml)", os.path.join(resources, 'Styles.xml'))):
             if not os.path.exists(path):
                 self.results.add(ValidationError.ERROR, incomplete_idml(missing))
-                return States.EXIT
+                return None
         if not os.path.exists(os.path.join(self.idml_output_folder, 'MasterSpreads')):
             # No master spreads is valid (only the [None] master); checks see no master items.
             self.results.add(ValidationWarning.WARNING, "MasterSpreads directory does not exist")
         if not os.path.exists(os.path.join(resources, 'Preferences.xml')):
             self.results.add(ValidationError.ERROR, incomplete_idml("document settings (Resources/Preferences.xml)"))
-            return States.EXIT
+            return None
 
         self.document = load_document(self.idml_output_folder, self.package_links, document_fonts_folder_path)
         self.layout = pages_from_spreads(self.document)
@@ -228,10 +227,10 @@ class FrontifyChecker:
                 # XMP PageNumber is the 1-based position of the page in the document.
                 page_by_index = {str(page['index']): page['page_id']
                                  for page in page_geometry.get_pages()}
-                for preview in MetadataParser(self.metadata_xml_path, self.unzipped_root_path).previews_objs_list:
-                    page_id = page_by_index.get(str(preview.page))
-                    if page_id and preview.base_64:
-                        previews[page_id] = ''.join(preview.base_64.split())
+                for page_number, thumbnail in xmp_thumbnails(self.metadata_xml_path).items():
+                    page_id = page_by_index.get(page_number)
+                    if page_id:
+                        previews[page_id] = thumbnail
             previews.update(self._render_package_pdf_previews(page_geometry))
             self.layout.previews = previews
         except Exception:

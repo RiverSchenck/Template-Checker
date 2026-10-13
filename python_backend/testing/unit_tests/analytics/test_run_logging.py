@@ -7,7 +7,7 @@ import app.analytics as analytics
 import app.utils as utils
 from src.classes.FrontifyChecker import FrontifyChecker
 from src.checks import Check
-from src.classes.States import States
+from src.checks.stages import States
 
 PASS_ZIP = os.path.join(os.path.dirname(__file__), '..', 'par_check', 'pass_data', 'Blank.zip')
 
