@@ -22,7 +22,7 @@
     },
     "Bleed": {
       "additionalProperties": false,
-      "description": "Offsets in points (may be negative); None when InDesign's value isn't a number.",
+      "description": "Offsets in points (may be negative); null when InDesign's value isn't a number.",
       "properties": {
         "top": {
           "anyOf": [
@@ -370,7 +370,7 @@
               "type": "null"
             }
           ],
-          "description": "The check's facts model (catalogue), or None.",
+          "description": "The check's facts (its facts model in the catalogue), or null.",
           "title": "Facts"
         },
         "text": {
@@ -762,7 +762,7 @@
               "type": "null"
             }
           ],
-          "description": "None for a flip.",
+          "description": "null for a flip.",
           "title": "Rotation Deg"
         }
       },

@@ -1,16 +1,16 @@
-"""Every issue the checker can report in results v1: its severity and the results section it's listed in.
+"""Every issue the checks report: its severity, and (results v1) the section it's listed in.
 
-The wording (title, why, fix, help link) is in the catalogue (src/results/catalogue.py), the only copy of it.
-To add an issue, add its entry to the catalogue and a line in the class for its severity below:
+Checks report these classifiers; the catalogue (src/results/catalogue.py) maps each to its results v2 check and holds
+the wording. A line in the class for its severity:
 
     TEXT_WRAP = _issue(Category.TEXT_BOX)
 
 reads as: an error (class ValidationError) reported under Text Boxes. Checks report it with
-`report(results, ValidationError.TEXT_WRAP, ...)`.
+`report(results, ValidationError.TEXT_WRAP, ...)`. How to add a check: docs/checks.md.
 """
 from dataclasses import dataclass, replace
 from enum import Enum
-from typing import Iterator, List, Optional
+from typing import Iterator, List
 
 
 class Severity(Enum):
@@ -73,11 +73,6 @@ def _severity(severity: Severity):
 def all_classifiers() -> Iterator[Classifier]:
     """Every classifier: errors, then warnings, then infos, each in the order defined below."""
     return iter(_ALL)
-
-
-def find(name: str, severity: Optional[Severity] = None) -> Optional[Classifier]:
-    """The classifier with this name (and severity, if given), or None for a name that no longer exists."""
-    return next((c for c in _ALL if c.name == name and severity in (None, c.severity)), None)
 
 
 @_severity(Severity.ERROR)

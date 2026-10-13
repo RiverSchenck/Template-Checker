@@ -62,7 +62,7 @@ export interface Issue {
   subject: Subject;
   location: Location;
   /**
-   * The check's facts model (catalogue), or None.
+   * The check's facts (its facts model in the catalogue), or null.
    */
   facts:
     | InheritedFacts
@@ -155,7 +155,7 @@ export interface BleedFacts {
   bleed: Bleed;
 }
 /**
- * Offsets in points (may be negative); None when InDesign's value isn't a number.
+ * Offsets in points (may be negative); null when InDesign's value isn't a number.
  */
 export interface Bleed {
   top: number | null;
@@ -189,7 +189,7 @@ export interface MissingFontFacts {
 export interface TransformationFacts {
   kind: "flip" | "skew";
   /**
-   * None for a flip.
+   * null for a flip.
    */
   rotation_deg: number | null;
 }

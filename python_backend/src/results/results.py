@@ -20,7 +20,7 @@ class Results:
     def add(self, classifier: Classifier, context: Optional[str] = '', *, page_id: Optional[str] = '',
             identifier: Optional[str] = None, data_id: Optional[str] = None, text_content: Optional[list] = None,
             context_details: Optional[dict] = None, subject: Subject = DOCUMENT) -> None:
-        """Record an issue. Its severity and results section come from the classifier.
+        """Record an issue. Its severity comes from the classifier.
 
         An issue with text at the same place as an earlier one (same classifier, identifier, page and item) only
         adds its text to that one, so a style used in many runs of one frame is reported once. Classifiers marked

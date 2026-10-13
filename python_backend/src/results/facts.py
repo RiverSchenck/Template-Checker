@@ -37,7 +37,7 @@ class MasterPageFacts(Facts):
 
 
 class Bleed(Facts):
-    """Offsets in points (may be negative); None when InDesign's value isn't a number."""
+    """Offsets in points (may be negative); null when InDesign's value isn't a number."""
     top: Optional[float]
     bottom: Optional[float]
     inside: Optional[float]
@@ -69,7 +69,7 @@ class MissingFontFacts(Facts):
 class TransformationFacts(Facts):
     kind: Literal['flip', 'skew']
     rotation_deg: Optional[float]
-    """None for a flip."""
+    """null for a flip."""
 
 
 ALL_FACTS = (InheritedFacts, AutoSizeFacts, SizeFacts, MasterPageFacts, BleedFacts, ParagraphStyleFacts,

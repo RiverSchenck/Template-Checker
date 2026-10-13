@@ -2,7 +2,8 @@
 
 The oracle (`python_backend/testing/oracle/`) encodes these rules independently of the checker's code. When the
 oracle and the checker disagree, the first question is whether the **rule** is right, not whether the code is.
-Rules marked *assumed* are my reading of the code and help articles; please confirm or correct them.
+Rules marked *assumed* are my reading of the code and help articles; please confirm or correct them. What each check
+tells the user (title, why, fix) is in [checks.md](checks.md).
 
 | Check | Rule | Severity | Status |
 |-------|------|----------|--------|
@@ -13,7 +14,7 @@ Rules marked *assumed* are my reading of the code and help articles; please conf
 | Image transformation | Judge the **end state**. Mirrored (determinant `a·d − b·c` < 0) → flip error. Axes not perpendicular → skew error, **whether or not it's also rotated**. Only rotated (and/or scaled) → no issue. Frame and image inside it are reported separately. Same rule for other page items. | Error | ✅ End-state rule confirmed · rotated + skewed = skew (2026-10-12) · rotation alone is no issue (2026-10-12) · *open: an image flipped inside a frame that's also flipped (they cancel). Today both are reported as flips.* |
 | Grid alignment | The paragraph style's `GridAlignment` (following `BasedOn`) must be None. Once per style. | Error | *Assumed* |
 | Text columns | A text frame with more than one column. | Error | *Assumed* |
-| Text wrap | Any page item whose wrap mode isn't None: text frames (`TEXT_WRAP`), and images, shapes, lines and groups (`TEXT_WRAP_ITEM`), which is where InDesign usually sets wrap. An item with no wrap setting has none (InDesign's default). | Error | ✅ Confirmed (2026-10-12) |
+| Text wrap | Any page item whose wrap mode isn't None: text frames, and images, shapes, lines and groups, which is where InDesign usually sets wrap (one check, `TEXT_WRAP`). An item with no wrap setting has none (InDesign's default). | Error | ✅ Confirmed (2026-10-12) |
 | Linked text frames | A text frame threaded to a previous or next frame. | Error | *Assumed* |
 | Embedded images | A placed image stored inside the document instead of linked. | Error | *Assumed* |
 | Document bleed | Any bleed offset other than 0 → one warning for the document. | Warning | *Assumed* |
@@ -129,9 +130,9 @@ reaches the template (no error, no warning). "Our rule" is the checker's current
 7. **Adobe Fonts** — an error only when the style's file isn't packaged; reported instead of "font missing",
    per style (a family can mix Adobe and desktop styles). The copy says Adobe Fonts aren't supported and a
    desktop version is needed.
-8. **Rotation** — no issue: Frontify carries it over. The rotation warnings (`IMAGE_TRANSFORMATION_IMAGE`,
-   `IMAGE_TRANSFORMATION_CONTAINER`, `PAGE_ITEM_TRANSFORMATION` as warnings) are retired; those names now only mean
-   flip/skew errors. Older analytics rows still hold the retired warnings.
+8. **Rotation** — no issue: Frontify carries it over. The rotation warnings are retired; flips and skews are one
+   check, `TRANSFORMATION`. Older analytics rows still hold the retired warnings, under their old names
+   (`IMAGE_TRANSFORMATION_IMAGE`, `IMAGE_TRANSFORMATION_CONTAINER`, `PAGE_ITEM_TRANSFORMATION` with severity warning).
 
 ### Proposed: font index check (not built)
 

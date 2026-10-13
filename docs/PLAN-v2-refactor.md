@@ -418,6 +418,14 @@ rows rewritten, every category a subject kind afterwards.
 **PR 5.5 Delete v1 leftovers (S).** `results/layout.py`, `classifiers.py` remnants, `validation_classifiers`,
 `check_guides.py` (moved into the catalogue), old docs; update `docs/API.md`, `apiReference.ts`,
 `validation-classifier-reference.md` → `docs/checks.md` generated from the catalogue.
+*Done (2026-10-13):* `docs/checks.md` is written by `python -m src.results.checks_doc` (a test fails while it's stale)
+and replaces `validation-classifier-reference.md`, with the steps to add a check. Dead code removed
+(`classifiers.find`, `FrontifyChecker.results_analytics`, `app/users.is_user_allowed`); docstrings and
+`checker-rules.md` use v2 names. `docs/API.md`, `apiReference.ts` and `check_guides.py` were already done in PR 5.3.
+**Moved to PR 6.1 (River):** what remains of v1 is only there for `testing/fixtures/checker_run.py` and the per-check
+tests, so it goes with them: `serialize.results_json` and `FrontifyChecker.results_json`; then, with checks reporting
+v2 checks and subjects directly, `results/layout.py` (results_v2 reads the Document), `Category`, the v1 parts of
+`classifiers.py` and `catalogue.V1_KEYS`, and merging issues on the subject instead of `Issue.identifier`.
 
 ### Phase 6 — Tests consolidation
 
@@ -425,6 +433,7 @@ rows rewritten, every category a subject kind afterwards.
 `testing/test_packages.py`: a data table (`testing/packages/expected.yaml` or `.py`) mapping package → expected
 issues as (check, subject name, page, key facts). Unknown packages fail. Delete `format_counter_diff` copies and
 `checker_setup.py`. Every deleted test is covered by goldens + table + PackageBuilder tests (show the mapping).
+Also (moved from PR 5.5): `testing/fixtures/checker_run.py` reads v2, then the v1 leftovers listed under PR 5.5 go.
 
 **PR 6.2 Corpus dedupe (S).** Move unique zips to `testing/packages/` (77 duplicates removed, ~400 MB working tree,
 ~40% golden time); goldens keyed by package; update references. Golden diff: file moves only.
