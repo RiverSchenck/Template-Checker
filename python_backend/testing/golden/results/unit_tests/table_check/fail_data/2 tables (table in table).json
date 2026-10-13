@@ -408,7 +408,7 @@
     "index": 1,
     "name": "1",
     "page_id": "uf7",
-    "preview": "sha256:b1fbecd16b450a59",
+    "preview": "image:JPEG 512x337",
     "spread_id": "uf2",
     "width": 249.44881889760003
    },
@@ -427,7 +427,7 @@
     "index": 2,
     "name": "2",
     "page_id": "u182",
-    "preview": "sha256:4b78781ab5b1773e",
+    "preview": "image:JPEG 512x337",
     "spread_id": "u17d",
     "width": 249.44881889760003
    }

@@ -1506,7 +1506,7 @@
     "index": 1,
     "name": "1",
     "page_id": "u192",
-    "preview": "sha256:49816d6736a78974",
+    "preview": "image:JPEG 1400x991",
     "spread_id": "u18d",
     "width": 1190.5511811024
    },
@@ -2045,7 +2045,7 @@
     "index": 2,
     "name": "2",
     "page_id": "ud3",
-    "preview": "sha256:23f8ec743a6c2f13",
+    "preview": "image:JPEG 1400x991",
     "spread_id": "uce",
     "width": 1190.5511811024
    }

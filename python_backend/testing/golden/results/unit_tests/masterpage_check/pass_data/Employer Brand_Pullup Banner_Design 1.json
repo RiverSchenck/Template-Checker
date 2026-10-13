@@ -946,7 +946,7 @@
     "index": 1,
     "name": "1",
     "page_id": "ud5",
-    "preview": "sha256:ffab4dc392642b46",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "ud0",
     "width": 2409.448818897638
    },
@@ -1077,7 +1077,7 @@
     "index": 2,
     "name": "2",
     "page_id": "u16d",
-    "preview": "sha256:94f23a692362d57b",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u162",
     "width": 2409.448818897638
    },
@@ -1208,7 +1208,7 @@
     "index": 3,
     "name": "3",
     "page_id": "u19f",
-    "preview": "sha256:1c6be98515c28835",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u194",
     "width": 2409.448818897638
    },
@@ -1339,7 +1339,7 @@
     "index": 4,
     "name": "4",
     "page_id": "u1cf",
-    "preview": "sha256:5e25c8402fe42293",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u1c4",
     "width": 2409.448818897638
    },
@@ -1470,7 +1470,7 @@
     "index": 5,
     "name": "5",
     "page_id": "u200",
-    "preview": "sha256:83ae3835840a831f",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u1f5",
     "width": 2409.448818897638
    },
@@ -1601,7 +1601,7 @@
     "index": 6,
     "name": "6",
     "page_id": "u227",
-    "preview": "sha256:e1a7996e61660df9",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u21c",
     "width": 2409.448818897638
    },
@@ -1732,7 +1732,7 @@
     "index": 7,
     "name": "7",
     "page_id": "u24c",
-    "preview": "sha256:6a8b6415c4229278",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u241",
     "width": 2409.448818897638
    },
@@ -1863,7 +1863,7 @@
     "index": 8,
     "name": "8",
     "page_id": "u2be",
-    "preview": "sha256:b31296632aa69b9b",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u2b3",
     "width": 2409.448818897638
    },
@@ -1994,7 +1994,7 @@
     "index": 9,
     "name": "9",
     "page_id": "u2f9",
-    "preview": "sha256:f3c7569f62e9593b",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u2ee",
     "width": 2409.448818897638
    },
@@ -2125,7 +2125,7 @@
     "index": 10,
     "name": "10",
     "page_id": "u335",
-    "preview": "sha256:f5f3dc843fae5bbe",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u32a",
     "width": 2409.448818897638
    },
@@ -2256,7 +2256,7 @@
     "index": 11,
     "name": "11",
     "page_id": "u362",
-    "preview": "sha256:93bd11140e8fc69c",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u357",
     "width": 2409.448818897638
    },
@@ -2387,7 +2387,7 @@
     "index": 12,
     "name": "12",
     "page_id": "u389",
-    "preview": "sha256:855053875e16ee70",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u37e",
     "width": 2409.448818897638
    },
@@ -2518,7 +2518,7 @@
     "index": 13,
     "name": "13",
     "page_id": "u3ae",
-    "preview": "sha256:6007d42789a08c38",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u3a3",
     "width": 2409.448818897638
    },
@@ -2649,7 +2649,7 @@
     "index": 14,
     "name": "14",
     "page_id": "u3d8",
-    "preview": "sha256:0b4daaf195d378bf",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u3cd",
     "width": 2409.448818897638
    }
