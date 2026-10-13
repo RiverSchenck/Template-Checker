@@ -40,6 +40,39 @@ def _rect_path(x: float, y: float, w: float, h: float) -> str:
             f'</PathPointArray></GeometryPathType></PathGeometry></Properties>')
 
 
+def _wrap_xml(wrap: Optional[str]) -> str:
+    return f'<TextWrapPreference TextWrapMode="{wrap}"/>' if wrap is not None else ''
+
+
+def _font_xml(font: Optional[str]) -> str:
+    return f'<AppliedFont type="string">{escape(font)}</AppliedFont>' if font else ''
+
+
+def _properties_xml(inner: str) -> str:
+    return f'<Properties>{inner}</Properties>' if inner else ''
+
+
+def _font_file(family: str, style: str, postscript: str) -> bytes:
+    """A minimal TrueType font whose name table says family / style / PostScript name."""
+    from fontTools.fontBuilder import FontBuilder
+    from fontTools.pens.ttGlyphPen import TTGlyphPen
+
+    builder = FontBuilder(1000, isTTF=True)
+    builder.setupGlyphOrder(['.notdef'])
+    builder.setupCharacterMap({})
+    pen = TTGlyphPen(None)
+    pen.moveTo((0, 0)); pen.lineTo((0, 500)); pen.lineTo((500, 0)); pen.closePath()
+    builder.setupGlyf({'.notdef': pen.glyph()})
+    builder.setupHorizontalMetrics({'.notdef': (500, 0)})
+    builder.setupHorizontalHeader(ascent=800, descent=-200)
+    builder.setupNameTable({'familyName': family, 'styleName': style, 'psName': postscript})
+    builder.setupOS2()
+    builder.setupPost()
+    out = io.BytesIO()
+    builder.save(out)
+    return out.getvalue()
+
+
 @dataclass
 class _Paragraph:
     style: str
@@ -60,6 +93,8 @@ class PackageBuilder:
     _items: List[str] = field(default_factory=list)
     _links: Dict[str, bytes] = field(default_factory=dict)
     _master_items: Dict[int, List[str]] = field(default_factory=dict)
+    _font_families: Dict[str, Dict[str, Tuple[Optional[str], Optional[str]]]] = field(default_factory=dict)
+    _document_fonts: Dict[str, bytes] = field(default_factory=dict)
     _next_id: int = 0x100
 
     def __post_init__(self):
@@ -70,12 +105,22 @@ class PackageBuilder:
         return f'u{self._next_id:x}'
 
     # --- styles ----------------------------------------------------------------------------
-    def paragraph_style(self, name: str, based_on: Optional[str] = None, **attrs: str):
-        """A paragraph style; inherits from [No paragraph style] unless based_on names another style."""
-        self._paragraph_styles[name] = {'based_on': based_on, 'attrs': attrs}
+    def paragraph_style(self, name: str, based_on: Optional[str] = None, font: Optional[str] = None, **attrs: str):
+        """A paragraph style; inherits from [No paragraph style] unless based_on names another style.
+        font sets its AppliedFont (a family name, stored under Properties as InDesign does)."""
+        self._paragraph_styles[name] = {'based_on': based_on, 'font': font, 'attrs': attrs}
 
-    def character_style(self, name: str, based_on: Optional[str] = None, **attrs: str):
-        self._character_styles[name] = {'based_on': based_on, 'attrs': attrs}
+    def character_style(self, name: str, based_on: Optional[str] = None, font: Optional[str] = None, **attrs: str):
+        self._character_styles[name] = {'based_on': based_on, 'font': font, 'attrs': attrs}
+
+    # --- fonts -----------------------------------------------------------------------------
+    def font_family(self, name: str, faces: Dict[str, Tuple[Optional[str], Optional[str]]]):
+        """A family in Fonts.xml. faces: {style name: (PostScript name, TypekitID)}."""
+        self._font_families[name] = faces
+
+    def document_font(self, family: str, style: str, postscript: str, file_name: Optional[str] = None):
+        """A font file in Document fonts, generated with the given family, style and PostScript names."""
+        self._document_fonts[file_name or f'{postscript}.ttf'] = _font_file(family, style, postscript)
 
     # --- content ---------------------------------------------------------------------------
     def story(self, paragraphs: Sequence, story_id: Optional[str] = None) -> str:
@@ -107,16 +152,17 @@ class PackageBuilder:
     def image(self, file_name: str, page: int = 0, at=(72, 300, 200, 150), *, include_in_links: bool = True,
               embedded: bool = False, image_transform: str = '1 0 0 1 0 0', frame_transform: Optional[str] = None,
               frame_style: str = DEFAULT_GRAPHIC_STYLE, image_style: str = DEFAULT_GRAPHIC_STYLE,
-              size_bytes: int = 1024, master: Optional[int] = None, broken_link: bool = False) -> str:
+              size_bytes: int = 1024, master: Optional[int] = None, broken_link: bool = False,
+              wrap: Optional[str] = None) -> str:
         """A placed image. master=N puts it on master spread N instead of the page; broken_link omits the
-        link's LinkResourceURI (a malformed export)."""
+        link's LinkResourceURI (a malformed export); wrap sets the frame's TextWrapMode."""
         frame_id, image_id, link_id = self._id(), self._id(), self._id()
         if include_in_links:
             self._links[file_name] = b'\0' * size_bytes
         stored = 'Embedded' if embedded else 'Normal'
         uri = None if broken_link else f'file:/Users/designer/{self.name}/Links/{file_name}'
         xml = (f'<Rectangle {_attrs({"Self": frame_id, "ContentType": "GraphicType", "AppliedObjectStyle": frame_style, "ItemTransform": frame_transform or self._page_transform(page)})}>'
-               f'{_rect_path(*at)}'
+               f'{_rect_path(*at)}{_wrap_xml(wrap)}'
                f'<Image {_attrs({"Self": image_id, "AppliedObjectStyle": image_style, "ItemTransform": image_transform})}>'
                f'<Link {_attrs({"Self": link_id, "LinkResourceURI": uri, "StoredState": stored})}/>'
                f'</Image></Rectangle>')
@@ -125,6 +171,30 @@ class PackageBuilder:
         else:
             self._master_items.setdefault(master, []).append(xml)
         return frame_id
+
+    def shape(self, tag: str = 'Rectangle', page: int = 0, at=(72, 300, 200, 150), *, wrap: Optional[str] = None,
+              pasted: Optional[str] = None, transform: Optional[str] = None) -> str:
+        """An empty Rectangle, Oval, Polygon or GraphicLine. pasted='PDF'/'EPS'/'Image'/'SVG' puts a graphic
+        pasted into the document inside it (inline Contents, no Link)."""
+        item_id = self._id()
+        inner = ''
+        if pasted:
+            inner = (f'<{pasted} Self="{self._id()}" ItemTransform="1 0 0 1 0 0"><Properties>'
+                     f'<Contents><![CDATA[UGFzdGVkIGdyYXBoaWM=]]></Contents></Properties></{pasted}>')
+        self._items.append(
+            f'<{tag} {_attrs({"Self": item_id, "ContentType": "GraphicType" if pasted else "Unassigned", "AppliedObjectStyle": DEFAULT_GRAPHIC_STYLE, "ItemTransform": transform or self._page_transform(page)})}>'
+            f'{_rect_path(*at)}{_wrap_xml(wrap)}{inner}</{tag}>')
+        return item_id
+
+    def group(self, page: int = 0, at=(72, 300, 200, 150), *, wrap: Optional[str] = None) -> str:
+        """A group holding one empty rectangle; wrap sets the group's TextWrapMode."""
+        group_id, child_id = self._id(), self._id()
+        self._items.append(
+            f'<Group {_attrs({"Self": group_id, "AppliedObjectStyle": DEFAULT_GRAPHIC_STYLE, "ItemTransform": self._page_transform(page)})}>'
+            f'{_wrap_xml(wrap)}'
+            f'<Rectangle {_attrs({"Self": child_id, "ContentType": "Unassigned", "AppliedObjectStyle": DEFAULT_GRAPHIC_STYLE, "ItemTransform": "1 0 0 1 0 0"})}>'
+            f'{_rect_path(*at)}</Rectangle></Group>')
+        return group_id
 
     def _page_transform(self, page: int) -> str:
         """Page-local coordinates -> spread coordinates (the spread origin is at the spine, mid-height)."""
@@ -141,23 +211,32 @@ class PackageBuilder:
             base = s['based_on'] or '$ID/[No paragraph style]'
             base = base if base.startswith('$ID/') else f'ParagraphStyle/{base}'
             paragraphs.append(f'<ParagraphStyle {_attrs({"Self": f"ParagraphStyle/{name}", "Name": name, **s["attrs"]})}>'
-                              f'<Properties><BasedOn type="string">{escape(base)}</BasedOn></Properties></ParagraphStyle>')
+                              f'<Properties><BasedOn type="string">{escape(base)}</BasedOn>{_font_xml(s["font"])}</Properties></ParagraphStyle>')
         characters = ['<CharacterStyle Self="CharacterStyle/$ID/[No character style]" Name="$ID/[No character style]"/>']
         for name, s in self._character_styles.items():
             base = s['based_on'] or '$ID/[No character style]'
             base = base if base.startswith('$ID/') else f'CharacterStyle/{base}'
             characters.append(f'<CharacterStyle {_attrs({"Self": f"CharacterStyle/{name}", "Name": name, **s["attrs"]})}>'
-                              f'<Properties><BasedOn type="string">{escape(base)}</BasedOn></Properties></CharacterStyle>')
+                              f'<Properties><BasedOn type="string">{escape(base)}</BasedOn>{_font_xml(s["font"])}</Properties></CharacterStyle>')
         return (f'<idPkg:Styles {NS}><RootCharacterStyleGroup>{"".join(characters)}</RootCharacterStyleGroup>'
                 f'<RootParagraphStyleGroup>{"".join(paragraphs)}</RootParagraphStyleGroup></idPkg:Styles>')
+
+    def _fonts_xml(self) -> str:
+        families = ''.join(
+            f'<FontFamily {_attrs({"Self": f"di{i}", "Name": family})}>'
+            + ''.join(f'<Font {_attrs({"Self": f"di{i}Font{j}", "FontFamily": family, "Name": f"{family} {style}", "PostScriptName": ps, "Status": "Installed", "FontStyleName": style, "FontType": "OpenTypeCFF", "TypekitID": typekit})}/>'
+                      for j, (style, (ps, typekit)) in enumerate(faces.items()))
+            + '</FontFamily>'
+            for i, (family, faces) in enumerate(self._font_families.items()))
+        return f'<idPkg:Fonts {NS}>{families}</idPkg:Fonts>'
 
     def _story_xml(self, story_id: str, paragraphs: List[_Paragraph]) -> str:
         body = ''
         for p in paragraphs:
             style = p.style if p.style.startswith('$ID/') else p.style
             runs = ''.join(
-                f'<CharacterStyleRange {_attrs({"AppliedCharacterStyle": attrs.pop("AppliedCharacterStyle", "CharacterStyle/$ID/[No character style]"), **attrs})}>'
-                f'<Content>{escape(text)}</Content></CharacterStyleRange>'
+                f'<CharacterStyleRange {_attrs({"AppliedCharacterStyle": attrs.pop("AppliedCharacterStyle", "CharacterStyle/$ID/[No character style]"), **{k: v for k, v in attrs.items() if k != "AppliedFont"}})}>'
+                f'{_properties_xml(_font_xml(attrs.get("AppliedFont")))}<Content>{escape(text)}</Content></CharacterStyleRange>'
                 for text, attrs in ((t, dict(a)) for t, a in p.runs))
             body += f'<ParagraphStyleRange {_attrs({"AppliedParagraphStyle": f"ParagraphStyle/{style}", **p.attrs})}>{runs}</ParagraphStyleRange>'
         return f'<idPkg:Story {NS}><Story Self="{story_id}">{body}</Story></idPkg:Story>'
@@ -177,7 +256,7 @@ class PackageBuilder:
                              + '<idPkg:Spread src="Spreads/Spread_spread1.xml"/>'
                              + ''.join(f'<idPkg:Story src="Stories/Story_{s}.xml"/>' for s in self._stories)
                              + '</Document>',
-            'Resources/Fonts.xml': f'<idPkg:Fonts {NS}/>',
+            'Resources/Fonts.xml': self._fonts_xml(),
             'Resources/Styles.xml': self._styles_xml(),
             'Resources/Preferences.xml': f'<idPkg:Preferences {NS}><DocumentPreference '
                                          + ' '.join(f'DocumentBleed{k}Offset="{self.bleed}"' for k in ('Top', 'Bottom', 'InsideOrLeft', 'OutsideOrRight'))
@@ -203,4 +282,6 @@ class PackageBuilder:
             zf.writestr(f'{self.name}/{self.name}.idml', self.idml_bytes())
             for file_name, data in self._links.items():
                 zf.writestr(f'{self.name}/Links/{file_name}', data)
+            for file_name, data in self._document_fonts.items():
+                zf.writestr(f'{self.name}/Document fonts/{file_name}', data)
         return path

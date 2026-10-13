@@ -8,15 +8,20 @@ Rules marked *assumed* are my reading of the code and help articles; please conf
 |-------|------|----------|--------|
 | Kerning (paragraph) | The paragraph **style's** `KerningMethod` (following `BasedOn`) must be Metrics. Kerning set directly on text is an override, reported by the overrides check, not here. | Error | ✅ Confirmed |
 | Kerning (character) | Same, for the character style. | Error | ✅ Confirmed |
-| Composer | The paragraph **style's** composer (following `BasedOn`) must be *HL Single* (Adobe Single-line). Reported once per style, saying which style it was inherited from. | Warning | ✅ Style-only confirmed · *once per style assumed* |
+| Composer | The paragraph **style's** composer (following `BasedOn`) must be single-line: *HL Single* (Adobe) or *HL Single Optyca* (World-Ready). Reported once per style, saying which style it was inherited from. | Warning | ✅ Style-only confirmed · *once per style assumed* · World-Ready Single-line allowed (2026-10-12) |
 | Auto-size | Width-based auto-size (WidthOnly, HeightAndWidth) must have "No Line Breaks" on, because Frontify always behaves that way. Any reference point is fine. | Error | ✅ Confirmed |
-| Image transformation | Judge the **end state**. Only rotated (and/or scaled) → warning. Mirrored (determinant `a·d − b·c` < 0) → flip error. Not rotated but axes not perpendicular → skew error. Frame and image inside it are reported separately. | Warning / Error | ✅ End-state rule confirmed · *open: an image flipped inside a frame that's also flipped (they cancel). Today both are reported as flips.* |
+| Image transformation | Judge the **end state**. Only rotated (and/or scaled) → warning. Mirrored (determinant `a·d − b·c` < 0) → flip error. Axes not perpendicular → skew error, **whether or not it's also rotated**. Frame and image inside it are reported separately. Same rule for other page items. | Warning / Error | ✅ End-state rule confirmed · rotated + skewed = skew (2026-10-12) · *open: an image flipped inside a frame that's also flipped (they cancel). Today both are reported as flips.* |
 | Grid alignment | The paragraph style's `GridAlignment` (following `BasedOn`) must be None. Once per style. | Error | *Assumed* |
 | Text columns | A text frame with more than one column. | Error | *Assumed* |
-| Text wrap | A text frame whose wrap mode isn't None. A frame with no wrap setting has none (InDesign's default). | Error | *Assumed* |
+| Text wrap | Any page item whose wrap mode isn't None: text frames (`TEXT_WRAP`), and images, shapes, lines and groups (`TEXT_WRAP_ITEM`), which is where InDesign usually sets wrap. An item with no wrap setting has none (InDesign's default). | Error | ✅ Confirmed (2026-10-12) |
 | Linked text frames | A text frame threaded to a previous or next frame. | Error | *Assumed* |
 | Embedded images | A placed image stored inside the document instead of linked. | Error | *Assumed* |
 | Document bleed | Any bleed offset other than 0 → one warning for the document. | Warning | *Assumed* |
+| Fill tint (character) | A **character style's** fill tint (following `BasedOn`) must be 100% (-1 or unset). Once per style. | Error | ✅ Confirmed (2026-10-12) |
+| Superscript / subscript | Per text run, the **effective** `Position` (text, then character style, then paragraph range, then paragraph style, each following `BasedOn`) must be Normal. | Error | ✅ Confirmed (2026-10-12) |
+| Baseline shift | Same resolution; `BaselineShift` must be 0. | Warning | ✅ Confirmed (2026-10-12) |
+| Fonts included | Every style the text uses (effective `AppliedFont` + `FontStyle`, including character styles) needs a file in Document Fonts, matched on PostScript name. A family with no file is reported without detail; otherwise the missing styles are named. Variable fonts and Adobe Fonts styles are left to their own checks. | Error | ✅ Confirmed (2026-10-12) |
+| Adobe Fonts | A style the text uses whose Fonts.xml entry has a real `TypekitID` (not the empty `$ID/` InDesign writes for desktop fonts) and whose file isn't in Document Fonts. A packaged Adobe Font is fine. | Error | ✅ Confirmed (2026-10-12) |
 
 Not yet covered by the oracle: paragraph style missing, overrides, hyphenation, fill tint, fonts (included,
 OTF/TTF, variable), images included/unused, large images, object styles, auto-size, tables, pasted graphics,
@@ -49,7 +54,7 @@ reaches the template (no error, no warning). "Our rule" is the checker's current
 |-|----------|----------|-----|
 | Rotation | **Supported.** `utility/Idml/PageItem.php:590-631` decomposes the matrix; rotation becomes CSS `rotate()`. Every layout operation afterwards understands rotation only: `module/IntermediateJson/Core/Domain/Resize/Write/ItemGeometry.php:179-207` reads `rotate` and nothing else; `BoxMapper.php` "the renderer applies the rotation itself". | Warning | ✅ |
 | Flip (mirror) | **Partial, fragile.** There is no flip concept: a mirror only comes out of the decomposition as a 180° rotation plus a negative `scaleY` (`Transformation.php:52-62`), then hand-tuned position fixes ("Correct upside-down elements", `PageItem.php:617-620`). Resizing ignores it. | Error | ✅ |
-| Skew | **Partial, fragile.** Emitted as CSS `skew()` with position corrections (`PageItem.php:602-606`, "Don't apply y-translation if skewed"); invisible to resize/layout. | Error | ✅ |
+| Skew | **Partial, fragile.** Emitted as CSS `skew()` with position corrections (`PageItem.php:602-606`); when the item is also rotated, the y-correction for the rotation is skipped (`PageItem.php:614-616`, "Don't apply y-translation if skewed"), so rotated + skewed items are mispositioned. Invisible to resize/layout. | Error (rotated or not) | ✅ |
 | Scale | Emitted as CSS `scale()` (`PageItem.php:627-628, 634-640`); invisible to resize/layout. | Not checked | ⚠️ gap |
 
 ### Text frames
@@ -57,7 +62,7 @@ reaches the template (no error, no warning). "Our rule" is the checker's current
 | | Frontify | Our rule | Fit |
 |-|----------|----------|-----|
 | Linked (threaded) frames | **Dropped, and wrong.** `PreviousTextFrame`/`NextTextFrame` are read (`PageItem.php:134-135`) and never used again. Each frame builds its text from its whole story (`TextFrame.php:124-130`), so a threaded story is likely repeated in every frame (from the code, not tested). | Error | ✅ |
-| Text wrap | **Dropped.** `TextWrap*` is never read anywhere in the import (0 references). Text won't flow around objects. | Error | ✅ |
+| Text wrap | **Dropped.** `TextWrap*` is never read anywhere in the import (0 references). Text won't flow around objects. Wrap is set on the obstacle (image, shape, group), so every item is checked, not only text frames. | Error | ✅ |
 | Text columns | **Partial.** Count and gutter become CSS `columnCount`/`columnGap` (`PageItem.php:498-501`); the browser balances columns, not InDesign. Fixed/max column width are read and dropped (`TextFrame.php:34-35`). | Error | ✅ columns won't break the same way |
 | Auto-size: type | **Supported.** WidthOnly / HeightOnly / HeightAndWidth mapped (`PageItem.php:510-528`). | — | ✅ |
 | Auto-size: reference point | **Supported, all nine** (`PageItem.php:530-568`), including the centre ones; the editor positions them (`web-app/application/client/Feature/Publishing/Component/Canvas/presentations/helpers/itemStyles/autoSizingReference.ts:14-50`). When the frame doesn't set one (it inherits from its object style), Frontify assumes `CenterPoint` — the same as InDesign's `[Normal Text Frame]`. | Not checked (since 2026-10-12) | ✅ |
@@ -74,10 +79,12 @@ reaches the template (no error, no warning). "Our rule" is the checker's current
 | Overrides | **Supported.** Range attributes are merged over the style (`TextFrame.php:183, 196-203`); some `<Properties>` overrides aren't read. | Warning | ✅ |
 | Kerning: Optical | **Rendered as Metrics.** Optical and Metrics both become CSS `font-kerning: normal` (`PageItem.php:279-281`), so Optical in InDesign won't match Frontify. | Error | ✅ designer should use Metrics |
 | Kerning: manual value | **Dropped.** `KerningValue` is never rendered (only read, `Styles.php:161-163`). | Not checked | ⚠️ gap |
+| Superscript / subscript | **Dropped.** `Position` is read (`Styles.php:214-216, 381-383`) and never rendered (no case in `PageItem::getStyle`); text shows full size on the baseline. | Error | ✅ |
+| Baseline shift | **Dropped.** 0 references to `BaselineShift`. | Warning | ✅ |
 | Grid alignment | **Dropped.** Read (`Styles.php:333-337`) and never used; line spacing won't snap to a grid. | Error | ✅ (looks different) |
-| Composer | **No effect.** Stored but never rendered (the browser breaks lines); on export Paragraph Composer is forced to Single-line (`Idml.php:401-407`). | Warning | ✅ (line breaks may differ) |
+| Composer | **No effect.** Stored but never rendered (the browser breaks lines); on export edited text gets a single-line composer: `HL Single`, or `HL Single Optyca` for World-Ready composers (`Idml.php:401-408`). | Warning unless single-line | ✅ (line breaks may differ) |
 | Hyphenation | **Supported, differently.** Becomes CSS `hyphens: auto` with limits (`PageItem.php:372-391`); the browser hyphenates, not InDesign, so line breaks differ. | Warning | ✅ |
-| Fill tint on text | **Dropped.** Text colour ignores `FillTint` (`Styles.php:167-169, 297-299`); tint is applied to frame backgrounds only (`PageItem.php:720`). | Error | ✅ |
+| Fill tint on text | **Dropped.** Text colour ignores `FillTint` in paragraph and character styles (`Styles.php:167-169, 297-299`); tint is applied to frame backgrounds only (`PageItem.php:720`). Tint **swatches** work (`Graphic.php:201-222`). | Error (paragraph and character styles) | ✅ |
 
 ### Images
 
@@ -93,7 +100,8 @@ reaches the template (no error, no warning). "Our rule" is the checker's current
 
 | | Frontify | Our rule | Fit |
 |-|----------|----------|-----|
-| Fonts in the package | Read only from a folder named exactly **`Document fonts`** and only if listed in InDesign's **`AdobeFnt*.lst`** index (`server/Helper/Publishing/File/InDesignImportFontFileReader.php:17-19, 40-49`). | Error when a used family isn't in Document Fonts | ⚠️ gap: we don't check the index or the exact folder name |
+| Fonts in the package | Read only from a folder named exactly **`Document fonts`** and only if listed in InDesign's **`AdobeFnt*.lst`** index (`server/Helper/Publishing/File/InDesignImportFontFileReader.php:17-19, 40-49`), keyed by PostScript name (`FontName`). Text gets the PostScript name of the face matching its `FontStyle` (`PageItem.php:246-255`). | Error when a used style has no file (by PostScript name) | ⚠️ gap: we don't check the index or the exact folder name |
+| Adobe Fonts | The `TypekitID` is copied into the template (`PageItem.php:253`) but nothing reads it: Frontify only loads fonts from the package. InDesign packages Adobe Fonts in some cases (e.g. Montserrat in the Harbour club fixtures, listed in `AdobeFnt23.lst`), and then they work. | Error when not packaged | ✅ |
 | File types | Accepts `ttf, ttc, otf, woff, woff2, eot, svg` (same file, line 17); others (Type 1, `.dfont`) silently skipped. `.ttc` is accepted, but nothing picks a face inside it. | Error unless `.otf`/`.ttf` | ✅ (stricter for woff/eot/svg, which InDesign packages don't contain) |
 | Variable fonts | **Not handled** (0 references to design axes / `fvar`). | Error | ✅ |
 
@@ -101,7 +109,7 @@ reaches the template (no error, no warning). "Our rule" is the checker's current
 
 | | Frontify | Our rule | Fit |
 |-|----------|----------|-----|
-| Master page items | Imported into every spread and **not editable** (`utility/Idml/Renderer/JsonRenderer.php:59-64`). | Error | ✅ |
+| Master page items | Imported into every spread (`utility/Idml/Renderer/JsonRenderer.php:59-66`). They're flagged `fromMaster`, but nothing reads the flag, so they're editable; an edit is written back to the **master** on export (`utility/Idml/Idml.php:218-222`), changing every page that uses it. | Error | ✅ |
 | Document bleed | **Dropped.** Never read from the IDML (0 references); bleed only exists as an export option the user picks. | Warning | ✅ |
 
 ### Decisions (2026-10-12)
@@ -113,6 +121,13 @@ reaches the template (no error, no warning). "Our rule" is the checker's current
    HeightAndWidth "must auto size from corners" removed): Frontify supports every reference point. Only "No Line
    Breaks" off (WidthOnly / HeightAndWidth) and unknown auto-size types remain errors.
 4. **Scale on items** — not checked for now.
+
+### Decisions (2026-10-12, from [rules-review-2026-10-12.md](rules-review-2026-10-12.md))
+
+5. **Text wrap** — any item with wrap is an error, without checking whether it overlaps text.
+6. **Superscript/subscript** — error; **baseline shift** — warning; both per text run on the effective value.
+7. **Adobe Fonts** — an error only when the style's file isn't packaged; reported instead of "font missing",
+   per style (a family can mix Adobe and desktop styles).
 
 ### Proposed: font index check (not built)
 

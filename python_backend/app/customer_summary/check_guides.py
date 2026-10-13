@@ -220,6 +220,42 @@ GUIDES: dict[str, dict[str, CheckGuide]] = {
             ),
             subject='paragraph-style',
         ),
+        'FILL_TINT_CHAR': CheckGuide(
+            title='Text color tint isn’t 100%',
+            why='Frontify shows text colors at full strength, so tinted text will look darker.',
+            fix=(
+                'In the character style, go to Character Color and set Tint to 100%.',
+                'To keep the lighter color, make a tint swatch (Swatches panel > New Tint Swatch) and apply that instead.',
+            ),
+            subject='character-style',
+        ),
+        'TEXT_WRAP_ITEM': CheckGuide(
+            title='Text wrap applied',
+            why='Frontify doesn’t support text wrap, so text won’t flow around this object and will run underneath it.',
+            fix=(
+                'Select the image, shape or group and choose No Text Wrap in Window > Text Wrap.',
+                'Then make room for it with the text frame’s size or insets instead.',
+            ),
+            subject='frame',
+        ),
+        'TEXT_POSITION': CheckGuide(
+            title='Superscript or subscript text',
+            why='Frontify doesn’t support superscript or subscript, so the text shows at full size on the baseline (for example ® or a footnote number).',
+            fix=(
+                'Set Position to Normal in the character style (Basic Character Formats) or in the Character panel.',
+                'For symbols like ® or ™, use a smaller point size in a character style instead, or a font’s superscript glyphs.',
+            ),
+            subject='character-style',
+        ),
+        'ADOBE_FONT': CheckGuide(
+            title='Adobe Font missing from the package',
+            why='Frontify only uses fonts included in the package; it can’t load Adobe Fonts from your Adobe account. Without the font files the template falls back to another font.',
+            fix=(
+                'Package again with File > Package and "Copy Fonts" checked, and check that the font’s files are in "Document fonts".',
+                'If InDesign won’t copy the Adobe Font, use a licensed desktop copy of the font (or another font) instead.',
+            ),
+            subject='font',
+        ),
     },
     'warnings': {
         'HYPHENATION': CheckGuide(
@@ -295,6 +331,14 @@ GUIDES: dict[str, dict[str, CheckGuide]] = {
                 'In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.',
             ),
             subject='paragraph-style',
+        ),
+        'BASELINE_SHIFT': CheckGuide(
+            title='Baseline shift used',
+            why='Frontify doesn’t support baseline shift, so shifted text sits on the baseline.',
+            fix=(
+                'Set Baseline Shift to 0 pt in the character style (Advanced Character Formats) or in the Character panel.',
+            ),
+            subject='character-style',
         ),
     },
     'infos': {

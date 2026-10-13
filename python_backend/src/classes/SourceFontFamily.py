@@ -14,6 +14,7 @@ class SourceFontFamily(FontFamily):
         super().__init__()
         self.font_error: bool = False
         self.extension: str = ''
+        self.postscript_name: str = ''
         self._extract_fonts(file_name, document_links_folder_path)
 
     def _extract_fonts(self, file_name: str, document_links_folder_path: str):
@@ -77,6 +78,8 @@ class SourceFontFamily(FontFamily):
                     styles.append(style_name)
 
             self.font_family = final_family_name
+            # What Frontify matches the file on (the FontName in InDesign's AdobeFnt*.lst index).
+            self.postscript_name = font["name"].getDebugName(6) or ''
             self.fonts = [styles]
             self.font_type = "TrueType" if font.sfntVersion == "true" else "Other"
             self.variable_font = "fvar" in font

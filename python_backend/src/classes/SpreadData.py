@@ -16,6 +16,13 @@ def _xml_local_tag(tag: str) -> str:
 _PAGE_ITEM_TRANSFORM_TAGS = frozenset(
     {'TextFrame', 'Rectangle', 'Oval', 'Polygon', 'Group'})
 
+# Items other than text frames that can carry text wrap (text frames have their own TextFrame.text_wrap_mode).
+_WRAP_ITEM_TAGS = frozenset({'Rectangle', 'Oval', 'Polygon', 'GraphicLine', 'Group'})
+
+# Frames that can hold a placed or pasted graphic, and the graphic elements InDesign writes inside them.
+_GRAPHIC_FRAME_TAGS = ('Rectangle', 'Oval', 'Polygon')
+_GRAPHIC_TYPES = ('PDF', 'EPS', 'Image', 'SVG')
+
 
 class SpreadData:
     def __init__(self, root: Element):
@@ -29,6 +36,7 @@ class SpreadData:
         self.pasted_graphics_num: int = 0
         self.geometric_bounds: str = ''
         self.page_item_transform_candidates: List[Dict[str, Any]] = []
+        self.wrap_items: List[Dict[str, str]] = []
         self._extract_spread_data(root)
 
     def _extract_spread_data(self, root: Element):
@@ -79,6 +87,25 @@ class SpreadData:
         self.page_item_transform_candidates = self._extract_page_item_transform_candidates(
             root)
 
+        self.wrap_items = self._extract_wrap_items(root)
+
+    def _extract_wrap_items(self, root: Element) -> List[Dict[str, str]]:
+        """Images, shapes, lines and groups with text wrap on. In InDesign wrap is set on the object text
+        flows around, not on the text frame. A missing TextWrapPreference means no wrap (InDesign's default)."""
+        spread = root.find(".//Spread")
+        if spread is None:
+            return []
+        out: List[Dict[str, str]] = []
+        for el in spread.iter():
+            tag = _xml_local_tag(el.tag)
+            if tag not in _WRAP_ITEM_TAGS:
+                continue
+            pref = el.find('TextWrapPreference')
+            mode = pref.get('TextWrapMode') if pref is not None else None
+            if mode not in (None, 'None'):
+                out.append({'tag': tag, 'self_id': el.get('Self') or '', 'mode': mode})
+        return out
+
     def _extract_page_item_transform_candidates(self, root: Element) -> List[Dict[str, Any]]:
         spread = root.find(".//Spread")
         if spread is None:
@@ -104,12 +131,13 @@ class SpreadData:
     def _extract_pasted_graphics_data(self, root: Element) -> int:
         pasted_graphics_num = 0
 
-        # Loop through all the <Rectangle> elements.
-        for rectangle_element in root.findall(".//Rectangle"):
+        # Every frame that can hold a graphic (a logo pasted into a circle is an Oval).
+        frames = [frame for tag in _GRAPHIC_FRAME_TAGS for frame in root.findall(f".//{tag}")]
+        for rectangle_element in frames:
             # Pasted Graphics do not have a link, while QR codes and such do.
             if rectangle_element.find('.//Link') is None:
-                # Check for children <PDF>, <EPS>, or <Image>.
-                for graphic_type in ['PDF', 'EPS', 'Image']:
+                # Check for children <PDF>, <EPS>, <Image> or <SVG>.
+                for graphic_type in _GRAPHIC_TYPES:
                     graphic_element = rectangle_element.find(graphic_type)
 
                     if graphic_element is not None:

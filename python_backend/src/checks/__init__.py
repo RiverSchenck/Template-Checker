@@ -27,6 +27,7 @@ CHECKS = (
     Check(States.OVERRIDES_CHECK, text.overrides_check, needs_stories=True),
     Check(States.KERNING_CHECK, text.kerning_check, needs_stories=True),
     Check(States.FONTS_INCLUDED_CHECK, fonts.fonts_included_check),
+    Check(States.ADOBE_FONT_CHECK, fonts.adobe_font_check),
     Check(States.OTF_TTF_FONT_CHECK, fonts.otf_ttf_font_check),
     Check(States.VARIABLE_FONT_CHECK, fonts.variable_font_check),
     Check(States.IMAGES_INCLUDED_CHECK, images.images_included_check),
@@ -45,6 +46,7 @@ CHECKS = (
     Check(States.GRID_ALIGNMENT_CHECK, text.grid_alignment_check, needs_stories=True),
     Check(States.COMPOSER_CHECK, text.composer_check, needs_stories=True),
     Check(States.OTHER_CHECKS, text.other_checks, needs_stories=True),
+    Check(States.POSITION_CHECK, text.position_check, needs_stories=True),
 )
 
 CHECKS_BY_STATE = {check.state: check for check in CHECKS}

@@ -67,7 +67,8 @@ def test_returns_the_summary_for_a_real_package(client):
     assert body['summary_version'] == SUMMARY_VERSION
     assert body['run_id'] == 'run-123'
     assert body['template_name'] == 'Brochure_Bad'
-    assert body['counts'] == {'blockers': 4, 'warnings': 3, 'infos': 0}
+    # Kinds of blocker: paragraph style, columns, missing font (Minion Pro), Adobe Font (Playfair Display), variable font.
+    assert body['counts'] == {'blockers': 5, 'warnings': 3, 'infos': 0}
     assert set(body) == {'summary_version', 'run_id', 'template_name', 'counts', 'html', 'text'}
     assert r.headers['Cache-Control'] == 'no-store'
 

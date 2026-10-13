@@ -2,6 +2,12 @@ from typing import Dict
 from lxml import etree as ET
 
 
+def _style_attributes(style) -> Dict[str, str]:
+    """The style's own formatting attributes (Hyphenation, FillTint, Position, FontStyle, ...), without its
+    identity (Self, Name). Attributes the style doesn't set are absent, as they are in Styles.xml."""
+    return {name: value for name, value in style.attrib.items() if name not in ('Self', 'Name')}
+
+
 class StylesParser:
     """A parser class to extract paragraph styles from the provided XML path."""
     def __init__(self, xml_path: str):
@@ -21,11 +27,7 @@ class StylesParser:
             if properties is not None:
                 for prop in properties:
                     style_properties[prop.tag] = prop.text
-            style_properties["Hyphenation"] = par_style.get("Hyphenation")
-            style_properties["FillTint"] = par_style.get("FillTint")
-            style_properties["GridAlignment"] = par_style.get("GridAlignment")
-            style_properties["Composer"] = par_style.get("Composer")
-            style_properties["KerningMethod"] = par_style.get("KerningMethod")
+            style_properties.update(_style_attributes(par_style))
             styles[style_id] = style_properties
         return styles
 
@@ -40,7 +42,7 @@ class StylesParser:
             if properties is not None:
                 for prop in properties:
                     style_properties[prop.tag] = prop.text
-            style_properties["KerningMethod"] = char_style.get("KerningMethod")
+            style_properties.update(_style_attributes(char_style))
             styles[style_id] = style_properties
         return styles
 

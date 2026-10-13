@@ -1,6 +1,9 @@
-from typing import Dict
+from typing import Dict, Optional, Tuple
 from xml.etree.ElementTree import Element
 from src.classes.PropertyBase import PropertyBase
+
+# What InDesign uses when nothing in the chain sets a value.
+NO_CHARACTER_STYLE = "CharacterStyle/$ID/[No character style]"
 
 
 class StoryCharacterData:
@@ -15,6 +18,8 @@ class StoryCharacterData:
         # Any attributes besides "AppliedCharacterStyle" and any properties
         self.overrides: Dict[str, str] = {}
         self.table_used: bool = False
+        self.styles_parser = styles_parser
+        self.paragraph: Optional['StoryParagraphData'] = None  # set when added to its paragraph
         self._extract_character_data(char_style_range)
         self._add_used_character_font(fonts_parser)
         self.kerning_obj: PropertyBase = PropertyBase(
@@ -68,6 +73,30 @@ class StoryCharacterData:
 
         return style_id
 
+    def effective(self, attr: str) -> Tuple[Optional[str], str]:
+        """The value InDesign applies to this run's text, and where it comes from, in InDesign's order: set on
+        the text itself, its character style (through BasedOn), the paragraph range, the paragraph style
+        (through BasedOn). The source is '' for the text itself, else the style id the value was found in.
+        (None, '') when nothing sets it. '$ID/' prefixes are removed from the value."""
+        local = self.overrides.get(attr)
+        if local:
+            return _normalize(local), ''
+        if self.style_id and self.style_id != NO_CHARACTER_STYLE:
+            prop = PropertyBase(self.style_id, self.styles_parser, attr)
+            if prop.value:
+                return prop.value, prop.inherited_from or self.style_id
+        paragraph = self.paragraph
+        if paragraph is None:
+            return None, ''
+        local = paragraph.overrides.get(attr) or paragraph.local_properties.get(attr)
+        if local:
+            return _normalize(local), ''
+        if paragraph.style_id:
+            prop = PropertyBase(paragraph.style_id, paragraph.styles_parser, attr)
+            if prop.value:
+                return prop.value, prop.inherited_from or paragraph.style_id
+        return None, ''
+
     def add_table(self):
         self.table_used = True
 
@@ -88,3 +117,7 @@ class StoryCharacterData:
                f"Content: {self.content}\n" + \
                f"Applied Font: {self.applied_font}\n" + \
                (f"Overrides: {self.overrides}\n" if self.has_overrides() else "")
+
+
+def _normalize(value: str) -> str:
+    return value.replace("$ID/", "", 1) if value.startswith("$ID/") else value

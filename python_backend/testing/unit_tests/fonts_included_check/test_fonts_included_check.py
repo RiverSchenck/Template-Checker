@@ -50,8 +50,8 @@ EXPECTED_OUTCOMES = {
     },
     "2 font missing.zip": {
         "errors": [
-            f"{ValidationError.FONTS_INCLUDED.value}",
-            f"{ValidationError.FONTS_INCLUDED.value}",
+            f"{ValidationError.FONTS_INCLUDED.value}",  # BlairITC TT
+            # Montserrat is an Adobe Font (TypekitID) that isn't packaged: reported by adobe_font_check instead.
         ],
         "warnings": [
         ]

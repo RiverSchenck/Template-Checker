@@ -44,9 +44,9 @@ def classify_page_item_transform(a: float, b: float, c: float, d: float) -> Tran
     (rule in docs/checker-rules.md):
     - mirrored (determinant a*d - b*c < 0) -> a flip, whatever rotation comes with it. '-1 0 0 1' is a
       horizontal flip; '-1 0 0 -1' is not mirrored, it's a 180 degree turn.
-    - otherwise rotated (angle of the x axis) -> rotation;
-    - otherwise axes not perpendicular -> skew.
-    Skew is only reported when there's no rotation.
+    - otherwise axes (a, b) and (c, d) not at right angles -> skew, rotated or not. Rotation and scaling keep
+      them at right angles; only a skew doesn't. Frontify mispositions rotated items that are also skewed.
+    - otherwise rotated (angle of the x axis) -> rotation.
     """
     if a * d - b * c < 0:
         if a < 0 < d:
@@ -56,14 +56,17 @@ def classify_page_item_transform(a: float, b: float, c: float, d: float) -> Tran
         # Mirrored and turned (e.g. '0 -1 -1 0'): neither axis simply reversed.
         return TransformClassification(TransformKind.FLIP, "has a flip transformation.")
     rotation_angle_degrees = math.degrees(math.atan2(b, a))
-    if abs(rotation_angle_degrees) > 0.01:
+    rotated = abs(rotation_angle_degrees) > 0.01
+    x_length, y_length = math.hypot(a, b), math.hypot(c, d)
+    if x_length and y_length and abs((a * c + b * d) / (x_length * y_length)) > 0.01:
+        also = f" (and a {rotation_angle_degrees:.2f}° rotation)" if rotated else ""
+        return TransformClassification(
+            TransformKind.SKEW,
+            f"has skew transformations{also}. Skew factors: b={b}, c={c}",
+        )
+    if rotated:
         return TransformClassification(
             TransformKind.ROTATION,
             f"has been rotated by {rotation_angle_degrees:.2f} degrees.",
-        )
-    if abs(b) > 0.01 or abs(c) > 0.01:
-        return TransformClassification(
-            TransformKind.SKEW,
-            f"has skew transformations. Skew factors: b={b}, c={c}",
         )
     return TransformClassification(TransformKind.NONE, "")
