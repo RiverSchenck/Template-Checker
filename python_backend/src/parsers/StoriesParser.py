@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict
-from lxml import etree as ET
+from src.helpers import safe_xml
 from typing import Optional
 from src.classes.StoryData import StoryData
 
@@ -18,7 +18,7 @@ class StoriesParser:
         for story_file in sorted(os.listdir(stories_dir)):
             if story_file.endswith('.xml'):
                 file_path = os.path.join(stories_dir, story_file)
-                tree = ET.parse(file_path)
+                tree = safe_xml.parse(file_path, large=True)
                 root = tree.getroot()
 
                 for story_element in root.findall("Story"):

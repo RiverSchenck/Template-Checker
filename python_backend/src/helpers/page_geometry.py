@@ -1,7 +1,6 @@
 import os
 from typing import Dict, List, Optional, Tuple
-from lxml import etree as ET
-
+from src.helpers import safe_xml
 from src.helpers.page_item_transform import parse_item_transform
 
 Matrix = Tuple[float, float, float, float, float, float]
@@ -67,22 +66,22 @@ class PageGeometryIndex:
     def _spread_paths_in_order(self, idml_output_folder: str) -> List[str]:
         designmap = os.path.join(idml_output_folder, 'designmap.xml')
         if os.path.exists(designmap):
-            root = ET.parse(designmap).getroot()
+            root = safe_xml.parse(designmap).getroot()
             paths = [el.get('src') for el in root.iter()
                      if _local_tag(el.tag) == 'Spread' and el.get('src')]
             if paths:
-                return [os.path.join(idml_output_folder, p) for p in paths]
+                # A src pointing outside the IDML folder ('../', absolute) is ignored.
+                return [path for path in (safe_xml.within(idml_output_folder, p) for p in paths) if path]
         spreads_dir = os.path.join(idml_output_folder, 'Spreads')
         if not os.path.isdir(spreads_dir):
             return []
         return [os.path.join(spreads_dir, f) for f in sorted(os.listdir(spreads_dir)) if f.endswith('.xml')]
 
     def _parse(self, idml_output_folder: str):
-        parser = ET.XMLParser(huge_tree=True)
         for path in self._spread_paths_in_order(idml_output_folder):
             if not os.path.exists(path):
                 continue
-            spread = ET.parse(path, parser).getroot().find('.//Spread')
+            spread = safe_xml.parse(path, large=True).getroot().find('.//Spread')
             if spread is None:
                 continue
             spread_id = spread.get('Self', '')

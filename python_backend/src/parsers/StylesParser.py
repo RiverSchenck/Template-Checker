@@ -1,5 +1,5 @@
 from typing import Dict
-from lxml import etree as ET
+from src.helpers import safe_xml
 
 
 def _style_attributes(style) -> Dict[str, str]:
@@ -18,7 +18,7 @@ class StylesParser:
 
     def _extract_paragraph_styles(self, xml_path: str) -> Dict[str, Dict[str, str]]:
         styles: Dict[str, Dict[str, str]] = {}
-        tree = ET.parse(xml_path)
+        tree = safe_xml.parse(xml_path)
         root = tree.getroot()
         for par_style in root.findall(".//ParagraphStyle"):
             style_id = par_style.get("Self")
@@ -33,7 +33,7 @@ class StylesParser:
 
     def _extract_character_styles(self, xml_path: str) -> Dict[str, Dict[str, str]]:
         styles: Dict[str, Dict[str, str]] = {}
-        tree = ET.parse(xml_path)
+        tree = safe_xml.parse(xml_path)
         root = tree.getroot()
         for char_style in root.findall(".//CharacterStyle"):
             style_id = char_style.get("Self")

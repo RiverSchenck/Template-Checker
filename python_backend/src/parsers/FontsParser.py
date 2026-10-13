@@ -1,4 +1,4 @@
-from lxml import etree as ET
+from src.helpers import safe_xml
 from typing import Dict, List, Set
 import os
 from src.classes.UsedFontFamily import UsedFontFamily
@@ -19,7 +19,7 @@ class FontsParser:
         if not os.path.exists(fonts_xml_path):
             raise FileNotFoundError(f"{fonts_xml_path} does not exist")
 
-        tree = ET.parse(fonts_xml_path)
+        tree = safe_xml.parse(fonts_xml_path)
         root = tree.getroot()
 
         fonts_families_list: List[UsedFontFamily] = []
