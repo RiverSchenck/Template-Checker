@@ -18,11 +18,6 @@ def _bleed(preferences_path: str):
     return {side: preference.get(attribute) for side, attribute in BLEED_SIDES.items()} if preference is not None else None
 
 
-def _by_file_name(spreads):
-    """Spreads in the order of their file names, as the checks have always listed them."""
-    return tuple(sorted(spreads, key=lambda spread: os.path.basename(spread.source)))
-
-
 def load_document(idml_folder: str, link_files: Iterable[Tuple[str, int]] = (),
                   fonts_folder: Optional[str] = None) -> Document:
     """The Document for an unpacked .idml. link_files: (name, size) per file in the package's Links folder;
@@ -35,8 +30,8 @@ def load_document(idml_folder: str, link_files: Iterable[Tuple[str, int]] = (),
     preferences_xml = os.path.join(resources, 'Preferences.xml')
     return Document(
         styles=load_styles(styles_xml) if os.path.exists(styles_xml) else StyleSheet({}),
-        spreads=_by_file_name(layout.spreads),
-        masters=_by_file_name(layout.masters),
+        spreads=layout.spreads,             # document order (designmap.xml), as InDesign shows them
+        masters=layout.masters,
         stories=load_stories(stories_folder) if os.path.isdir(stories_folder) else None,
         font_catalog=load_font_catalog(fonts_xml) if os.path.exists(fonts_xml) else FontCatalog(()),
         packaged_images=packaged_images(link_files),

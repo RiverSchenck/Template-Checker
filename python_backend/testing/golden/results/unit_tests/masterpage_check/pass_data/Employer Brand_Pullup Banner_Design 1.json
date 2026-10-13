@@ -459,6 +459,15 @@
        "context": "2 pasted graphics found.",
        "data_id": "null",
        "identifier": "null",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
+       "validationClassifier": "PASTED_GRAPHICS"
+      },
+      {
+       "context": "2 pasted graphics found.",
+       "data_id": "null",
+       "identifier": "null",
        "page_id": "u16d",
        "page_name": "2",
        "spread_id": "u162",
@@ -570,15 +579,6 @@
        "page_id": "u3d8",
        "page_name": "14",
        "spread_id": "u3cd",
-       "validationClassifier": "PASTED_GRAPHICS"
-      },
-      {
-       "context": "2 pasted graphics found.",
-       "data_id": "null",
-       "identifier": "null",
-       "page_id": "ud5",
-       "page_name": "1",
-       "spread_id": "ud0",
        "validationClassifier": "PASTED_GRAPHICS"
       }
      ],

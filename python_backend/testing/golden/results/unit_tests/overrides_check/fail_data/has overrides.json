@@ -349,17 +349,17 @@
        "bounds": {
         "height": 399.6,
         "kind": "Rectangle",
-        "page_id": "ud5",
+        "page_id": "u16d",
         "width": 1113.59,
         "x": 647.93,
         "y": 195.67
        },
-       "context": "Link 'FINASTRA-22_LOGO_RGB_white.png' (ID: ufe) is used but not found in the Links folder.",
-       "data_id": "ufe",
+       "context": "Link 'FINASTRA-22_LOGO_RGB_white.png' (ID: u186) is used but not found in the Links folder.",
+       "data_id": "u186",
        "identifier": "FINASTRA-22_LOGO_RGB_white.png",
-       "page_id": "ud5",
-       "page_name": "1",
-       "spread_id": "ud0",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
        "validationClassifier": "IMAGE_INCLUDED"
       }
      ],
@@ -418,17 +418,17 @@
        "bounds": {
         "height": 3118.11,
         "kind": "Rectangle",
-        "page_id": "ud5",
+        "page_id": "u16d",
         "width": 2551.18,
         "x": -70.87,
         "y": 2622.05
        },
-       "context": "Link 'Wave_Pattern_CMYK_Gray.ai' (ID: u27e) is used but not found in the Links folder.",
-       "data_id": "u27e",
+       "context": "Link 'Wave_Pattern_CMYK_Gray.ai' (ID: u27a) is used but not found in the Links folder.",
+       "data_id": "u27a",
        "identifier": "Wave_Pattern_CMYK_Gray.ai",
-       "page_id": "ud5",
-       "page_name": "1",
-       "spread_id": "ud0",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
        "validationClassifier": "IMAGE_INCLUDED"
       }
      ],
@@ -441,18 +441,18 @@
        "context": "2 pasted graphics found.",
        "data_id": "null",
        "identifier": "null",
-       "page_id": "u16d",
-       "page_name": "2",
-       "spread_id": "u162",
+       "page_id": "ud5",
+       "page_name": "1",
+       "spread_id": "ud0",
        "validationClassifier": "PASTED_GRAPHICS"
       },
       {
        "context": "2 pasted graphics found.",
        "data_id": "null",
        "identifier": "null",
-       "page_id": "ud5",
-       "page_name": "1",
-       "spread_id": "ud0",
+       "page_id": "u16d",
+       "page_name": "2",
+       "spread_id": "u162",
        "validationClassifier": "PASTED_GRAPHICS"
       }
      ],
