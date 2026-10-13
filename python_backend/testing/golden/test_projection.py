@@ -56,6 +56,35 @@ def test_every_issue_in_every_golden_is_projected():
         assert sum(project(data).values()) == items, package
 
 
+def v2_issue(check, kind, subject_id, item_id=None, page_id=None, facts=None, detail=None, severity='error'):
+    return {'check': check, 'severity': severity, 'subject': {'kind': kind, 'id': subject_id, 'name': 'shown'},
+            'location': {'page_id': page_id, 'page_name': '1', 'spread_id': 's1', 'item_id': item_id, 'bounds': None},
+            'facts': facts, 'text': ['ignored'], 'detail': detail}
+
+
+def test_v2_projects_like_v1():
+    pairs = [
+        # A style: v1 named it by its short id, v2 by its Self.
+        (results('par_styles', '[No paragraph style]', 'errors',
+                 item('KERNING', 'u9', 'p2', 'Inherited from: X', context_details={'inheritedFrom': 'X'})),
+         v2_issue('KERNING', 'paragraph_style', 'ParagraphStyle/$ID/[No paragraph style]', 'u9', 'p2',
+                  {'inherited_from': 'X'}, 'Inherited from: X')),
+        # A text frame: v1 grouped by story (or by the unstyled text's style), v2 by the frame.
+        (results('text_boxes', 'NormalParagraphStyle', 'errors', item('PARAGRAPH_STYLE', 'u5')),
+         v2_issue('PARAGRAPH_STYLE', 'text_frame', 'u5', 'u5', 'p1')),
+        (results('images', 'logo.png', 'errors', item('IMAGE_TRANSFORMATION_CONTAINER', 'u7')),
+         v2_issue('TRANSFORMATION', 'image_frame', 'u7', 'u7', 'p1')),
+        # A page item: v1 identified it as 'Kind:Self'.
+        (results('general', 'Oval:u3', 'errors', item('TEXT_WRAP_ITEM', 'u3')),
+         v2_issue('TEXT_WRAP', 'page_item', 'u3', 'u3', 'p1')),
+        # The document: v1 'null', v2 no id; no item, no page.
+        (results('general', 'null', 'warnings', item('DOCUMENT_BLEED', data_id='null', page_id='')),
+         v2_issue('DOCUMENT_BLEED', 'document', None, severity='warning')),
+    ]
+    for v1, v2 in pairs:
+        assert project(v1) == project({'schema_version': 2, 'issues': [v2]}), v2['check']
+
+
 def test_cli_reports_no_change_for_an_unchanged_package(capsys):
     package = next(p for p in packages() if 'kerning_check/fail_data' in p)
     assert main([package]) == 0

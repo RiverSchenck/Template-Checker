@@ -1,6 +1,7 @@
 """The issues a run found. Checks add to it; serialize.results_json turns it into the response."""
 from typing import Iterator, List, Optional
 
+from src.model.subject import DOCUMENT, Subject
 from src.results.classifiers import Classifier, Severity
 from src.results.issue import Issue
 
@@ -18,7 +19,7 @@ class Results:
 
     def add(self, classifier: Classifier, context: Optional[str] = '', *, page_id: Optional[str] = '',
             identifier: Optional[str] = None, data_id: Optional[str] = None, text_content: Optional[list] = None,
-            context_details: Optional[dict] = None) -> None:
+            context_details: Optional[dict] = None, subject: Subject = DOCUMENT) -> None:
         """Record an issue. Its severity and results section come from the classifier.
 
         An issue with text at the same place as an earlier one (same classifier, identifier, page and item) only
@@ -26,7 +27,7 @@ class Results:
         one_per_range (overrides) are never merged.
         """
         issue = Issue(classifier, context or '', page_id or '', _none_if_null(identifier), _none_if_null(data_id),
-                      list(text_content or []), context_details)
+                      subject, list(text_content or []), context_details)
         if issue.text_content and not classifier.one_per_range:
             earlier = next((i for i in self._issues if (i.classifier, i.identifier, i.page_id, i.data_id) ==
                             (classifier, issue.identifier, issue.page_id, issue.data_id)), None)

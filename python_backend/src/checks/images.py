@@ -1,6 +1,7 @@
 """Checks on placed images: included, size, embedded, transformations."""
 
 from src.checks._report import at_link, report
+from src.model import subject as subjects
 from src.model.document import Document
 from src.results.results import Results
 from src.results.classifiers import ValidationError, ValidationInfo, ValidationWarning
@@ -32,11 +33,11 @@ def images_included_check(doc: Document, results: Results) -> None:
             message = f"Link '{missing_image}' (ID: {link_id}) is used but not found in the Links folder."
             page_id = doc.page_of_item(link_id)
         report(results, ValidationError.IMAGE_INCLUDED, message, page_id=page_id, identifier=missing_image,
-               data_id=link_id)
+               data_id=link_id, subject=subjects.image(missing_image))
 
     for unused_image in sorted(image_names - set(link_name_to_id)):
         report(results, ValidationWarning.UNUSED_IMAGE, f"Image '{unused_image}' is present in the document but not used.",
-               identifier=unused_image)
+               identifier=unused_image, subject=subjects.image(unused_image))
 
 
 def large_image_check(doc: Document, results: Results) -> None:
@@ -46,7 +47,7 @@ def large_image_check(doc: Document, results: Results) -> None:
             data_id = doc.frame_of_image(image.name)
             report(results, ValidationInfo.LARGE_IMAGE, f"Image {image.name} is {image.size_mb}MB.",
                    page_id=doc.page_of_item(data_id), identifier=image.name, data_id=data_id,
-                   context_details={'size_mb': image.size_mb})
+                   context_details={'size_mb': image.size_mb}, subject=subjects.image(image.name))
 
 
 def embedded_image_check(doc: Document, results: Results) -> None:
@@ -70,5 +71,6 @@ def image_transformation_check(doc: Document, results: Results) -> None:
                 continue
             subject = "Image inside Container" if is_image else "Image Container"
             classifier = ValidationError.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationError.IMAGE_TRANSFORMATION_CONTAINER
+            about = where['subject'] if is_image else subjects.image_frame(link.frame_id, link.name)
             report(results, classifier, f"{subject} {classification.message}",
-                   context_details=transform_facts(classification, *parsed[:2]), **where)
+                   context_details=transform_facts(classification, *parsed[:2]), **{**where, 'subject': about})

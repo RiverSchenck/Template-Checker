@@ -16,7 +16,7 @@ from src.pipeline.workspace import Workspace
 from src.results.classifiers import Category, Severity
 from src.results.layout import DocumentLayout
 from src.results.results import Results
-from src.results.serialize import results_json
+from src.results.serialize import results_json, results_v2
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +98,10 @@ class FrontifyChecker:
         """The response: every issue found, with what the frontend needs to show and highlight it."""
         return results_json(self.results, self.layout, template_name=self.template_name,
                             output_folder=self.output_folder, totals=self.totals)
+
+    def results_v2(self) -> dict:
+        """Results v2 (plan §4.3)."""
+        return results_v2(self.results, self.layout, template_name=self.template_name, totals=self.totals)
 
     def get_error_types(self) -> List[str]:
         return self.results.names(Severity.ERROR)

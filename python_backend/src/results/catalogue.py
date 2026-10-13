@@ -8,9 +8,11 @@ Until results v2 (plan PR 5.2) checks report v1 classifiers (src/results/classif
 entry and the kind of thing it's about.
 """
 from dataclasses import dataclass
-from typing import Dict, Mapping, Optional, Tuple
+from typing import Dict, Mapping, Optional, Tuple, Type
 
 from src.results.classifiers import Severity
+from src.results.facts import (AutoSizeFacts, BleedFacts, Facts, InheritedFacts, MasterPageFacts, MissingFontFacts,
+                                OverrideFacts, ParagraphStyleFacts, SizeFacts, TransformationFacts)
 
 HELP_ARTICLE = 'https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates'
 
@@ -30,14 +32,15 @@ class Entry:
     fix: Mapping[str, Tuple[str, ...]]  # steps in InDesign, by subject kind ('*' when they're the same for every kind)
     help_article: Optional[str] = None
     is_check: bool = True           # False for package and parsing failures: not listed among the checks a template passed
+    facts: Optional[Type[Facts]] = None  # the model of the facts its issues record (src/results/facts.py), if any
 
     def fix_for(self, kind: str) -> Tuple[str, ...]:
         return self.fix.get(kind) or self.fix.get('*') or ()
 
 
-def _entry(key, severity, kinds, title, why, fix, help_article=None, is_check=True) -> Entry:
+def _entry(key, severity, kinds, title, why, fix, help_article=None, is_check=True, facts=None) -> Entry:
     return Entry(key, severity, tuple(kinds.split()), title, why, fix if isinstance(fix, dict) else {'*': fix},
-                 help_article, is_check)
+                 help_article, is_check, facts)
 
 
 E, W, I = Severity.ERROR, Severity.WARNING, Severity.INFO
@@ -56,16 +59,16 @@ ENTRIES: Tuple[Entry, ...] = (
     _entry('MASTERPAGE', E, 'document', 'Items on a master page',
            'Frontify only reads items on the document pages, so anything on a master page (called a parent page in newer InDesign versions) is ignored or breaks the template.',
            ('In the Pages panel, open the master (parent) page and move its items onto the document pages, or delete them.',),
-           article('h_4bef512504')),
+           article('h_4bef512504'), facts=MasterPageFacts),
     _entry('PARAGRAPH_STYLE', E, 'text_frame', 'Text without a paragraph style',
            'Frontify uses paragraph styles to format text and decide what can be edited. Text set to [Basic Paragraph] or [No Paragraph Style] has nothing to follow.',
            ('Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).',),
-           article('h_68e2603775')),
+           article('h_68e2603775'), facts=ParagraphStyleFacts),
     _entry('FONTS_INCLUDED', E, 'font', 'Font missing from the package',
            'Frontify needs the font files to render the text, otherwise the template falls back to another font.',
            ('Make sure the font is installed or activated on your computer.',
             'Package again with File > Package with "Copy Fonts" checked, and zip the whole folder, including "Document fonts".'),
-           article('h_a3094cd981')),
+           article('h_a3094cd981'), facts=MissingFontFacts),
     _entry('OTF_TTF_FONT', E, 'font', 'Unsupported font format',
            'Frontify can only use OpenType (.otf) and TrueType (.ttf) fonts. Other formats, such as Type 1, can’t be loaded.',
            ('Get an OTF or TTF version from the font vendor and swap it in with Type > Find/Replace Font.',),
@@ -90,7 +93,7 @@ ENTRIES: Tuple[Entry, ...] = (
                       'If you need the flipped look, save a flipped copy of the image file instead.'),
             'image_frame': ('Select the image frame and ' + _CLEAR_TRANSFORMATIONS,),
             'page_item': ('Select the item and ' + _CLEAR_TRANSFORMATIONS,)},
-           article('h_1205c11ca4')),
+           article('h_1205c11ca4'), facts=TransformationFacts),
     _entry('TABLE', E, 'text_frame', 'Table in a text frame', 'Frontify doesn’t support InDesign tables.',
            ('Click into the table and choose Table > Convert Table to Text, or rebuild it with separate text frames.',),
            article('h_b333040b53')),
@@ -101,7 +104,7 @@ ENTRIES: Tuple[Entry, ...] = (
     _entry('AUTO_SIZE_TEXT_BOX', E, 'text_frame', 'Auto-size text frame set up incorrectly',
            'Frontify grows auto-size frames as people type, and can’t match how these settings resize the frame.',
            ('For each frame, open Object > Text Frame Options > Auto-Size and make the change noted next to it.',),
-           article('h_e69bd3114b')),
+           article('h_e69bd3114b'), facts=AutoSizeFacts),
     _entry('TEXT_COLUMNS', E, 'text_frame', 'Text frame has columns',
            'Frontify doesn’t support multiple columns inside one text frame.',
            ('Set Columns to 1 in Object > Text Frame Options. Use separate text frames if you need columns.',),
@@ -118,15 +121,15 @@ ENTRIES: Tuple[Entry, ...] = (
     _entry('GRID_ALIGNMENT', E, 'paragraph_style', 'Text aligned to the baseline grid',
            'Frontify doesn’t use InDesign’s baseline grid, so line spacing will change.',
            ('In the paragraph style, go to Indents and Spacing and set Align to Grid to None.',),
-           article('h_f6aa8d5242')),
+           article('h_f6aa8d5242'), facts=InheritedFacts),
     _entry('KERNING', E, 'paragraph_style', 'Kerning isn’t set to Metrics',
            'Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited.',
            ('In the paragraph style, go to Basic Character Formats and set Kerning to Metrics.',),
-           article('h_270ad57d8d')),
+           article('h_270ad57d8d'), facts=InheritedFacts),
     _entry('KERNING_CHAR', E, 'character_style', 'Kerning isn’t set to Metrics',
            'Frontify spaces letters using the font’s own kerning (Metrics). Other settings make text shift when it’s edited.',
            ('In the character style, go to Basic Character Formats and set Kerning to Metrics.',),
-           article('h_270ad57d8d')),
+           article('h_270ad57d8d'), facts=InheritedFacts),
     _entry('TEXT_WRAP', E, 'text_frame page_item', 'Text wrap applied',
            'Frontify doesn’t support text wrap, so text won’t flow around objects and will run underneath them.',
            {'text_frame': ('Select the frame and choose No Text Wrap in Window > Text Wrap.',),
@@ -136,34 +139,34 @@ ENTRIES: Tuple[Entry, ...] = (
     _entry('FILL_TINT', E, 'paragraph_style', 'Text color tint isn’t 100%',
            'Frontify shows text colors at full strength, so tinted text will look darker.',
            ('In the paragraph style, go to Character Color and set Tint to 100%.',),
-           article('h_5cc6e214cf')),
+           article('h_5cc6e214cf'), facts=InheritedFacts),
     _entry('FILL_TINT_CHAR', E, 'character_style', 'Text color tint isn’t 100%',
            'Frontify shows text colors at full strength, so tinted text will look darker.',
            ('In the character style, go to Character Color and set Tint to 100%.',
             'To keep the lighter color, make a tint swatch (Swatches panel > New Tint Swatch) and apply that instead.'),
-           article('h_5cc6e214cf')),
+           article('h_5cc6e214cf'), facts=InheritedFacts),
     _entry('TEXT_POSITION', E, 'character_style', 'Superscript or subscript text',
            'Frontify doesn’t support superscript or subscript, so the text shows at full size on the baseline (for example ® or a footnote number).',
            ('Set Position to Normal in the character style (Basic Character Formats) or in the Character panel.',
             'For symbols like ® or ™, use a smaller point size in a character style instead, or a font’s superscript glyphs.'),
-           article('h_85811f039b')),
+           article('h_85811f039b'), facts=InheritedFacts),
     _entry('ADOBE_FONT', E, 'font', 'Adobe Font used',
            'Adobe Fonts aren’t supported in Frontify templates (for licensing reasons), so the template falls back to another font.',
            ('Install a desktop version of the font (OTF or TTF) that you’re licensed to use, and switch the text to it: Type > Find/Change Font, or update the paragraph and character styles.',
             'Package again with "Copy Fonts" checked, and zip the whole folder, including "Document fonts".'),
-           article('h_a3094cd981')),
+           article('h_a3094cd981'), facts=MissingFontFacts),
 
     # --- warnings (may look different) ---------------------------------------------------------------------------
     _entry('HYPHENATION', W, 'paragraph_style', 'Hyphenation is on',
            'Browsers hyphenate differently from InDesign, so lines may break in different places.',
            ('In the paragraph style, go to Hyphenation and uncheck Hyphenate.',),
-           article('h_55fa4b04cf')),
+           article('h_55fa4b04cf'), facts=InheritedFacts),
     _entry('OVERRIDE', W, 'text_frame', 'Text formatted outside its paragraph style',
            'Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.',
            ('Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.',
             'To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.',
             'To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.'),
-           article('h_68e2603775')),
+           article('h_68e2603775'), facts=OverrideFacts),
     _entry('UNUSED_IMAGE', W, 'image', 'Unused images in the package',
            'These files aren’t used in the document and only make the package bigger.',
            ('Delete the unused files from the Links folder before zipping the package.',),
@@ -171,15 +174,16 @@ ENTRIES: Tuple[Entry, ...] = (
     _entry('DOCUMENT_BLEED', W, 'document', 'Document has bleed',
            'Bleed is added to every export, which is right for print templates but usually unwanted for digital ones.',
            ('For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine.',),
-           'https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based'),
+           'https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based',
+           facts=BleedFacts),
     _entry('COMPOSER', W, 'paragraph_style', 'Paragraph Composer used',
            'The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.',
            ('In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.',),
-           article('h_bfdd4bceb0')),
+           article('h_bfdd4bceb0'), facts=InheritedFacts),
     _entry('BASELINE_SHIFT', W, 'character_style', 'Baseline shift used',
            'Frontify doesn’t support baseline shift, so shifted text sits on the baseline.',
            ('Set Baseline Shift to 0 pt in the character style (Advanced Character Formats) or in the Character panel.',),
-           article('h_85811f039b')),
+           article('h_85811f039b'), facts=InheritedFacts),
 
     # --- infos (worth a check) ---------------------------------------------------------------------------------
     _entry('EMPTY_TEXT_FRAME', I, 'text_frame', 'Empty text frame',
@@ -189,7 +193,7 @@ ENTRIES: Tuple[Entry, ...] = (
     _entry('LARGE_IMAGE', I, 'image', 'Large image',
            'Very large images slow down editing and exporting in Frontify.',
            ('Reduce the image’s pixel size or file size if it doesn’t need to be this large.',),
-           article('h_66fcd1c2c2')),
+           article('h_66fcd1c2c2'), facts=SizeFacts),
 )
 
 BY_KEY: Dict[str, Entry] = {entry.key: entry for entry in ENTRIES}
