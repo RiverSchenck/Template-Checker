@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from typing import Optional
 from flask import request, current_app, g
 from werkzeug.utils import secure_filename
-from src.checks.stages import States
+from src.pipeline.run import StageTracker, run
+from src.pipeline.workspace import Workspace
 from .analytics import log_analytics_to_supabase, first_error_message
 from .customer_summary import CustomerSummary, build_customer_summary, summary_payload
 
@@ -53,6 +54,8 @@ class CheckOutcome:
     """The analytics run id, or None if logging is off or failed."""
     summary: Optional[CustomerSummary]
     """The customer summary, or None if it couldn't be written (logged)."""
+    idml_folder: Optional[str] = None
+    """The unpacked .idml, once intake got that far (for the XML export)."""
 
     def response(self) -> dict:
         """What /v1/checks and /run send: the results (v2) and, next to them, the customer summary (with its
@@ -61,8 +64,9 @@ class CheckOutcome:
                 'customer_summary': summary_payload(self.summary, include_sections=True) if self.summary else None}
 
 
-def run_check(checker, file_path: str, source_type: str = 'api', user_id: Optional[str] = None) -> CheckOutcome:
-    """Run the checker on the uploaded file. Raises CheckFailed if it crashes.
+def run_check(file_path: str, workspace: Workspace, source_type: str = 'api', user_id: Optional[str] = None,
+              previews: bool = False) -> CheckOutcome:
+    """Run the checker on the uploaded file, in the request's run folder. Raises CheckFailed if it crashes.
 
     Every attempt is logged to analytics: 'completed' when all checks ran, 'rejected' when the upload couldn't be
     checked (the results explain why), and 'failed' when the checker crashed.
@@ -75,18 +79,17 @@ def run_check(checker, file_path: str, source_type: str = 'api', user_id: Option
         'file_size_bytes': file_size_bytes,
         'user_id': user_id,
     }
+    tracker = StageTracker()
     try:
-        checker.set_source_file_path(file_path)
-        checker.run_state_machine()
-
+        outcome = run(file_path, workspace, previews=previews, tracker=tracker)
         duration_ms = int((time.time() - start_time) * 1000)
 
-        results = checker.results_v2()
+        results = outcome.json()
         summary = _build_summary(results)
 
-        # The state machine only reaches RESULTS when every check ran; otherwise it exited early on a bad upload.
-        completed = checker.last_state == States.RESULTS
-        stopped_at_stage = None if completed else _state_name(checker.last_state)
+        # A run reaches RESULTS when every check ran; otherwise the upload was rejected at outcome.stage.
+        completed = outcome.completed
+        stopped_at_stage = None if completed else outcome.stage.name
         run_id = _log_run(
             **{**run_info, 'template_name': results.get('template_name') or run_info['template_name']},
             duration_ms=duration_ms,
@@ -101,11 +104,11 @@ def run_check(checker, file_path: str, source_type: str = 'api', user_id: Option
             **run_info,
             duration_ms=int((time.time() - start_time) * 1000),
             status='failed',
-            stopped_at_stage=_state_name(getattr(checker, 'last_state', None)),
+            stopped_at_stage=_state_name(tracker.stage),
             error_message=f'{type(e).__name__}: {e}',
         )
         raise CheckFailed() from e
-    return CheckOutcome(results, completed, stopped_at_stage, run_id, summary)
+    return CheckOutcome(results, completed, stopped_at_stage, run_id, summary, outcome.idml_folder)
 
 
 def _build_summary(results: dict) -> Optional[CustomerSummary]:
@@ -119,8 +122,3 @@ def _build_summary(results: dict) -> Optional[CustomerSummary]:
 
 def _state_name(state) -> Optional[str]:
     return state.name if state is not None else None
-
-
-def checker_cleanup(checker):
-    """Remove the run's folder (upload, unpacked package, XML export) once the response has its data."""
-    checker.delete_unzipped_root_path()

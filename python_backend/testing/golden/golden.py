@@ -16,7 +16,8 @@ import os
 
 from PIL import Image
 
-from src.classes.FrontifyChecker import FrontifyChecker
+from src.pipeline.run import run as run_package
+from src.pipeline.workspace import run_workspace
 
 BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TESTING_DIR = os.path.join(BACKEND_DIR, 'testing')
@@ -54,16 +55,9 @@ def _fingerprint(text: str) -> str:
 
 def run(package: str) -> dict:
     """The checker's results for one package, minus anything that varies between runs."""
-    checker = FrontifyChecker()
-    checker.set_source_file_path(os.path.join(TESTING_DIR, package))
-    try:
-        with contextlib.redirect_stdout(io.StringIO()):
-            checker.run_state_machine()
-        results = checker.results_v2()
-    finally:
-        checker.delete_unzipped_root_path()
-    return {'stopped_at': checker.last_state.name if checker.last_state else None,
-            'results': _canonical(results)}
+    with run_workspace() as workspace, contextlib.redirect_stdout(io.StringIO()):
+        outcome = run_package(os.path.join(TESTING_DIR, package), workspace)
+    return {'stopped_at': outcome.stage.name, 'results': _canonical(outcome.json())}
 
 
 def dumps(data: dict) -> str:

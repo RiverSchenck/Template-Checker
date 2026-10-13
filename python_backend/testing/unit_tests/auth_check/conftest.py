@@ -117,13 +117,12 @@ def client(monkeypatch, fake_db):
     # Don't run the real checker; just record who the run was attributed to.
     calls = []
 
-    def fake_run_check(checker, path, source_type='api', user_id=None):
+    def fake_run_check(path, workspace, source_type='api', user_id=None, previews=False):
         calls.append({'source_type': source_type, 'user_id': user_id})
         results = {'template_name': 'x.zip'}
         return CheckOutcome(results, True, None, 'run-1', build_customer_summary(results))
     monkeypatch.setattr(routes, 'upload_file', lambda: {'status': 'success', 'path': '/tmp/x.zip'})
     monkeypatch.setattr(routes, 'run_check', fake_run_check)
-    monkeypatch.setattr(routes, 'checker_cleanup', lambda checker: None)
 
     c = UploadingClient(flask_app, flask_app.response_class, use_cookies=True)
     c.run_calls = calls

@@ -6,6 +6,7 @@ crashes) raises; the StageTracker passed in says which stage it happened in.
 """
 import logging
 import os
+import shutil
 from dataclasses import dataclass, field
 from typing import Dict, Iterable, Optional
 
@@ -138,3 +139,18 @@ def run(zip_path: str, workspace: Workspace, *, previews: bool = True, checks: I
     tracker.stage = States.RESULTS
     return RunOutcome(template_name, States.RESULTS, results, loaded.layout, count_totals(loaded.document),
                       loaded.document, intake.idml_folder)
+
+
+def zip_idml(idml_folder: Optional[str], workspace: Workspace) -> Optional[str]:
+    """The unpacked .idml's XML as a zip in the run's folder (the "download XML" feature): its path, or None if it
+    couldn't be made (logged). The app sends it before the run's folder is removed."""
+    try:
+        if not idml_folder or not os.path.isdir(idml_folder):
+            raise FileNotFoundError(f"IDML output folder does not exist: {idml_folder}")
+        zip_path = shutil.make_archive(os.path.join(workspace.folder('export'), 'xml'), 'zip', idml_folder)
+        if os.path.getsize(zip_path) == 0:
+            raise FileNotFoundError(f"ZIP file is empty: {zip_path}")
+        return zip_path
+    except Exception:
+        logger.exception('Creating the XML zip failed')
+        return None

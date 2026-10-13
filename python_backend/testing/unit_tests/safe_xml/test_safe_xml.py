@@ -9,11 +9,12 @@ import zipfile
 import pytest
 from lxml import etree
 
-from src.classes.FrontifyChecker import FrontifyChecker
 from src.helpers import safe_xml
 from src.helpers.package_zip import DAMAGED_IDML
 from src.helpers.page_geometry import PageGeometryIndex
 from src.helpers.pdf_previews import xmp_thumbnails
+from src.pipeline.run import run
+from src.pipeline.workspace import run_workspace
 from testing.fixtures.idml_builder import PackageBuilder
 
 ENTITIES = '<!ENTITY a0 "xxxxxxxxxx">' + ''.join(f'<!ENTITY a{i} "{("&a%d;" % (i - 1)) * 10}">' for i in range(1, 10))
@@ -109,14 +110,9 @@ def test_checker_stops_at_parse_xml_on_a_hostile_spread(tmp_path):
     package = tmp_path / 'Template.zip'
     with zipfile.ZipFile(package, 'w') as z:
         z.writestr('Template/Template.idml', hostile.getvalue())
-    checker = FrontifyChecker()
-    checker.set_source_file_path(str(package))
     start = time.monotonic()
-    try:
-        with contextlib.redirect_stdout(io.StringIO()):
-            checker.run_state_machine()
-    finally:
-        checker.delete_unzipped_root_path()
-    assert checker.last_state.name == 'PARSE_XML'
-    assert [issue.context for issue in checker.results] == [DAMAGED_IDML]
+    with run_workspace() as workspace, contextlib.redirect_stdout(io.StringIO()):
+        outcome = run(str(package), workspace)
+    assert outcome.stage.name == 'PARSE_XML'
+    assert [issue.context for issue in outcome.results] == [DAMAGED_IDML]
     assert time.monotonic() - start < 5
