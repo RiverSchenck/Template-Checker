@@ -1,7 +1,26 @@
 {
  "results": {
   "char_styles": {
-   "details": {},
+   "details": {
+    "[No character style]": {
+     "errors": [],
+     "infos": [],
+     "warnings": [
+      {
+       "context": "Baseline Shift is: -2pt",
+       "data_id": "",
+       "identifier": "[No character style]",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "text_content": [
+        "Date: "
+       ],
+       "validationClassifier": "BASELINE_SHIFT"
+      }
+     ]
+    }
+   },
    "total_count": 1
   },
   "checks": [
@@ -198,6 +217,38 @@
     "severity": "errors"
    },
    {
+    "category": "char_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT_CHAR",
+    "label": "Color Fill Tint",
+    "message": "Fill Tint must be 100. Frontify shows text colours without their tint.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP_ITEM",
+    "label": "Text Wrap (Object)",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_POSITION",
+    "label": "Superscript/Subscript",
+    "message": "Superscript and subscript are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "ADOBE_FONT",
+    "label": "Adobe Font",
+    "message": "Adobe Fonts must be packaged. Frontify only loads fonts included in the package.",
+    "severity": "errors"
+   },
+   {
     "category": "par_styles",
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
     "key": "HYPHENATION",
@@ -267,6 +318,14 @@
     "key": "COMPOSER",
     "label": "Composer",
     "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "severity": "warnings"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "BASELINE_SHIFT",
+    "label": "Baseline Shift",
+    "message": "Baseline shift is not supported. Shifted text sits on the baseline in Frontify.",
     "severity": "warnings"
    },
    {
@@ -1601,6 +1660,11 @@
    "total_count": 9
   },
   "validation_classifiers": {
+   "BASELINE_SHIFT": {
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "label": "Baseline Shift",
+    "message": "Baseline shift is not supported. Shifted text sits on the baseline in Frontify."
+   },
    "COMPOSER": {
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
     "label": "Composer",

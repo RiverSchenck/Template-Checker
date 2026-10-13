@@ -41,7 +41,7 @@ class ParsedDocument:
 
     def _build_data_id_to_page_id_mapping(self):
         """Pre-compute data_id to page_id mapping for O(1) lookups.
-        Maps link rectangle IDs, text frame IDs, and page-item Self IDs (transform check) to page IDs.
+        Maps link rectangle IDs, text frame IDs, and page-item Self IDs (transform and wrap checks) to page IDs.
         """
         if not self.spreads_parser:
             return
@@ -64,7 +64,7 @@ class ParsedDocument:
                 if frame_id:
                     self._data_id_to_page_id[frame_id] = page_id
 
-            for cand in spread.get_page_item_transform_candidates():
+            for cand in spread.get_page_item_transform_candidates() + spread.wrap_items:
                 cid = cand.get('self_id') or ''
                 if cid:
                     self._data_id_to_page_id[cid] = page_id

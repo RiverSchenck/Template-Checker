@@ -33,6 +33,8 @@ CHECKS: Dict[str, tuple] = {
                      lambda r: {i['data_id'] for _, i in checker_items(r, 'TEXT_COLUMNS')}),
     'text_wrap': (lambda d: {i[1] for i in oracle.text_wrap(d)},
                   lambda r: {i['data_id'] for _, i in checker_items(r, 'TEXT_WRAP')}),
+    'text_wrap_items': (lambda d: {i[1] for i in oracle.text_wrap_items(d)},
+                        lambda r: {i['data_id'] for _, i in checker_items(r, 'TEXT_WRAP_ITEM')}),
     'linked_text_frames': (lambda d: {i[1] for i in oracle.linked_text_frames(d)},
                            lambda r: {i['data_id'] for _, i in checker_items(r, 'LINKED_TEXT_FRAME')}),
     'embedded_images': (lambda d: {i[1] for i in oracle.embedded_images(d)},

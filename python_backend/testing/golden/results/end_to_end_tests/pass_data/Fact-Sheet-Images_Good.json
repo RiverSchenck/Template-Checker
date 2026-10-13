@@ -198,6 +198,38 @@
     "severity": "errors"
    },
    {
+    "category": "char_styles",
+    "help_article": "https://help.frontify.com",
+    "key": "FILL_TINT_CHAR",
+    "label": "Color Fill Tint",
+    "message": "Fill Tint must be 100. Frontify shows text colours without their tint.",
+    "severity": "errors"
+   },
+   {
+    "category": "general",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_WRAP_ITEM",
+    "label": "Text Wrap (Object)",
+    "message": "Text Wrap is not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "char_styles",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "TEXT_POSITION",
+    "label": "Superscript/Subscript",
+    "message": "Superscript and subscript are not supported.",
+    "severity": "errors"
+   },
+   {
+    "category": "fonts",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "ADOBE_FONT",
+    "label": "Adobe Font",
+    "message": "Adobe Fonts must be packaged. Frontify only loads fonts included in the package.",
+    "severity": "errors"
+   },
+   {
     "category": "par_styles",
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
     "key": "HYPHENATION",
@@ -270,6 +302,14 @@
     "severity": "warnings"
    },
    {
+    "category": "char_styles",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "key": "BASELINE_SHIFT",
+    "label": "Baseline Shift",
+    "message": "Baseline shift is not supported. Shifted text sits on the baseline in Frontify.",
+    "severity": "warnings"
+   },
+   {
     "category": "text_boxes",
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
     "key": "EMPTY_TEXT_FRAME",
@@ -287,8 +327,39 @@
    }
   ],
   "fonts": {
-   "details": {},
-   "total_count": 3
+   "details": {
+    "Montserrat": {
+     "errors": [
+      {
+       "context": "",
+       "data_id": "null",
+       "identifier": "Montserrat",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "VARIABLE_FONT"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    },
+    "Playfair Display": {
+     "errors": [
+      {
+       "context": "Missing styles: Black",
+       "data_id": "null",
+       "identifier": "Playfair Display",
+       "page_id": "",
+       "page_name": "",
+       "spread_id": "",
+       "validationClassifier": "ADOBE_FONT"
+      }
+     ],
+     "infos": [],
+     "warnings": []
+    }
+   },
+   "total_count": 4
   },
   "general": {
    "details": {
@@ -522,10 +593,20 @@
    "total_count": 11
   },
   "validation_classifiers": {
+   "ADOBE_FONT": {
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+    "label": "Adobe Font",
+    "message": "Adobe Fonts must be packaged. Frontify only loads fonts included in the package."
+   },
    "PAGE_ITEM_TRANSFORMATION": {
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
     "label": "Page Item Transformation",
     "message": "Page item has been rotated. You may see slight discrepencies between export and editing."
+   },
+   "VARIABLE_FONT": {
+    "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "label": "Variable Font",
+    "message": "Variable fonts are not supported"
    }
   }
  },

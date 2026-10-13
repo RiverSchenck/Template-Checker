@@ -85,14 +85,21 @@ def text_columns_check(doc: ParsedDocument, results: ValidationResult) -> None:
 
 
 def text_wrap_check(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Error for each text frame with text wrap on. A frame without wrap settings has none
-    (InDesign's default)."""
+    """Error for each item with text wrap on: text frames (TEXT_WRAP), and images, shapes, lines and groups
+    (TEXT_WRAP_ITEM), which is where wrap is usually set. Frontify ignores wrap, so text runs under the
+    object. An item without wrap settings has none (InDesign's default)."""
     for spread in doc.spreads_parser.spreads_obj_list:
         for text_frame in spread.text_frame_obj_list:
             mode = text_frame.text_wrap_mode
             if mode not in (None, 'None'):
                 report(results, ValidationError.TEXT_WRAP, f"Text box wrap is '{mode}' not None.",
                        **at_frame(doc, text_frame))
+        for item in spread.wrap_items:
+            tag, self_id = item['tag'], item['self_id']
+            report(results, ValidationError.TEXT_WRAP_ITEM, f"{tag} wrap is '{item['mode']}' not None.",
+                   page_id=doc.find_page_id_from_data_id(self_id) if self_id else first_page_id(spread),
+                   identifier=f"{tag}:{self_id}" if self_id else tag,
+                   data_id=self_id or 'null')
 
 
 def linked_text_frame_check(doc: ParsedDocument, results: ValidationResult) -> None:

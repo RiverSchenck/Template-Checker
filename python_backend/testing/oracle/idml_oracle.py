@@ -106,6 +106,18 @@ def text_wrap(doc: Idml) -> Set[Item]:
     return out
 
 
+def text_wrap_items(doc: Idml) -> Set[Item]:
+    """Wrap set on the object text flows around: images, shapes, lines and groups (not text frames)."""
+    out = set()
+    for spread in doc.spreads:
+        for el in spread.iter('Rectangle', 'Oval', 'Polygon', 'GraphicLine', 'Group'):
+            pref = el.find('TextWrapPreference')
+            mode = pref.get('TextWrapMode') if pref is not None else 'None'
+            if mode != 'None':
+                out.add(('', el.get('Self'), mode))
+    return out
+
+
 def linked_text_frames(doc: Idml) -> Set[Item]:
     return {('', f.get('Self'), '') for f in doc.frames()
             if f.get('PreviousTextFrame') != 'n' or f.get('NextTextFrame') != 'n'}
@@ -121,19 +133,21 @@ def _classify(transform: Optional[str]) -> Optional[str]:
     """ItemTransform is 'a b c d tx ty'. Classified from the matrix itself, not by mirroring the checker:
     - determinant a*d - b*c < 0 means the item is mirrored: a flip (e.g. '-1 0 0 1' flips horizontally;
       '-1 0 0 -1' is a 180 degree turn, not a flip);
-    - otherwise the angle of the x axis, atan2(b, a), is the rotation;
-    - an unrotated item whose axes aren't perpendicular (c != 0 or b != 0) is skewed.
+    - otherwise the y axis should point 90 degrees from the x axis; if it doesn't, the item is skewed,
+      rotated or not (Frontify mispositions rotated items that are skewed);
+    - otherwise the angle of the x axis, atan2(b, a), is the rotation.
     """
     if not transform:
         return None
     a, b, c, d = map(float, transform.split()[:4])
     if a * d - b * c < 0:
         return 'flip'
-    angle = math.degrees(math.atan2(b, a))
-    if abs(angle) > 0.01:
-        return f'rotation {angle:.2f}'
-    if abs(b) > 0.01 or abs(c) > 0.01:
+    x_angle = math.degrees(math.atan2(b, a))
+    between_axes = (math.degrees(math.atan2(d, c)) - x_angle) % 360
+    if abs(between_axes - 90) > 0.5:
         return 'skew'
+    if abs(x_angle) > 0.01:
+        return f'rotation {x_angle:.2f}'
     return None
 
 
@@ -193,7 +207,8 @@ def _once_per_style(doc: Idml, attr: str, is_issue) -> Set[Item]:
 
 
 def composer(doc: Idml) -> Set[Item]:
-    return _once_per_style(doc, 'Composer', lambda v: v != 'HL Single')
+    """Frontify keeps the single-line composers (Adobe and World-Ready) when it writes text back."""
+    return _once_per_style(doc, 'Composer', lambda v: v not in ('HL Single', 'HL Single Optyca'))
 
 
 def grid_alignment(doc: Idml) -> Set[Item]:

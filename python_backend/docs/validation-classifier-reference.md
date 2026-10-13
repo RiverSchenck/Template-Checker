@@ -19,6 +19,7 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 | `MASTERPAGE` | error | Master Page can't be used. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504 | Yes |
 | `WARNING` | warning | *(No default message on this member; call site supplies text.)* | — | Yes — e.g. missing `MasterSpreads` directory |
 | `DOCUMENT_BLEED` | warning | InDesign defined bleed is applied. | https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based | Yes |
+| `TEXT_WRAP_ITEM` | error | Text Wrap is not supported. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates | Yes — images, shapes, lines and groups with wrap |
 
 ---
 
@@ -39,6 +40,9 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 | Error name | Level | Description | Help article | FrontifyChecker |
 |------------|-------|-------------|--------------|-----------------|
 | `KERNING_CHAR` | error | Kerning must be 'Metrics' | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d | Yes — character style |
+| `FILL_TINT_CHAR` | error | Fill Tint must be 100. Frontify shows text colours without their tint. | https://help.frontify.com | Yes — character style |
+| `TEXT_POSITION` | error | Superscript and subscript are not supported. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates | Yes — per text run |
+| `BASELINE_SHIFT` | warning | Baseline shift is not supported. Shifted text sits on the baseline in Frontify. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates | Yes — per text run |
 
 ---
 
@@ -63,7 +67,8 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 
 | Error name | Level | Description | Help article | FrontifyChecker |
 |------------|-------|-------------|--------------|-----------------|
-| `FONTS_INCLUDED` | error | Package is missing fonts. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
+| `FONTS_INCLUDED` | error | Package is missing fonts (whole family, or the styles named in the context). | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
+| `ADOBE_FONT` | error | Adobe Fonts must be packaged. Frontify only loads fonts included in the package. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates | Yes — Adobe Fonts styles not in Document fonts |
 | `OTF_TTF_FONT` | error | Only OTF or TTF fonts are supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
 | `VARIABLE_FONT` | error | Variable fonts are not supported | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981 | Yes |
 

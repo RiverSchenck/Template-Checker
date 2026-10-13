@@ -40,7 +40,8 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.PARAGRAPH_STYLE_TEXT_BOX.value}",
             f"{ValidationError.PARAGRAPH_STYLE_TEXT_BOX.value}",
             f"{ValidationError.PARAGRAPH_STYLE_TEXT_BOX.value}",
-            f"{ValidationError.FONTS_INCLUDED.value}",
+            # Playfair Display: the text uses its Regular style, an Adobe Font (TypekitID) that isn't packaged.
+            f"{ValidationError.ADOBE_FONT.value}",
             f"{ValidationError.FONTS_INCLUDED.value}",
             f"{ValidationError.OTF_TTF_FONT.value}",
             f"{ValidationError.VARIABLE_FONT.value}",
@@ -144,7 +145,8 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.LINKED_TEXT_FRAME.value}",
             f"{ValidationError.LINKED_TEXT_FRAME.value}",
             f"{ValidationError.OTF_TTF_FONT.value}",
-            f"{ValidationError.FONTS_INCLUDED.value}",
+            # Playfair Display: the text uses its Regular style, an Adobe Font (TypekitID) that isn't packaged.
+            f"{ValidationError.ADOBE_FONT.value}",
         ],
         "warnings": [
             f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",
@@ -414,7 +416,8 @@ EXPECTED_OUTCOMES = {
             f"{ValidationError.PARAGRAPH_STYLE_TEXT_BOX.value}",
             f"{ValidationError.TEXT_COLUMNS.value}",
             f"{ValidationError.TEXT_COLUMNS.value}",
-            f"{ValidationError.FONTS_INCLUDED.value}",
+            # Playfair Display: the text uses its Regular style, an Adobe Font (TypekitID) that isn't packaged.
+            f"{ValidationError.ADOBE_FONT.value}",
             f"{ValidationError.FONTS_INCLUDED.value}",
             f"{ValidationError.VARIABLE_FONT.value}",
         ],
@@ -594,6 +597,29 @@ EXPECTED_OUTCOMES = {
 
 # Expected warnings for pass fixtures (default: none). Page-item rotation can appear on
 # otherwise "good" templates without affecting other assertions.
+# "Good" packages that turned out to have real font problems once fonts were checked per style and through
+# character styles (docs/rules-review-2026-10-12.md). Each was confirmed in the package's own files.
+PASS_EXPECTED_ERRORS = {
+    # Text uses Playfair Display Black (paragraph style Title), an Adobe Font that isn't packaged; and a
+    # variable Montserrat is used through the character styles Title style / Text style.
+    "Fact-Sheet-Images_Good.zip": [
+        f"{ValidationError.ADOBE_FONT.value}",
+        f"{ValidationError.VARIABLE_FONT.value}",
+    ],
+    # Text uses Playfair Display Black (Header) and Regular (Footer), Adobe Fonts that aren't packaged.
+    "Lookbook_Good.zip": [
+        f"{ValidationError.ADOBE_FONT.value}",
+    ],
+    # Text uses Playfair Display Regular (Sub Header); only PlayfairDisplay-Black.ttf is packaged.
+    "Flyer-Sales_Good.zip": [
+        f"{ValidationError.FONTS_INCLUDED.value}",
+    ],
+    # Text uses Playfair Display Regular (Paragraph Style 1); only the Bold file is packaged.
+    "Packaging_Good.zip": [
+        f"{ValidationError.FONTS_INCLUDED.value}",
+    ],
+}
+
 PASS_EXPECTED_WARNINGS = {
     "Fact-Sheet-Images_Good.zip": [
         f"{ValidationWarning.PAGE_ITEM_TRANSFORMATION.value}",
@@ -719,9 +745,10 @@ def test_zip_check_pass(testcase_zip):
 
     filename = os.path.basename(testcase_zip)
     expected_warnings = PASS_EXPECTED_WARNINGS.get(filename, [])
+    expected_errors = PASS_EXPECTED_ERRORS.get(filename, [])
 
     # Assert
-    assert not actual_errors
+    assert Counter(actual_errors) == Counter(expected_errors)
 
     assert Counter(actual_warnings) == Counter(expected_warnings)
 

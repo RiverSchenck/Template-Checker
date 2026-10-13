@@ -11,6 +11,7 @@ class StoryParagraphData:
         self.index = index
         self.all_properties: Dict[str, str] = {}
         self.overrides: Dict[str, str] = {}
+        self.styles_parser = styles_parser
         self.child_char_style_objs: List['StoryCharacterData'] = []
         self._extract_paragraph_data(par_style_range, styles_parser)
         # self.based_on: str = self.all_properties.get("BasedOn")
@@ -43,10 +44,17 @@ class StoryParagraphData:
         for attr, value in par_style_range.attrib.items():
             if attr != "AppliedParagraphStyle":
                 self.overrides[attr] = value
+        # Formatting stored as elements on the range itself (e.g. AppliedFont); not counted as overrides here,
+        # only used to resolve a run's effective value.
+        properties = par_style_range.find("Properties")
+        self.local_properties: Dict[str, str] = (
+            {prop.tag: prop.text for prop in properties if isinstance(prop.tag, str)} if properties is not None else {})
 
     def _add_used_paragraph_font(self, fonts_parser: 'FontsParser'):
         fonts_parser.add_used_font_family(
             self.applied_font_obj.value)
+        fonts_parser.add_paragraph_face(
+            self.applied_font_obj.value, PropertyBase(self.style_id, self.styles_parser, "FontStyle").value)
 
     def normalize_style_id(self, style_id):
         # Check if the style ID is valid and not None
@@ -67,6 +75,7 @@ class StoryParagraphData:
         self.content += content
 
     def add_child_char_style(self, char_style: 'StoryCharacterData'):
+        char_style.paragraph = self
         self.child_char_style_objs.append(char_style)
         self.append_content(char_style.get_content())
 

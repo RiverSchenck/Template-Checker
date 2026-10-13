@@ -30,5 +30,7 @@ class States(Enum):
     GRID_ALIGNMENT_CHECK = auto()
     COMPOSER_CHECK = auto()
     OTHER_CHECKS = auto()
+    POSITION_CHECK = auto()
+    ADOBE_FONT_CHECK = auto()
     RESULTS = auto()
     EXIT = auto()

@@ -1,7 +1,9 @@
-"""Checks on text: paragraph and character styles, overrides, kerning, composer, tables."""
+"""Checks on text: paragraph and character styles, overrides, kerning, composer, tables, superscript."""
 from typing import Dict, List, Union
 
 from src.checks._report import at_story, inherited, report, text_list
+from src.classes.PropertyBase import PropertyBase
+from src.classes.StoryCharacterData import NO_CHARACTER_STYLE
 from src.document import ParsedDocument
 from src.error_handling.ErrorHandling import ValidationResult
 from src.error_handling.ValidationClassifier import ValidationError, ValidationInfo, ValidationWarning
@@ -165,24 +167,83 @@ def grid_alignment_check(doc: ParsedDocument, results: ValidationResult) -> None
                     context_of=lambda p, prop: inherited(prop)[0])
 
 
+# Single-line composers Frontify keeps when it writes edited text back (Idml.php getTextComposer): Adobe
+# Single-line, and World-Ready Single-line. Every other composer becomes one of these on export.
+SINGLE_LINE_COMPOSERS = ('HL Single', 'HL Single Optyca')
+
+
 def composer_check(doc: ParsedDocument, results: ValidationResult) -> None:
     """Warning, once per paragraph style, when its style (through BasedOn) uses a composer other
-    than Adobe Single-line (HL Single)."""
+    than a single-line one (Adobe or World-Ready Single-line)."""
     _once_per_style(doc, results, ValidationWarning.COMPOSER,
-                    is_issue=lambda p: p.get_composer() != 'HL Single',
+                    is_issue=lambda p: p.get_composer() not in SINGLE_LINE_COMPOSERS,
                     prop_of=lambda p: p.composer_obj,
                     context_of=lambda p, prop: inherited(prop)[0])
 
 
+DEFAULT_TINTS = (None, '', '-1', '100')
+
+
 def other_checks(doc: ParsedDocument, results: ValidationResult) -> None:
-    """Fill tint: error, once per paragraph style, when its style's fill tint is set to anything but
-    100% (-1 and unset mean the default, 100%)."""
+    """Fill tint: error, once per paragraph style and once per character style, when the style's fill
+    tint (through BasedOn) is set to anything but 100% (-1 and unset mean the default, 100%). Frontify
+    shows text colours untinted; a tint swatch works."""
     def context_of(par_style, prop):
         source = prop.inherited_from
         message = f'Fill Tint is: {par_style.get_filltint()}'
         return f'{message}; Inherited from: {source}' if source else message
 
     _once_per_style(doc, results, ValidationError.FILL_TINT,
-                    is_issue=lambda p: p.get_filltint() not in [None, '-1', '100'],
+                    is_issue=lambda p: p.get_filltint() not in DEFAULT_TINTS,
                     prop_of=lambda p: p.filltint_obj,
                     context_of=context_of)
+
+    reported = set()
+    for story in doc.stories_parser.stories_data_list:
+        for run in story.character_styles:
+            style = run.style_id
+            if not style or style == NO_CHARACTER_STYLE or style in reported:
+                continue
+            prop = PropertyBase(style, run.styles_parser, "FillTint")
+            if prop.value in DEFAULT_TINTS:
+                continue
+            reported.add(style)
+            message = f'Fill Tint is: {prop.value}'
+            _, details = inherited(prop)
+            report(results, ValidationError.FILL_TINT_CHAR,
+                   f'{message}; Inherited from: {prop.inherited_from}' if prop.inherited_from else message,
+                   context_details=details, **at_story(story, run.normalized_style_id))
+
+
+def _position_context(name: str, value: str, source: str) -> str:
+    message = f'{name} is: {value}'
+    return f'{message}; Inherited from: {source}' if source else message
+
+
+def position_check(doc: ParsedDocument, results: ValidationResult) -> None:
+    """Superscript, subscript and baseline shift, per text run, wherever the value comes from (the text,
+    its character style, the paragraph or its style). Frontify reads neither: superscripts show full size
+    on the baseline (error), shifted text sits on the baseline (warning)."""
+    for story in doc.stories_parser.stories_data_list:
+        for run in story.character_styles:
+            content = run.get_content()
+            if not content.strip():
+                continue
+            where = at_story(story, run.normalized_style_id)
+            position, source = run.effective("Position")
+            if position and position != 'Normal':
+                report(results, ValidationError.TEXT_POSITION, _position_context('Position', position, source),
+                       text_content=text_list(content),
+                       context_details={'inheritedFrom': source} if source else None, **where)
+            shift, source = run.effective("BaselineShift")
+            if shift and _non_zero(shift):
+                report(results, ValidationWarning.BASELINE_SHIFT,
+                       _position_context('Baseline Shift', f'{shift}pt', source), text_content=text_list(content),
+                       context_details={'inheritedFrom': source} if source else None, **where)
+
+
+def _non_zero(value: str) -> bool:
+    try:
+        return abs(float(value)) > 1e-6
+    except ValueError:
+        return False

@@ -37,6 +37,10 @@ class StoryData:
                     char_style_range, fonts_parser, styles_parser)
                 self.add_character_style(char_style)
                 par_style.add_child_char_style(char_style)
+                # The font the text is set in, wherever it comes from (text, character style, paragraph).
+                font, _ = char_style.effective("AppliedFont")
+                font_style, _ = char_style.effective("FontStyle")
+                fonts_parser.add_used_face(font, font_style)
 
     def _extract_grouped_styles(self) -> List[List[StoryParagraphData]]:
         grouped_paragraph_styles = []

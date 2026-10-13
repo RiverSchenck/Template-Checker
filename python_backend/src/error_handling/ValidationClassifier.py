@@ -127,6 +127,22 @@ class ValidationError(Enum):
                  "Fill Tint must be 100. (This may be inaccurate, testing currently)",
                  "https://help.frontify.com",
                  "Color Fill Tint (Beta)", ValidationCategory.PAR_STYLE)
+    FILL_TINT_CHAR = (auto(),
+                      "Fill Tint must be 100. Frontify shows text colours without their tint.",
+                      "https://help.frontify.com",
+                      "Color Fill Tint", ValidationCategory.CHAR_STYLE)
+    TEXT_WRAP_ITEM = (auto(),
+                      "Text Wrap is not supported.",
+                      "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+                      "Text Wrap (Object)", ValidationCategory.GENERAL)
+    TEXT_POSITION = (auto(),
+                     "Superscript and subscript are not supported.",
+                     "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+                     "Superscript/Subscript", ValidationCategory.CHAR_STYLE)
+    ADOBE_FONT = (auto(),
+                  "Adobe Fonts must be packaged. Frontify only loads fonts included in the package.",
+                  "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+                  "Adobe Font", ValidationCategory.FONTS)
 
     def __new__(cls, _, message=None, help_article=None, label=None, category=ValidationCategory.GENERAL):
         member = object.__new__(cls)
@@ -175,6 +191,10 @@ class ValidationWarning(Enum):
                 "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
                 "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
                 "Composer", ValidationCategory.PAR_STYLE)
+    BASELINE_SHIFT = (auto(),
+                      "Baseline shift is not supported. Shifted text sits on the baseline in Frontify.",
+                      "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates",
+                      "Baseline Shift", ValidationCategory.CHAR_STYLE)
 
     def __new__(cls, _, message=None, help_article=None, label=None, category=ValidationCategory.GENERAL):
         member = object.__new__(cls)
