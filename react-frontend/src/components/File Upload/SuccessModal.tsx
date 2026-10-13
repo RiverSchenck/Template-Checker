@@ -14,14 +14,12 @@ import { triggerConfettiCelebration } from './Confetti';
 interface SuccessModalProps {
   open: boolean;
   onClose: () => void;
-  seeDetails?: (value: boolean) => void;
   navigateToResults?: () => void;
 }
 
 export default function SuccessModal({
   open,
   onClose,
-  seeDetails,
   navigateToResults,
 }: SuccessModalProps) {
   useEffect(() => {
@@ -31,7 +29,6 @@ export default function SuccessModal({
   }, [open]);
 
   const handleSeeDetails = () => {
-    seeDetails?.(true);
     navigateToResults?.();
     onClose();
   };
@@ -50,7 +47,7 @@ export default function SuccessModal({
           <span>Unchecked issues are still possible. Review results for full context.</span>
         </div>
         <DialogFooter className="gap-2 sm:gap-0">
-          {seeDetails && (
+          {navigateToResults && (
             <Button variant="outline" onClick={handleSeeDetails}>
               See details
             </Button>

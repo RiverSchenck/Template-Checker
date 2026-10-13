@@ -2,14 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, Frame, Info, MoveUpRight } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
-import { PageLayout } from '../../types';
+import { Page } from '../../types';
 import { cn } from '../../lib/utils';
 import PageCanvas, { placeOnPage, severityStyles, type CanvasMarker } from './pages/PageCanvas';
 import PageTabs, { type SeverityCounts } from './pages/PageTabs';
 import { SEVERITIES, type Place, type Problem } from './buildReport';
 
 type PageViewerProps = {
-  pageLayouts: PageLayout[];
+  pages: Page[];
   problems: Problem[];
   /** When set, only this problem is highlighted; otherwise everything is. */
   selectedProblem: Problem | null;
@@ -23,7 +23,7 @@ type ViewerMarker = CanvasMarker & { place: Place; problem: Problem };
 
 /** The page preview with the issues drawn on it. */
 function PageViewer({
-  pageLayouts,
+  pages,
   problems,
   selectedProblem,
   selectedPlaceKey,
@@ -52,15 +52,15 @@ function PageViewer({
     Object.values(byPage).forEach((markers) =>
       markers.sort((a, b) => SEVERITIES.indexOf(b.severity) - SEVERITIES.indexOf(a.severity))
     );
-    const orderedMarkers = pageLayouts.flatMap((page) =>
-      [...(byPage[page.page_id] ?? [])].sort((a, b) => a.bounds.y - b.bounds.y || a.bounds.x - b.bounds.x)
+    const orderedMarkers = pages.flatMap((page) =>
+      [...(byPage[page.id] ?? [])].sort((a, b) => a.bounds.y - b.bounds.y || a.bounds.x - b.bounds.x)
     );
     return { markersByPage: byPage, ordered: orderedMarkers, countsByPage: counts };
-  }, [selectedProblem, problems, pageLayouts]);
+  }, [selectedProblem, problems, pages]);
 
-  const pageIndex = Math.max(0, pageLayouts.findIndex((p) => p.page_id === pageId));
-  const page = pageLayouts[pageIndex];
-  const markers = page ? markersByPage[page.page_id] ?? [] : [];
+  const pageIndex = Math.max(0, pages.findIndex((p) => p.id === pageId));
+  const page = pages[pageIndex];
+  const markers = page ? markersByPage[page.id] ?? [] : [];
   const selectedMarker = markers.find((m) => m.key === selectedPlaceKey);
   const selectedIndex = ordered.findIndex((m) => m.key === selectedPlaceKey);
 
@@ -68,7 +68,7 @@ function PageViewer({
     if (!ordered.length) return;
     const next =
       selectedIndex === -1
-        ? Math.max(0, ordered.findIndex((m) => m.bounds.page_id === page?.page_id))
+        ? Math.max(0, ordered.findIndex((m) => m.bounds.page_id === page?.id))
         : (selectedIndex + direction + ordered.length) % ordered.length;
     const marker = ordered[next];
     onPageChange(marker.bounds.page_id);
@@ -76,8 +76,8 @@ function PageViewer({
   };
 
   const stepPage = (direction: 1 | -1) => {
-    const next = pageLayouts[pageIndex + direction];
-    if (next) onPageChange(next.page_id);
+    const next = pages[pageIndex + direction];
+    if (next) onPageChange(next.id);
   };
 
   useEffect(() => {
@@ -110,8 +110,8 @@ function PageViewer({
       {/* Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border px-3 py-2">
         <PageTabs
-          pages={pageLayouts}
-          currentPageId={page.page_id}
+          pages={pages}
+          currentPageId={page.id}
           countsByPage={countsByPage}
           onSelectPage={onPageChange}
         />
@@ -174,7 +174,7 @@ function PageViewer({
             selectedLabel={selectedMarker?.problem.guide.title}
           />
         </div>
-        {pageLayouts.length > 1 && (
+        {pages.length > 1 && (
           <div className="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-1">
             <Button
               variant="ghost"
@@ -191,7 +191,7 @@ function PageViewer({
               size="icon"
               className="pointer-events-auto h-8 w-8 rounded-full text-muted-foreground"
               onClick={() => stepPage(1)}
-              disabled={pageIndex === pageLayouts.length - 1}
+              disabled={pageIndex === pages.length - 1}
               aria-label="Next page"
             >
               <ChevronRight className="h-5 w-5" />

@@ -1,17 +1,15 @@
-import {
-  CategoryDetail,
-  CheckDefinition,
-  ContextDetails,
-  PageBounds,
-  PageLayout,
-  ValidationCategory,
-  ValidationItem,
-  ValidationResult,
-  ValidationType,
-} from '../../types';
-import { getCheckGuide, type CheckGuide, type SubjectKind } from './checkGuide';
+import type { Bounds, Check, CheckResult, Issue, Results, ValidationType } from '../../types';
+
+/**
+ * The report: a checker result (results v2) grouped into problems, one per check, each listing what to fix and
+ * where. The customer summary groups them the same way (python_backend/app/customer_summary/report.py), so a summary
+ * section and its problem share an id, e.g. `errors:KERNING`.
+ */
 
 export const SEVERITIES: ValidationType[] = ['errors', 'warnings', 'infos'];
+
+/** Severity in results v2 -> how the report groups it. */
+const SEVERITY_LIST: Record<Issue['severity'], ValidationType> = { error: 'errors', warning: 'warnings', info: 'infos' };
 
 /** What each severity means, as the support team uses them. */
 export const SEVERITY_INFO: Record<ValidationType, { title: string; description: string }> = {
@@ -29,21 +27,62 @@ export const SEVERITY_INFO: Record<ValidationType, { title: string; description:
   },
 };
 
-const CATEGORY_KEYS = ['par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general'] as const;
-type CategoryKey = (typeof CATEGORY_KEYS)[number];
+/**
+ * What a problem's places are grouped by: fixing one paragraph style fixes every frame that uses it, while a frame
+ * problem has to be fixed frame by frame.
+ */
+export type SubjectKind = 'paragraph-style' | 'character-style' | 'font' | 'image' | 'frame' | 'document';
+
+type IssueKind = Issue['subject']['kind'];
+
+const GROUPED_AS: Record<IssueKind, SubjectKind> = {
+  paragraph_style: 'paragraph-style',
+  character_style: 'character-style',
+  font: 'font',
+  image: 'image',
+  image_frame: 'image',
+  text_frame: 'frame',
+  page_item: 'frame',
+  document: 'document',
+};
+const TEXT_KINDS: IssueKind[] = ['text_frame', 'paragraph_style', 'character_style'];
+const IMAGE_KINDS: IssueKind[] = ['image', 'image_frame'];
+
+/** When a problem's places are of several kinds whose fix differs, each kind's steps start with what they're for. */
+const FIX_LEADS: Record<IssueKind, string> = {
+  text_frame: 'Text frames',
+  image: 'Images',
+  image_frame: 'Image frames',
+  page_item: 'Other items',
+  paragraph_style: 'Paragraph styles',
+  character_style: 'Character styles',
+  font: 'Fonts',
+  document: 'Document',
+};
+/** An object style is applied to the image's frame, so its steps are for image frames. */
+const FIX_LEAD_OF: Record<string, string> = { 'OBJECT_STYLE:image': 'Image frames' };
+
+/** What goes wrong in Frontify and how to fix it in InDesign, for one check. */
+export type CheckGuide = {
+  /** Short plain-language name of the problem. */
+  title: string;
+  /** What goes wrong in Frontify, in a sentence or two. */
+  why: string;
+  /** How the template author fixes it in InDesign. */
+  fix: string[];
+};
 
 /** One occurrence of a problem: usually a frame on a page. */
 export type Place = {
   key: string;
-  item: ValidationItem;
-  category: CategoryKey;
-  bounds?: PageBounds;
+  issue: Issue;
+  bounds?: Bounds;
   pageName?: string;
   /** Text inside the frame, when it has any. */
   frameText?: string;
   frameLabel: string;
   context: string;
-  contextDetails?: ContextDetails | null;
+  facts: Issue['facts'];
 };
 
 /** What to fix: a style, font, image file, frame, or the document itself. */
@@ -60,8 +99,6 @@ export type Problem = {
   key: string;
   severity: ValidationType;
   guide: CheckGuide;
-  label: string;
-  message: string;
   helpArticle: string | null;
   subjects: Subject[];
   placeCount: number;
@@ -74,19 +111,18 @@ export type Report = {
   problemCounts: Record<ValidationType, number>;
   placeCounts: Record<ValidationType, number>;
   /** Checks that found nothing, with their plain-language copy. */
-  passedChecks: (CheckDefinition & { guide: CheckGuide })[];
+  passedChecks: (Check & { guide: CheckGuide })[];
   /** How many of each thing were checked, e.g. 14 paragraph styles. */
   checked: { label: string; count: number }[];
 };
 
-const CHECKED_LABELS: Record<CategoryKey, string> = {
-  par_styles: 'paragraph styles',
-  char_styles: 'character styles',
-  text_boxes: 'text frames',
-  fonts: 'fonts',
-  images: 'images',
-  general: '',
-};
+const CHECKED_LABELS: [keyof Results['subjects_checked'], string][] = [
+  ['paragraph_style', 'paragraph styles'],
+  ['character_style', 'character styles'],
+  ['text_frame', 'text frames'],
+  ['font', 'fonts'],
+  ['image', 'images'],
+];
 
 const SUBJECT_LABELS: Record<SubjectKind, string> = {
   'paragraph-style': 'Paragraph style',
@@ -99,107 +135,108 @@ const SUBJECT_LABELS: Record<SubjectKind, string> = {
 
 const clean = (text: string | undefined | null) => text?.replace(/\s+/g, ' ').trim() || undefined;
 
-const isNamed = (identifier: string | null | undefined): identifier is string =>
-  !!identifier && identifier !== 'null';
-
-function frameLabel(bounds: PageBounds | undefined, category: CategoryKey): string {
-  if (bounds?.kind === 'TextFrame' || category === 'text_boxes' || category === 'par_styles' || category === 'char_styles') {
-    return 'Text frame';
-  }
+function frameLabel(bounds: Bounds | undefined, kind: IssueKind): string {
+  if (bounds?.kind === 'TextFrame' || TEXT_KINDS.includes(kind)) return 'Text frame';
   if (bounds?.kind === 'Group') return 'Group';
-  if (category === 'images') return 'Image frame';
+  if (IMAGE_KINDS.includes(kind)) return 'Image frame';
   if (bounds?.kind === 'GraphicLine') return 'Line';
   return 'Frame';
 }
 
-function frameText(item: ValidationItem, result: ValidationResult): string | undefined {
-  const storyId = (item.identifier ?? '').split('_par_')[0];
-  return clean(result.text_box_data?.[storyId]?.content) ?? clean(item.text_content?.find((t) => t.trim()));
+function frameText(issue: Issue, results: Results): string | undefined {
+  const { subject } = issue;
+  const box = subject.kind === 'text_frame' && subject.id ? results.text_boxes[subject.id] : undefined;
+  return clean(box?.content) ?? clean(issue.text?.find((t) => t.trim()));
 }
 
 function subjectFor(kind: SubjectKind, place: Place): { key: string; name: string | null; label: string } {
-  const { item } = place;
+  const { subject, location } = place.issue;
   switch (kind) {
     case 'paragraph-style':
     case 'character-style':
     case 'font':
     case 'image':
-      if (isNamed(item.identifier)) {
-        return { key: `${kind}:${item.identifier}`, name: item.identifier, label: `${SUBJECT_LABELS[kind]} “${item.identifier}”` };
-      }
+      if (subject.name) return { key: `${kind}:${subject.name}`, name: subject.name, label: `${SUBJECT_LABELS[kind]} “${subject.name}”` };
       break;
     case 'document':
       if (!place.bounds) return { key: 'document', name: null, label: 'Document' };
       break;
   }
   // Frame-level: each frame is its own thing to fix.
-  const id = isNamed(item.data_id) ? item.data_id : `${item.identifier}:${item.page_id}`;
+  const id = location.item_id ?? `${subject.id}:${location.page_id}`;
   const label = place.frameText ? `${place.frameLabel} “${place.frameText}”` : place.frameLabel;
   return { key: `frame:${id}`, name: place.frameText ?? null, label };
 }
 
-export function buildReport(result: ValidationResult): Report {
-  const pageIndex = new Map((result.page_layouts ?? []).map((page: PageLayout) => [page.page_id, page]));
-  const checks = result.checks ?? [];
-  const checkFor = (severity: ValidationType, key: string) =>
-    checks.find((check) => check.severity === severity && check.key === key);
+/** The check's wording; when its places are of several kinds with different steps, each kind's steps, led by what
+ * they're for. A check the result doesn't list (a checker that no longer has it) is named by its key. */
+function guideFor(check: Check | undefined, key: string, kinds: IssueKind[]): CheckGuide {
+  if (!check) return { title: key, why: '', fix: [] };
+  const present = check.subject_kinds.filter((kind) => kinds.includes(kind) && check.fix[kind]);
+  const steps = present.map((kind) => check.fix[kind]);
+  const distinct = new Set(steps.map((s) => JSON.stringify(s)));
+  if (distinct.size <= 1) return { title: check.title, why: check.why, fix: steps[0] ?? [] };
+  return {
+    title: check.title,
+    why: check.why,
+    fix: present.flatMap((kind, k) =>
+      steps[k].map((step, i) => (i === 0 ? `${FIX_LEAD_OF[`${check.key}:${kind}`] ?? FIX_LEADS[kind]}: ${step}` : step))
+    ),
+  };
+}
 
+export function buildReport({ results }: CheckResult): Report {
+  const pageIndex = new Map(results.pages.map((page) => [page.id, page]));
+  const checks = new Map<string, Check>(results.checks.map((check) => [check.key, check]));
   const problems = new Map<string, Problem>();
+  const kinds = new Map<string, IssueKind[]>();
 
-  CATEGORY_KEYS.forEach((category) => {
-    const data = result[category] as CategoryDetail | undefined;
-    Object.values(data?.details ?? {}).forEach((entries) => {
-      SEVERITIES.forEach((severity) => {
-        entries[severity].forEach((item, index) => {
-          const key = item.validationClassifier;
-          const id = `${severity}:${key}`;
-          const check = checkFor(severity, key);
-          const classifier = result.validation_classifiers?.[key];
-          let problem = problems.get(id);
-          if (!problem) {
-            const label = check?.label ?? classifier?.label ?? key;
-            const message = check?.message ?? classifier?.message ?? '';
-            problem = {
-              id,
-              key,
-              severity,
-              guide: getCheckGuide(result.check_guides, severity, key, label, message),
-              label,
-              message,
-              helpArticle: check?.help_article ?? classifier?.help_article ?? null,
-              subjects: [],
-              placeCount: 0,
-              pageNames: [],
-            };
-            problems.set(id, problem);
-          }
+  results.issues.forEach((issue, index) => {
+    const severity = SEVERITY_LIST[issue.severity];
+    const id = `${severity}:${issue.check}`;
+    let problem = problems.get(id);
+    if (!problem) {
+      problem = {
+        id,
+        key: issue.check,
+        severity,
+        guide: { title: issue.check, why: '', fix: [] },
+        helpArticle: checks.get(issue.check)?.help_article ?? null,
+        subjects: [],
+        placeCount: 0,
+        pageNames: [],
+      };
+      problems.set(id, problem);
+      kinds.set(id, []);
+    }
+    kinds.get(id)!.push(issue.subject.kind);
 
-          const bounds = item.bounds && pageIndex.has(item.bounds.page_id) ? item.bounds : undefined;
-          const pageId = bounds?.page_id ?? item.page_id;
-          const place: Place = {
-            key: `${id}:${category}:${item.identifier}:${item.data_id}:${index}`,
-            item,
-            category,
-            bounds,
-            pageName: pageId ? pageIndex.get(pageId)?.name || item.page_name || undefined : undefined,
-            frameText: frameText(item, result),
-            frameLabel: frameLabel(bounds, category),
-            context: item.context ?? '',
-            contextDetails: item.context_details,
-          };
+    const { location } = issue;
+    const bounds = location.bounds && pageIndex.has(location.bounds.page_id) ? location.bounds : undefined;
+    const pageId = bounds?.page_id ?? location.page_id;
+    const place: Place = {
+      key: `${id}:${index}`,
+      issue,
+      bounds,
+      pageName: pageId ? pageIndex.get(pageId)?.name || location.page_name || undefined : undefined,
+      frameText: frameText(issue, results),
+      frameLabel: frameLabel(bounds, issue.subject.kind),
+      context: issue.detail ?? '',
+      facts: issue.facts,
+    };
 
-          const subjectInfo = subjectFor(problem.guide.subject, place);
-          let subject = problem.subjects.find((s) => s.key === subjectInfo.key);
-          if (!subject) {
-            const kind = subjectInfo.key.startsWith('frame:') ? 'frame' : problem.guide.subject;
-            subject = { ...subjectInfo, kind, places: [] };
-            problem.subjects.push(subject);
-          }
-          subject.places.push(place);
-          problem.placeCount += 1;
-        });
-      });
-    });
+    const kind = GROUPED_AS[issue.subject.kind] ?? 'document';
+    const subjectInfo = subjectFor(kind, place);
+    let subject = problem.subjects.find((s) => s.key === subjectInfo.key);
+    if (!subject) {
+      subject = { ...subjectInfo, kind: subjectInfo.key.startsWith('frame:') ? 'frame' : kind, places: [] };
+      problem.subjects.push(subject);
+    }
+    subject.places.push(place);
+    problem.placeCount += 1;
+  });
+  problems.forEach((problem, id) => {
+    problem.guide = guideFor(checks.get(problem.key), problem.key, kinds.get(id)!);
   });
 
   const pageOrder = (name: string) => {
@@ -207,7 +244,8 @@ export function buildReport(result: ValidationResult): Report {
     return index ?? (Number.isFinite(Number(name)) ? Number(name) : Infinity);
   };
 
-  const placeOrder = (place: Place) => pageIndex.get(place.bounds?.page_id ?? place.item.page_id)?.index ?? Infinity;
+  const placeOrder = (place: Place) =>
+    pageIndex.get(place.bounds?.page_id ?? place.issue.location.page_id ?? '')?.index ?? Infinity;
   problems.forEach((problem) => {
     problem.subjects.forEach((subject) =>
       subject.places.sort(
@@ -243,18 +281,18 @@ export function buildReport(result: ValidationResult): Report {
     placeCounts[problem.severity] += problem.placeCount;
   });
 
-  const checked = CATEGORY_KEYS.flatMap((category) => {
-    const count = (result[category] as CategoryDetail | undefined)?.total_count ?? 0;
-    return CHECKED_LABELS[category] && count > 0 ? [{ label: CHECKED_LABELS[category], count }] : [];
+  const checked = CHECKED_LABELS.flatMap(([kind, label]) => {
+    const count = results.subjects_checked[kind] ?? 0;
+    return count > 0 ? [{ label, count }] : [];
   });
 
   return {
     problems: sorted,
     problemCounts,
     placeCounts,
-    passedChecks: checks
-      .filter((check) => !problems.has(`${check.severity}:${check.key}`))
-      .map((check) => ({ ...check, guide: getCheckGuide(result.check_guides, check.severity, check.key, check.label, check.message) })),
+    passedChecks: results.checks
+      .filter((check) => check.is_check && !problems.has(`${SEVERITY_LIST[check.severity]}:${check.key}`))
+      .map((check) => ({ ...check, guide: guideFor(check, check.key, check.subject_kinds) })),
     checked,
   };
 }
@@ -308,8 +346,6 @@ export function describeWhere(problem: Problem): string {
   }
   return [`${problem.placeCount} places`, pages].filter(Boolean).join(', ');
 }
-
-export const categoryLabel = (category: CategoryKey) => ValidationCategory[category];
 
 // ------------------------------------------------------------------ Comparison with the previous upload
 

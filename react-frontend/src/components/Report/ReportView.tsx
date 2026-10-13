@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
-import { ValidationResult } from '../../types';
+import { CheckResult } from '../../types';
 import SummaryHeader from './SummaryHeader';
 import ChangesPanel from './ChangesPanel';
 import ProblemList from './ProblemList';
@@ -17,8 +17,8 @@ import {
 import { notify } from '../../lib/notify';
 
 type ReportViewProps = {
-  result: ValidationResult;
-  previous?: ValidationResult | null;
+  result: CheckResult;
+  previous?: CheckResult | null;
 };
 
 /** Stands in when results have no summary, so the review hooks still have a document; review can't be opened. */
@@ -32,11 +32,11 @@ function ReportView({ result, previous }: ReportViewProps) {
   const report = useMemo(() => buildReport(result), [result]);
   const previousReport = useMemo(() => (previous ? buildReport(previous) : null), [previous]);
   const comparison = useMemo(() => (previousReport ? compareReports(previousReport, report) : null), [previousReport, report]);
-  const templateName = result.template_name || 'Untitled template';
-  // The backend writes the summary; results from before it did (or where it failed) have none.
+  const templateName = result.results.template_name || 'Untitled template';
+  // The backend writes the summary; it's null where writing it failed.
   const summary = result.customer_summary;
   const summaryDoc = useMemo(() => (summary ? toSummaryDocument(summary) : NO_SUMMARY), [summary]);
-  const pageLayouts = result.page_layouts ?? [];
+  const pages = result.results.pages;
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedPlaceKey, setSelectedPlaceKey] = useState<string | null>(null);
@@ -46,7 +46,7 @@ function ReportView({ result, previous }: ReportViewProps) {
       const page = firstPageOf(problem);
       if (page) return page;
     }
-    return pageLayouts[0]?.page_id ?? null;
+    return pages[0]?.id ?? null;
   });
 
   const selected = report.problems.find((p) => p.id === selectedId) ?? null;
@@ -129,7 +129,7 @@ function ReportView({ result, previous }: ReportViewProps) {
 
   const pageViewer = (
     <PageViewer
-      pageLayouts={pageLayouts}
+      pages={pages}
       problems={report.problems}
       selectedProblem={selected}
       selectedPlaceKey={selectedPlaceKey}
@@ -166,7 +166,7 @@ function ReportView({ result, previous }: ReportViewProps) {
             summaryRef={summaryRef}
             onProgress={handleProgress}
           />
-          {pageLayouts.length > 0 && <div className="lg:sticky lg:top-24">{pageViewer}</div>}
+          {pages.length > 0 && <div className="lg:sticky lg:top-24">{pageViewer}</div>}
         </div>
       </div>
     );
@@ -177,7 +177,7 @@ function ReportView({ result, previous }: ReportViewProps) {
       <SummaryHeader
         report={report}
         templateName={templateName}
-        pageCount={pageLayouts.length}
+        pageCount={pages.length}
         previousCounts={previousReport?.placeCounts ?? null}
         onJumpTo={(severity) =>
           document.getElementById(`report-section-${severity}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -189,7 +189,7 @@ function ReportView({ result, previous }: ReportViewProps) {
       />
 
       {comparison && previous && (
-        <ChangesPanel comparison={comparison} previousName={previous.template_name || 'previous upload'} />
+        <ChangesPanel comparison={comparison} previousName={previous.results.template_name || 'previous upload'} />
       )}
 
       {report.problems.length === 0 ? (

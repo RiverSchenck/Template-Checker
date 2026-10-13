@@ -14,11 +14,9 @@ import { useAuth } from './components/AuthContext';
 
 function FileUploadWrapper() {
   const ctx = useOutletContext<ProtectedLayoutOutletContext>();
-  const seeDetails = (value: boolean) => ctx.setSeeDetails(!!value);
   return (
     <FileUploadPage
       checkerResponse={ctx.checkerResponse}
-      seeDetails={seeDetails}
       navigateToResults={ctx.navigateToResults}
     />
   );
@@ -45,7 +43,6 @@ function ValidationListWrapper() {
     <ValidationList
       jsonResponse={ctx.checkerResults}
       previousJsonResponse={ctx.previousCheckerResults ?? null}
-      seeDetails={ctx.seeDetails}
     />
   );
 }

@@ -1,11 +1,11 @@
 import React from 'react';
-import { PageBounds, PageLayout, ValidationType } from '../../../types';
+import { Bounds, Page, ValidationType } from '../../../types';
 import { cn } from '../../../lib/utils';
 
 /** A highlighted box on the page. */
 export type CanvasMarker = {
   key: string;
-  bounds: PageBounds;
+  bounds: Bounds;
   severity: ValidationType;
   title: string;
 };
@@ -48,7 +48,7 @@ type Box = { x: number; y: number; width: number; height: number; offPage: boole
  * Where to draw a frame: clipped to the page, grown if tiny, and pinned to the page edge
  * when it sits (mostly) on the pasteboard so it's never silently invisible.
  */
-export function placeOnPage(b: PageBounds, page: PageLayout): Box {
+export function placeOnPage(b: Bounds, page: Page): Box {
   const x0 = Math.max(0, b.x);
   const y0 = Math.max(0, b.y);
   const x1 = Math.min(page.width, b.x + b.width);
@@ -75,7 +75,7 @@ export function placeOnPage(b: PageBounds, page: PageLayout): Box {
 const pct = (value: number, total: number) => `${(value / total) * 100}%`;
 
 type PageCanvasProps = {
-  page: PageLayout;
+  page: Page;
   markers: CanvasMarker[];
   selectedKey?: string | null;
   hoverKey?: string | null;

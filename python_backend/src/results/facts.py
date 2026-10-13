@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict
 
 
 class Facts(BaseModel):
-    model_config = ConfigDict(extra='forbid')
+    model_config = ConfigDict(extra='forbid', use_attribute_docstrings=True)
 
 
 class InheritedFacts(Facts):

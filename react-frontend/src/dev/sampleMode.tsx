@@ -1,6 +1,8 @@
 /**
  * Dev-only sample data mode: run `npm run dev:sample` to see the app signed in as an admin, with the analytics
- * and summary feedback endpoints answered from src/dev/sampleData.ts. No backend or Supabase project needed.
+ * and summary feedback endpoints answered from src/dev/sampleData.ts, and checks answered from src/fixtures (real
+ * results from the backend's goldens: upload any .zip, named like a fixture, e.g. brochure.zip, to pick one). No
+ * backend or Supabase project needed.
  *
  * index.tsx only imports this behind `import.meta.env.DEV`, so it never ships in a production build.
  */
@@ -91,9 +93,47 @@ function installFetchMock() {
   };
 }
 
+const FIXTURES = import.meta.glob('../fixtures/*.json', { import: 'default' });
+
+/** The fixture whose name the uploaded file's name contains (e.g. "Brochure_Bad.zip" -> brochure), else flyer-sales. */
+async function sampleCheck(fileName: string): Promise<unknown> {
+  const name = fileName.toLowerCase().replace(/[_\s]/g, '-');
+  const path =
+    Object.keys(FIXTURES).find((p) => name.includes(p.replace(/^.*\/|\.json$/g, ''))) ?? '../fixtures/flyer-sales.json';
+  return FIXTURES[path]();
+}
+
+/** Answer /v1/checks uploads (sent with XMLHttpRequest for upload progress) from the results fixtures. */
+function installUploadMock() {
+  class SampleXHR extends XMLHttpRequest {
+    private sample = false;
+
+    open(method: string, url: string | URL, ...rest: [boolean?, string?, string?]) {
+      const href = String(url);
+      this.sample = href.startsWith(`${baseURL}/v1/checks`) && !href.includes('/v1/checks/');
+      if (rest.length) super.open(method, url, rest[0] ?? true, rest[1], rest[2]);
+      else super.open(method, url);
+    }
+
+    send(body?: Document | XMLHttpRequestBodyInit | null) {
+      if (!this.sample) return super.send(body);
+      const file = body instanceof FormData ? body.get('file') : null;
+      void sampleCheck(file instanceof File ? file.name : '').then(async (response) => {
+        await new Promise((resolve) => setTimeout(resolve, 600));
+        Object.defineProperty(this, 'status', { value: 200 });
+        Object.defineProperty(this, 'response', { value: JSON.stringify({ run_id: 'sample', status: 'completed', ...(response as object) }) });
+        this.upload.dispatchEvent(new ProgressEvent('load'));
+        this.dispatchEvent(new ProgressEvent('load'));
+      });
+    }
+  }
+  window.XMLHttpRequest = SampleXHR;
+}
+
 export function renderWithSampleData(root: Root) {
   installFetchMock();
-  console.info('[sample data] Analytics and summary feedback endpoints are answered from src/dev/sampleData.ts');
+  installUploadMock();
+  console.info('[sample data] Analytics and summary feedback are answered from src/dev/sampleData.ts, checks from src/fixtures');
   root.render(
     <React.StrictMode>
       <AuthContext.Provider value={auth}>

@@ -35,7 +35,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { ValidationResult } from '../../types';
+import { CheckResult } from '../../types';
 import { Skeleton } from '../ui/skeleton';
 import FrontifyLogo from '../../assets/frontifyLogo.svg';
 import FrontifyNook from '../../assets/frontifyNook.svg';
@@ -43,7 +43,7 @@ import { useAuth } from '../AuthContext';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
 
 export interface SidebarMenuProps {
-  checkerResults: ValidationResult | null;
+  checkerResults: CheckResult | null;
 }
 
 function pathnameToItemId(pathname: string, hash: string): string {

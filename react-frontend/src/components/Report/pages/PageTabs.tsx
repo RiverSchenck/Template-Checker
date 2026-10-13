@@ -1,11 +1,11 @@
 import React from 'react';
-import { PageLayout, ValidationType } from '../../../types';
+import { Page, ValidationType } from '../../../types';
 import { cn } from '../../../lib/utils';
 
 export type SeverityCounts = Record<ValidationType, number>;
 
 type PageTabsProps = {
-  pages: PageLayout[];
+  pages: Page[];
   currentPageId: string;
   countsByPage: Record<string, SeverityCounts>;
   onSelectPage: (pageId: string) => void;
@@ -28,19 +28,19 @@ function PageTabs({ pages, currentPageId, countsByPage, onSelectPage }: PageTabs
         aria-label="Pages"
       >
         {pages.map((page) => {
-          const active = page.page_id === currentPageId;
-          const counts = countsByPage[page.page_id];
+          const active = page.id === currentPageId;
+          const counts = countsByPage[page.id];
           const total = counts ? counts.errors + counts.warnings + counts.infos : 0;
           const worst = counts && (['errors', 'warnings', 'infos'] as ValidationType[]).find((t) => counts[t] > 0);
           const label = page.name || String(page.index);
           return (
             <button
-              key={page.page_id}
+              key={page.id}
               type="button"
               role="tab"
               aria-selected={active}
               aria-label={`Page ${label}${total ? `, ${total} ${total === 1 ? 'issue' : 'issues'}` : ', no issues'}`}
-              onClick={() => onSelectPage(page.page_id)}
+              onClick={() => onSelectPage(page.id)}
               className={cn(
                 'flex h-6 shrink-0 items-center gap-1.5 rounded px-2 text-xs tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
                 active

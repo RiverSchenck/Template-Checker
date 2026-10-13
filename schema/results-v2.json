@@ -4,6 +4,7 @@
       "additionalProperties": false,
       "properties": {
         "auto_size": {
+          "description": "InDesign's AutoSizingType, e.g. WidthOnly.",
           "title": "Auto Size",
           "type": "string"
         },
@@ -115,6 +116,7 @@
           "type": "number"
         },
         "kind": {
+          "description": "The item's tag, e.g. TextFrame.",
           "title": "Kind",
           "type": "string"
         }
@@ -215,6 +217,7 @@
             },
             "type": "array"
           },
+          "description": "Steps in InDesign, per kind of subject.",
           "propertyNames": {
             "enum": [
               "paragraph_style",
@@ -242,6 +245,7 @@
           "title": "Help Article"
         },
         "is_check": {
+          "description": "False for package and parsing failures, which aren't listed among the checks a template passed.",
           "title": "Is Check",
           "type": "boolean"
         }
@@ -264,6 +268,7 @@
       "description": "A style setting that comes from a style it's based on.",
       "properties": {
         "inherited_from": {
+          "description": "Self of the style that sets it.",
           "title": "Inherited From",
           "type": "string"
         }
@@ -365,6 +370,7 @@
               "type": "null"
             }
           ],
+          "description": "The check's facts model (catalogue), or None.",
           "title": "Facts"
         },
         "text": {
@@ -379,6 +385,7 @@
               "type": "null"
             }
           ],
+          "description": "The text it's about, when relevant.",
           "title": "Text"
         },
         "detail": {
@@ -390,6 +397,7 @@
               "type": "null"
             }
           ],
+          "description": "Short display text. Never parse it: facts hold the data.",
           "title": "Detail"
         }
       },
@@ -450,6 +458,7 @@
               "type": "null"
             }
           ],
+          "description": "Self of the page item it points at.",
           "title": "Item Id"
         },
         "bounds": {
@@ -477,6 +486,7 @@
       "additionalProperties": false,
       "properties": {
         "kind": {
+          "description": "The element's tag, e.g. Rectangle.",
           "title": "Kind",
           "type": "string"
         },
@@ -496,6 +506,7 @@
       "additionalProperties": false,
       "properties": {
         "elements": {
+          "description": "What's on the master pages, in the order found.",
           "items": {
             "$ref": "#/$defs/MasterElement"
           },
@@ -520,6 +531,7 @@
           "type": "array"
         },
         "whole_family": {
+          "description": "No file of the family is in the package.",
           "title": "Whole Family",
           "type": "boolean"
         }
@@ -542,6 +554,7 @@
           "additionalProperties": {
             "type": "string"
           },
+          "description": "Property -> the value set on the text.",
           "title": "Overrides",
           "type": "object"
         }
@@ -596,6 +609,7 @@
               "type": "null"
             }
           ],
+          "description": "Base64 JPEG, when previews were asked for.",
           "title": "Preview"
         },
         "frames": {
@@ -623,6 +637,7 @@
       "additionalProperties": false,
       "properties": {
         "whole_frame": {
+          "description": "The whole frame has no paragraph style (else one run of its text).",
           "title": "Whole Frame",
           "type": "boolean"
         },
@@ -747,6 +762,7 @@
               "type": "null"
             }
           ],
+          "description": "None for a flip.",
           "title": "Rotation Deg"
         }
       },
@@ -770,6 +786,7 @@
       "type": "string"
     },
     "issues": {
+      "description": "Every issue, in the order found.",
       "items": {
         "$ref": "#/$defs/Issue"
       },
@@ -796,6 +813,7 @@
       "type": "object"
     },
     "pages": {
+      "description": "In document order.",
       "items": {
         "$ref": "#/$defs/Page"
       },
@@ -806,6 +824,7 @@
       "additionalProperties": {
         "$ref": "#/$defs/TextBox"
       },
+      "description": "The text of each text frame an issue is about, by subject id.",
       "title": "Text Boxes",
       "type": "object"
     },
