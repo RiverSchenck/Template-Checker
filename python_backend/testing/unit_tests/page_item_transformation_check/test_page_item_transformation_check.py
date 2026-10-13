@@ -4,7 +4,7 @@ from lxml import etree as ET
 from src.classes.SpreadData import SpreadData
 from src.checks.layout import page_item_transformation_check
 from src.document import ParsedDocument
-from src.results.results import ValidationResult
+from src.results.results import Results
 from src.parsers.SpreadsParser import SpreadsParser
 from src.results.classifiers import Severity, ValidationError
 from src.helpers.page_item_transform import (
@@ -80,7 +80,7 @@ def test_page_item_transformation_check_skew_textframe(tmp_path):
     (spreads_dir / "Spread_uc0.xml").write_bytes(xml)
 
     # A check runs on a parsed document directly: no package to unzip.
-    results = ValidationResult()
+    results = Results()
     page_item_transformation_check(ParsedDocument(spreads_parser=SpreadsParser(str(spreads_dir))), results)
 
     errors = results.names(Severity.ERROR)

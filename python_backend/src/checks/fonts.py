@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 from src.checks._report import report
 from src.document import ParsedDocument
-from src.results.results import ValidationResult
+from src.results.results import Results
 from src.results.classifiers import ValidationError
 
 
@@ -28,7 +28,7 @@ def _is_adobe(font, style: str) -> bool:
     return bool((font.faces.get(style) or {}).get('typekit'))
 
 
-def _report_missing(doc: ParsedDocument, results: ValidationResult, classifier, adobe: bool) -> None:
+def _report_missing(doc: ParsedDocument, results: Results, classifier, adobe: bool) -> None:
     """Missing fonts, split by where each style comes from: Adobe Fonts (adobe=True) or desktop fonts. A
     family with no file at all is reported once, under Adobe Fonts if any style the text uses is one; a
     partly packaged family names its missing styles."""
@@ -46,7 +46,7 @@ def _report_missing(doc: ParsedDocument, results: ValidationResult, classifier, 
             report(results, classifier, f"Missing styles: {', '.join(styles)}", identifier=font.font_family)
 
 
-def fonts_included_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def fonts_included_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each font family used in the document (Fonts.xml, via paragraph styles, character styles
     and text) whose files aren't in Document Fonts: the whole family, or some of the styles the text uses
     (named in the message). Variable fonts are skipped (variable_font_check reports them), and so are
@@ -54,14 +54,14 @@ def fonts_included_check(doc: ParsedDocument, results: ValidationResult) -> None
     _report_missing(doc, results, ValidationError.FONTS_INCLUDED, adobe=False)
 
 
-def adobe_font_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def adobe_font_check(doc: ParsedDocument, results: Results) -> None:
     """Error for Adobe Fonts styles (a TypekitID in Fonts.xml) the text uses whose files aren't in Document
     Fonts, reported like fonts_included_check. Frontify never loads Adobe Fonts from Adobe, only from the
     package; InDesign packages them in some cases, and then they work like any other font."""
     _report_missing(doc, results, ValidationError.ADOBE_FONT, adobe=True)
 
 
-def otf_ttf_font_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def otf_ttf_font_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each file in Document Fonts that isn't .otf or .ttf."""
     for font in doc.source_folders_parser.document_fonts:
         extension = font.extension
@@ -69,7 +69,7 @@ def otf_ttf_font_check(doc: ParsedDocument, results: ValidationResult) -> None:
             report(results, ValidationError.OTF_TTF_FONT, f"Font is {extension}", identifier=font.font_family)
 
 
-def variable_font_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def variable_font_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each variable font family the document uses."""
     for font in doc.fonts_parser.used_font_families:
         if font.variable_font:

@@ -40,7 +40,7 @@ def run_checker(package_path: str) -> CheckerRun:
     try:
         with contextlib.redirect_stdout(io.StringIO()):
             checker.run_state_machine()
-        results = checker.results.get_formatted_results_json()
+        results = checker.results_json()
     finally:
         checker.delete_unzipped_root_path()
     issues = [

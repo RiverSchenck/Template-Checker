@@ -2,12 +2,12 @@
 
 from src.checks._report import at_link, report
 from src.document import ParsedDocument
-from src.results.results import ValidationResult
+from src.results.results import Results
 from src.results.classifiers import ValidationError, ValidationInfo, ValidationWarning
 from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform
 
 
-def images_included_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def images_included_check(doc: ParsedDocument, results: Results) -> None:
     """Links vs. the Links folder. Error for an image used on a page or master page that isn't in
     Links (embedded images excluded); warning for a file in Links that nothing uses; error for a
     zero-byte file in Links."""
@@ -44,7 +44,7 @@ def images_included_check(doc: ParsedDocument, results: ValidationResult) -> Non
                identifier=unused_image)
 
 
-def large_image_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def large_image_check(doc: ParsedDocument, results: Results) -> None:
     """Info for each file in Links larger than 10 MB."""
     for image in doc.source_folders_parser.images_obj_list:
         if image.image_size_MB > 10:
@@ -54,7 +54,7 @@ def large_image_check(doc: ParsedDocument, results: ValidationResult) -> None:
                    page_id=page_id, identifier=image.get_image_name(), data_id=data_id)
 
 
-def embedded_image_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def embedded_image_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each image stored inside the document (StoredState "Embedded") instead of linked."""
     for spread in doc.spreads_parser.spreads_obj_list:
         for link in spread.links_obj_list:
@@ -62,7 +62,7 @@ def embedded_image_check(doc: ParsedDocument, results: ValidationResult) -> None
                 report(results, ValidationError.EMBEDDED_IMAGE, **at_link(doc, spread, link))
 
 
-def image_transformation_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def image_transformation_check(doc: ParsedDocument, results: Results) -> None:
     """The placed image and its frame are each judged by their end state (docs/checker-rules.md):
     mirrored -> flip error, skewed -> error. Rotation is fine: Frontify carries it over."""
     for spread in doc.spreads_parser.spreads_obj_list:

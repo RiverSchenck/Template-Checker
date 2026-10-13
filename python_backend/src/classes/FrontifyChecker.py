@@ -5,8 +5,10 @@ import tempfile
 import uuid
 import zipfile
 from typing import Callable, Dict, List, Optional, Tuple
-from src.results.results import ValidationResult
-from src.results.classifiers import Severity, ValidationError, ValidationWarning
+from src.results.classifiers import Category, Severity, ValidationError, ValidationWarning
+from src.results.layout import DocumentLayout, pages_from_spreads, text_boxes_from_stories
+from src.results.results import Results
+from src.results.serialize import results_json
 from src.parsers.SourceFoldersParser import SourceFoldersParser
 from src.parsers.SpreadsParser import SpreadsParser
 from src.parsers.FontsParser import FontsParser
@@ -67,8 +69,11 @@ class FrontifyChecker:
             States.UNZIP_IDML: self.unzip_idml_state,
             States.PARSE_XML: self.parse_xml,
         }
-        # Validation Class
-        self.results: ValidationResult = ValidationResult()
+        # What the checks found, and what the response needs about the document to show it
+        self.results: Results = Results()
+        self.layout: DocumentLayout = DocumentLayout()
+        self.totals: Dict[Category, int] = {}
+        self.output_folder: Optional[str] = None  # set once the IDML is unpacked
 
     def run_state_machine(self):
         """Unzip and parse the package, then run every check in order and count totals.
@@ -101,7 +106,6 @@ class FrontifyChecker:
     def get_zip_state(self) -> bool:
         """The upload must be a .zip; otherwise report it."""
         if self.source_file_path and self.source_file_path.endswith('.zip'):
-            self.template_name = os.path.basename(self.source_file_path)
             return True
         else:
             self.results.add(ValidationError.ZIP, "File uploaded is not ZIP")
@@ -109,7 +113,7 @@ class FrontifyChecker:
 
     def unzip_package_state(self) -> States:
         """UNZIP_PACKAGE: check it's a zip, make this run's folder, extract what the checks read."""
-        self.results.template_name = os.path.basename(self.source_file_path)
+        self.template_name = os.path.basename(self.source_file_path)
         self.data_folder = DATA_FOLDER
         if not self.get_zip_state():
             return States.EXIT
@@ -181,7 +185,7 @@ class FrontifyChecker:
         os.makedirs(self.idml_output_folder, exist_ok=True)
         try:
             extract_idml(idml_path, self.idml_output_folder)
-            self.results.idml_output_folder = self.idml_output_folder
+            self.output_folder = self.idml_output_folder
             return True
         except PackageError as e:
             self.results.add(ValidationError.ERROR, str(e))
@@ -213,8 +217,7 @@ class FrontifyChecker:
 
         self.spreads_parser = SpreadsParser(
             spreads_dir)
-        # Set spreads_parser in results to build spread-to-page mapping
-        self.results.set_spreads_parser(self.spreads_parser)
+        self.layout = pages_from_spreads(self.spreads_parser)
         # Fonts.XML
         # Init: FontsParser
         # Check if Fonts.XML exists
@@ -242,14 +245,10 @@ class FrontifyChecker:
         stories_dir = os.path.join(self.idml_output_folder, 'Stories')
         if not os.path.exists(stories_dir):
             self.stories_exist = False
-            # Set stories_parser to None in ValidationResult
-            self.results.stories_parser = None
         else:
             # Initialize the StoriesParser and extract story data
             self.stories_parser = StoriesParser(
                 stories_dir, styles_parser, self.fonts_parser, self.spreads_parser)
-            # Set stories_parser in ValidationResult so it's available when adding validations
-            self.results.stories_parser = self.stories_parser
 
         # Map stories to text frames
         if self.stories_parser:
@@ -261,6 +260,7 @@ class FrontifyChecker:
                     if story:
                         text_frame.parent_story_obj = story
                         story.parent_text_frame_id = text_frame.frame_id
+            self.layout.text_boxes = text_boxes_from_stories(self.stories_parser)
         # Map source images to links
         link_dict = {}
         for spread in self.spreads_parser.spreads_obj_list:
@@ -326,7 +326,7 @@ class FrontifyChecker:
         """Page geometry and embedded previews let the frontend highlight issues on the page."""
         try:
             page_geometry = PageGeometryIndex(self.idml_output_folder)
-            self.results.page_geometry = page_geometry
+            self.layout.geometry = page_geometry
             previews = {}
             if self.metadata_xml_path:
                 # XMP PageNumber is the 1-based position of the page in the document.
@@ -337,7 +337,7 @@ class FrontifyChecker:
                     if page_id and preview.base_64:
                         previews[page_id] = ''.join(preview.base_64.split())
             previews.update(self._render_package_pdf_previews(page_geometry))
-            self.results.page_previews = previews
+            self.layout.previews = previews
         except Exception:
             # Highlighting is a nice-to-have; never fail the check because of it.
             logger.warning('Page highlighting data unavailable', exc_info=True)
@@ -376,29 +376,20 @@ class FrontifyChecker:
             return folder_paths[actual_folder_index]
 
     def results_analytics(self):
-        """Totals per category (how many styles, text boxes, fonts and images the document has)."""
+        """Totals per results section: how many styles, text boxes, fonts and images the document has."""
+        if self.stories_exist:
+            self.totals[Category.PAR_STYLE] = self.calculate_style_total_count('paragraph')
+            self.totals[Category.CHAR_STYLE] = self.calculate_style_total_count('character')
+            self.totals[Category.TEXT_BOX] = self.stories_parser.get_stories_length()
+        self.totals[Category.FONTS] = (self.fonts_parser.get_used_font_families_count()
+                                       + len(self.source_folders_parser.document_fonts))
+        self.totals[Category.IMAGES] = sum(len(spread.links_obj_list) + spread.pasted_graphics_num
+                                           for spread in self.spreads_parser.spreads_obj_list)
 
-        if (self.stories_exist):
-            par_styles_count = self.calculate_style_total_count('paragraph')
-            self.results.par_styles_count = par_styles_count
-            char_styles_count = self.calculate_style_total_count('character')
-            self.results.char_styles_count = char_styles_count
-            text_box_count = self.stories_parser.get_stories_length()
-            self.results.text_box_total_count = text_box_count
-            self.results.stories_parser = self.stories_parser
-        else:
-            self.results.stories_parser = None
-
-        fonts_count = self.fonts_parser.get_used_font_families_count()
-        fonts_count += len(self.source_folders_parser.document_fonts)
-        self.results.fonts_total_count = fonts_count
-
-        images_count = 0
-        spreads = self.spreads_parser.spreads_obj_list
-        for spread in spreads:
-            images_count += len(spread.links_obj_list)
-            images_count += spread.pasted_graphics_num
-        self.results.images_total_count = images_count
+    def results_json(self) -> dict:
+        """The response: every issue found, with what the frontend needs to show and highlight it."""
+        return results_json(self.results, self.layout, template_name=self.template_name,
+                            output_folder=self.output_folder, totals=self.totals)
 
     def calculate_style_total_count(self, style_type='paragraph'):
         """Fetch all styles from documents and count unique instances."""

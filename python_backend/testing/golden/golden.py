@@ -51,7 +51,7 @@ def run(package: str) -> dict:
     try:
         with contextlib.redirect_stdout(io.StringIO()):
             checker.run_state_machine()
-        results = checker.results.get_formatted_results_json()
+        results = checker.results_json()
     finally:
         checker.delete_unzipped_root_path()
     results.pop('output_folder', None)  # a random temp path

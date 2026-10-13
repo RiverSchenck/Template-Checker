@@ -2,10 +2,10 @@
 from typing import Optional, Tuple
 
 from src.results.classifiers import Classifier
-from src.results.results import ValidationResult
+from src.results.results import Results
 
 
-def report(results: ValidationResult, classifier: Classifier, context: Optional[str] = None, *, page_id: str = '',
+def report(results: Results, classifier: Classifier, context: Optional[str] = None, *, page_id: str = '',
            identifier='null', data_id='null', text_content: Optional[list] = None,
            context_details: Optional[dict] = None) -> None:
     """Record an issue. Its severity comes from the classifier (ValidationError.X is an error, and so on)."""

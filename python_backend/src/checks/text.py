@@ -5,7 +5,7 @@ from src.checks._report import at_story, inherited, report, text_list
 from src.classes.PropertyBase import PropertyBase
 from src.classes.StoryCharacterData import NO_CHARACTER_STYLE
 from src.document import ParsedDocument
-from src.results.results import ValidationResult
+from src.results.results import Results
 from src.results.classifiers import ValidationError, ValidationInfo, ValidationWarning
 
 
@@ -42,7 +42,7 @@ def generate_context_message(content: str, items: Union[List[List['StoryParagrap
     return ''
 
 
-def par_style_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def par_style_check(doc: ParsedDocument, results: Results) -> None:
     """Text without a paragraph style. Error when a whole text frame uses only a default style ([No
     paragraph style] / [Basic Paragraph]); otherwise an error per run of default-styled text
     (consecutive ranges with the same style are grouped). Info for empty text frames."""
@@ -68,7 +68,7 @@ def par_style_check(doc: ParsedDocument, results: ValidationResult) -> None:
                        text_content=text_list(content), **at_story(story, group[0].normalized_style_id))
 
 
-def hyphenation_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def hyphenation_check(doc: ParsedDocument, results: Results) -> None:
     """Warning for each paragraph whose style (through BasedOn) has hyphenation on. Default styles
     are skipped."""
     for story in doc.stories_parser.stories_data_list:
@@ -79,26 +79,14 @@ def hyphenation_check(doc: ParsedDocument, results: ValidationResult) -> None:
                        context_details=details, **at_story(story, par_style.normalized_style_id))
 
 
-def _remember_frame_text(results: ValidationResult, story, frame_id) -> None:
-    """Override issues are grouped by text frame; the frontend shows that frame's full text from text_box_data."""
-    if frame_id and frame_id != 'null' and frame_id not in results.text_box_data:
-        page_id = story.page_id
-        results.text_box_data[frame_id] = {
-            "identifier": frame_id,
-            "content": story.get_content(),
-            "page_id": page_id if page_id is not None else "",
-            "frame_id": frame_id,
-        }
-
-
-def _report_override(results: ValidationResult, story, item, siblings, index) -> None:
-    """One override warning for a character or paragraph range, grouped under its text frame."""
+def _report_override(results: Results, story, item, siblings, index) -> None:
+    """One override warning for a character or paragraph range, grouped under its text frame (the results
+    show that frame's full text)."""
     frame_id = story.parent_text_frame_id
     content = item.get_content()
     text_part = f"Text: {content} {generate_context_message(content, siblings, index)}".strip()
     overrides_str = format_overrides(item.overrides)
     message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
-    _remember_frame_text(results, story, frame_id)
     report(results, ValidationWarning.OVERRIDE, message,
            page_id=story.page_id,
            identifier=frame_id if frame_id and frame_id != 'null' else 'null',
@@ -107,7 +95,7 @@ def _report_override(results: ValidationResult, story, item, siblings, index) ->
            context_details={"text": content or "", "overrides": item.overrides})
 
 
-def overrides_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def overrides_check(doc: ParsedDocument, results: Results) -> None:
     """Warning for text formatted outside its style: character-level overrides, or paragraph-level
     ones when the paragraph has none at character level (to avoid reporting both)."""
     for story in doc.stories_parser.stories_data_list:
@@ -121,7 +109,7 @@ def overrides_check(doc: ParsedDocument, results: ValidationResult) -> None:
                 _report_override(results, story, par_style, paragraphs, par_idx)
 
 
-def kerning_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def kerning_check(doc: ParsedDocument, results: Results) -> None:
     """Error when a paragraph style or character style (through BasedOn) uses kerning other than
     Metrics. Kerning set directly on text is an override, reported by overrides_check."""
     for story in doc.stories_parser.stories_data_list:
@@ -136,7 +124,7 @@ def kerning_check(doc: ParsedDocument, results: ValidationResult) -> None:
                            context_details=details, **at_story(story, item.normalized_style_id))
 
 
-def table_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def table_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each table in a story (reported against the story's text frame)."""
     for story in doc.stories_parser.stories_data_list:
         for run in story.character_styles:
@@ -144,7 +132,7 @@ def table_check(doc: ParsedDocument, results: ValidationResult) -> None:
                 report(results, ValidationError.TABLE, **at_story(story, story.story_id))
 
 
-def _once_per_style(doc: ParsedDocument, results: ValidationResult, classifier, is_issue, prop_of, context_of) -> None:
+def _once_per_style(doc: ParsedDocument, results: Results, classifier, is_issue, prop_of, context_of) -> None:
     """Report each paragraph style at most once, at the first story that uses it."""
     reported = set()
     for story in doc.stories_parser.stories_data_list:
@@ -158,7 +146,7 @@ def _once_per_style(doc: ParsedDocument, results: ValidationResult, classifier, 
                        **at_story(story, style))
 
 
-def grid_alignment_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def grid_alignment_check(doc: ParsedDocument, results: Results) -> None:
     """Error, once per paragraph style, when its style (through BasedOn) aligns to the baseline
     grid."""
     _once_per_style(doc, results, ValidationError.GRID_ALIGNMENT,
@@ -172,7 +160,7 @@ def grid_alignment_check(doc: ParsedDocument, results: ValidationResult) -> None
 SINGLE_LINE_COMPOSERS = ('HL Single', 'HL Single Optyca')
 
 
-def composer_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def composer_check(doc: ParsedDocument, results: Results) -> None:
     """Warning, once per paragraph style, when its style (through BasedOn) uses a composer other
     than a single-line one (Adobe or World-Ready Single-line)."""
     _once_per_style(doc, results, ValidationWarning.COMPOSER,
@@ -184,7 +172,7 @@ def composer_check(doc: ParsedDocument, results: ValidationResult) -> None:
 DEFAULT_TINTS = (None, '', '-1', '100')
 
 
-def other_checks(doc: ParsedDocument, results: ValidationResult) -> None:
+def other_checks(doc: ParsedDocument, results: Results) -> None:
     """Fill tint: error, once per paragraph style and once per character style, when the style's fill
     tint (through BasedOn) is set to anything but 100% (-1 and unset mean the default, 100%). Frontify
     shows text colours untinted; a tint swatch works."""
@@ -220,7 +208,7 @@ def _position_context(name: str, value: str, source: str) -> str:
     return f'{message}; Inherited from: {source}' if source else message
 
 
-def position_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def position_check(doc: ParsedDocument, results: Results) -> None:
     """Superscript, subscript and baseline shift, per text run, wherever the value comes from (the text,
     its character style, the paragraph or its style). Frontify reads neither: superscripts show full size
     on the baseline (error), shifted text sits on the baseline (warning)."""

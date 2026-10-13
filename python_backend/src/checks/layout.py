@@ -2,12 +2,12 @@
 
 from src.checks._report import at_frame, at_link, first_page_id, report
 from src.document import ParsedDocument
-from src.results.results import ValidationResult
+from src.results.results import Results
 from src.results.classifiers import ValidationError, ValidationWarning
 from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform
 
 
-def masterpage_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def masterpage_check(doc: ParsedDocument, results: Results) -> None:
     """Error when a master spread holds anything besides its pages and properties (items on a master
     page)."""
     unexpected_elements = doc.masterspreads_parser.unexpected_elements
@@ -15,7 +15,7 @@ def masterpage_check(doc: ParsedDocument, results: ValidationResult) -> None:
         report(results, ValidationError.MASTERPAGE, 'Elements: ' + ', '.join(unexpected_elements), identifier=None)
 
 
-def page_item_transformation_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def page_item_transformation_check(doc: ParsedDocument, results: Results) -> None:
     """Same end-state rule as image_transformation_check, for text frames, image-less rectangles,
     ovals, polygons and groups: flip or skew -> error; rotation is fine."""
     for spread in doc.spreads_parser.spreads_obj_list:
@@ -34,7 +34,7 @@ def page_item_transformation_check(doc: ParsedDocument, results: ValidationResul
                    data_id=self_id or 'null')
 
 
-def pasted_graphics_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def pasted_graphics_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each spread with graphics pasted into the document (PDF/EPS/image content without a
     link)."""
     for spread in doc.spreads_parser.spreads_obj_list:
@@ -44,7 +44,7 @@ def pasted_graphics_check(doc: ParsedDocument, results: ValidationResult) -> Non
                    page_id=first_page_id(spread), identifier=None)
 
 
-def document_bleed_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def document_bleed_check(doc: ParsedDocument, results: Results) -> None:
     """One warning when any document bleed offset isn't 0."""
     bleed_values = doc.preferences_parser.document_bleed
     if bleed_values is not None and any(value != '0' for value in bleed_values.values()):
@@ -52,7 +52,7 @@ def document_bleed_check(doc: ParsedDocument, results: ValidationResult) -> None
         report(results, ValidationWarning.DOCUMENT_BLEED, f"{descriptions}.", identifier=None)
 
 
-def auto_size_text_box_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def auto_size_text_box_check(doc: ParsedDocument, results: Results) -> None:
     """Error for auto-sizing text frames that won't behave the same in Frontify. Frontify always treats
     WidthOnly and HeightAndWidth as "No Line Breaks", so the InDesign frame must have it on to match.
     Every reference point is supported by Frontify, so it isn't checked (docs/checker-rules.md)."""
@@ -72,7 +72,7 @@ def auto_size_text_box_check(doc: ParsedDocument, results: ValidationResult) -> 
                 report(results, ValidationError.AUTO_SIZE_TEXT_BOX, message, **at_frame(doc, text_frame))
 
 
-def text_columns_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def text_columns_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each text frame with more than one column."""
     for spread in doc.spreads_parser.spreads_obj_list:
         for text_frame in spread.text_frame_obj_list:
@@ -81,7 +81,7 @@ def text_columns_check(doc: ParsedDocument, results: ValidationResult) -> None:
                 report(results, ValidationError.TEXT_COLUMNS, **at_frame(doc, text_frame))
 
 
-def text_wrap_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def text_wrap_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each item with text wrap on: text frames (TEXT_WRAP), and images, shapes, lines and groups
     (TEXT_WRAP_ITEM), which is where wrap is usually set. Frontify ignores wrap, so text runs under the
     object. An item without wrap settings has none (InDesign's default)."""
@@ -99,7 +99,7 @@ def text_wrap_check(doc: ParsedDocument, results: ValidationResult) -> None:
                    data_id=self_id or 'null')
 
 
-def linked_text_frame_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def linked_text_frame_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each text frame threaded to a previous or next frame."""
     for spread in doc.spreads_parser.spreads_obj_list:
         for text_frame in spread.text_frame_obj_list:
@@ -107,7 +107,7 @@ def linked_text_frame_check(doc: ParsedDocument, results: ValidationResult) -> N
                 report(results, ValidationError.LINKED_TEXT_FRAME, **at_frame(doc, text_frame))
 
 
-def object_style_check(doc: ParsedDocument, results: ValidationResult) -> None:
+def object_style_check(doc: ParsedDocument, results: Results) -> None:
     """Error for each text frame, and each placed image or its frame, using an object style other
     than InDesign's defaults."""
     for spread in doc.spreads_parser.spreads_obj_list:
