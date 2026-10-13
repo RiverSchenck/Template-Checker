@@ -13,7 +13,7 @@ from src.classes.FrontifyChecker import FrontifyChecker
 from src.helpers import safe_xml
 from src.helpers.package_zip import DAMAGED_IDML
 from src.helpers.page_geometry import PageGeometryIndex
-from src.parsers.MetadataParser import MetadataParser
+from src.helpers.pdf_previews import xmp_thumbnails
 from testing.fixtures.idml_builder import PackageBuilder
 
 ENTITIES = '<!ENTITY a0 "xxxxxxxxxx">' + ''.join(f'<!ENTITY a{i} "{("&a%d;" % (i - 1)) * 10}">' for i in range(1, 10))
@@ -83,7 +83,7 @@ def test_designmap_src_outside_the_idml_folder_is_ignored(tmp_path):
     assert [page['page_id'] for page in PageGeometryIndex(str(folder)).get_pages()] == ['p1']
 
 
-def test_preview_page_number_cannot_write_outside_previews(tmp_path):
+def test_preview_thumbnails_are_read_without_writing_files(tmp_path):
     jpeg = base64.b64encode(b'\xff\xd8 not really a jpeg').decode()
     xmp = ('<x:xmpmeta xmlns:x="adobe:ns:meta/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" '
            'xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:xmpTPg="http://ns.adobe.com/xap/1.0/t/pg/" '
@@ -91,11 +91,10 @@ def test_preview_page_number_cannot_write_outside_previews(tmp_path):
            + ''.join(f'<rdf:li><xmpTPg:PageNumber>{n}</xmpTPg:PageNumber><xmpGImg:image>{jpeg}</xmpGImg:image></rdf:li>'
                      for n in ('1', '../../escaped'))
            + '</rdf:Seq></xmp:PageInfo></rdf:Description></rdf:RDF></x:xmpmeta>')
-    run_folder = tmp_path / 'run'
-    previews = MetadataParser(write(run_folder / 'META-INF' / 'metadata.xml', xmp), str(run_folder)).previews_objs_list
-    assert [p.page for p in previews] == ['1']
-    assert (run_folder / 'Previews' / '1.jpg').exists()
-    assert not (tmp_path / 'escaped.jpg').exists()
+    metadata = write(tmp_path / 'run' / 'META-INF' / 'metadata.xml', xmp)
+    thumbnails = xmp_thumbnails(metadata)
+    assert thumbnails['1'] == jpeg  # a page number like '../../escaped' is only a key; it matches no page
+    assert [p for p in tmp_path.rglob('*') if p.is_file()] == [tmp_path / 'run' / 'META-INF' / 'metadata.xml']
 
 
 def test_checker_stops_at_parse_xml_on_a_hostile_spread(tmp_path):

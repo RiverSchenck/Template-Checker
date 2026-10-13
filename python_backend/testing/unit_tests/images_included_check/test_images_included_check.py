@@ -1,7 +1,7 @@
 import pytest
 import os
 from testing.checker_setup import setup_instance
-from src.classes.States import States
+from src.checks.stages import States
 from src.results.classifiers import ValidationError, ValidationWarning
 from collections import Counter
 

@@ -3,6 +3,8 @@ import io
 import os
 from typing import Dict, List, Optional
 
+from src.helpers import safe_xml
+
 # Long side of a rendered page preview, in pixels. Sharp enough to read text and see frame edges,
 # small enough to keep the results JSON a reasonable size.
 PREVIEW_LONG_SIDE = 1400
@@ -71,3 +73,19 @@ def render_pdf_previews(pdf_path: str, pages: List[Dict]) -> Dict[str, str]:
         return previews
     finally:
         pdf.close()
+
+
+_XMP = {'xmp': 'http://ns.adobe.com/xap/1.0/', 'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'xmpTPg': 'http://ns.adobe.com/xap/1.0/t/pg/', 'xmpGImg': 'http://ns.adobe.com/xap/1.0/g/img/'}
+
+
+def xmp_thumbnails(metadata_path: str) -> Dict[str, str]:
+    """The page thumbnails InDesign stores in the IDML's META-INF/metadata.xml (about 200px wide), as base64 JPEG
+    by XMP page number (the 1-based position of the page in the document). Read in memory, never written out."""
+    thumbnails: Dict[str, str] = {}
+    page_info = safe_xml.parse(metadata_path).getroot().find('.//xmp:PageInfo', _XMP)
+    for page in page_info.findall('.//rdf:li', _XMP) if page_info is not None else ():
+        number, image = page.find('xmpTPg:PageNumber', _XMP), page.find('xmpGImg:image', _XMP)
+        if number is not None and image is not None and image.text:
+            thumbnails[number.text] = ''.join(image.text.replace('&#xA;', '\n').split())
+    return thumbnails

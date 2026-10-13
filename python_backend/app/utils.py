@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Optional
 from flask import request, current_app, g
 from werkzeug.utils import secure_filename
-from src.classes.States import States
+from src.checks.stages import States
 from .analytics import log_analytics_to_supabase, first_error_message
 from .customer_summary import CustomerSummary, build_customer_summary, check_guides_payload, summary_payload
 

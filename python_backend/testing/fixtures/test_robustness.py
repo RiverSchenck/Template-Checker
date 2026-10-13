@@ -5,7 +5,7 @@ Each builds the smallest package that triggers the bug. None of these change res
 """
 from lxml import etree as ET
 
-from src.classes.Link import Link
+from src.model.layout import read_link
 from testing.fixtures.checker_run import run_checker
 from testing.fixtures.idml_builder import PackageBuilder
 
@@ -51,10 +51,10 @@ def test_l2_a_malformed_link_is_skipped_not_crashed_on(tmp_path):
 def test_l3_link_without_a_grandparent_element():
     image = ET.fromstring('<Image Self="i1" ItemTransform="1 0 0 1 0 0">'
                           '<Link Self="l1" LinkResourceURI="file:/x/Links/a.png" StoredState="Normal"/></Image>')
-    link = Link(image.find('Link'))
-    assert link.get_image_name() == 'a.png'
-    assert link.get_rectangle_link_id() is None
-    assert link.get_container_item_transform() is None
+    link = read_link(image.find('Link'))
+    assert link.name == 'a.png'
+    assert link.frame_id is None
+    assert link.frame_transform is None
 
 
 def test_l4_text_frame_whose_story_is_missing(tmp_path):

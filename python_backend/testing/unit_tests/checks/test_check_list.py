@@ -1,7 +1,7 @@
 """The check list is part of the contract: analytics stores each check's state name (runs.stopped_at_stage)
 and the frontend labels them, and results depend on the order checks run in."""
 from src.checks import CHECKS
-from src.classes.States import States
+from src.checks.stages import States
 
 EXPECTED_ORDER = [
     'MASTERPAGE_CHECK', 'PAR_CHECK', 'HYPHENATION_CHECK', 'OVERRIDES_CHECK', 'KERNING_CHECK',
