@@ -13,13 +13,14 @@ import { categoryLabel, formatBucket, formatCount, formatPercent, ratio } from '
 import { useIssueDetail } from './useAnalytics';
 import type { Bucket, IssueDetail, IssueSummary, Overview, PeriodSelection } from './types';
 
-// Identifiers are only comparable across templates for these categories (a font or style name means the same
-// thing everywhere; a text box's story id doesn't).
+// Identifiers are only comparable across templates for these categories (a font, style or file name means the same
+// thing everywhere; a frame's id doesn't).
 const IDENTIFIER_HEADINGS: Record<string, string> = {
-  fonts: 'Fonts involved most',
-  par_styles: 'Paragraph styles involved most',
-  char_styles: 'Character styles involved most',
-  images: 'Images involved most',
+  font: 'Fonts involved most',
+  paragraph_style: 'Paragraph styles involved most',
+  character_style: 'Character styles involved most',
+  image: 'Images involved most',
+  image_frame: 'Images involved most',
 };
 
 function Stat({ label, value }: { label: string; value: string }) {

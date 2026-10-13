@@ -39,11 +39,3 @@ def test_a_merged_check_fixes_each_kind_its_own_way():
     entry = catalogue.BY_KEY['OBJECT_STYLE']
     assert '[Basic Text Frame]' in entry.fix_for('text_frame')[0]
     assert '[Basic Graphics Frame]' in entry.fix_for('image')[0]
-
-
-def test_split_v1_keys_never_share_a_title_until_results_v2():
-    titles = collections.Counter(catalogue.v1_title(c.name) for c in all_classifiers()
-                                 if catalogue.for_v1(c.name)[0].is_check)
-    # KERNING/KERNING_CHAR, FILL_TINT/FILL_TINT_CHAR and TEXT_WRAP/TEXT_WRAP_ITEM shared their titles already.
-    assert {title for title, n in titles.items() if n > 1} == {
-        'Kerning isn’t set to Metrics', 'Text color tint isn’t 100%', 'Text wrap applied'}

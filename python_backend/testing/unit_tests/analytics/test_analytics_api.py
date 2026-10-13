@@ -229,9 +229,9 @@ def test_issues_get_labels_from_the_checker_catalogue(fake_rpc):
 
 def test_issue_description_comes_from_the_catalogue():
     # Rotation warnings are gone (rotation is fine), so transformation names only mean flip/skew errors.
-    assert analytics_api.describe_issue('IMAGE_TRANSFORMATION_IMAGE', 'error')['message'] == \
+    assert analytics_api.describe_issue('TRANSFORMATION', 'error')['message'] == \
         'Frontify can’t reproduce flipped or skewed items, so they’ll look different or break when edited.'
-    assert analytics_api.describe_issue('PAGE_ITEM_TRANSFORMATION')['label'] == 'Item is flipped or skewed'
+    assert analytics_api.describe_issue('TRANSFORMATION')['label'] == 'Item is flipped or skewed'
 
 
 def test_issue_description_for_a_retired_type_falls_back_to_its_name():

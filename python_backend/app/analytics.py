@@ -6,16 +6,9 @@ import logging
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timezone
 
-from src.results import catalogue
-from src.results.classifiers import Classifier, Severity, find
-
 logger = logging.getLogger(__name__)
 
-# Severity in results v2 -> the classifier severity it was reported with.
-SEVERITY = {'error': Severity.ERROR, 'warning': Severity.WARNING, 'info': Severity.INFO}
-# The v1 results section (validations.category) for a check analytics doesn't know, by what it's about.
-CATEGORY_OF_KIND = {'paragraph_style': 'par_styles', 'character_style': 'char_styles', 'text_frame': 'text_boxes',
-                    'font': 'fonts', 'image': 'images', 'image_frame': 'images'}
+SEVERITIES = ('error', 'warning', 'info')
 MAX_ERROR_MESSAGE_LENGTH = 1000
 
 
@@ -40,13 +33,6 @@ def get_supabase_client():
         return None
 
 
-def _v1_classifier(issue: Dict[str, Any]) -> Optional[Classifier]:
-    """The v1 classifier a v2 issue was reported as. Stored rows keep v1's validation_type and category until the
-    analytics migration (plan PR 5.4): validations.category only allows v1's six results sections."""
-    name = catalogue.v1_name(issue.get('check'), (issue.get('subject') or {}).get('kind'), issue.get('facts'))
-    return find(name, SEVERITY.get(issue.get('severity')))
-
-
 def _issues(results_json: Dict[str, Any]):
     """Every issue in results v2."""
     return results_json.get('issues') or []
@@ -54,23 +40,22 @@ def _issues(results_json: Dict[str, Any]):
 
 def extract_validation_counts(results_json: Dict[str, Any]) -> Dict[str, int]:
     """total_errors, total_warnings and total_infos in results JSON."""
-    counts = {f'total_{severity}s': 0 for severity in SEVERITY}
+    counts = {f'total_{severity}s': 0 for severity in SEVERITIES}
     for issue in _issues(results_json):
         counts[f"total_{issue['severity']}s"] += 1
     return counts
 
 
 def extract_individual_validations(results_json: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """One row per issue in results JSON, ready for the validations table."""
+    """One row per issue in results JSON, ready for the validations table: its check, severity, the kind of thing
+    it's about (category) and that thing's name (identifier)."""
     rows = []
     for issue in _issues(results_json):
-        classifier = _v1_classifier(issue)
         subject = issue.get('subject') or {}
-        category = classifier.category.value if classifier else CATEGORY_OF_KIND.get(subject.get('kind'), 'general')
         rows.append({
-            'validation_type': classifier.name if classifier else issue.get('check', 'UNKNOWN'),
+            'validation_type': issue.get('check') or 'UNKNOWN',
             'severity': issue['severity'],
-            'category': category,
+            'category': subject.get('kind') or 'document',
             'identifier': subject.get('name') or subject.get('id') or '',
         })
     return rows

@@ -66,13 +66,16 @@ export function sourceLabel(source: string): string {
   return SOURCE_LABELS[source as SourceType] ?? source;
 }
 
+/** What an issue is about (results v2 subject kinds; older runs were migrated to them). */
 const CATEGORY_LABELS: Record<string, string> = {
-  par_styles: 'Paragraph styles',
-  char_styles: 'Character styles',
-  text_boxes: 'Text boxes',
-  fonts: 'Fonts',
-  images: 'Images',
-  general: 'General',
+  paragraph_style: 'Paragraph styles',
+  character_style: 'Character styles',
+  text_frame: 'Text frames',
+  image: 'Images',
+  image_frame: 'Image frames',
+  font: 'Fonts',
+  page_item: 'Other items',
+  document: 'Document',
 };
 
 export function categoryLabel(category: string): string {

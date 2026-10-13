@@ -146,7 +146,7 @@ def _classifiers_used(results: Results) -> Dict[str, dict]:
     used: Dict[str, dict] = {}
     for issue in results:
         entry, _ = catalogue.for_v1(issue.classifier.name)
-        used.setdefault(issue.classifier.name, {'label': catalogue.v1_title(issue.classifier.name), 'message': '',
+        used.setdefault(issue.classifier.name, {'label': entry.title, 'message': '',
                                                 'help_article': entry.help_article})
     return used
 
@@ -175,7 +175,7 @@ def _page_layouts(layout: DocumentLayout) -> List[dict]:
 def _checks() -> List[dict]:
     """Every template check, so the frontend can list what passed."""
     return [
-        {'key': c.name, 'severity': c.severity.value, 'label': catalogue.v1_title(c.name), 'message': '',
+        {'key': c.name, 'severity': c.severity.value, 'label': entry.title, 'message': '',
          'help_article': entry.help_article, 'category': c.category.value}
         for c, (entry, _) in ((c, catalogue.for_v1(c.name)) for c in all_classifiers()) if entry.is_check
     ]

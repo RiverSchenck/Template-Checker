@@ -172,11 +172,11 @@ def test_severity_comes_from_the_list_an_issue_is_in():
         _issue('UNUSED_IMAGE', 'warning', 'image', 'photo.jpg'),
         _issue('LARGE_IMAGE', 'info', 'image', 'photo.jpg'))
     assert [(v['validation_type'], v['severity']) for v in analytics.extract_individual_validations(results)] == [
-        ('IMAGE_TRANSFORMATION_IMAGE', 'error'), ('UNUSED_IMAGE', 'warning'), ('LARGE_IMAGE', 'info')]
+        ('TRANSFORMATION', 'error'), ('UNUSED_IMAGE', 'warning'), ('LARGE_IMAGE', 'info')]
     assert analytics.extract_validation_counts(results) == {'total_errors': 1, 'total_warnings': 1, 'total_infos': 1}
 
 
 def test_a_new_classifier_needs_no_analytics_change():
     results = _results_with(_issue('SOME_NEW_WARNING', 'warning', 'image', None))
     assert analytics.extract_individual_validations(results) == [
-        {'validation_type': 'SOME_NEW_WARNING', 'severity': 'warning', 'category': 'images', 'identifier': ''}]
+        {'validation_type': 'SOME_NEW_WARNING', 'severity': 'warning', 'category': 'image', 'identifier': ''}]

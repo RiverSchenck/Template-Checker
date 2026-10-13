@@ -214,32 +214,7 @@ V1_KEYS: Dict[str, Tuple[str, str]] = {
 }
 
 
-# Analytics (v1 keys until plan PR 5.4) still lists the split v1 keys of a merged check as separate issues; they keep
-# their own titles there so it never lists the same title twice (River, 2026-10-13). Results v2 has one check.
-_V1_TITLES = {
-    'PARAGRAPH_STYLE_TEXT_BOX': 'Text frame has no paragraph style',
-    'OBJECT_STYLE_TEXT': 'Object style on a text frame',
-    'OBJECT_STYLE_IMAGE': 'Object style on an image frame',
-    'IMAGE_TRANSFORMATION_IMAGE': 'Image is flipped or skewed',
-    'IMAGE_TRANSFORMATION_CONTAINER': 'Image frame is flipped or skewed',
-}
-
-
 def for_v1(name: str) -> Optional[Tuple[Entry, str]]:
     """(entry, subject kind) for a v1 classifier name, or None for one that no longer exists."""
     key, kind = V1_KEYS.get(name, (None, None))
     return (BY_KEY[key], kind) if key else None
-
-
-def v1_name(key: str, kind: str, facts: Optional[dict] = None) -> str:
-    """The v1 classifier a v2 issue was reported as: its check and the kind of thing it's about tell them apart,
-    and for PARAGRAPH_STYLE (both about text frames) whether the whole frame is unstyled. A key the catalogue
-    doesn't know is its own name."""
-    if key == 'PARAGRAPH_STYLE':
-        return 'PARAGRAPH_STYLE_TEXT_BOX' if (facts or {}).get('whole_frame') else 'PARAGRAPH_STYLE'
-    return next((name for name, found in V1_KEYS.items() if found == (key, kind)), key)
-
-
-def v1_title(name: str) -> str:
-    """The title a v1 classifier is shown with (its entry's, or its own until results v2)."""
-    return _V1_TITLES.get(name) or for_v1(name)[0].title
