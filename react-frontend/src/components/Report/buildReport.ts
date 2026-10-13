@@ -116,12 +116,13 @@ export type Report = {
   checked: { label: string; count: number }[];
 };
 
+/** What was checked, in the singular (an s is added for more than one). */
 const CHECKED_LABELS: [keyof Results['subjects_checked'], string][] = [
-  ['paragraph_style', 'paragraph styles'],
-  ['character_style', 'character styles'],
-  ['text_frame', 'text frames'],
-  ['font', 'fonts'],
-  ['image', 'images'],
+  ['paragraph_style', 'paragraph style'],
+  ['character_style', 'character style'],
+  ['text_frame', 'text frame'],
+  ['font', 'font'],
+  ['image', 'image'],
 ];
 
 const SUBJECT_LABELS: Record<SubjectKind, string> = {
@@ -283,7 +284,7 @@ export function buildReport({ results }: CheckResult): Report {
 
   const checked = CHECKED_LABELS.flatMap(([kind, label]) => {
     const count = results.subjects_checked[kind] ?? 0;
-    return count > 0 ? [{ label, count }] : [];
+    return count > 0 ? [{ label: count === 1 ? label : `${label}s`, count }] : [];
   });
 
   return {
