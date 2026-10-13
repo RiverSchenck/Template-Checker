@@ -65,3 +65,24 @@ def fake_limiter(monkeypatch):
     db = FakeLimiterDB()
     monkeypatch.setattr(rate_limit, '_rpc', db.rpc)
     return db
+
+
+@pytest.fixture(autouse=True)
+def no_real_supabase(monkeypatch):
+    """Keep tests offline: no Supabase credentials, and any unpatched client lookup fails loudly.
+
+    run.py loads .env at import, so a local run would otherwise log to production Supabase.
+    Tests that need a database patch get_supabase_client themselves (their patch runs after this one).
+    """
+    import sys
+    import app.routes  # noqa: F401  imports every module that looks up a client
+
+    monkeypatch.delenv('SUPABASE_URL', raising=False)
+    monkeypatch.delenv('SUPABASE_KEY', raising=False)
+
+    def forbidden():
+        raise AssertionError('test reached the real Supabase client; patch get_supabase_client')
+
+    for name, module in list(sys.modules.items()):
+        if (name == 'app' or name.startswith('app.')) and hasattr(module, 'get_supabase_client'):
+            monkeypatch.setattr(module, 'get_supabase_client', forbidden)

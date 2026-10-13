@@ -6,12 +6,15 @@ commit, so the diff shows exactly what customers will see differently.
     python -m testing.golden            # report which packages differ
     python -m testing.golden --update   # rewrite the stored results
 """
+import base64
 import contextlib
 import glob
 import hashlib
 import io
 import json
 import os
+
+from PIL import Image
 
 from src.classes.FrontifyChecker import FrontifyChecker
 
@@ -31,7 +34,7 @@ def golden_path(package: str) -> str:
 
 
 def _canonical(value):
-    """Previews are large base64 images: keep a fingerprint so a changed render still shows up."""
+    """Previews are large base64 images: keep their format and size, so a missing or resized preview shows up."""
     if isinstance(value, dict):
         return {k: (_fingerprint(v) if k == 'preview' and isinstance(v, str) else _canonical(v))
                 for k, v in value.items()}
@@ -41,7 +44,12 @@ def _canonical(value):
 
 
 def _fingerprint(text: str) -> str:
-    return 'sha256:' + hashlib.sha256(text.encode()).hexdigest()[:16]
+    """Not the pixels: pdfium draws some PDFs differently on macOS and Linux (e.g. a font that has no glyphs)."""
+    try:
+        with Image.open(io.BytesIO(base64.b64decode(text))) as image:
+            return f'image:{image.format} {image.width}x{image.height}'
+    except (ValueError, OSError):
+        return 'sha256:' + hashlib.sha256(text.encode()).hexdigest()[:16]
 
 
 def run(package: str) -> dict:

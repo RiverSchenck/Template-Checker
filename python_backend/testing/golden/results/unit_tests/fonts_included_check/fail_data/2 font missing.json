@@ -425,7 +425,7 @@
     "index": 1,
     "name": "1",
     "page_id": "u2215",
-    "preview": "sha256:90805ddd896f7efc",
+    "preview": "image:JPEG 512x361",
     "spread_id": "u2210",
     "width": 841.8897637779997
    },
@@ -572,7 +572,7 @@
     "index": 2,
     "name": "2",
     "page_id": "u193b",
-    "preview": "sha256:28d529a95b3c9c13",
+    "preview": "image:JPEG 512x362",
     "spread_id": "u1936",
     "width": 841.8897637779997
    }

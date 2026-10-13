@@ -13,6 +13,7 @@ def client(monkeypatch):
     monkeypatch.setattr(routes, 'verify_supabase_token', fake_verify)
     monkeypatch.setattr(routes.user_helpers, 'get_user_by_email',
                         lambda email: {'id': '1', 'email': email} if email == 'approved@example.com' else None)
+    monkeypatch.setattr(routes.user_helpers, 'is_admin', lambda email=None, auth_user_id=None: False)
     monkeypatch.setattr(routes, 'get_overview', lambda period: {'ok': True})
     return flask_app.test_client()
 

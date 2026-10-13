@@ -506,7 +506,7 @@
     "index": 1,
     "name": "1",
     "page_id": "ud5",
-    "preview": "sha256:ce7e45315ae123f5",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "ud0",
     "width": 2409.448818897638
    },
@@ -645,7 +645,7 @@
     "index": 2,
     "name": "2",
     "page_id": "u16d",
-    "preview": "sha256:1f01970fe396c113",
+    "preview": "image:JPEG 596x1400",
     "spread_id": "u162",
     "width": 2409.448818897638
    }

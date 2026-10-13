@@ -370,7 +370,7 @@
     "index": 1,
     "name": "1",
     "page_id": "ueb",
-    "preview": "sha256:5350c4896eea0ff5",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "ue6",
     "width": 595.2755905510003
    },
@@ -397,7 +397,7 @@
     "index": 2,
     "name": "2",
     "page_id": "u161",
-    "preview": "sha256:59cc7734af18124d",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "u15c",
     "width": 595.2755905510003
    },
@@ -416,7 +416,7 @@
     "index": 3,
     "name": "3",
     "page_id": "u162",
-    "preview": "sha256:95356e3c1d562d5a",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "u15c",
     "width": 595.2755905510003
    },
@@ -435,7 +435,7 @@
     "index": 4,
     "name": "4",
     "page_id": "u1c1",
-    "preview": "sha256:31cced51d757ff57",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "u1bc",
     "width": 595.2755905510003
    },
@@ -462,7 +462,7 @@
     "index": 5,
     "name": "5",
     "page_id": "u1c2",
-    "preview": "sha256:7a830a28363baa3a",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "u1bc",
     "width": 595.2755905510003
    },
@@ -489,7 +489,7 @@
     "index": 6,
     "name": "6",
     "page_id": "u1ea",
-    "preview": "sha256:050483a397875da9",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "u1e5",
     "width": 595.2755905510003
    },
@@ -508,7 +508,7 @@
     "index": 7,
     "name": "7",
     "page_id": "u1eb",
-    "preview": "sha256:5bd66b73132d6762",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "u1e5",
     "width": 595.2755905510003
    },
@@ -535,7 +535,7 @@
     "index": 8,
     "name": "8",
     "page_id": "u21c",
-    "preview": "sha256:4b3ba2b3f2456db9",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "u217",
     "width": 595.2755905510003
    }

@@ -394,7 +394,7 @@
     "index": 1,
     "name": "1",
     "page_id": "ud5",
-    "preview": "sha256:34087a8ebc6dbef4",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "ud0",
     "width": 595.2755905509999
    },
@@ -421,7 +421,7 @@
     "index": 2,
     "name": "2",
     "page_id": "u153",
-    "preview": "sha256:b0d11f95fd854451",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "u148",
     "width": 595.2755905509999
    },
@@ -448,7 +448,7 @@
     "index": 3,
     "name": "3",
     "page_id": "u1ed",
-    "preview": "sha256:b31648402ad09832",
+    "preview": "image:JPEG 990x1400",
     "spread_id": "u1e2",
     "width": 595.2755905509999
    }
