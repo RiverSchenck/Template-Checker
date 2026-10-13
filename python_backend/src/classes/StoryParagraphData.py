@@ -1,11 +1,11 @@
-from xml.etree.ElementTree import Element
 from typing import Dict, List
 from src.classes.PropertyBase import PropertyBase
+from src.model.text import Paragraph
 
 
 class StoryParagraphData:
     """A class to represent and manage paragraph styles."""
-    def __init__(self, index, par_style_range: Element, styles_parser: 'StylesParser', fonts_parser: 'FontsParser'):
+    def __init__(self, index, par_style_range: Paragraph, styles_parser: 'StylesParser', fonts_parser: 'FontsParser'):
         self.style_id: str = ''
         self.normalized_style_id: str = ''
         self.index = index
@@ -30,25 +30,20 @@ class StoryParagraphData:
         self.content: str = ''
         self._add_used_paragraph_font(fonts_parser)
 
-    def _extract_paragraph_data(self, par_style_range: Element, styles_parser: 'StylesParser'):
-        self.style_id = par_style_range.get(
-            "AppliedParagraphStyle")
+    def _extract_paragraph_data(self, paragraph: Paragraph, styles_parser: 'StylesParser'):
+        self.style_id = paragraph.style
         self.normalized_style_id = self.normalize_style_id(self.style_id)
+        self.container = paragraph.container  # body | table | footnote
 
         # Get properties of the paragraph style from Styles.xml
         self.all_properties = styles_parser.get_all_properties(
             self.style_id)
 
-        # Extract attribute overrides from par_style_range
-        self.overrides = {}
-        for attr, value in par_style_range.attrib.items():
-            if attr != "AppliedParagraphStyle":
-                self.overrides[attr] = value
+        # Attributes set on the paragraph range (overrides)
+        self.overrides = dict(paragraph.attrs)
         # Formatting stored as elements on the range itself (e.g. AppliedFont); not counted as overrides here,
         # only used to resolve a run's effective value.
-        properties = par_style_range.find("Properties")
-        self.local_properties: Dict[str, str] = (
-            {prop.tag: prop.text for prop in properties if isinstance(prop.tag, str)} if properties is not None else {})
+        self.local_properties: Dict[str, str] = dict(paragraph.properties)
 
     def _add_used_paragraph_font(self, fonts_parser: 'FontsParser'):
         fonts_parser.add_used_font_family(

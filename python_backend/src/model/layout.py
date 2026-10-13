@@ -16,7 +16,7 @@ GRAPHIC_FRAME_TAGS = frozenset({'Rectangle', 'Oval', 'Polygon'})
 PASTED_TYPES = ('PDF', 'EPS', 'Image', 'SVG')  # graphics pasted into a frame, stored inline (no Link)
 
 
-def _tag(element) -> str:
+def local_tag(element) -> str:
     tag = element.tag if isinstance(element.tag, str) else ''
     return tag.split('}', 1)[-1]
 
@@ -99,8 +99,8 @@ def _pasted(frame) -> Optional[str]:
     return None
 
 
-def _item(element) -> PageItem:
-    kind = _tag(element)
+def read_item(element) -> PageItem:
+    kind = local_tag(element)
     has_link = element.find('.//Link') is not None
     common = dict(kind=kind, id=element.get('Self') or '', transform=element.get('ItemTransform'),
                   object_style=element.get('AppliedObjectStyle'),
@@ -116,7 +116,7 @@ def _item(element) -> PageItem:
                      no_line_breaks=_pref(element, 'TextFramePreference', 'UseNoLineBreaksForAutoSizing'))
 
 
-def _link(element) -> Link:
+def read_link(element) -> Link:
     graphic = element.getparent()
     frame = graphic.getparent() if graphic is not None else None
     uri = unquote_uri(element.get('LinkResourceURI'))
@@ -134,20 +134,20 @@ def read_spread(element, is_master: bool = False) -> Spread:
                   for page in element.findall('Page') if page.get('Self'))
     items, links = [], []
     for child in element.iter():
-        tag = _tag(child)
+        tag = local_tag(child)
         if tag in ITEM_TAGS:
-            items.append(_item(child))
+            items.append(read_item(child))
         elif tag == 'Link':
-            links.append(_link(child))
+            links.append(read_link(child))
     return Spread(spread_id, is_master, pages, tuple(items), tuple(links),
-                  tuple(_tag(child) for child in element if _tag(child)))
+                  tuple(local_tag(child) for child in element if local_tag(child)))
 
 
 def _sources(idml_folder: str, designmap, kind: str, folder: str) -> List[str]:
     """Paths of the spread (kind='Spread') or master spread files, in designmap order. Without a designmap
     entry for them, the folder's files sorted by name."""
     sources = [element.get('src') for element in (designmap.iter() if designmap is not None else ())
-               if _tag(element) == kind and element.get('src')]
+               if local_tag(element) == kind and element.get('src')]
     if sources:
         return [path for path in (safe_xml.within(idml_folder, src) for src in sources)
                 if path and os.path.exists(path)]

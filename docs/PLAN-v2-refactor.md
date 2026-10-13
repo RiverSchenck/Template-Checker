@@ -307,6 +307,11 @@ read correctly (B6). PR 0.3 xfails flip to passing. **Expected golden diff: none
 audit found no hyperlinks/notes/anchored objects in it, only table cells — confirm table-cell grouping is
 unchanged; if not, document each change). Decide with River: are Note/Footnote paragraphs checked? Default: notes
 skipped (editorial), footnotes and table cells checked as text but grouped separately.
+*Done (2026-10-13):* B1, B2, B4, B6 fixed by feeding the old story classes from the walker; notes skipped, pending
+deletions skipped, footnotes and table cells checked (River). Table cells stay in the same v1 paragraph groups:
+grouping them separately turned "whole frame unstyled" errors into per-range errors in 12 packages, a rule change;
+v2 keeps `container` instead. `Br` → `\n` in its own commit (text-only diff in 39 goldens). **B3 moved to PR 2.4**
+(River): the walker collects items placed in text, but image/frame checks only see them once they read `Document`.
 
 **PR 2.4 Document + loader; checks read the model (L, refactor).** `model/document.py`, `model/subject.py`,
 `model/load.py`: indexes (item → page, frame ↔ story, link ↔ image, used faces, totals) computed once; no
@@ -314,6 +319,8 @@ post-construction mutation. Port every check to `Document` (iterators replace th
 one `inherited()` builder; `at_item` replaces copied location blocks). Old parsers kept only for the parity test.
 Golden diff: **0**. Fixes B5 and B8 in a **separate follow-up commit** in the same PR with its own expected diff
 (B5: one fewer duplicate transform issue per affected Oval/Polygon frame; B8: none in corpus).
+Also fixes **B3** (moved from PR 2.3): `Document` includes page items and links placed in stories, so image and frame
+checks see them; the three PR 0.3 B3 xfails flip to passing (expected diff: none in the corpus, which has none).
 
 **PR 2.5 Delete the old model (M).** Remove `classes/` (except what moved), `parsers/`, old `document.py`,
 `PropertyBase`, MetadataParser disk writes (S4-adjacent), dead code from §2.3; move `States` to

@@ -852,7 +852,7 @@
         "x": 626.0,
         "y": 590.91
        },
-       "context": "Text: Ben jonsen — Overrides: FontStyle: Black, AppliedFont: Locator Display, Leading: 48, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
+       "context": "Text: Ben jonsen — Overrides: AppliedFont: Locator Display, Leading: 48, FontStyle: Black, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
        "context_details": {
         "overrides": {
          "AppliedFont": "Locator Display",
@@ -912,7 +912,7 @@
         "x": 626.0,
         "y": 642.97
        },
-       "context": "Text: Process Engineer — Overrides: FontStyle: Light, AppliedFont: Locator Display, Leading: 48, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
+       "context": "Text: Process Engineer — Overrides: AppliedFont: Locator Display, Leading: 48, FontStyle: Light, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
        "context_details": {
         "overrides": {
          "AppliedFont": "Locator Display",
