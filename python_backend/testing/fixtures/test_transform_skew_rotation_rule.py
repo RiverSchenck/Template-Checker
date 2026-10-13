@@ -1,6 +1,7 @@
 """Transforms are judged by their end state. A skew is reported whether or not the item is also rotated:
 Frontify mispositions rotated items that are skewed (PageItem.php getTransformationData skips the
-y-correction), so rotation + skew is an error, not a rotation warning (docs/rules-review-2026-10-12.md)."""
+y-correction), so rotation + skew is an error. A rotation on its own is fine: Frontify carries it over
+(docs/checker-rules.md, decision 8)."""
 import math
 
 import pytest
@@ -38,7 +39,7 @@ def test_skew_without_rotation():
 
 
 @pytest.mark.parametrize('matrix', [rotation(30), rotation(-90), rotation(45, sx=2, sy=0.5), (-1, 0, 0, -1)])
-def test_rotation_only_is_a_warning(matrix):
+def test_rotation_only_is_not_an_issue(matrix):
     result = classify_page_item_transform(*matrix)
     assert result.kind == TransformKind.ROTATION
     assert not result.is_error
@@ -67,3 +68,13 @@ def test_rotated_and_skewed_image_frame_is_an_error(tmp_path):
     pkg.image('photo.jpg', frame_transform=f'{a} {b} {c} {d} 0 -396')
     run = run_checker(pkg.write(tmp_path))
     assert [i.severity for i in run.of('IMAGE_TRANSFORMATION_CONTAINER')] == ['errors']
+
+
+def test_rotated_items_raise_nothing(tmp_path):
+    a, b, c, d = rotation(30)
+    pkg = PackageBuilder()
+    pkg.text_frame(pkg.story([('Body', 'Rotated')]), transform=f'{a} {b} {c} {d} 0 -396')
+    pkg.image('photo.jpg', frame_transform=f'{a} {b} {c} {d} 0 -396', image_transform=f'{a} {b} {c} {d} 0 0')
+    run = run_checker(pkg.write(tmp_path))
+    assert run.of('PAGE_ITEM_TRANSFORMATION') == []
+    assert run.of('IMAGE_TRANSFORMATION_IMAGE') == run.of('IMAGE_TRANSFORMATION_CONTAINER') == []

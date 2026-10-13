@@ -2,7 +2,7 @@ import pytest
 import os
 from testing.checker_setup import setup_instance
 from src.classes.States import States
-from src.error_handling.ValidationClassifier import ValidationWarning, ValidationError
+from src.error_handling.ValidationClassifier import ValidationError
 from collections import Counter
 
 def format_counter_diff(expected: Counter, actual: Counter, label: str) -> tuple:
@@ -33,11 +33,15 @@ def format_counter_diff(expected: Counter, actual: Counter, label: str) -> tuple
     summary = f"DIFF: {', '.join(summary_parts)}"
     return (detailed, summary)
 
+# Image and frame issues are counted together under this name (see combine_image_transformation_counts).
+IMAGE_TRANSFORMATION = 'IMAGE_TRANSFORMATION'
+
+# Rotations are fine (Frontify carries them over), so these packages' rotations no longer raise warnings.
 EXPECTED_OUTCOMES = {
     "Image Transformation Folder.zip": {
         "errors": [
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Flip (frame uf3)
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Horizontal flip (frame uea, -1 0 0 1; was reported as a 180 degree rotation)
+            IMAGE_TRANSFORMATION,  # Flip (frame uf3)
+            IMAGE_TRANSFORMATION,  # Horizontal flip (frame uea, -1 0 0 1; was reported as a 180 degree rotation)
         ],
         "warnings": [
         ]
@@ -46,30 +50,24 @@ EXPECTED_OUTCOMES = {
         "errors": [
         ],
         "warnings": [
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",  # Rotation
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",  # Rotation
         ]
     },
     "4 err 2 warn transformations.zip": {
         "errors": [
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Shear
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Flip
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Flip
+            IMAGE_TRANSFORMATION,  # Shear
+            IMAGE_TRANSFORMATION,  # Flip
+            IMAGE_TRANSFORMATION,  # Flip
         ],
         "warnings": [
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",  # Rotation
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",  # Rotation
         ]
     },
     "3 err 2 warn transformation.zip": {
         "errors": [
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Flip
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Flip
-            f"{ValidationError.IMAGE_TRANSFORMATION.value}",  # Embedded
+            IMAGE_TRANSFORMATION,  # Flip
+            IMAGE_TRANSFORMATION,  # Flip
+            IMAGE_TRANSFORMATION,  # Embedded
         ],
         "warnings": [
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",  # Rotation
-            f"{ValidationWarning.IMAGE_TRANSFORMATION.value}",  # Rotation
         ]
     }
 }
@@ -106,7 +104,7 @@ def test_zip_check_fail(testcase_zip):
     expected_infos = EXPECTED_OUTCOMES[filename].get("infos", [])
 
     # Combine IMAGE_TRANSFORMATION_IMAGE and IMAGE_TRANSFORMATION_CONTAINER counts
-    # for comparison with expected outcomes (which use the old IMAGE_TRANSFORMATION type)
+    # for comparison with expected outcomes
     def combine_image_transformation_counts(counter):
         combined = Counter()
         image_transformation_total = 0
@@ -117,26 +115,13 @@ def test_zip_check_fail(testcase_zip):
             else:
                 combined[key] = value
         if image_transformation_total > 0:
-            combined[ValidationError.IMAGE_TRANSFORMATION.value] = image_transformation_total
-        return combined
-
-    def combine_image_transformation_warning_counts(counter):
-        combined = Counter()
-        image_transformation_total = 0
-        for key, value in counter.items():
-            if key in [ValidationWarning.IMAGE_TRANSFORMATION_IMAGE.value,
-                       ValidationWarning.IMAGE_TRANSFORMATION_CONTAINER.value]:
-                image_transformation_total += value
-            else:
-                combined[key] = value
-        if image_transformation_total > 0:
-            combined[ValidationWarning.IMAGE_TRANSFORMATION.value] = image_transformation_total
+            combined[IMAGE_TRANSFORMATION] = image_transformation_total
         return combined
 
     actual_errors_count = combine_image_transformation_counts(Counter(actual_errors))
     expected_errors_count = Counter(expected_errors)
 
-    actual_warnings_count = combine_image_transformation_warning_counts(Counter(actual_warnings))
+    actual_warnings_count = Counter(actual_warnings)
     expected_warnings_count = Counter(expected_warnings)
 
     actual_infos_count = Counter(actual_infos)

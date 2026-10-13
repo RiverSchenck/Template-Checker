@@ -90,15 +90,6 @@ GUIDES: dict[str, dict[str, CheckGuide]] = {
             ),
             subject='image',
         ),
-        'IMAGE_TRANSFORMATION': CheckGuide(
-            title='Image is flipped or skewed',
-            why='Frontify can’t reproduce flipped or skewed images, so they’ll look different or break when edited.',
-            fix=(
-                'Select the image and choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip).',
-                'If you need the flipped look, save a flipped copy of the image file instead.',
-            ),
-            subject='image',
-        ),
         'IMAGE_TRANSFORMATION_IMAGE': CheckGuide(
             title='Image is flipped or skewed',
             why='Frontify can’t reproduce flipped or skewed images, so they’ll look different or break when edited.',
@@ -283,38 +274,6 @@ GUIDES: dict[str, dict[str, CheckGuide]] = {
                 'Delete the unused files from the Links folder before zipping the package.',
             ),
             subject='image',
-        ),
-        'IMAGE_TRANSFORMATION': CheckGuide(
-            title='Image is rotated',
-            why='Rotation works, but the image may look slightly different in Frontify than in InDesign.',
-            fix=(
-                'Check the result in Frontify. If it looks off, save a rotated copy of the image and place it unrotated.',
-            ),
-            subject='image',
-        ),
-        'IMAGE_TRANSFORMATION_IMAGE': CheckGuide(
-            title='Image is rotated',
-            why='Rotation works, but the image may look slightly different in Frontify than in InDesign.',
-            fix=(
-                'Check the result in Frontify. If it looks off, save a rotated copy of the image and place it unrotated.',
-            ),
-            subject='image',
-        ),
-        'IMAGE_TRANSFORMATION_CONTAINER': CheckGuide(
-            title='Image frame is rotated',
-            why='Rotation works, but the frame may look slightly different in Frontify than in InDesign.',
-            fix=(
-                'Check the result in Frontify. If it looks off, remove the rotation from the frame.',
-            ),
-            subject='image',
-        ),
-        'PAGE_ITEM_TRANSFORMATION': CheckGuide(
-            title='Item is rotated',
-            why='Rotation works, but the item may look slightly different in Frontify than in InDesign.',
-            fix=(
-                'Check the result in Frontify. If it looks off, remove the rotation.',
-            ),
-            subject='frame',
         ),
         'DOCUMENT_BLEED': CheckGuide(
             title='Document has bleed',

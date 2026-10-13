@@ -20,7 +20,7 @@ class TransformClassification:
 
     @property
     def is_error(self) -> bool:
-        """Flips and skews are errors; a rotation on its own is a warning."""
+        """Flips and skews are errors. A rotation on its own is fine: Frontify carries it over."""
         return self.kind in (TransformKind.FLIP_HORIZONTAL, TransformKind.FLIP_VERTICAL, TransformKind.FLIP,
                              TransformKind.SKEW)
 

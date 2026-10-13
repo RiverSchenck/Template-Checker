@@ -10,7 +10,7 @@ Rules marked *assumed* are my reading of the code and help articles; please conf
 | Kerning (character) | Same, for the character style. | Error | ✅ Confirmed |
 | Composer | The paragraph **style's** composer (following `BasedOn`) must be single-line: *HL Single* (Adobe) or *HL Single Optyca* (World-Ready). Reported once per style, saying which style it was inherited from. | Warning | ✅ Style-only confirmed · *once per style assumed* · World-Ready Single-line allowed (2026-10-12) |
 | Auto-size | Width-based auto-size (WidthOnly, HeightAndWidth) must have "No Line Breaks" on, because Frontify always behaves that way. Any reference point is fine. | Error | ✅ Confirmed |
-| Image transformation | Judge the **end state**. Only rotated (and/or scaled) → warning. Mirrored (determinant `a·d − b·c` < 0) → flip error. Axes not perpendicular → skew error, **whether or not it's also rotated**. Frame and image inside it are reported separately. Same rule for other page items. | Warning / Error | ✅ End-state rule confirmed · rotated + skewed = skew (2026-10-12) · *open: an image flipped inside a frame that's also flipped (they cancel). Today both are reported as flips.* |
+| Image transformation | Judge the **end state**. Mirrored (determinant `a·d − b·c` < 0) → flip error. Axes not perpendicular → skew error, **whether or not it's also rotated**. Only rotated (and/or scaled) → no issue. Frame and image inside it are reported separately. Same rule for other page items. | Error | ✅ End-state rule confirmed · rotated + skewed = skew (2026-10-12) · rotation alone is no issue (2026-10-12) · *open: an image flipped inside a frame that's also flipped (they cancel). Today both are reported as flips.* |
 | Grid alignment | The paragraph style's `GridAlignment` (following `BasedOn`) must be None. Once per style. | Error | *Assumed* |
 | Text columns | A text frame with more than one column. | Error | *Assumed* |
 | Text wrap | Any page item whose wrap mode isn't None: text frames (`TEXT_WRAP`), and images, shapes, lines and groups (`TEXT_WRAP_ITEM`), which is where InDesign usually sets wrap. An item with no wrap setting has none (InDesign's default). | Error | ✅ Confirmed (2026-10-12) |
@@ -52,7 +52,7 @@ reaches the template (no error, no warning). "Our rule" is the checker's current
 
 | | Frontify | Our rule | Fit |
 |-|----------|----------|-----|
-| Rotation | **Supported.** `utility/Idml/PageItem.php:590-631` decomposes the matrix; rotation becomes CSS `rotate()`. Every layout operation afterwards understands rotation only: `module/IntermediateJson/Core/Domain/Resize/Write/ItemGeometry.php:179-207` reads `rotate` and nothing else; `BoxMapper.php` "the renderer applies the rotation itself". | Warning | ✅ |
+| Rotation | **Supported.** `utility/Idml/PageItem.php:590-631` decomposes the matrix; rotation becomes CSS `rotate()`. Every layout operation afterwards understands rotation only: `module/IntermediateJson/Core/Domain/Resize/Write/ItemGeometry.php:179-207` reads `rotate` and nothing else; `BoxMapper.php` "the renderer applies the rotation itself". Position is corrected for it (`PageItem.php:608-621`), for groups too (`Group.php:98-118`) and images inside frames (`Rectangle.php:80-88`). | No issue (since 2026-10-12) | ✅ carried over faithfully |
 | Flip (mirror) | **Partial, fragile.** There is no flip concept: a mirror only comes out of the decomposition as a 180° rotation plus a negative `scaleY` (`Transformation.php:52-62`), then hand-tuned position fixes ("Correct upside-down elements", `PageItem.php:617-620`). Resizing ignores it. | Error | ✅ |
 | Skew | **Partial, fragile.** Emitted as CSS `skew()` with position corrections (`PageItem.php:602-606`); when the item is also rotated, the y-correction for the rotation is skipped (`PageItem.php:614-616`, "Don't apply y-translation if skewed"), so rotated + skewed items are mispositioned. Invisible to resize/layout. | Error (rotated or not) | ✅ |
 | Scale | Emitted as CSS `scale()` (`PageItem.php:627-628, 634-640`); invisible to resize/layout. | Not checked | ⚠️ gap |
@@ -127,7 +127,11 @@ reaches the template (no error, no warning). "Our rule" is the checker's current
 5. **Text wrap** — any item with wrap is an error, without checking whether it overlaps text.
 6. **Superscript/subscript** — error; **baseline shift** — warning; both per text run on the effective value.
 7. **Adobe Fonts** — an error only when the style's file isn't packaged; reported instead of "font missing",
-   per style (a family can mix Adobe and desktop styles).
+   per style (a family can mix Adobe and desktop styles). The copy says Adobe Fonts aren't supported and a
+   desktop version is needed.
+8. **Rotation** — no issue: Frontify carries it over. The rotation warnings (`IMAGE_TRANSFORMATION_IMAGE`,
+   `IMAGE_TRANSFORMATION_CONTAINER`, `PAGE_ITEM_TRANSFORMATION` as warnings) are retired; those names now only mean
+   flip/skew errors. Older analytics rows still hold the retired warnings.
 
 ### Proposed: font index check (not built)
 

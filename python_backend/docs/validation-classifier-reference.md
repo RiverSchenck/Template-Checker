@@ -19,6 +19,7 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 | `MASTERPAGE` | error | Master Page can't be used. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504 | Yes |
 | `WARNING` | warning | *(No default message on this member; call site supplies text.)* | — | Yes — e.g. missing `MasterSpreads` directory |
 | `DOCUMENT_BLEED` | warning | InDesign defined bleed is applied. | https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based | Yes |
+| `PAGE_ITEM_TRANSFORMATION` | error | Page item transformations (flip/skew) are not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4 | Yes — flipped or skewed text frames, shapes and groups |
 | `TEXT_WRAP_ITEM` | error | Text Wrap is not supported. | https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12 | Yes — images, shapes, lines and groups with wrap |
 
 ---
@@ -80,15 +81,11 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 |------------|-------|-------------|--------------|-----------------|
 | `IMAGE_INCLUDED` | error | Package missing image link. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1 | Yes |
 | `EMBEDDED_IMAGE` | error | Embedded images are not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d | Yes |
-| `IMAGE_TRANSFORMATION` | error | Image transformations are not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4 | No — checker emits `IMAGE_TRANSFORMATION_IMAGE` / `IMAGE_TRANSFORMATION_CONTAINER` instead |
 | `IMAGE_TRANSFORMATION_IMAGE` | error | Image transformations are not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4 | Yes — image (item) transform |
 | `IMAGE_TRANSFORMATION_CONTAINER` | error | Image transformations are not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4 | Yes — container transform |
 | `PASTED_GRAPHICS` | error | Pasted graphics are not supported | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d | Yes |
 | `OBJECT_STYLE_IMAGE` | error | Object styles are not supported. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf | Yes |
 | `UNUSED_IMAGE` | warning | Image(s) in package are unused making the package larger in size. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2 | Yes |
-| `IMAGE_TRANSFORMATION` | warning | Element has been rotated. You may see slight discrepencies between export and editing. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4 | No — checker emits `IMAGE_TRANSFORMATION_IMAGE` / `IMAGE_TRANSFORMATION_CONTAINER` instead |
-| `IMAGE_TRANSFORMATION_IMAGE` | warning | Image has been rotated. You may see slight discrepencies between export and editing. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4 | Yes — rotation on image |
-| `IMAGE_TRANSFORMATION_CONTAINER` | warning | Image container has been rotated. You may see slight discrepencies between export and editing. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4 | Yes — rotation on container |
 | `LARGE_IMAGE` | info | Image is large. Verify that this large of an image is needed. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2 | Yes |
 
 ---
@@ -96,5 +93,5 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 ## Notes
 
 - **`ValidationWarning.WARNING`:** Not assigned a `ValidationCategory` in code (`WARNING = auto()` only). It is documented under **General** alongside other package / document-level items.
-- **Duplicate names across levels:** `IMAGE_TRANSFORMATION` exists on both `ValidationError` and `ValidationWarning` with different default messages; only the `*_IMAGE` / `*_CONTAINER` variants are emitted from `FrontifyChecker.image_transformation_check`.
+- **Rotation is not an issue** (Frontify carries it over). The rotation warnings were retired on 2026-10-12, so each transformation name now means one thing: a flip or skew error.
 - **Help links:** Some entries use `http://` in source; consider normalizing to `https://` for user-facing docs.

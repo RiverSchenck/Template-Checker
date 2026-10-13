@@ -6,7 +6,7 @@ from src.checks.layout import page_item_transformation_check
 from src.document import ParsedDocument
 from src.error_handling.ErrorHandling import ValidationResult
 from src.parsers.SpreadsParser import SpreadsParser
-from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning
+from src.error_handling.ValidationClassifier import ValidationError
 from src.helpers.page_item_transform import (
     parse_item_transform,
     classify_page_item_transform,
@@ -85,4 +85,4 @@ def test_page_item_transformation_check_skew_textframe(tmp_path):
 
     errors = results.get_error_types()
     assert errors.count(ValidationError.PAGE_ITEM_TRANSFORMATION.value) == 1
-    assert ValidationWarning.PAGE_ITEM_TRANSFORMATION.value not in results.get_warning_types()
+    assert results.get_warning_types() == []
