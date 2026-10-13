@@ -442,6 +442,11 @@ Also in this PR (River): the report's "checked" line in the singular for one, fi
 analytics sample data worded from the catalogue. **Split off to PR 6.1b (River):** the app calls the pipeline (and
 `FrontifyChecker` goes, with the tests that fake it); checks report v2 checks and subjects, so `results/layout.py`,
 `Category`, the v1 parts of `classifiers.py` and `catalogue.V1_KEYS` go and issues merge on the subject.
+*Done 6.1b (2026-10-13):* the app runs `pipeline/run.run()` itself (`app/utils.run_check(path, workspace, ...)`,
+`pipeline/run.zip_idml` for the XML export) and `src/classes/` is gone; checks report catalogue keys
+(`report(results, 'KERNING', ..., subject=...)`), the catalogue gives severity and `one_per_range`, issues merge on
+(check, subject, page, item); `classifiers.py`, `Category`, `V1_KEYS`, `Issue.identifier` and `results/layout.py`
+are gone (`results_v2` reads the Document and the previews). Goldens, summaries and the package table unchanged.
 
 **PR 6.2 Corpus dedupe (S).** Move unique zips to `testing/packages/` (77 duplicates removed, ~400 MB working tree,
 ~40% golden time); goldens keyed by package; update references. Golden diff: file moves only.

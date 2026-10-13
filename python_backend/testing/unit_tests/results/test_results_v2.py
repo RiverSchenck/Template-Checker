@@ -6,7 +6,6 @@ from src.pipeline.run import run
 from src.pipeline.workspace import run_workspace
 from src.results import catalogue
 from src.results.models import SCHEMA_PATH, Results, schema_json
-from src.results.serialize import results_v2
 from testing.fixtures.idml_builder import PackageBuilder
 from testing.golden.golden import load, packages
 
@@ -16,7 +15,7 @@ FLIP = '-1 0 0 1 0 -396'
 def check(package_path: str) -> dict:
     with run_workspace() as workspace:
         outcome = run(package_path, workspace, previews=False)
-    results = results_v2(outcome.results, outcome.layout, template_name=outcome.template_name, totals=outcome.totals)
+    results = outcome.json()
     Results.model_validate(results)
     for issue in results['issues']:
         entry = catalogue.BY_KEY[issue['check']]

@@ -21,7 +21,6 @@ from src.model.load import load_document
 from src.pipeline.intake import Intake, Rejected, unpack_idml, unpack_package
 from src.pipeline.previews import page_previews
 from src.pipeline.workspace import Workspace
-from src.results.layout import DocumentLayout, pages_from_spreads, text_boxes_from_stories
 from src.results.results import Results
 from src.results.serialize import results_v2
 
@@ -44,7 +43,7 @@ class StageTracker:
 @dataclass(frozen=True)
 class Loaded:
     document: Document
-    layout: DocumentLayout      # pages, geometry, text boxes and (when asked) previews for the results
+    previews: Dict[str, str]    # page Self -> base64 JPEG, when asked for
 
 
 def load(intake: Intake, results: Results, *, previews: bool) -> Loaded:
@@ -69,12 +68,7 @@ def load(intake: Intake, results: Results, *, previews: bool) -> Loaded:
     except (etree.XMLSyntaxError, safe_xml.UnsafeXMLError):
         logger.info('Damaged XML in the .idml', exc_info=True)
         raise Rejected(States.PARSE_XML, 'ERROR', DAMAGED_IDML)
-    layout = pages_from_spreads(document)
-    layout.text_boxes = text_boxes_from_stories(document)
-    layout.geometry = document.geometry
-    if previews:
-        layout.previews = page_previews(document, intake)
-    return Loaded(document, layout)
+    return Loaded(document, page_previews(document, intake) if previews else {})
 
 
 def run_check(check: Check, document: Document, results: Results) -> None:
@@ -102,10 +96,10 @@ class RunOutcome:
     template_name: str
     stage: States                           # RESULTS when every check ran, else the stage it was rejected at
     results: Results
-    layout: DocumentLayout = field(default_factory=DocumentLayout)
     totals: Dict[str, int] = field(default_factory=dict)
     document: Optional[Document] = None
     idml_folder: Optional[str] = None       # the unpacked .idml (for the XML export), once intake got that far
+    previews: Dict[str, str] = field(default_factory=dict)  # page Self -> base64 JPEG, when asked for
 
     @property
     def completed(self) -> bool:
@@ -113,7 +107,8 @@ class RunOutcome:
 
     def json(self) -> dict:
         """Results v2: every issue, with what the frontend needs to show and highlight it."""
-        return results_v2(self.results, self.layout, template_name=self.template_name, totals=self.totals)
+        return results_v2(self.results, self.document, template_name=self.template_name, totals=self.totals,
+                          previews=self.previews)
 
 
 def run(zip_path: str, workspace: Workspace, *, previews: bool = True, checks: Iterable[Check] = CHECKS,
@@ -136,8 +131,8 @@ def run(zip_path: str, workspace: Workspace, *, previews: bool = True, checks: I
         tracker.stage = check.state
         run_check(check, loaded.document, results)
     tracker.stage = States.RESULTS
-    return RunOutcome(template_name, States.RESULTS, results, loaded.layout, count_totals(loaded.document),
-                      loaded.document, intake.idml_folder)
+    return RunOutcome(template_name, States.RESULTS, results, count_totals(loaded.document), loaded.document,
+                      intake.idml_folder, loaded.previews)
 
 
 def zip_idml(idml_folder: Optional[str], workspace: Workspace) -> Optional[str]:
