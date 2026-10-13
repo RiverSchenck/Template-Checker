@@ -140,7 +140,7 @@ class ValidationError(Enum):
                      "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
                      "Superscript/Subscript", ValidationCategory.CHAR_STYLE)
     ADOBE_FONT = (auto(),
-                  "Adobe Fonts must be packaged. Frontify only loads fonts included in the package.",
+                  "Adobe Fonts are not supported. Use a desktop version of the font (OTF or TTF) instead.",
                   "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
                   "Adobe Font", ValidationCategory.FONTS)
 

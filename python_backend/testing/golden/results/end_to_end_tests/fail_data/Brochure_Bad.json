@@ -226,7 +226,7 @@
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
     "key": "ADOBE_FONT",
     "label": "Adobe Font",
-    "message": "Adobe Fonts must be packaged. Frontify only loads fonts included in the package.",
+    "message": "Adobe Fonts are not supported. Use a desktop version of the font (OTF or TTF) instead.",
     "severity": "errors"
    },
    {
@@ -1547,7 +1547,7 @@
    "ADOBE_FONT": {
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
     "label": "Adobe Font",
-    "message": "Adobe Fonts must be packaged. Frontify only loads fonts included in the package."
+    "message": "Adobe Fonts are not supported. Use a desktop version of the font (OTF or TTF) instead."
    },
    "COMPOSER": {
     "help_article": "http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
