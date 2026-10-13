@@ -9,280 +9,280 @@
     "category": "general",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
     "key": "MASTERPAGE",
-    "label": "Masterpage",
-    "message": "Master Page can't be used.",
+    "label": "Items on a master page",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
     "key": "PARAGRAPH_STYLE",
-    "label": "Paragraph Style",
-    "message": "Text found missing paragraph styles.",
+    "label": "Text without a paragraph style",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
     "key": "PARAGRAPH_STYLE_TEXT_BOX",
-    "label": "Paragraph Style",
-    "message": "No paragraph styles were used.",
+    "label": "Text frame has no paragraph style",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "fonts",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
     "key": "FONTS_INCLUDED",
-    "label": "Fonts Included",
-    "message": "Package is missing fonts.",
+    "label": "Font missing from the package",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "fonts",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
     "key": "OTF_TTF_FONT",
-    "label": "OTF/TTF Font",
-    "message": "Only OTF or TTF fonts are supported.",
+    "label": "Unsupported font format",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "fonts",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
     "key": "VARIABLE_FONT",
-    "label": "Variable Font",
-    "message": "Variable fonts are not supported",
+    "label": "Variable font used",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "images",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
     "key": "IMAGE_INCLUDED",
-    "label": "Images Included",
-    "message": "Package missing image link.",
+    "label": "Linked image missing from the package",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "images",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
     "key": "EMBEDDED_IMAGE",
-    "label": "Embedded Image",
-    "message": "Embedded images are not supported.",
+    "label": "Embedded image",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "images",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
     "key": "IMAGE_TRANSFORMATION_IMAGE",
-    "label": "Image Transformation (Image)",
-    "message": "Image transformations are not supported.",
+    "label": "Image is flipped or skewed",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "images",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
     "key": "IMAGE_TRANSFORMATION_CONTAINER",
-    "label": "Image Transformation (Container)",
-    "message": "Image transformations are not supported.",
+    "label": "Image frame is flipped or skewed",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "general",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
     "key": "PAGE_ITEM_TRANSFORMATION",
-    "label": "Page Item Transformation",
-    "message": "Page item transformations (flip/skew) are not supported.",
+    "label": "Item is flipped or skewed",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
     "key": "TABLE",
-    "label": "Table",
-    "message": "Tables are not supported",
+    "label": "Table in a text frame",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "images",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
     "key": "PASTED_GRAPHICS",
-    "label": "Pasted Graphics",
-    "message": "Pasted graphics are not supported",
+    "label": "Pasted graphic",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
     "key": "AUTO_SIZE_TEXT_BOX",
-    "label": "Auto Sizing Text Box",
-    "message": "Auto-size text boxes were not set up properly",
+    "label": "Auto-size text frame set up incorrectly",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
     "key": "TEXT_COLUMNS",
-    "label": "Text Column",
-    "message": "Text columns are not supported",
+    "label": "Text frame has columns",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
     "key": "LINKED_TEXT_FRAME",
-    "label": "Linked Text Frame",
-    "message": "Linked (threaded) text frames are not supported.",
+    "label": "Threaded (linked) text frames",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
     "key": "OBJECT_STYLE_TEXT",
-    "label": "Object Style",
-    "message": "Object styles are not supported.",
+    "label": "Object style on a text frame",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "images",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
     "key": "OBJECT_STYLE_IMAGE",
-    "label": "Object Style",
-    "message": "Object styles are not supported.",
+    "label": "Object style on an image frame",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "par_styles",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
     "key": "GRID_ALIGNMENT",
-    "label": "Grid Alignment",
-    "message": "Grid alignment is not supported",
+    "label": "Text aligned to the baseline grid",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "par_styles",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
     "key": "KERNING",
-    "label": "Kerning",
-    "message": "Kerning must be 'Metrics'",
+    "label": "Kerning isn’t set to Metrics",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "char_styles",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
     "key": "KERNING_CHAR",
-    "label": "Kerning",
-    "message": "Kerning must be 'Metrics'",
+    "label": "Kerning isn’t set to Metrics",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12",
     "key": "TEXT_WRAP",
-    "label": "Text Wrap",
-    "message": "Text Wrap is not supported.",
+    "label": "Text wrap applied",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "par_styles",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf",
     "key": "FILL_TINT",
-    "label": "Color Fill Tint (Beta)",
-    "message": "Fill Tint must be 100. (This may be inaccurate, testing currently)",
+    "label": "Text color tint isn’t 100%",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "char_styles",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_5cc6e214cf",
     "key": "FILL_TINT_CHAR",
-    "label": "Color Fill Tint",
-    "message": "Fill Tint must be 100. Frontify shows text colours without their tint.",
+    "label": "Text color tint isn’t 100%",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "general",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12",
     "key": "TEXT_WRAP_ITEM",
-    "label": "Text Wrap (Object)",
-    "message": "Text Wrap is not supported.",
+    "label": "Text wrap applied",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "char_styles",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
     "key": "TEXT_POSITION",
-    "label": "Superscript/Subscript",
-    "message": "Superscript and subscript are not supported.",
+    "label": "Superscript or subscript text",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "fonts",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
     "key": "ADOBE_FONT",
-    "label": "Adobe Font",
-    "message": "Adobe Fonts are not supported. Use a desktop version of the font (OTF or TTF) instead.",
+    "label": "Adobe Font used",
+    "message": "",
     "severity": "errors"
    },
    {
     "category": "par_styles",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
     "key": "HYPHENATION",
-    "label": "Hyphenation",
-    "message": "Hyphenation is not supported.",
+    "label": "Hyphenation is on",
+    "message": "",
     "severity": "warnings"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
     "key": "OVERRIDE",
-    "label": "Override",
-    "message": "Overrides are not supported.",
+    "label": "Text formatted outside its paragraph style",
+    "message": "",
     "severity": "warnings"
    },
    {
     "category": "images",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
     "key": "UNUSED_IMAGE",
-    "label": "Unused Image",
-    "message": "Image(s) in package are unused making the package larger in size.",
+    "label": "Unused images in the package",
+    "message": "",
     "severity": "warnings"
    },
    {
     "category": "general",
     "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
     "key": "DOCUMENT_BLEED",
-    "label": "Document Bleed",
-    "message": "InDesign defined bleed is applied.",
+    "label": "Document has bleed",
+    "message": "",
     "severity": "warnings"
    },
    {
     "category": "par_styles",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
     "key": "COMPOSER",
-    "label": "Composer",
-    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur.",
+    "label": "Paragraph Composer used",
+    "message": "",
     "severity": "warnings"
    },
    {
     "category": "char_styles",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
     "key": "BASELINE_SHIFT",
-    "label": "Baseline Shift",
-    "message": "Baseline shift is not supported. Shifted text sits on the baseline in Frontify.",
+    "label": "Baseline shift used",
+    "message": "",
     "severity": "warnings"
    },
    {
     "category": "text_boxes",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
     "key": "EMPTY_TEXT_FRAME",
-    "label": "Empty Text Frames",
-    "message": "Empty text frame found.",
+    "label": "Empty text frame",
+    "message": "",
     "severity": "infos"
    },
    {
     "category": "images",
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
     "key": "LARGE_IMAGE",
-    "label": "Large Image",
-    "message": "Image is large. Verify that this large of an image is needed.",
+    "label": "Large image",
+    "message": "",
     "severity": "infos"
    }
   ],
@@ -7131,48 +7131,48 @@
   "validation_classifiers": {
    "COMPOSER": {
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
-    "label": "Composer",
-    "message": "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer. Otherwise, discrepencies between export and editing may occur."
+    "label": "Paragraph Composer used",
+    "message": ""
    },
    "DOCUMENT_BLEED": {
     "help_article": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based",
-    "label": "Document Bleed",
-    "message": "InDesign defined bleed is applied."
+    "label": "Document has bleed",
+    "message": ""
    },
    "HYPHENATION": {
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
-    "label": "Hyphenation",
-    "message": "Hyphenation is not supported."
+    "label": "Hyphenation is on",
+    "message": ""
    },
    "IMAGE_INCLUDED": {
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_eba8d9b8c1",
-    "label": "Images Included",
-    "message": "Package missing image link."
+    "label": "Linked image missing from the package",
+    "message": ""
    },
    "IMAGE_TRANSFORMATION_IMAGE": {
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
-    "label": "Image Transformation (Image)",
-    "message": "Image transformations are not supported."
+    "label": "Image is flipped or skewed",
+    "message": ""
    },
    "MASTERPAGE": {
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
-    "label": "Masterpage",
-    "message": "Master Page can't be used."
+    "label": "Items on a master page",
+    "message": ""
    },
    "OVERRIDE": {
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-    "label": "Override",
-    "message": "Overrides are not supported."
+    "label": "Text formatted outside its paragraph style",
+    "message": ""
    },
    "PARAGRAPH_STYLE_TEXT_BOX": {
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
-    "label": "Paragraph Style",
-    "message": "No paragraph styles were used."
+    "label": "Text frame has no paragraph style",
+    "message": ""
    },
    "PASTED_GRAPHICS": {
     "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
-    "label": "Pasted Graphics",
-    "message": "Pasted graphics are not supported"
+    "label": "Pasted graphic",
+    "message": ""
    }
   }
  },

@@ -9,6 +9,7 @@
 """
 from typing import Dict, List, Optional
 
+from src.results import catalogue
 from src.results.classifiers import Category, Severity, all_classifiers
 from src.results.issue import Issue
 from src.results.layout import DocumentLayout
@@ -70,11 +71,13 @@ def _issue_json(issue: Issue, layout: DocumentLayout) -> dict:
 
 
 def _classifiers_used(results: Results) -> Dict[str, dict]:
-    """Label, message and help link of each classifier that has an issue."""
+    """Label (the catalogue title) and help link of each classifier that has an issue. The message is no longer
+    used (plan D2: the catalogue's why replaces it) and stays empty until results v2 drops the field."""
     used: Dict[str, dict] = {}
     for issue in results:
-        c = issue.classifier
-        used.setdefault(c.name, {'label': c.label, 'message': c.message or '', 'help_article': c.help_article})
+        entry, _ = catalogue.for_v1(issue.classifier.name)
+        used.setdefault(issue.classifier.name, {'label': catalogue.v1_title(issue.classifier.name), 'message': '',
+                                                'help_article': entry.help_article})
     return used
 
 
@@ -102,7 +105,7 @@ def _page_layouts(layout: DocumentLayout) -> List[dict]:
 def _checks() -> List[dict]:
     """Every template check, so the frontend can list what passed."""
     return [
-        {'key': c.name, 'severity': c.severity.value, 'label': c.label, 'message': c.message or '',
-         'help_article': c.help_article, 'category': c.category.value}
-        for c in all_classifiers() if c.is_check
+        {'key': c.name, 'severity': c.severity.value, 'label': catalogue.v1_title(c.name), 'message': '',
+         'help_article': entry.help_article, 'category': c.category.value}
+        for c, (entry, _) in ((c, catalogue.for_v1(c.name)) for c in all_classifiers()) if entry.is_check
     ]

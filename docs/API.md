@@ -167,9 +167,9 @@ yourself), `service_unavailable` (503) and `internal_error` (500).
 
 ## For maintainers: changing the summary
 
-The summary and the per-check copy are written in one place: `python_backend/app/customer_summary/`
-(`check_guides.py` for each check's title, why and fix steps; `summary.py` for the message). The web app shows what
-the backend sends and has no copy of its own.
+Each check's title, why and fix steps are written once, in the catalogue (`python_backend/src/results/catalogue.py`);
+the summary's own sentences are in `python_backend/app/customer_summary/summary.py`. The web app shows what the
+backend sends and has no copy of its own.
 
 Expected summaries for every golden checker result, plus hand-built edge cases (`testing/golden/summary_cases/`), are
 stored in `testing/golden/summaries/`. After changing the wording, or when the checker's golden results change:

@@ -12,6 +12,7 @@ import re
 from typing import Dict, Any, Optional
 from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+from src.results import catalogue
 from src.results.classifiers import Severity, find
 
 logger = logging.getLogger(__name__)
@@ -156,17 +157,17 @@ def analytics_period(
 
 
 def describe_issue(validation_type: str, severity: Optional[str] = None) -> Dict[str, Optional[str]]:
-    """Display label, message and help article for a validation type, from the checker's own classifiers.
+    """Display label (title), message (why) and help article for a validation type, from the catalogue.
 
     severity ('error', 'warning' or 'info') picks the classifier when given; a type that no longer exists (e.g. a
     retired check in older runs) gets a label made from its name.
     """
     wanted = {'error': Severity.ERROR, 'warning': Severity.WARNING, 'info': Severity.INFO}.get(severity)
     classifier = find(validation_type, wanted) or find(validation_type)
-    label = validation_type.replace('_', ' ').title()
     if classifier is None:
-        return {'label': label, 'message': None, 'help_article': None}
-    return {'label': classifier.label or label, 'message': classifier.message, 'help_article': classifier.help_article}
+        return {'label': validation_type.replace('_', ' ').title(), 'message': None, 'help_article': None}
+    entry, _ = catalogue.for_v1(classifier.name)
+    return {'label': catalogue.v1_title(classifier.name), 'message': entry.why or None, 'help_article': entry.help_article}
 
 
 def _rpc(name: str, params: Dict[str, Any]) -> Dict[str, Any]:
