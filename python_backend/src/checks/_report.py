@@ -1,27 +1,16 @@
-"""Shared plumbing for checks: record an issue, and where it is (page, identifier, frame).
-
-Severity comes from the classifier: a ValidationError is reported as an error, a ValidationWarning as a
-warning, a ValidationInfo as an info.
-"""
+"""Shared plumbing for checks: record an issue, and where it is (page, identifier, frame)."""
 from typing import Optional, Tuple
 
+from src.results.classifiers import Classifier
 from src.results.results import ValidationResult
-from src.results.classifiers import ValidationError, ValidationInfo, ValidationWarning
 
 
-def report(results: ValidationResult, classifier, context: Optional[str] = None, *, page_id: str = '',
+def report(results: ValidationResult, classifier: Classifier, context: Optional[str] = None, *, page_id: str = '',
            identifier='null', data_id='null', text_content: Optional[list] = None,
            context_details: Optional[dict] = None) -> None:
-    kwargs = dict(context=context, page_id=page_id, identifier=identifier, data_id=data_id,
-                  text_content=text_content, context_details=context_details)
-    if isinstance(classifier, ValidationError):
-        results.add_error(error_type=classifier, **kwargs)
-    elif isinstance(classifier, ValidationWarning):
-        results.add_warning(warning_type=classifier, **kwargs)
-    elif isinstance(classifier, ValidationInfo):
-        results.add_info(info_type=classifier, **kwargs)
-    else:
-        raise TypeError(f'Not a validation classifier: {classifier!r}')
+    """Record an issue. Its severity comes from the classifier (ValidationError.X is an error, and so on)."""
+    results.add(classifier, context, page_id=page_id, identifier=identifier, data_id=data_id,
+                text_content=text_content, context_details=context_details)
 
 
 # --- where an issue is -----------------------------------------------------------------------------------------

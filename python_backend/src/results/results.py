@@ -1,8 +1,8 @@
 from collections import defaultdict
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from src.results.ValidationContext import ValidationContext
-from src.results.classifiers import ValidationError, ValidationWarning, ValidationInfo, ValidationCategory
+from src.results.classifiers import Category, Classifier, Severity, all_classifiers
 
 
 class ValidationResult():
@@ -28,139 +28,57 @@ class ValidationResult():
         # page Self -> base64 JPEG preview embedded by InDesign
         self.page_previews: Dict[str, str] = {}
 
-    @staticmethod
-    def _category_to_response_key(category: ValidationCategory) -> str:
-        """Convert ValidationCategory enum to response JSON key format."""
-        mapping = {
-            ValidationCategory.PAR_STYLE: 'par_styles',
-            ValidationCategory.CHAR_STYLE: 'char_styles',
-            ValidationCategory.TEXT_BOX: 'text_boxes',
-            ValidationCategory.FONTS: 'fonts',
-            ValidationCategory.IMAGES: 'images',
-            ValidationCategory.GENERAL: 'general'
-        }
-        return mapping.get(category, category.value.lower())
+    def add(self, classifier: Classifier, context: Optional[str] = '', *, page_id: str = '', identifier='null',
+            data_id='null', text_content: Optional[list] = None, context_details: Optional[dict] = None) -> None:
+        """Record an issue. Its severity and section come from the classifier.
 
-
-    def add_validation(self, validation_type: str, classifier, context: str = '',
-                      page_id: str = '', identifier: str = 'null',
-                      data_id: str = 'null', text_content: list = None, context_details: dict = None):
-        """
-        Unified method for adding errors, warnings, and infos.
-        Stores validations directly in category-based structure.
-
-        Args:
-            page_id: page Self (page identifier) - will be mapped to page_name later in JSON generation
-            text_content: list of text strings where the issue occurs (for PAR_STYLE, CHAR_STYLE, and OVERRIDE)
-            context_details: optional structured data (e.g. text, overrides, inheritedFrom) for the frontend
+        page_id: page Self (mapped to the page's name when the JSON is built)
+        identifier: what the issue is grouped under (style, story, font or file name); 'null' for none
+        data_id: the page item it points at, for highlighting; 'null' for none
+        text_content: the text it's about. An issue at the same place as an earlier one with the same classifier
+            only adds its text to that one, unless the classifier is one_per_range.
+        context_details: structured data for the frontend (e.g. text, overrides, inheritedFrom)
         """
         # "No identifier" / "no item" is 'null' in the results JSON. Checks may pass None or 'null'; store one
         # form, or a None group and a 'null' group would collide in the JSON and one would overwrite the other.
         identifier = 'null' if identifier is None else identifier
         data_id = 'null' if data_id is None else data_id
+        same_list = self.validations[classifier.category.value][identifier][classifier.severity.value]
 
-        # Get category from classifier and convert to response key
-        category = classifier.category
-        category_key = self._category_to_response_key(category)
+        if text_content and not classifier.one_per_range:
+            earlier = next((issue for issue in same_list if issue.page_id == page_id and issue.data_id == data_id
+                            and issue.classifier_type == classifier.value), None)
+            if earlier:
+                earlier.text_content = list(dict.fromkeys(earlier.text_content + text_content))  # no repeats, in order
+                return
 
-        # Check if validation with same key already exists for merging text_content
-        # Skip merging for OVERRIDE validations - they should be reported as separate warnings
-        is_override = (classifier.category == ValidationCategory.TEXT_BOX and
-                      classifier.value == ValidationWarning.OVERRIDE.value)
+        same_list.append(ValidationContext(context, classifier, page_id, identifier, data_id, text_content,
+                                           context_details))
 
-        existing_validation = None
-        if text_content and len(text_content) > 0 and not is_override:
-            existing_validations = self.validations[category_key][identifier][validation_type]
-            for existing in existing_validations:
-                if (existing.page_id == page_id and
-                    existing.data_id == data_id and
-                    existing.classifier_type == classifier.value):
-                    existing_validation = existing
-                    break
+        # Text box issues are grouped by story; the JSON shows each story's text.
+        if classifier.category == Category.TEXT_BOX and self.stories_parser and identifier not in self.text_box_data:
+            self.extract_text_box_content(identifier)
 
-        if existing_validation:
-            # Merge text_content arrays
-            existing_text_content = existing_validation.text_content
-            merged_text_content = list(dict.fromkeys(existing_text_content + text_content))  # Remove duplicates, keep order
-            existing_validation.text_content = merged_text_content
-        else:
-            # Create new validation
-            validation = ValidationContext(context, classifier, page_id, identifier, data_id, text_content, context_details)
-            self.validations[category_key][identifier][validation_type].append(validation)
-
-            # Handle special text_box case for identifier extraction
-            # Identifiers for TEXT_BOX category are story_id
-            if category == ValidationCategory.TEXT_BOX and self.stories_parser:
-                story_id = identifier
-                if story_id not in self.text_box_data:
-                    self.extract_text_box_content(story_id)
-
-            # Track classifier metadata
-            classifier_key = classifier.value
-            if classifier_key not in self.validation_classifiers:
-                self.validation_classifiers[classifier_key] = {
-                    "label": classifier.label,
-                    "message": classifier.message if classifier.message else "",
-                    "help_article": classifier.help_article if classifier.help_article else None
-                }
-
-    def add_custom_error(self, message: str, error_type: 'ValidationError'):
-        """An error whose message is written by the caller (package and parsing failures)."""
-        self.add_validation('errors', error_type, message)
-
-    def add_error(self, context: str, error_type: 'ValidationError', page_id: str = '', identifier='null', data_id='null', text_content: list = None, context_details: dict = None):
-        """Add error validation."""
-        self.add_validation('errors', error_type, context, page_id, identifier, data_id, text_content, context_details)
-
-    def add_warning(self, context: str, warning_type: 'ValidationWarning', page_id: str = '', identifier='null', data_id='null', text_content: list = None, context_details: dict = None):
-        """Add warning validation."""
-        self.add_validation('warnings', warning_type, context, page_id, identifier, data_id, text_content, context_details)
-
-    def add_info(self, context: str, info_type: 'ValidationInfo', page_id: str = '', identifier='null', data_id='null', text_content: list = None, context_details: dict = None):
-        """Add info validation."""
-        self.add_validation('infos', info_type, context, page_id, identifier, data_id, text_content, context_details)
+        self.validation_classifiers.setdefault(classifier.value, {
+            "label": classifier.label,
+            "message": classifier.message or "",
+            "help_article": classifier.help_article or None,
+        })
 
     def set_spreads_parser(self, spreads_parser):
         self.spreads_parser = spreads_parser
         self._build_spread_to_pages_mapping()
         self._build_pages_mapping()
 
-    def get_errors(self) -> List[ValidationContext]:
-        """Get all errors from all categories."""
-        errors = []
-        for category_data in self.validations.values():
-            for identifier_data in category_data.values():
-                errors.extend(identifier_data['errors'])
-        return errors
+    def issues(self, severity: Optional[Severity] = None) -> List[ValidationContext]:
+        """Every issue recorded (of one severity, if given), section by section."""
+        severities = [severity] if severity else list(Severity)
+        return [issue for by_identifier in self.validations.values() for lists in by_identifier.values()
+                for s in severities for issue in lists[s.value]]
 
-    def get_warnings(self) -> List[ValidationContext]:
-        """Get all warnings from all categories."""
-        warnings = []
-        for category_data in self.validations.values():
-            for identifier_data in category_data.values():
-                warnings.extend(identifier_data['warnings'])
-        return warnings
-
-    def get_infos(self) -> List[ValidationContext]:
-        """Get all infos from all categories."""
-        infos = []
-        for category_data in self.validations.values():
-            for identifier_data in category_data.values():
-                infos.extend(identifier_data['infos'])
-        return infos
-
-    def get_error_types(self) -> List['ValidationError']:
-        """Get all error types (classifier types) from all errors."""
-        return [error.classifier_type for error in self.get_errors()]
-
-    def get_warning_types(self) -> List['ValidationWarning']:
-        """Get all warning types (classifier types) from all warnings."""
-        return [warning.classifier_type for warning in self.get_warnings()]
-
-    def get_info_types(self) -> List['ValidationInfo']:
-        """Get all info types (classifier types) from all infos."""
-        return [info.classifier_type for info in self.get_infos()]
-
+    def names(self, severity: Severity) -> List[str]:
+        """The classifier name of every issue of this severity (one per issue)."""
+        return [issue.classifier_type for issue in self.issues(severity)]
 
     def extract_text_box_content(self, identifier):
         story = self.stories_parser.get_story_by_id(identifier)
@@ -209,7 +127,7 @@ class ValidationResult():
             return bounds["page_id"]
         return fallback_page_id if fallback_page_id is not None else ""
 
-    def _build_validation_item_json(self, item: ValidationContext, category_key: str, page_to_spread: dict) -> dict:
+    def _build_validation_item_json(self, item: ValidationContext, page_to_spread: dict) -> dict:
         """Build JSON representation of a validation item, including text_content when applicable."""
         bounds = self.page_geometry.get_bounds(item.data_id) if self.page_geometry else None
         page_id = self._page_of(bounds, item.page_id)
@@ -231,17 +149,8 @@ class ValidationResult():
         if context_details is not None:
             base_item["context_details"] = context_details
 
-        # Include text_content for PAR_STYLE, CHAR_STYLE, and OVERRIDE (TEXT_BOX category)
-        should_include_text_content = (
-            category_key == 'par_styles' or
-            category_key == 'char_styles' or
-            (category_key == 'text_boxes' and item.classifier_type == ValidationWarning.OVERRIDE.value)
-        )
-
-        if should_include_text_content:
-            text_content = item.text_content
-            if text_content and len(text_content) > 0:
-                base_item["text_content"] = text_content
+        if item.classifier.shows_text and item.text_content:
+            base_item["text_content"] = item.text_content
 
         return base_item
 
@@ -267,9 +176,7 @@ class ValidationResult():
         categories_response = {}
 
         # Expected categories in response
-        expected_categories = ['par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general']
-
-        for category_key in expected_categories:
+        for category_key in (category.value for category in Category):
             # Convert stored validations to response format
             category_validations = self.validations.get(category_key, {})
             details = {}
@@ -277,15 +184,15 @@ class ValidationResult():
             for identifier, type_dict in category_validations.items():
                 details[identifier] = {
                     'errors': [
-                        self._build_validation_item_json(item, category_key, page_to_spread)
+                        self._build_validation_item_json(item, page_to_spread)
                         for item in type_dict['errors']
                     ],
                     'warnings': [
-                        self._build_validation_item_json(item, category_key, page_to_spread)
+                        self._build_validation_item_json(item, page_to_spread)
                         for item in type_dict['warnings']
                     ],
                     'infos': [
-                        self._build_validation_item_json(item, category_key, page_to_spread)
+                        self._build_validation_item_json(item, page_to_spread)
                         for item in type_dict['infos']
                     ]
                 }
@@ -321,29 +228,20 @@ class ValidationResult():
         }
         return response
 
-    # Generic classifiers used for package/parsing failures rather than template checks.
-    _NON_CHECK_CLASSIFIERS = {'ERROR', 'IDML', 'ZIP', 'WARNING'}
-
-    def _build_checks(self) -> List[dict]:
-        """Every template check that runs, so the frontend can list what passed.
-
-        Keyed by severity and name: some names (e.g. IMAGE_TRANSFORMATION) exist as both an
-        error and a warning with different messages.
-        """
-        checks = []
-        for severity, classifiers in (('errors', ValidationError), ('warnings', ValidationWarning), ('infos', ValidationInfo)):
-            for classifier in classifiers:
-                if classifier.name in self._NON_CHECK_CLASSIFIERS:
-                    continue
-                checks.append({
-                    "key": classifier.name,
-                    "severity": severity,
-                    "label": classifier.label,
-                    "message": classifier.message or "",
-                    "help_article": classifier.help_article,
-                    "category": self._category_to_response_key(classifier.category),
-                })
-        return checks
+    @staticmethod
+    def _build_checks() -> List[dict]:
+        """Every template check, so the frontend can list what passed."""
+        return [
+            {
+                "key": classifier.name,
+                "severity": classifier.severity.value,
+                "label": classifier.label,
+                "message": classifier.message or "",
+                "help_article": classifier.help_article,
+                "category": classifier.category.value,
+            }
+            for classifier in all_classifiers() if classifier.is_check
+        ]
 
     def _build_page_layouts(self) -> List[dict]:
         """Pages in document order with size (points) and preview image, for issue highlighting."""
