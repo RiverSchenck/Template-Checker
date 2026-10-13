@@ -687,10 +687,10 @@
        "page_name": "1",
        "spread_id": "uf95",
        "text_content": [
-        "No-cost Home Energy Assessment (HEA) ",
-        "Manufactured Homes Initiative (MHI)",
-        "Multifamily Energy Efficiency Program",
-        "Energy Efficiency Assistance Program"
+        "No-cost Home Energy Assessment (HEA) \n",
+        "Manufactured Homes Initiative (MHI)\n",
+        "Multifamily Energy Efficiency Program\n",
+        "Energy Efficiency Assistance Program\n"
        ],
        "validationClassifier": "KERNING"
       },
@@ -710,7 +710,7 @@
        "page_name": "1",
        "spread_id": "uf95",
        "text_content": [
-        "Start Saving"
+        "Start Saving\n"
        ],
        "validationClassifier": "KERNING"
       },
@@ -730,9 +730,9 @@
        "page_name": "1",
        "spread_id": "uf95",
        "text_content": [
-        "New construction rebates",
-        "Energy efficiency rebates",
-        "Our Marketplace"
+        "New construction rebates\n",
+        "Energy efficiency rebates\n",
+        "Our Marketplace\n"
        ],
        "validationClassifier": "KERNING"
       }
@@ -810,13 +810,13 @@
     "page_name": "1"
    },
    "u319f": {
-    "content": "Residential\nNo-cost Home Energy Assessment (HEA) \nRather than focusing on a single problem like an old heating and water system, not enough insulation in the attic, or leaky windows, a no-cost Home Energy Assessment looks for opportunities throughout an entire home to improve performance. \nManufactured Homes Initiative (MHI)\nResidential customers in manufactured homes with active SEMCO natural gas accounts may be eligible for no-cost upgrades. These upgrades are designed to increase a home’s comfort and reduce overall energy costs.\nMultifamily Energy Efficiency Program\nSEMCO’s Multifamily Energy Efficiency Program offers reduced-cost energy-efficient upgrades for multifamily properties. This program also offers no-cost direct installation of showerheads, faucet aerators, and pipe wrap, based on water heater fuel type. \nEnergy Efficiency Assistance Program\nThe SEMCO Energy Efficiency Assistance Program reduces financial barriers to energy efficiency and home comfort by providing customers with increased incentives for EWR upgrades. Participants must be SEMCO residential customers and meet the household income levels established (currently 200 percent of poverty level), which is based on the federal income guidelines published by the US Department of Energy Weatherization Program. Renters must have expressed consent from property owner to qualify for upgrades. \n",
+    "content": "Residential\n\nNo-cost Home Energy Assessment (HEA) \n\nRather than focusing on a single problem like an old heating and water system, not enough insulation in the attic, or leaky windows, a no-cost Home Energy Assessment looks for opportunities throughout an entire home to improve performance. \n\nManufactured Homes Initiative (MHI)\n\nResidential customers in manufactured homes with active SEMCO natural gas accounts may be eligible for no-cost upgrades. These upgrades are designed to increase a home’s comfort and reduce overall energy costs.\n\nMultifamily Energy Efficiency Program\n\nSEMCO’s Multifamily Energy Efficiency Program offers reduced-cost energy-efficient upgrades for multifamily properties. This program also offers no-cost direct installation of showerheads, faucet aerators, and pipe wrap, based on water heater fuel type. \n\nEnergy Efficiency Assistance Program\n\nThe SEMCO Energy Efficiency Assistance Program reduces financial barriers to energy efficiency and home comfort by providing customers with increased incentives for EWR upgrades. Participants must be SEMCO residential customers and meet the household income levels established (currently 200 percent of poverty level), which is based on the federal income guidelines published by the US Department of Energy Weatherization Program. Renters must have expressed consent from property owner to qualify for upgrades. \n",
     "identifier": "u319f",
     "page_id": "ufa2",
     "page_name": "1"
    },
    "u3623": {
-    "content": "Start Saving\nSee all the ways we can help you save at semcoewr.com, or give us a call at 855.298.5387.\n",
+    "content": "Start Saving\n\nSee all the ways we can help you save at semcoewr.com, or give us a call at 855.298.5387.\n",
     "identifier": "u3623",
     "page_id": "ufa2",
     "page_name": "1"
@@ -828,13 +828,13 @@
     "page_name": "1"
    },
    "u3698": {
-    "content": "New construction rebates\nEnergy efficiency Home Energy Rating System (HERS) rated homes with a score of 56 or lower can receive a rebate for building energy efficient. Go to www.hersindex.com to learn more about HERS ratings\nEnergy efficiency rebates\nSEMCO’s EWR program offers generous rebates to help encourage customers to make the most energy-efficient choice. Rebates are only available to SEMCO customers and are subject to change. For specific eligibility requirements,  visit semcoewr.com. We offer rebates in the following areas:\nSpace heatingWater heatingAir sealing and insulationWindow and door replacementsENERGY STAR\nOur Marketplace\nOur online store makes it easier than ever to save on the latest smart thermostats from ecobee and Google Nest. Customers can save up to $100 instantly on Wi-Fi enabled thermostats, with no need to complete a rebate application. We ship the  new thermostat directly to their home within two weeks.\n",
+    "content": "New construction rebates\n\nEnergy efficiency Home Energy Rating System (HERS) rated homes with a score of 56 or lower can receive a rebate for building energy efficient. Go to www.hersindex.com to learn more about HERS ratings\n\nEnergy efficiency rebates\n\nSEMCO’s EWR program offers generous rebates to help encourage customers to make the most energy-efficient choice. Rebates are only available to SEMCO customers and are subject to change. For specific eligibility requirements,  visit semcoewr.com. \nWe offer rebates in the following areas:\n\nSpace heating\nWater heating\nAir sealing and insulation\nWindow and door replacements\nENERGY STAR\n\nOur Marketplace\n\nOur online store makes it easier than ever to save on the latest smart thermostats from ecobee and Google Nest. Customers can save up to $100 instantly on Wi-Fi enabled thermostats, with no need to complete a rebate application. We ship the  new thermostat directly to their home within two weeks.\n",
     "identifier": "u3698",
     "page_id": "ufa2",
     "page_name": "1"
    },
    "ufa6": {
-    "content": "SEMCO IQ flyer (868331)[TOP BANNER]<Efficiency United logo>\t\tSavings brought to you by SEMCO Energy Gas Company and our \t\t\t\t\tMichigan energy providers. [HEADLINE OPTIONS]We’re Here to Help.Helping Neighbors in Need. Need an Extra Hand? Energy Efficiency Assistance Program[BODY COPY]Efficiency United’s Energy Efficiency Assistance Program offers no-cost weatherization products and services like insulation, high-efficiency heating equipment and ENERGY STAR® certified appliances to households that fall below a certain income. Check the chart below to see if you qualify. Members in Household\tMax. Qualifying Income1\t\t\t\t$24,1202\t\t\t\t$32,4803\t\t\t\t$40,8404\t\t\t\t$49,2005\t\t\t\t$57,5606\t\t\t\t$65,9207\t\t\t\t$74,2808\t\t\t\t$82,640*Add $8,360 for each additional household member[CTA]\nReady to get started? Call us at 877.367.3191 or visit efficiencyunited.com to learn more.\n",
+    "content": "SEMCO IQ flyer (868331)\n\n[TOP BANNER]\n\n<Efficiency United logo>\t\tSavings brought to you by SEMCO Energy Gas Company and our \t\t\t\t\tMichigan energy providers. \n\n[HEADLINE OPTIONS]\n\nWe’re Here to Help.\nHelping Neighbors in Need. \nNeed an Extra Hand? \nEnergy Efficiency Assistance Program\n\n[BODY COPY]\n\nEfficiency United’s Energy Efficiency Assistance Program offers no-cost weatherization products and services like insulation, high-efficiency heating equipment and ENERGY STAR® certified appliances to households that fall below a certain income. Check the chart below to see if you qualify. \n\nMembers in Household\tMax. Qualifying Income\n1\t\t\t\t$24,120\n2\t\t\t\t$32,480\n3\t\t\t\t$40,840\n4\t\t\t\t$49,200\n5\t\t\t\t$57,560\n6\t\t\t\t$65,920\n7\t\t\t\t$74,280\n8\t\t\t\t$82,640\n\n*Add $8,360 for each additional household member\n\n[CTA]\n\n\nReady to get started? Call us at 877.367.3191 or visit efficiencyunited.com to learn more.\n\n",
     "identifier": "ufa6",
     "page_id": "ufa2",
     "page_name": "1"
@@ -979,18 +979,21 @@
         "x": 36.0,
         "y": 229.01
        },
-       "context": "Text:  Whitespace after text: Rather than focusing on a single problem like an old heating and water system, not enough insulation in the attic, or leaky windows, a no-cost Home Energy Assessment looks for opportunities throughout an entire home to improve performance. — Overrides: Tracking: -10",
+       "context": "Text:   Whitespace after text: Rather than focusing on a single problem like an old heating and water system, not enough insulation in the attic, or leaky windows, a no-cost Home Energy Assessment looks for opportunities throughout an entire home to improve performance. — Overrides: Tracking: -10",
        "context_details": {
         "overrides": {
          "Tracking": "-10"
         },
-        "text": ""
+        "text": "\n"
        },
        "data_id": "u319f",
        "identifier": "u319f",
        "page_id": "ufa2",
        "page_name": "1",
        "spread_id": "uf95",
+       "text_content": [
+        "\n"
+       ],
        "validationClassifier": "OVERRIDE"
       }
      ]
@@ -1040,7 +1043,7 @@
         "x": 119.92,
         "y": 704.31
        },
-       "context": "Text:  Whitespace after text: Start Saving — Overrides: Leading: 14.4, StrokeWeight: 0.8647777732326433, Tracking: 15, MiterLimit: 3.459111092930573, RubyFontSize: -0.8647777732326433, KentenFontSize: -0.8647777732326433",
+       "context": "Text:   Whitespace after text: Start Saving — Overrides: Leading: 14.4, StrokeWeight: 0.8647777732326433, Tracking: 15, MiterLimit: 3.459111092930573, RubyFontSize: -0.8647777732326433, KentenFontSize: -0.8647777732326433",
        "context_details": {
         "overrides": {
          "KentenFontSize": "-0.8647777732326433",
@@ -1050,13 +1053,16 @@
          "StrokeWeight": "0.8647777732326433",
          "Tracking": "15"
         },
-        "text": ""
+        "text": "\n"
        },
        "data_id": "u3623",
        "identifier": "u3623",
        "page_id": "ufa2",
        "page_name": "1",
        "spread_id": "uf95",
+       "text_content": [
+        "\n"
+       ],
        "validationClassifier": "OVERRIDE"
       },
       {
@@ -1249,18 +1255,21 @@
         "x": 319.68,
         "y": 348.48
        },
-       "context": "Text:  Whitespace after text: Energy efficiency Home Energy Rating System (HERS) rated homes with a score of 56 or lower can receive a rebate for building energy efficient. Go to www.hersindex.com to learn more about HERS ratings — Overrides: FillColor: Color/C=0 M=0 Y=0 K=85",
+       "context": "Text:   Whitespace after text: Energy efficiency Home Energy Rating System (HERS) rated homes with a score of 56 or lower can receive a rebate for building energy efficient. Go to www.hersindex.com to learn more about HERS ratings — Overrides: FillColor: Color/C=0 M=0 Y=0 K=85",
        "context_details": {
         "overrides": {
          "FillColor": "Color/C=0 M=0 Y=0 K=85"
         },
-        "text": ""
+        "text": "\n"
        },
        "data_id": "u3698",
        "identifier": "u3698",
        "page_id": "ufa2",
        "page_name": "1",
        "spread_id": "uf95",
+       "text_content": [
+        "\n"
+       ],
        "validationClassifier": "OVERRIDE"
       }
      ]

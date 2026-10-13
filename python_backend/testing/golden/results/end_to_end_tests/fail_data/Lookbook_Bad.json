@@ -636,13 +636,13 @@
   "template_name": "Lookbook_Bad.zip",
   "text_box_data": {
    "u1f7": {
-    "content": "AutumNLookbook\n",
+    "content": "AutumN\nLookbook\n",
     "identifier": "u1f7",
     "page_id": "ue7",
     "page_name": "1"
    },
    "u1fa": {
-    "content": "AutumNLookbook\n",
+    "content": "AutumN\nLookbook\n",
     "identifier": "u1fa",
     "page_id": "ue7",
     "page_name": "1"
@@ -684,13 +684,13 @@
     "page_name": "1"
    },
    "u2c5": {
-    "content": "mustard linen pants combined with smokin hot biker bootsmonobrand\n",
+    "content": "mustard linen pants combined with \nsmokin hot biker boots\nmonobrand\n\n",
     "identifier": "u2c5",
     "page_id": "u192",
     "page_name": "2"
    },
    "u2c8": {
-    "content": "mustard linen pants combined with smokin hot biker bootsmonobrand\n",
+    "content": "mustard linen pants combined with \nsmokin hot biker boots\nmonobrand\n\n",
     "identifier": "u2c8",
     "page_id": "u192",
     "page_name": "2"
@@ -708,13 +708,13 @@
     "page_name": "2"
    },
    "u332": {
-    "content": "light linen shirt matched with a fancy apron mono\n",
+    "content": "light linen shirt matched \nwith a fancy apron \nmono\n",
     "identifier": "u332",
     "page_id": "u192",
     "page_name": "2"
    },
    "u335": {
-    "content": "light linen shirt matched with a fancy apron mono\n",
+    "content": "light linen shirt matched \nwith a fancy apron \nmono\n",
     "identifier": "u335",
     "page_id": "u192",
     "page_name": "2"
@@ -732,13 +732,13 @@
     "page_name": "6"
    },
    "u457": {
-    "content": "Monobrand offers fashion and quality at the best price in a sustainable way.Monobrand HQ Paradise Street 158080 Big Citymonobrand.com\n",
+    "content": "Monobrand offers fashion and \nquality at the best price in a sustainable way.\nMonobrand HQ Paradise Street 15\n8080 Big City\n\nmonobrand.com\n\n",
     "identifier": "u457",
     "page_id": "u456",
     "page_name": "8"
    },
    "u45a": {
-    "content": "Monobrand offers fashion and quality at the best price in a sustainable way.Monobrand HQ Paradise Street 158080 Big Citymonobrand.com\n",
+    "content": "Monobrand offers fashion and \nquality at the best price in a sustainable way.\nMonobrand HQ Paradise Street 15\n8080 Big City\n\nmonobrand.com\n\n",
     "identifier": "u45a",
     "page_id": "u456",
     "page_name": "8"
@@ -759,7 +759,7 @@
         "x": 51.41,
         "y": 406.77
        },
-       "context": "Text: AutumNLookbook — Overrides: Leading: 57.50563265573572, AppliedFont: Playfair Display, FillColor: Color/Paper, FontStyle: Black, PointSize: 65.17305034316715, StrokeWeight: 0.30939180481438927, Capitalization: AllCaps, OTFContextualAlternate: false, MiterLimit: 1.237567219257557, RubyFontSize: -0.30939180481438927, KentenFontSize: -0.30939180481438927",
+       "context": "Text: AutumN Lookbook — Overrides: Leading: 57.50563265573572, AppliedFont: Playfair Display, FillColor: Color/Paper, FontStyle: Black, PointSize: 65.17305034316715, StrokeWeight: 0.30939180481438927, Capitalization: AllCaps, OTFContextualAlternate: false, MiterLimit: 1.237567219257557, RubyFontSize: -0.30939180481438927, KentenFontSize: -0.30939180481438927",
        "context_details": {
         "overrides": {
          "AppliedFont": "Playfair Display",
@@ -774,7 +774,7 @@
          "RubyFontSize": "-0.30939180481438927",
          "StrokeWeight": "0.30939180481438927"
         },
-        "text": "AutumNLookbook"
+        "text": "AutumN\nLookbook"
        },
        "data_id": "u1f7",
        "identifier": "u1f7",
@@ -782,7 +782,7 @@
        "page_name": "1",
        "spread_id": "ue2",
        "text_content": [
-        "AutumNLookbook"
+        "AutumN\nLookbook"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -1010,7 +1010,7 @@
         "x": -699.02,
         "y": 502.44
        },
-       "context": "Text: mustard linen pants combined with smokin hot biker boots — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+       "context": "Text: mustard linen pants combined with  smokin hot biker boots — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
        "context_details": {
         "overrides": {
          "AppliedFont": "Playfair Display",
@@ -1022,7 +1022,7 @@
          "StrokeWeight": "0.32244888188967313",
          "Tracking": "-5"
         },
-        "text": "mustard linen pants combined with smokin hot biker boots"
+        "text": "mustard linen pants combined with \nsmokin hot biker boots\n"
        },
        "data_id": "u2c5",
        "identifier": "u2c5",
@@ -1030,7 +1030,7 @@
        "page_name": "2",
        "spread_id": "u18d",
        "text_content": [
-        "mustard linen pants combined with smokin hot biker boots"
+        "mustard linen pants combined with \nsmokin hot biker boots\n"
        ],
        "validationClassifier": "OVERRIDE"
       },
@@ -1077,7 +1077,7 @@
         "x": -699.02,
         "y": 502.44
        },
-       "context": "Text:  Whitespace after text: monobrand — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, ParagraphBreakType: NextColumn, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+       "context": "Text:   Whitespace after text: monobrand — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, ParagraphBreakType: NextColumn, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
        "context_details": {
         "overrides": {
          "AppliedFont": "Playfair Display",
@@ -1090,13 +1090,16 @@
          "StrokeWeight": "0.32244888188967313",
          "Tracking": "-5"
         },
-        "text": ""
+        "text": "\n"
        },
        "data_id": "u2c5",
        "identifier": "u2c5",
        "page_id": "u192",
        "page_name": "2",
        "spread_id": "u18d",
+       "text_content": [
+        "\n"
+       ],
        "validationClassifier": "OVERRIDE"
       }
      ]
@@ -1200,7 +1203,7 @@
         "x": -746.93,
         "y": 766.77
        },
-       "context": "Text: light linen shirt matched with a fancy apron mono — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+       "context": "Text: light linen shirt matched  with a fancy apron  mono — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
        "context_details": {
         "overrides": {
          "AppliedFont": "Playfair Display",
@@ -1212,7 +1215,7 @@
          "StrokeWeight": "0.32244888188967313",
          "Tracking": "-5"
         },
-        "text": "light linen shirt matched with a fancy apron mono"
+        "text": "light linen shirt matched \nwith a fancy apron \nmono"
        },
        "data_id": "u332",
        "identifier": "u332",
@@ -1220,7 +1223,7 @@
        "page_name": "2",
        "spread_id": "u18d",
        "text_content": [
-        "light linen shirt matched with a fancy apron mono"
+        "light linen shirt matched \nwith a fancy apron \nmono"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -1325,7 +1328,7 @@
         "x": 36.0,
         "y": 724.96
        },
-       "context": "Text: Monobrand offers fashion and quality at the best price in a sustainable way. — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+       "context": "Text: Monobrand offers fashion and  quality at the best price in a sustainable way. — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
        "context_details": {
         "overrides": {
          "AppliedFont": "Playfair Display",
@@ -1337,7 +1340,7 @@
          "StrokeWeight": "0.32244888188967313",
          "Tracking": "-5"
         },
-        "text": "Monobrand offers fashion and quality at the best price in a sustainable way."
+        "text": "Monobrand offers fashion and \nquality at the best price in a sustainable way.\n"
        },
        "data_id": "u457",
        "identifier": "u457",
@@ -1345,7 +1348,7 @@
        "page_name": "8",
        "spread_id": "u451",
        "text_content": [
-        "Monobrand offers fashion and quality at the best price in a sustainable way."
+        "Monobrand offers fashion and \nquality at the best price in a sustainable way.\n"
        ],
        "validationClassifier": "OVERRIDE"
       },
@@ -1392,7 +1395,7 @@
         "x": 36.0,
         "y": 724.96
        },
-       "context": "Text: Paradise Street 158080 Big Citymonobrand.com — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+       "context": "Text: Paradise Street 15 8080 Big City  monobrand.com — Overrides: AppliedFont: Playfair Display, PointSize: 10, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
        "context_details": {
         "overrides": {
          "AppliedFont": "Playfair Display",
@@ -1404,7 +1407,7 @@
          "StrokeWeight": "0.32244888188967313",
          "Tracking": "-5"
         },
-        "text": "Paradise Street 158080 Big Citymonobrand.com"
+        "text": "Paradise Street 15\n8080 Big City\n\nmonobrand.com\n"
        },
        "data_id": "u457",
        "identifier": "u457",
@@ -1412,7 +1415,7 @@
        "page_name": "8",
        "spread_id": "u451",
        "text_content": [
-        "Paradise Street 158080 Big Citymonobrand.com"
+        "Paradise Street 15\n8080 Big City\n\nmonobrand.com\n"
        ],
        "validationClassifier": "OVERRIDE"
       }

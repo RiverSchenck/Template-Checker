@@ -3,6 +3,7 @@
 What the walk handles (plan B1-B4, B6):
 - runs and text inside HyperlinkTextSource, XMLElement and Change elements (pending deletions are left out);
 - text after a special character (<?ACE n?>): processing instructions add nothing, the text around them stays;
+- a line break (<Br/>) is '\n', as in Frontify;
 - paragraphs inside table cells, footnotes and notes keep their container instead of being flattened into the
   body text around them;
 - page items placed in a run (inline or anchored images, frames, groups) are collected on the run;
@@ -114,6 +115,8 @@ class _Walker:
                 continue
             if tag == 'Content':
                 text.append(''.join(child.itertext()))
+            elif tag == 'Br':  # a line break inside the paragraph range (InDesign writes one between paragraphs)
+                text.append('\n')
             elif tag == 'ParagraphStyleRange':
                 self.paragraph(child, container)
             elif tag in ITEM_TAGS:

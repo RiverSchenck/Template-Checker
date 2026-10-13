@@ -85,3 +85,8 @@ def test_formatting_set_on_text():
     assert p.attrs == {'Justification': 'CenterAlign'}
     assert [(r.style, dict(r.attrs), dict(r.properties)) for r in p.runs] == [
         (None, {}, {'AppliedFont': 'Arial'}), (NO_STYLE, {'PointSize': '12'}, {})]
+
+
+def test_line_breaks_are_newlines():
+    assert story(para(run('<Content>Trim: 8.5x11</Content><Br /><Content>Finish</Content>'))).paragraphs[0].text == \
+        'Trim: 8.5x11\nFinish'

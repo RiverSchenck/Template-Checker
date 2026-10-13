@@ -62,8 +62,8 @@ def par_style_check(doc: ParsedDocument, results: Results) -> None:
         for i, group in enumerate(grouped):
             if group[0].style_id in doc.default_par_styles:
                 content = ''.join(par_style.get_content() for par_style in group)
-                # Whitespace-only text needs its neighbours to be findable.
-                message = f"{content} {generate_context_message(content, grouped, i)}"
+                # Whitespace-only text needs its neighbours to be findable. One line: line breaks show as spaces.
+                message = f"{content.replace(chr(10), ' ')} {generate_context_message(content, grouped, i)}"
                 report(results, ValidationError.PARAGRAPH_STYLE, message,
                        text_content=text_list(content), **at_story(story, group[0].normalized_style_id))
 
@@ -84,7 +84,8 @@ def _report_override(results: Results, story, item, siblings, index) -> None:
     show that frame's full text)."""
     frame_id = story.parent_text_frame_id
     content = item.get_content()
-    text_part = f"Text: {content} {generate_context_message(content, siblings, index)}".strip()
+    # The message is one line: a line break in the text shows as a space (facts keep the real text).
+    text_part = f"Text: {content.replace(chr(10), ' ')} {generate_context_message(content, siblings, index)}".strip()
     overrides_str = format_overrides(item.overrides)
     message = f"{text_part} — Overrides: {overrides_str}" if overrides_str else text_part
     report(results, ValidationWarning.OVERRIDE, message,

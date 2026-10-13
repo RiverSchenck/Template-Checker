@@ -513,25 +513,25 @@
   "template_name": "Tietoevry_General News_Template Folder2.zip",
   "text_box_data": {
    "u120": {
-    "content": "News TitleIn MaximumThree Lines\n",
+    "content": "News Title\nIn Maximum\nThree Lines\n",
     "identifier": "u120",
     "page_id": "ud5",
     "page_name": "1"
    },
    "u134": {
-    "content": "News TitleIn MaximumThree Lines\n",
+    "content": "News Title\nIn Maximum\nThree Lines\n",
     "identifier": "u134",
     "page_id": "ud5",
     "page_name": "1"
    },
    "u175": {
-    "content": "Short descriptionabout the news content\n",
+    "content": "Short description\nabout the news content\n",
     "identifier": "u175",
     "page_id": "ud5",
     "page_name": "1"
    },
    "u178": {
-    "content": "Short descriptionabout the news content\n",
+    "content": "Short description\nabout the news content\n",
     "identifier": "u178",
     "page_id": "ud5",
     "page_name": "1"
@@ -575,7 +575,7 @@
         "x": 50.0,
         "y": 347.5
        },
-       "context": "Text: News TitleIn MaximumThree Lines — Overrides: Leading: 76.39999999999999, AppliedFont: Tietoevry Sans 1, FillColor: Color/TE RGB 40%25 Peach, FontStyle: Light, PointSize: 72, OTFContextualAlternate: false",
+       "context": "Text: News Title In Maximum Three Lines — Overrides: Leading: 76.39999999999999, AppliedFont: Tietoevry Sans 1, FillColor: Color/TE RGB 40%25 Peach, FontStyle: Light, PointSize: 72, OTFContextualAlternate: false",
        "context_details": {
         "overrides": {
          "AppliedFont": "Tietoevry Sans 1",
@@ -585,7 +585,7 @@
          "OTFContextualAlternate": "false",
          "PointSize": "72"
         },
-        "text": "News TitleIn MaximumThree Lines"
+        "text": "News Title\nIn Maximum\nThree Lines"
        },
        "data_id": "u134",
        "identifier": "u134",
@@ -593,7 +593,7 @@
        "page_name": "1",
        "spread_id": "ud0",
        "text_content": [
-        "News TitleIn MaximumThree Lines"
+        "News Title\nIn Maximum\nThree Lines"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -612,7 +612,7 @@
         "x": 50.0,
         "y": 227.5
        },
-       "context": "Text: Short descriptionabout the news content — Overrides: Leading: 40.39999999999999, AppliedFont: Tietoevry Sans 1, FillColor: Color/TE RGB White, PointSize: 30, OTFContextualAlternate: false",
+       "context": "Text: Short description about the news content — Overrides: Leading: 40.39999999999999, AppliedFont: Tietoevry Sans 1, FillColor: Color/TE RGB White, PointSize: 30, OTFContextualAlternate: false",
        "context_details": {
         "overrides": {
          "AppliedFont": "Tietoevry Sans 1",
@@ -621,7 +621,7 @@
          "OTFContextualAlternate": "false",
          "PointSize": "30"
         },
-        "text": "Short descriptionabout the news content"
+        "text": "Short description\nabout the news content"
        },
        "data_id": "u175",
        "identifier": "u175",
@@ -629,7 +629,7 @@
        "page_name": "1",
        "spread_id": "ud0",
        "text_content": [
-        "Short descriptionabout the news content"
+        "Short description\nabout the news content"
        ],
        "validationClassifier": "OVERRIDE"
       }

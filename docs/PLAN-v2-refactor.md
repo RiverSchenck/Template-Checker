@@ -310,7 +310,8 @@ skipped (editorial), footnotes and table cells checked as text but grouped separ
 *Done (2026-10-13):* B1, B2, B4, B6 fixed by feeding the old story classes from the walker; notes skipped, pending
 deletions skipped, footnotes and table cells checked (River). Table cells stay in the same v1 paragraph groups:
 grouping them separately turned "whole frame unstyled" errors into per-range errors in 12 packages, a rule change;
-v2 keeps `container` instead. `Br` → `\n` in its own commit (text-only diff in 39 goldens). **B3 moved to PR 2.4**
+v2 keeps `container` instead. `Br` → `\n` in its own commit (text-only diff in 39 result goldens and 21 customer summaries: words no longer run
+together; messages show a line break as a space). **B3 moved to PR 2.4**
 (River): the walker collects items placed in text, but image/frame checks only see them once they read `Document`.
 
 **PR 2.4 Document + loader; checks read the model (L, refactor).** `model/document.py`, `model/subject.py`,

@@ -441,25 +441,25 @@
   "template_name": "Flyer-Sales_Bad.zip",
   "text_box_data": {
    "u6ce": {
-    "content": "50% off on all products onmonobrand.com\n",
+    "content": "50% off on all products on\nmonobrand.com\n",
     "identifier": "u6ce",
     "page_id": "u698",
     "page_name": "1"
    },
    "u6d1": {
-    "content": "50% off on all products onmonobrand.com\n",
+    "content": "50% off on all products on\nmonobrand.com\n",
     "identifier": "u6d1",
     "page_id": "u698",
     "page_name": "1"
    },
    "u957": {
-    "content": "SuperSale\n",
+    "content": "Super\nSale\n",
     "identifier": "u957",
     "page_id": "u698",
     "page_name": "1"
    },
    "u95a": {
-    "content": "SuperSale\n",
+    "content": "Super\nSale\n",
     "identifier": "u95a",
     "page_id": "u698",
     "page_name": "1"
@@ -492,7 +492,7 @@
         "x": 96.38,
         "y": 402.52
        },
-       "context": "Text: 50% off on all products onmonobrand.com — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 13, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
+       "context": "Text: 50% off on all products on monobrand.com — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 13, StrokeWeight: 0.32244888188967313, Tracking: -5, OTFContextualAlternate: false, MiterLimit: 1.2897955275586925, RubyFontSize: -0.32244888188967313, KentenFontSize: -0.32244888188967313",
        "context_details": {
         "overrides": {
          "AppliedFont": "Montserrat",
@@ -505,7 +505,7 @@
          "StrokeWeight": "0.32244888188967313",
          "Tracking": "-5"
         },
-        "text": "50% off on all products onmonobrand.com"
+        "text": "50% off on all products on\nmonobrand.com"
        },
        "data_id": "u6ce",
        "identifier": "u6ce",
@@ -513,7 +513,7 @@
        "page_name": "1",
        "spread_id": "u693",
        "text_content": [
-        "50% off on all products onmonobrand.com"
+        "50% off on all products on\nmonobrand.com"
        ],
        "validationClassifier": "OVERRIDE"
       }
@@ -555,7 +555,7 @@
         "x": -62.93,
         "y": 196.72
        },
-       "context": "Text: SuperSale — Overrides: Leading: 77.91226096735717, AppliedFont: Playfair Display, FontStyle: Black, PointSize: 88.30056242967147, StrokeWeight: 0.4191835464565751, OTFContextualAlternate: false, MiterLimit: 1.6767341858263003, RubyFontSize: -0.4191835464565751, KentenFontSize: -0.4191835464565751",
+       "context": "Text: Super Sale — Overrides: Leading: 77.91226096735717, AppliedFont: Playfair Display, FontStyle: Black, PointSize: 88.30056242967147, StrokeWeight: 0.4191835464565751, OTFContextualAlternate: false, MiterLimit: 1.6767341858263003, RubyFontSize: -0.4191835464565751, KentenFontSize: -0.4191835464565751",
        "context_details": {
         "overrides": {
          "AppliedFont": "Playfair Display",
@@ -568,7 +568,7 @@
          "RubyFontSize": "-0.4191835464565751",
          "StrokeWeight": "0.4191835464565751"
         },
-        "text": "SuperSale"
+        "text": "Super\nSale"
        },
        "data_id": "u957",
        "identifier": "u957",
@@ -576,7 +576,7 @@
        "page_name": "1",
        "spread_id": "u693",
        "text_content": [
-        "SuperSale"
+        "Super\nSale"
        ],
        "validationClassifier": "OVERRIDE"
       }

@@ -392,13 +392,13 @@
   "template_name": "6 overrides.zip",
   "text_box_data": {
    "u100": {
-    "content": "thisis a lotof texthere\nyes\nit\nis a\nlotof text\n",
+    "content": "this\nis a \nlot\nof \ntext\nhere\n\nyes\n\nit\n\nis a\n\nlot\nof text\n",
     "identifier": "u100",
     "page_id": "ud3",
     "page_name": "1"
    },
    "u112": {
-    "content": "thisis a lotof texthere\nyes\nit\nis a\nlotof text\n",
+    "content": "this\nis a \nlot\nof \ntext\nhere\n\nyes\n\nit\n\nis a\n\nlot\nof text\n",
     "identifier": "u112",
     "page_id": "ud3",
     "page_name": "1"
@@ -526,7 +526,7 @@
         "overrides": {
          "Justification": "FullyJustified"
         },
-        "text": "yes"
+        "text": "yes\n"
        },
        "data_id": "u112",
        "identifier": "u112",
@@ -534,7 +534,7 @@
        "page_name": "1",
        "spread_id": "uce",
        "text_content": [
-        "yes"
+        "yes\n"
        ],
        "validationClassifier": "OVERRIDE"
       },
@@ -555,7 +555,7 @@
          "LeftIndent": "18",
          "NumberingContinue": "false"
         },
-        "text": "is a"
+        "text": "is a\n"
        },
        "data_id": "u112",
        "identifier": "u112",
@@ -563,7 +563,7 @@
        "page_name": "1",
        "spread_id": "uce",
        "text_content": [
-        "is a"
+        "is a\n"
        ],
        "validationClassifier": "OVERRIDE"
       },

@@ -386,7 +386,7 @@
     "page_name": "1"
    },
    "u142": {
-    "content": "Position Abteilung Bereich\nDivision\n",
+    "content": "Position Abteilung Bereich\n\nDivision\n",
     "identifier": "u142",
     "page_id": "u100",
     "page_name": "1"
@@ -398,7 +398,7 @@
     "page_name": "1"
    },
    "u179": {
-    "content": "Voith GmbH & Co. KGaASt. Pöltener Straße 4389522 Heidenheim, GermanyTelefon +49 7321 37 0000Mobil +49 151 26430000Fax +49 7321 37 0000wolfgang.mustermann-langname@voith.com\n",
+    "content": "Voith GmbH & Co. KGaA\nSt. Pöltener Straße 43\n89522 Heidenheim, Germany\nTelefon +49 7321 37 0000\nMobil +49 151 26430000\nFax +49 7321 37 0000\nwolfgang.mustermann-langname@voith.com\n",
     "identifier": "u179",
     "page_id": "u100",
     "page_name": "1"
@@ -517,7 +517,7 @@
          "LeftIndent": "18",
          "NumberingContinue": "false"
         },
-        "text": "Position Abteilung Bereich"
+        "text": "Position Abteilung Bereich\n"
        },
        "data_id": "u142",
        "identifier": "u142",
@@ -525,7 +525,7 @@
        "page_name": "1",
        "spread_id": "ufb",
        "text_content": [
-        "Position Abteilung Bereich"
+        "Position Abteilung Bereich\n"
        ],
        "validationClassifier": "OVERRIDE"
       },
@@ -603,12 +603,12 @@
         "x": 126.14,
         "y": 58.1
        },
-       "context": "Text: St. Pöltener Straße 4389522 Heidenheim, Germany — Overrides: FillColor: Color/Paper",
+       "context": "Text: St. Pöltener Straße 43 89522 Heidenheim, Germany — Overrides: FillColor: Color/Paper",
        "context_details": {
         "overrides": {
          "FillColor": "Color/Paper"
         },
-        "text": "St. Pöltener Straße 4389522 Heidenheim, Germany"
+        "text": "St. Pöltener Straße 43\n89522 Heidenheim, Germany"
        },
        "data_id": "u179",
        "identifier": "u179",
@@ -616,7 +616,7 @@
        "page_name": "1",
        "spread_id": "ufb",
        "text_content": [
-        "St. Pöltener Straße 4389522 Heidenheim, Germany"
+        "St. Pöltener Straße 43\n89522 Heidenheim, Germany"
        ],
        "validationClassifier": "OVERRIDE"
       }
