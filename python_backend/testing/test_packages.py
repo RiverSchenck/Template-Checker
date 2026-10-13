@@ -7,16 +7,15 @@ why, so a change in what the checker finds reads as a change here.
   them. Other checks' issues in the same package aren't compared.
 - ALL_ISSUES: per package, how many issues of each check the whole run finds; every check is compared.
 
-A package in neither table fails: every package needs a row.
+A package can have a row in both; a package in neither table fails: every package needs a row.
 """
-import os
 from collections import Counter
 
 import pytest
 
 from src.pipeline.run import run
 from src.pipeline.workspace import run_workspace
-from testing.golden.golden import TESTING_DIR, packages
+from testing.golden.golden import package_path, packages
 from testing.packages.expected import ALL_ISSUES, CHECKS
 
 # The fact that tells two issues of a check apart, shown after the subject.
@@ -41,11 +40,10 @@ def describe(issue: dict) -> str:
 
 def results(package: str) -> dict:
     with run_workspace() as workspace:
-        return run(os.path.join(TESTING_DIR, package), workspace, previews=False).json()
+        return run(package_path(package), workspace, previews=False).json()
 
 
-def test_every_package_has_one_row():
-    assert not set(CHECKS) & set(ALL_ISSUES)
+def test_every_package_has_a_row():
     assert sorted(CHECKS.keys() | ALL_ISSUES.keys()) == packages(), 'add a row to testing/packages/expected.py'
 
 

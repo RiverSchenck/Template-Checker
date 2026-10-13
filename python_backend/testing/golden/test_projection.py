@@ -84,6 +84,6 @@ def test_v2_projects_like_v1():
 
 
 def test_cli_reports_no_change_for_an_unchanged_package(capsys):
-    package = next(p for p in packages() if 'kerning_check/fail_data' in p)
+    package = '1 large image.zip'  # (it has kerning issues)
     assert main([package]) == 0
     assert '0 package(s) with changed issues: +0 -0' in capsys.readouterr().out

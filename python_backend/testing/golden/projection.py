@@ -6,7 +6,9 @@ so goldens of either version compare with the current output (plan PR 5.2 proved
 
     python -m testing.golden.projection                      # stored goldens -> current code
     python -m testing.golden.projection --base origin/main   # goldens at a git ref -> current code
-    python -m testing.golden.projection "unit_tests/kerning_check/fail_data/x.zip"   # only these packages
+    python -m testing.golden.projection "1 large image.zip"     # only these packages (names in testing/packages/)
+
+Goldens are keyed by package name since the corpus was deduplicated (plan PR 6.2): --base needs a ref from after it.
 """
 import argparse
 import json
@@ -124,7 +126,7 @@ def _golden_at(ref: str, package: str) -> Optional[dict]:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description='Issues added and removed per package, golden results -> current code.')
-    parser.add_argument('packages', nargs='*', help='package paths relative to testing/ (default: all)')
+    parser.add_argument('packages', nargs='*', help='package names in testing/packages/ (default: all)')
     parser.add_argument('--base', help='read the golden results at this git ref instead of the working tree')
     args = parser.parse_args(argv)
 
