@@ -292,6 +292,12 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Regular"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Minion Pro",
        "page_id": "",
@@ -1073,6 +1079,10 @@
         "y": 303.45
        },
        "context": "  Whitespace after text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.",
+       "context_details": {
+        "whitespace_only": true,
+        "whole_frame": false
+       },
        "data_id": "u3f4",
        "identifier": "NormalParagraphStyle",
        "page_id": "u3dc",
@@ -1090,6 +1100,10 @@
         "y": 371.19
        },
        "context": "  Whitespace after text: Reptata tquodit iusciatia dolorum aperrum quo od quodita ecullabo. Nam in ne pra demporem netur? Modita sedignam fuga.",
+       "context_details": {
+        "whitespace_only": true,
+        "whole_frame": false
+       },
        "data_id": "u47d",
        "identifier": "NormalParagraphStyle",
        "page_id": "u3dc",
@@ -1107,6 +1121,10 @@
         "y": 315.35
        },
        "context": "  Whitespace after text: Icatur aut ut aut qui sequi cum volorpor sum nonsequ odissitas moles serectur, sunt.",
+       "context_details": {
+        "whitespace_only": true,
+        "whole_frame": false
+       },
        "data_id": "ud61",
        "identifier": "NormalParagraphStyle",
        "page_id": "u3dc",
@@ -1169,6 +1187,10 @@
         "y": 134.16
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u3dd",
        "identifier": "u3e0",
        "page_id": "u3dc",
@@ -1265,6 +1287,10 @@
         "y": 114.8
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u423",
        "identifier": "u426",
        "page_id": "u3dc",
@@ -1420,6 +1446,10 @@
         "y": 637.8
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u594",
        "identifier": "u597",
        "page_id": "u3dc",
@@ -1477,6 +1507,10 @@
         "y": 196.52
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u5ce",
        "identifier": "u5d1",
        "page_id": "u3dc",

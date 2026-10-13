@@ -307,6 +307,12 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Regular"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Minion Pro",
        "page_id": "",
@@ -342,6 +348,14 @@
      "errors": [
       {
        "context": "Elements: Rectangle",
+       "context_details": {
+        "elements": [
+         {
+          "count": 1,
+          "kind": "Rectangle"
+         }
+        ]
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -354,6 +368,14 @@
      "warnings": [
       {
        "context": "top: 7.2pt, bottom: 7.2pt, inside: 7.2pt, outside: 7.2pt.",
+       "context_details": {
+        "bleed": {
+         "bottom": 7.2,
+         "inside": 7.2,
+         "outside": 7.2,
+         "top": 7.2
+        }
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -404,6 +426,9 @@
         "y": 410.9
        },
        "context": "Image iStock-1226023798.jpg is 15.25MB.",
+       "context_details": {
+        "size_mb": 15.25
+       },
        "data_id": "u179",
        "identifier": "iStock-1226023798.jpg",
        "page_id": "ud3",
@@ -443,6 +468,10 @@
         "y": 76.82
        },
        "context": "Image Container has skew transformations. Skew factors: b=0.0, c=-0.36397023426620234",
+       "context_details": {
+        "kind": "skew",
+        "rotation_deg": 0.0
+       },
        "data_id": "u119",
        "identifier": "music.png",
        "page_id": "ud3",
@@ -801,6 +830,10 @@
         "y": 188.64
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u16e",
        "identifier": "ue5",
        "page_id": "ud3",
@@ -875,6 +908,10 @@
         "y": 188.64
        },
        "context": "'No Line Breaks' must be checked.",
+       "context_details": {
+        "auto_size": "HeightAndWidth",
+        "no_line_breaks": false
+       },
        "data_id": "u10f",
        "identifier": "ufd",
        "page_id": "ud3",

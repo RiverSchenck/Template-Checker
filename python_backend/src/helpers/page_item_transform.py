@@ -25,6 +25,18 @@ class TransformClassification:
                              TransformKind.SKEW)
 
 
+_FLIPS = (TransformKind.FLIP_HORIZONTAL, TransformKind.FLIP_VERTICAL, TransformKind.FLIP)
+
+
+def transform_facts(classification: TransformClassification, a: float, b: float) -> dict:
+    """Facts for a flip or skew issue: {'kind': 'flip' | 'skew', 'rotation_deg'}. rotation_deg is the rotation that
+    comes with a skew (what the message reports, 0 when none); None for a flip, which is an error whatever its
+    rotation."""
+    if classification.kind in _FLIPS:
+        return {'kind': 'flip', 'rotation_deg': None}
+    return {'kind': 'skew', 'rotation_deg': round(math.degrees(math.atan2(b, a)), 2)}
+
+
 def parse_item_transform(s: str) -> Optional[Tuple[float, float, float, float, float, float]]:
     if not s or not str(s).strip():
         return None

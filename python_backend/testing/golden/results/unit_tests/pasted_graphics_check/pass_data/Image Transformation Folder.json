@@ -308,6 +308,10 @@
         "y": 396.0
        },
        "context": "Image Container has a horizontal flip transformation.",
+       "context_details": {
+        "kind": "flip",
+        "rotation_deg": null
+       },
        "data_id": "uea",
        "identifier": "logo_KawaksakiMotorsCorp.USA_original.png",
        "page_id": "ud3",
@@ -325,6 +329,10 @@
         "y": 36.0
        },
        "context": "Image Container has a vertical flip transformation.",
+       "context_details": {
+        "kind": "flip",
+        "rotation_deg": null
+       },
        "data_id": "uf3",
        "identifier": "logo_KawaksakiMotorsCorp.USA_original.png",
        "page_id": "uf2",

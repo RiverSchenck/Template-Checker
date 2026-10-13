@@ -45,23 +45,20 @@ def _round_half_up(value: float, places: int = 0) -> str:
 
 # ------------------------------------------------------------------ Details from the checker, in customer words
 
-_AUTO_SIZE_SETTINGS = (
-    (re.compile('no line breaks', re.I), 'turn on No Line Breaks'),
-)
+# Auto-size types Frontify always treats as "No Line Breaks" (src/checks/layout.py auto_size_text_box_check).
+_WIDTH_AUTO_SIZE = ('WidthOnly', 'HeightAndWidth')
 
 
 def _place_detail(problem: Problem, place: Place) -> Optional[str]:
-    """A short note about one place, e.g. "turn on No Line Breaks" or "15.25 MB". Raw checker values (skew factors, link ids)
-    are left out."""
-    context = place.context
-    if not context:
-        return None
-    if problem.key == 'AUTO_SIZE_TEXT_BOX':
-        setting = next((text for pattern, text in _AUTO_SIZE_SETTINGS if pattern.search(context)), None)
-        return setting or context.removesuffix('.')
-    if problem.key == 'LARGE_IMAGE':
-        match = re.search(r'([\d.]+)\s*MB', context, re.I)
-        return f'{match.group(1)} MB' if match else None
+    """A short note about one place, e.g. "turn on No Line Breaks" or "15.25 MB", from the facts the check recorded.
+    Raw checker values (skew factors, link ids) are left out."""
+    facts = place.context_details or {}
+    if problem.key == 'AUTO_SIZE_TEXT_BOX' and place.context:
+        if facts.get('auto_size') in _WIDTH_AUTO_SIZE:
+            return 'turn on No Line Breaks'
+        return place.context.removesuffix('.')
+    if problem.key == 'LARGE_IMAGE' and facts.get('size_mb') is not None:
+        return f"{facts['size_mb']} MB"
     return None
 
 
@@ -106,23 +103,22 @@ def _pt_to_mm(pt: float) -> str:
 
 def _problem_notes(problem: Problem) -> list[str]:
     """Extra lines for the whole issue, e.g. what's on the master page or how big the bleed is."""
-    contexts = unique(p.context for s in problem.subjects for p in s.places)
+    facts = [p.context_details or {} for s in problem.subjects for p in s.places]
     if problem.key == 'MASTERPAGE':
         counts: dict[str, int] = {}
-        for context in contexts:
-            for element in re.sub(r'^Elements:\s*', '', context, flags=re.I).split(','):
-                if element.strip():
-                    counts[element.strip()] = counts.get(element.strip(), 0) + 1
+        for element in (e for f in facts for e in f.get('elements') or ()):
+            counts[element['kind']] = counts.get(element['kind'], 0) + element['count']
         items = [_plural(n, _ELEMENT_NAMES.get(e, e.lower())) for e, n in counts.items()]
         return [f'Found on the master page: {_list_text(items)}'] if items else []
     if problem.key == 'DOCUMENT_BLEED':
-        sides = [(side, _pt_to_mm(float(pt))) for side, pt in re.findall(r'(\w+):\s*(\d+(?:\.\d+)?)pt', contexts[0] if contexts else '')]
+        bleed = next((f['bleed'] for f in facts if f.get('bleed')), {})
+        sides = [(side, _pt_to_mm(pt)) for side, pt in bleed.items() if pt is not None]
         if not sides:
             return []
         sizes = unique(size for _, size in sides)
         described = f'{sizes[0]} on all sides' if len(sizes) == 1 else ', '.join(f'{side} {size}' for side, size in sides)
         return [f'Current bleed: {described}']
-    if problem.key == 'PARAGRAPH_STYLE' and any(re.search('whitespace', c, re.I) for c in contexts):
+    if problem.key == 'PARAGRAPH_STYLE' and any(f.get('whitespace_only') for f in facts):
         return ['Tip: some of this is only spaces or empty lines after the text. Delete them, or give them a style too.']
     return []
 

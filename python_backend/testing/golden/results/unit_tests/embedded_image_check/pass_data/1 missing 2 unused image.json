@@ -298,6 +298,14 @@
      "warnings": [
       {
        "context": "top: 70.86614173228347pt, bottom: 70.86614173228347pt, inside: 70.86614173228347pt, outside: 70.86614173228347pt.",
+       "context_details": {
+        "bleed": {
+         "bottom": 70.86614173228347,
+         "inside": 70.86614173228347,
+         "outside": 70.86614173228347,
+         "top": 70.86614173228347
+        }
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -887,6 +895,10 @@
         "y": 1785.6
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u12e7",
        "identifier": "u12ea",
        "page_id": "u16d",
@@ -945,6 +957,10 @@
         "y": 2357.25
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u1300",
        "identifier": "u1303",
        "page_id": "u16d",
@@ -1006,6 +1022,10 @@
         "y": 1971.02
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u1319",
        "identifier": "u131c",
        "page_id": "u16d",
@@ -1067,6 +1087,10 @@
         "y": 2569.37
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u1332",
        "identifier": "u1335",
        "page_id": "u16d",
@@ -1090,6 +1114,10 @@
         "y": 1252.91
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u1d56",
        "identifier": "u1d44",
        "page_id": "ud5",
@@ -1145,6 +1173,10 @@
         "y": 3332.13
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u1d6d",
        "identifier": "u1d5b",
        "page_id": "u16d",
@@ -1201,6 +1233,10 @@
         "y": 1970.21
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u42e",
        "identifier": "u41a",
        "page_id": "ud5",
@@ -1297,6 +1333,10 @@
         "y": 2155.63
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u434",
        "identifier": "u437",
        "page_id": "ud5",
@@ -1355,6 +1395,10 @@
         "y": 2569.85
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u453",
        "identifier": "u456",
        "page_id": "ud5",
@@ -1416,6 +1460,10 @@
         "y": 2781.97
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u46c",
        "identifier": "u470",
        "page_id": "ud5",

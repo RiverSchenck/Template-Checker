@@ -468,6 +468,10 @@
         "y": 499.68
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u102",
        "identifier": "uf0",
        "page_id": "ud3",

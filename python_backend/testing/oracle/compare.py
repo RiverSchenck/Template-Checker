@@ -17,12 +17,6 @@ def checker_items(results: dict, *classifiers: str):
                         yield identifier, item
 
 
-def _transform_kind(context: str) -> str:
-    if 'flip' in context:
-        return 'flip'
-    return 'skew' if 'skew' in context else context
-
-
 # name -> (oracle side, checker side); both produce comparable sets
 CHECKS: Dict[str, tuple] = {
     'text_columns': (lambda d: {i[1] for i in oracle.text_columns(d)},
@@ -37,8 +31,8 @@ CHECKS: Dict[str, tuple] = {
                         lambda r: {i['data_id'] for _, i in checker_items(r, 'EMBEDDED_IMAGE')}),
     'image_transformations': (
         lambda d: oracle.image_transformations(d),
-        lambda r: {('image' if i['context'].startswith('Image inside') else 'container', i['data_id'],
-                    _transform_kind(i['context']))
+        lambda r: {('image' if i['validationClassifier'] == 'IMAGE_TRANSFORMATION_IMAGE' else 'container', i['data_id'],
+                    i['context_details']['kind'])
                    for _, i in checker_items(r, 'IMAGE_TRANSFORMATION_IMAGE', 'IMAGE_TRANSFORMATION_CONTAINER')}),
     'document_bleed': (lambda d: len(oracle.document_bleed(d)),
                        lambda r: len(list(checker_items(r, 'DOCUMENT_BLEED')))),

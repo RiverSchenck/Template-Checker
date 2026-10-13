@@ -4,7 +4,7 @@ from src.checks._report import at_link, report
 from src.model.document import Document
 from src.results.results import Results
 from src.results.classifiers import ValidationError, ValidationInfo, ValidationWarning
-from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform
+from src.helpers.page_item_transform import classify_page_item_transform, parse_item_transform, transform_facts
 
 
 def images_included_check(doc: Document, results: Results) -> None:
@@ -45,7 +45,8 @@ def large_image_check(doc: Document, results: Results) -> None:
         if image.size_mb > 10:
             data_id = doc.frame_of_image(image.name)
             report(results, ValidationInfo.LARGE_IMAGE, f"Image {image.name} is {image.size_mb}MB.",
-                   page_id=doc.page_of_item(data_id), identifier=image.name, data_id=data_id)
+                   page_id=doc.page_of_item(data_id), identifier=image.name, data_id=data_id,
+                   context_details={'size_mb': image.size_mb})
 
 
 def embedded_image_check(doc: Document, results: Results) -> None:
@@ -69,4 +70,5 @@ def image_transformation_check(doc: Document, results: Results) -> None:
                 continue
             subject = "Image inside Container" if is_image else "Image Container"
             classifier = ValidationError.IMAGE_TRANSFORMATION_IMAGE if is_image else ValidationError.IMAGE_TRANSFORMATION_CONTAINER
-            report(results, classifier, f"{subject} {classification.message}", **where)
+            report(results, classifier, f"{subject} {classification.message}",
+                   context_details=transform_facts(classification, *parsed[:2]), **where)

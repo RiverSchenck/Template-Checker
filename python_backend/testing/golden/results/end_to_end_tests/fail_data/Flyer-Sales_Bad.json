@@ -292,6 +292,12 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Regular"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Minion Pro",
        "page_id": "",
@@ -314,6 +320,14 @@
      "warnings": [
       {
        "context": "top: 8.503937007874017pt, bottom: 8.503937007874017pt, inside: 8.503937007874017pt, outside: 8.503937007874017pt.",
+       "context_details": {
+        "bleed": {
+         "bottom": 8.503937007874017,
+         "inside": 8.503937007874017,
+         "outside": 8.503937007874017,
+         "top": 8.503937007874017
+        }
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",
@@ -531,6 +545,10 @@
         "y": 402.52
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u6ce",
        "identifier": "u6d1",
        "page_id": "u698",
@@ -594,6 +612,10 @@
         "y": 196.72
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u957",
        "identifier": "u95a",
        "page_id": "u698",
@@ -659,6 +681,10 @@
         "y": 515.52
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u96e",
        "identifier": "u971",
        "page_id": "u698",

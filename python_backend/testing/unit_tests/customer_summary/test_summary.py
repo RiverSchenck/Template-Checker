@@ -47,7 +47,8 @@ def make_result(**overrides):
         'char_styles': category({}),
         'text_boxes': category({
             'story1': {**EMPTY, 'errors': [item(validationClassifier='AUTO_SIZE_TEXT_BOX', identifier='story1', data_id='f5',
-                                                context="'No Line Breaks' must be checked.", bounds=bounds('p1', 80))]},
+                                                context="'No Line Breaks' must be checked.", bounds=bounds('p1', 80),
+                                                context_details={'auto_size': 'WidthOnly', 'no_line_breaks': False})]},
         }, 6),
         'fonts': category({
             'Pangea Bold': {**EMPTY, 'errors': [item(validationClassifier='FONTS_INCLUDED', identifier='Pangea Bold',
@@ -103,7 +104,8 @@ def test_names_frames_on_the_same_page_once_and_puts_checker_details_in_plain_wo
         general=category({'document': {**EMPTY, 'warnings': [item(
             validationClassifier='DOCUMENT_BLEED', identifier='document', page_id='', page_name='',
             context='top: 8.503937007874017pt, bottom: 8.503937007874017pt, inside: 8.503937007874017pt, '
-                    'outside: 8.503937007874017pt.')]}}),
+                    'outside: 8.503937007874017pt.',
+            context_details={'bleed': {side: 8.503937007874017 for side in ('top', 'bottom', 'inside', 'outside')}})]}}),
         text_box_data={'s1': {'content': 'Title'}, 's2': {'content': 'Intro'}},
         checks=[],
     )).review_text

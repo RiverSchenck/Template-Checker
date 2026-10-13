@@ -314,6 +314,14 @@
      "warnings": [
       {
        "context": "top: 8.503937007874017pt, bottom: 8.503937007874017pt, inside: 8.503937007874017pt, outside: 8.503937007874017pt.",
+       "context_details": {
+        "bleed": {
+         "bottom": 8.503937007874017,
+         "inside": 8.503937007874017,
+         "outside": 8.503937007874017,
+         "top": 8.503937007874017
+        }
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",

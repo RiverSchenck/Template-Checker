@@ -337,6 +337,12 @@
      "errors": [
       {
        "context": "",
+       "context_details": {
+        "missing_styles": [
+         "Regular"
+        ],
+        "whole_family": true
+       },
        "data_id": "null",
        "identifier": "Minion Pro",
        "page_id": "",
@@ -625,6 +631,10 @@
         "y": 467.72
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u112",
        "identifier": "u115",
        "page_id": "ud3",
@@ -648,6 +658,10 @@
         "y": 223.94
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "uf5",
        "identifier": "ue3",
        "page_id": "ud3",
@@ -739,6 +753,10 @@
         "y": 345.83
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "ufa",
        "identifier": "ufe",
        "page_id": "ud3",

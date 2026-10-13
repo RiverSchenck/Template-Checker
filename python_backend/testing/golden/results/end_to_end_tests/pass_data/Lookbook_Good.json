@@ -292,6 +292,13 @@
      "errors": [
       {
        "context": "Missing styles: Black, Regular",
+       "context_details": {
+        "missing_styles": [
+         "Black",
+         "Regular"
+        ],
+        "whole_family": false
+       },
        "data_id": "null",
        "identifier": "Playfair Display",
        "page_id": "",

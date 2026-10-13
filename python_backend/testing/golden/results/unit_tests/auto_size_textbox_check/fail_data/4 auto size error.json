@@ -437,6 +437,10 @@
         "y": 251.84
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u124",
        "identifier": "u112",
        "page_id": "ud3",
@@ -454,6 +458,10 @@
         "y": 251.84
        },
        "context": "'No Line Breaks' must be checked.",
+       "context_details": {
+        "auto_size": "HeightAndWidth",
+        "no_line_breaks": false
+       },
        "data_id": "u124",
        "identifier": "u112",
        "page_id": "ud3",
@@ -477,6 +485,10 @@
         "y": 309.6
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u128",
        "identifier": "u12b",
        "page_id": "ud3",
@@ -500,6 +512,10 @@
         "y": 391.64
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u13f",
        "identifier": "u143",
        "page_id": "ud3",
@@ -523,6 +539,10 @@
         "y": 58.8
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "uf6",
        "identifier": "ue4",
        "page_id": "ud3",
@@ -540,6 +560,10 @@
         "y": 58.8
        },
        "context": "Only width, height, and WidthAndHeight are supported.",
+       "context_details": {
+        "auto_size": "HeightAndWidthProportionally",
+        "no_line_breaks": false
+       },
        "data_id": "uf6",
        "identifier": "ue4",
        "page_id": "ud3",
@@ -563,6 +587,10 @@
         "y": 52.8
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u10d",
        "identifier": "ufb",
        "page_id": "ud3",
@@ -580,6 +608,10 @@
         "y": 52.8
        },
        "context": "'No Line Breaks' must be checked.",
+       "context_details": {
+        "auto_size": "WidthOnly",
+        "no_line_breaks": false
+       },
        "data_id": "u10d",
        "identifier": "ufb",
        "page_id": "ud3",

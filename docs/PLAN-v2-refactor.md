@@ -358,6 +358,9 @@ is a thin wrapper over the pipeline for the app and the tests (River): it goes i
 `customer_summary/summary.py` reads facts; its five regexes are deleted; `oracle/compare.py` stops matching
 'flip'/'skew' substrings. Golden diff: `context_details` gains fields; **summary goldens unchanged** (that is the
 proof). `context` prose unchanged.
+*Done (2026-10-13):* MASTERPAGE `elements` is a list of `{kind, count}` in the order found (JSON objects lose key
+order: goldens and Flask sort them); FONTS_INCLUDED/ADOBE_FONT also say `whole_family`; TRANSFORMATION's `rotation_deg`
+is `None` for a flip. Two summary unit tests and `summary_cases/rounding.json` gained the facts in their inputs (River).
 
 ### Phase 5 — Results v2
 

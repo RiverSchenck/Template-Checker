@@ -389,6 +389,10 @@
         "y": 311.04
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u107",
        "identifier": "ude",
        "page_id": "ud3",

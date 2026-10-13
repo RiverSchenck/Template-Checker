@@ -296,6 +296,14 @@
      "errors": [
       {
        "context": "Elements: Rectangle",
+       "context_details": {
+        "elements": [
+         {
+          "count": 1,
+          "kind": "Rectangle"
+         }
+        ]
+       },
        "data_id": "null",
        "identifier": "null",
        "page_id": "",

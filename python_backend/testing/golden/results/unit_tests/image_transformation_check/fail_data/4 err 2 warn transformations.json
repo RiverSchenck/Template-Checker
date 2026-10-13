@@ -308,6 +308,10 @@
         "y": -69.6
        },
        "context": "Image Container has a vertical flip transformation.",
+       "context_details": {
+        "kind": "flip",
+        "rotation_deg": null
+       },
        "data_id": "u126",
        "identifier": "230209_FRO2301_NYC_15.jpg",
        "page_id": "u125",
@@ -325,6 +329,10 @@
         "y": 50.4
        },
        "context": "Image inside Container has a vertical flip transformation.",
+       "context_details": {
+        "kind": "flip",
+        "rotation_deg": null
+       },
        "data_id": "u12e",
        "identifier": "230209_FRO2301_NYC_15.jpg",
        "page_id": "u125",
@@ -348,6 +356,10 @@
         "y": 494.9
        },
        "context": "Image inside Container has skew transformations. Skew factors: b=0.0, c=-0.1311362852727794",
+       "context_details": {
+        "kind": "skew",
+        "rotation_deg": 0.0
+       },
        "data_id": "u154",
        "identifier": "Frontify_Linkedin-Cover-Employee_1584x396.png",
        "page_id": "u125",
@@ -576,6 +588,10 @@
         "y": 603.6
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u11a",
        "identifier": "u108",
        "page_id": "ud3",
@@ -599,6 +615,10 @@
         "y": 189.6
        },
        "context": "",
+       "context_details": {
+        "whitespace_only": false,
+        "whole_frame": true
+       },
        "data_id": "u144",
        "identifier": "u132",
        "page_id": "u125",
