@@ -8,6 +8,7 @@ import re
 import uuid
 from .errors import api_error
 from .routes import main as main_blueprint
+from src.pipeline.workspace import sweep_stale, work_dir
 
 # A caller-supplied X-Request-ID is reused only if it looks like an id, so it can't inject anything into logs.
 _REQUEST_ID = re.compile(r'^[A-Za-z0-9._:-]{1,128}$')
@@ -49,14 +50,16 @@ def create_app():
          # The analytics CSV export reports how many rows matched vs. were included.
          expose_headers=['Content-Disposition', 'X-Total-Rows', 'X-Exported-Rows', 'X-Request-ID'])
 
-    UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    # Every check run keeps its files (upload, unpacked package, XML export) in its own folder under here
+    # (src/pipeline/workspace.py); folders left by killed runs are swept at start.
+    app.config['UPLOAD_FOLDER'] = work_dir()
 
     # Set maximum file upload size to 200MB (safe for 256MB Fly machine; unzip needs ~2x disk)
     # Value is in bytes: 200 * 1024 * 1024 = 209715200
     app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200MB
 
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    sweep_stale()
 
     app.register_blueprint(main_blueprint)
 

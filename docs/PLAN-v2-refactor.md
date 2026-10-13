@@ -339,6 +339,9 @@ XMP thumbnails are read in memory (`helpers/pdf_previews.xmp_thumbnails`); PR 3.
 default system temp; upload, unzip and XML zip all inside it; `sweep_stale(1h)` at app start), `pipeline/intake.py`
 (`open_package` raising `Rejected(stage, reason)`; no empty-folder creation; package PDF taken from the package
 listing). Fixes S4. Golden diff: 0.
+*Done (2026-10-13):* intake in two steps (`unpack_package`, `unpack_idml`) so the stages stay exact; the package PDF is
+chosen from the extracted package folder, which holds only the package's own PDFs. `FrontifyChecker` calls the intake
+until PR 3.2.
 
 **PR 3.2 Runner; previews opt-in (M).** `pipeline/run.py` with a stage tracker (analytics names unchanged),
 `pipeline/previews.py` (XMP in memory, PDF render) called only when asked (D6). `app/` uses
