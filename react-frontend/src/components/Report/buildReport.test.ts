@@ -124,6 +124,14 @@ describe('buildReport', () => {
     ]);
   });
 
+  it('says what was checked in the singular for one', () => {
+    const report = buildReport(makeResult({ subjects_checked: { paragraph_style: 1, text_frame: 2 } }));
+    expect(report.checked).toEqual([
+      { label: 'paragraph style', count: 1 },
+      { label: 'text frames', count: 2 },
+    ]);
+  });
+
   it('marks every check as passed when nothing is found', () => {
     const report = buildReport(makeResult({ issues: [] }));
     expect(report.problems).toEqual([]);

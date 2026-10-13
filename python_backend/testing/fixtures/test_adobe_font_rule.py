@@ -26,7 +26,7 @@ def run_with_fonts(tmp_path, adobe=True, packaged=(), other_missing=False):
 
 def test_unpackaged_adobe_font_is_an_error_once(tmp_path):
     run = run_with_fonts(tmp_path)
-    assert [(i.severity, i.identifier, i.context) for i in run.of('ADOBE_FONT')] == [('errors', 'Cloud Sans', '')]
+    assert [(i.severity, i.subject, i.detail) for i in run.of('ADOBE_FONT')] == [('error', 'Cloud Sans', '')]
     assert run.of('FONTS_INCLUDED') == []
 
 
@@ -38,19 +38,19 @@ def test_packaged_adobe_font_is_fine(tmp_path):
 
 def test_partly_packaged_adobe_font_names_missing_styles(tmp_path):
     run = run_with_fonts(tmp_path, packaged=('Regular',))
-    assert [i.context for i in run.of('ADOBE_FONT')] == ['Missing styles: Bold']
+    assert [i.detail for i in run.of('ADOBE_FONT')] == ['Missing styles: Bold']
 
 
 def test_other_missing_fonts_still_reported(tmp_path):
     run = run_with_fonts(tmp_path, other_missing=True)
-    assert [i.identifier for i in run.of('ADOBE_FONT')] == ['Cloud Sans']
-    assert [i.identifier for i in run.of('FONTS_INCLUDED')] == ['Desk Serif']
+    assert [i.subject for i in run.of('ADOBE_FONT')] == ['Cloud Sans']
+    assert [i.subject for i in run.of('FONTS_INCLUDED')] == ['Desk Serif']
 
 
 def test_desktop_font_is_not_an_adobe_font(tmp_path):
     run = run_with_fonts(tmp_path, adobe=False)
     assert run.of('ADOBE_FONT') == []
-    assert [i.identifier for i in run.of('FONTS_INCLUDED')] == ['Cloud Sans']
+    assert [i.subject for i in run.of('FONTS_INCLUDED')] == ['Cloud Sans']
 
 
 def test_only_the_adobe_styles_count_as_adobe(tmp_path):
@@ -62,8 +62,8 @@ def test_only_the_adobe_styles_count_as_adobe(tmp_path):
     pkg.paragraph_style('Body', font='Mixed', FontStyle='Regular')
     pkg.text_frame(pkg.story([('Body', [('a', {}), ('b', {'FontStyle': 'Italic'}), ('c', {'FontStyle': 'Bold'})])]))
     run = run_checker(pkg.write(tmp_path))
-    assert [i.context for i in run.of('FONTS_INCLUDED')] == ['Missing styles: Regular']
-    assert [i.context for i in run.of('ADOBE_FONT')] == ['Missing styles: Italic']
+    assert [i.detail for i in run.of('FONTS_INCLUDED')] == ['Missing styles: Regular']
+    assert [i.detail for i in run.of('ADOBE_FONT')] == ['Missing styles: Italic']
 
 
 def test_absent_family_used_only_in_a_desktop_style_is_not_adobe(tmp_path):
@@ -72,5 +72,5 @@ def test_absent_family_used_only_in_a_desktop_style_is_not_adobe(tmp_path):
     pkg.paragraph_style('Body', font='Mixed', FontStyle='Regular')
     pkg.text_frame(pkg.story([('Body', 'Regular only')]))
     run = run_checker(pkg.write(tmp_path))
-    assert [i.identifier for i in run.of('FONTS_INCLUDED')] == ['Mixed']
+    assert [i.subject for i in run.of('FONTS_INCLUDED')] == ['Mixed']
     assert run.of('ADOBE_FONT') == []

@@ -59,7 +59,7 @@ def test_rotated_and_skewed_text_frame_is_an_error(tmp_path):
     pkg = PackageBuilder()
     pkg.text_frame(pkg.story([('Body', 'Skewed')]), transform=f'{a} {b} {c} {d} 0 -396')
     run = run_checker(pkg.write(tmp_path))
-    assert [i.severity for i in run.of('PAGE_ITEM_TRANSFORMATION')] == ['errors']
+    assert [i.severity for i in run.of('TRANSFORMATION', 'page_item')] == ['error']
 
 
 def test_rotated_and_skewed_image_frame_is_an_error(tmp_path):
@@ -67,7 +67,7 @@ def test_rotated_and_skewed_image_frame_is_an_error(tmp_path):
     pkg = PackageBuilder()
     pkg.image('photo.jpg', frame_transform=f'{a} {b} {c} {d} 0 -396')
     run = run_checker(pkg.write(tmp_path))
-    assert [i.severity for i in run.of('IMAGE_TRANSFORMATION_CONTAINER')] == ['errors']
+    assert [i.severity for i in run.of('TRANSFORMATION', 'image_frame')] == ['error']
 
 
 def test_rotated_items_raise_nothing(tmp_path):
@@ -76,5 +76,4 @@ def test_rotated_items_raise_nothing(tmp_path):
     pkg.text_frame(pkg.story([('Body', 'Rotated')]), transform=f'{a} {b} {c} {d} 0 -396')
     pkg.image('photo.jpg', frame_transform=f'{a} {b} {c} {d} 0 -396', image_transform=f'{a} {b} {c} {d} 0 0')
     run = run_checker(pkg.write(tmp_path))
-    assert run.of('PAGE_ITEM_TRANSFORMATION') == []
-    assert run.of('IMAGE_TRANSFORMATION_IMAGE') == run.of('IMAGE_TRANSFORMATION_CONTAINER') == []
+    assert run.of('TRANSFORMATION') == []

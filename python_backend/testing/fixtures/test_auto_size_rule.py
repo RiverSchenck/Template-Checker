@@ -12,7 +12,7 @@ POINTS = ['TopLeftPoint', 'TopCenterPoint', 'TopRightPoint', 'LeftCenterPoint', 
 def auto_size_errors(tmp_path, **frame):
     pkg = PackageBuilder()
     pkg.text_frame(pkg.story([('Body', 'Auto')]), **frame)
-    return [i.context for i in run_checker(pkg.write(tmp_path)).of('AUTO_SIZE_TEXT_BOX')]
+    return [i.detail for i in run_checker(pkg.write(tmp_path)).of('AUTO_SIZE_TEXT_BOX')]
 
 
 @pytest.mark.parametrize('point', POINTS)

@@ -9,7 +9,7 @@ from testing.fixtures.idml_builder import PackageBuilder
 def pasted_contexts(tmp_path, build):
     pkg = PackageBuilder()
     build(pkg)
-    return [i.context for i in run_checker(pkg.write(tmp_path)).of('PASTED_GRAPHICS')]
+    return [i.detail for i in run_checker(pkg.write(tmp_path)).of('PASTED_GRAPHICS')]
 
 
 @pytest.mark.parametrize('tag', ['Rectangle', 'Oval', 'Polygon'])

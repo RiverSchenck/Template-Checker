@@ -1,4 +1,4 @@
-"""Phase 1 crash and latent-bug fixes (docs/PLAN-backend-refactor.md, B1 and L1-L7).
+"""Phase 1 crash and latent-bug fixes (docs/archive/PLAN-backend-refactor.md, B1 and L1-L7).
 
 Each builds the smallest package that triggers the bug. None of these change results for real test packages
 (the golden results stay identical); they cover inputs the 187 test packages don't contain.
@@ -19,7 +19,7 @@ def text_package(**kwargs) -> PackageBuilder:
 def test_b1_package_without_master_spreads_is_checked(tmp_path):
     run = run_checker(text_package(master_spreads=False).write(tmp_path))
     assert run.stopped_at == 'RESULTS'
-    assert 'MASTERPAGE' not in run.classifiers()
+    assert 'MASTERPAGE' not in run.checks()
 
 
 def test_l1_images_on_every_master_count_as_used(tmp_path):
@@ -36,7 +36,7 @@ def test_l1_missing_image_on_an_earlier_master_is_reported(tmp_path):
     pkg.image('only-on-master-1.png', master=0, include_in_links=False)
     pkg.image('logo-b.png', master=1)
     run = run_checker(pkg.write(tmp_path))
-    assert [i.identifier for i in run.of('IMAGE_INCLUDED')] == ['only-on-master-1.png']
+    assert [i.subject for i in run.of('IMAGE_INCLUDED')] == ['only-on-master-1.png']
 
 
 def test_l2_a_malformed_link_is_skipped_not_crashed_on(tmp_path):
@@ -45,7 +45,7 @@ def test_l2_a_malformed_link_is_skipped_not_crashed_on(tmp_path):
     pkg.image('fine.png', embedded=True, include_in_links=False)
     run = run_checker(pkg.write(tmp_path))
     assert run.stopped_at == 'RESULTS'
-    assert [i.identifier for i in run.of('EMBEDDED_IMAGE')] == ['fine.png']
+    assert [i.subject for i in run.of('EMBEDDED_IMAGE')] == ['fine.png']
 
 
 def test_l3_link_without_a_grandparent_element():
@@ -63,8 +63,8 @@ def test_l4_text_frame_whose_story_is_missing(tmp_path):
     run = run_checker(pkg.write(tmp_path))
     assert run.stopped_at == 'RESULTS'
     [columns] = run.of('TEXT_COLUMNS')
-    assert (columns.identifier, columns.data_id) == ('u999', frame)
-    assert [i.data_id for i in run.of('OBJECT_STYLE_TEXT')] == [frame]
+    assert (columns.subject, columns.item_id) == (frame, frame)
+    assert [i.item_id for i in run.of('OBJECT_STYLE', 'text_frame')] == [frame]
 
 
 def test_l5_cyclic_based_on_does_not_crash(tmp_path):
@@ -95,4 +95,4 @@ def test_l7_text_wrap_still_checked_when_document_has_no_stories(tmp_path):
     frame = pkg.text_frame('u999', wrap='BoundingBoxTextWrap')  # a frame, but no Stories/ at all
     run = run_checker(pkg.write(tmp_path))
     assert run.stopped_at == 'RESULTS'
-    assert [i.data_id for i in run.of('TEXT_WRAP')] == [frame]
+    assert [i.item_id for i in run.of('TEXT_WRAP')] == [frame]

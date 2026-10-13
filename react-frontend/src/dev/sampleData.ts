@@ -6,9 +6,11 @@
  * Built in a few deliberate stories worth spotting on the page:
  *  - usage grows through the year; weekends are quiet
  *  - a deploy 9 days ago causes a run of PARSE_XML crashes
- *  - "Color Fill Tint" is a new check that started firing 12 days ago
+ *  - the text color tint check (FILL_TINT) is new: it started firing 12 days ago
  *  - overrides are trending down, missing fonts are steady
  */
+import type { Check, CheckResult } from '../types';
+import flyer from '../fixtures/flyer-sales.json';
 import type {
   Bucket,
   IssueDetail,
@@ -72,41 +74,53 @@ const TEMPLATE_STEMS = [
 
 interface IssueType {
   type: string;
-  severity: Severity;
-  category: string;
-  label: string;
-  message: string;
   /** Chance a completed run hits it, as a function of how many days ago the run was. */
   rate: (daysAgo: number) => number;
   identifiers?: readonly string[];
 }
+
+/** The catalogue (every check's wording), as results list it. */
+const CHECKS = new Map<string, Check>(
+  (flyer as unknown as CheckResult).results.checks.map((check) => [check.key, check])
+);
 
 const FONTS = ['Helvetica Neue', 'Gotham', 'Proxima Nova', 'Futura PT', 'Avenir Next', 'Brandon Grotesque', 'Minion Pro'];
 const PAR_STYLES = ['Body', 'Headline 1', 'Subhead', 'Caption', 'Legal', 'Bullet list', 'Quote'];
 const CHAR_STYLES = ['Bold', 'Italic', 'Superscript', 'Link', 'Price'];
 const IMAGES = ['hero.psd', 'logo.ai', 'background.tif', 'product-shot.jpg', 'pattern.eps', 'portrait.png'];
 
-const help = 'http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates';
 const ISSUES: IssueType[] = [
-  { type: 'FONTS_INCLUDED', severity: 'error', category: 'font', label: 'Fonts Included', message: 'Package is missing fonts.', rate: () => 0.36, identifiers: FONTS },
-  { type: 'OVERRIDE', severity: 'warning', category: 'text_frame', label: 'Override', message: 'Overrides are not supported.', rate: (d) => 0.22 + 0.3 * (d / 365) },
-  { type: 'PARAGRAPH_STYLE', severity: 'error', category: 'text_frame', label: 'Paragraph Style', message: 'Text found missing paragraph styles.', rate: () => 0.27 },
-  { type: 'HYPHENATION', severity: 'warning', category: 'paragraph_style', label: 'Hyphenation', message: 'Hyphenation is not supported.', rate: () => 0.24, identifiers: PAR_STYLES },
-  { type: 'IMAGE_INCLUDED', severity: 'error', category: 'image', label: 'Images Included', message: 'Package missing image link.', rate: (d) => (d < 30 ? 0.2 : 0.13), identifiers: IMAGES },
-  { type: 'KERNING', severity: 'error', category: 'paragraph_style', label: 'Kerning', message: "Kerning must be 'Metrics'", rate: () => 0.17, identifiers: PAR_STYLES },
-  { type: 'COMPOSER', severity: 'warning', category: 'paragraph_style', label: 'Composer', message: "We recommend defining paragraph style composers as 'Adobe Single-line Composer', as browsers can render this composer.", rate: () => 0.15, identifiers: PAR_STYLES },
-  { type: 'DOCUMENT_BLEED', severity: 'warning', category: 'document', label: 'Document Bleed', message: 'InDesign defined bleed is applied.', rate: () => 0.12 },
-  { type: 'OTF_TTF_FONT', severity: 'error', category: 'font', label: 'OTF/TTF Font', message: 'Only OTF or TTF fonts are supported.', rate: () => 0.09, identifiers: ['Helvetica (Type 1)', 'Times (Type 1)', 'Univers 55 (PS)'] },
-  { type: 'EMBEDDED_IMAGE', severity: 'error', category: 'image', label: 'Embedded Image', message: 'Embedded images are not supported.', rate: () => 0.08, identifiers: IMAGES },
-  { type: 'KERNING_CHAR', severity: 'error', category: 'character_style', label: 'Kerning', message: "Kerning must be 'Metrics'", rate: () => 0.06, identifiers: CHAR_STYLES },
-  { type: 'LINKED_TEXT_FRAME', severity: 'error', category: 'text_frame', label: 'Linked Text Frame', message: 'Linked (threaded) text frames are not supported.', rate: () => 0.05 },
-  { type: 'TABLE', severity: 'error', category: 'text_frame', label: 'Table', message: 'Tables are not supported', rate: () => 0.035 },
-  { type: 'MASTERPAGE', severity: 'error', category: 'document', label: 'Masterpage', message: "Master Page can't be used.", rate: () => 0.03 },
-  { type: 'FILL_TINT', severity: 'error', category: 'paragraph_style', label: 'Color Fill Tint (Beta)', message: 'Fill Tint must be 100. (This may be inaccurate, testing currently)', rate: (d) => (d < 12 ? 0.11 : 0), identifiers: PAR_STYLES },
-  { type: 'LARGE_IMAGE', severity: 'info', category: 'image', label: 'Large Image', message: 'Image is large. Verify that this large of an image is needed.', rate: () => 0.19, identifiers: IMAGES },
-  { type: 'EMPTY_TEXT_FRAME', severity: 'info', category: 'text_frame', label: 'Empty Text Frames', message: 'Empty text frame found.', rate: () => 0.14 },
+  { type: 'FONTS_INCLUDED', rate: () => 0.36, identifiers: FONTS },
+  { type: 'OVERRIDE', rate: (d) => 0.22 + 0.3 * (d / 365) },
+  { type: 'PARAGRAPH_STYLE', rate: () => 0.27 },
+  { type: 'HYPHENATION', rate: () => 0.24, identifiers: PAR_STYLES },
+  { type: 'IMAGE_INCLUDED', rate: (d) => (d < 30 ? 0.2 : 0.13), identifiers: IMAGES },
+  { type: 'KERNING', rate: () => 0.17, identifiers: PAR_STYLES },
+  { type: 'COMPOSER', rate: () => 0.15, identifiers: PAR_STYLES },
+  { type: 'DOCUMENT_BLEED', rate: () => 0.12 },
+  { type: 'OTF_TTF_FONT', rate: () => 0.09, identifiers: ['Helvetica (Type 1)', 'Times (Type 1)', 'Univers 55 (PS)'] },
+  { type: 'EMBEDDED_IMAGE', rate: () => 0.08, identifiers: IMAGES },
+  { type: 'KERNING_CHAR', rate: () => 0.06, identifiers: CHAR_STYLES },
+  { type: 'LINKED_TEXT_FRAME', rate: () => 0.05 },
+  { type: 'TABLE', rate: () => 0.035 },
+  { type: 'MASTERPAGE', rate: () => 0.03 },
+  { type: 'FILL_TINT', rate: (d) => (d < 12 ? 0.11 : 0), identifiers: PAR_STYLES },
+  { type: 'LARGE_IMAGE', rate: () => 0.19, identifiers: IMAGES },
+  { type: 'EMPTY_TEXT_FRAME', rate: () => 0.14 },
 ];
-const ISSUE_BY_TYPE = new Map(ISSUES.map((i) => [i.type, i]));
+const ISSUE_BY_TYPE = new Map(ISSUES.map((i) => [i.type, { ...i, ...describe(i.type) }]));
+
+/** Severity, category and wording of a check, as the backend describes it (app/analytics_api.describe_issue). */
+function describe(type: string) {
+  const check = CHECKS.get(type)!;
+  return {
+    severity: check.severity as Severity,
+    category: check.subject_kinds[0],
+    label: check.title,
+    message: check.why,
+    help_article: check.help_article,
+  };
+}
 
 interface SampleRun extends RunRow {
   t: number;
@@ -181,7 +195,7 @@ function generate(now: number): SampleRun[] {
         run.duration_ms = Math.round(80 + rand() * 400);
         run.total_errors = 1;
       } else {
-        for (const issue of ISSUES) {
+        for (const issue of ISSUE_BY_TYPE.values()) {
           if (rand() >= issue.rate(daysAgo)) continue;
           const hits = 1 + Math.floor(logNormal(2, 0.8));
           for (let h = 0; h < hits; h++) {
@@ -348,7 +362,7 @@ export function sampleOverview(params: URLSearchParams): Overview {
         first_seen_at: new Date(FIRST_SEEN.get(type)!).toISOString(),
         label: info.label,
         message: info.message,
-        help_article: help,
+        help_article: info.help_article,
       };
     })
     .sort((a, b) => b.runs_affected - a.runs_affected || b.occurrences - a.occurrences);
@@ -449,7 +463,7 @@ export function sampleIssueDetail(type: string, params: URLSearchParams): IssueD
     validation_type: type,
     label: info?.label ?? type,
     message: info?.message ?? null,
-    help_article: help,
+    help_article: info?.help_article ?? null,
     occurrences: hits.reduce((a, r) => a + r.validations.filter((v) => v.type === type).length, 0),
     runs_affected: hits.length,
     completed_runs: completed.length,

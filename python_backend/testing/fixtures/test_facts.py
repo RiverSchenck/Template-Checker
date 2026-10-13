@@ -1,23 +1,13 @@
-"""Checks record what they found as facts (context_details), so nothing has to read it back out of the message
-(plan PR 4.1, §4.3)."""
+"""Checks record what they found as facts, so nothing has to read it back out of the message (plan PR 4.1, §4.3)."""
 from testing.fixtures.checker_run import run_checker
 from testing.fixtures.idml_builder import PackageBuilder
 
 
-def facts(tmp_path, build, classifier):
+def facts(tmp_path, build, check, kind=None):
     pkg = PackageBuilder()
     pkg.text_frame(pkg.story([('Body', 'Hello')]))
     build(pkg)
-    run = run_checker(pkg.write(tmp_path))
-    return [details for (cls, details) in
-            ((i['validationClassifier'], i.get('context_details')) for i in _items(run.results)) if cls == classifier]
-
-
-def _items(results):
-    for category in ('par_styles', 'char_styles', 'text_boxes', 'fonts', 'images', 'general'):
-        for by_severity in results[category]['details'].values():
-            for items in by_severity.values():
-                yield from items
+    return [i.facts for i in run_checker(pkg.write(tmp_path)).of(check, kind)]
 
 
 def test_auto_size(tmp_path):
@@ -54,5 +44,5 @@ def test_flip_and_skew(tmp_path):
     def build(pkg):
         pkg.image('a.jpg', frame_transform='-1 0 0 1 300 0')
         pkg.shape('Oval', transform='0.9659258 0.2588190 0.2 1 0 0')  # skewed and turned 15 degrees
-    assert facts(tmp_path, build, 'IMAGE_TRANSFORMATION_CONTAINER') == [{'kind': 'flip', 'rotation_deg': None}]
-    assert facts(tmp_path, build, 'PAGE_ITEM_TRANSFORMATION') == [{'kind': 'skew', 'rotation_deg': 15.0}]
+    assert facts(tmp_path, build, 'TRANSFORMATION', 'image_frame') == [{'kind': 'flip', 'rotation_deg': None}]
+    assert facts(tmp_path, build, 'TRANSFORMATION', 'page_item') == [{'kind': 'skew', 'rotation_deg': 15.0}]
