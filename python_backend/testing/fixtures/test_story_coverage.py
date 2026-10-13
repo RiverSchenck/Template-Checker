@@ -1,9 +1,8 @@
-"""Story content the checker used to miss (B1-B4 in docs/PLAN-v2-refactor.md). B1, B2 and B4 were fixed in PR 2.3; B3
-(objects placed in text) is fixed in PR 2.4.
+"""Story content the checker used to miss (B1-B4 in docs/PLAN-v2-refactor.md). B1, B2 and B4 were fixed in PR 2.3, B3
+(objects placed in text) in PR 2.4.
 
 Each case builds the same content twice: placed plainly (the control, which passes today) and nested the way
-InDesign writes it. A nested form not handled yet is marked xfail(strict=True), so when it's fixed the test
-XPASSes and fails until the mark is removed. Decided with River (2026-10-13): notes and pending deletions are
+InDesign writes it; both must give the same result. Decided with River (2026-10-13): notes and pending deletions are
 skipped; footnotes and table cells are checked as text. (Frontify itself drops all of these; see "Possible
 future checks" in docs/checker-rules.md.)
 """
@@ -12,7 +11,6 @@ import pytest
 from testing.fixtures.checker_run import run_checker
 from testing.fixtures.idml_builder import PackageBuilder
 
-NOT_YET = 'fixed in PR 2.4 (docs/PLAN-v2-refactor.md)'
 
 
 def para(style, inner):
@@ -100,7 +98,7 @@ def _image_on_page(**image):
 
 @pytest.mark.parametrize('build', [
     pytest.param(_image_on_page(), id='on-page'),
-    pytest.param(_inline_image(), id='inline', marks=pytest.mark.xfail(strict=True, reason=f'B3: {NOT_YET}')),
+    pytest.param(_inline_image(), id='inline'),
 ])
 def test_placed_image_is_not_unused(tmp_path, build):
     assert check(tmp_path, build).of('UNUSED_IMAGE') == []
@@ -108,8 +106,7 @@ def test_placed_image_is_not_unused(tmp_path, build):
 
 @pytest.mark.parametrize('build', [
     pytest.param(_image_on_page(image_transform='-1 0 0 1 0 0'), id='on-page'),
-    pytest.param(_inline_image(image_transform='-1 0 0 1 0 0'), id='inline',
-                 marks=pytest.mark.xfail(strict=True, reason=f'B3: {NOT_YET}')),
+    pytest.param(_inline_image(image_transform='-1 0 0 1 0 0'), id='inline'),
 ])
 def test_flipped_image_is_reported(tmp_path, build):
     assert len(check(tmp_path, build).of('IMAGE_TRANSFORMATION_IMAGE')) == 1
@@ -127,7 +124,7 @@ def _frame_on_page(pkg):
 
 @pytest.mark.parametrize('build', [
     pytest.param(_frame_on_page, id='on-page'),
-    pytest.param(_anchored_frame, id='anchored', marks=pytest.mark.xfail(strict=True, reason=f'B3: {NOT_YET}')),
+    pytest.param(_anchored_frame, id='anchored'),
 ])
 def test_frame_checks_see_the_frame(tmp_path, build):
     assert len(check(tmp_path, build).of('TEXT_COLUMNS')) == 1

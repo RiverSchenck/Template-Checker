@@ -1,5 +1,5 @@
 """What the results JSON needs to know about the document: its pages, where items are, page previews and the
-text of each text box. Built once from the parsers (pages_from_spreads, text_boxes_from_stories), so turning
+text of each text box. Built once from the Document (pages_from_spreads, text_boxes_from_stories), so turning
 results into JSON never reaches into parsing."""
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
@@ -46,26 +46,25 @@ class DocumentLayout:
             if page_id else ''
 
 
-def pages_from_spreads(spreads_parser) -> DocumentLayout:
+def pages_from_spreads(doc) -> DocumentLayout:
     """A layout with the document's pages and spreads (geometry, previews and text boxes are added later)."""
     layout = DocumentLayout()
-    for spread in spreads_parser.spreads_obj_list:
-        page_ids = [page['self'] for page in spread.get_pages() if page.get('self')]
-        if spread.spread_self and page_ids:
-            layout.spread_to_pages[spread.spread_self] = page_ids
-        for page in spread.get_pages():
-            if page.get('self'):
-                layout.pages[page['self']] = page.get('name', '')
+    for spread in doc.spreads:
+        page_ids = [page.id for page in spread.pages]
+        if spread.id and page_ids:
+            layout.spread_to_pages[spread.id] = page_ids
+        for page in spread.pages:
+            layout.pages[page.id] = page.name
     return layout
 
 
-def text_boxes_from_stories(stories_parser) -> Dict[str, TextBox]:
+def text_boxes_from_stories(doc) -> Dict[str, TextBox]:
     """Each story's text, by story Self and by the Self of the frame it's in."""
     boxes: Dict[str, TextBox] = {}
-    for story in stories_parser.stories_data_list:
-        frame_id = story.parent_text_frame_id or None
-        box = TextBox(story.get_content(), story.page_id or '', frame_id)
-        boxes[story.story_id] = box
+    for story in doc.stories or ():
+        frame_id = doc.story_frame.get(story.id) or None
+        box = TextBox(doc.story_text(story), doc.story_page.get(story.id) or '', frame_id)
+        boxes[story.id] = box
         if frame_id and frame_id != 'null':
             boxes.setdefault(frame_id, box)
     return boxes

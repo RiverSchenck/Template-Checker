@@ -322,6 +322,10 @@ Golden diff: **0**. Fixes B5 and B8 in a **separate follow-up commit** in the sa
 (B5: one fewer duplicate transform issue per affected Oval/Polygon frame; B8: none in corpus).
 Also fixes **B3** (moved from PR 2.3): `Document` includes page items and links placed in stories, so image and frame
 checks see them; the three PR 0.3 B3 xfails flip to passing (expected diff: none in the corpus, which has none).
+*Done (2026-10-13), five commits:* Document + loader with golden diff 0 (spreads kept in file-name order);
+designmap order (24 goldens: 22 order-only, 2 where an image placed on several spreads is reported at its last
+placement in document order); B5, B8 and B3 (no corpus diff; each proved with built packages). `model/subject.py`
+is left to PR 5.2, where v2 needs it.
 
 **PR 2.5 Delete the old model (M).** Remove `classes/` (except what moved), `parsers/`, old `document.py`,
 `PropertyBase`, MetadataParser disk writes (S4-adjacent), dead code from §2.3; move `States` to

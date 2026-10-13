@@ -170,19 +170,20 @@ class PackageBuilder:
               embedded: bool = False, image_transform: str = '1 0 0 1 0 0', frame_transform: Optional[str] = None,
               frame_style: str = DEFAULT_GRAPHIC_STYLE, image_style: str = DEFAULT_GRAPHIC_STYLE,
               size_bytes: int = 1024, master: Optional[int] = None, broken_link: bool = False,
-              wrap: Optional[str] = None) -> str:
+              wrap: Optional[str] = None, frame: str = 'Rectangle') -> str:
         """A placed image. master=N puts it on master spread N instead of the page; broken_link omits the
-        link's LinkResourceURI (a malformed export); wrap sets the frame's TextWrapMode."""
+        link's LinkResourceURI (a malformed export); wrap sets the frame's TextWrapMode; frame is the frame's
+        kind (Rectangle, Oval or Polygon)."""
         frame_id, image_id, link_id = self._id(), self._id(), self._id()
         if include_in_links:
             self._links[file_name] = b'\0' * size_bytes
         stored = 'Embedded' if embedded else 'Normal'
         uri = None if broken_link else f'file:/Users/designer/{self.name}/Links/{file_name}'
-        xml = (f'<Rectangle {_attrs({"Self": frame_id, "ContentType": "GraphicType", "AppliedObjectStyle": frame_style, "ItemTransform": frame_transform or self._page_transform(page)})}>'
+        xml = (f'<{frame} {_attrs({"Self": frame_id, "ContentType": "GraphicType", "AppliedObjectStyle": frame_style, "ItemTransform": frame_transform or self._page_transform(page)})}>'
                f'{_rect_path(*at)}{_wrap_xml(wrap)}'
                f'<Image {_attrs({"Self": image_id, "AppliedObjectStyle": image_style, "ItemTransform": image_transform})}>'
                f'<Link {_attrs({"Self": link_id, "LinkResourceURI": uri, "StoredState": stored})}/>'
-               f'</Image></Rectangle>')
+               f'</Image></{frame}>')
         if master is None:
             self._items.append(xml)
         else:
