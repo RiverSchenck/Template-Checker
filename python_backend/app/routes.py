@@ -944,13 +944,14 @@ def _run_and_respond(respond, previews: bool = False):
 def create_check():
     """Check an uploaded template package and return every result.
 
-    Response 200: {run_id, status: "completed" | "rejected", results}. A package that couldn't be checked (not a
-    valid ZIP, no .idml...) is "rejected", with the reason in the results.
+    Response 200: {run_id, status: "completed" | "rejected", results, customer_summary}: results v2
+    (schema/results-v2.json) and the customer summary (null if it couldn't be written). A package that couldn't be
+    checked (not a valid ZIP, no .idml...) is "rejected", with the reason in the results.
     """
     return _run_and_respond(lambda outcome, _: jsonify({
         'run_id': outcome.run_id,
         'status': 'completed' if outcome.completed else 'rejected',
-        'results': outcome.response_results,
+        **outcome.response(),
     }), previews=request.args.get('previews') == '1')
 
 
@@ -959,9 +960,9 @@ def create_check():
 @_require_upload()
 @limit_checks
 def run_checker():
-    """Deprecated: POST /v1/checks. Same check, results wrapped as {type: "data", content: {results}}."""
+    """Deprecated: POST /v1/checks. Same check, wrapped as {type: "data", content: {results, customer_summary}}."""
     return _run_and_respond(
-        lambda outcome, _: jsonify({'type': 'data', 'content': {'results': outcome.response_results}}), previews=True)
+        lambda outcome, _: jsonify({'type': 'data', 'content': outcome.response()}), previews=True)
 
 
 @main.route('/v1/checks/summary', methods=['POST'])

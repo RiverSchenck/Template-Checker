@@ -1,5 +1,135 @@
 {
   "text": "We checked “3 linked text boxes” and found 2 issues in the InDesign file that are likely causing the problems in Frontify, plus 1 that may change how it looks. Here’s what to change:\n\nLikely causing the problems\n\n1. Threaded (linked) text frames\nFrontify doesn’t support text flowing from one frame into another.\nWhere: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)\n• Turn on View > Extras > Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text.\nLearn more\n\n2. Text without a paragraph style\nFrontify uses paragraph styles to format text and decide what can be edited.\nWhere: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)\n• Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).\nLearn more\n\nMay change how it looks\n\n3. Paragraph Composer used\nThe Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.\nWhere: the paragraph style “[Basic Paragraph]”, used on page 1\n• In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.\nLearn more\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
   "html": "<p>We checked “3 linked text boxes” and found 2 issues in the InDesign file that are likely causing the problems in Frontify, plus 1 that may change how it looks. Here’s what to change:</p><p><strong>Likely causing the problems</strong></p><p><strong>1. Threaded (linked) text frames</strong><br>Frontify doesn’t support text flowing from one frame into another.<br>Where: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)</p><ul><li>Turn on View &gt; Extras &gt; Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698\">Learn more</a></p><p><strong>2. Text without a paragraph style</strong><br>Frontify uses paragraph styles to format text and decide what can be edited.<br>Where: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)</p><ul><li>Select the text (or the whole frame) and apply a paragraph style in Window &gt; Styles &gt; Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\">Learn more</a></p><p><strong>May change how it looks</strong></p><p><strong>3. Paragraph Composer used</strong><br>The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.<br>Where: the paragraph style “[Basic Paragraph]”, used on page 1</p><ul><li>In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0\">Learn more</a></p><p>Once that’s done, package the document again with File &gt; Package, zip the package folder and upload it to Frontify.</p>",
-  "plain_text": "We checked “3 linked text boxes” and found 2 issues in the InDesign file that are likely causing the problems in Frontify, plus 1 that may change how it looks. Here’s what to change:\n\nLikely causing the problems\n\n1. Threaded (linked) text frames\nFrontify doesn’t support text flowing from one frame into another.\nWhere: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)\n• Turn on View > Extras > Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698\n\n2. Text without a paragraph style\nFrontify uses paragraph styles to format text and decide what can be edited.\nWhere: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)\n• Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\nMay change how it looks\n\n3. Paragraph Composer used\nThe Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.\nWhere: the paragraph style “[Basic Paragraph]”, used on page 1\n• In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify."
+  "plain_text": "We checked “3 linked text boxes” and found 2 issues in the InDesign file that are likely causing the problems in Frontify, plus 1 that may change how it looks. Here’s what to change:\n\nLikely causing the problems\n\n1. Threaded (linked) text frames\nFrontify doesn’t support text flowing from one frame into another.\nWhere: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)\n• Turn on View > Extras > Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698\n\n2. Text without a paragraph style\nFrontify uses paragraph styles to format text and decide what can be edited.\nWhere: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)\n• Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\nMay change how it looks\n\n3. Paragraph Composer used\nThe Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.\nWhere: the paragraph style “[Basic Paragraph]”, used on page 1\n• In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
+  "sections": [
+    {
+      "key": "intro",
+      "title": "Introduction",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "text",
+          "text": "We checked “3 linked text boxes” and found 2 issues in the InDesign file that are likely causing the problems in Frontify, plus 1 that may change how it looks. Here’s what to change:"
+        }
+      ]
+    },
+    {
+      "key": "intro",
+      "title": "Group heading",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "heading",
+          "text": "Likely causing the problems"
+        }
+      ]
+    },
+    {
+      "key": "LINKED_TEXT_FRAME",
+      "title": "Threaded (linked) text frames",
+      "problem_id": "errors:LINKED_TEXT_FRAME",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "1. Threaded (linked) text frames"
+        },
+        {
+          "kind": "text",
+          "text": "Frontify doesn’t support text flowing from one frame into another."
+        },
+        {
+          "kind": "text",
+          "text": "Where: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)"
+        },
+        {
+          "kind": "step",
+          "text": "Turn on View > Extras > Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698"
+        }
+      ]
+    },
+    {
+      "key": "PARAGRAPH_STYLE",
+      "title": "Text without a paragraph style",
+      "problem_id": "errors:PARAGRAPH_STYLE",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "2. Text without a paragraph style"
+        },
+        {
+          "kind": "text",
+          "text": "Frontify uses paragraph styles to format text and decide what can be edited."
+        },
+        {
+          "kind": "text",
+          "text": "Where: the text frame “fdgsgdfdfgsdfgdfgsdf” (page 1)"
+        },
+        {
+          "kind": "step",
+          "text": "Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style])."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775"
+        }
+      ]
+    },
+    {
+      "key": "intro",
+      "title": "Group heading",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "heading",
+          "text": "May change how it looks"
+        }
+      ]
+    },
+    {
+      "key": "COMPOSER",
+      "title": "Paragraph Composer used",
+      "problem_id": "warnings:COMPOSER",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "3. Paragraph Composer used"
+        },
+        {
+          "kind": "text",
+          "text": "The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify."
+        },
+        {
+          "kind": "text",
+          "text": "Where: the paragraph style “[Basic Paragraph]”, used on page 1"
+        },
+        {
+          "kind": "step",
+          "text": "In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0"
+        }
+      ]
+    },
+    {
+      "key": "closing",
+      "title": "Closing",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "text",
+          "text": "Once that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify."
+        }
+      ]
+    }
+  ]
 }

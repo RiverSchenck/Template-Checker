@@ -1,5 +1,60 @@
 {
   "text": "We checked “Unicode” and didn’t find anything that should stop it from working in Frontify, but one issue may make it look different than expected. Here’s what to change:\n\n1. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: text frames “Sale 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 ends soon” (page 1, size changed), “Hello world” (page 1, font, leading, tracking and more changed) and 1 more\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
   "html": "<p>We checked “Unicode” and didn’t find anything that should stop it from working in Frontify, but one issue may make it look different than expected. Here’s what to change:</p><p><strong>1. Text formatted outside its paragraph style</strong><br>Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.<br>Where: text frames “Sale 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 ends soon” (page 1, size changed), “Hello world” (page 1, font, leading, tracking and more changed) and 1 more</p><ul><li>Click into the text. A + after the style name in Window &gt; Styles &gt; Paragraph Styles means it has extra formatting.</li><li>To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.</li><li>To keep the look, update the style to match instead (right-click the style &gt; Redefine Style), or use a character style for single words.</li></ul><p>Once that’s done, package the document again with File &gt; Package, zip the package folder and upload it to Frontify.</p>",
-  "plain_text": "We checked “Unicode” and didn’t find anything that should stop it from working in Frontify, but one issue may make it look different than expected. Here’s what to change:\n\n1. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: text frames “Sale 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 ends soon” (page 1, size changed), “Hello world” (page 1, font, leading, tracking and more changed) and 1 more\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify."
+  "plain_text": "We checked “Unicode” and didn’t find anything that should stop it from working in Frontify, but one issue may make it look different than expected. Here’s what to change:\n\n1. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: text frames “Sale 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 ends soon” (page 1, size changed), “Hello world” (page 1, font, leading, tracking and more changed) and 1 more\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
+  "sections": [
+    {
+      "key": "intro",
+      "title": "Introduction",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "text",
+          "text": "We checked “Unicode” and didn’t find anything that should stop it from working in Frontify, but one issue may make it look different than expected. Here’s what to change:"
+        }
+      ]
+    },
+    {
+      "key": "OVERRIDE",
+      "title": "Text formatted outside its paragraph style",
+      "problem_id": "warnings:OVERRIDE",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "1. Text formatted outside its paragraph style"
+        },
+        {
+          "kind": "text",
+          "text": "Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify."
+        },
+        {
+          "kind": "text",
+          "text": "Where: text frames “Sale 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 ends soon” (page 1, size changed), “Hello world” (page 1, font, leading, tracking and more changed) and 1 more"
+        },
+        {
+          "kind": "step",
+          "text": "Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting."
+        },
+        {
+          "kind": "step",
+          "text": "To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel."
+        },
+        {
+          "kind": "step",
+          "text": "To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words."
+        }
+      ]
+    },
+    {
+      "key": "closing",
+      "title": "Closing",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "text",
+          "text": "Once that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify."
+        }
+      ]
+    }
+  ]
 }

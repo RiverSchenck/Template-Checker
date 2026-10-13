@@ -12,7 +12,7 @@ import os
 
 import pytest
 
-from app.customer_summary import build_customer_summary
+from app.customer_summary import build_customer_summary, summary_payload
 
 GOLDEN_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'golden')
 RESULTS_DIR = os.path.join(GOLDEN_DIR, 'results')
@@ -46,7 +46,8 @@ def test_every_golden_result_has_an_expected_summary():
 def test_summary_matches_golden(package):
     with open(INPUTS[package], encoding='utf-8') as f:
         summary = build_customer_summary(json.load(f)['results'])
-    actual = {'text': summary.review_text, 'html': summary.html, 'plain_text': summary.plain_text}
+    actual = {'text': summary.review_text, 'html': summary.html, 'plain_text': summary.plain_text,
+              'sections': summary_payload(summary, include_sections=True)['sections']}
 
     path = os.path.join(SUMMARIES_DIR, package)
     if UPDATE:

@@ -1,5 +1,186 @@
 {
   "text": "We checked “2 large images 1 small with same name Folder” and found one issue in the InDesign file that is likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:\n\nLikely causing the problems\n\n1. Font missing from the package\nFrontify needs the font files to render the text, otherwise the template falls back to another font.\nWhere: the font “Poppins”\n• Make sure the font is installed or activated on your computer.\n• Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\".\nLearn more\n\nMay change how it looks\n\n2. Document has bleed\nBleed is added to every export, which is right for print templates but usually unwanted for digital ones.\nCurrent bleed: 5 mm on all sides\n• For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine.\nLearn more\n\n3. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: the text frame “Jetzt FAIRTIQ-App installieren” (page 1, leading changed)\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\nLearn more\n\nWorth a quick check (often fine as is)\n\n4. Large image\nVery large images slow down editing and exporting in Frontify.\nWhere: images “PHONE_SHAPE.psd” (page 1, 55.59 MB) and “Screen2_women_cmyk_300dpi.jpg” (page 1, 10.49 MB)\n• Reduce the image’s pixel size or file size if it doesn’t need to be this large.\nLearn more\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
   "html": "<p>We checked “2 large images 1 small with same name Folder” and found one issue in the InDesign file that is likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:</p><p><strong>Likely causing the problems</strong></p><p><strong>1. Font missing from the package</strong><br>Frontify needs the font files to render the text, otherwise the template falls back to another font.<br>Where: the font “Poppins”</p><ul><li>Make sure the font is installed or activated on your computer.</li><li>Package again with File &gt; Package with &quot;Copy Fonts&quot; checked, and zip the whole folder, including &quot;Document fonts&quot;.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981\">Learn more</a></p><p><strong>May change how it looks</strong></p><p><strong>2. Document has bleed</strong><br>Bleed is added to every export, which is right for print templates but usually unwanted for digital ones.<br>Current bleed: 5 mm on all sides</p><ul><li>For a digital template, set bleed to 0 in File &gt; Document Setup &gt; Bleed and Slug. For print templates, bleed is fine.</li></ul><p><a href=\"https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based\">Learn more</a></p><p><strong>3. Text formatted outside its paragraph style</strong><br>Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.<br>Where: the text frame “Jetzt FAIRTIQ-App installieren” (page 1, leading changed)</p><ul><li>Click into the text. A + after the style name in Window &gt; Styles &gt; Paragraph Styles means it has extra formatting.</li><li>To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.</li><li>To keep the look, update the style to match instead (right-click the style &gt; Redefine Style), or use a character style for single words.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\">Learn more</a></p><p><strong>Worth a quick check (often fine as is)</strong></p><p><strong>4. Large image</strong><br>Very large images slow down editing and exporting in Frontify.<br>Where: images “PHONE_SHAPE.psd” (page 1, 55.59 MB) and “Screen2_women_cmyk_300dpi.jpg” (page 1, 10.49 MB)</p><ul><li>Reduce the image’s pixel size or file size if it doesn’t need to be this large.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2\">Learn more</a></p><p>Once that’s done, package the document again with File &gt; Package, zip the package folder and upload it to Frontify.</p>",
-  "plain_text": "We checked “2 large images 1 small with same name Folder” and found one issue in the InDesign file that is likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:\n\nLikely causing the problems\n\n1. Font missing from the package\nFrontify needs the font files to render the text, otherwise the template falls back to another font.\nWhere: the font “Poppins”\n• Make sure the font is installed or activated on your computer.\n• Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\".\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981\n\nMay change how it looks\n\n2. Document has bleed\nBleed is added to every export, which is right for print templates but usually unwanted for digital ones.\nCurrent bleed: 5 mm on all sides\n• For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine.\nLearn more: https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based\n\n3. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: the text frame “Jetzt FAIRTIQ-App installieren” (page 1, leading changed)\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\nWorth a quick check (often fine as is)\n\n4. Large image\nVery large images slow down editing and exporting in Frontify.\nWhere: images “PHONE_SHAPE.psd” (page 1, 55.59 MB) and “Screen2_women_cmyk_300dpi.jpg” (page 1, 10.49 MB)\n• Reduce the image’s pixel size or file size if it doesn’t need to be this large.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify."
+  "plain_text": "We checked “2 large images 1 small with same name Folder” and found one issue in the InDesign file that is likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:\n\nLikely causing the problems\n\n1. Font missing from the package\nFrontify needs the font files to render the text, otherwise the template falls back to another font.\nWhere: the font “Poppins”\n• Make sure the font is installed or activated on your computer.\n• Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\".\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981\n\nMay change how it looks\n\n2. Document has bleed\nBleed is added to every export, which is right for print templates but usually unwanted for digital ones.\nCurrent bleed: 5 mm on all sides\n• For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine.\nLearn more: https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based\n\n3. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: the text frame “Jetzt FAIRTIQ-App installieren” (page 1, leading changed)\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\nWorth a quick check (often fine as is)\n\n4. Large image\nVery large images slow down editing and exporting in Frontify.\nWhere: images “PHONE_SHAPE.psd” (page 1, 55.59 MB) and “Screen2_women_cmyk_300dpi.jpg” (page 1, 10.49 MB)\n• Reduce the image’s pixel size or file size if it doesn’t need to be this large.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
+  "sections": [
+    {
+      "key": "intro",
+      "title": "Introduction",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "text",
+          "text": "We checked “2 large images 1 small with same name Folder” and found one issue in the InDesign file that is likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:"
+        }
+      ]
+    },
+    {
+      "key": "intro",
+      "title": "Group heading",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "heading",
+          "text": "Likely causing the problems"
+        }
+      ]
+    },
+    {
+      "key": "FONTS_INCLUDED",
+      "title": "Font missing from the package",
+      "problem_id": "errors:FONTS_INCLUDED",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "1. Font missing from the package"
+        },
+        {
+          "kind": "text",
+          "text": "Frontify needs the font files to render the text, otherwise the template falls back to another font."
+        },
+        {
+          "kind": "text",
+          "text": "Where: the font “Poppins”"
+        },
+        {
+          "kind": "step",
+          "text": "Make sure the font is installed or activated on your computer."
+        },
+        {
+          "kind": "step",
+          "text": "Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\"."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981"
+        }
+      ]
+    },
+    {
+      "key": "intro",
+      "title": "Group heading",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "heading",
+          "text": "May change how it looks"
+        }
+      ]
+    },
+    {
+      "key": "DOCUMENT_BLEED",
+      "title": "Document has bleed",
+      "problem_id": "warnings:DOCUMENT_BLEED",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "2. Document has bleed"
+        },
+        {
+          "kind": "text",
+          "text": "Bleed is added to every export, which is right for print templates but usually unwanted for digital ones."
+        },
+        {
+          "kind": "text",
+          "text": "Current bleed: 5 mm on all sides"
+        },
+        {
+          "kind": "step",
+          "text": "For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based"
+        }
+      ]
+    },
+    {
+      "key": "OVERRIDE",
+      "title": "Text formatted outside its paragraph style",
+      "problem_id": "warnings:OVERRIDE",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "3. Text formatted outside its paragraph style"
+        },
+        {
+          "kind": "text",
+          "text": "Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify."
+        },
+        {
+          "kind": "text",
+          "text": "Where: the text frame “Jetzt FAIRTIQ-App installieren” (page 1, leading changed)"
+        },
+        {
+          "kind": "step",
+          "text": "Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting."
+        },
+        {
+          "kind": "step",
+          "text": "To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel."
+        },
+        {
+          "kind": "step",
+          "text": "To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775"
+        }
+      ]
+    },
+    {
+      "key": "intro",
+      "title": "Group heading",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "heading",
+          "text": "Worth a quick check (often fine as is)"
+        }
+      ]
+    },
+    {
+      "key": "LARGE_IMAGE",
+      "title": "Large image",
+      "problem_id": "infos:LARGE_IMAGE",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "4. Large image"
+        },
+        {
+          "kind": "text",
+          "text": "Very large images slow down editing and exporting in Frontify."
+        },
+        {
+          "kind": "text",
+          "text": "Where: images “PHONE_SHAPE.psd” (page 1, 55.59 MB) and “Screen2_women_cmyk_300dpi.jpg” (page 1, 10.49 MB)"
+        },
+        {
+          "kind": "step",
+          "text": "Reduce the image’s pixel size or file size if it doesn’t need to be this large."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2"
+        }
+      ]
+    },
+    {
+      "key": "closing",
+      "title": "Closing",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "text",
+          "text": "Once that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify."
+        }
+      ]
+    }
+  ]
 }

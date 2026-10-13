@@ -13,7 +13,7 @@ def test_v1_checks_returns_the_run_its_status_and_results(client):
 
     assert r.status_code == 200
     body = r.get_json()
-    assert set(body) == {'run_id', 'status', 'results'}
+    assert set(body) == {'run_id', 'status', 'results', 'customer_summary'}
     assert (body['run_id'], body['status'], body['results']['template_name']) == ('run-1', 'completed', 'x.zip')
     assert 'Deprecation' not in r.headers
 

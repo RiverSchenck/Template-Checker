@@ -5,7 +5,7 @@ results_v2 writes results v2 (plan §4.3; the contract is src/results/models.py)
     {schema_version: 2, template_name, issues: [{check, severity, subject, location, facts, text, detail}],
      subjects_checked, pages, text_boxes, checks}
 
-results_json writes v1, which the web API still sends until the web app reads v2 (plan PR 5.3):
+results_json writes v1, which only testing/fixtures/checker_run.py still reads (until plan PR 6.1):
 
     {template_name, output_folder,
      par_styles | char_styles | text_boxes | fonts | images | general:

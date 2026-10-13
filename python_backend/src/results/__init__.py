@@ -7,5 +7,5 @@
     catalogue.py    every check with the only copy of its wording, and the facts model its issues record
     facts.py        the facts models
     models.py       results v2, the contract (schema/results-v2.json is generated from it)
-    serialize.py    results_v2 and results_json (v1, until the web app reads v2): the only places that know the shape
+    serialize.py    results_v2, and results_json (v1, only for testing/fixtures/checker_run.py until plan PR 6.1)
 """

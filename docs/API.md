@@ -110,19 +110,32 @@ See [Errors](#errors) below; every endpoint answers them the same way.
 
 ## `POST /v1/checks`
 
-Same request as `/v1/checks/summary`. Returns `{run_id, status, results}`: `status` is `completed`, or `rejected` when
-the package couldn't be checked (the reason is in `results`; still a 200). `results` includes two fields the web app
-uses:
+Same request as `/v1/checks/summary`. Returns `{run_id, status, results, customer_summary}`: `status` is `completed`,
+or `rejected` when the package couldn't be checked (the reason is in `results`; still a 200).
 
-- `customer_summary`: the summary as above (`summary_version`, `counts`, `html`, `text`), plus `sections`, the
-  message line by line (`{key, title, problem_id, lines: [{kind, text, href?}]}`), which the web app's review view is
-  built from. `null` if the summary couldn't be written; the results are still returned.
-- `check_guides`: the plain-language copy for each check that ran or found something, as
-  `{severity: {check key: {title, why, fix, subject}}}`.
+`results` is results v2; its JSON Schema is [`schema/results-v2.json`](../schema/results-v2.json):
 
-Page previews (`results.page_layouts[].preview`, a base64 JPEG per page) are left out unless you ask with
-`?previews=1` (`POST /v1/checks?previews=1`): rendering them is most of a check's time. Without it, `preview` is
-`null`; the page sizes and frame outlines are always there.
+- `schema_version`: `2`.
+- `issues`: every issue, in the order found: `{check, severity, subject, location, facts, text, detail}`.
+  - `check` is a key from `checks`; `severity` is `error`, `warning` or `info`.
+  - `subject` is what to fix: `{kind, id, name}`, where `kind` is `paragraph_style`, `character_style`, `text_frame`,
+    `image`, `image_frame`, `font`, `page_item` or `document`.
+  - `location` is where it is: `{page_id, page_name, spread_id, item_id, bounds}`, any of them `null`.
+  - `facts` holds the check's structured data (e.g. `{size_mb}` for a large image). `detail` is short display text:
+    show it, don't parse it.
+- `checks`: every check, with its wording: `{key, severity, subject_kinds, title, why, fix, help_article, is_check}`.
+  `fix` lists the steps in InDesign per subject kind. `is_check` is false for package and parsing failures.
+- `pages`: the pages in document order, with size (points), `preview` and frame outlines.
+- `text_boxes`: the text of each text frame an issue is about, by subject id.
+- `subjects_checked`: how many of each kind the document has, e.g. `{"paragraph_style": 12}`.
+
+`customer_summary` is the summary as above (`summary_version`, `counts`, `html`, `text`), plus `sections`, the
+message line by line (`{key, title, problem_id, lines: [{kind, text, href?}]}`), which the web app's review view is
+built from. `null` if the summary couldn't be written; the results are still returned.
+
+Page previews (`results.pages[].preview`, a base64 JPEG per page) are left out unless you ask with `?previews=1`
+(`POST /v1/checks?previews=1`): rendering them is most of a check's time. Without it, `preview` is `null`; the page
+sizes and frame outlines are always there.
 
 ## `POST /v1/checks/xml`
 

@@ -1,5 +1,199 @@
 {
   "text": "We checked “NewEmployeeFolder1” and found 3 issues in the InDesign file that are likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:\n\nLikely causing the problems\n\n1. Text without a paragraph style\nFrontify uses paragraph styles to format text and decide what can be edited.\nWhere: text frames “Welcome to the team”, “Ben jonsen”, “Process Engineer” (page 1)\n• Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).\nLearn more\n\n2. Font missing from the package\nFrontify needs the font files to render the text, otherwise the template falls back to another font.\nWhere: the font “Minion Pro”\n• Make sure the font is installed or activated on your computer.\n• Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\".\nLearn more\n\n3. Pasted graphic\nGraphics pasted straight into InDesign aren’t linked files, so Frontify can’t read them.\n• Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place.\nLearn more\n\nMay change how it looks\n\n4. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: text frames “Welcome to the team” (page 1, size and leading changed), “Ben jonsen” (page 1, font, size, leading and more changed), “Process Engineer” (page 1, font, size, leading and more changed)\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\nLearn more\n\n5. Paragraph Composer used\nThe Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.\nWhere: the paragraph style “[Basic Paragraph]”, used on page 1\n• In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.\nLearn more\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
   "html": "<p>We checked “NewEmployeeFolder1” and found 3 issues in the InDesign file that are likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:</p><p><strong>Likely causing the problems</strong></p><p><strong>1. Text without a paragraph style</strong><br>Frontify uses paragraph styles to format text and decide what can be edited.<br>Where: text frames “Welcome to the team”, “Ben jonsen”, “Process Engineer” (page 1)</p><ul><li>Select the text (or the whole frame) and apply a paragraph style in Window &gt; Styles &gt; Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\">Learn more</a></p><p><strong>2. Font missing from the package</strong><br>Frontify needs the font files to render the text, otherwise the template falls back to another font.<br>Where: the font “Minion Pro”</p><ul><li>Make sure the font is installed or activated on your computer.</li><li>Package again with File &gt; Package with &quot;Copy Fonts&quot; checked, and zip the whole folder, including &quot;Document fonts&quot;.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981\">Learn more</a></p><p><strong>3. Pasted graphic</strong><br>Graphics pasted straight into InDesign aren’t linked files, so Frontify can’t read them.</p><ul><li>Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File &gt; Place.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d\">Learn more</a></p><p><strong>May change how it looks</strong></p><p><strong>4. Text formatted outside its paragraph style</strong><br>Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.<br>Where: text frames “Welcome to the team” (page 1, size and leading changed), “Ben jonsen” (page 1, font, size, leading and more changed), “Process Engineer” (page 1, font, size, leading and more changed)</p><ul><li>Click into the text. A + after the style name in Window &gt; Styles &gt; Paragraph Styles means it has extra formatting.</li><li>To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.</li><li>To keep the look, update the style to match instead (right-click the style &gt; Redefine Style), or use a character style for single words.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\">Learn more</a></p><p><strong>5. Paragraph Composer used</strong><br>The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.<br>Where: the paragraph style “[Basic Paragraph]”, used on page 1</p><ul><li>In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0\">Learn more</a></p><p>Once that’s done, package the document again with File &gt; Package, zip the package folder and upload it to Frontify.</p>",
-  "plain_text": "We checked “NewEmployeeFolder1” and found 3 issues in the InDesign file that are likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:\n\nLikely causing the problems\n\n1. Text without a paragraph style\nFrontify uses paragraph styles to format text and decide what can be edited.\nWhere: text frames “Welcome to the team”, “Ben jonsen”, “Process Engineer” (page 1)\n• Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\n2. Font missing from the package\nFrontify needs the font files to render the text, otherwise the template falls back to another font.\nWhere: the font “Minion Pro”\n• Make sure the font is installed or activated on your computer.\n• Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\".\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981\n\n3. Pasted graphic\nGraphics pasted straight into InDesign aren’t linked files, so Frontify can’t read them.\n• Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d\n\nMay change how it looks\n\n4. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: text frames “Welcome to the team” (page 1, size and leading changed), “Ben jonsen” (page 1, font, size, leading and more changed), “Process Engineer” (page 1, font, size, leading and more changed)\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\n5. Paragraph Composer used\nThe Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.\nWhere: the paragraph style “[Basic Paragraph]”, used on page 1\n• In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify."
+  "plain_text": "We checked “NewEmployeeFolder1” and found 3 issues in the InDesign file that are likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:\n\nLikely causing the problems\n\n1. Text without a paragraph style\nFrontify uses paragraph styles to format text and decide what can be edited.\nWhere: text frames “Welcome to the team”, “Ben jonsen”, “Process Engineer” (page 1)\n• Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\n2. Font missing from the package\nFrontify needs the font files to render the text, otherwise the template falls back to another font.\nWhere: the font “Minion Pro”\n• Make sure the font is installed or activated on your computer.\n• Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\".\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981\n\n3. Pasted graphic\nGraphics pasted straight into InDesign aren’t linked files, so Frontify can’t read them.\n• Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d\n\nMay change how it looks\n\n4. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: text frames “Welcome to the team” (page 1, size and leading changed), “Ben jonsen” (page 1, font, size, leading and more changed), “Process Engineer” (page 1, font, size, leading and more changed)\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\n5. Paragraph Composer used\nThe Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.\nWhere: the paragraph style “[Basic Paragraph]”, used on page 1\n• In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
+  "sections": [
+    {
+      "key": "intro",
+      "title": "Introduction",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "text",
+          "text": "We checked “NewEmployeeFolder1” and found 3 issues in the InDesign file that are likely causing the problems in Frontify, plus 2 that may change how it looks. Here’s what to change:"
+        }
+      ]
+    },
+    {
+      "key": "intro",
+      "title": "Group heading",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "heading",
+          "text": "Likely causing the problems"
+        }
+      ]
+    },
+    {
+      "key": "PARAGRAPH_STYLE",
+      "title": "Text without a paragraph style",
+      "problem_id": "errors:PARAGRAPH_STYLE",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "1. Text without a paragraph style"
+        },
+        {
+          "kind": "text",
+          "text": "Frontify uses paragraph styles to format text and decide what can be edited."
+        },
+        {
+          "kind": "text",
+          "text": "Where: text frames “Welcome to the team”, “Ben jonsen”, “Process Engineer” (page 1)"
+        },
+        {
+          "kind": "step",
+          "text": "Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style])."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775"
+        }
+      ]
+    },
+    {
+      "key": "FONTS_INCLUDED",
+      "title": "Font missing from the package",
+      "problem_id": "errors:FONTS_INCLUDED",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "2. Font missing from the package"
+        },
+        {
+          "kind": "text",
+          "text": "Frontify needs the font files to render the text, otherwise the template falls back to another font."
+        },
+        {
+          "kind": "text",
+          "text": "Where: the font “Minion Pro”"
+        },
+        {
+          "kind": "step",
+          "text": "Make sure the font is installed or activated on your computer."
+        },
+        {
+          "kind": "step",
+          "text": "Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\"."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981"
+        }
+      ]
+    },
+    {
+      "key": "PASTED_GRAPHICS",
+      "title": "Pasted graphic",
+      "problem_id": "errors:PASTED_GRAPHICS",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "3. Pasted graphic"
+        },
+        {
+          "kind": "text",
+          "text": "Graphics pasted straight into InDesign aren’t linked files, so Frontify can’t read them."
+        },
+        {
+          "kind": "step",
+          "text": "Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d"
+        }
+      ]
+    },
+    {
+      "key": "intro",
+      "title": "Group heading",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "heading",
+          "text": "May change how it looks"
+        }
+      ]
+    },
+    {
+      "key": "OVERRIDE",
+      "title": "Text formatted outside its paragraph style",
+      "problem_id": "warnings:OVERRIDE",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "4. Text formatted outside its paragraph style"
+        },
+        {
+          "kind": "text",
+          "text": "Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify."
+        },
+        {
+          "kind": "text",
+          "text": "Where: text frames “Welcome to the team” (page 1, size and leading changed), “Ben jonsen” (page 1, font, size, leading and more changed), “Process Engineer” (page 1, font, size, leading and more changed)"
+        },
+        {
+          "kind": "step",
+          "text": "Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting."
+        },
+        {
+          "kind": "step",
+          "text": "To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel."
+        },
+        {
+          "kind": "step",
+          "text": "To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775"
+        }
+      ]
+    },
+    {
+      "key": "COMPOSER",
+      "title": "Paragraph Composer used",
+      "problem_id": "warnings:COMPOSER",
+      "lines": [
+        {
+          "kind": "title",
+          "text": "5. Paragraph Composer used"
+        },
+        {
+          "kind": "text",
+          "text": "The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify."
+        },
+        {
+          "kind": "text",
+          "text": "Where: the paragraph style “[Basic Paragraph]”, used on page 1"
+        },
+        {
+          "kind": "step",
+          "text": "In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer."
+        },
+        {
+          "kind": "link",
+          "text": "Learn more",
+          "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0"
+        }
+      ]
+    },
+    {
+      "key": "closing",
+      "title": "Closing",
+      "problem_id": null,
+      "lines": [
+        {
+          "kind": "text",
+          "text": "Once that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify."
+        }
+      ]
+    }
+  ]
 }
