@@ -48,6 +48,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "test:ci": "vitest run",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint ."
   },
   "browserslist": {
