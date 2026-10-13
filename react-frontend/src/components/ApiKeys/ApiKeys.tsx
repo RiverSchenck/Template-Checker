@@ -306,7 +306,7 @@ export function ApiKeys() {
         <PageHeader
           icon={KeyRound}
           title="API keys"
-          description="Run the checker from scripts, CI pipelines and tools like Intercom. Keys act on your behalf and can only run checks."
+          description="Run the checker from scripts, CI pipelines and internal tools. Keys act on your behalf and can only run checks."
           actions={
             <Button onClick={openCreate} className={primaryActionClass}>
               <Plus className="h-4 w-4" />

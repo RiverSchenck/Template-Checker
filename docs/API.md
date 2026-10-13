@@ -49,7 +49,7 @@ the server logs for that request.
 ## `POST /v1/checks/summary`
 
 Checks a packaged InDesign template and returns a message for the customer: what to change in the InDesign file,
-why, and where. It's written to be reviewed by support and pasted into an Intercom reply.
+why, and where. It's written to be reviewed and then sent to the customer, for example pasted into a help desk reply.
 
 ### Request
 
@@ -80,7 +80,7 @@ curl -X POST https://template-checker-test.fly.dev/v1/checks/summary \
 | `run_id` | The check's id in Template Checker analytics. `null` if analytics was unavailable; the summary is still valid. |
 | `template_name` | The template's name, without the file extension. |
 | `counts` | Distinct issues by severity: `blockers` (likely causing the problems), `warnings` (may change how it looks), `infos` (worth a check). |
-| `html` | The message as HTML. Uses only `<p>`, `<br>`, `<strong>`, `<ul>`, `<li>` and `<a>`, which Intercom's composer keeps when pasted. |
+| `html` | The message as HTML. Uses only `<p>`, `<br>`, `<strong>`, `<ul>`, `<li>` and `<a>`, which most rich-text editors keep when pasted. |
 | `text` | The same message as plain text, with links written out (`Learn more: https://…`). |
 
 Responses are sent with `Cache-Control: no-store`.
@@ -88,7 +88,7 @@ Responses are sent with `Cache-Control: no-store`.
 ### Showing and copying it
 
 Show `html` to the person reviewing it, so they see exactly what the customer will get. When they copy, put both
-versions on the clipboard; Intercom uses the HTML, anything else falls back to the text. This must run inside the
+versions on the clipboard; rich-text editors use the HTML, anything else falls back to the text. This must run inside the
 click handler (browsers only allow clipboard writes from a user action):
 
 ```js
