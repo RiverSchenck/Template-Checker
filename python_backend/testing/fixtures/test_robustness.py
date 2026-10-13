@@ -1,4 +1,4 @@
-"""Phase 1 crash and latent-bug fixes (docs/PLAN-backend-refactor.md, B1 and L1-L7).
+"""Phase 1 crash and latent-bug fixes (docs/archive/PLAN-backend-refactor.md, B1 and L1-L7).
 
 Each builds the smallest package that triggers the bug. None of these change results for real test packages
 (the golden results stay identical); they cover inputs the 187 test packages don't contain.

@@ -1,4 +1,4 @@
-"""Phase 1 fixes that change what users see (docs/PLAN-backend-refactor.md, B2 B4 B5 B7).
+"""Phase 1 fixes that change what users see (docs/archive/PLAN-backend-refactor.md, B2 B4 B5 B7).
 
 Rules confirmed with the product owner are in docs/checker-rules.md.
 """

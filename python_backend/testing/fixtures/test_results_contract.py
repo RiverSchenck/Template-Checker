@@ -1,4 +1,4 @@
-"""The results JSON must contain every issue the checks recorded (docs/PLAN-backend-refactor.md, B8)."""
+"""The results JSON must contain every issue the checks recorded (docs/archive/PLAN-backend-refactor.md, B8)."""
 from testing.fixtures.checker_run import run_checker
 from testing.fixtures.idml_builder import PackageBuilder
 
