@@ -12,7 +12,7 @@ import re
 from typing import Dict, Any, Optional
 from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
-from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning, ValidationInfo
+from src.results.classifiers import ValidationError, ValidationWarning, ValidationInfo
 
 logger = logging.getLogger(__name__)
 

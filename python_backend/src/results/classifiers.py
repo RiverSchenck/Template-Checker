@@ -18,9 +18,6 @@ class ValidationError(Enum):
     ERROR = (auto(),
              "Error",
              None, 'Error', ValidationCategory.GENERAL)
-    FOLDER = (auto(),
-              "Folder error",
-              None, 'Folder', ValidationCategory.GENERAL)
     IDML = (auto(),
             "IDML error",
             None, 'IDML', ValidationCategory.GENERAL)

@@ -1,6 +1,6 @@
 # Validation classifiers reference
 
-This document lists every validation classifier defined in [`ValidationClassifier.py`](../src/error_handling/ValidationClassifier.py), grouped by **`ValidationCategory`**. **Level** is determined by which enum the member belongs to: `ValidationError` → error, `ValidationWarning` → warning, `ValidationInfo` → info.
+This document lists every validation classifier defined in [`classifiers.py`](../src/results/classifiers.py), grouped by **`ValidationCategory`**. **Level** is determined by which enum the member belongs to: `ValidationError` → error, `ValidationWarning` → warning, `ValidationInfo` → info.
 
 **FrontifyChecker** indicates whether [`FrontifyChecker.py`](../src/classes/FrontifyChecker.py) references that enum member when emitting a result.
 
@@ -13,7 +13,6 @@ Section titles use the category **label** from code (`ValidationCategory.*.label
 | Error name | Level | Description | Help article | FrontifyChecker |
 |------------|-------|-------------|--------------|-----------------|
 | `ERROR` | error | Error | — | Yes — generic IDML / filesystem failures (unzip, missing dirs, `Fonts.XML`, `Styles.xml`, `Preferences.xml`, spread parse errors, etc.) |
-| `FOLDER` | error | Folder error | — | No — not referenced |
 | `IDML` | error | IDML error | — | Yes — missing or multiple `.idml` files |
 | `ZIP` | error | ZIP file error | https://help.frontify.com/en/articles/5306557-what-input-formats-do-digital-and-print-templates-support | Yes — upload is not a ZIP |
 | `MASTERPAGE` | error | Master Page can't be used. | http://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504 | Yes |

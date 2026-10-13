@@ -10,7 +10,7 @@ from typing import Callable
 from src.checks import fonts, images, layout, text
 from src.classes.States import States
 from src.document import ParsedDocument
-from src.error_handling.ErrorHandling import ValidationResult
+from src.results.results import ValidationResult
 
 
 @dataclass(frozen=True)

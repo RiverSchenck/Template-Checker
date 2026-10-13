@@ -1,20 +1,15 @@
-import json
-import os
 from collections import defaultdict
-from typing import List, Dict, Union
-from src.error_handling.ValidationContext import ValidationContext
-from src.error_handling.Success import Success
-from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning, ValidationInfo, ValidationCategory
+from typing import Dict, List
+
+from src.results.ValidationContext import ValidationContext
+from src.results.classifiers import ValidationError, ValidationWarning, ValidationInfo, ValidationCategory
 
 
 class ValidationResult():
     def __init__(self):
-        self.successes: List[Success] = []
         # Store validations directly by category -> identifier -> {errors/warnings/infos} -> [ValidationContext]
         self.validations: Dict[str, Dict[str, Dict[str, List[ValidationContext]]]] = defaultdict(
             lambda: defaultdict(lambda: {'errors': [], 'warnings': [], 'infos': []}))
-        # Category counts for metadata
-        self.category_counts: Dict[str, int] = defaultdict(int)
         # Classifier metadata
         self.validation_classifiers: Dict[str, dict] = {}
         self.template_name: str = None
@@ -70,7 +65,6 @@ class ValidationResult():
 
         # Check if validation with same key already exists for merging text_content
         # Skip merging for OVERRIDE validations - they should be reported as separate warnings
-        from src.error_handling.ValidationClassifier import ValidationWarning
         is_override = (classifier.category == ValidationCategory.TEXT_BOX and
                       classifier.value == ValidationWarning.OVERRIDE.value)
 
@@ -110,15 +104,9 @@ class ValidationResult():
                     "help_article": classifier.help_article if classifier.help_article else None
                 }
 
-    def add_custom_error(self, message: str, error_type: 'ValidationError', page_id: str = ''):
-        """Add custom error with formatted message."""
-        # Derive page_name for message if available
-        page_name_for_message = ''
-        if page_id and self.pages and page_id in self.pages:
-            page_name_for_message = self.pages[page_id]
-        if page_name_for_message:
-            message += f' [Page {page_name_for_message}]'
-        self.add_validation('errors', error_type, message, page_id, 'null', 'null')
+    def add_custom_error(self, message: str, error_type: 'ValidationError'):
+        """An error whose message is written by the caller (package and parsing failures)."""
+        self.add_validation('errors', error_type, message)
 
     def add_error(self, context: str, error_type: 'ValidationError', page_id: str = '', identifier='null', data_id='null', text_content: list = None, context_details: dict = None):
         """Add error validation."""
@@ -223,14 +211,12 @@ class ValidationResult():
 
     def _build_validation_item_json(self, item: ValidationContext, category_key: str, page_to_spread: dict) -> dict:
         """Build JSON representation of a validation item, including text_content when applicable."""
-        from src.error_handling.ValidationClassifier import ValidationWarning
-
         bounds = self.page_geometry.get_bounds(item.data_id) if self.page_geometry else None
         page_id = self._page_of(bounds, item.page_id)
 
         base_item = {
             "validationClassifier": item.classifier_type,
-            "context": item.get_formatted_message(),
+            "context": item.context,
             "identifier": item.identifier,
             "page_id": page_id,  # page Self (stored directly)
             "page_name": self.pages.get(page_id, "") if page_id else "",  # mapped from pages
@@ -269,7 +255,15 @@ class ValidationResult():
                     if page_self:  # Ensure page_self is not None
                         page_to_spread[page_self] = spread_self
 
-        # Build category sections dynamically from stored validations
+        # How many styles, frames, fonts and images the document has, per section.
+        totals = {
+            'par_styles': self.par_styles_count,
+            'char_styles': self.char_styles_count,
+            'text_boxes': self.text_box_total_count,
+            'fonts': self.fonts_total_count,
+            'images': self.images_total_count,
+            'general': 0,
+        }
         categories_response = {}
 
         # Expected categories in response
@@ -281,9 +275,7 @@ class ValidationResult():
             details = {}
 
             for identifier, type_dict in category_validations.items():
-                # Ensure identifier is not None - convert to string if needed
-                safe_identifier = identifier if identifier is not None else 'null'
-                details[safe_identifier] = {
+                details[identifier] = {
                     'errors': [
                         self._build_validation_item_json(item, category_key, page_to_spread)
                         for item in type_dict['errors']
@@ -298,24 +290,9 @@ class ValidationResult():
                     ]
                 }
 
-            # Get total count for this category
-            total_count = 0
-            if category_key == 'par_styles':
-                total_count = self.par_styles_count
-            elif category_key == 'char_styles':
-                total_count = self.char_styles_count
-            elif category_key == 'text_boxes':
-                total_count = self.text_box_total_count
-            elif category_key == 'fonts':
-                total_count = self.fonts_total_count
-            elif category_key == 'images':
-                total_count = self.images_total_count
-            elif category_key == 'general':
-                total_count = 0
-
             categories_response[category_key] = {
                 "details": details,
-                "total_count": total_count
+                "total_count": totals[category_key],
             }
 
         # Map page_id to page_name in text_box_data
@@ -324,9 +301,7 @@ class ValidationResult():
             frame_bounds = self.page_geometry.get_bounds(text_box.get("frame_id")) if self.page_geometry else None
             page_id = self._page_of(frame_bounds, text_box.get("page_id"))
             page_name = self.pages.get(page_id, "") if page_id else ""
-            # Ensure identifier is not None
-            safe_identifier = identifier if identifier is not None else 'null'
-            mapped_text_box_data[safe_identifier] = {
+            mapped_text_box_data[identifier] = {
                 "identifier": text_box.get("identifier", ""),
                 "content": text_box.get("content", ""),
                 "page_id": page_id,
@@ -347,7 +322,7 @@ class ValidationResult():
         return response
 
     # Generic classifiers used for package/parsing failures rather than template checks.
-    _NON_CHECK_CLASSIFIERS = {'ERROR', 'FOLDER', 'IDML', 'ZIP', 'WARNING'}
+    _NON_CHECK_CLASSIFIERS = {'ERROR', 'IDML', 'ZIP', 'WARNING'}
 
     def _build_checks(self) -> List[dict]:
         """Every template check that runs, so the frontend can list what passed.

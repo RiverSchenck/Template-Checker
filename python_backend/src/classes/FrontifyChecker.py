@@ -5,8 +5,8 @@ import tempfile
 import uuid
 import zipfile
 from typing import Callable, Dict, List, Optional, Tuple
-from src.error_handling.ErrorHandling import ValidationResult
-from src.error_handling.ValidationClassifier import ValidationError, ValidationWarning, ValidationInfo
+from src.results.results import ValidationResult
+from src.results.classifiers import ValidationError, ValidationWarning, ValidationInfo
 from src.parsers.SourceFoldersParser import SourceFoldersParser
 from src.parsers.SpreadsParser import SpreadsParser
 from src.parsers.FontsParser import FontsParser
@@ -429,15 +429,6 @@ class FrontifyChecker:
                     unique_styles.add(style_id)
 
         return len(unique_styles)
-
-    def get_errors(self) -> List['Error']:
-        return self.results.get_errors()
-
-    def get_warnings(self) -> List['Warning']:
-        return self.results.get_warnings()
-
-    def get_infos(self) -> List['Info']:
-        return self.results.get_infos()
 
     def get_error_types(self) -> List['ValidationError']:
         return self.results.get_error_types()
