@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict
-from lxml import etree as ET
+from src.helpers import safe_xml
 from src.classes.SpreadData import SpreadData
 
 
@@ -19,8 +19,7 @@ class SpreadsParser:
         for filename in sorted(os.listdir(spreads_xml_dir)):
             if filename.endswith('.xml'):
                 file_path = os.path.join(spreads_xml_dir, filename)
-                parser = ET.XMLParser(huge_tree=True)
-                tree = ET.parse(file_path, parser)
+                tree = safe_xml.parse(file_path, large=True)
                 root = tree.getroot()
 
                 spread_data = SpreadData(root)

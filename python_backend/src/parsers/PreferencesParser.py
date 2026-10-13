@@ -1,4 +1,4 @@
-from lxml import etree as ET
+from src.helpers import safe_xml
 from typing import Dict
 
 
@@ -9,7 +9,7 @@ class PreferencesParser:
                                   str] = self._extract_document_bleed(xml_path)
 
     def _extract_document_bleed(self, xml_path: str):
-        tree = ET.parse(xml_path)
+        tree = safe_xml.parse(xml_path)
         root = tree.getroot()
         # Find the DocumentPreference element
         document_preference = root.find(".//DocumentPreference")

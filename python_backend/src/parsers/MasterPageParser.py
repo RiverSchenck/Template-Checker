@@ -1,6 +1,6 @@
 import logging
 import os
-from lxml import etree as ET
+from src.helpers import safe_xml
 from xml.etree.ElementTree import Element
 from typing import List, Optional
 from src.classes.Link import Link
@@ -18,7 +18,7 @@ class MasterPageParser:
             self._get_elements_from_all_files(masterspreads_dir)
 
     def _get_elements_from_file(self, file_path: str) -> List[str]:
-        tree = ET.parse(file_path)
+        tree = safe_xml.parse(file_path, large=True)
         root = tree.getroot()
         master_spread = root.find('MasterSpread')
         elements: List[str] = []
