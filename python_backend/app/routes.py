@@ -5,8 +5,9 @@ import jwt
 import urllib.request
 from datetime import datetime, timezone
 from functools import wraps
-from flask import Blueprint, Response, jsonify, send_file, after_this_request, request, current_app, g
+from flask import Blueprint, Response, jsonify, send_file, request, current_app, g
 from src.classes.FrontifyChecker import FrontifyChecker
+from src.pipeline.workspace import run_workspace
 from .errors import api_error, error_body
 from .utils import CheckFailed, upload_file, run_check, checker_cleanup
 from .analytics import first_error_message, get_app_version
@@ -914,21 +915,25 @@ def _not_checkable(outcome):
 
 
 def _run_and_respond(respond):
-    """Store the upload, run the check, and build the response from its outcome. Cleans up either way."""
-    checker = FrontifyChecker()
-    try:
-        source_type, run_user_id = _run_source_and_user_id()
-        upload_result = upload_file()
-        if upload_result['status'] != 'success':
-            return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
+    """Store the upload, run the check, and build the response from its outcome. Everything the run writes
+    (upload, unpacked package, XML export) is in one run folder, removed either way."""
+    with run_workspace() as workspace:
+        g.workspace = workspace
+        checker = FrontifyChecker()
+        checker.workspace = workspace
         try:
-            outcome = run_check(checker, upload_result['path'], source_type, user_id=run_user_id)
-        except CheckFailed:
-            return api_error(
-                500, 'check_failed', 'The template couldn\'t be checked. Try again, or contact us with the request ID.')
-        return respond(outcome, checker)
-    finally:
-        checker_cleanup(checker)
+            source_type, run_user_id = _run_source_and_user_id()
+            upload_result = upload_file()
+            if upload_result['status'] != 'success':
+                return api_error(500, 'upload_failed', 'The upload couldn\'t be saved. Try again.')
+            try:
+                outcome = run_check(checker, upload_result['path'], source_type, user_id=run_user_id)
+            except CheckFailed:
+                return api_error(
+                    500, 'check_failed', 'The template couldn\'t be checked. Try again, or contact us with the request ID.')
+            return respond(outcome, checker)
+        finally:
+            checker_cleanup(checker)
 
 
 @main.route('/v1/checks', methods=['POST'])
@@ -1009,16 +1014,8 @@ def run_checker_and_download():
             current_app.logger.error('XML export ZIP missing: %s', zip_path)
             return api_error(500, 'export_failed', _EXPORT_FAILED)
 
-        @after_this_request
-        def remove_zip(response):
-            # The upload and unzipped files are removed by _run_and_respond; the export ZIP once it has been sent.
-            try:
-                os.remove(zip_path)
-            except OSError:
-                current_app.logger.warning('Could not remove XML export %s', zip_path)
-            return response
-
         try:
+            # send_file opens the zip now, so it's still sent after _run_and_respond removes the run folder.
             return send_file(zip_path, mimetype='application/zip', as_attachment=True,
                              download_name=f'{display_template_name(checker.get_template_name() or "template")}-xml.zip')
         except Exception:

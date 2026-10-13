@@ -1,24 +1,22 @@
 import math
 import os
 import shutil
+import tempfile
 import uuid
 
 import pytest
 
-DATA_FOLDER = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src', 'data')
+# Check runs keep their files under WORK_DIR (src/pipeline/workspace.py). Point it at a folder of the test run's
+# own, before the app is imported (it reads WORK_DIR at start), so tests never touch the real temp folder.
+TEST_WORK_DIR = tempfile.mkdtemp(prefix='template-checker-tests-')
+os.environ['WORK_DIR'] = TEST_WORK_DIR
 
 
 @pytest.fixture(scope='session', autouse=True)
-def cleanup_unzipped_test_data():
-    """Remove the folders FrontifyChecker unzips into src/data during the test run (they can add up to GBs)."""
-    before = set(os.listdir(DATA_FOLDER)) if os.path.isdir(DATA_FOLDER) else set()
+def remove_test_work_dir():
+    """Remove the test run's WORK_DIR, with anything a failed test left in it (unpacked packages add up)."""
     yield
-    if not os.path.isdir(DATA_FOLDER):
-        return
-    for name in set(os.listdir(DATA_FOLDER)) - before:
-        path = os.path.join(DATA_FOLDER, name)
-        if os.path.isdir(path):
-            shutil.rmtree(path, ignore_errors=True)
+    shutil.rmtree(TEST_WORK_DIR, ignore_errors=True)
 
 
 class FakeLimiterDB:

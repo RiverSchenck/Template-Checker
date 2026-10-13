@@ -5,7 +5,6 @@ import zipfile
 
 import pytest
 
-import src.classes.FrontifyChecker as frontify_checker
 from src.classes.FrontifyChecker import DAMAGED_IDML, IDML_TOO_LARGE, NOT_A_ZIP, FrontifyChecker
 from src.helpers import safe_xml
 from testing.fixtures.idml_builder import PackageBuilder
@@ -95,7 +94,7 @@ def test_damaged_zip_entry_is_rejected(tmp_path):
 def test_server_fault_is_not_blamed_on_the_upload(tmp_path, monkeypatch):
     blocker = tmp_path / 'not-a-folder'
     blocker.write_text('')
-    monkeypatch.setattr(frontify_checker, 'DATA_FOLDER', str(blocker / 'data'))
+    monkeypatch.setenv('WORK_DIR', str(blocker / 'work'))
     checker = FrontifyChecker()
     checker.set_source_file_path(package(tmp_path))
     with pytest.raises(OSError):

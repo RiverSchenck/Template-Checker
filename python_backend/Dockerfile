@@ -20,7 +20,8 @@ EXPOSE 80
 ENV FLASK_ENV=production
 ENV PORT=80
 ENV DEBUG=False
-ENV UPLOAD_FOLDER=/app/uploads
+# One folder per check run (upload, unpacked package, XML export); stale ones are swept at start.
+ENV WORK_DIR=/tmp/template-checker
 
 # Gunicorn configuration for large file uploads:
 # -b 0.0.0.0:80                    : Bind to all interfaces on port 80

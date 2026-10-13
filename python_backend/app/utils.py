@@ -1,7 +1,5 @@
 import os
-import shutil
 import time
-import uuid
 from dataclasses import dataclass
 from typing import Optional
 from flask import request, current_app, g
@@ -21,11 +19,8 @@ def upload_file():
             return {'status': 'error', 'error': {'message': 'No selected file'}}
 
         filename = secure_filename(file.filename) or 'upload.zip'
-        # Each upload gets its own folder so concurrent checks never overwrite or delete each other's files
-        upload_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], uuid.uuid4().hex)
-        os.makedirs(upload_dir)
-        g.upload_dir = upload_dir
-        save_path = os.path.join(upload_dir, filename)
+        # Into this request's run folder (g.workspace), so concurrent checks never touch each other's files
+        save_path = os.path.join(g.workspace.folder('upload'), filename)
         file.save(save_path)
 
         return {'status': 'success', 'path': save_path}
@@ -132,8 +127,5 @@ def _state_name(state) -> Optional[str]:
 
 
 def checker_cleanup(checker):
-    """Cleanup the checker and remove this request's uploaded files (only this request's folder)."""
+    """Remove the run's folder (upload, unpacked package, XML export) once the response has its data."""
     checker.delete_unzipped_root_path()
-    upload_dir = g.pop('upload_dir', None)
-    if upload_dir:
-        shutil.rmtree(upload_dir, ignore_errors=True)
