@@ -9,24 +9,17 @@ from src.results.classifiers import Category, Severity, ValidationError, Validat
 from src.results.layout import DocumentLayout, pages_from_spreads, text_boxes_from_stories
 from src.results.results import Results
 from src.results.serialize import results_json
-from src.parsers.SourceFoldersParser import SourceFoldersParser
-from src.parsers.SpreadsParser import SpreadsParser
-from src.parsers.FontsParser import FontsParser
-from src.parsers.MasterPageParser import MasterPageParser
-from src.parsers.StylesParser import StylesParser
-from src.parsers.StoriesParser import StoriesParser
-from src.parsers.PreferencesParser import PreferencesParser
 from src.parsers.MetadataParser import MetadataParser
 from src.classes.States import States
 from src.checks import CHECKS, CHECKS_BY_STATE, Check
-from src.document import ParsedDocument
+from src.model.document import Document, short_style_id
+from src.model.load import load_document
 from lxml import etree
 
 from src.helpers import safe_xml
 from src.helpers.package_zip import (
     DAMAGED_ARCHIVE_ERRORS, DAMAGED_IDML, MultipleIdmlError, NoIdmlError, PackageError, extract_idml,
     extract_package, read_package)
-from src.helpers.page_geometry import PageGeometryIndex
 from src.helpers.pdf_previews import find_package_pdf, render_pdf_previews
 
 logger = logging.getLogger(__name__)
@@ -60,20 +53,12 @@ class FrontifyChecker:
         self.idml_path: str = ''
         self.idml_problem: Optional[str] = None
         self.package_links: List[Tuple[str, int]] = []  # (file name, size) in Links/
-        # XML Data
-        self.stories_parser: StoriesParser = None
-        self.masterspreads_parser: MasterPageParser = None
-        self.fonts_parser: FontsParser = None
-        self.spreads_parser: SpreadsParser = None
-        self.source_folders_parser: SourceFoldersParser = None
-        self.preferences_parser: PreferencesParser = None
-        self.stories_exist: bool = True
         self.metadata_xml_path: bool = False
         self.current_state: States = States.UNZIP_PACKAGE
         # Last state run_state_machine ran; RESULTS once every check finished
         self.last_state: Optional[States] = None
         # The parsed template the checks read; built at the end of parse_xml
-        self.document: Optional[ParsedDocument] = None
+        self.document: Optional[Document] = None
         # The checks, in order (an instance copy, so a test can swap one out)
         self.checks: List[Check] = list(CHECKS)
         # Intake: unzip, unpack the IDML, parse it. Each returns the next state, or EXIT on a bad upload.
@@ -210,134 +195,33 @@ class FrontifyChecker:
         return States.EXIT
 
     def _parse_xml(self) -> States:
-        # Source Folders (Links, Document Fonts)
-        # Init: SourceFoldersParser
-        # Check if 'Document Fonts' exists, if not create it to continue code flow
-        document_fonts_folder_path = self.ensure_folder_exists(
-            self.unzipped_folder_path, 'Document Fonts')
-        self.source_folders_parser = SourceFoldersParser(
-            self.package_links, document_fonts_folder_path)
-
-        # Spreads XML
-        # Init: SpreadsParser
-        # Check if Spreads directory exists
-        spreads_dir = os.path.join(
-            self.idml_output_folder, 'Spreads')
-        if not os.path.exists(spreads_dir):
-            self.results.add(ValidationError.ERROR, incomplete_idml("pages (Spreads folder)"))
-            return States.EXIT
-
-        self.spreads_parser = SpreadsParser(
-            spreads_dir)
-        self.layout = pages_from_spreads(self.spreads_parser)
-        # Fonts.XML
-        # Init: FontsParser
-        # Check if Fonts.XML exists
-        fonts_xml_path = os.path.join(
-            self.idml_output_folder, 'Resources', 'Fonts.xml')
-        if not os.path.exists(fonts_xml_path):
-            self.results.add(ValidationError.ERROR, incomplete_idml("font list (Resources/Fonts.xml)"))
-            return States.EXIT
-        self.fonts_parser = FontsParser(
-            fonts_xml_path)
-        # Styles.XML
-        # Init: StylesParser
-        # Check if Styles.xml exists
-        styles_xml_path = os.path.join(
-            self.idml_output_folder, 'Resources', 'Styles.xml')
-        if not os.path.exists(styles_xml_path):
-            self.results.add(ValidationError.ERROR, incomplete_idml("styles (Resources/Styles.xml)"))
-            return States.EXIT
-        # Initialize the StylesParser
-        styles_parser = StylesParser(styles_xml_path)
-
-        # Stories XML
-        # Init: StoriesParser
-        # Check if Stories directory exists
-        stories_dir = os.path.join(self.idml_output_folder, 'Stories')
-        if not os.path.exists(stories_dir):
-            self.stories_exist = False
-        else:
-            # Initialize the StoriesParser and extract story data
-            self.stories_parser = StoriesParser(
-                stories_dir, styles_parser, self.fonts_parser, self.spreads_parser)
-
-        # Map stories to text frames
-        if self.stories_parser:
-            for spread in self.spreads_parser.spreads_obj_list:
-                for text_frame in spread.text_frame_obj_list:
-                    # Use dictionary lookup for O(1) performance instead of O(n) search
-                    story = self.stories_parser.stories_dict.get(
-                        text_frame.parent_story_id)
-                    if story:
-                        text_frame.parent_story_obj = story
-                        story.parent_text_frame_id = text_frame.frame_id
-            self.layout.text_boxes = text_boxes_from_stories(self.stories_parser)
-        # Map source images to links
-        link_dict = {}
-        for spread in self.spreads_parser.spreads_obj_list:
-            for link in spread.links_obj_list:
-                link_name = link.link_name
-                link_dict[link_name] = link
-
-        for image in self.source_folders_parser.images_obj_list:
-            if image.get_image_name() in link_dict:
-                matching_link = link_dict[image.get_image_name()]
-                image.parent_link_data_id = matching_link.get_rectangle_link_id()
-
-        # MasterSpreads XML
-        # Init: MasterPageParser
-        # Check if MasterSpreads directory exists
-        masterspreads_dir = os.path.join(
-            self.idml_output_folder, 'MasterSpreads')
-        if not os.path.exists(masterspreads_dir):
+        document_fonts_folder_path = self.ensure_folder_exists(self.unzipped_folder_path, 'Document Fonts')
+        resources = os.path.join(self.idml_output_folder, 'Resources')
+        for missing, path in (("pages (Spreads folder)", os.path.join(self.idml_output_folder, 'Spreads')),
+                              ("font list (Resources/Fonts.xml)", os.path.join(resources, 'Fonts.xml')),
+                              ("styles (Resources/Styles.xml)", os.path.join(resources, 'Styles.xml'))):
+            if not os.path.exists(path):
+                self.results.add(ValidationError.ERROR, incomplete_idml(missing))
+                return States.EXIT
+        if not os.path.exists(os.path.join(self.idml_output_folder, 'MasterSpreads')):
+            # No master spreads is valid (only the [None] master); checks see no master items.
             self.results.add(ValidationWarning.WARNING, "MasterSpreads directory does not exist")
-            # No master spreads is valid (only the [None] master); checks see an empty master page.
-            self.masterspreads_parser = MasterPageParser(None)
-        else:
-            self.masterspreads_parser = MasterPageParser(masterspreads_dir)
-
-        # META-INF XML
-        # Init: NA
-        # Store Folder location
-        meta_inf_folder = os.path.join(
-            self.idml_output_folder, 'META-INF')
-        if not os.path.exists(meta_inf_folder):
-            self.metadata_xml_path = False
-        else:
-            potential_metadata_path = os.path.join(
-                meta_inf_folder, 'metadata.xml')
-            if os.path.exists(potential_metadata_path):
-                self.metadata_xml_path = potential_metadata_path
-
-        self._load_page_highlighting_data()
-
-        # Preferences XML
-        # Init: Preferences Parser
-        # Check if Styles.xml exists
-        preferences_xml_path = os.path.join(
-            self.idml_output_folder, 'Resources', 'Preferences.xml')
-        if not os.path.exists(preferences_xml_path):
+        if not os.path.exists(os.path.join(resources, 'Preferences.xml')):
             self.results.add(ValidationError.ERROR, incomplete_idml("document settings (Resources/Preferences.xml)"))
             return States.EXIT
-        # Initialize the StylesParser
-        self.preferences_parser = PreferencesParser(preferences_xml_path)
 
-        self.document = ParsedDocument(
-            spreads_parser=self.spreads_parser,
-            stories_parser=self.stories_parser,
-            masterspreads_parser=self.masterspreads_parser,
-            fonts_parser=self.fonts_parser,
-            source_folders_parser=self.source_folders_parser,
-            preferences_parser=self.preferences_parser,
-        )
-
+        self.document = load_document(self.idml_output_folder, self.package_links, document_fonts_folder_path)
+        self.layout = pages_from_spreads(self.document)
+        self.layout.text_boxes = text_boxes_from_stories(self.document)
+        metadata = os.path.join(self.idml_output_folder, 'META-INF', 'metadata.xml')
+        self.metadata_xml_path = metadata if os.path.exists(metadata) else False
+        self._load_page_highlighting_data()
         return States.MASTERPAGE_CHECK
 
     def _load_page_highlighting_data(self):
         """Page geometry and embedded previews let the frontend highlight issues on the page."""
         try:
-            page_geometry = PageGeometryIndex(self.idml_output_folder)
+            page_geometry = self.document.geometry
             self.layout.geometry = page_geometry
             previews = {}
             if self.metadata_xml_path:
@@ -389,39 +273,21 @@ class FrontifyChecker:
 
     def results_analytics(self):
         """Totals per results section: how many styles, text boxes, fonts and images the document has."""
-        if self.stories_exist:
-            self.totals[Category.PAR_STYLE] = self.calculate_style_total_count('paragraph')
-            self.totals[Category.CHAR_STYLE] = self.calculate_style_total_count('character')
-            self.totals[Category.TEXT_BOX] = self.stories_parser.get_stories_length()
-        self.totals[Category.FONTS] = (self.fonts_parser.get_used_font_families_count()
-                                       + len(self.source_folders_parser.document_fonts))
-        self.totals[Category.IMAGES] = sum(len(spread.links_obj_list) + spread.pasted_graphics_num
-                                           for spread in self.spreads_parser.spreads_obj_list)
+        doc = self.document
+        if doc.stories_exist:
+            self.totals[Category.PAR_STYLE] = len({short_style_id(paragraph.style)
+                                                   for story in doc.stories for paragraph in doc.paragraphs(story)})
+            self.totals[Category.CHAR_STYLE] = len({short_style_id(run.style)
+                                                    for story in doc.stories for _, run in doc.runs(story)})
+            self.totals[Category.TEXT_BOX] = len(doc.stories)
+        self.totals[Category.FONTS] = len(doc.used_fonts) + len(doc.packaged_fonts)
+        self.totals[Category.IMAGES] = sum(len(spread.links) + sum(1 for item in spread.items if item.pasted)
+                                           for spread in doc.spreads)
 
     def results_json(self) -> dict:
         """The response: every issue found, with what the frontend needs to show and highlight it."""
         return results_json(self.results, self.layout, template_name=self.template_name,
                             output_folder=self.output_folder, totals=self.totals)
-
-    def calculate_style_total_count(self, style_type='paragraph'):
-        """Fetch all styles from documents and count unique instances."""
-        unique_styles = set()
-        stories_data = self.stories_parser.stories_data_list
-
-        if style_type == 'paragraph':
-            for story in stories_data:
-                par_styles = story.paragraph_styles
-                for style in par_styles:
-                    style_id = style.normalized_style_id
-                    unique_styles.add(style_id)
-        elif style_type == 'character':
-            for story in stories_data:
-                char_styles = story.character_styles
-                for style in char_styles:
-                    style_id = style.normalized_style_id
-                    unique_styles.add(style_id)
-
-        return len(unique_styles)
 
     def get_error_types(self) -> List[str]:
         return self.results.names(Severity.ERROR)

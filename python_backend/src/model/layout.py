@@ -3,6 +3,7 @@
 Spreads and master spreads go through the same code, in designmap.xml order. Each file is parsed once; the
 same trees give the page geometry (PageGeometryIndex), so nothing is read twice.
 """
+import logging
 import os
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
@@ -14,6 +15,8 @@ from src.helpers.page_geometry import PageGeometryIndex
 ITEM_TAGS = frozenset({'TextFrame', 'Rectangle', 'Oval', 'Polygon', 'GraphicLine', 'Group'})
 GRAPHIC_FRAME_TAGS = frozenset({'Rectangle', 'Oval', 'Polygon'})
 PASTED_TYPES = ('PDF', 'EPS', 'Image', 'SVG')  # graphics pasted into a frame, stored inline (no Link)
+
+logger = logging.getLogger(__name__)
 
 
 def local_tag(element) -> str:
@@ -73,6 +76,7 @@ class Spread:
     items: Tuple[PageItem, ...]     # every page item at any depth (inside groups too), in document order
     links: Tuple[Link, ...]
     child_tags: Tuple[str, ...]     # tags of the spread's direct children ('Page', 'TextFrame'...)
+    source: str = ''                # the file it was read from, relative to the IDML folder
 
     @property
     def text_frames(self) -> Tuple[TextFrame, ...]:
@@ -116,7 +120,11 @@ def read_item(element) -> PageItem:
                      no_line_breaks=_pref(element, 'TextFramePreference', 'UseNoLineBreaksForAutoSizing'))
 
 
-def read_link(element) -> Link:
+def read_link(element) -> Optional[Link]:
+    """The Link, or None for a malformed one without a LinkResourceURI (it's skipped, as InDesign can't use it)."""
+    if element.get('LinkResourceURI') is None:
+        logger.warning('Skipping link %s without a LinkResourceURI', element.get('Self'))
+        return None
     graphic = element.getparent()
     frame = graphic.getparent() if graphic is not None else None
     uri = unquote_uri(element.get('LinkResourceURI'))
@@ -127,7 +135,7 @@ def read_link(element) -> Link:
                   if frame is not None else (None, None, None)))
 
 
-def read_spread(element, is_master: bool = False) -> Spread:
+def read_spread(element, is_master: bool = False, source: str = '') -> Spread:
     """A <Spread> or <MasterSpread> element as data, in one pass over its tree."""
     spread_id = element.get('Self') or ''
     pages = tuple(Page(page.get('Self'), page.get('Name') or '', spread_id)
@@ -138,9 +146,11 @@ def read_spread(element, is_master: bool = False) -> Spread:
         if tag in ITEM_TAGS:
             items.append(read_item(child))
         elif tag == 'Link':
-            links.append(read_link(child))
+            link = read_link(child)
+            if link is not None:
+                links.append(link)
     return Spread(spread_id, is_master, pages, tuple(items), tuple(links),
-                  tuple(local_tag(child) for child in element if local_tag(child)))
+                  tuple(local_tag(child) for child in element if local_tag(child)), source)
 
 
 def _sources(idml_folder: str, designmap, kind: str, folder: str) -> List[str]:
@@ -164,11 +174,11 @@ def load_layout(idml_folder: str) -> Layout:
     for path in _sources(idml_folder, designmap, 'Spread', 'Spreads'):
         element = safe_xml.parse(path, large=True).getroot().find('.//Spread')
         if element is not None:
-            spread_elements.append(element)
+            spread_elements.append((element, os.path.relpath(path, idml_folder)))
     masters = []
     for path in _sources(idml_folder, designmap, 'MasterSpread', 'MasterSpreads'):
         element = safe_xml.parse(path, large=True).getroot().find('MasterSpread')
         if element is not None:
-            masters.append(read_spread(element, is_master=True))
-    return Layout(tuple(read_spread(element) for element in spread_elements), tuple(masters),
-                  PageGeometryIndex(spreads=spread_elements))
+            masters.append(read_spread(element, is_master=True, source=os.path.relpath(path, idml_folder)))
+    return Layout(tuple(read_spread(element, source=source) for element, source in spread_elements), tuple(masters),
+                  PageGeometryIndex(spreads=[element for element, _ in spread_elements]))

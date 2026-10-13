@@ -122,7 +122,7 @@ class _Walker:
             elif tag in ITEM_TAGS:
                 items.append(read_item(child))
                 items.extend(read_item(e) for e in child.iter() if e is not child and local_tag(e) in ITEM_TAGS)
-                links.extend(read_link(e) for e in child.iter() if local_tag(e) == 'Link')
+                links.extend(link for link in (read_link(e) for e in child.iter() if local_tag(e) == 'Link') if link)
             else:
                 self._content(child, CONTAINERS.get(tag, container), text, items, links)
 
