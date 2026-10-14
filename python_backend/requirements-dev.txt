@@ -1,0 +1,5 @@
+# Test-only packages, on top of requirements.txt (CI installs both; the Docker image only requirements.txt).
+-r requirements.txt
+iniconfig==2.3.0
+pluggy==1.6.0
+pytest==9.0.3

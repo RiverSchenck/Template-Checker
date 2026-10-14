@@ -6,31 +6,12 @@ import logging
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timezone
 
+from .analytics_api import get_supabase_client
+
 logger = logging.getLogger(__name__)
 
 SEVERITIES = ('error', 'warning', 'info')
 MAX_ERROR_MESSAGE_LENGTH = 1000
-
-
-def get_supabase_client():
-    """Initialize and return Supabase client if credentials are available."""
-    try:
-        from supabase import create_client, Client
-
-        supabase_url = os.getenv('SUPABASE_URL')
-        supabase_key = os.getenv('SUPABASE_KEY')
-
-        if not supabase_url or not supabase_key:
-            logger.warning("Supabase credentials not found. Analytics will be skipped.")
-            return None
-
-        return create_client(supabase_url, supabase_key)
-    except ImportError:
-        logger.warning("supabase-py not installed. Install with: pip install supabase")
-        return None
-    except Exception as e:
-        logger.error(f"Failed to initialize Supabase client: {e}")
-        return None
 
 
 def _issues(results_json: Dict[str, Any]):
