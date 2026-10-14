@@ -109,3 +109,10 @@
 .dark [data-sidebar="sidebar"] {
   background: oklch(0.205 0 0);
 }
+
+/* The all-clear icon on a result with no issues (Report/CleanResult). */
+@keyframes clean-pop {
+  0% { transform: scale(0.4) rotate(-12deg); opacity: 0; }
+  60% { transform: scale(1.12) rotate(4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); }
+}
