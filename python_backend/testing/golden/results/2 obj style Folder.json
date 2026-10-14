@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u102",
@@ -612,6 +613,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "logo_FÃ¶rderturm_original.png",
@@ -631,6 +633,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "logo_Förderturm_original.png",
@@ -657,6 +660,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u102",
@@ -683,6 +687,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "logo_FÃ¶rderturm_original.png",
@@ -711,6 +716,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

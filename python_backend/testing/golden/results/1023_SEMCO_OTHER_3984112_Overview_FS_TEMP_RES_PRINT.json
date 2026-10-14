@@ -583,6 +583,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Found on the master page: 1 group",
     "severity": "error",
     "subject": {
      "id": null,
@@ -612,6 +613,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u2fad",
@@ -641,6 +643,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u3623",
@@ -663,6 +666,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "udcf",
@@ -692,6 +696,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ufa3",
@@ -729,6 +734,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "font, size, leading and more changed",
     "severity": "warning",
     "subject": {
      "id": "u2fad",
@@ -762,6 +768,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u319f",
@@ -801,6 +808,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "leading changed",
     "severity": "warning",
     "subject": {
      "id": "u3623",
@@ -839,6 +847,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "leading and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u3623",
@@ -882,6 +891,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "font, size, leading and more changed",
     "severity": "warning",
     "subject": {
      "id": "u3623",
@@ -924,6 +934,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "font, size, tracking and more changed",
     "severity": "warning",
     "subject": {
      "id": "u3623",
@@ -966,6 +977,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "font, size, tracking and more changed",
     "severity": "warning",
     "subject": {
      "id": "u3623",
@@ -1008,6 +1020,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "font, size, tracking and more changed",
     "severity": "warning",
     "subject": {
      "id": "u3623",
@@ -1043,6 +1056,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u3648",
@@ -1076,6 +1090,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "color changed",
     "severity": "warning",
     "subject": {
      "id": "u3698",
@@ -1103,6 +1118,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1131,6 +1147,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1162,6 +1179,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1188,6 +1206,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1217,6 +1236,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1243,6 +1263,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1271,6 +1292,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1299,6 +1321,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1327,6 +1350,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1355,6 +1379,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1383,6 +1408,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1411,6 +1437,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1439,6 +1466,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1467,6 +1495,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1495,6 +1524,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "udcf",
@@ -1523,6 +1553,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/H4",
@@ -1554,6 +1585,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/H4",
@@ -1582,6 +1614,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/H4",
@@ -1610,6 +1643,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Minion Pro",
@@ -1634,6 +1668,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Times",
@@ -1653,6 +1688,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Times.ttc",
@@ -1681,6 +1717,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": "15.25 MB",
     "severity": "info",
     "subject": {
      "id": "iStock-1226023798.jpg",
@@ -1700,6 +1737,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "udcf",
@@ -1726,6 +1764,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 3.2 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -1754,6 +1793,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/H2",
@@ -1782,6 +1822,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",
@@ -1810,6 +1851,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/H3",
@@ -1838,6 +1880,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/H4",
@@ -1866,6 +1909,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Body",
@@ -1894,6 +1938,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/H1",
@@ -1922,6 +1967,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Body Bullet",
@@ -1941,6 +1987,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "CharacterStyle/$ID/[No character style]",

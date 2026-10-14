@@ -583,6 +583,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Found on the master page: 1 text frame",
     "severity": "error",
     "subject": {
      "id": null,
@@ -609,6 +610,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "u104",
@@ -635,6 +637,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "u146",
@@ -661,6 +664,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "u1ce",
@@ -687,6 +691,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "u1ef",
@@ -713,6 +718,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "u210",
@@ -732,6 +738,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "u235",
@@ -758,6 +765,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u104",
@@ -784,6 +792,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u146",
@@ -810,6 +819,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1ce",
@@ -836,6 +846,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1ef",
@@ -862,6 +873,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u210",
@@ -881,6 +893,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u235",
@@ -909,6 +922,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

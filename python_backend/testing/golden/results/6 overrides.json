@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u112",
@@ -617,6 +618,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "font changed",
     "severity": "warning",
     "subject": {
      "id": "u112",
@@ -650,6 +652,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u112",
@@ -684,6 +687,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "u112",
@@ -717,6 +721,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "u112",
@@ -753,6 +758,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "u112",
@@ -786,6 +792,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "u112",
@@ -812,6 +819,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Lucida Grande",
@@ -831,6 +839,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "LucidaGrande.ttc",
@@ -859,6 +868,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

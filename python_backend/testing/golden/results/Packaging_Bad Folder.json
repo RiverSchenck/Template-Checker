@@ -583,6 +583,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Found on the master page: 1 rectangle",
     "severity": "error",
     "subject": {
      "id": null,
@@ -612,6 +613,7 @@
      "page_name": "1",
      "spread_id": "uf0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u128",
@@ -638,6 +640,7 @@
      "page_name": "1",
      "spread_id": "uf0"
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "ufb",
@@ -670,6 +673,7 @@
      "page_name": "1",
      "spread_id": "uf0"
     },
+    "note": "font changed",
     "severity": "warning",
     "subject": {
      "id": "u128",
@@ -697,6 +701,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Playfair Display",
@@ -716,6 +721,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Futura.ttc",
@@ -735,6 +741,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Montserrat",
@@ -761,6 +768,7 @@
      "page_name": "1",
      "spread_id": "uf0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "monobrand-text-logo-black.png",
@@ -772,7 +780,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "1 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 1
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -780,6 +790,7 @@
      "page_name": "1",
      "spread_id": "uf0"
     },
+    "note": "1 pasted graphic",
     "severity": "error",
     "subject": {
      "id": null,
@@ -806,6 +817,7 @@
      "page_name": "1",
      "spread_id": "uf0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u13e",
@@ -832,6 +844,7 @@
      "page_name": "1",
      "spread_id": "uf0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u154",
@@ -858,6 +871,7 @@
      "page_name": "1",
      "spread_id": "uf0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 2",
@@ -886,6 +900,7 @@
      "page_name": "1",
      "spread_id": "uf0"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

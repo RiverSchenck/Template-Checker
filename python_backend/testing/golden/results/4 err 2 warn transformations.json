@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u11a",
@@ -615,6 +616,7 @@
      "page_name": "2",
      "spread_id": "u120"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u144",
@@ -641,6 +643,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "logo_FÃ¶rderturm_original.png",
@@ -660,6 +663,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "logo_Förderturm_original.png",
@@ -689,6 +693,7 @@
      "page_name": "2",
      "spread_id": "u120"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "u126",
@@ -718,6 +723,7 @@
      "page_name": "2",
      "spread_id": "u120"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "230209_FRO2301_NYC_15.jpg",
@@ -747,6 +753,7 @@
      "page_name": "2",
      "spread_id": "u120"
     },
+    "note": "skewed",
     "severity": "error",
     "subject": {
      "id": "Frontify_Linkedin-Cover-Employee_1584x396.png",
@@ -775,6 +782,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

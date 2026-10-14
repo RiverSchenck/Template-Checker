@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "ue8"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u130",
@@ -615,6 +616,7 @@
      "page_name": "2",
      "spread_id": "u133"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u163",
@@ -644,6 +646,7 @@
      "page_name": "3",
      "spread_id": "u133"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u17a",
@@ -673,6 +676,7 @@
      "page_name": "3",
      "spread_id": "u133"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u190",
@@ -702,6 +706,7 @@
      "page_name": "4",
      "spread_id": "u193"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1ad",
@@ -731,6 +736,7 @@
      "page_name": "4",
      "spread_id": "u193"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1c3",
@@ -760,6 +766,7 @@
      "page_name": "6",
      "spread_id": "u1d2"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1ec",
@@ -789,6 +796,7 @@
      "page_name": "6",
      "spread_id": "u1d2"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u202",
@@ -818,6 +826,7 @@
      "page_name": "8",
      "spread_id": "u21b"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u235",
@@ -847,6 +856,7 @@
      "page_name": "1",
      "spread_id": "ue8"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u103",
@@ -885,6 +895,7 @@
      "page_name": "1",
      "spread_id": "ue8"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u130",
@@ -926,6 +937,7 @@
      "page_name": "2",
      "spread_id": "u133"
     },
+    "note": "font, size, leading and more changed",
     "severity": "warning",
     "subject": {
      "id": "u163",
@@ -961,6 +973,7 @@
      "page_name": "3",
      "spread_id": "u133"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u17a",
@@ -997,6 +1010,7 @@
      "page_name": "3",
      "spread_id": "u133"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u190",
@@ -1037,6 +1051,7 @@
      "page_name": "4",
      "spread_id": "u193"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u1ad",
@@ -1073,6 +1088,7 @@
      "page_name": "4",
      "spread_id": "u193"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u1c3",
@@ -1113,6 +1129,7 @@
      "page_name": "6",
      "spread_id": "u1d2"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u1ec",
@@ -1149,6 +1166,7 @@
      "page_name": "6",
      "spread_id": "u1d2"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u202",
@@ -1189,6 +1207,7 @@
      "page_name": "8",
      "spread_id": "u21b"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u235",
@@ -1230,6 +1249,7 @@
      "page_name": "8",
      "spread_id": "u21b"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u235",
@@ -1270,6 +1290,7 @@
      "page_name": "8",
      "spread_id": "u21b"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u235",
@@ -1309,6 +1330,7 @@
      "page_name": "1",
      "spread_id": "ue8"
     },
+    "note": "font and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u103",
@@ -1335,6 +1357,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Minion Pro",
@@ -1360,6 +1383,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Playfair Display",
@@ -1379,6 +1403,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Montserrat",
@@ -1405,6 +1430,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 3 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -1431,6 +1457,7 @@
      "page_name": "4",
      "spread_id": "u193"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1c3",
@@ -1457,6 +1484,7 @@
      "page_name": "6",
      "spread_id": "u1d2"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u202",
@@ -1485,6 +1513,7 @@
      "page_name": "1",
      "spread_id": "ue8"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

@@ -583,6 +583,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Found on the master page: 1 rectangle",
     "severity": "error",
     "subject": {
      "id": null,
@@ -609,6 +610,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "u144",
@@ -638,6 +640,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u16e",
@@ -666,6 +669,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Par Style",
@@ -699,6 +703,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u16e",
@@ -725,6 +730,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Minion Pro",
@@ -744,6 +750,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Futura.ttc",
@@ -763,6 +770,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Montserrat",
@@ -789,6 +797,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "music.png",
@@ -808,6 +817,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "portrait of a young woman in meditation at the beach.jpg",
@@ -836,6 +846,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "15.25 MB",
     "severity": "info",
     "subject": {
      "id": "iStock-1226023798.jpg",
@@ -862,6 +873,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "_Layers.png",
@@ -891,6 +903,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "skewed",
     "severity": "error",
     "subject": {
      "id": "u119",
@@ -917,6 +930,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u144",
@@ -928,7 +942,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "1 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 1
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -936,6 +952,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "1 pasted graphic",
     "severity": "error",
     "subject": {
      "id": null,
@@ -962,6 +979,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 2.5 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -991,6 +1009,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "turn on No Line Breaks",
     "severity": "error",
     "subject": {
      "id": "u10f",
@@ -1017,6 +1036,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "uf7",
@@ -1043,6 +1063,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "uf7",
@@ -1069,6 +1090,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u16e",
@@ -1095,6 +1117,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "music.png",
@@ -1121,6 +1144,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/Par Style",
@@ -1149,6 +1173,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",
@@ -1177,6 +1202,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Par Style",

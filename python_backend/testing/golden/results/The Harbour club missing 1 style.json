@@ -586,6 +586,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u417d",
@@ -614,6 +615,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangementen",
@@ -644,6 +646,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangement",
@@ -674,6 +677,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/prijs",
@@ -704,6 +708,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement wit",
@@ -734,6 +739,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangement",
@@ -764,6 +770,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/prijs",
@@ -794,6 +801,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement goud",
@@ -824,6 +832,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement wit",
@@ -854,6 +863,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangement",
@@ -884,6 +894,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/prijs",
@@ -914,6 +925,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement goud",
@@ -944,6 +956,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement wit",
@@ -974,6 +987,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop wit",
@@ -1004,6 +1018,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop wit",
@@ -1034,6 +1049,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop goud",
@@ -1064,6 +1080,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop goud",
@@ -1094,6 +1111,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop goud",
@@ -1120,6 +1138,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "BlairMdITC TT",
@@ -1144,6 +1163,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "SwiftSCEF",
@@ -1168,6 +1188,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Stay Dreaming",
@@ -1192,6 +1213,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "BlairITC TT",
@@ -1216,6 +1238,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Montserrat (OTF)",
@@ -1244,6 +1267,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/intro Harbour Club",
@@ -1272,6 +1296,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Body Harbour Club",
@@ -1300,6 +1325,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangementen",
@@ -1328,6 +1354,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangement",
@@ -1356,6 +1383,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/prijs",
@@ -1384,6 +1412,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",
@@ -1412,6 +1441,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement wit",
@@ -1440,6 +1470,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement goud",
@@ -1468,6 +1499,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop wit",
@@ -1496,6 +1528,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop goud",

@@ -583,6 +583,7 @@
      "page_name": "1",
      "spread_id": "ue7"
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "u193",
@@ -611,6 +612,7 @@
      "page_name": "1",
      "spread_id": "ue7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 2",
@@ -637,6 +639,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Playfair Display",
@@ -656,6 +659,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Montserrat",
@@ -675,6 +679,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "monobrand-main-logo-black.png",
@@ -703,6 +708,7 @@
      "page_name": "1",
      "spread_id": "ue7"
     },
+    "note": "15.25 MB",
     "severity": "info",
     "subject": {
      "id": "iStock-1226023798.jpg",
@@ -729,6 +735,7 @@
      "page_name": "1",
      "spread_id": "ue7"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u193",
@@ -758,6 +765,7 @@
      "page_name": "1",
      "spread_id": "ue7"
     },
+    "note": "turn on No Line Breaks",
     "severity": "error",
     "subject": {
      "id": "u118",
@@ -784,6 +792,7 @@
      "page_name": "1",
      "spread_id": "ue7"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u118",
@@ -810,6 +819,7 @@
      "page_name": "1",
      "spread_id": "ue7"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 2",
@@ -838,6 +848,7 @@
      "page_name": "1",
      "spread_id": "ue7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 2",
@@ -866,6 +877,7 @@
      "page_name": "1",
      "spread_id": "ue7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

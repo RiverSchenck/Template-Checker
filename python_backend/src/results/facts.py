@@ -25,6 +25,10 @@ class SizeFacts(Facts):
     size_mb: float
 
 
+class CountFacts(Facts):
+    count: int
+
+
 class MasterElement(Facts):
     kind: str
     """The element's tag, e.g. Rectangle."""
@@ -72,5 +76,5 @@ class TransformationFacts(Facts):
     """null for a flip."""
 
 
-ALL_FACTS = (InheritedFacts, AutoSizeFacts, SizeFacts, MasterPageFacts, BleedFacts, ParagraphStyleFacts,
+ALL_FACTS = (InheritedFacts, AutoSizeFacts, SizeFacts, CountFacts, MasterPageFacts, BleedFacts, ParagraphStyleFacts,
              OverrideFacts, MissingFontFacts, TransformationFacts)

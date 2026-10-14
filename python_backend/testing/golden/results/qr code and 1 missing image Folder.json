@@ -583,6 +583,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "iStock-1226023798.jpg",
@@ -609,6 +610,7 @@
      "page_name": "1",
      "spread_id": "uf95"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "QR Code15403-811472920",
@@ -635,6 +637,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 3.2 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,

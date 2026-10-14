@@ -3,7 +3,7 @@ import { Check, ChevronRight, ExternalLink } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import { cn } from '../../lib/utils';
 import { severityStyles } from './pages/PageCanvas';
-import { describeWhere, formatPages, SEVERITIES, SEVERITY_INFO, type Problem, type Report, type ReportComparison, type Subject } from './buildReport';
+import { describeWhere, formatPages, placesNote, SEVERITIES, SEVERITY_INFO, type Problem, type Report, type ReportComparison, type Subject } from './buildReport';
 
 type ProblemListProps = {
   problems: Problem[];
@@ -46,7 +46,8 @@ function SubjectRow({
   const isFrame = subject.kind === 'frame';
   const title = isFrame ? place.frameText ?? place.frameLabel : subject.label;
   const pageText = pages.length ? formatPages(pages) : '';
-  const extra = isFrame ? place.context : subject.places.length > 1 ? `${subject.places.length} frames` : '';
+  const count = !isFrame && subject.places.length > 1 ? `${subject.places.length} frames` : '';
+  const note = placesNote(subject.places);
 
   const content = (
     <>
@@ -59,12 +60,15 @@ function SubjectRow({
       >
         {pageText ? `p${pageText}` : '–'}
       </span>
-      <span className="min-w-0 flex-1 truncate text-[13px] text-foreground">{title}</span>
-      {extra && <span className="max-w-[45%] shrink-0 truncate text-xs text-muted-foreground">{extra}</span>}
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-[13px] text-foreground">{title}</span>
+        {note && <span className="block truncate text-xs text-muted-foreground">{note}</span>}
+      </span>
+      {count && <span className="shrink-0 text-xs text-muted-foreground">{count}</span>}
     </>
   );
 
-  const base = 'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left';
+  const base = 'flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left';
   return onSelect ? (
     <button
       type="button"
@@ -138,8 +142,8 @@ function ProblemDetails({
           )}
         </div>
       ) : (
-        problem.subjects[0]?.places[0]?.context && (
-          <p className="text-sm text-muted-foreground">{problem.subjects[0].places[0].context}</p>
+        placesNote(problem.subjects[0]?.places ?? []) && (
+          <p className="text-[13px] text-muted-foreground">{placesNote(problem.subjects[0].places)}</p>
         )
       )}
 

@@ -586,6 +586,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1332",
@@ -615,6 +616,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1d56",
@@ -644,6 +646,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1d6d",
@@ -681,6 +684,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1332",
@@ -714,6 +718,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u1d56",
@@ -748,6 +753,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": "size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u1d6d",
@@ -782,6 +788,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": "size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u453",
@@ -808,6 +815,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "FuturaEF",
@@ -832,6 +840,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "FuturaEF DemiBold",
@@ -843,7 +852,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -851,6 +862,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -862,7 +874,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -870,6 +884,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -896,6 +911,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 25 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -922,6 +938,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/Header 1 - Your Drive",
@@ -948,6 +965,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/HEader 2 - Our Future",
@@ -976,6 +994,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Header - Your Desire",
@@ -1004,6 +1023,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Header 2",
@@ -1032,6 +1052,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Learn",
@@ -1060,6 +1081,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",
@@ -1088,6 +1110,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Header 1 - Your Drive",
@@ -1116,6 +1139,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Win",
@@ -1144,6 +1168,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/HEader 2 - Our Future",
@@ -1172,6 +1197,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Shaped",

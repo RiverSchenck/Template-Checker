@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "u693"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u6ce",
@@ -615,6 +616,7 @@
      "page_name": "1",
      "spread_id": "u693"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u957",
@@ -644,6 +646,7 @@
      "page_name": "1",
      "spread_id": "u693"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u96e",
@@ -683,6 +686,7 @@
      "page_name": "1",
      "spread_id": "u693"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u6ce",
@@ -724,6 +728,7 @@
      "page_name": "1",
      "spread_id": "u693"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u957",
@@ -767,6 +772,7 @@
      "page_name": "1",
      "spread_id": "u693"
     },
+    "note": "font, size, tracking and more changed",
     "severity": "warning",
     "subject": {
      "id": "u96e",
@@ -793,6 +799,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Minion Pro",
@@ -819,6 +826,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 3 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -847,6 +855,7 @@
      "page_name": "1",
      "spread_id": "u693"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

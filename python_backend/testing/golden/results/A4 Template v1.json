@@ -586,6 +586,7 @@
      "page_name": "2",
      "spread_id": "u148"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1a7",
@@ -615,6 +616,7 @@
      "page_name": "3",
      "spread_id": "u1e2"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u21b",
@@ -652,6 +654,7 @@
      "page_name": "2",
      "spread_id": "u148"
     },
+    "note": "font, size, leading and more changed",
     "severity": "warning",
     "subject": {
      "id": "u1a7",
@@ -695,6 +698,7 @@
      "page_name": "3",
      "spread_id": "u1e2"
     },
+    "note": "font, size, leading and more changed",
     "severity": "warning",
     "subject": {
      "id": "u21b",
@@ -721,6 +725,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Minion Pro",
@@ -732,7 +737,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "1 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 1
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -740,6 +747,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": "1 pasted graphic",
     "severity": "error",
     "subject": {
      "id": null,
@@ -766,6 +774,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 3 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -792,6 +801,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Bold_positive",
