@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -587,7 +586,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -607,7 +605,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,

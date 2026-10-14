@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -627,7 +625,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -657,7 +654,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Welcome to the team — Overrides: Leading: Auto, PointSize: 65",
     "facts": {
      "overrides": {
       "Leading": "Auto",
@@ -692,7 +688,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Ben jonsen — Overrides: AppliedFont: Locator Display, Leading: 48, FontStyle: Black, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
     "facts": {
      "overrides": {
       "AppliedFont": "Locator Display",
@@ -731,7 +726,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Process Engineer — Overrides: AppliedFont: Locator Display, Leading: 48, FontStyle: Light, FillColor: Color/Paper, Capitalization: AllCaps, PointSize: 40",
     "facts": {
      "overrides": {
       "AppliedFont": "Locator Display",
@@ -770,7 +764,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -795,7 +788,6 @@
    },
    {
     "check": "PASTED_GRAPHICS",
-    "detail": "1 pasted graphics found.",
     "facts": {
      "count": 1
     },
@@ -817,7 +809,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

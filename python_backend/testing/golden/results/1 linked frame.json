@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -624,7 +622,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -651,7 +648,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

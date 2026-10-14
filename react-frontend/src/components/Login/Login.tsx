@@ -136,7 +136,7 @@ export default function Login() {
     try {
       const res = await fetch(`${baseURL}/access-requests`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Source': 'react-frontend' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, why_need_access: why }),
       });
       const data = await res.json().catch(() => ({}));

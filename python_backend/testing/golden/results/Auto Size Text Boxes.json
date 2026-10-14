@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: TextFrame",
     "facts": {
      "elements": [
       {
@@ -594,7 +593,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -624,7 +622,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -654,7 +651,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -684,7 +680,6 @@
    },
    {
     "check": "EMPTY_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -704,7 +699,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: This is some textfghdhgggfhfgh — Overrides: PointSize: 72, OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "OTFContextualAlternate": "false",
@@ -739,7 +733,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Regular Text box — Overrides: PointSize: 72, OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "OTFContextualAlternate": "false",
@@ -774,7 +767,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Second auto Text box — Overrides: PointSize: 72, OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "OTFContextualAlternate": "false",
@@ -809,7 +801,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "OTFContextualAlternate": "false"

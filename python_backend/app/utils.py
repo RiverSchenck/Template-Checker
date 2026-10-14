@@ -63,7 +63,7 @@ class CheckOutcome:
     """The unpacked .idml, once intake got that far (for the XML export)."""
 
     def response(self) -> dict:
-        """What /v1/checks and /run send: the results (v2) and, next to them, the customer summary (with its
+        """What /v1/checks sends: the results (v2) and, next to them, the customer summary (with its
         sections, for the web app's review view)."""
         return {'results': self.results,
                 'customer_summary': summary_payload(self.summary, include_sections=True) if self.summary else None}

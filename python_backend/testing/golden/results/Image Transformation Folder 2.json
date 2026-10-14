@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "IMAGE_INCLUDED",
-    "detail": "Link 'logo_KawaksakiMotorsCorp.USA_original.png' (ID: uf3) is used but not found in the Links folder.",
     "facts": null,
     "location": {
      "bounds": {
@@ -594,7 +593,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image Container has a horizontal flip transformation.",
     "facts": {
      "kind": "flip",
      "rotation_deg": null
@@ -624,7 +622,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image Container has a vertical flip transformation.",
     "facts": {
      "kind": "flip",
      "rotation_deg": null

@@ -88,8 +88,8 @@ def test_release_never_raises(monkeypatch):
 
 def test_50th_check_allowed_51st_rejected(client):
     for _ in range(routes.CHECKS_PER_HOUR):
-        assert client.post('/run', headers=USER).status_code == 200
-    r = client.post('/run', headers=USER)
+        assert client.post('/v1/checks', headers=USER).status_code == 200
+    r = client.post('/v1/checks', headers=USER)
     assert r.status_code == 429
     assert r.get_json()['error']['code'] == 'rate_limited'
     assert int(r.headers['Retry-After']) > 0
@@ -100,27 +100,27 @@ def test_browser_and_api_key_share_the_same_quota(client):
     key = create_key(client)
     for i in range(routes.CHECKS_PER_HOUR):
         headers = USER if i % 2 else {'Authorization': f'Bearer {key}'}
-        assert client.post('/run', headers=headers).status_code == 200
-    assert client.post('/run-and-download-xml', headers={'Authorization': f'Bearer {key}'}).status_code == 429
-    assert client.post('/run', headers=USER).status_code == 429
+        assert client.post('/v1/checks', headers=headers).status_code == 200
+    assert client.post('/v1/checks/xml', headers={'Authorization': f'Bearer {key}'}).status_code == 429
+    assert client.post('/v1/checks', headers=USER).status_code == 429
 
 
 def test_quota_is_per_user(client):
     for _ in range(routes.CHECKS_PER_HOUR):
-        client.post('/run', headers=USER)
-    assert client.post('/run', headers=USER).status_code == 429
-    assert client.post('/run', headers=OTHER_USER).status_code == 200
+        client.post('/v1/checks', headers=USER)
+    assert client.post('/v1/checks', headers=USER).status_code == 429
+    assert client.post('/v1/checks', headers=OTHER_USER).status_code == 200
 
 
 def test_unauthenticated_requests_do_not_use_quota(client):
     for _ in range(routes.CHECKS_PER_HOUR + 5):
-        assert client.post('/run').status_code == 401
-    assert client.post('/run', headers=USER).status_code == 200
+        assert client.post('/v1/checks').status_code == 401
+    assert client.post('/v1/checks', headers=USER).status_code == 200
 
 
 # --- one check at a time --------------------------------------------------------------------------------------------
 
-@pytest.mark.parametrize('path', ['/run', '/run-and-download-xml'])
+@pytest.mark.parametrize('path', ['/v1/checks', '/v1/checks/xml'])
 def test_second_concurrent_check_is_rejected_without_using_quota(client, path):
     held = rate_limit.acquire('checks:user:user-1')  # simulate a check in progress in another worker
     try:
@@ -134,15 +134,15 @@ def test_second_concurrent_check_is_rejected_without_using_quota(client, path):
 
 
 def test_lock_is_released_after_a_check(client):
-    assert client.post('/run', headers=USER).status_code == 200
-    assert client.post('/run', headers=USER).status_code == 200
+    assert client.post('/v1/checks', headers=USER).status_code == 200
+    assert client.post('/v1/checks', headers=USER).status_code == 200
 
 
 def test_lock_is_released_when_the_check_crashes(client, monkeypatch):
     def crash(*a, **k):
         raise RuntimeError('boom')
     monkeypatch.setattr(routes, 'run_check', crash)
-    assert client.post('/run', headers=USER).status_code == 500
+    assert client.post('/v1/checks', headers=USER).status_code == 500
     lock = rate_limit.acquire('checks:user:user-1')
     assert lock is not None
     rate_limit.release(lock)
@@ -153,7 +153,7 @@ def test_limiter_failure_lets_checks_through(client, monkeypatch, failing):
     def broken(*a, **k):
         raise rate_limit.LimiterUnavailable('supabase down')
     monkeypatch.setattr(rate_limit, failing, broken)
-    assert client.post('/run', headers=USER).status_code == 200
+    assert client.post('/v1/checks', headers=USER).status_code == 200
 
 
 def test_limiter_failure_refuses_access_requests(client, monkeypatch):
@@ -172,11 +172,11 @@ def test_limiter_failure_refuses_access_requests(client, monkeypatch):
 
 def test_hourly_window_slides(client, fake_limiter):
     for _ in range(routes.CHECKS_PER_HOUR):
-        client.post('/run', headers=USER)
-    r = client.post('/run', headers=USER)
+        client.post('/v1/checks', headers=USER)
+    r = client.post('/v1/checks', headers=USER)
     assert r.status_code == 429 and int(r.headers['Retry-After']) == 3600
     fake_limiter.now += 3600
-    assert client.post('/run', headers=USER).status_code == 200
+    assert client.post('/v1/checks', headers=USER).status_code == 200
 
 
 # --- access requests ------------------------------------------------------------------------------------------------

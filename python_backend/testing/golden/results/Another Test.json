@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: Rectangle",
     "facts": {
      "elements": [
       {
@@ -594,7 +593,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -624,7 +622,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -655,7 +652,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: paragraph — Overrides: PointSize: 24",
     "facts": {
      "overrides": {
       "PointSize": "24"
@@ -689,7 +685,6 @@
    },
    {
     "check": "EMBEDDED_IMAGE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -716,7 +711,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 2pt, bottom: 2pt, inside: 2pt, outside: 2pt.",
     "facts": {
      "bleed": {
       "bottom": 2.0,
@@ -743,7 +737,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -770,7 +763,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -797,7 +789,6 @@
    },
    {
     "check": "GRID_ALIGNMENT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -824,7 +815,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -853,7 +843,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -627,7 +625,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -657,7 +654,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -687,7 +683,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -717,7 +712,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -747,7 +741,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -777,7 +770,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -807,7 +799,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -837,7 +828,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -867,7 +857,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -897,7 +886,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -927,7 +915,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -957,7 +944,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -987,7 +973,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1017,7 +1002,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1047,7 +1031,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1077,7 +1060,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1107,7 +1089,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1137,7 +1118,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1167,7 +1147,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1197,7 +1176,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1227,7 +1205,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1257,7 +1234,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1287,7 +1263,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1317,7 +1292,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1347,7 +1321,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1377,7 +1350,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1407,7 +1379,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1437,7 +1408,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1467,7 +1437,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1497,7 +1466,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1527,7 +1495,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1557,7 +1524,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1587,7 +1553,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1617,7 +1582,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1647,7 +1611,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1677,7 +1640,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1707,7 +1669,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1737,7 +1698,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1767,7 +1727,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1797,7 +1756,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1827,7 +1785,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1857,7 +1814,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1887,7 +1843,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1917,7 +1872,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1947,7 +1901,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -1977,7 +1930,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2007,7 +1959,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2037,7 +1988,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2067,7 +2017,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2097,7 +2046,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2127,7 +2075,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2157,7 +2104,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2187,7 +2133,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2217,7 +2162,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2247,7 +2191,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2277,7 +2220,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2307,7 +2249,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2337,7 +2278,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2367,7 +2307,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2397,7 +2336,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2427,7 +2365,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -2457,7 +2394,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2493,7 +2429,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2529,7 +2464,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2566,7 +2500,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2602,7 +2535,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2638,7 +2570,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2675,7 +2606,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2711,7 +2641,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2747,7 +2676,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2784,7 +2712,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2820,7 +2747,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2856,7 +2782,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2893,7 +2818,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2929,7 +2853,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -2965,7 +2888,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3002,7 +2924,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3038,7 +2959,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3074,7 +2994,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3111,7 +3030,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3147,7 +3065,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3183,7 +3100,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3220,7 +3136,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3256,7 +3171,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3292,7 +3206,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3329,7 +3242,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3365,7 +3277,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3401,7 +3312,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3437,7 +3347,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3473,7 +3382,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3509,7 +3417,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3545,7 +3452,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3581,7 +3487,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3617,7 +3522,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3653,7 +3557,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3689,7 +3592,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3725,7 +3627,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3761,7 +3662,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3798,7 +3698,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3835,7 +3734,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3872,7 +3770,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3909,7 +3806,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3946,7 +3842,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -3983,7 +3878,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4019,7 +3913,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4055,7 +3948,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4092,7 +3984,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4128,7 +4019,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4164,7 +4054,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4200,7 +4089,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4236,7 +4124,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4272,7 +4159,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: JACKET SIZE: M COLOR: BLACK — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4308,7 +4194,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4344,7 +4229,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4380,7 +4264,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4416,7 +4299,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4452,7 +4334,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4488,7 +4369,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, PointSize: 9, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4524,7 +4404,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4561,7 +4440,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4598,7 +4476,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4635,7 +4512,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4672,7 +4548,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4709,7 +4584,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: $ 250.00 — Overrides: AppliedFont: Montserrat, FontStyle: Medium, PointSize: 23, Tracking: 50",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -4746,7 +4620,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -4771,7 +4644,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

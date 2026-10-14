@@ -10,7 +10,7 @@ export const baseURL =
  * Never embed a static token here: VITE_* variables are baked into the public JS bundle.
  */
 export function getAuthHeaders(accessToken?: string | null): Record<string, string> {
-  const headers: Record<string, string> = { 'X-Source': 'react-frontend' };
+  const headers: Record<string, string> = {};
   if (accessToken) {
     headers['Authorization'] = `Bearer ${accessToken}`;
   }

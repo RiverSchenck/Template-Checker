@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -598,7 +597,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -629,7 +627,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

@@ -55,7 +55,7 @@ def test_cannot_revoke_someone_elses_key(client):
     other_key = create_key(client, 'other@example.com')
     r = client.delete(f"/api-keys/{other_key['id']}", headers=bearer('valid-approved@example.com'))
     assert r.status_code == 404
-    assert client.post('/run', headers=bearer(other_key['key'])).status_code == 200
+    assert client.post('/v1/checks', headers=bearer(other_key['key'])).status_code == 200
 
 
 def test_revoke_unknown_or_malformed_id_is_404(client):
@@ -75,25 +75,25 @@ def test_admin_key_routes_require_admin(client):
 
 # --- using a key ----------------------------------------------------------------------------------------------------
 
-@pytest.mark.parametrize('path', ['/run', '/run-and-download-xml'])
+@pytest.mark.parametrize('path', ['/v1/checks', '/v1/checks/xml'])
 def test_valid_key_can_run_checker(client, path):
     key = create_key(client)['key']
     r = client.post(path, headers=bearer(key))
-    # /run-and-download-xml fails later (no real checker output) but must get past auth.
+    # /v1/checks/xml fails later (no real checker output) but must get past auth.
     assert r.status_code not in (401, 403)
     assert client.run_calls[-1]['user_id'] == 'user-1'
 
 
-def test_key_runs_are_recorded_as_api_even_with_spoofed_source(client):
+def test_key_runs_are_recorded_as_api(client):
     key = create_key(client)['key']
-    client.post('/run', headers={**bearer(key), 'X-Source': 'react-frontend'})
+    client.post('/v1/checks', headers=bearer(key))
     assert client.run_calls[-1]['source_type'] == 'api'
 
 
 def test_key_use_updates_last_used_at(client, fake_db):
     key = create_key(client)['key']
     assert fake_db.db['api_keys'][0]['last_used_at'] is None
-    client.post('/run', headers=bearer(key))
+    client.post('/v1/checks', headers=bearer(key))
     assert fake_db.db['api_keys'][0]['last_used_at'] is not None
 
 
@@ -101,25 +101,25 @@ def test_revoked_key_is_rejected(client):
     created = create_key(client)
     r = client.delete(f"/api-keys/{created['id']}", headers=bearer('valid-approved@example.com'))
     assert r.status_code == 204
-    assert client.post('/run', headers=bearer(created['key'])).status_code == 401
+    assert client.post('/v1/checks', headers=bearer(created['key'])).status_code == 401
 
 
 def test_expired_key_is_rejected(client, fake_db):
     key = create_key(client)['key']
     fake_db.db['api_keys'][0]['expires_at'] = (datetime.now(timezone.utc) - timedelta(seconds=1)).isoformat()
-    assert client.post('/run', headers=bearer(key)).status_code == 401
+    assert client.post('/v1/checks', headers=bearer(key)).status_code == 401
 
 
 def test_key_of_deleted_user_is_rejected(client, fake_db):
     key = create_key(client)['key']
     fake_db.db['users'] = [u for u in fake_db.db['users'] if u['id'] != 'user-1']
-    assert client.post('/run', headers=bearer(key)).status_code == 401
+    assert client.post('/v1/checks', headers=bearer(key)).status_code == 401
 
 
 @pytest.mark.parametrize('token', ['tc_', 'tc_short', 'tc_' + 'a' * 44, 'tc_' + 'a' * 42 + '!'])
 def test_malformed_key_is_rejected_without_db_lookup(client, fake_db, monkeypatch, token):
     monkeypatch.setattr(fake_db, 'table', lambda name: pytest.fail('malformed key reached the database'))
-    assert client.post('/run', headers=bearer(token)).status_code == 401
+    assert client.post('/v1/checks', headers=bearer(token)).status_code == 401
 
 
 def test_generated_keys_match_expected_format(client):
@@ -127,7 +127,7 @@ def test_generated_keys_match_expected_format(client):
 
 
 def test_unknown_key_is_rejected(client):
-    assert client.post('/run', headers=bearer('tc_' + 'a' * 43)).status_code == 401
+    assert client.post('/v1/checks', headers=bearer('tc_' + 'a' * 43)).status_code == 401
 
 
 @pytest.mark.parametrize('path', ['/analytics/overview', '/me', '/admin/users', '/admin/api-keys'])
@@ -143,7 +143,7 @@ def test_admin_can_create_a_key_that_never_expires(client, fake_db, monkeypatch)
     created = create_key(client, expires_in_days=None)
     assert created['expires_at'] is None and created['active']
     assert fake_db.db['api_keys'][0]['expires_at'] is None
-    assert client.post('/run', headers=bearer(created['key'])).status_code == 200
+    assert client.post('/v1/checks', headers=bearer(created['key'])).status_code == 200
 
 
 def test_only_admins_can_create_a_key_that_never_expires(client, fake_db):
@@ -156,4 +156,4 @@ def test_key_that_never_expires_can_still_be_revoked(client, monkeypatch):
     monkeypatch.setattr('app.routes.user_helpers.is_admin', lambda email=None, auth_user_id=None: True)
     created = create_key(client, expires_in_days=None)
     client.delete(f"/api-keys/{created['id']}", headers=bearer('valid-approved@example.com'))
-    assert client.post('/run', headers=bearer(created['key'])).status_code == 401
+    assert client.post('/v1/checks', headers=bearer(created['key'])).status_code == 401

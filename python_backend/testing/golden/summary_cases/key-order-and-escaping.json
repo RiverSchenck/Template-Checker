@@ -27,7 +27,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       },
       {
         "check": "KERNING",
@@ -53,7 +53,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       },
       {
         "check": "KERNING",
@@ -79,7 +79,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       },
       {
         "check": "KERNING",
@@ -105,7 +105,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       },
       {
         "check": "KERNING",
@@ -131,7 +131,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       },
       {
         "check": "KERNING",
@@ -157,7 +157,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       }
     ],
     "subjects_checked": {},

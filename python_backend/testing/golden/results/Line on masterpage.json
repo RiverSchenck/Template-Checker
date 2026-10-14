@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: GraphicLine",
     "facts": {
      "elements": [
       {

@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "ADOBE_FONT",
-    "detail": "Missing styles: Black, Regular",
     "facts": {
      "missing_styles": [
       "Black",

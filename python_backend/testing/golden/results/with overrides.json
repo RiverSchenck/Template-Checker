@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -598,7 +597,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -629,7 +627,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -660,7 +657,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -691,7 +687,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -722,7 +717,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -753,7 +747,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -784,7 +777,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -815,7 +807,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -846,7 +837,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -877,7 +867,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -908,7 +897,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -939,7 +927,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -970,7 +957,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1001,7 +987,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1032,7 +1017,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1063,7 +1047,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1094,7 +1077,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1125,7 +1107,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: only — Overrides: Leading: 20",
     "facts": {
      "overrides": {
       "Leading": "20"
@@ -1159,7 +1140,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: colleagues! At The Harbour Club Amsterdam Zuid, our team — Overrides: StrokeColor: Color/Paper",
     "facts": {
      "overrides": {
       "StrokeColor": "Color/Paper"
@@ -1193,7 +1173,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: of — Overrides: Tracking: 40",
     "facts": {
      "overrides": {
       "Tracking": "40"
@@ -1227,7 +1206,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Price — Overrides: Justification: CenterAlign",
     "facts": {
      "overrides": {
       "Justification": "CenterAlign"
@@ -1261,7 +1239,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Information — Overrides: LeftIndent: 18, FirstLineIndent: -18, BulletsAndNumberingListType: NumberedList, NumberingContinue: false",
     "facts": {
      "overrides": {
       "BulletsAndNumberingListType": "NumberedList",
@@ -1298,7 +1275,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Title of Package — Overrides: LeftIndent: 18, FirstLineIndent: -18, BulletsAndNumberingListType: BulletList",
     "facts": {
      "overrides": {
       "BulletsAndNumberingListType": "BulletList",
@@ -1334,7 +1310,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Price — Overrides: PointSize: 10",
     "facts": {
      "overrides": {
       "PointSize": "10"
@@ -1368,7 +1343,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Zuid — Overrides: PointSize: 9",
     "facts": {
      "overrides": {
       "PointSize": "9"
@@ -1402,7 +1376,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Amsterdam — Overrides: AppliedFont: Stay Dreaming, FontStyle: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Stay Dreaming",
@@ -1437,7 +1410,6 @@
    },
    {
     "check": "ADOBE_FONT",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -1462,7 +1434,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1491,7 +1462,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1520,7 +1490,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1549,7 +1518,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1578,7 +1546,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1607,7 +1574,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1636,7 +1602,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1665,7 +1630,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1694,7 +1658,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

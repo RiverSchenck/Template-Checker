@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "IMAGE_INCLUDED",
-    "detail": "Link 'logo_FÃ¶rderturm_original.png' (ID: ue9) is used but not found in the Links folder.",
     "facts": null,
     "location": {
      "bounds": {
@@ -624,7 +622,6 @@
    },
    {
     "check": "UNUSED_IMAGE",
-    "detail": "Image 'logo_Förderturm_original.png' is present in the document but not used.",
     "facts": null,
     "location": {
      "bounds": null,
@@ -644,7 +641,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -671,7 +667,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -698,7 +693,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

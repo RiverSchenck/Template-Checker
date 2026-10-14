@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -627,7 +625,6 @@
    },
    {
     "check": "OTF_TTF_FONT",
-    "detail": "Font is .ttc",
     "facts": null,
     "location": {
      "bounds": null,
@@ -647,7 +644,6 @@
    },
    {
     "check": "UNUSED_IMAGE",
-    "detail": "Image 'music.svg' is present in the document but not used.",
     "facts": null,
     "location": {
      "bounds": null,
@@ -667,7 +663,6 @@
    },
    {
     "check": "LARGE_IMAGE",
-    "detail": "Image iStock-1226023798.jpg is 15.25MB.",
     "facts": {
      "size_mb": 15.25
     },
@@ -696,7 +691,6 @@
    },
    {
     "check": "EMBEDDED_IMAGE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -723,7 +717,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image Container has skew transformations. Skew factors: b=0.0, c=-0.36397023426620234",
     "facts": {
      "kind": "skew",
      "rotation_deg": 0.0
@@ -753,7 +746,6 @@
    },
    {
     "check": "PASTED_GRAPHICS",
-    "detail": "1 pasted graphics found.",
     "facts": {
      "count": 1
     },
@@ -775,7 +767,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 2.8346456692913384pt, bottom: 2.8346456692913384pt, inside: 2.8346456692913384pt, outside: 2.8346456692913384pt.",
     "facts": {
      "bleed": {
       "bottom": 2.8346456692913384,
@@ -802,7 +793,6 @@
    },
    {
     "check": "TEXT_COLUMNS",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -829,7 +819,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -856,7 +845,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -883,7 +871,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

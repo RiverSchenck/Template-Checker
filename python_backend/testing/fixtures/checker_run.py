@@ -44,10 +44,11 @@ def run_checker(package_path: str) -> CheckerRun:
     with run_workspace() as workspace:
         outcome = run(package_path, workspace, previews=False)
     results = outcome.json()
+    # `detail` is the checker's own message for each issue (results v2 doesn't send it), in the same order.
     issues = [
         Issue(i['severity'], i['check'], i['subject']['kind'], i['subject']['name'] or i['subject']['id'],
-              i['location']['item_id'], i['location']['page_id'], i['location']['page_name'], i['detail'] or '',
+              i['location']['item_id'], i['location']['page_id'], i['location']['page_name'], raw.context or '',
               i['facts'])
-        for i in results['issues']
+        for i, raw in zip(results['issues'], outcome.results)
     ]
     return CheckerRun(outcome.stage.name, results, issues)

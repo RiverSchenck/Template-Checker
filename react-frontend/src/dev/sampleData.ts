@@ -158,7 +158,9 @@ function generate(now: number): SampleRun[] {
       const t = day.getTime() + (8 + rand() * 10) * 60 * 60 * 1000;
       if (t > now) continue;
       const agent = daysAgo > 380 && rand() < 0.5 ? null : weighted(AGENTS.map((a) => [a, a.weight] as const));
-      const source: SourceType = weighted([['react-frontend', 70], ['extension', 22], ['api', 8]] as const);
+      // The Chrome extension was retired; only older runs come from it.
+      const picked: SourceType = weighted([['react-frontend', 70], ['extension', 22], ['api', 8]] as const);
+      const source: SourceType = picked === 'extension' && daysAgo < 90 ? 'react-frontend' : picked;
       const crashRate = daysAgo < 9 ? 0.06 : 0.008;
       const r = rand();
       const status: RunStatus = r < crashRate ? 'failed' : r < crashRate + 0.035 ? 'rejected' : 'completed';
@@ -794,7 +796,7 @@ const API_REQUESTS: SampleApiRequest[] = (() => {
       // The revoked key keeps being tried after it was revoked: those show as invalid-key attempts.
       let key: SampleApiRequest['key'] = choose(API_KEYS.map((k) => [k, k.weight] as const));
       if (key.revoked_at && t > new Date(key.revoked_at).getTime()) key = null;
-      const endpoint = choose([['/v1/checks/summary', 60], ['/v1/checks', 22], ['/summary', 10], ['/v1/checks/xml', 5], ['/run', 3]] as const);
+      const endpoint = choose([['/v1/checks/summary', 70], ['/v1/checks', 25], ['/v1/checks/xml', 5]] as const);
       const [status_code, error_code] = !key
         ? [401, 'unauthorized']
         : choose([

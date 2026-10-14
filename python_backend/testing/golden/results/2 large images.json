@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "LARGE_IMAGE",
-    "detail": "Image PHONE_SHAPE.psd is 55.59MB.",
     "facts": {
      "size_mb": 55.59
     },
@@ -596,7 +595,6 @@
    },
    {
     "check": "LARGE_IMAGE",
-    "detail": "Image Screen2.psd is 37.45MB.",
     "facts": {
      "size_mb": 37.45
     },
@@ -625,7 +623,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -654,7 +651,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -683,7 +679,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

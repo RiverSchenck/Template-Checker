@@ -2,7 +2,7 @@
 
 results_v2 writes results v2 (plan §4.3; the contract is src/results/models.py):
 
-    {schema_version: 2, template_name, issues: [{check, severity, subject, location, facts, text, note, detail}],
+    {schema_version: 2, template_name, issues: [{check, severity, subject, location, facts, text, note}],
      subjects_checked, pages, text_boxes, checks}
 """
 from typing import Dict, List, Optional
@@ -65,8 +65,8 @@ def _issue(issue: Issue, where: _Where) -> dict:
                      'bounds': where.bounds(issue.data_id)},
         'facts': issue.context_details,
         'text': issue.text_content if entry.shows_text and issue.text_content else None,
-        'note': notes.note(entry.key, issue.context_details),
-        'detail': issue.context or None,
+        # A package or parsing failure's message is the note: why the upload couldn't be checked.
+        'note': notes.note(entry.key, issue.context_details) if entry.is_check else issue.context or None,
     }
 
 

@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "OVERRIDE",
-    "detail": "Text: Mu — Overrides: PointSize: 12",
     "facts": {
      "overrides": {
       "PointSize": "12"
@@ -601,7 +600,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: m — Overrides: Leading: 9",
     "facts": {
      "overrides": {
       "Leading": "9"
@@ -635,7 +633,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Akademischer Titel — Overrides: Justification: CenterJustified",
     "facts": {
      "overrides": {
       "Justification": "CenterJustified"
@@ -669,7 +666,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Position Abteilung Bereich — Overrides: LeftIndent: 18, FirstLineIndent: -18, BulletsAndNumberingListType: NumberedList, NumberingContinue: false",
     "facts": {
      "overrides": {
       "BulletsAndNumberingListType": "NumberedList",
@@ -706,7 +702,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: isi — Overrides: AppliedFont: EmojiOne, FontStyle: Color",
     "facts": {
      "overrides": {
       "AppliedFont": "EmojiOne",
@@ -741,7 +736,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: oit — Overrides: FontStyle: 65 Medium",
     "facts": {
      "overrides": {
       "FontStyle": "65 Medium"
@@ -775,7 +769,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: St. Pöltener Straße 43 89522 Heidenheim, Germany — Overrides: FillColor: Color/Paper",
     "facts": {
      "overrides": {
       "FillColor": "Color/Paper"

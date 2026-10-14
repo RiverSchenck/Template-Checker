@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -627,7 +625,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -657,7 +654,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: grow — Overrides: AppliedFont: FuturaEF DemiBold, UnderlineColor: Color/Finastra Violet, FillColor: Color/Paper, PointSize: 230.99999999999997, Underline: true, UnderlineOffset: 38, UnderlineWeight: 28",
     "facts": {
      "overrides": {
       "AppliedFont": "FuturaEF DemiBold",
@@ -697,7 +693,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Hello this is some text — Overrides: PointSize: 120",
     "facts": {
      "overrides": {
       "PointSize": "120"
@@ -731,7 +726,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: More text here, HI — Overrides: PointSize: 200, Tracking: 50",
     "facts": {
      "overrides": {
       "PointSize": "200",
@@ -766,7 +760,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: be — Overrides: PointSize: 72, Tracking: 50",
     "facts": {
      "overrides": {
       "PointSize": "72",
@@ -801,7 +794,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Medium"
@@ -826,7 +818,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -851,7 +842,6 @@
    },
    {
     "check": "PASTED_GRAPHICS",
-    "detail": "2 pasted graphics found.",
     "facts": {
      "count": 2
     },
@@ -873,7 +863,6 @@
    },
    {
     "check": "PASTED_GRAPHICS",
-    "detail": "2 pasted graphics found.",
     "facts": {
      "count": 2
     },
@@ -895,7 +884,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 70.86614173228347pt, bottom: 70.86614173228347pt, inside: 70.86614173228347pt, outside: 70.86614173228347pt.",
     "facts": {
      "bleed": {
       "bottom": 70.86614173228347,
@@ -922,7 +910,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -951,7 +938,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -980,7 +966,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1009,7 +994,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1038,7 +1022,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1067,7 +1050,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1096,7 +1078,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1125,7 +1106,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

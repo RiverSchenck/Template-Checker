@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -627,7 +625,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Bereit. — Overrides: Leading: 77.976, AppliedFont: TheSans, FillColor: Color/SC White RGB, FontStyle: B7 Bold, PointSize: 60, Tracking: -20, AppliedLanguage: $ID/English: UK",
     "facts": {
      "overrides": {
       "AppliedFont": "TheSans",
@@ -667,7 +664,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Bereit.  Im Netz für die Schweiz. — Overrides: Leading: 66.07157051672317, AppliedFont: TheSans, FillColor: Color/SC White RGB, FontStyle: B3 Light, PointSize: 56.488808964060034, StrokeWeight: 0.9414801494010006, Tracking: -20, AppliedLanguage: $ID/English: UK, MiterLimit: 3.765920597604002, RubyFontSize: -0.9414801494010006, KentenFontSize: -0.9414801494010006",
     "facts": {
      "overrides": {
       "AppliedFont": "TheSans",
@@ -711,7 +707,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -736,7 +731,6 @@
    },
    {
     "check": "PASTED_GRAPHICS",
-    "detail": "1 pasted graphics found.",
     "facts": {
      "count": 1
     },
@@ -758,7 +752,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 8.503937007874015pt, bottom: 8.503937007874015pt, inside: 8.503937007874015pt, outside: 8.503937007874015pt.",
     "facts": {
      "bleed": {
       "bottom": 8.503937007874015,
@@ -785,7 +778,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {

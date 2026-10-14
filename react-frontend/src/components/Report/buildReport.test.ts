@@ -29,8 +29,8 @@ const frame = (id: string) => ({ kind: 'text_frame' as const, id, name: null });
 const issue = (
   checkKey: Issue['check'],
   subject: Issue['subject'],
-  { severity = 'error', item_id = null, page_id = 'p1', page_name = '1', bounds = null, text = null, note = null, detail = null }: Partial<
-    Pick<Issue, 'severity' | 'text' | 'note' | 'detail'> & Issue['location']
+  { severity = 'error', item_id = null, page_id = 'p1', page_name = '1', bounds = null, text = null, note = null }: Partial<
+    Pick<Issue, 'severity' | 'text' | 'note'> & Issue['location']
   > = {}
 ): Issue => ({
   check: checkKey,
@@ -40,7 +40,6 @@ const issue = (
   facts: null,
   text,
   note,
-  detail,
 });
 
 const bounds = (page_id: string, y: number) => ({ page_id, kind: 'TextFrame', x: 10, y, width: 100, height: 20 });
@@ -51,7 +50,7 @@ const ISSUES: Issue[] = [
   issue('KERNING', style('Headline'), { item_id: 'f3', page_id: 'p3', page_name: '3', bounds: bounds('p3', 10) }),
   issue('COMPOSER', style('Headline'), { severity: 'warning', item_id: 'f1', bounds: bounds('p1', 10) }),
   issue('KERNING', style('Body'), { item_id: 'f4', bounds: bounds('p1', 50) }),
-  issue('AUTO_SIZE_TEXT_BOX', frame('f5'), { item_id: 'f5', detail: "'No Line Breaks' must be checked.", bounds: bounds('p1', 80) }),
+  issue('AUTO_SIZE_TEXT_BOX', frame('f5'), { item_id: 'f5', note: 'turn on No Line Breaks', bounds: bounds('p1', 80) }),
   issue('FONTS_INCLUDED', { kind: 'font', id: 'Pangea Bold', name: 'Pangea Bold' }, { page_id: null, page_name: null }),
 ];
 
@@ -203,14 +202,13 @@ describe('check guides', () => {
   });
 });
 
-test('places show the checker’s plain-words note, never its raw detail', () => {
+test('places show the checker’s plain-words note', () => {
   const report = buildReport(
     makeResult({
       issues: [
         issue('AUTO_SIZE_TEXT_BOX', frame('f5'), {
           item_id: 'f5',
           note: 'turn on No Line Breaks',
-          detail: "'No Line Breaks' must be checked.",
           bounds: bounds('p1', 80),
         }),
       ],

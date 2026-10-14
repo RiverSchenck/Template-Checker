@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: TextFrame, TextFrame",
     "facts": {
      "elements": [
       {
@@ -594,7 +593,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -624,7 +622,6 @@
    },
    {
     "check": "EMPTY_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -651,7 +648,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -674,7 +670,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -697,7 +692,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -728,7 +722,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: No paragraph style, override here — Overrides: AppliedFont: Playfair Display, FontStyle: Black",
     "facts": {
      "overrides": {
       "AppliedFont": "Playfair Display",
@@ -763,7 +756,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -788,7 +780,6 @@
    },
    {
     "check": "ADOBE_FONT",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Black"
@@ -813,7 +804,6 @@
    },
    {
     "check": "OTF_TTF_FONT",
-    "detail": "Font is .ttc",
     "facts": null,
     "location": {
      "bounds": null,
@@ -833,7 +823,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -853,7 +842,6 @@
    },
    {
     "check": "IMAGE_INCLUDED",
-    "detail": "Link 'logo_FÃ¶rderturm_original.png' (ID: u160) is used but not found in the Links folder.",
     "facts": null,
     "location": {
      "bounds": {
@@ -880,7 +868,6 @@
    },
    {
     "check": "UNUSED_IMAGE",
-    "detail": "Image 'logo_Fiasco_Design_charcoal.png' is present in the document but not used.",
     "facts": null,
     "location": {
      "bounds": null,
@@ -900,7 +887,6 @@
    },
    {
     "check": "LARGE_IMAGE",
-    "detail": "Image iStock-1226023798.jpg is 15.25MB.",
     "facts": {
      "size_mb": 15.25
     },
@@ -929,7 +915,6 @@
    },
    {
     "check": "EMBEDDED_IMAGE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -956,7 +941,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image Container has a horizontal flip transformation.",
     "facts": {
      "kind": "flip",
      "rotation_deg": null
@@ -986,7 +970,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image Container has skew transformations. Skew factors: b=0.0, c=-0.36397023426620234",
     "facts": {
      "kind": "skew",
      "rotation_deg": 0.0
@@ -1016,7 +999,6 @@
    },
    {
     "check": "TABLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1043,7 +1025,6 @@
    },
    {
     "check": "PASTED_GRAPHICS",
-    "detail": "1 pasted graphics found.",
     "facts": {
      "count": 1
     },
@@ -1065,7 +1046,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 72pt, bottom: 72pt, inside: 72pt, outside: 72pt.",
     "facts": {
      "bleed": {
       "bottom": 72.0,
@@ -1092,7 +1072,6 @@
    },
    {
     "check": "TEXT_COLUMNS",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1119,7 +1098,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1146,7 +1124,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1173,7 +1150,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1200,7 +1176,6 @@
    },
    {
     "check": "GRID_ALIGNMENT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1227,7 +1202,6 @@
    },
    {
     "check": "GRID_ALIGNMENT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1254,7 +1228,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

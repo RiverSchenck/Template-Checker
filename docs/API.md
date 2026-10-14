@@ -26,15 +26,8 @@ Per user, across the web app and API keys together:
 
 ## Versions
 
-The public API lives under `/v1`. The paths from before it still work, but every response on them carries
-`Deprecation: @1791763200` (2026-10-12) and `Link: <new path>; rel="successor-version"`:
-
-| Old path | Use instead |
-|---|---|
-| `POST /run` | `POST /v1/checks` (note the new response shape below) |
-| `POST /summary` | `POST /v1/checks/summary` |
-| `POST /run-and-download-xml` | `POST /v1/checks/xml` |
-| `GET /test` | `GET /health` |
+The public API lives under `/v1`. The paths from before it (`/run`, `/summary`, `/run-and-download-xml`, `/test`)
+were removed on 2026-10-15.
 
 `GET /health` needs no auth and returns `{"status": "ok", "version": "…"}`.
 
@@ -116,15 +109,14 @@ or `rejected` when the package couldn't be checked (the reason is in `results`; 
 `results` is results v2; its JSON Schema is [`schema/results-v2.json`](../schema/results-v2.json):
 
 - `schema_version`: `2`.
-- `issues`: every issue, in the order found: `{check, severity, subject, location, facts, text, note, detail}`.
+- `issues`: every issue, in the order found: `{check, severity, subject, location, facts, text, note}`.
   - `check` is a key from `checks`; `severity` is `error`, `warning` or `info`.
   - `subject` is what to fix: `{kind, id, name}`, where `kind` is `paragraph_style`, `character_style`, `text_frame`,
     `image`, `image_frame`, `font`, `page_item` or `document`.
   - `location` is where it is: `{page_id, page_name, spread_id, item_id, bounds}`, any of them `null`.
   - `facts` holds the check's structured data (e.g. `{size_mb}` for a large image).
   - `note` is a short note in plain words, e.g. `font and size changed` or `Current bleed: 3 mm on all sides`, or
-    `null` when there's nothing to add. Show it, don't parse it.
-  - `detail` is deprecated: the checker's raw message, kept for existing integrations. Use `note` or `facts`.
+    `null` when there's nothing to add. For a package that couldn't be checked, it says why. Show it, don't parse it.
 - `checks`: every check, with its wording: `{key, severity, subject_kinds, title, why, fix, help_article, is_check}`.
   `fix` lists the steps in InDesign per subject kind. `is_check` is false for package and parsing failures.
 - `pages`: the pages in document order, with size (points), `preview` and frame outlines.

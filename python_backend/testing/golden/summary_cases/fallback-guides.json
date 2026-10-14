@@ -20,7 +20,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": "The file is not a valid ZIP archive."
+        "note": "The file is not a valid ZIP archive."
       },
       {
         "check": "NEW_CHECK",
@@ -39,7 +39,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       }
     ],
     "subjects_checked": {},

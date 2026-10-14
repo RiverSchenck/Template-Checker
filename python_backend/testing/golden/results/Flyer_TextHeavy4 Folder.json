@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: Group, Group, Group, Group, Group, Group",
     "facts": {
      "elements": [
       {
@@ -594,7 +593,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 9pt, bottom: 9pt, inside: 9pt, outside: 9pt.",
     "facts": {
      "bleed": {
       "bottom": 9.0,
@@ -621,7 +619,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -648,7 +645,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -675,7 +671,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -704,7 +699,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -733,7 +727,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

@@ -210,7 +210,7 @@ export const ENDPOINTS: EndpointDoc[] = [
     ],
   },
   {
-    id: 'run',
+    id: 'checks',
     method: 'POST',
     path: '/v1/checks',
     name: 'Run a check',
@@ -235,7 +235,6 @@ export const ENDPOINTS: EndpointDoc[] = [
               facts: { missing_styles: ['Bold'], whole_family: false },
               text: null,
               note: 'Bold missing',
-              detail: 'Missing styles: Bold',
             },
           ],
           checks: [],
@@ -262,7 +261,7 @@ export const ENDPOINTS: EndpointDoc[] = [
             name: 'issues',
             type: 'array',
             description:
-              'Every issue, in the order found: `check`, `severity` (`error`, `warning` or `info`), `subject` (what to fix: `kind`, `id`, `name`), `location` (page, item and its position), `facts` (the check’s structured data), `note` (a short note in plain words to show, or null) and `detail` (deprecated: use `note` or `facts`).',
+              'Every issue, in the order found: `check`, `severity` (`error`, `warning` or `info`), `subject` (what to fix: `kind`, `id`, `name`), `location` (page, item and its position), `facts` (the check’s structured data) and `note` (a short note in plain words to show, or null; for a package that couldn’t be checked, why).',
           },
           {
             name: 'checks',
@@ -292,7 +291,7 @@ export const ENDPOINTS: EndpointDoc[] = [
     ],
   },
   {
-    id: 'run-and-download-xml',
+    id: 'xml',
     method: 'POST',
     path: '/v1/checks/xml',
     name: 'Export XML',

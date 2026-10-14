@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: this — Overrides: AppliedFont: Lucida Grande",
     "facts": {
      "overrides": {
       "AppliedFont": "Lucida Grande"
@@ -631,7 +629,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: lot — Overrides: PointSize: 30",
     "facts": {
      "overrides": {
       "PointSize": "30"
@@ -665,7 +662,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: text — Overrides: StrokeWeight: 0.75, StrokeColor: Color/Black",
     "facts": {
      "overrides": {
       "StrokeColor": "Color/Black",
@@ -700,7 +696,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: yes — Overrides: Justification: FullyJustified",
     "facts": {
      "overrides": {
       "Justification": "FullyJustified"
@@ -734,7 +729,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: is a — Overrides: LeftIndent: 18, FirstLineIndent: -18, BulletsAndNumberingListType: NumberedList, NumberingContinue: false",
     "facts": {
      "overrides": {
       "BulletsAndNumberingListType": "NumberedList",
@@ -771,7 +765,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: of text — Overrides: KerningMethod: $ID/Optical",
     "facts": {
      "overrides": {
       "KerningMethod": "$ID/Optical"
@@ -805,7 +798,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -830,7 +822,6 @@
    },
    {
     "check": "OTF_TTF_FONT",
-    "detail": "Font is .ttc",
     "facts": null,
     "location": {
      "bounds": null,
@@ -850,7 +841,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: TextFrame",
     "facts": {
      "elements": [
       {
@@ -594,7 +593,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -624,7 +622,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -654,7 +651,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -684,7 +680,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -714,7 +709,6 @@
    },
    {
     "check": "EMPTY_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -734,7 +728,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: H&W TOP LEFT — Overrides: PointSize: 36, OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "OTFContextualAlternate": "false",
@@ -769,7 +762,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: H&W TOP RIGHT — Overrides: PointSize: 36, OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "OTFContextualAlternate": "false",
@@ -804,7 +796,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: H&W BOTTOM LEFT — Overrides: PointSize: 36, OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "OTFContextualAlternate": "false",
@@ -839,7 +830,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: H&W BOTTOM RIGHT — Overrides: PointSize: 36, OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "OTFContextualAlternate": "false",
@@ -874,7 +864,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "OTFContextualAlternate": "false"
@@ -899,7 +888,6 @@
    },
    {
     "check": "AUTO_SIZE_TEXT_BOX",
-    "detail": "'No Line Breaks' must be checked.",
     "facts": {
      "auto_size": "HeightAndWidth",
      "no_line_breaks": false
@@ -929,7 +917,6 @@
    },
    {
     "check": "AUTO_SIZE_TEXT_BOX",
-    "detail": "'No Line Breaks' must be checked.",
     "facts": {
      "auto_size": "HeightAndWidth",
      "no_line_breaks": false
@@ -959,7 +946,6 @@
    },
    {
     "check": "AUTO_SIZE_TEXT_BOX",
-    "detail": "'No Line Breaks' must be checked.",
     "facts": {
      "auto_size": "HeightAndWidth",
      "no_line_breaks": false
@@ -989,7 +975,6 @@
    },
    {
     "check": "AUTO_SIZE_TEXT_BOX",
-    "detail": "'No Line Breaks' must be checked.",
     "facts": {
      "auto_size": "HeightAndWidth",
      "no_line_breaks": false

@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: Rectangle",
     "facts": {
      "elements": [
       {
@@ -594,7 +593,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -624,7 +622,6 @@
    },
    {
     "check": "EMPTY_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -651,7 +648,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: monobrand.com — Overrides: AppliedFont: Montserrat, FontStyle: ExtraLight",
     "facts": {
      "overrides": {
       "AppliedFont": "Montserrat",
@@ -686,7 +682,6 @@
    },
    {
     "check": "ADOBE_FONT",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Bold",
@@ -712,7 +707,6 @@
    },
    {
     "check": "OTF_TTF_FONT",
-    "detail": "Font is .ttc",
     "facts": null,
     "location": {
      "bounds": null,
@@ -732,7 +726,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -752,7 +745,6 @@
    },
    {
     "check": "EMBEDDED_IMAGE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -779,7 +771,6 @@
    },
    {
     "check": "PASTED_GRAPHICS",
-    "detail": "1 pasted graphics found.",
     "facts": {
      "count": 1
     },
@@ -801,7 +792,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -828,7 +818,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -855,7 +844,6 @@
    },
    {
     "check": "GRID_ALIGNMENT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -882,7 +870,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: Rectangle",
     "facts": {
      "elements": [
       {
@@ -594,7 +593,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -624,7 +622,6 @@
    },
    {
     "check": "EMPTY_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -651,7 +648,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -682,7 +678,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -713,7 +708,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -744,7 +738,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -773,7 +766,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -802,7 +794,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -831,7 +822,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -860,7 +850,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -889,7 +878,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -918,7 +906,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -947,7 +934,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -976,7 +962,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1005,7 +990,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1034,7 +1018,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1063,7 +1046,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1092,7 +1074,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1121,7 +1102,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: 43 — Overrides: PointSize: 8",
     "facts": {
      "overrides": {
       "PointSize": "8"
@@ -1155,7 +1135,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: He — Overrides: PointSize: 12",
     "facts": {
      "overrides": {
       "PointSize": "12"
@@ -1189,7 +1168,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -1214,7 +1192,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -1234,7 +1211,6 @@
    },
    {
     "check": "EMBEDDED_IMAGE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1261,7 +1237,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image inside Container has skew transformations. Skew factors: b=0.0, c=-0.09827196325187464",
     "facts": {
      "kind": "skew",
      "rotation_deg": 0.0
@@ -1291,7 +1266,6 @@
    },
    {
     "check": "TABLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1318,7 +1292,6 @@
    },
    {
     "check": "TEXT_COLUMNS",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1345,7 +1318,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1372,7 +1344,6 @@
    },
    {
     "check": "GRID_ALIGNMENT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1399,7 +1370,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

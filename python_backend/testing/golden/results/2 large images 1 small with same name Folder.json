@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "OVERRIDE",
-    "detail": "Text: Jetzt FAIRTIQ-App installieren — Overrides: Leading: 96.79856594717104, StrokeWeight: 1.0999837039451255, MiterLimit: 4.399934815780502, RubyFontSize: -1.0999837039451255, KentenFontSize: -1.0999837039451255",
     "facts": {
      "overrides": {
       "KentenFontSize": "-1.0999837039451255",
@@ -605,7 +604,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Medium"
@@ -630,7 +628,6 @@
    },
    {
     "check": "LARGE_IMAGE",
-    "detail": "Image PHONE_SHAPE.psd is 55.59MB.",
     "facts": {
      "size_mb": 55.59
     },
@@ -659,7 +656,6 @@
    },
    {
     "check": "LARGE_IMAGE",
-    "detail": "Image Screen2_women_cmyk_300dpi.jpg is 10.49MB.",
     "facts": {
      "size_mb": 10.49
     },
@@ -688,7 +684,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 14.173228346456694pt, bottom: 14.173228346456694pt, inside: 14.173228346456694pt, outside: 14.173228346456694pt.",
     "facts": {
      "bleed": {
       "bottom": 14.173228346456694,

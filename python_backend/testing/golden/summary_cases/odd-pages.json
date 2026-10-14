@@ -27,7 +27,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       },
       {
         "check": "OVERRIDE",
@@ -53,7 +53,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       },
       {
         "check": "OVERRIDE",
@@ -72,7 +72,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       },
       {
         "check": "OVERRIDE",
@@ -98,7 +98,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       },
       {
         "check": "EMPTY_TEXT_FRAME",
@@ -124,7 +124,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": null
+        "note": null
       }
     ],
     "subjects_checked": {},

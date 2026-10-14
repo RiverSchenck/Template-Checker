@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "IMAGE_INCLUDED",
-    "detail": "Link 'iStock-1226023798.jpg' (ID: u361a) is used but not found in the Links folder.",
     "facts": null,
     "location": {
      "bounds": {
@@ -594,7 +593,6 @@
    },
    {
     "check": "EMBEDDED_IMAGE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -621,7 +619,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 9pt, bottom: 9pt, inside: 9pt, outside: 9pt.",
     "facts": {
      "bleed": {
       "bottom": 9.0,

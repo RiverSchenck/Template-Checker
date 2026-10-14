@@ -127,7 +127,7 @@ def test_failed_run_row_has_outcome_and_no_validations(fake_supabase):
 def test_completed_run_row_defaults(fake_supabase, monkeypatch):
     monkeypatch.setenv('APP_VERSION', 'abc123')
     results = {'issues': [
-        _issue('FONTS_INCLUDED', 'error', 'font', 'Helvetica', detail='Package is missing fonts.'),
+        _issue('FONTS_INCLUDED', 'error', 'font', 'Helvetica', note='Package is missing fonts.'),
     ]}
 
     assert analytics.log_analytics_to_supabase(
@@ -145,18 +145,18 @@ def test_completed_run_row_defaults(fake_supabase, monkeypatch):
 
 def test_first_error_message():
     results = {'issues': [
-        _issue('FONTS_INCLUDED', 'warning', 'font', 'x', detail='a warning'),
-        _issue('IDML', 'error', 'document', None, detail='No IDML file found'),
+        _issue('FONTS_INCLUDED', 'warning', 'font', 'x', note='a warning'),
+        _issue('IDML', 'error', 'document', None, note='No IDML file found'),
     ]}
     assert analytics.first_error_message(results) == 'No IDML file found'
     assert analytics.first_error_message({}) is None
 
 
-def _issue(check, severity, kind, name, detail=None):
+def _issue(check, severity, kind, name, note=None):
     """An issue in results v2."""
     return {'check': check, 'severity': severity, 'subject': {'kind': kind, 'id': name, 'name': name},
             'location': {'page_id': None, 'page_name': None, 'spread_id': None, 'item_id': None, 'bounds': None},
-            'facts': None, 'text': None, 'detail': detail}
+            'facts': None, 'text': None, 'note': note}
 
 
 def _results_with(*issues):
