@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Activity,
   CloudUpload,
   FileCheck,
   BarChart3,
-  LayoutDashboard,
   ListChecks,
   PlugZap,
   Users,
@@ -167,54 +166,22 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
               <SidebarMenuItem>
                 <SidebarMenuButton
                   tooltip="Analytics"
-                  isActive={activeId === 'analytics' && !isAdmin}
+                  isActive={activeId === 'analytics'}
                   onClick={() => toAnalytics('/analytics')}
                 >
                   <BarChart3 className="h-4 w-4" />
                   <span>Analytics</span>
                 </SidebarMenuButton>
-                {/* Admins get the admin-only analytics pages under a labelled divider. */}
-                {isAdmin && !loadingRole && (
-                  <SidebarMenuSub>
-                    {[
-                      { id: 'analytics', path: '/analytics', label: 'Overview', icon: LayoutDashboard },
-                      { id: 'analytics-operations', path: '/analytics/operations', label: 'Operations', icon: Activity, admin: true },
-                      { id: 'analytics-checks', path: '/analytics/checks', label: 'All checks', icon: ListChecks },
-                      { id: 'analytics-api', path: '/analytics/api', label: 'API usage', icon: PlugZap },
-                    ].map((item) => (
-                      <React.Fragment key={item.id}>
-                        {item.admin && (
-                          <li className="px-2 pb-0.5 pt-2 text-[11px] font-medium uppercase tracking-wide text-sidebar-foreground/50">
-                            Admin
-                          </li>
-                        )}
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton
-                            isActive={activeId === item.id}
-                            onClick={(e: React.MouseEvent) => {
-                              e.preventDefault();
-                              toAnalytics(item.path);
-                            }}
-                            href={item.path}
-                          >
-                            <item.icon className="h-4 w-4" />
-                            <span>{item.label}</span>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      </React.Fragment>
-                    ))}
-                  </SidebarMenuSub>
-                )}
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* User management section (admin only) */}
+        {/* Admin section: user management and the admin-only analytics pages */}
         {isAdmin && !loadingRole && (
           <SidebarGroup className="mt-3">
             <SidebarGroupLabel className="h-auto min-h-0 px-2 pb-1.5 pt-0 text-[13px] font-medium text-sidebar-foreground/60">
-              User management
+              Admin
             </SidebarGroupLabel>
             <SidebarGroupContent className="flex flex-col gap-0.5">
               <SidebarMenu>
@@ -253,6 +220,22 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                       <span>Summary feedback</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+                  {[
+                    { id: 'analytics-operations', path: '/analytics/operations', label: 'Operations', icon: Activity },
+                    { id: 'analytics-checks', path: '/analytics/checks', label: 'All checks', icon: ListChecks },
+                    { id: 'analytics-api', path: '/analytics/api', label: 'API usage', icon: PlugZap },
+                  ].map((item) => (
+                    <SidebarMenuItem key={item.id}>
+                      <SidebarMenuButton
+                        tooltip={item.label}
+                        isActive={activeId === item.id}
+                        onClick={() => toAnalytics(item.path)}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.label}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
