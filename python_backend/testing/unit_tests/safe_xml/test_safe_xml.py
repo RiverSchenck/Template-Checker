@@ -42,8 +42,8 @@ def test_billion_laughs_fails_fast(tmp_path, large):
 
 
 def test_external_entity_is_never_read(tmp_path):
-    secret = write(tmp_path / 'outside.txt', 'SECRET')
-    path = write(tmp_path / 'a.xml', f'<?xml version="1.0"?><!DOCTYPE a [<!ENTITY x SYSTEM "file://{secret}">]><a>&x;</a>')
+    outside_file = write(tmp_path / 'outside.txt', 'OUTSIDE')
+    path = write(tmp_path / 'a.xml', f'<?xml version="1.0"?><!DOCTYPE a [<!ENTITY x SYSTEM "file://{outside_file}">]><a>&x;</a>')
     with pytest.raises(safe_xml.UnsafeXMLError, match='DTD'):
         safe_xml.parse(path)
 

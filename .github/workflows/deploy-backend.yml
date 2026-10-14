@@ -12,6 +12,10 @@ concurrency:
   group: deploy-backend
   cancel-in-progress: false
 
+# Read-only token: these jobs only check out code (deploys use FLY_API_TOKEN, not GITHUB_TOKEN).
+permissions:
+  contents: read
+
 jobs:
   tests:
     uses: ./.github/workflows/test.yml
