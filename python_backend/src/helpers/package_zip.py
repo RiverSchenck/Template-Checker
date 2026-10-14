@@ -12,7 +12,6 @@ Declared sizes can be trusted as upper bounds: zipfile never reads past an entry
 declared size and verifies its CRC, so a lying header fails instead of over-writing.
 """
 import os
-import posixpath
 import shutil
 import unicodedata
 import zipfile
