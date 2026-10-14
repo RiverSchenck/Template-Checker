@@ -456,7 +456,7 @@ export function ApiDocs({ baseURL, onCreateKey }: { baseURL: string; onCreateKey
             {[
               ['Format', 'Keys start with `tc_`, followed by 43 URL-safe characters.'],
               ['Visibility', 'A key is shown once, when it is created. Only a hash is stored, so a lost key cannot be recovered; create a new one instead.'],
-              ['Expiry', 'Every key expires after 30 days, 90 days, 6 months or 1 year, chosen at creation. Expired keys return `401 unauthorized`.'],
+              ['Expiry', 'Keys expire after 30 days, 90 days, 6 months or 1 year, chosen at creation. Admins can also create keys that never expire. Expired keys return `401 unauthorized`.'],
               ['Scope', 'Keys can call the check endpoints only. They cannot manage users, keys or settings.'],
               ['Revocation', 'Revoking a key on the Keys tab takes effect immediately.'],
             ].map(([label, text]) => (

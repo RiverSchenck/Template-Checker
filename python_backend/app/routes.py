@@ -683,7 +683,8 @@ def list_my_api_keys():
 @main.route('/api-keys', methods=['POST'])
 @require_auth
 def create_my_api_key():
-    """Create an API key for the caller. Body: {"name": "...", "expires_in_days": 90}. The key is returned once."""
+    """Create an API key for the caller. Body: {"name": "...", "expires_in_days": 90}. The key is returned once.
+    Admins can pass "expires_in_days": null for a key that never expires."""
     user_row = _current_users_row()
     if not user_row:
         return api_error(403, 'access_denied', 'Access not authorized')
@@ -695,7 +696,10 @@ def create_my_api_key():
     if len(name) > 100:
         return api_error(400, 'invalid_request', 'name must be 100 characters or fewer')
     expires_in_days = data.get('expires_in_days', api_keys.DEFAULT_EXPIRY_DAYS)
-    if not isinstance(expires_in_days, int) or isinstance(expires_in_days, bool) \
+    if expires_in_days is None:
+        if not _is_admin_request():
+            return api_error(400, 'invalid_request', 'Only admins can create keys that never expire')
+    elif not isinstance(expires_in_days, int) or isinstance(expires_in_days, bool) \
             or not 1 <= expires_in_days <= api_keys.MAX_EXPIRY_DAYS:
         return api_error(
             400, 'invalid_request', f'expires_in_days must be a whole number from 1 to {api_keys.MAX_EXPIRY_DAYS}')

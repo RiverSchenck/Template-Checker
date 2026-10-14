@@ -134,3 +134,26 @@ def test_unknown_key_is_rejected(client):
 def test_key_is_not_accepted_outside_checker_routes(client, path):
     key = create_key(client)['key']
     assert client.get(path, headers=bearer(key)).status_code == 401
+
+
+# --- keys that never expire -----------------------------------------------------------------------------------------
+
+def test_admin_can_create_a_key_that_never_expires(client, fake_db, monkeypatch):
+    monkeypatch.setattr('app.routes.user_helpers.is_admin', lambda email=None, auth_user_id=None: True)
+    created = create_key(client, expires_in_days=None)
+    assert created['expires_at'] is None and created['active']
+    assert fake_db.db['api_keys'][0]['expires_at'] is None
+    assert client.post('/run', headers=bearer(created['key'])).status_code == 200
+
+
+def test_only_admins_can_create_a_key_that_never_expires(client, fake_db):
+    r = client.post('/api-keys', json={'name': 'CI', 'expires_in_days': None}, headers=bearer('valid-approved@example.com'))
+    assert r.status_code == 400
+    assert fake_db.db['api_keys'] == []
+
+
+def test_key_that_never_expires_can_still_be_revoked(client, monkeypatch):
+    monkeypatch.setattr('app.routes.user_helpers.is_admin', lambda email=None, auth_user_id=None: True)
+    created = create_key(client, expires_in_days=None)
+    client.delete(f"/api-keys/{created['id']}", headers=bearer('valid-approved@example.com'))
+    assert client.post('/run', headers=bearer(created['key'])).status_code == 401

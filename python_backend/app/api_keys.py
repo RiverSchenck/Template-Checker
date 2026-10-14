@@ -46,16 +46,17 @@ def is_active(row: dict[str, Any], now: Optional[datetime] = None) -> bool:
     return not row.get('revoked_at') and not _is_expired(row, now or datetime.now(timezone.utc))
 
 
-def create_key(user_id: str, name: str, expires_in_days: int) -> tuple[str, dict[str, Any]]:
-    """Create a key for users.id `user_id`. Returns (plaintext_key, public row). Raises on Supabase errors."""
+def create_key(user_id: str, name: str, expires_in_days: Optional[int]) -> tuple[str, dict[str, Any]]:
+    """Create a key for users.id `user_id`; `expires_in_days=None` never expires. Returns (plaintext_key, public row).
+    Raises on Supabase errors."""
     key = KEY_PREFIX + secrets.token_urlsafe(32)
-    expires_at = datetime.now(timezone.utc) + timedelta(days=expires_in_days)
+    expires_at = datetime.now(timezone.utc) + timedelta(days=expires_in_days) if expires_in_days is not None else None
     row = {
         'user_id': user_id,
         'name': name,
         'key_hash': _hash(key),
         'key_prefix': key[:DISPLAY_PREFIX_LEN],
-        'expires_at': expires_at.isoformat(),
+        'expires_at': expires_at.isoformat() if expires_at else None,
     }
     r = get_supabase_client().table('api_keys').insert(row).execute()
     created = dict(r.data[0])
