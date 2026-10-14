@@ -63,7 +63,7 @@
       "In the Pages panel, open the master (parent) page and move its items onto the document pages, or delete them."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_99bb96e90b",
     "is_check": true,
     "key": "MASTERPAGE",
     "severity": "error",
@@ -79,7 +79,7 @@
       "Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style])."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913",
     "is_check": true,
     "key": "PARAGRAPH_STYLE",
     "severity": "error",
@@ -96,7 +96,7 @@
       "Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\"."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c",
     "is_check": true,
     "key": "FONTS_INCLUDED",
     "severity": "error",
@@ -112,7 +112,7 @@
       "Get an OTF or TTF version from the font vendor and swap it in with Type > Find/Replace Font."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c",
     "is_check": true,
     "key": "OTF_TTF_FONT",
     "severity": "error",
@@ -128,7 +128,7 @@
       "Install the static (non-variable) version of the font and swap it in with Type > Find/Replace Font."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c",
     "is_check": true,
     "key": "VARIABLE_FONT",
     "severity": "error",
@@ -162,7 +162,7 @@
       "Save it into the Links folder and package again."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a2eb3f6ecb",
     "is_check": true,
     "key": "EMBEDDED_IMAGE",
     "severity": "error",
@@ -185,7 +185,7 @@
       "Select the item and choose Object > Transform > Clear Transformations (or set the shear angle to 0° and remove the flip)."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_022555b62f",
     "is_check": true,
     "key": "TRANSFORMATION",
     "severity": "error",
@@ -203,7 +203,7 @@
       "Click into the table and choose Table > Convert Table to Text, or rebuild it with separate text frames."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_8f92a81f7d",
     "is_check": true,
     "key": "TABLE",
     "severity": "error",
@@ -219,7 +219,7 @@
       "Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a2eb3f6ecb",
     "is_check": true,
     "key": "PASTED_GRAPHICS",
     "severity": "error",
@@ -235,7 +235,7 @@
       "For each frame, open Object > Text Frame Options > Auto-Size and make the change noted next to it."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_21148f7d2a",
     "is_check": true,
     "key": "AUTO_SIZE_TEXT_BOX",
     "severity": "error",
@@ -251,7 +251,7 @@
       "Set Columns to 1 in Object > Text Frame Options. Use separate text frames if you need columns."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_d55dd03fc0",
     "is_check": true,
     "key": "TEXT_COLUMNS",
     "severity": "error",
@@ -267,7 +267,7 @@
       "Turn on View > Extras > Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bc5d86592a",
     "is_check": true,
     "key": "LINKED_TEXT_FRAME",
     "severity": "error",
@@ -286,7 +286,7 @@
       "Select the frame and apply [None] or [Basic Text Frame] in Window > Styles > Object Styles, then re-apply any formatting you need directly."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_37f364a103",
     "is_check": true,
     "key": "OBJECT_STYLE",
     "severity": "error",
@@ -303,7 +303,7 @@
       "In the paragraph style, go to Indents and Spacing and set Align to Grid to None."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b90a29f967",
     "is_check": true,
     "key": "GRID_ALIGNMENT",
     "severity": "error",
@@ -319,7 +319,7 @@
       "In the paragraph style, go to Basic Character Formats and set Kerning to Metrics."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f29528ad33",
     "is_check": true,
     "key": "KERNING",
     "severity": "error",
@@ -335,7 +335,7 @@
       "In the character style, go to Basic Character Formats and set Kerning to Metrics."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f29528ad33",
     "is_check": true,
     "key": "KERNING_CHAR",
     "severity": "error",
@@ -355,7 +355,7 @@
       "Select the frame and choose No Text Wrap in Window > Text Wrap."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_627c2b756b",
     "is_check": true,
     "key": "TEXT_WRAP",
     "severity": "error",
@@ -406,7 +406,7 @@
       "For symbols like ® or ™, use a smaller point size in a character style instead, or a font’s superscript glyphs."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_7a03ddce2a",
     "is_check": true,
     "key": "TEXT_POSITION",
     "severity": "error",
@@ -423,7 +423,7 @@
       "Package again with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\"."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c",
     "is_check": true,
     "key": "ADOBE_FONT",
     "severity": "error",
@@ -439,7 +439,7 @@
       "In the paragraph style, go to Hyphenation and uncheck Hyphenate."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_888b7d36b2",
     "is_check": true,
     "key": "HYPHENATION",
     "severity": "warning",
@@ -457,7 +457,7 @@
       "To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913",
     "is_check": true,
     "key": "OVERRIDE",
     "severity": "warning",
@@ -473,7 +473,7 @@
       "Delete the unused files from the Links folder before zipping the package."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_920b0ad113",
     "is_check": true,
     "key": "UNUSED_IMAGE",
     "severity": "warning",
@@ -505,7 +505,7 @@
       "In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_519531be7c",
     "is_check": true,
     "key": "COMPOSER",
     "severity": "warning",
@@ -521,7 +521,7 @@
       "Set Baseline Shift to 0 pt in the character style (Advanced Character Formats) or in the Character panel."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_7a03ddce2a",
     "is_check": true,
     "key": "BASELINE_SHIFT",
     "severity": "warning",
@@ -537,7 +537,7 @@
       "Delete the frame if it isn’t needed."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913",
     "is_check": true,
     "key": "EMPTY_TEXT_FRAME",
     "severity": "info",
@@ -553,7 +553,7 @@
       "Reduce the image’s pixel size or file size if it doesn’t need to be this large."
      ]
     },
-    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2",
+    "help_article": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_920b0ad113",
     "is_check": true,
     "key": "LARGE_IMAGE",
     "severity": "info",
@@ -956,8 +956,8 @@
    "warnings": 3,
    "infos": 0
   },
-  "html": "<p>Our review of “Flyer-Sales_Bad” found 2 likely causes of the problems in Frontify and 3 possible contributing factors. The recommended changes are below.</p><p><strong>Likely causes</strong></p><p><strong>1. Text without a paragraph style</strong><br>Frontify uses paragraph styles to format text and decide what can be edited.<br>Where: text frames “Super Sale”, “50% off on all products on monob…”, “only this weekend” (page 1)</p><ul><li>Select the text (or the whole frame) and apply a paragraph style in Window &gt; Styles &gt; Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\">Learn more</a></p><p><strong>2. Font missing from the package</strong><br>Frontify needs the font files to render the text, otherwise the template falls back to another font.<br>Where: the font “Minion Pro”</p><ul><li>Make sure the font is installed or activated on your computer.</li><li>Package again with File &gt; Package with &quot;Copy Fonts&quot; checked, and zip the whole folder, including &quot;Document fonts&quot;.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981\">Learn more</a></p><p><strong>Possible contributing factors</strong></p><p><strong>3. Text formatted outside its paragraph style</strong><br>Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.<br>Where: text frames “Super Sale” (page 1, font, size and leading changed), “50% off on all products on monob…” (page 1, font, size and tracking changed), “only this weekend” (page 1, font, size, tracking and more changed)</p><ul><li>Click into the text. A + after the style name in Window &gt; Styles &gt; Paragraph Styles means it has extra formatting.</li><li>To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.</li><li>To keep the look, update the style to match instead (right-click the style &gt; Redefine Style), or use a character style for single words.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\">Learn more</a></p><p><strong>4. Document has bleed</strong><br>Bleed is added to every export, which is right for print templates but usually unwanted for digital ones.<br>Current bleed: 3 mm on all sides</p><ul><li>For a digital template, set bleed to 0 in File &gt; Document Setup &gt; Bleed and Slug. For print templates, bleed is fine.</li></ul><p><a href=\"https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based\">Learn more</a></p><p><strong>5. Paragraph Composer used</strong><br>The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.<br>Where: the paragraph style “[Basic Paragraph]”, used on page 1</p><ul><li>In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0\">Learn more</a></p><p>Once that’s done, package the document again with File &gt; Package, zip the package folder and upload it to Frontify.</p>",
-  "text": "Our review of “Flyer-Sales_Bad” found 2 likely causes of the problems in Frontify and 3 possible contributing factors. The recommended changes are below.\n\nLikely causes\n\n1. Text without a paragraph style\nFrontify uses paragraph styles to format text and decide what can be edited.\nWhere: text frames “Super Sale”, “50% off on all products on monob…”, “only this weekend” (page 1)\n• Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\n2. Font missing from the package\nFrontify needs the font files to render the text, otherwise the template falls back to another font.\nWhere: the font “Minion Pro”\n• Make sure the font is installed or activated on your computer.\n• Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\".\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981\n\nPossible contributing factors\n\n3. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: text frames “Super Sale” (page 1, font, size and leading changed), “50% off on all products on monob…” (page 1, font, size and tracking changed), “only this weekend” (page 1, font, size, tracking and more changed)\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775\n\n4. Document has bleed\nBleed is added to every export, which is right for print templates but usually unwanted for digital ones.\nCurrent bleed: 3 mm on all sides\n• For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine.\nLearn more: https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based\n\n5. Paragraph Composer used\nThe Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.\nWhere: the paragraph style “[Basic Paragraph]”, used on page 1\n• In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
+  "html": "<p>Our review of “Flyer-Sales_Bad” found 2 likely causes of the problems in Frontify and 3 possible contributing factors. The recommended changes are below.</p><p><strong>Likely causes</strong></p><p><strong>1. Text without a paragraph style</strong><br>Frontify uses paragraph styles to format text and decide what can be edited.<br>Where: text frames “Super Sale”, “50% off on all products on monob…”, “only this weekend” (page 1)</p><ul><li>Select the text (or the whole frame) and apply a paragraph style in Window &gt; Styles &gt; Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913\">Learn more</a></p><p><strong>2. Font missing from the package</strong><br>Frontify needs the font files to render the text, otherwise the template falls back to another font.<br>Where: the font “Minion Pro”</p><ul><li>Make sure the font is installed or activated on your computer.</li><li>Package again with File &gt; Package with &quot;Copy Fonts&quot; checked, and zip the whole folder, including &quot;Document fonts&quot;.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c\">Learn more</a></p><p><strong>Possible contributing factors</strong></p><p><strong>3. Text formatted outside its paragraph style</strong><br>Formatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.<br>Where: text frames “Super Sale” (page 1, font, size and leading changed), “50% off on all products on monob…” (page 1, font, size and tracking changed), “only this weekend” (page 1, font, size, tracking and more changed)</p><ul><li>Click into the text. A + after the style name in Window &gt; Styles &gt; Paragraph Styles means it has extra formatting.</li><li>To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.</li><li>To keep the look, update the style to match instead (right-click the style &gt; Redefine Style), or use a character style for single words.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913\">Learn more</a></p><p><strong>4. Document has bleed</strong><br>Bleed is added to every export, which is right for print templates but usually unwanted for digital ones.<br>Current bleed: 3 mm on all sides</p><ul><li>For a digital template, set bleed to 0 in File &gt; Document Setup &gt; Bleed and Slug. For print templates, bleed is fine.</li></ul><p><a href=\"https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based\">Learn more</a></p><p><strong>5. Paragraph Composer used</strong><br>The Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.<br>Where: the paragraph style “[Basic Paragraph]”, used on page 1</p><ul><li>In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.</li></ul><p><a href=\"https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_519531be7c\">Learn more</a></p><p>Once that’s done, package the document again with File &gt; Package, zip the package folder and upload it to Frontify.</p>",
+  "text": "Our review of “Flyer-Sales_Bad” found 2 likely causes of the problems in Frontify and 3 possible contributing factors. The recommended changes are below.\n\nLikely causes\n\n1. Text without a paragraph style\nFrontify uses paragraph styles to format text and decide what can be edited.\nWhere: text frames “Super Sale”, “50% off on all products on monob…”, “only this weekend” (page 1)\n• Select the text (or the whole frame) and apply a paragraph style in Window > Styles > Paragraph Styles (any style except [Basic Paragraph] or [No Paragraph Style]).\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913\n\n2. Font missing from the package\nFrontify needs the font files to render the text, otherwise the template falls back to another font.\nWhere: the font “Minion Pro”\n• Make sure the font is installed or activated on your computer.\n• Package again with File > Package with \"Copy Fonts\" checked, and zip the whole folder, including \"Document fonts\".\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c\n\nPossible contributing factors\n\n3. Text formatted outside its paragraph style\nFormatting added by hand on top of a paragraph style (shown as a + next to the style name) may be lost or look different in Frontify.\nWhere: text frames “Super Sale” (page 1, font, size and leading changed), “50% off on all products on monob…” (page 1, font, size and tracking changed), “only this weekend” (page 1, font, size, tracking and more changed)\n• Click into the text. A + after the style name in Window > Styles > Paragraph Styles means it has extra formatting.\n• To remove it, select the text and click Clear Overrides at the bottom of the Paragraph Styles panel.\n• To keep the look, update the style to match instead (right-click the style > Redefine Style), or use a character style for single words.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913\n\n4. Document has bleed\nBleed is added to every export, which is right for print templates but usually unwanted for digital ones.\nCurrent bleed: 3 mm on all sides\n• For a digital template, set bleed to 0 in File > Document Setup > Bleed and Slug. For print templates, bleed is fine.\nLearn more: https://help.frontify.com/en/articles/8519462-bleed-settings-and-pdf-presets-for-digital-print-templates-indesign-based\n\n5. Paragraph Composer used\nThe Adobe Paragraph Composer breaks lines differently from browsers, so text may reflow in Frontify.\nWhere: the paragraph style “[Basic Paragraph]”, used on page 1\n• In the paragraph style, go to Justification and set Composer to Adobe Single-line Composer.\nLearn more: https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_519531be7c\n\nOnce that’s done, package the document again with File > Package, zip the package folder and upload it to Frontify.",
   "sections": [
    {
     "key": "intro",
@@ -1005,7 +1005,7 @@
      {
       "kind": "link",
       "text": "Learn more",
-      "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775"
+      "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913"
      }
     ]
    },
@@ -1037,7 +1037,7 @@
      {
       "kind": "link",
       "text": "Learn more",
-      "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981"
+      "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c"
      }
     ]
    },
@@ -1084,7 +1084,7 @@
      {
       "kind": "link",
       "text": "Learn more",
-      "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775"
+      "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913"
      }
     ]
    },
@@ -1140,7 +1140,7 @@
      {
       "kind": "link",
       "text": "Learn more",
-      "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0"
+      "href": "https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_519531be7c"
      }
     ]
    },

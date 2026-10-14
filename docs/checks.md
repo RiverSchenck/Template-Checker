@@ -55,7 +55,7 @@ Frontify only reads items on the document pages, so anything on a master page (c
 
 **Facts:** `elements` (What's on the master pages, in the order found).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_4bef512504)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_99bb96e90b)
 
 ### Text without a paragraph style
 
@@ -69,7 +69,7 @@ Frontify uses paragraph styles to format text and decide what can be edited. Tex
 
 **Facts:** `whole_frame` (The whole frame has no paragraph style (else one run of its text)), `whitespace_only`.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913)
 
 ### Font missing from the package
 
@@ -84,7 +84,7 @@ Frontify needs the font files to render the text, otherwise the template falls b
 
 **Facts:** `missing_styles`, `whole_family` (No file of the family is in the package).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c)
 
 ### Unsupported font format
 
@@ -96,7 +96,7 @@ Frontify can only use OpenType (.otf) and TrueType (.ttf) fonts. Other formats, 
 
 - Get an OTF or TTF version from the font vendor and swap it in with Type > Find/Replace Font.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c)
 
 ### Variable font used
 
@@ -108,7 +108,7 @@ Frontify doesn’t support variable fonts, so text using them won’t render cor
 
 - Install the static (non-variable) version of the font and swap it in with Type > Find/Replace Font.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c)
 
 ### Linked image missing from the package
 
@@ -134,7 +134,7 @@ Frontify needs images as separate linked files and can’t read images embedded 
 - In Window > Links, select the image and choose Unembed Link from the panel menu.
 - Save it into the Links folder and package again.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a2eb3f6ecb)
 
 ### Item is flipped or skewed
 
@@ -154,7 +154,7 @@ Frontify can’t reproduce flipped or skewed items, so they’ll look different 
 
 **Facts:** `kind`, `rotation_deg` (null for a flip).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_1205c11ca4)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_022555b62f)
 
 ### Table in a text frame
 
@@ -166,7 +166,7 @@ Frontify doesn’t support InDesign tables.
 
 - Click into the table and choose Table > Convert Table to Text, or rebuild it with separate text frames.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b333040b53)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_8f92a81f7d)
 
 ### Pasted graphic
 
@@ -180,7 +180,7 @@ Graphics pasted straight into InDesign aren’t linked files, so Frontify can’
 
 **Facts:** `count`.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a2eb3f6ecb)
 
 ### Auto-size text frame set up incorrectly
 
@@ -194,7 +194,7 @@ Frontify grows auto-size frames as people type, and can’t match how these sett
 
 **Facts:** `auto_size` (InDesign's AutoSizingType, e.g. WidthOnly), `no_line_breaks`.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_e69bd3114b)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_21148f7d2a)
 
 ### Text frame has columns
 
@@ -206,7 +206,7 @@ Frontify doesn’t support multiple columns inside one text frame.
 
 - Set Columns to 1 in Object > Text Frame Options. Use separate text frames if you need columns.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_2ea0534af5)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_d55dd03fc0)
 
 ### Threaded (linked) text frames
 
@@ -218,7 +218,7 @@ Frontify doesn’t support text flowing from one frame into another.
 
 - Turn on View > Extras > Show Text Threads, then double-click a frame’s out port to break the thread so each frame holds its own text.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_befb8c0698)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bc5d86592a)
 
 ### Object style applied
 
@@ -233,7 +233,7 @@ Frontify doesn’t apply object styles, so the frame will look different.
 - For images:
   - Select the frame and apply [None] or [Basic Graphics Frame] in Window > Styles > Object Styles, then re-apply any formatting you need directly.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a92f4cebdf)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_37f364a103)
 
 ### Text aligned to the baseline grid
 
@@ -247,7 +247,7 @@ Frontify doesn’t use InDesign’s baseline grid, so line spacing will change.
 
 **Facts:** `inherited_from` (Self of the style that sets it).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f6aa8d5242)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_b90a29f967)
 
 ### Kerning isn’t set to Metrics
 
@@ -261,7 +261,7 @@ Frontify spaces letters using the font’s own kerning (Metrics). Other settings
 
 **Facts:** `inherited_from` (Self of the style that sets it).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f29528ad33)
 
 ### Kerning isn’t set to Metrics
 
@@ -275,7 +275,7 @@ Frontify spaces letters using the font’s own kerning (Metrics). Other settings
 
 **Facts:** `inherited_from` (Self of the style that sets it).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_270ad57d8d)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_f29528ad33)
 
 ### Text wrap applied
 
@@ -291,7 +291,7 @@ Frontify doesn’t support text wrap, so text won’t flow around objects and wi
   - Select the image, shape or group and choose No Text Wrap in Window > Text Wrap.
   - Then make room for it with the text frame’s size or insets instead.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_0882abae12)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_627c2b756b)
 
 ### Text color tint isn’t 100%
 
@@ -335,7 +335,7 @@ Frontify doesn’t support superscript or subscript, so the text shows at full s
 
 **Facts:** `inherited_from` (Self of the style that sets it).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_7a03ddce2a)
 
 ### Adobe Font used
 
@@ -350,7 +350,7 @@ Adobe Fonts aren’t supported in Frontify templates (for licensing reasons), so
 
 **Facts:** `missing_styles`, `whole_family` (No file of the family is in the package).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_a3094cd981)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_fe2170b74c)
 
 ## Warnings
 
@@ -368,7 +368,7 @@ Browsers hyphenate differently from InDesign, so lines may break in different pl
 
 **Facts:** `inherited_from` (Self of the style that sets it).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_55fa4b04cf)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_888b7d36b2)
 
 ### Text formatted outside its paragraph style
 
@@ -384,7 +384,7 @@ Formatting added by hand on top of a paragraph style (shown as a + next to the s
 
 **Facts:** `text`, `overrides` (Property -> the value set on the text).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913)
 
 ### Unused images in the package
 
@@ -396,7 +396,7 @@ These files aren’t used in the document and only make the package bigger.
 
 - Delete the unused files from the Links folder before zipping the package.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_920b0ad113)
 
 ### Document has bleed
 
@@ -424,7 +424,7 @@ The Adobe Paragraph Composer breaks lines differently from browsers, so text may
 
 **Facts:** `inherited_from` (Self of the style that sets it).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_bfdd4bceb0)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_519531be7c)
 
 ### Baseline shift used
 
@@ -438,7 +438,7 @@ Frontify doesn’t support baseline shift, so shifted text sits on the baseline.
 
 **Facts:** `inherited_from` (Self of the style that sets it).
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_85811f039b)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_7a03ddce2a)
 
 ## Infos
 
@@ -454,7 +454,7 @@ Empty frames are allowed, but are often left over by accident.
 
 - Delete the frame if it isn’t needed.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_68e2603775)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_da29f45913)
 
 ### Large image
 
@@ -468,7 +468,7 @@ Very large images slow down editing and exporting in Frontify.
 
 **Facts:** `size_mb`.
 
-[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_66fcd1c2c2)
+[Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_920b0ad113)
 
 ## Package and parsing failures
 
