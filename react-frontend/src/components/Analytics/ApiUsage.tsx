@@ -9,13 +9,6 @@ import { formatDays } from './PeriodBar';
 import { formatBucket, formatCount, formatDuration, formatPercent, personLabel, ratio } from './format';
 import type { ApiPeriodStats, ApiTimeseriesPoint, ApiUsage as ApiUsageData, Bucket, Overview } from './types';
 
-/** Endpoints kept for old integrations; calls to them are worth moving to /v1. */
-const DEPRECATED_ENDPOINTS: Record<string, string> = {
-  '/run': '/v1/checks',
-  '/summary': '/v1/checks/summary',
-  '/run-and-download-xml': '/v1/checks/xml',
-};
-
 // Outcome colors are status colors, as in Checks over time: fine / caller's mistake / ours.
 const SERIES = [
   { key: 'succeeded', label: 'Succeeded', light: '#a3a3a3', dark: '#737373', swatch: 'bg-[#a3a3a3] dark:bg-[#737373]' },
@@ -157,19 +150,13 @@ function Endpoints({ usage }: { usage: ApiUsageData }) {
     <SectionCard
       title="Endpoints"
       description="What callers use the API for"
-      info="Old paths still work but are deprecated; the tag names the /v1 endpoint to move to."
       bodyClassName="px-0 pb-2"
     >
       <ul className="divide-y border-t">
         {usage.endpoints.map((e) => (
           <li key={e.endpoint} className="px-5 py-2.5">
             <div className="flex items-baseline justify-between gap-3">
-              <span className="flex min-w-0 items-center gap-2">
-                <code className="truncate text-[13px] font-medium">{e.endpoint}</code>
-                {DEPRECATED_ENDPOINTS[e.endpoint] && (
-                  <StatusPill tone="amber">Deprecated · use {DEPRECATED_ENDPOINTS[e.endpoint]}</StatusPill>
-                )}
-              </span>
+              <code className="min-w-0 truncate text-[13px] font-medium">{e.endpoint}</code>
               <span className="shrink-0 text-sm font-semibold tabular-nums">{formatCount(e.requests)}</span>
             </div>
             <Meter value={e.requests / top} className="my-1.5" />

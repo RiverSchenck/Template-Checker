@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Bold",
@@ -595,7 +594,6 @@
    },
    {
     "check": "OTF_TTF_FONT",
-    "detail": "Font is .ttc",
     "facts": null,
     "location": {
      "bounds": null,

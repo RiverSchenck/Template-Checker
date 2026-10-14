@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -627,7 +625,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -657,7 +654,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. — Overrides: Leading: 15, AppliedFont: Aleo, FontStyle: Light",
     "facts": {
      "overrides": {
       "AppliedFont": "Aleo",
@@ -693,7 +689,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Aenean — Overrides: Leading: 15, AppliedFont: Aleo, FontStyle: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Aleo",
@@ -729,7 +724,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. — Overrides: Leading: 15, AppliedFont: Varta, FontStyle: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Varta",
@@ -765,7 +759,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: This is a Public Sans Bold Headline — Overrides: AppliedFont: Cabin, FontStyle: Bold, PointSize: 34",
     "facts": {
      "overrides": {
       "AppliedFont": "Cabin",
@@ -801,7 +794,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: This is a Public Sans Intro Para medium weight — Overrides: AppliedFont: Alexandria, FontStyle: Black, PointSize: 21",
     "facts": {
      "overrides": {
       "AppliedFont": "Alexandria",
@@ -837,7 +829,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -862,7 +853,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -882,7 +872,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -902,7 +891,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -922,7 +910,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -942,7 +929,6 @@
    },
    {
     "check": "IMAGE_INCLUDED",
-    "detail": "Link 'ECU-AUS-Logo_CMYK.pdf' (ID: u133) is used but not found in the Links folder.",
     "facts": null,
     "location": {
      "bounds": {
@@ -969,7 +955,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

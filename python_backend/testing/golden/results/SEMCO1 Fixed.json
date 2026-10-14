@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": "See all the ways we can help you save at semcoewr.com, or give us a call at 855.298.5387. ",
     "facts": {
      "whitespace_only": false,
      "whole_frame": false
@@ -627,7 +625,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -657,7 +654,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: 15189510419 — Overrides: Leading: 11, AppliedFont: Roboto, FillColor: Color/C=0 M=0 Y=0 K=85 2, PointSize: 6, Ligatures: false, Tracking: 10, OTFContextualAlternate: false",
     "facts": {
      "overrides": {
       "AppliedFont": "Roboto",
@@ -697,7 +693,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:   Whitespace after text: Rather than focusing on a single problem like an old heating and water system, not enough insulation in the attic, or leaky windows, a no-cost Home Energy Assessment looks for opportunities throughout an entire home to improve performance. — Overrides: Tracking: -10",
     "facts": {
      "overrides": {
       "Tracking": "-10"
@@ -731,7 +726,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Start Saving — Overrides: Leading: 11.708852099873559, StrokeWeight: 0, OTFContextualAlternate: false, MiterLimit: 2.601967133305235, StrokeAlignment: CenterAlignment, RubyFontSize: -0.3841088931363521, KentenFontSize: -0.3841088931363521",
     "facts": {
      "overrides": {
       "KentenFontSize": "-0.3841088931363521",
@@ -771,7 +765,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:   Whitespace after text: Start Saving — Overrides: Leading: 14.4, StrokeWeight: 0.8647777732326433, Tracking: 15, MiterLimit: 3.459111092930573, RubyFontSize: -0.8647777732326433, KentenFontSize: -0.8647777732326433",
     "facts": {
      "overrides": {
       "KentenFontSize": "-0.8647777732326433",
@@ -810,7 +803,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: See — Overrides: Leading: 15, AppliedFont: Roboto, FillColor: Color/C=0 M=0 Y=0 K=85, FontStyle: Medium, PointSize: 9.9, KerningMethod: $ID/Optical, StrokeWeight: 0.9, Tracking: 10, MiterLimit: 3.6, RubyFontSize: -0.9, KentenFontSize: -0.9",
     "facts": {
      "overrides": {
       "AppliedFont": "Roboto",
@@ -854,7 +846,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: all the ways we can help you save at — Overrides: AppliedFont: Roboto, FillColor: Color/C=0 M=0 Y=0 K=85, FontStyle: Medium, PointSize: 9.9, KerningMethod: $ID/Optical, StrokeWeight: 0.9, Tracking: 10, MiterLimit: 3.6, RubyFontSize: -0.9, KentenFontSize: -0.9",
     "facts": {
      "overrides": {
       "AppliedFont": "Roboto",
@@ -897,7 +888,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: semcoewr.com — Overrides: AppliedFont: Roboto, FillColor: Color/C=80 M=13 Y=45 K=0, FontStyle: Medium, PointSize: 9.9, KerningMethod: $ID/Optical, StrokeWeight: 0.9, Tracking: 10, MiterLimit: 3.6, RubyFontSize: -0.9, KentenFontSize: -0.9",
     "facts": {
      "overrides": {
       "AppliedFont": "Roboto",
@@ -940,7 +930,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: , or give us a call at 855.298.5387. — Overrides: AppliedFont: Roboto, FillColor: Color/C=0 M=0 Y=0 K=85, FontStyle: Medium, PointSize: 9.9, KerningMethod: $ID/Optical, StrokeWeight: 0.9, Tracking: 10, MiterLimit: 3.6, RubyFontSize: -0.9, KentenFontSize: -0.9",
     "facts": {
      "overrides": {
       "AppliedFont": "Roboto",
@@ -983,7 +972,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: 3984229 — Overrides: FillColor: Color/Paper, FontStyle: Regular, PointSize: 5",
     "facts": {
      "overrides": {
       "FillColor": "Color/Paper",
@@ -1019,7 +1007,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:   Whitespace after text: Energy efficiency Home Energy Rating System (HERS) rated homes with a score of 56 or lower can receive a rebate for building energy efficient. Go to www.hersindex.com to learn more about HERS ratings — Overrides: FillColor: Color/C=0 M=0 Y=0 K=85",
     "facts": {
      "overrides": {
       "FillColor": "Color/C=0 M=0 Y=0 K=85"
@@ -1053,7 +1040,6 @@
    },
    {
     "check": "KERNING",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1085,7 +1071,6 @@
    },
    {
     "check": "KERNING",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1114,7 +1099,6 @@
    },
    {
     "check": "KERNING",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1145,7 +1129,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -1170,7 +1153,6 @@
    },
    {
     "check": "LARGE_IMAGE",
-    "detail": "Image iStock-1226023798.jpg is 15.25MB.",
     "facts": {
      "size_mb": 15.25
     },
@@ -1199,7 +1181,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 9pt, bottom: 9pt, inside: 9pt, outside: 9pt.",
     "facts": {
      "bleed": {
       "bottom": 9.0,

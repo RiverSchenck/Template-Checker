@@ -81,13 +81,10 @@ export interface Issue {
    */
   text: string[] | null;
   /**
-   * A short note in plain words, e.g. "font and size changed", made from the facts (src/results/notes.py).
+   * A short note in plain words, e.g. "font and size changed", made from the facts (src/results/notes.py). For a
+   * package or parsing failure, why the upload couldn't be checked.
    */
   note: string | null;
-  /**
-   * Deprecated: the checker's raw message, kept for existing API callers. Use note (words) or facts (data).
-   */
-  detail: string | null;
 }
 /**
  * What the issue is about. Styles: id is the style's Self, name as InDesign shows it. Text frames and image

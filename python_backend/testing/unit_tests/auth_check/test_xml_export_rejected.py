@@ -6,14 +6,13 @@ from app.utils import CheckOutcome
 
 USER = {'Authorization': 'Bearer valid-approved@example.com'}
 REASON = 'No .idml file found in the provided package.'
-REJECTED = {'issues': [{'check': 'ERROR', 'severity': 'error', 'detail': REASON}]}
+REJECTED = {'issues': [{'check': 'ERROR', 'severity': 'error', 'note': REASON}]}
 
 
-@pytest.mark.parametrize('path', ['/v1/checks/xml', '/run-and-download-xml'])
-def test_xml_export_of_a_rejected_upload_is_422_with_the_reason(client, monkeypatch, path):
+def test_xml_export_of_a_rejected_upload_is_422_with_the_reason(client, monkeypatch):
     monkeypatch.setattr(routes, 'run_check', lambda *a, **k: CheckOutcome(REJECTED, False, 'UNZIP_IDML', 'run-1', None))
 
-    r = client.post(path, headers=USER)
+    r = client.post('/v1/checks/xml', headers=USER)
 
     assert r.status_code == 422
     error = r.get_json()['error']

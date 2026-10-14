@@ -5,7 +5,7 @@ import app.routes as routes
 from app.utils import CheckFailed, CheckOutcome
 
 USER = {'Authorization': 'Bearer valid-approved@example.com'}
-CHECK_PATHS = ['/run', '/run-and-download-xml', '/summary']
+CHECK_PATHS = ['/v1/checks', '/v1/checks/xml', '/v1/checks/summary']
 
 
 def _error(response):
@@ -38,7 +38,7 @@ def test_missing_file(client, path):
     assert client.run_calls == []
 
 
-@pytest.mark.parametrize('path', ['/run', '/run-and-download-xml'])
+@pytest.mark.parametrize('path', ['/v1/checks', '/v1/checks/xml'])
 def test_upload_failure(client, monkeypatch, path):
     monkeypatch.setattr(routes, 'upload_file', lambda: {'status': 'error', 'error': {'message': 'disk full at /srv'}})
     r = client.post(path, headers=USER)
@@ -48,7 +48,7 @@ def test_upload_failure(client, monkeypatch, path):
     assert '/srv' not in error['message']
 
 
-@pytest.mark.parametrize('path', ['/run', '/run-and-download-xml'])
+@pytest.mark.parametrize('path', ['/v1/checks', '/v1/checks/xml'])
 def test_checker_crash(client, monkeypatch, path):
     def crash(*a, **k):
         raise CheckFailed()
@@ -67,7 +67,7 @@ def test_xml_export_failure_hides_server_paths(client, monkeypatch):
     monkeypatch.setattr(routes, 'run_check', checked('Brochure'))
     monkeypatch.setattr(routes, 'zip_idml', lambda idml_folder, workspace: '/srv/app/src/data/missing.zip')
 
-    r = client.post('/run-and-download-xml', headers=USER)
+    r = client.post('/v1/checks/xml', headers=USER)
 
     assert r.status_code == 500
     error = _error(r)

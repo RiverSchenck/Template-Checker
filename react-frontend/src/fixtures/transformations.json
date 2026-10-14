@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -597,7 +596,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -627,7 +625,6 @@
    },
    {
     "check": "IMAGE_INCLUDED",
-    "detail": "Link 'logo_FÃ¶rderturm_original.png' (ID: ue9) is used but not found in the Links folder.",
     "facts": null,
     "location": {
      "bounds": {
@@ -654,7 +651,6 @@
    },
    {
     "check": "UNUSED_IMAGE",
-    "detail": "Image 'logo_Förderturm_original.png' is present in the document but not used.",
     "facts": null,
     "location": {
      "bounds": null,
@@ -674,7 +670,6 @@
    },
    {
     "check": "EMBEDDED_IMAGE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -701,7 +696,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image Container has a vertical flip transformation.",
     "facts": {
      "kind": "flip",
      "rotation_deg": null
@@ -731,7 +725,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image inside Container has a vertical flip transformation.",
     "facts": {
      "kind": "flip",
      "rotation_deg": null
@@ -761,7 +754,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image inside Container has skew transformations. Skew factors: b=0.0, c=-0.1311362852727794",
     "facts": {
      "kind": "skew",
      "rotation_deg": 0
@@ -791,7 +783,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

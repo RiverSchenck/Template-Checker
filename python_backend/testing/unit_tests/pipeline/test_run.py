@@ -77,7 +77,7 @@ def client(monkeypatch):
 
 
 @pytest.mark.parametrize('path, previews', [
-    ('/v1/checks', False), ('/v1/checks?previews=1', True), ('/run', True),
+    ('/v1/checks', False), ('/v1/checks?previews=1', True),
     ('/v1/checks/summary', False), ('/v1/checks/xml', False),
 ])
 def test_previews_are_rendered_only_where_asked(client, path, previews):

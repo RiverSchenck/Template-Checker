@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: Group, Group, Group, Group, Group, Group",
     "facts": {
      "elements": [
       {
@@ -594,7 +593,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: XX:XX a.m. to XX:XX p.m. | Agenda item 1 XX:XX a.m. to XX:XX p.m. | Agenda item 2 XX:XX a.m. to XX:XX p.m. | Agenda item 3 XX:XX a.m. to XX:XX p.m. | Agenda item 4 XX:XX a.m. to XX:XX p.m. | Agenda item 5  El ipicabo. Nam sequam et aut vendemporiam quas eos idelest maximax imostem faceatum ut et debit venecerferi conserc hilibuscim alit, sinctur? Qui berumquibus ea doluptis dolorepta perro bea cusae molorepe volorer spidipsam cus ma dolor aut il ius sin enditiur aut expla voloribus et fuga. Itas apiet et pro dus quaernam aut volore veroreiundae volorecea dolo offic tent.  Opta non nus reiusciis nienecatur? Lorro venihil inihit qui aut omnime eum quaturessed mil ilicit, tet mos nienis escid quat. Pis deruptia sit voloritibus, quae liquunt otasincia vellabo rehendantur? Quis remporepel et archil et qui re optatem nobit, eosapiet fugit lit, que. — Overrides: Leading: 13.2, PointSize: 11",
     "facts": {
      "overrides": {
       "Leading": "13.2",
@@ -629,7 +627,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Headline ends — Overrides: Leading: 38, PointSize: 38",
     "facts": {
      "overrides": {
       "Leading": "38",
@@ -664,7 +661,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: in maize. — Overrides: Leading: 38, PointSize: 38",
     "facts": {
      "overrides": {
       "Leading": "38",
@@ -699,7 +695,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 9pt, bottom: 9pt, inside: 9pt, outside: 9pt.",
     "facts": {
      "bleed": {
       "bottom": 9.0,
@@ -726,7 +721,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -753,7 +747,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -780,7 +773,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -809,7 +801,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -838,7 +829,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

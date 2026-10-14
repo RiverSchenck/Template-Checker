@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "EMPTY_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -594,7 +593,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -623,7 +621,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {

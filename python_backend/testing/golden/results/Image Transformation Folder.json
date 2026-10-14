@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "TRANSFORMATION",
-    "detail": "Image Container has a horizontal flip transformation.",
     "facts": {
      "kind": "flip",
      "rotation_deg": null
@@ -597,7 +596,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image Container has a vertical flip transformation.",
     "facts": {
      "kind": "flip",
      "rotation_deg": null

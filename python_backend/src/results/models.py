@@ -67,9 +67,8 @@ class Issue(Model):
     text: Optional[List[str]]
     """The text it's about, when relevant."""
     note: Optional[str]
-    """A short note in plain words, e.g. "font and size changed", made from the facts (src/results/notes.py)."""
-    detail: Optional[str]
-    """Deprecated: the checker's raw message, kept for existing API callers. Use note (words) or facts (data)."""
+    """A short note in plain words, e.g. "font and size changed", made from the facts (src/results/notes.py). For a
+    package or parsing failure, why the upload couldn't be checked."""
 
 
 class Page(Model):

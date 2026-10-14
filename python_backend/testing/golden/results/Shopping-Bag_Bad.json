@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "EMPTY_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -594,7 +593,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -625,7 +623,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Bold"
@@ -650,7 +647,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -670,7 +666,6 @@
    },
    {
     "check": "UNUSED_IMAGE",
-    "detail": "Image 'monobrand-main-logo-black.png' is present in the document but not used.",
     "facts": null,
     "location": {
      "bounds": null,
@@ -690,7 +685,6 @@
    },
    {
     "check": "LARGE_IMAGE",
-    "detail": "Image iStock-1226023798.jpg is 15.25MB.",
     "facts": {
      "size_mb": 15.25
     },
@@ -719,7 +713,6 @@
    },
    {
     "check": "TABLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -746,7 +739,6 @@
    },
    {
     "check": "AUTO_SIZE_TEXT_BOX",
-    "detail": "'No Line Breaks' must be checked.",
     "facts": {
      "auto_size": "HeightAndWidth",
      "no_line_breaks": false
@@ -776,7 +768,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -803,7 +794,6 @@
    },
    {
     "check": "GRID_ALIGNMENT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -830,7 +820,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -859,7 +848,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

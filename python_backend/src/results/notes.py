@@ -106,8 +106,14 @@ def note(check: str, facts: Optional[dict]) -> Optional[str]:
         return master_page_note(counts)
     if check == 'PASTED_GRAPHICS' and facts.get('count'):
         return plural(facts['count'], 'pasted graphic')
-    if check == 'AUTO_SIZE_TEXT_BOX' and facts.get('auto_size') in WIDTH_AUTO_SIZE:
-        return 'turn on No Line Breaks'
+    if check == 'AUTO_SIZE_TEXT_BOX' and facts.get('auto_size'):
+        if facts['auto_size'] in WIDTH_AUTO_SIZE:
+            return 'turn on No Line Breaks'
+        # Frontify maps only WidthOnly, HeightOnly and HeightAndWidth; any other type is ignored, so the frame keeps
+        # its size (app-server utility/Idml/PageItem.php, the autoSizingType switch).
+        if facts['auto_size'] == 'HeightAndWidthProportionally':
+            return 'use Height and Width: Frontify won’t resize Keep Proportions'
+        return 'use Width, Height or Height and Width: Frontify won’t resize this type'
     if check == 'TRANSFORMATION' and facts.get('kind'):
         return 'flipped' if facts['kind'] == 'flip' else 'skewed'
     if check == 'PARAGRAPH_STYLE' and facts.get('whitespace_only'):

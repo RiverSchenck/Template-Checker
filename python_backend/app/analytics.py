@@ -55,8 +55,8 @@ def get_app_version() -> Optional[str]:
 
 def first_error_message(results_json: Dict[str, Any]) -> Optional[str]:
     """The first error's message in results JSON (for a rejected upload, the reason it was rejected)."""
-    return next((issue['detail'] for issue in _issues(results_json)
-                 if issue.get('severity') == 'error' and issue.get('detail')), None)
+    return next((issue['note'] for issue in _issues(results_json)
+                 if issue.get('severity') == 'error' and issue.get('note')), None)
 
 
 def log_analytics_to_supabase(
@@ -75,7 +75,7 @@ def log_analytics_to_supabase(
 
     Args:
         template_name: Name of the template
-        source_type: Source of the request ('react-frontend', 'extension', or 'api')
+        source_type: Source of the request: 'react-frontend' or 'api' (runs before 2026-10-15 may say 'extension')
         duration_ms: Duration of validation in milliseconds
         file_size_bytes: Size of uploaded file in bytes
         results_json: Full validation results JSON. None when the checker crashed before producing results.

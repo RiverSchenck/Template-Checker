@@ -27,7 +27,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": "Image Container has been rotated by 89.50 degrees."
+        "note": null
       },
       {
         "check": "TRANSFORMATION",
@@ -53,7 +53,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": "Image Container has been rotated by -0.50 degrees."
+        "note": null
       },
       {
         "check": "TRANSFORMATION",
@@ -79,7 +79,7 @@
         },
         "facts": null,
         "text": null,
-        "detail": "Image Container has been rotated by -90.50 degrees."
+        "note": null
       },
       {
         "check": "LARGE_IMAGE",
@@ -107,7 +107,7 @@
           "size_mb": 15.25
         },
         "text": null,
-        "detail": "Image d.png is 15.25MB."
+        "note": "15.25 MB"
       },
       {
         "check": "DOCUMENT_BLEED",
@@ -133,7 +133,7 @@
           }
         },
         "text": null,
-        "detail": "top: 0.7086614173228347pt, bottom: 2.125pt, inside: 0.36pt, outside: 9pt."
+        "note": "Current bleed: top 0.3 mm, bottom 0.7 mm, inside 0.1 mm, outside 3.2 mm"
       }
     ],
     "subjects_checked": {},

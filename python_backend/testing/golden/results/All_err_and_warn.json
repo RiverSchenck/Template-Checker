@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "MASTERPAGE",
-    "detail": "Elements: Rectangle",
     "facts": {
      "elements": [
       {
@@ -594,7 +593,6 @@
    },
    {
     "check": "EMPTY_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -621,7 +619,6 @@
    },
    {
     "check": "PARAGRAPH_STYLE",
-    "detail": null,
     "facts": {
      "whitespace_only": false,
      "whole_frame": true
@@ -651,7 +648,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -682,7 +678,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: no paragraph style — Overrides: PointSize: 14",
     "facts": {
      "overrides": {
       "PointSize": "14"
@@ -716,7 +711,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -741,7 +735,6 @@
    },
    {
     "check": "OTF_TTF_FONT",
-    "detail": "Font is .ttc",
     "facts": null,
     "location": {
      "bounds": null,
@@ -761,7 +754,6 @@
    },
    {
     "check": "VARIABLE_FONT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": null,
@@ -781,7 +773,6 @@
    },
    {
     "check": "IMAGE_INCLUDED",
-    "detail": "Link 'music.png' (ID: u119) is used but not found in the Links folder.",
     "facts": null,
     "location": {
      "bounds": {
@@ -808,7 +799,6 @@
    },
    {
     "check": "UNUSED_IMAGE",
-    "detail": "Image 'portrait of a young woman in meditation at the beach.jpg' is present in the document but not used.",
     "facts": null,
     "location": {
      "bounds": null,
@@ -828,7 +818,6 @@
    },
    {
     "check": "LARGE_IMAGE",
-    "detail": "Image iStock-1226023798.jpg is 15.25MB.",
     "facts": {
      "size_mb": 15.25
     },
@@ -857,7 +846,6 @@
    },
    {
     "check": "EMBEDDED_IMAGE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -884,7 +872,6 @@
    },
    {
     "check": "TRANSFORMATION",
-    "detail": "Image Container has skew transformations. Skew factors: b=0.0, c=-0.36397023426620234",
     "facts": {
      "kind": "skew",
      "rotation_deg": 0.0
@@ -914,7 +901,6 @@
    },
    {
     "check": "TABLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -941,7 +927,6 @@
    },
    {
     "check": "PASTED_GRAPHICS",
-    "detail": "1 pasted graphics found.",
     "facts": {
      "count": 1
     },
@@ -963,7 +948,6 @@
    },
    {
     "check": "DOCUMENT_BLEED",
-    "detail": "top: 7.2pt, bottom: 7.2pt, inside: 7.2pt, outside: 7.2pt.",
     "facts": {
      "bleed": {
       "bottom": 7.2,
@@ -990,7 +974,6 @@
    },
    {
     "check": "AUTO_SIZE_TEXT_BOX",
-    "detail": "'No Line Breaks' must be checked.",
     "facts": {
      "auto_size": "HeightAndWidth",
      "no_line_breaks": false
@@ -1020,7 +1003,6 @@
    },
    {
     "check": "TEXT_COLUMNS",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1047,7 +1029,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1074,7 +1055,6 @@
    },
    {
     "check": "LINKED_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1101,7 +1081,6 @@
    },
    {
     "check": "OBJECT_STYLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1128,7 +1107,6 @@
    },
    {
     "check": "GRID_ALIGNMENT",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1155,7 +1133,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -1184,7 +1161,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

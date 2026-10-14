@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "FONTS_INCLUDED",
-    "detail": "Missing styles: Regular",
     "facts": {
      "missing_styles": [
       "Regular"

@@ -567,7 +567,6 @@
   "issues": [
    {
     "check": "EMPTY_TEXT_FRAME",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -594,7 +593,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -625,7 +623,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -656,7 +653,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -687,7 +683,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -718,7 +713,6 @@
    },
    {
     "check": "HYPHENATION",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },
@@ -749,7 +743,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: +12 3 45 67 89 10 / +12 3 45 67 89 10 — Overrides: StrokeWeight: 0.35175000000000006, MiterLimit: 1.4070000000000003, RubyFontSize: -0.35175000000000006, KentenFontSize: -0.35175000000000006",
     "facts": {
      "overrides": {
       "KentenFontSize": "-0.35175000000000006",
@@ -786,7 +779,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: firstname.lastname@stanleystella.com — Overrides: Hyphenation: false",
     "facts": {
      "overrides": {
       "Hyphenation": "false"
@@ -820,7 +812,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Position — Overrides: Hyphenation: false",
     "facts": {
      "overrides": {
       "Hyphenation": "false"
@@ -854,7 +845,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: First name Last name — Overrides: Hyphenation: false",
     "facts": {
      "overrides": {
       "Hyphenation": "false"
@@ -888,7 +878,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -920,7 +909,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -952,7 +940,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -984,7 +971,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1016,7 +1002,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1048,7 +1033,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1080,7 +1064,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1112,7 +1095,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1144,7 +1126,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1176,7 +1157,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1208,7 +1188,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1240,7 +1219,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1272,7 +1250,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1304,7 +1281,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1336,7 +1312,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1368,7 +1343,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1400,7 +1374,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1432,7 +1405,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1464,7 +1436,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1496,7 +1467,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1528,7 +1498,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1560,7 +1529,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1592,7 +1560,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1624,7 +1591,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text:  Whitespace — Overrides: AppliedFont: Regular",
     "facts": {
      "overrides": {
       "AppliedFont": "Regular"
@@ -1656,7 +1622,6 @@
    },
    {
     "check": "OVERRIDE",
-    "detail": "Text: Rue Jules Cockx 8-10 - 1160 Brussels - Belgium stanleystella.com — Overrides: Hyphenation: false",
     "facts": {
      "overrides": {
       "Hyphenation": "false"
@@ -1690,7 +1655,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Light",
@@ -1716,7 +1680,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -1741,7 +1704,6 @@
    },
    {
     "check": "FONTS_INCLUDED",
-    "detail": null,
     "facts": {
      "missing_styles": [
       "Regular"
@@ -1766,7 +1728,6 @@
    },
    {
     "check": "TABLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1793,7 +1754,6 @@
    },
    {
     "check": "TABLE",
-    "detail": null,
     "facts": null,
     "location": {
      "bounds": {
@@ -1820,7 +1780,6 @@
    },
    {
     "check": "COMPOSER",
-    "detail": "Inherited from: ParagraphStyle/$ID/[No paragraph style]",
     "facts": {
      "inherited_from": "ParagraphStyle/$ID/[No paragraph style]"
     },

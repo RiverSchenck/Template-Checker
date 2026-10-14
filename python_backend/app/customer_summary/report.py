@@ -55,7 +55,8 @@ class Place:
     frame_text: Optional[str]
     """Text inside the frame, when it has any."""
     frame_label: str
-    context: str
+    note: Optional[str]
+    """The checker's note in plain words (results v2 `note`)."""
     context_details: Optional[dict]
 
 
@@ -197,7 +198,7 @@ def build_problems(result: dict) -> list[Problem]:
             page_name=page_name,
             frame_text=_frame_text(issue, result),
             frame_label=_frame_label(bounds, subject_kind),
-            context=issue.get('detail') or '',
+            note=issue.get('note'),
             context_details=issue.get('facts'),
         )
 

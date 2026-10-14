@@ -21,12 +21,12 @@ def frame(frame_id):
 
 
 def issue(check='KERNING', severity='error', subject=None, item_id=None, page_id='p1', page_name='1', bounds=None,
-          facts=None, text=None, detail=None):
+          facts=None, text=None, note=None):
     """An issue in results v2."""
     return {'check': check, 'severity': severity, 'subject': subject or {'kind': 'document', 'id': None, 'name': None},
             'location': {'page_id': page_id, 'page_name': page_name, 'spread_id': 's1', 'item_id': item_id,
                          'bounds': bounds},
-            'facts': facts, 'text': text, 'detail': detail}
+            'facts': facts, 'text': text, 'note': note}
 
 
 def bounds(page_id, y):
@@ -43,7 +43,7 @@ def make_result(**overrides):
             issue(subject=style('Headline'), item_id='f3', page_id='p3', page_name='3', bounds=bounds('p3', 10)),
             issue('COMPOSER', 'warning', style('Headline'), item_id='f1', bounds=bounds('p1', 10)),
             issue(subject=style('Body'), item_id='f4', bounds=bounds('p1', 50)),
-            issue('AUTO_SIZE_TEXT_BOX', subject=frame('f5'), item_id='f5', detail="'No Line Breaks' must be checked.",
+            issue('AUTO_SIZE_TEXT_BOX', subject=frame('f5'), item_id='f5', note='turn on No Line Breaks',
                   bounds=bounds('p1', 80), facts={'auto_size': 'WidthOnly', 'no_line_breaks': False}),
             issue('FONTS_INCLUDED', subject={'kind': 'font', 'id': 'Pangea Bold', 'name': 'Pangea Bold'}, page_id=None,
                   page_name=None),
@@ -93,8 +93,6 @@ def test_names_frames_on_the_same_page_once_and_puts_checker_details_in_plain_wo
                                           'name': 'NormalParagraphStyle'}, bounds=bounds('p1', 10)),
             *(issue('OVERRIDE', 'warning', frame(sid), item_id=sid, bounds=bounds('p1', 10)) for sid in ('s1', 's2')),
             issue('DOCUMENT_BLEED', 'warning', page_id=None, page_name=None,
-                  detail='top: 8.503937007874017pt, bottom: 8.503937007874017pt, inside: 8.503937007874017pt, '
-                         'outside: 8.503937007874017pt.',
                   facts={'bleed': {side: 8.503937007874017 for side in ('top', 'bottom', 'inside', 'outside')}}),
         ],
         text_boxes={'s1': {'content': 'Title', 'page_id': 'p1'}, 's2': {'content': 'Intro', 'page_id': 'p1'}},

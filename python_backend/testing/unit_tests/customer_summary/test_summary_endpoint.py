@@ -46,7 +46,7 @@ def _package_bytes(package=PACKAGE):
 
 def _post(client, data=None, filename='Brochure_Bad.zip', headers=AUTH):
     files = {} if data is None else {'file': (io.BytesIO(data), filename)}
-    return client.post('/summary', data=files, headers=headers, content_type='multipart/form-data')
+    return client.post('/v1/checks/summary', data=files, headers=headers, content_type='multipart/form-data')
 
 
 def _expected_summary(package=PACKAGE):
@@ -74,11 +74,11 @@ def test_returns_the_summary_for_a_real_package(client):
 
 
 def test_logs_the_run_to_analytics_as_the_caller(client):
-    _post(client, _package_bytes(), headers={**AUTH, 'X-Source': 'extension'})
+    _post(client, _package_bytes(), headers=AUTH)
 
     [run] = client.logged
     assert run['user_id'] == 'user-1'
-    assert run['source_type'] == 'extension'
+    assert run['source_type'] == 'react-frontend'
     assert run['status'] == 'completed'
 
 
@@ -109,11 +109,11 @@ def test_removes_the_upload_afterwards(client):
 
 
 def test_run_includes_the_summary_and_the_checks_for_the_web_app(client):
-    r = client.post('/run', data={'file': (io.BytesIO(_package_bytes()), 'Brochure_Bad.zip')}, headers=AUTH,
+    r = client.post('/v1/checks', data={'file': (io.BytesIO(_package_bytes()), 'Brochure_Bad.zip')}, headers=AUTH,
                     content_type='multipart/form-data')
 
     assert r.status_code == 200
-    content = r.get_json()['content']
+    content = r.get_json()
     results, summary = content['results'], content['customer_summary']
     expected = _expected_summary()
     assert summary['html'] == expected['html']
@@ -132,11 +132,11 @@ def test_run_still_returns_results_when_the_summary_fails(client, monkeypatch):
         raise KeyError('internal detail')
     monkeypatch.setattr(utils, 'build_customer_summary', broken)
 
-    r = client.post('/run', data={'file': (io.BytesIO(_package_bytes()), 'Brochure_Bad.zip')}, headers=AUTH,
+    r = client.post('/v1/checks', data={'file': (io.BytesIO(_package_bytes()), 'Brochure_Bad.zip')}, headers=AUTH,
                     content_type='multipart/form-data')
 
     assert r.status_code == 200
-    content = r.get_json()['content']
+    content = r.get_json()
     assert content['customer_summary'] is None
     assert content['results']['issues']
 

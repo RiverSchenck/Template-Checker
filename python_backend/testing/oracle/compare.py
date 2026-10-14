@@ -22,6 +22,12 @@ def checker_items(results: dict, check: str, *kinds: str):
             yield _short_style(subject['id'] or ''), issue
 
 
+def _inherited(issue: dict) -> str:
+    """Where a style setting comes from, as the oracle words it (from the issue's inherited_from fact)."""
+    source = (issue['facts'] or {}).get('inherited_from')
+    return f'Inherited from: {source}' if source else ''
+
+
 def _item(issue: dict) -> str:
     return issue['location']['item_id']
 
@@ -49,9 +55,9 @@ CHECKS: Dict[str, tuple] = {
     'character_kerning': (lambda d: {i[0] for i in oracle.character_kerning(d)},
                           lambda r: {style for style, _ in checker_items(r, 'KERNING_CHAR')}),
     'composer': (lambda d: {(i[0], i[2]) for i in oracle.composer(d)},
-                 lambda r: {(style, i['detail'] or '') for style, i in checker_items(r, 'COMPOSER')}),
+                 lambda r: {(style, _inherited(i)) for style, i in checker_items(r, 'COMPOSER')}),
     'grid_alignment': (lambda d: {(i[0], i[2]) for i in oracle.grid_alignment(d)},
-                       lambda r: {(style, i['detail'] or '') for style, i in checker_items(r, 'GRID_ALIGNMENT')}),
+                       lambda r: {(style, _inherited(i)) for style, i in checker_items(r, 'GRID_ALIGNMENT')}),
 }
 
 

@@ -78,7 +78,7 @@ class FakeSupabase:
         return FakeQuery(self.db, name)
 
 
-CHECK_PATHS = ('/run', '/run-and-download-xml', '/summary', '/v1/checks', '/v1/checks/summary', '/v1/checks/xml')
+CHECK_PATHS = ('/v1/checks', '/v1/checks/summary', '/v1/checks/xml')
 
 
 class UploadingClient(FlaskClient):

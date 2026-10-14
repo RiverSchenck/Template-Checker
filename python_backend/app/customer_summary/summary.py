@@ -8,7 +8,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Optional
 
-from src.results.notes import WIDTH_AUTO_SIZE, bleed_note, list_text, master_page_note, overrides_note, plural
+from src.results.notes import bleed_note, list_text, master_page_note, overrides_note, plural
 
 from .report import Place, Problem, Subject, build_problems, format_pages, unique
 
@@ -32,13 +32,8 @@ def _first_sentence(text: str) -> str:
 def _place_detail(problem: Problem, place: Place) -> Optional[str]:
     """A short note about one place, e.g. "turn on No Line Breaks" or "15.25 MB", from the facts the check recorded.
     Raw checker values (skew factors, link ids) are left out."""
-    facts = place.context_details or {}
-    if problem.key == 'AUTO_SIZE_TEXT_BOX' and place.context:
-        if facts.get('auto_size') in WIDTH_AUTO_SIZE:
-            return 'turn on No Line Breaks'
-        return place.context.removesuffix('.')
-    if problem.key == 'LARGE_IMAGE' and facts.get('size_mb') is not None:
-        return f"{facts['size_mb']} MB"
+    if problem.key in ('AUTO_SIZE_TEXT_BOX', 'LARGE_IMAGE'):
+        return place.note
     return None
 
 

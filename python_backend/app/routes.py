@@ -216,26 +216,9 @@ def _current_users_row():
     return user_helpers.get_user_by_email(email) if email else None
 
 
-SOURCE_TYPES = ('react-frontend', 'extension', 'api')
-
-
 def _run_source():
-    """Where a check came from, for analytics: 'react-frontend', 'extension' or 'api'.
-
-    Worked out from facts the caller can't easily fake rather than trusted from a header: API keys are always 'api';
-    otherwise the browser-set Origin says whether it's the web app or the Chrome extension. X-Source is only a fallback
-    for signed-in callers without a recognised Origin (e.g. an extension content script), and only if it's valid, so a
-    wrong value can never stop a run from being logged.
-    """
-    if getattr(g, 'api_key_user', None):
-        return 'api'
-    origin = request.headers.get('Origin', '')
-    if origin.startswith('chrome-extension://'):
-        return 'extension'
-    if origin and origin in current_app.config.get('WEB_APP_ORIGINS', ()):
-        return 'react-frontend'
-    hinted = request.headers.get('X-Source', '')
-    return hinted if hinted in SOURCE_TYPES else 'api'
+    """Where a check came from, for analytics: 'api' for API keys, otherwise the web app ('react-frontend')."""
+    return 'api' if getattr(g, 'api_key_user', None) else 'react-frontend'
 
 
 def _run_source_and_user_id():
@@ -902,30 +885,9 @@ def admin_resolve_summary_comment(comment_id):
 
 
 @main.route('/health')
-@main.route('/test')  # old name, kept for anything still calling it
 def health():
     """Liveness check: no auth, no database. Also handy to wake the machine before a demo."""
     return jsonify({'status': 'ok', 'version': get_app_version()})
-
-
-# Paths from before /v1, kept working. Responses on them say they're deprecated and where they moved
-# (Deprecation, RFC 9745: deprecated since 2026-10-12; Link rel="successor-version").
-LEGACY_PATHS = {
-    '/run': '/v1/checks',
-    '/summary': '/v1/checks/summary',
-    '/run-and-download-xml': '/v1/checks/xml',
-    '/test': '/health',
-}
-_DEPRECATED_SINCE = '@1791763200'  # 2026-10-12T00:00:00Z
-
-
-@main.after_request
-def mark_legacy_paths(response):
-    successor = LEGACY_PATHS.get(request.path)
-    if successor:
-        response.headers['Deprecation'] = _DEPRECATED_SINCE
-        response.headers['Link'] = f'<{successor}>; rel="successor-version"'
-    return response
 
 
 def _require_upload(zip_only=False):
@@ -990,18 +952,7 @@ def create_check():
     }), previews=request.args.get('previews') == '1')
 
 
-@main.route('/run', methods=['POST'])
-@require_auth(allow_api_key=True)
-@_require_upload()
-@limit_checks
-def run_checker():
-    """Deprecated: POST /v1/checks. Same check, wrapped as {type: "data", content: {results, customer_summary}}."""
-    return _run_and_respond(
-        lambda outcome, _: jsonify({'type': 'data', 'content': outcome.response()}), previews=True)
-
-
 @main.route('/v1/checks/summary', methods=['POST'])
-@main.route('/summary', methods=['POST'])
 @require_auth(allow_api_key=True)
 @_require_upload(zip_only=True)
 @limit_checks
@@ -1012,7 +963,7 @@ def customer_summary():
     Response 200: {run_id, template_name, summary_version, counts: {blockers, warnings, infos}, html, text}.
     `html` pastes with formatting into Intercom; `text` is the same message as plain text with links written out.
     Errors: {error: {code, message, request_id}}; see docs/API.md for the codes.
-    Counts toward the same per-user check limits as /run.
+    Counts toward the same per-user check limits as /v1/checks.
     """
     filename = request.files['file'].filename
 
@@ -1038,7 +989,6 @@ _EXPORT_FAILED = 'The XML export couldn\'t be created. Try again, or contact us 
 
 
 @main.route('/v1/checks/xml', methods=['POST'])
-@main.route('/run-and-download-xml', methods=['POST'])
 @require_auth(allow_api_key=True)
 @_require_upload()
 @limit_checks

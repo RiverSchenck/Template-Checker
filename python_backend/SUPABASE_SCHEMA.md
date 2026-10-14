@@ -6,7 +6,7 @@ This document describes the database schema for analytics tracking and for **inv
 
 ### `users` table (approved users and roles)
 
-Single source of truth for who can sign in and their role. Replaces the previous use of `profiles` and `allowed_users` for access control.
+Single source of truth for who can sign in and their role.
 
 | Column          | Type        | Description |
 |-----------------|-------------|-------------|
@@ -44,10 +44,6 @@ At most one `pending` request per email (unique index on `lower(email)`, migrati
 
 **RLS**: Enabled. No policies for anon/authenticated—only the service role (backend) can access.
 
-### `profiles` table (legacy, not used for access)
-
-This table is **no longer used** for access or role. The app uses the `users` table instead. You can leave the table in place or drop it in a future migration.
-
 ### `runs` table
 
 Stores high-level information about each validation run.
@@ -57,7 +53,7 @@ Stores high-level information about each validation run.
 | `id`              | `uuid` (primary key, auto-generated) | Unique run identifier                                            |
 | `timestamp`       | `timestamptz`                        | When the run occurred (UTC)                                      |
 | `template_name`   | `text`                               | Name of the template being validated                             |
-| `source_type`     | `text`                               | Source of request: `'react-frontend'`, `'extension'`, or `'api'` |
+| `source_type`     | `text`                               | Source of request: `'react-frontend'` (the web app) or `'api'` (an API key). Runs before 2026-10-15 may say `'extension'` (the retired Chrome extension). |
 | `duration_ms`     | `integer`                            | Duration of validation in milliseconds                           |
 | `file_size_bytes` | `bigint`                             | Size of uploaded file in bytes                                   |
 | `total_errors`    | `integer`                            | Total number of errors found                                     |
@@ -89,7 +85,7 @@ Stores each individual error, warning, or info found during validation. This all
 
 ## SQL to Create Tables
 
-For `users` and `access_requests`, use the migration file `migrations/001_users_and_access_requests.sql`. Below: runs, validations, and legacy profiles (optional).
+For `users` and `access_requests`, use the migration file `migrations/001_users_and_access_requests.sql`. Below: runs and validations.
 CREATE TABLE runs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
