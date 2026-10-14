@@ -53,4 +53,5 @@ def release(handle: tuple[str, str]) -> None:
     try:
         _rpc('release_check_lease', {'p_bucket': bucket, 'p_lease_id': lease_id})
     except Exception:
-        logger.exception('Failed to release check lease for %s; it will expire on its own', bucket)
+        # The bucket names a user or an IP address, so it isn't logged.
+        logger.exception('Failed to release a check lease; it will expire on its own')
