@@ -584,6 +584,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Futura",
@@ -603,6 +604,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Futura.ttc",

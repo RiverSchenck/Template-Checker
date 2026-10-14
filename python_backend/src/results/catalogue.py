@@ -9,8 +9,8 @@ Checks report issues by key (`report(results, 'KERNING', ...)`).
 from dataclasses import dataclass
 from typing import Dict, Literal, Mapping, Optional, Tuple, Type
 
-from src.results.facts import (AutoSizeFacts, BleedFacts, Facts, InheritedFacts, MasterPageFacts, MissingFontFacts,
-                                OverrideFacts, ParagraphStyleFacts, SizeFacts, TransformationFacts)
+from src.results.facts import (AutoSizeFacts, BleedFacts, CountFacts, Facts, InheritedFacts, MasterPageFacts,
+                               MissingFontFacts, OverrideFacts, ParagraphStyleFacts, SizeFacts, TransformationFacts)
 
 Severity = Literal['error', 'warning', 'info']
 
@@ -107,7 +107,7 @@ ENTRIES: Tuple[Entry, ...] = (
     _entry('PASTED_GRAPHICS', E, 'document', 'Pasted graphic',
            'Graphics pasted straight into InDesign aren’t linked files, so Frontify can’t read them.',
            ('Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place.',),
-           article('h_889cff064d')),
+           article('h_889cff064d'), facts=CountFacts),
     _entry('AUTO_SIZE_TEXT_BOX', E, 'text_frame', 'Auto-size text frame set up incorrectly',
            'Frontify grows auto-size frames as people type, and can’t match how these settings resize the frame.',
            ('For each frame, open Object > Text Frame Options > Auto-Size and make the change noted next to it.',),

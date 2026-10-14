@@ -576,6 +576,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Roboto Mono",
@@ -602,6 +603,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 3 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,

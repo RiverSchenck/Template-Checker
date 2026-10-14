@@ -1,5 +1,5 @@
 import type { Check, CheckResult, Issue, Results } from '../../types';
-import { buildReport, compareReports, describeWhere, formatPages } from './buildReport';
+import { buildReport, compareReports, describeWhere, formatPages, placesNote } from './buildReport';
 
 type Kind = Issue['subject']['kind'];
 
@@ -29,8 +29,8 @@ const frame = (id: string) => ({ kind: 'text_frame' as const, id, name: null });
 const issue = (
   checkKey: Issue['check'],
   subject: Issue['subject'],
-  { severity = 'error', item_id = null, page_id = 'p1', page_name = '1', bounds = null, text = null, detail = null }: Partial<
-    Pick<Issue, 'severity' | 'text' | 'detail'> & Issue['location']
+  { severity = 'error', item_id = null, page_id = 'p1', page_name = '1', bounds = null, text = null, note = null, detail = null }: Partial<
+    Pick<Issue, 'severity' | 'text' | 'note' | 'detail'> & Issue['location']
   > = {}
 ): Issue => ({
   check: checkKey,
@@ -39,6 +39,7 @@ const issue = (
   location: { page_id, page_name, spread_id: 's1', item_id, bounds },
   facts: null,
   text,
+  note,
   detail,
 });
 
@@ -200,4 +201,21 @@ describe('check guides', () => {
       'Image frames: Apply [Basic Graphics Frame].',
     ]);
   });
+});
+
+test('places show the checker’s plain-words note, never its raw detail', () => {
+  const report = buildReport(
+    makeResult({
+      issues: [
+        issue('AUTO_SIZE_TEXT_BOX', frame('f5'), {
+          item_id: 'f5',
+          note: 'turn on No Line Breaks',
+          detail: "'No Line Breaks' must be checked.",
+          bounds: bounds('p1', 80),
+        }),
+      ],
+    })
+  );
+  const [subject] = report.problems[0].subjects;
+  expect(placesNote(subject.places)).toBe('turn on No Line Breaks');
 });

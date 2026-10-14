@@ -12,15 +12,15 @@ from pydantic import BaseModel, ConfigDict
 
 from src.results import catalogue
 from src.results.catalogue import Severity
-from src.results.facts import (AutoSizeFacts, BleedFacts, InheritedFacts, MasterPageFacts, MissingFontFacts,
-                               OverrideFacts, ParagraphStyleFacts, SizeFacts, TransformationFacts)
+from src.results.facts import (AutoSizeFacts, BleedFacts, CountFacts, InheritedFacts, MasterPageFacts,
+                               MissingFontFacts, OverrideFacts, ParagraphStyleFacts, SizeFacts, TransformationFacts)
 
 SCHEMA_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'schema', 'results-v2.json')
 
 CheckKey = Literal[tuple(catalogue.BY_KEY)]
 SubjectKind = Literal['paragraph_style', 'character_style', 'text_frame', 'image', 'image_frame', 'font', 'page_item',
                       'document']
-AnyFacts = Union[InheritedFacts, AutoSizeFacts, SizeFacts, MasterPageFacts, BleedFacts, ParagraphStyleFacts,
+AnyFacts = Union[InheritedFacts, AutoSizeFacts, SizeFacts, CountFacts, MasterPageFacts, BleedFacts, ParagraphStyleFacts,
                  OverrideFacts, MissingFontFacts, TransformationFacts]
 
 
@@ -66,8 +66,10 @@ class Issue(Model):
     """The check's facts (its facts model in the catalogue), or null."""
     text: Optional[List[str]]
     """The text it's about, when relevant."""
+    note: Optional[str]
+    """A short note in plain words, e.g. "font and size changed", made from the facts (src/results/notes.py)."""
     detail: Optional[str]
-    """Short display text. Never parse it: facts hold the data."""
+    """Deprecated: the checker's raw message, kept for existing API callers. Use note (words) or facts (data)."""
 
 
 class Page(Model):

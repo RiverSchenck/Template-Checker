@@ -587,6 +587,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Found on the master page: 2 text frames and 1 rectangle",
     "severity": "error",
     "subject": {
      "id": null,
@@ -616,6 +617,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u12e7",
@@ -645,6 +647,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1300",
@@ -674,6 +677,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1319",
@@ -703,6 +707,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1332",
@@ -732,6 +737,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u13fc",
@@ -761,6 +767,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1415",
@@ -790,6 +797,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u142e",
@@ -819,6 +827,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1447",
@@ -848,6 +857,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u148b",
@@ -877,6 +887,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u14a4",
@@ -906,6 +917,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u14bd",
@@ -935,6 +947,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u14d6",
@@ -964,6 +977,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1595",
@@ -993,6 +1007,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u15ae",
@@ -1022,6 +1037,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u15c7",
@@ -1051,6 +1067,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u15e0",
@@ -1080,6 +1097,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1617",
@@ -1109,6 +1127,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1630",
@@ -1138,6 +1157,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1649",
@@ -1167,6 +1187,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1662",
@@ -1196,6 +1217,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u173c",
@@ -1225,6 +1247,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1755",
@@ -1254,6 +1277,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u176e",
@@ -1283,6 +1307,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1787",
@@ -1312,6 +1337,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u17be",
@@ -1341,6 +1367,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u17d7",
@@ -1370,6 +1397,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u17f0",
@@ -1399,6 +1427,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1809",
@@ -1428,6 +1457,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1984",
@@ -1457,6 +1487,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u199d",
@@ -1486,6 +1517,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u19b6",
@@ -1515,6 +1547,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u19cf",
@@ -1544,6 +1577,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u19fd",
@@ -1573,6 +1607,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1a16",
@@ -1602,6 +1637,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1a2f",
@@ -1631,6 +1667,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1a48",
@@ -1660,6 +1697,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1ae9",
@@ -1689,6 +1727,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1b02",
@@ -1718,6 +1757,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1b1b",
@@ -1747,6 +1787,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1b34",
@@ -1776,6 +1817,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1b53",
@@ -1805,6 +1847,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1b6c",
@@ -1834,6 +1877,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1b85",
@@ -1863,6 +1907,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1b9e",
@@ -1892,6 +1937,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1bc7",
@@ -1921,6 +1967,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1be0",
@@ -1950,6 +1997,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1bf9",
@@ -1979,6 +2027,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1c12",
@@ -2008,6 +2057,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1c32",
@@ -2037,6 +2087,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1c4b",
@@ -2066,6 +2117,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1c64",
@@ -2095,6 +2147,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1c7d",
@@ -2117,6 +2170,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1ca3",
@@ -2146,6 +2200,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u42e",
@@ -2175,6 +2230,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u434",
@@ -2204,6 +2260,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u453",
@@ -2233,6 +2290,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u46c",
@@ -2254,6 +2312,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Header Par Style",
@@ -2290,6 +2349,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u12e7",
@@ -2326,6 +2386,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1300",
@@ -2365,6 +2426,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1319",
@@ -2404,6 +2466,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1332",
@@ -2440,6 +2503,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u13fc",
@@ -2476,6 +2540,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1415",
@@ -2515,6 +2580,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u142e",
@@ -2554,6 +2620,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1447",
@@ -2590,6 +2657,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u148b",
@@ -2626,6 +2694,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u14a4",
@@ -2665,6 +2734,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u14bd",
@@ -2704,6 +2774,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u14d6",
@@ -2740,6 +2811,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1595",
@@ -2776,6 +2848,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u15ae",
@@ -2815,6 +2888,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u15c7",
@@ -2854,6 +2928,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u15e0",
@@ -2890,6 +2965,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1617",
@@ -2926,6 +3002,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1630",
@@ -2965,6 +3042,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1649",
@@ -3004,6 +3082,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1662",
@@ -3040,6 +3119,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u173c",
@@ -3076,6 +3156,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1755",
@@ -3115,6 +3196,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u176e",
@@ -3154,6 +3236,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1787",
@@ -3190,6 +3273,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u17be",
@@ -3226,6 +3310,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u17d7",
@@ -3265,6 +3350,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u17f0",
@@ -3304,6 +3390,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1809",
@@ -3340,6 +3427,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1984",
@@ -3376,6 +3464,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u199d",
@@ -3415,6 +3504,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u19b6",
@@ -3454,6 +3544,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u19cf",
@@ -3490,6 +3581,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u19fd",
@@ -3526,6 +3618,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1a16",
@@ -3565,6 +3658,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1a2f",
@@ -3604,6 +3698,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1a48",
@@ -3640,6 +3735,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1ae9",
@@ -3676,6 +3772,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1b02",
@@ -3715,6 +3812,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1b1b",
@@ -3754,6 +3852,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1b34",
@@ -3790,6 +3889,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1b53",
@@ -3826,6 +3926,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1b6c",
@@ -3865,6 +3966,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1b85",
@@ -3904,6 +4006,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1b9e",
@@ -3940,6 +4043,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1bc7",
@@ -3976,6 +4080,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1be0",
@@ -4015,6 +4120,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1bf9",
@@ -4054,6 +4160,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1c12",
@@ -4090,6 +4197,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1c32",
@@ -4126,6 +4234,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1c4b",
@@ -4165,6 +4274,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1c64",
@@ -4204,6 +4314,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u1c7d",
@@ -4230,6 +4341,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u1ca3",
@@ -4266,6 +4378,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u42e",
@@ -4305,6 +4418,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u434",
@@ -4341,6 +4455,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u453",
@@ -4380,6 +4495,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": "font, size and color changed",
     "severity": "warning",
     "subject": {
      "id": "u46c",
@@ -4408,6 +4524,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "pexels-mizuno-k-12903254.png",
@@ -4434,6 +4551,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_1033103851.png",
@@ -4460,6 +4578,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_1151850470.png",
@@ -4486,6 +4605,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_1281259936.png",
@@ -4512,6 +4632,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_1654831870.png",
@@ -4538,6 +4659,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_1660490494.png",
@@ -4564,6 +4686,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_1865153395.png",
@@ -4590,6 +4713,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_1912253137.png",
@@ -4616,6 +4740,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_1935739078.png",
@@ -4642,6 +4767,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_2079591820.png",
@@ -4668,6 +4794,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "shutterstock_2091390667.png",
@@ -4697,6 +4824,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "Arrow_Pattern_CMYK_Gray.ai",
@@ -4726,6 +4854,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "Arrow_Pattern_CMYK_Gray.ai",
@@ -4755,6 +4884,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "Arrow_Pattern_CMYK_Gray.ai",
@@ -4784,6 +4914,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "Arrow_Pattern_CMYK_Gray.ai",
@@ -4813,6 +4944,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "Arrow_Pattern_CMYK_Gray.ai",
@@ -4842,6 +4974,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "Arrow_Pattern_CMYK_Gray.ai",
@@ -4871,6 +5004,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "Arrow_Pattern_CMYK_Gray.ai",
@@ -4882,7 +5016,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -4890,6 +5026,7 @@
      "page_name": "1",
      "spread_id": "ud0"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -4901,7 +5038,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -4909,6 +5048,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -4920,7 +5060,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -4928,6 +5070,7 @@
      "page_name": "3",
      "spread_id": "u194"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -4939,7 +5082,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -4947,6 +5092,7 @@
      "page_name": "4",
      "spread_id": "u1c4"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -4958,7 +5104,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -4966,6 +5114,7 @@
      "page_name": "5",
      "spread_id": "u1f5"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -4977,7 +5126,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -4985,6 +5136,7 @@
      "page_name": "6",
      "spread_id": "u21c"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -4996,7 +5148,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -5004,6 +5158,7 @@
      "page_name": "7",
      "spread_id": "u241"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -5015,7 +5170,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -5023,6 +5180,7 @@
      "page_name": "8",
      "spread_id": "u2b3"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -5034,7 +5192,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -5042,6 +5202,7 @@
      "page_name": "9",
      "spread_id": "u2ee"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -5053,7 +5214,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -5061,6 +5224,7 @@
      "page_name": "10",
      "spread_id": "u32a"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -5072,7 +5236,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -5080,6 +5246,7 @@
      "page_name": "11",
      "spread_id": "u357"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -5091,7 +5258,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -5099,6 +5268,7 @@
      "page_name": "12",
      "spread_id": "u37e"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -5110,7 +5280,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -5118,6 +5290,7 @@
      "page_name": "13",
      "spread_id": "u3a3"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -5129,7 +5302,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "2 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 2
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -5137,6 +5312,7 @@
      "page_name": "14",
      "spread_id": "u3cd"
     },
+    "note": "2 pasted graphics",
     "severity": "error",
     "subject": {
      "id": null,
@@ -5163,6 +5339,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 25 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -5191,6 +5368,7 @@
      "page_name": "2",
      "spread_id": "u162"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",
@@ -5212,6 +5390,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Header Par Style",

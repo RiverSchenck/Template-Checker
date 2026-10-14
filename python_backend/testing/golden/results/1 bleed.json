@@ -582,6 +582,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Public Sans",
@@ -608,6 +609,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ECU-AUS-Logo_CMYK.pdf",
@@ -634,6 +636,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 1 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -662,6 +665,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 3",
@@ -690,6 +694,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 1",
@@ -718,6 +723,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 2",

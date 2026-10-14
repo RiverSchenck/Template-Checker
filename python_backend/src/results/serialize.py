@@ -2,13 +2,13 @@
 
 results_v2 writes results v2 (plan §4.3; the contract is src/results/models.py):
 
-    {schema_version: 2, template_name, issues: [{check, severity, subject, location, facts, text, detail}],
+    {schema_version: 2, template_name, issues: [{check, severity, subject, location, facts, text, note, detail}],
      subjects_checked, pages, text_boxes, checks}
 """
 from typing import Dict, List, Optional
 
 from src.model.document import Document
-from src.results import catalogue
+from src.results import catalogue, notes
 from src.results.catalogue import Entry
 from src.results.issue import Issue
 from src.results.results import Results
@@ -65,6 +65,7 @@ def _issue(issue: Issue, where: _Where) -> dict:
                      'bounds': where.bounds(issue.data_id)},
         'facts': issue.context_details,
         'text': issue.text_content if entry.shows_text and issue.text_content else None,
+        'note': notes.note(entry.key, issue.context_details),
         'detail': issue.context or None,
     }
 

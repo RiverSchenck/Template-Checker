@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u11e",
@@ -612,6 +613,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "uf0",
@@ -638,6 +640,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u107",
@@ -664,6 +667,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u11e",
@@ -692,6 +696,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

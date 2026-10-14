@@ -583,6 +583,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Found on the master page: 1 rectangle",
     "severity": "error",
     "subject": {
      "id": null,
@@ -612,6 +613,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u17f",
@@ -640,6 +642,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 2",
@@ -673,6 +676,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u1b9",
@@ -701,6 +705,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Performance.png",
@@ -727,6 +732,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 0.7 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -753,6 +759,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u19f",
@@ -779,6 +786,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1b9",
@@ -805,6 +813,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 2",
@@ -833,6 +842,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",
@@ -861,6 +871,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Paragraph Style 2",

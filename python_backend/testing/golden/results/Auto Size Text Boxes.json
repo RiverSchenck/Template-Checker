@@ -583,6 +583,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Found on the master page: 1 text frame",
     "severity": "error",
     "subject": {
      "id": null,
@@ -612,6 +613,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u151",
@@ -641,6 +643,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u168",
@@ -670,6 +673,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u16e",
@@ -689,6 +693,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "udc",
@@ -721,6 +726,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u151",
@@ -755,6 +761,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u168",
@@ -789,6 +796,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u16e",
@@ -815,6 +823,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "udc",

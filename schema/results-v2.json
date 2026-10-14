@@ -263,6 +263,20 @@
       "title": "Check",
       "type": "object"
     },
+    "CountFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "title": "Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "count"
+      ],
+      "title": "CountFacts",
+      "type": "object"
+    },
     "InheritedFacts": {
       "additionalProperties": false,
       "description": "A style setting that comes from a style it's based on.",
@@ -349,6 +363,9 @@
               "$ref": "#/$defs/SizeFacts"
             },
             {
+              "$ref": "#/$defs/CountFacts"
+            },
+            {
               "$ref": "#/$defs/MasterPageFacts"
             },
             {
@@ -388,6 +405,18 @@
           "description": "The text it's about, when relevant.",
           "title": "Text"
         },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "A short note in plain words, e.g. \"font and size changed\", made from the facts (src/results/notes.py).",
+          "title": "Note"
+        },
         "detail": {
           "anyOf": [
             {
@@ -397,7 +426,7 @@
               "type": "null"
             }
           ],
-          "description": "Short display text. Never parse it: facts hold the data.",
+          "description": "Deprecated: the checker's raw message, kept for existing API callers. Use note (words) or facts (data).",
           "title": "Detail"
         }
       },
@@ -408,6 +437,7 @@
         "location",
         "facts",
         "text",
+        "note",
         "detail"
       ],
       "title": "Issue",

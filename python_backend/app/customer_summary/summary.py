@@ -6,8 +6,9 @@ POST /summary returns the same message for integrations such as Intercom.
 import math
 import re
 from dataclasses import dataclass, field
-from decimal import ROUND_HALF_UP, Decimal
 from typing import Optional
+
+from src.results.notes import WIDTH_AUTO_SIZE, bleed_note, list_text, master_page_note, overrides_note, plural
 
 from .report import Place, Problem, Subject, build_problems, format_pages, unique
 
@@ -18,43 +19,22 @@ def _shorten(text: str, max_length: int = 32) -> str:
     return f'{text[:max_length].rstrip()}…' if len(text) > max_length else text
 
 
-def _plural(n: int, word: str) -> str:
-    return f"{n} {word}{'' if n == 1 else 's'}"
-
-
 def _pages_text(pages: list[str]) -> str:
     return f"{'page' if len(pages) == 1 else 'pages'} {format_pages(pages)}"
-
-
-def _list_text(items: list[str]) -> str:
-    return ''.join(items) if len(items) <= 1 else f"{', '.join(items[:-1])} and {items[-1]}"
 
 
 def _first_sentence(text: str) -> str:
     return re.split(r'(?<=[.!?])\s+', text)[0].strip()
 
 
-def _round_half_up(value: float, places: int = 0) -> str:
-    """'89.5' -> '90', '0.35' -> '0.4', '3.0' -> '3': halves round up, trailing zeros dropped."""
-    rounded = Decimal(str(value)).quantize(Decimal(1).scaleb(-places), rounding=ROUND_HALF_UP)
-    text = f'{rounded:f}'
-    if '.' in text:
-        text = text.rstrip('0').rstrip('.')
-    return '0' if text in ('-0', '') else text
-
-
 # ------------------------------------------------------------------ Details from the checker, in customer words
-
-# Auto-size types Frontify always treats as "No Line Breaks" (src/checks/layout.py auto_size_text_box_check).
-_WIDTH_AUTO_SIZE = ('WidthOnly', 'HeightAndWidth')
-
 
 def _place_detail(problem: Problem, place: Place) -> Optional[str]:
     """A short note about one place, e.g. "turn on No Line Breaks" or "15.25 MB", from the facts the check recorded.
     Raw checker values (skew factors, link ids) are left out."""
     facts = place.context_details or {}
     if problem.key == 'AUTO_SIZE_TEXT_BOX' and place.context:
-        if facts.get('auto_size') in _WIDTH_AUTO_SIZE:
+        if facts.get('auto_size') in WIDTH_AUTO_SIZE:
             return 'turn on No Line Breaks'
         return place.context.removesuffix('.')
     if problem.key == 'LARGE_IMAGE' and facts.get('size_mb') is not None:
@@ -62,43 +42,12 @@ def _place_detail(problem: Problem, place: Place) -> Optional[str]:
     return None
 
 
-# Overridden properties customers would recognise, in the order InDesign shows them. Others (e.g. MiterLimit) are
-# left out.
-_OVERRIDE_NAMES = {
-    'AppliedFont': 'font',
-    'FontStyle': 'font',
-    'PointSize': 'size',
-    'Leading': 'leading',
-    'Tracking': 'tracking',
-    'Capitalization': 'capitalization',
-    'FillColor': 'color',
-}
-
-
 def _places_details(problem: Problem, places: list[Place]) -> list[str]:
     """Notes about one frame, style or image: its place details, or for overrides which formatting was changed."""
     if problem.key == 'OVERRIDE':
-        changed = {k for p in places for k in ((p.context_details or {}).get('overrides') or {})}
-        names = unique(name for k, name in _OVERRIDE_NAMES.items() if k in changed)
-        if not names:
-            return []
-        listed = f"{', '.join(names[:3])} and more" if len(names) > 3 else _list_text(names)
-        return [f'{listed} changed']
+        changed = overrides_note(k for p in places for k in ((p.context_details or {}).get('overrides') or {}))
+        return [changed] if changed else []
     return unique(_place_detail(problem, p) for p in places)
-
-
-_ELEMENT_NAMES = {
-    'TextFrame': 'text frame',
-    'Rectangle': 'rectangle',
-    'Oval': 'oval',
-    'Polygon': 'polygon',
-    'GraphicLine': 'line',
-    'Group': 'group',
-}
-
-
-def _pt_to_mm(pt: float) -> str:
-    return f'{_round_half_up(pt * 25.4 / 72, 1)} mm'
 
 
 def _problem_notes(problem: Problem) -> list[str]:
@@ -108,16 +57,11 @@ def _problem_notes(problem: Problem) -> list[str]:
         counts: dict[str, int] = {}
         for element in (e for f in facts for e in f.get('elements') or ()):
             counts[element['kind']] = counts.get(element['kind'], 0) + element['count']
-        items = [_plural(n, _ELEMENT_NAMES.get(e, e.lower())) for e, n in counts.items()]
-        return [f'Found on the master page: {_list_text(items)}'] if items else []
+        found = master_page_note(counts)
+        return [found] if found else []
     if problem.key == 'DOCUMENT_BLEED':
-        bleed = next((f['bleed'] for f in facts if f.get('bleed')), {})
-        sides = [(side, _pt_to_mm(pt)) for side, pt in bleed.items() if pt is not None]
-        if not sides:
-            return []
-        sizes = unique(size for _, size in sides)
-        described = f'{sizes[0]} on all sides' if len(sizes) == 1 else ', '.join(f'{side} {size}' for side, size in sides)
-        return [f'Current bleed: {described}']
+        current = bleed_note(next((f['bleed'] for f in facts if f.get('bleed')), {}))
+        return [current] if current else []
     if problem.key == 'PARAGRAPH_STYLE' and any(f.get('whitespace_only') for f in facts):
         return ['Tip: some of this is only spaces or empty lines after the text. Delete them, or give them a style too.']
     return []
@@ -189,7 +133,7 @@ def _frames_where(problem: Problem, subjects: list[Subject]) -> str:
 
     if not entries:
         pages = f' on {_pages_text(list(unnamed_pages))}' if unnamed_pages else ''
-        return f'a {word}{pages}' if unnamed_count == 1 else f'{_plural(unnamed_count, word)}{pages}'
+        return f'a {word}{pages}' if unnamed_count == 1 else f'{plural(unnamed_count, word)}{pages}'
     lead = f'the {word}' if len(entries) + unnamed_count == 1 else f'{word}s'
     text = f"{lead} {', '.join(names)}"
     more = hidden + unnamed_count
@@ -208,7 +152,7 @@ def _named_where(problem: Problem, kind: str, subjects: list[Subject]) -> str:
         names.append(f'“{name}”{suffix}')
     shown = names[:MAX_LISTED]
     hidden = len(names) - len(shown)
-    listed = f"{', '.join(shown)} and {hidden} more" if hidden else _list_text(shown)
+    listed = f"{', '.join(shown)} and {hidden} more" if hidden else list_text(shown)
     is_style = kind in ('paragraph-style', 'character-style')
     pages = unique(p.page_name for s in subjects for p in s.places) if is_style else []
     used = f', used on {_pages_text([p for p in problem.page_names if p in pages])}' if pages else ''

@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "ue2"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u1f7",
@@ -615,6 +616,7 @@
      "page_name": "1",
      "spread_id": "ue2"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u218",
@@ -644,6 +646,7 @@
      "page_name": "1",
      "spread_id": "ue2"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u22f",
@@ -673,6 +676,7 @@
      "page_name": "1",
      "spread_id": "ue2"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u28d",
@@ -702,6 +706,7 @@
      "page_name": "2",
      "spread_id": "u18d"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u2c5",
@@ -731,6 +736,7 @@
      "page_name": "2",
      "spread_id": "u18d"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u311",
@@ -760,6 +766,7 @@
      "page_name": "2",
      "spread_id": "u18d"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u332",
@@ -789,6 +796,7 @@
      "page_name": "6",
      "spread_id": "u413"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u433",
@@ -818,6 +826,7 @@
      "page_name": "8",
      "spread_id": "u451"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u457",
@@ -859,6 +868,7 @@
      "page_name": "1",
      "spread_id": "ue2"
     },
+    "note": "font, size, leading and more changed",
     "severity": "warning",
     "subject": {
      "id": "u1f7",
@@ -899,6 +909,7 @@
      "page_name": "1",
      "spread_id": "ue2"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u218",
@@ -939,6 +950,7 @@
      "page_name": "1",
      "spread_id": "ue2"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u22f",
@@ -979,6 +991,7 @@
      "page_name": "1",
      "spread_id": "ue2"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u28d",
@@ -1019,6 +1032,7 @@
      "page_name": "2",
      "spread_id": "u18d"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u2c5",
@@ -1060,6 +1074,7 @@
      "page_name": "2",
      "spread_id": "u18d"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u2c5",
@@ -1101,6 +1116,7 @@
      "page_name": "2",
      "spread_id": "u18d"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u2c5",
@@ -1142,6 +1158,7 @@
      "page_name": "2",
      "spread_id": "u18d"
     },
+    "note": "font, size, tracking and more changed",
     "severity": "warning",
     "subject": {
      "id": "u311",
@@ -1182,6 +1199,7 @@
      "page_name": "2",
      "spread_id": "u18d"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u332",
@@ -1223,6 +1241,7 @@
      "page_name": "6",
      "spread_id": "u413"
     },
+    "note": "font, size, tracking and more changed",
     "severity": "warning",
     "subject": {
      "id": "u433",
@@ -1263,6 +1282,7 @@
      "page_name": "8",
      "spread_id": "u451"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u457",
@@ -1304,6 +1324,7 @@
      "page_name": "8",
      "spread_id": "u451"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u457",
@@ -1344,6 +1365,7 @@
      "page_name": "8",
      "spread_id": "u451"
     },
+    "note": "font, size and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u457",
@@ -1370,6 +1392,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Minion Pro",
@@ -1396,6 +1419,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 3 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -1424,6 +1448,7 @@
      "page_name": "1",
      "spread_id": "ue2"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

@@ -68,6 +68,7 @@ export interface Issue {
     | InheritedFacts
     | AutoSizeFacts
     | SizeFacts
+    | CountFacts
     | MasterPageFacts
     | BleedFacts
     | ParagraphStyleFacts
@@ -80,7 +81,11 @@ export interface Issue {
    */
   text: string[] | null;
   /**
-   * Short display text. Never parse it: facts hold the data.
+   * A short note in plain words, e.g. "font and size changed", made from the facts (src/results/notes.py).
+   */
+  note: string | null;
+  /**
+   * Deprecated: the checker's raw message, kept for existing API callers. Use note (words) or facts (data).
    */
   detail: string | null;
 }
@@ -137,6 +142,9 @@ export interface AutoSizeFacts {
 }
 export interface SizeFacts {
   size_mb: number;
+}
+export interface CountFacts {
+  count: number;
 }
 export interface MasterPageFacts {
   /**

@@ -581,6 +581,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Regular missing",
     "severity": "error",
     "subject": {
      "id": "Playfair Display",

@@ -45,7 +45,7 @@ def pasted_graphics_check(doc: Document, results: Results) -> None:
         count = pasted.count(spread)
         if count > 0:
             report(results, 'PASTED_GRAPHICS', f"{count} pasted graphics found.",
-                   page_id=first_page_id(spread))
+                   page_id=first_page_id(spread), context_details={'count': count})
 
 
 def _points(value):

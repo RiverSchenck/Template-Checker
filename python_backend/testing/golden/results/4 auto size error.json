@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u124",
@@ -615,6 +616,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u128",
@@ -644,6 +646,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u13f",
@@ -673,6 +676,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "uf6",
@@ -702,6 +706,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u10d",
@@ -731,6 +736,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "uf6",
@@ -760,6 +766,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "turn on No Line Breaks",
     "severity": "error",
     "subject": {
      "id": "u10d",
@@ -789,6 +796,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "turn on No Line Breaks",
     "severity": "error",
     "subject": {
      "id": "u124",
@@ -817,6 +825,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

@@ -585,6 +585,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangementen",
@@ -615,6 +616,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangement",
@@ -645,6 +647,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/prijs",
@@ -675,6 +678,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement goud",
@@ -705,6 +709,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement wit",
@@ -735,6 +740,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangement",
@@ -765,6 +771,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/prijs",
@@ -795,6 +802,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement goud",
@@ -825,6 +833,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement wit",
@@ -855,6 +864,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangement",
@@ -885,6 +895,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/prijs",
@@ -915,6 +926,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement goud",
@@ -945,6 +957,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement wit",
@@ -975,6 +988,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop wit",
@@ -1005,6 +1019,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop wit",
@@ -1035,6 +1050,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop goud",
@@ -1065,6 +1081,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop goud",
@@ -1095,6 +1112,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop goud",
@@ -1125,6 +1143,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/intro Harbour Club",
@@ -1153,6 +1172,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Body Harbour Club",
@@ -1181,6 +1201,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangementen",
@@ -1209,6 +1230,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Arrangement",
@@ -1237,6 +1259,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/prijs",
@@ -1265,6 +1288,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement goud",
@@ -1293,6 +1317,7 @@
      "page_name": "2",
      "spread_id": "u1936"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body arrangement wit",
@@ -1321,6 +1346,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop wit",
@@ -1349,6 +1375,7 @@
      "page_name": "1",
      "spread_id": "u2210"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/kop goud",

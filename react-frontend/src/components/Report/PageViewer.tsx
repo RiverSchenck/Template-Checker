@@ -210,7 +210,7 @@ function PageViewer({
                 {selectedMarker.place.frameText ?? selectedMarker.place.frameLabel}
               </span>
               <span className="block truncate text-xs text-muted-foreground">
-                {[selectedMarker.problem.guide.title, selectedMarker.place.context].filter(Boolean).join(' · ')}
+                {[selectedMarker.problem.guide.title, selectedMarker.place.note].filter(Boolean).join(' · ')}
               </span>
             </span>
             {selectedOffPage && (

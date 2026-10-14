@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "uea",
@@ -615,6 +616,7 @@
      "page_name": "2",
      "spread_id": "ued"
     },
+    "note": "flipped",
     "severity": "error",
     "subject": {
      "id": "uf3",

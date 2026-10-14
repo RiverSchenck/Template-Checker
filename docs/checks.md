@@ -178,6 +178,8 @@ Graphics pasted straight into InDesign aren’t linked files, so Frontify can’
 
 - Save the graphic as a file (for example SVG, PDF or PNG), delete the pasted version and place the file with File > Place.
 
+**Facts:** `count`.
+
 [Help article](https://help.frontify.com/en/articles/3768754-prepare-indesign-documents-for-templates#h_889cff064d)
 
 ### Auto-size text frame set up incorrectly

@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u154",
@@ -615,6 +616,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u42a",
@@ -634,6 +636,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Futura copy.ttc",
@@ -653,6 +656,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "music.svg",
@@ -681,6 +685,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "15.25 MB",
     "severity": "info",
     "subject": {
      "id": "iStock-1226023798.jpg",
@@ -707,6 +712,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "album.png",
@@ -736,6 +742,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "skewed",
     "severity": "error",
     "subject": {
      "id": "u3e4",
@@ -747,7 +754,9 @@
    {
     "check": "PASTED_GRAPHICS",
     "detail": "1 pasted graphics found.",
-    "facts": null,
+    "facts": {
+     "count": 1
+    },
     "location": {
      "bounds": null,
      "item_id": null,
@@ -755,6 +764,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "1 pasted graphic",
     "severity": "error",
     "subject": {
      "id": null,
@@ -781,6 +791,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 1 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -807,6 +818,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u42a",
@@ -833,6 +845,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u16d",
@@ -859,6 +872,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u40f",
@@ -887,6 +901,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

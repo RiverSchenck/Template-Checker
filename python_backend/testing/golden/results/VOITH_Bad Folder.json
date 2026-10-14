@@ -583,6 +583,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Found on the master page: 1 rectangle",
     "severity": "error",
     "subject": {
      "id": null,
@@ -612,6 +613,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u12c",
@@ -638,6 +640,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "info",
     "subject": {
      "id": "u21c",
@@ -666,6 +669,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -696,6 +700,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -726,6 +731,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -756,6 +762,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -784,6 +791,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -812,6 +820,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -840,6 +849,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -868,6 +878,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -896,6 +907,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -924,6 +936,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -952,6 +965,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -980,6 +994,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1008,6 +1023,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1036,6 +1052,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1064,6 +1081,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1092,6 +1110,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1123,6 +1142,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u179",
@@ -1156,6 +1176,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": "size changed",
     "severity": "warning",
     "subject": {
      "id": "u179",
@@ -1182,6 +1203,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "MdFago",
@@ -1201,6 +1223,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Montserrat",
@@ -1227,6 +1250,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Sharing Collections.png",
@@ -1256,6 +1280,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": "skewed",
     "severity": "error",
     "subject": {
      "id": "Voith_logotype_SC.eps",
@@ -1282,6 +1307,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u21c",
@@ -1308,6 +1334,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u142",
@@ -1334,6 +1361,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Voith_logotype_SC.eps",
@@ -1360,6 +1388,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ParagraphStyle/Name",
@@ -1388,6 +1417,7 @@
      "page_name": "1",
      "spread_id": "ufb"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Name",

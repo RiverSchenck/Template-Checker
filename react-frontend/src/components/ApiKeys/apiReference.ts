@@ -234,6 +234,7 @@ export const ENDPOINTS: EndpointDoc[] = [
               location: { page_id: null, page_name: null, spread_id: null, item_id: null, bounds: null },
               facts: { missing_styles: ['Bold'], whole_family: false },
               text: null,
+              note: 'Bold missing',
               detail: 'Missing styles: Bold',
             },
           ],
@@ -261,7 +262,7 @@ export const ENDPOINTS: EndpointDoc[] = [
             name: 'issues',
             type: 'array',
             description:
-              'Every issue, in the order found: `check`, `severity` (`error`, `warning` or `info`), `subject` (what to fix: `kind`, `id`, `name`), `location` (page, item and its position), `facts` (the check’s structured data) and `detail` (display text; don’t parse it).',
+              'Every issue, in the order found: `check`, `severity` (`error`, `warning` or `info`), `subject` (what to fix: `kind`, `id`, `name`), `location` (page, item and its position), `facts` (the check’s structured data), `note` (a short note in plain words to show, or null) and `detail` (deprecated: use `note` or `facts`).',
           },
           {
             name: 'checks',

@@ -583,6 +583,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Found on the master page: 6 groups",
     "severity": "error",
     "subject": {
      "id": null,
@@ -615,6 +616,7 @@
      "page_name": "1",
      "spread_id": "u236"
     },
+    "note": "size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u288",
@@ -649,6 +651,7 @@
      "page_name": "1",
      "spread_id": "u236"
     },
+    "note": "size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u29e",
@@ -683,6 +686,7 @@
      "page_name": "1",
      "spread_id": "u236"
     },
+    "note": "size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u29e",
@@ -711,6 +715,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "Current bleed: 3.2 mm on all sides",
     "severity": "warning",
     "subject": {
      "id": null,
@@ -737,6 +742,7 @@
      "page_name": "1",
      "spread_id": "u236"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u25a",
@@ -763,6 +769,7 @@
      "page_name": "1",
      "spread_id": "u236"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "frontify_10999_ub16b.eps",
@@ -791,6 +798,7 @@
      "page_name": "1",
      "spread_id": "u236"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/legal%3alegal 5/6.5",
@@ -819,6 +827,7 @@
      "page_name": "1",
      "spread_id": "u236"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/body copy%3abody text",
@@ -847,6 +856,7 @@
      "page_name": "1",
      "spread_id": "u236"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Headlines%3aHeadlines 30/28",

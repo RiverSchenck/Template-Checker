@@ -81,7 +81,8 @@ export type Place = {
   /** Text inside the frame, when it has any. */
   frameText?: string;
   frameLabel: string;
-  context: string;
+  /** Short note in plain words from the checker, e.g. "font and size changed". */
+  note: string | null;
   facts: Issue['facts'];
 };
 
@@ -222,7 +223,7 @@ export function buildReport({ results }: CheckResult): Report {
       pageName: pageId ? pageIndex.get(pageId)?.name || location.page_name || undefined : undefined,
       frameText: frameText(issue, results),
       frameLabel: frameLabel(bounds, issue.subject.kind),
-      context: issue.detail ?? '',
+      note: issue.note,
       facts: issue.facts,
     };
 
@@ -410,4 +411,9 @@ export function compareReports(previous: Report, current: Report): ReportCompari
     }
   });
   return comparison;
+}
+
+/** The distinct notes of some places, joined: what to show next to a frame, style or the whole document. */
+export function placesNote(places: Place[]): string {
+  return Array.from(new Set(places.map((p) => p.note).filter(Boolean))).join(' · ');
 }

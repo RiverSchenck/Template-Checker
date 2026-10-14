@@ -116,13 +116,15 @@ or `rejected` when the package couldn't be checked (the reason is in `results`; 
 `results` is results v2; its JSON Schema is [`schema/results-v2.json`](../schema/results-v2.json):
 
 - `schema_version`: `2`.
-- `issues`: every issue, in the order found: `{check, severity, subject, location, facts, text, detail}`.
+- `issues`: every issue, in the order found: `{check, severity, subject, location, facts, text, note, detail}`.
   - `check` is a key from `checks`; `severity` is `error`, `warning` or `info`.
   - `subject` is what to fix: `{kind, id, name}`, where `kind` is `paragraph_style`, `character_style`, `text_frame`,
     `image`, `image_frame`, `font`, `page_item` or `document`.
   - `location` is where it is: `{page_id, page_name, spread_id, item_id, bounds}`, any of them `null`.
-  - `facts` holds the check's structured data (e.g. `{size_mb}` for a large image). `detail` is short display text:
-    show it, don't parse it.
+  - `facts` holds the check's structured data (e.g. `{size_mb}` for a large image).
+  - `note` is a short note in plain words, e.g. `font and size changed` or `Current bleed: 3 mm on all sides`, or
+    `null` when there's nothing to add. Show it, don't parse it.
+  - `detail` is deprecated: the checker's raw message, kept for existing integrations. Use `note` or `facts`.
 - `checks`: every check, with its wording: `{key, severity, subject_kinds, title, why, fix, help_article, is_check}`.
   `fix` lists the steps in InDesign per subject kind. `is_check` is false for package and parsing failures.
 - `pages`: the pages in document order, with size (points), `preview` and frame outlines.

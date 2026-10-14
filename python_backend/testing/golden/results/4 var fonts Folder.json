@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u112",
@@ -615,6 +616,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "uf5",
@@ -644,6 +646,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ufa",
@@ -677,6 +680,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "font and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u112",
@@ -712,6 +716,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "font and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u112",
@@ -747,6 +752,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "font and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u112",
@@ -782,6 +788,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "uf5",
@@ -817,6 +824,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "font and size changed",
     "severity": "warning",
     "subject": {
      "id": "ufa",
@@ -843,6 +851,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Minion Pro",
@@ -862,6 +871,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Aleo",
@@ -881,6 +891,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Varta",
@@ -900,6 +911,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Cabin",
@@ -919,6 +931,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "Alexandria",
@@ -945,6 +958,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "ECU-AUS-Logo_CMYK.pdf",
@@ -973,6 +987,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",

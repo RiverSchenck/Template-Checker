@@ -585,6 +585,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "55.59 MB",
     "severity": "info",
     "subject": {
      "id": "PHONE_SHAPE.psd",
@@ -613,6 +614,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": "37.45 MB",
     "severity": "info",
     "subject": {
      "id": "Screen2.psd",
@@ -641,6 +643,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/SLOGAN 1 - BIG TX",
@@ -669,6 +672,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/SLOGAN 1 - BODY TX",
@@ -697,6 +701,7 @@
      "page_name": "1",
      "spread_id": "uce"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/SLOGAN 1 - CTA",

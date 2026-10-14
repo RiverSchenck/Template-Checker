@@ -586,6 +586,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u3dd",
@@ -615,6 +616,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "only spaces or empty lines",
     "severity": "error",
     "subject": {
      "id": "u3f4",
@@ -644,6 +646,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u423",
@@ -673,6 +676,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "only spaces or empty lines",
     "severity": "error",
     "subject": {
      "id": "u47d",
@@ -702,6 +706,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u594",
@@ -731,6 +736,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "error",
     "subject": {
      "id": "u5ce",
@@ -760,6 +766,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "only spaces or empty lines",
     "severity": "error",
     "subject": {
      "id": "ud61",
@@ -788,6 +795,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Title",
@@ -818,6 +826,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -848,6 +857,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Title",
@@ -878,6 +888,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -908,6 +919,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Title",
@@ -938,6 +950,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -968,6 +981,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Title",
@@ -998,6 +1012,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1028,6 +1043,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Title",
@@ -1058,6 +1074,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1088,6 +1105,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Title",
@@ -1118,6 +1136,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1148,6 +1167,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Title",
@@ -1178,6 +1198,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1208,6 +1229,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Title",
@@ -1238,6 +1260,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
@@ -1278,6 +1301,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u3dd",
@@ -1313,6 +1337,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u3f4",
@@ -1353,6 +1378,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "font and tracking changed",
     "severity": "warning",
     "subject": {
      "id": "u423",
@@ -1388,6 +1414,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u47d",
@@ -1421,6 +1448,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "font changed",
     "severity": "warning",
     "subject": {
      "id": "u4df",
@@ -1454,6 +1482,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "font changed",
     "severity": "warning",
     "subject": {
      "id": "u4f6",
@@ -1489,6 +1518,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u594",
@@ -1524,6 +1554,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "u5ce",
@@ -1560,6 +1591,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": "font, size and leading changed",
     "severity": "warning",
     "subject": {
      "id": "ud61",
@@ -1586,6 +1618,7 @@
      "page_name": null,
      "spread_id": null
     },
+    "note": "whole family missing",
     "severity": "error",
     "subject": {
      "id": "Minion Pro",
@@ -1614,6 +1647,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/$ID/NormalParagraphStyle",
@@ -1642,6 +1676,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Title",
@@ -1670,6 +1705,7 @@
      "page_name": "1",
      "spread_id": "u3d7"
     },
+    "note": null,
     "severity": "warning",
     "subject": {
      "id": "ParagraphStyle/Text",
