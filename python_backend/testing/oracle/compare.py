@@ -2,7 +2,7 @@
 import functools
 from typing import Dict
 
-from testing.golden.golden import TESTING_DIR, load
+from testing.golden.golden import load, package_path
 from testing.oracle import idml_oracle as oracle
 
 STYLE_PREFIXES = ('ParagraphStyle/$ID/', 'ParagraphStyle/', 'CharacterStyle/$ID/', 'CharacterStyle/')
@@ -57,7 +57,7 @@ CHECKS: Dict[str, tuple] = {
 
 @functools.lru_cache(maxsize=None)
 def _idml(package: str):
-    return oracle.Idml.from_package(f'{TESTING_DIR}/{package}')
+    return oracle.Idml.from_package(package_path(package))
 
 
 def compare(package: str, check: str):

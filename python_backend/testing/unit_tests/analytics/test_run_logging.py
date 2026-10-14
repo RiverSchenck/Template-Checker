@@ -10,7 +10,7 @@ from src.checks import CHECKS, Check
 from src.checks.stages import States
 from src.pipeline.workspace import run_workspace
 
-PASS_ZIP = os.path.join(os.path.dirname(__file__), '..', 'par_check', 'pass_data', 'Blank.zip')
+PASS_ZIP = os.path.join(os.path.dirname(__file__), '..', '..', 'packages', 'Blank.zip')
 
 
 @pytest.fixture

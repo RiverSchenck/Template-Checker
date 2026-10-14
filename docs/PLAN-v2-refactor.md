@@ -450,6 +450,12 @@ are gone (`results_v2` reads the Document and the previews). Goldens, summaries 
 
 **PR 6.2 Corpus dedupe (S).** Move unique zips to `testing/packages/` (77 duplicates removed, ~400 MB working tree,
 ~40% golden time); goldens keyed by package; update references. Golden diff: file moves only.
+*Done (2026-10-13):* 187 zips -> 110 in `testing/packages/` (77 byte-identical copies removed; 1.5 GB -> 1.1 GB);
+a name shared by different contents gets a short content hash (`The Harbour club [713646].zip`), and the content
+saved as both `1 large image.zip` and a SEMCO name keeps `1 large image.zip` (River). Goldens and summaries are keyed
+by package name (110 each); `expected.py` rows of one content merged (a package can be in both tables). Every new
+golden equals the old ones of its content, except `template_name` for the 18 renamed copies. The unused unpacked
+Employer Brand package folder is gone. `projection --base` needs a ref from after this PR.
 
 ---
 

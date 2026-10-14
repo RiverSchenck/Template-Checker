@@ -16,7 +16,7 @@ from app.utils import CheckFailed
 from run import app as flask_app
 
 TESTING_DIR = os.path.join(os.path.dirname(__file__), '..', '..')
-PACKAGE = 'end_to_end_tests/fail_data/Brochure_Bad'
+PACKAGE = 'Brochure_Bad'
 USER_ROW = {'id': 'user-1', 'email': 'approved@example.com'}
 AUTH = {'Authorization': 'Bearer valid-approved@example.com'}
 
@@ -40,7 +40,7 @@ def client(monkeypatch):
 
 
 def _package_bytes(package=PACKAGE):
-    with open(os.path.join(TESTING_DIR, package + '.zip'), 'rb') as f:
+    with open(os.path.join(TESTING_DIR, 'packages', package + '.zip'), 'rb') as f:
         return f.read()
 
 

@@ -21,13 +21,17 @@ from src.pipeline.workspace import run_workspace
 
 BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TESTING_DIR = os.path.join(BACKEND_DIR, 'testing')
+PACKAGES_DIR = os.path.join(TESTING_DIR, 'packages')
 RESULTS_DIR = os.path.join(TESTING_DIR, 'golden', 'results')
 
 
 def packages():
-    """Every test package, as paths relative to testing/ (stable ids for parametrize and file names)."""
-    paths = glob.glob(os.path.join(TESTING_DIR, '**', '*.zip'), recursive=True)
-    return sorted(os.path.relpath(p, TESTING_DIR) for p in paths)
+    """Every test package, by file name (testing/packages/; stable ids for parametrize and file names)."""
+    return sorted(os.path.basename(p) for p in glob.glob(os.path.join(PACKAGES_DIR, '*.zip')))
+
+
+def package_path(package: str) -> str:
+    return os.path.join(PACKAGES_DIR, package)
 
 
 def golden_path(package: str) -> str:
@@ -56,7 +60,7 @@ def _fingerprint(text: str) -> str:
 def run(package: str) -> dict:
     """The checker's results for one package, minus anything that varies between runs."""
     with run_workspace() as workspace, contextlib.redirect_stdout(io.StringIO()):
-        outcome = run_package(os.path.join(TESTING_DIR, package), workspace)
+        outcome = run_package(package_path(package), workspace)
     return {'stopped_at': outcome.stage.name, 'results': _canonical(outcome.json())}
 
 

@@ -16,7 +16,7 @@ from src.pipeline.run import StageTracker, run
 from src.pipeline.workspace import run_workspace
 
 TESTING_DIR = os.path.join(os.path.dirname(__file__), '..', '..')
-BLANK = os.path.join(TESTING_DIR, 'end_to_end_tests', 'pass_data', 'Blank.zip')  # one page, with a preview
+BLANK = os.path.join(TESTING_DIR, 'packages', 'Blank.zip')  # one page, with a preview
 
 
 def without_previews(results: dict) -> dict:

@@ -13,14 +13,14 @@ import { fileURLToPath } from 'node:url';
 const GOLDEN = fileURLToPath(new URL('../../python_backend/testing/golden/', import.meta.url));
 const OUT = fileURLToPath(new URL('../src/fixtures/', import.meta.url));
 
-/** Fixture name -> golden package (relative to testing/, without .json). */
+/** Fixture name -> golden package (its name in python_backend/testing/packages/, without .zip). */
 export const PACKAGES = {
-  'flyer-sales': 'end_to_end_tests/fail_data/Flyer-Sales_Bad',
-  brochure: 'end_to_end_tests/fail_data/Brochure_Bad',
-  'object-styles': 'unit_tests/object_style_check/fail_data/4 obj style',
-  transformations: 'unit_tests/image_transformation_check/fail_data/3 err 2 warn transformation',
-  'fact-sheet': 'end_to_end_tests/fail_data/Fact-Sheet-Images_Bad',
-  clean: 'end_to_end_tests/pass_data/Brochure_Good',
+  'flyer-sales': 'Flyer-Sales_Bad',
+  brochure: 'Brochure_Bad',
+  'object-styles': '4 obj style',
+  transformations: '3 err 2 warn transformation',
+  'fact-sheet': 'Fact-Sheet-Images_Bad',
+  clean: 'Brochure_Good',
 };
 
 const SEVERITY_COUNTS = { errors: 'blockers', warnings: 'warnings', infos: 'infos' };
