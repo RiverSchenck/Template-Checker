@@ -1,4 +1,4 @@
-"""Story content the checker used to miss (B1-B4 in docs/PLAN-v2-refactor.md). B1, B2 and B4 were fixed in PR 2.3, B3
+"""Story content the checker used to miss (B1-B4 in docs/archive/PLAN-v2-refactor.md). B1, B2 and B4 were fixed in PR 2.3, B3
 (objects placed in text) in PR 2.4.
 
 Each case builds the same content twice: placed plainly (the control, which passes today) and nested the way

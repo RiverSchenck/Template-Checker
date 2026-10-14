@@ -1,4 +1,4 @@
--- Migration: analytics on results v2 (docs/PLAN-v2-refactor.md PR 5.4, decision D4), step 2 of 2.
+-- Migration: analytics on results v2 (docs/archive/PLAN-v2-refactor.md PR 5.4, decision D4), step 2 of 2.
 --
 -- Run AFTER the backend that writes results v2 keys is deployed (011_results_v2.sql ran before it).
 -- Rewrites what the old backend wrote while the deploy rolled out, then lets `validations.category` hold subject
