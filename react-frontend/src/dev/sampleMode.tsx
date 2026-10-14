@@ -20,6 +20,7 @@ import {
   sampleOverview,
   sampleResolveSummaryComment,
   sampleRuns,
+  sampleApiUsage,
   sampleRunsCsv,
 } from './sampleData';
 
@@ -65,6 +66,7 @@ function installFetchMock() {
 
     if (path === '/analytics/overview') return json(sampleOverview(params));
     if (path === '/analytics/runs') return json(sampleRuns(params));
+    if (path === '/analytics/api') return json(sampleApiUsage(params));
     if (path === '/analytics/runs.csv') {
       const { csv, total, exported } = sampleRunsCsv(params);
       return new Response(csv, {

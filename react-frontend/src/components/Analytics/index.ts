@@ -1,1 +1,1 @@
-export { AnalyticsLayout, AnalyticsOverview, AnalyticsOperations, AnalyticsChecks } from './Analytics';
+export { AnalyticsLayout, AnalyticsOverview, AnalyticsOperations, AnalyticsChecks, AnalyticsApi } from './Analytics';

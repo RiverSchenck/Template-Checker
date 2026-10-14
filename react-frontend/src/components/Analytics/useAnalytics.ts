@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { fetchAnalytics } from './api';
-import type { IssueDetail, Overview, PeriodSelection, RunFilters, RunsPage } from './types';
+import type { ApiUsage, IssueDetail, Overview, PeriodSelection, RunFilters, RunsPage } from './types';
 
 interface Loadable<T> {
   data: T | null;
@@ -62,6 +62,10 @@ function useAnalyticsRequest<T>(
 
 export function useOverview(period: PeriodSelection, refresh: number) {
   return useAnalyticsRequest<Overview>('overview', periodParams(period), refresh);
+}
+
+export function useApiUsage(period: PeriodSelection, refresh: number) {
+  return useAnalyticsRequest<ApiUsage>('api', periodParams(period), refresh);
 }
 
 export function useIssueDetail(validationType: string | null, period: PeriodSelection, refresh: number) {

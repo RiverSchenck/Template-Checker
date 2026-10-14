@@ -12,6 +12,9 @@
 import type { Check, CheckResult } from '../types';
 import flyer from '../fixtures/flyer-sales.json';
 import type {
+  ApiFailure,
+  ApiPeriodStats,
+  ApiUsage,
   Bucket,
   IssueDetail,
   Overview,
@@ -751,4 +754,148 @@ export function sampleResolveSummaryComment(id: string, resolved: boolean): Summ
   c.resolved_at = resolved ? new Date().toISOString() : null;
   const { user_id, user_email, user_display_name, template_name, summary, reviewed_at, ...rest } = c;
   return { ...rest, template_name: null, summary: null, reviewed_at: null };
+}
+
+
+// --- API usage (GET /analytics/api) -------------------------------------------------------------------------------
+
+type SampleApiRequest = Omit<ApiFailure, 'key_name' | 'key_prefix' | 'display_name' | 'email'> & {
+  t: number;
+  key: (typeof API_KEYS)[number] | null;
+};
+
+const API_KEYS = [
+  { key_id: 'k1000000-0000-4000-8000-000000000001', name: 'Intercom macro', key_prefix: 'tc_Q8fLm2x', expires_at: null, revoked_at: null, agent: AGENTS[0], weight: 50 },
+  { key_id: 'k1000000-0000-4000-8000-000000000002', name: 'Zapier: new tickets', key_prefix: 'tc_7HdKp0a', expires_at: new Date(Date.now() + 200 * DAY).toISOString(), revoked_at: null, agent: AGENTS[1], weight: 30 },
+  { key_id: 'k1000000-0000-4000-8000-000000000003', name: 'Local script', key_prefix: 'tc_c3VbN9e', expires_at: new Date(Date.now() + 9 * DAY).toISOString(), revoked_at: null, agent: AGENTS[2], weight: 12 },
+  { key_id: 'k1000000-0000-4000-8000-000000000004', name: 'Old CI job', key_prefix: 'tc_Zx1rT4w', expires_at: new Date(Date.now() + 60 * DAY).toISOString(), revoked_at: new Date(Date.now() - 20 * DAY).toISOString(), agent: AGENTS[3], weight: 4 },
+] as const;
+
+/** API requests were first recorded this many days ago (before that, the comparison is shown as unavailable). */
+const API_DATA_DAYS = 150;
+
+const API_REQUESTS: SampleApiRequest[] = (() => {
+  const apiRand = mulberry32(20261014); // its own seed, so the runs above stay the same
+  const choose = <T,>(items: readonly (readonly [T, number])[]) => {
+    let r = apiRand() * items.reduce((a, [, w]) => a + w, 0);
+    for (const [item, w] of items) if ((r -= w) <= 0) return item;
+    return items[items.length - 1][0];
+  };
+  const requests: SampleApiRequest[] = [];
+  const today = new Date(NOW);
+  today.setHours(0, 0, 0, 0);
+  for (let daysAgo = API_DATA_DAYS; daysAgo >= 0; daysAgo--) {
+    const day = new Date(today.getTime() - daysAgo * DAY);
+    const weekend = day.getDay() === 0 || day.getDay() === 6;
+    const count = Math.round((weekend ? 2 : 14) * (0.6 + 0.4 * (1 - daysAgo / API_DATA_DAYS)) * (0.6 + apiRand() * 0.8));
+    for (let n = 0; n < count; n++) {
+      const t = day.getTime() + (7 + apiRand() * 12) * 60 * 60 * 1000;
+      if (t > NOW) continue;
+      // The revoked key keeps being tried after it was revoked: those show as invalid-key attempts.
+      let key: SampleApiRequest['key'] = choose(API_KEYS.map((k) => [k, k.weight] as const));
+      if (key.revoked_at && t > new Date(key.revoked_at).getTime()) key = null;
+      const endpoint = choose([['/v1/checks/summary', 60], ['/v1/checks', 22], ['/summary', 10], ['/v1/checks/xml', 5], ['/run', 3]] as const);
+      const [status_code, error_code] = !key
+        ? [401, 'unauthorized']
+        : choose([
+            [[200, null], 92],
+            [[422, 'template_not_checkable'], 3],
+            [[429, 'rate_limited'], 2],
+            [[400, 'missing_file'], 1.5],
+            [[500, daysAgo < 9 ? 'check_failed' : 'summary_failed'], daysAgo < 9 ? 2.5 : 0.5],
+          ] as const);
+      requests.push({
+        t,
+        key,
+        id: `r0000000-0000-4000-8000-${String(requests.length).padStart(12, '0')}`,
+        created_at: new Date(t).toISOString(),
+        method: 'POST',
+        endpoint,
+        status_code,
+        error_code,
+        duration_ms: Math.round(status_code === 200 ? logNormal(4200, 0.4) : status_code >= 500 ? logNormal(3000, 0.5) : 30 + apiRand() * 80),
+        run_id: status_code === 200 || status_code >= 500 || status_code === 422 ? `00000000-0000-4000-8000-${String(requests.length).padStart(12, '0')}` : null,
+        request_id: Math.floor(apiRand() * 2 ** 52).toString(16).padStart(13, '0') + Math.floor(apiRand() * 2 ** 52).toString(16).padStart(13, '0'),
+      });
+    }
+  }
+  return requests;
+})();
+
+function apiStats(requests: SampleApiRequest[]): ApiPeriodStats {
+  const ok = requests.filter((r) => r.status_code < 400).map((r) => r.duration_ms!);
+  return {
+    requests: requests.length,
+    succeeded: ok.length,
+    client_errors: requests.filter((r) => r.status_code >= 400 && r.status_code < 500).length,
+    server_errors: requests.filter((r) => r.status_code >= 500).length,
+    invalid_key: requests.filter((r) => !r.key).length,
+    active_keys: new Set(requests.map((r) => r.key?.key_id).filter(Boolean)).size,
+    active_users: new Set(requests.map((r) => r.key?.agent.id).filter(Boolean)).size,
+    p50_duration_ms: percentile(ok, 0.5),
+    p95_duration_ms: percentile(ok, 0.95),
+  };
+}
+
+export function sampleApiUsage(params: URLSearchParams): ApiUsage {
+  const { start, end, prevStart, bucket } = periodFor(params);
+  const current = API_REQUESTS.filter((r) => r.t >= start && r.t < end);
+  const previous = API_REQUESTS.filter((r) => r.t >= prevStart && r.t < start);
+  const group = <K,>(items: SampleApiRequest[], key: (r: SampleApiRequest) => K) => {
+    const map = new Map<K, SampleApiRequest[]>();
+    for (const r of items) map.set(key(r), [...(map.get(key(r)) ?? []), r]);
+    return [...map.entries()];
+  };
+  const errors = (rs: SampleApiRequest[]) => rs.filter((r) => r.status_code >= 400).length;
+  const last = (rs: SampleApiRequest[]) => new Date(Math.max(...rs.map((r) => r.t))).toISOString();
+  const byBucket = new Map(group(current, (r) => bucketKey(r.t, bucket)));
+
+  return {
+    current: apiStats(current),
+    previous: apiStats(previous),
+    data_since: API_REQUESTS[0]?.created_at ?? null,
+    timeseries: bucketKeys(start, end, bucket).map((b) => {
+      const s = apiStats(byBucket.get(b) ?? []);
+      return { bucket: b, succeeded: s.succeeded, client_errors: s.client_errors, server_errors: s.server_errors };
+    }),
+    endpoints: group(current, (r) => r.endpoint)
+      .map(([endpoint, rs]) => ({
+        endpoint,
+        requests: rs.length,
+        errors: errors(rs),
+        p95_duration_ms: percentile(rs.filter((r) => r.status_code < 400).map((r) => r.duration_ms!), 0.95),
+        last_request_at: last(rs),
+      }))
+      .sort((a, b) => b.requests - a.requests),
+    keys: group(current.filter((r) => r.key), (r) => r.key!)
+      .map(([k, rs]) => ({
+        key_id: k.key_id,
+        name: k.name,
+        key_prefix: k.key_prefix,
+        expires_at: k.expires_at,
+        revoked_at: k.revoked_at,
+        user_id: k.agent.id,
+        display_name: k.agent.display_name,
+        email: k.agent.email,
+        avatar_url: null,
+        requests: rs.length,
+        errors: errors(rs),
+        last_request_at: last(rs),
+      }))
+      .sort((a, b) => b.requests - a.requests),
+    errors: group(current.filter((r) => r.status_code >= 400), (r) => `${r.error_code}|${r.status_code}`)
+      .map(([, rs]) => ({ error_code: rs[0].error_code ?? `http_${rs[0].status_code}`, status_code: rs[0].status_code, requests: rs.length }))
+      .sort((a, b) => b.requests - a.requests),
+    recent_failures: current
+      .filter((r) => r.status_code >= 400)
+      .sort((a, b) => b.t - a.t)
+      .slice(0, 50)
+      .map(({ t, key, ...r }) => ({
+        ...r,
+        key_name: key?.name ?? null,
+        key_prefix: key?.key_prefix ?? null,
+        display_name: key?.agent.display_name ?? null,
+        email: key?.agent.email ?? null,
+      })),
+  };
 }

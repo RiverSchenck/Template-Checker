@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Activity, BarChart3, Inbox, ListChecks } from 'lucide-react';
+import { Activity, BarChart3, Inbox, ListChecks, PlugZap } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { cn } from '../../lib/utils';
@@ -7,7 +7,7 @@ import { useAuth } from '../AuthContext';
 import { Skeleton } from '../ui/skeleton';
 import { TooltipProvider } from '../ui/tooltip';
 import { EmptyState, PageHeader, PageShell, StatusPill } from '../layout/page-kit';
-import { useOverview } from './useAnalytics';
+import { useApiUsage, useOverview } from './useAnalytics';
 import { periodSearch, useAnalyticsUrlState, writeFilters } from './urlState';
 import { PeriodPicker } from './PeriodBar';
 import { Highlights } from './Highlights';
@@ -20,6 +20,7 @@ import { Reliability } from './Reliability';
 import { Team } from './Team';
 import { RunsTable } from './RunsTable';
 import { RunSheet } from './RunSheet';
+import { ApiUsage } from './ApiUsage';
 import { ErrorNote } from './parts';
 import { personLabel } from './format';
 import type { Overview, PeriodSelection, RunFilters, RunRow } from './types';
@@ -101,6 +102,12 @@ export const ANALYTICS_PAGES: Record<string, { title: string; description: strin
     title: 'All checks',
     description: 'Every check in this period, newest first. Select one for details.',
     icon: ListChecks,
+    admin: true,
+  },
+  api: {
+    title: 'API usage',
+    description: 'Who calls the API with a key, which endpoints, and what goes wrong.',
+    icon: PlugZap,
     admin: true,
   },
 };
@@ -295,5 +302,21 @@ export function AnalyticsChecks() {
       refresh={refresh}
       onSelectRun={selectRun}
     />
+  );
+}
+
+/** Requests made with API keys (admin only). */
+export function AnalyticsApi() {
+  const { overview, period, refresh } = useAnalytics();
+  const [retry, setRetry] = useState(0);
+  const { data, loading, error } = useApiUsage(period, refresh + retry);
+  return (
+    <div className={cn('transition-opacity', loading && data && 'opacity-60')} aria-busy={loading}>
+      {!data && loading ? (
+        <AnalyticsLoadingState />
+      ) : (
+        <ApiUsage usage={data} overview={overview} error={error} onRetry={() => setRetry((r) => r + 1)} />
+      )}
+    </div>
   );
 }

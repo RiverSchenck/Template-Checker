@@ -9,19 +9,19 @@ import type { Overview, PeriodStats, TimeseriesPoint } from './types';
 
 type Better = 'up' | 'down';
 
-interface Delta {
+export interface Delta {
   /** Signed change: a fraction for counts (0.12 = +12%), percentage points for rates (0.05 = +5 pts). */
   value: number;
   kind: 'relative' | 'points' | 'absolute';
   better: Better;
 }
 
-function relativeDelta(current: number, previous: number, better: Better): Delta | null {
+export function relativeDelta(current: number, previous: number, better: Better): Delta | null {
   if (previous <= 0) return null;
   return { value: (current - previous) / previous, kind: 'relative', better };
 }
 
-function pointsDelta(current: number | null, previous: number | null, better: Better): Delta | null {
+export function pointsDelta(current: number | null, previous: number | null, better: Better): Delta | null {
   if (current == null || previous == null) return null;
   return { value: current - previous, kind: 'points', better };
 }
@@ -44,7 +44,7 @@ function DeltaBadge({ delta, comparedWith }: { delta: Delta | null; comparedWith
     <span className="inline-flex items-center gap-1 text-xs">
       <span
         className={cn(
-          'inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 font-medium tabular-nums',
+          'inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 font-medium tabular-nums',
           flat
             ? 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300'
             : good
@@ -97,7 +97,7 @@ function Sparkline({ values, rate = false }: { values: (number | null)[]; rate?:
   );
 }
 
-function Tile({
+export function Tile({
   label,
   value,
   delta,
@@ -113,7 +113,7 @@ function Tile({
   value: string;
   delta: Delta | null;
   detail: React.ReactNode;
-  spark: (number | null)[];
+  spark?: (number | null)[];
   rate?: boolean;
 }) {
   return (
@@ -126,9 +126,13 @@ function Tile({
       <div className="mt-2.5">
         <DeltaBadge delta={delta} comparedWith={comparedWith} />
       </div>
-      <div className="mt-3">
-        <Sparkline values={spark} rate={rate} />
-      </div>
+      {spark ? (
+        <div className="mt-3">
+          <Sparkline values={spark} rate={rate} />
+        </div>
+      ) : (
+        <div className="flex-1" />
+      )}
       <p className="mt-2 truncate border-t pt-2.5 text-xs text-muted-foreground">{detail}</p>
     </div>
   );

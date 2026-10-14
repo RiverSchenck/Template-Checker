@@ -301,3 +301,18 @@ def test_issue_detail_stays_open_to_everyone(client, fake_rpc, admin):
     admin['value'] = False
     fake_rpc.result = {'occurrences': 1}
     assert client.get('/analytics/issues/FONTS_INCLUDED?days=7', headers=AUTH).status_code == 200
+
+
+def test_api_usage_endpoint_calls_its_function(client, fake_rpc):
+    r = client.get('/analytics/api?days=120&tz=Europe/Zurich', headers=AUTH)
+    assert r.status_code == 200
+    [(name, params)] = fake_rpc.calls
+    assert name == 'analytics_api_usage'
+    assert params['p_bucket'] == 'week' and params['p_tz'] == 'Europe/Zurich'
+
+
+def test_only_admins_see_api_usage(client, fake_rpc, admin):
+    admin['value'] = False
+    assert client.get('/analytics/api', headers=AUTH).status_code == 403
+    assert client.get('/analytics/api').status_code == 401
+    assert fake_rpc.calls == []

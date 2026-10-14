@@ -7,6 +7,7 @@ import {
   BarChart3,
   LayoutDashboard,
   ListChecks,
+  PlugZap,
   Users,
   Inbox,
   KeyRound,
@@ -55,6 +56,7 @@ function pathnameToItemId(pathname: string, hash: string): string {
   if (pathname.startsWith('/results')) return 'results';
   if (pathname.startsWith('/analytics/operations')) return 'analytics-operations';
   if (pathname.startsWith('/analytics/checks')) return 'analytics-checks';
+  if (pathname.startsWith('/analytics/api')) return 'analytics-api';
   if (pathname.startsWith('/analytics')) return 'analytics';
   if (pathname.startsWith('/admin/access-requests')) return 'admin-access-requests';
   if (pathname.startsWith('/admin/summary-feedback')) return 'admin-summary-feedback';
@@ -178,6 +180,7 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
                       { id: 'analytics', path: '/analytics', label: 'Overview', icon: LayoutDashboard },
                       { id: 'analytics-operations', path: '/analytics/operations', label: 'Operations', icon: Activity, admin: true },
                       { id: 'analytics-checks', path: '/analytics/checks', label: 'All checks', icon: ListChecks },
+                      { id: 'analytics-api', path: '/analytics/api', label: 'API usage', icon: PlugZap },
                     ].map((item) => (
                       <React.Fragment key={item.id}>
                         {item.admin && (

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useOutletContext, Navigate } from 'react-
 import { Toaster } from './components/ui/sonner';
 import FileUploadPage from './components/File Upload/FileUpload';
 import ValidationList from './components/Validation List/ValidationList';
-import { AnalyticsChecks, AnalyticsLayout, AnalyticsOperations, AnalyticsOverview } from './components/Analytics';
+import { AnalyticsApi, AnalyticsChecks, AnalyticsLayout, AnalyticsOperations, AnalyticsOverview } from './components/Analytics';
 import AuthCallback from './components/AuthCallback';
 import ProtectedLayout, { type ProtectedLayoutOutletContext } from './components/ProtectedLayout';
 import { UserManagement } from './components/Admin/UserManagement';
@@ -60,6 +60,7 @@ export default function App() {
             <Route index element={<AnalyticsOverview />} />
             <Route path="operations" element={<AdminGuard><AnalyticsOperations /></AdminGuard>} />
             <Route path="checks" element={<AdminGuard><AnalyticsChecks /></AdminGuard>} />
+            <Route path="api" element={<AdminGuard><AnalyticsApi /></AdminGuard>} />
           </Route>
           <Route path="api-keys" element={<ApiKeys />} />
           <Route path="my-feedback" element={<MyFeedback />} />
