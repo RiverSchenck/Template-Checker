@@ -7,7 +7,6 @@ import { SiteHeader } from './site-header';
 import Login from './Login/Login';
 import { useAuth } from './AuthContext';
 import { CheckResult } from '../types';
-import '../App.css';
 
 export type ProtectedLayoutOutletContext = {
   checkerResults: CheckResult | null;
