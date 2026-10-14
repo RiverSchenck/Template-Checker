@@ -161,8 +161,8 @@ export const ENDPOINTS: EndpointDoc[] = [
         template_name: 'Brochure',
         summary_version: 'deployment-01JA2X7Q9K',
         counts: { blockers: 4, warnings: 3, infos: 0 },
-        html: '<p>We checked “Brochure” and…',
-        text: 'We checked “Brochure” and…',
+        html: '<p>Our review of “Brochure” found…',
+        text: 'Our review of “Brochure” found…',
       }),
     },
     fields: [

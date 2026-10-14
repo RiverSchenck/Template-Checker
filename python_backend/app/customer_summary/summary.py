@@ -332,8 +332,8 @@ def display_template_name(template_name: str) -> str:
 
 
 GROUP_HEADINGS = {
-    'errors': 'Likely causing the problems',
-    'warnings': 'May change how it looks',
+    'errors': 'Likely causes',
+    'warnings': 'Possible contributing factors',
     'infos': 'Worth a quick check (often fine as is)',
 }
 
@@ -372,22 +372,20 @@ def build_customer_summary(result: dict) -> CustomerSummary:
     clean_name = display_template_name(result.get('template_name') or 'Untitled template')
     name = f'“{clean_name}”' if clean_name and clean_name != 'No Name' else 'your template'
 
-    def issues(n: int) -> str:
-        return 'one issue' if n == 1 else f'{n} issues'
-
     if blockers:
-        plus = f', plus {warnings} that may change how it looks' if warnings else ''
-        intro = (f"We checked {name} and found {issues(blockers)} in the InDesign file that "
-                 f"{'is' if blockers == 1 else 'are'} likely causing the problems in Frontify{plus}. Here’s what to change:")
+        likely = f"{blockers} likely cause{'' if blockers == 1 else 's'}"
+        possible = f" and {warnings} possible contributing factor{'' if warnings == 1 else 's'}" if warnings else ''
+        intro = (f'Our review of {name} found {likely} of the problems in Frontify{possible}. '
+                 'The recommended changes are below.')
     elif warnings:
-        intro = (f'We checked {name} and didn’t find anything that should stop it from working in Frontify, but '
-                 f'{issues(warnings)} may make it look different than expected. Here’s what to change:')
+        intro = (f"Our review of {name} found {warnings} possible contributing factor{'' if warnings == 1 else 's'} "
+                 'to the problems in Frontify. The recommended changes are below.')
     elif infos:
-        intro = (f'We checked {name} and didn’t find anything that should cause problems in Frontify. '
-                 f"{'One thing is' if infos == 1 else 'A few things are'} worth a quick check, though "
-                 f"{'it’s' if infos == 1 else 'they’re'} often fine as is:")
+        intro = (f'Our review of {name} found no likely causes of problems in Frontify. '
+                 f"{'One item is' if infos == 1 else 'A few items are'} worth a quick check, though "
+                 f"{'it is' if infos == 1 else 'they are'} often fine as is:")
     else:
-        intro = f'We checked {name} and didn’t find anything in the InDesign file that would cause problems in Frontify.'
+        intro = f'Our review of {name} found nothing in the InDesign file that is likely to cause problems in Frontify.'
     sections = [SummarySection('intro', 'Introduction', (SummaryLine('text', intro),))]
 
     number = 0

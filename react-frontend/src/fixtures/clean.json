@@ -833,8 +833,8 @@
    "warnings": 0,
    "infos": 0
   },
-  "html": "<p>We checked “Brochure_Good” and didn’t find anything in the InDesign file that would cause problems in Frontify.</p>",
-  "text": "We checked “Brochure_Good” and didn’t find anything in the InDesign file that would cause problems in Frontify.",
+  "html": "<p>Our review of “Brochure_Good” found nothing in the InDesign file that is likely to cause problems in Frontify.</p>",
+  "text": "Our review of “Brochure_Good” found nothing in the InDesign file that is likely to cause problems in Frontify.",
   "sections": [
    {
     "key": "intro",
@@ -843,7 +843,7 @@
     "lines": [
      {
       "kind": "text",
-      "text": "We checked “Brochure_Good” and didn’t find anything in the InDesign file that would cause problems in Frontify."
+      "text": "Our review of “Brochure_Good” found nothing in the InDesign file that is likely to cause problems in Frontify."
      }
     ]
    }

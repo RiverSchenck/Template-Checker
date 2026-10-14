@@ -23,7 +23,7 @@ describe('ReportView customer summary', () => {
     const summary = screen.getByRole('article', { name: 'Customer summary' });
     const firstTitle = result.customer_summary!.sections.find((s) => s.problem_id)!.lines[0].text;
     expect(within(summary).getByText(firstTitle)).toHaveClass('font-semibold');
-    expect(summary.textContent).toContain('Likely causing the problems');
+    expect(summary.textContent).toContain('Likely causes');
     const link = within(summary).getAllByRole('link', { name: 'Learn more' })[0];
     expect(link.getAttribute('href')).toMatch(/^https?:\/\/help\.frontify\.com\//);
   });
