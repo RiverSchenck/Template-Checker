@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import type { PeriodSelection, RunFilters, RunStatus, SourceType } from './types';
 
 /**
- * Everything that shapes the analytics page lives in the URL, so a link reproduces exactly what you see:
+ * Everything that shapes the analytics pages lives in the URL, so a link reproduces exactly what you see:
  *   ?range=7|30|90|365  or  ?start=YYYY-MM-DD&end=YYYY-MM-DD
  *   &status= &source= &agent=<user id> &has=<validation type> &q=<template search>   (the checks table)
  *   &issue=<validation type>                                                        (the open issue panel)
@@ -16,6 +16,28 @@ const STATUSES: RunStatus[] = ['completed', 'rejected', 'failed'];
 const SOURCES: SourceType[] = ['react-frontend', 'extension', 'api'];
 
 const FILTER_KEYS = ['status', 'source', 'agent', 'has', 'q'] as const;
+const PERIOD_KEYS = ['range', 'start', 'end'] as const;
+
+/** The period part of the query string (`?range=90`, or empty), so links between analytics pages keep the dates. */
+export function periodSearch(params: URLSearchParams): string {
+  const kept = new URLSearchParams();
+  PERIOD_KEYS.forEach((k) => {
+    const v = params.get(k);
+    if (v) kept.set(k, v);
+  });
+  const search = kept.toString();
+  return search ? `?${search}` : '';
+}
+
+/** Replace the checks-table filters in `params`. */
+export function writeFilters(params: URLSearchParams, f: RunFilters) {
+  FILTER_KEYS.forEach((k) => params.delete(k));
+  if (f.status) params.set('status', f.status);
+  if (f.source) params.set('source', f.source);
+  if (f.userId) params.set('agent', f.userId);
+  if (f.validationType) params.set('has', f.validationType);
+  if (f.search?.trim()) params.set('q', f.search.trim());
+}
 
 function readPeriod(params: URLSearchParams): PeriodSelection {
   const start = params.get('start');
@@ -76,18 +98,7 @@ export function useAnalyticsUrlState() {
     [update]
   );
 
-  const setFilters = useCallback(
-    (f: RunFilters) =>
-      update((next) => {
-        FILTER_KEYS.forEach((k) => next.delete(k));
-        if (f.status) next.set('status', f.status);
-        if (f.source) next.set('source', f.source);
-        if (f.userId) next.set('agent', f.userId);
-        if (f.validationType) next.set('has', f.validationType);
-        if (f.search?.trim()) next.set('q', f.search.trim());
-      }),
-    [update]
-  );
+  const setFilters = useCallback((f: RunFilters) => update((next) => writeFilters(next, f)), [update]);
 
   const setIssue = useCallback(
     (validationType: string | null) =>
@@ -98,5 +109,5 @@ export function useAnalyticsUrlState() {
     [update]
   );
 
-  return { period, setPeriod, filters, setFilters, issue, setIssue };
+  return { params, period, setPeriod, filters, setFilters, issue, setIssue };
 }

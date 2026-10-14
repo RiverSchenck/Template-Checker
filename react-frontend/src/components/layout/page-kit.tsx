@@ -38,11 +38,14 @@ export function PageShell({ children, className }: { children: React.ReactNode; 
 export function PageHeader({
   icon: Icon,
   title,
+  badge,
   description,
   actions,
 }: {
   icon: LucideIcon;
   title: string;
+  /** Shown after the title, e.g. an "Admin only" pill. */
+  badge?: React.ReactNode;
   description?: React.ReactNode;
   actions?: React.ReactNode;
 }) {
@@ -52,6 +55,7 @@ export function PageHeader({
         <h1 className="flex items-center gap-2.5 text-[1.65rem] font-semibold leading-tight tracking-tight">
           <Icon className="h-6 w-6 shrink-0 text-muted-foreground" strokeWidth={1.75} aria-hidden />
           {title}
+          {badge}
         </h1>
         {description && (
           <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground">{description}</p>
