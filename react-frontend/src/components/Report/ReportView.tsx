@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { CleanResult } from './CleanResult';
 import { CheckResult } from '../../types';
 import SummaryHeader from './SummaryHeader';
 import ChangesPanel from './ChangesPanel';
@@ -193,15 +193,12 @@ function ReportView({ result, previous }: ReportViewProps) {
       )}
 
       {report.problems.length === 0 ? (
-        <div className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card px-6 py-12 text-center">
-          <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400" aria-hidden />
-          <p className="text-sm font-medium text-foreground">Every check passed</p>
-          {report.checked.length > 0 && (
-            <p className="text-xs text-muted-foreground">
-              Checked {report.checked.map((c) => `${c.count} ${c.label}`).join(', ')}.
-            </p>
-          )}
-        </div>
+        <CleanResult
+          result={result}
+          report={report}
+          templateName={templateName}
+          pageViewer={pages.length > 0 ? pageViewer : null}
+        />
       ) : (
         <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-cols-[minmax(300px,400px)_minmax(0,1fr)]">
           <div className="order-2 lg:order-1">

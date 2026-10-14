@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { notify } from '../../lib/notify';
 import { AlertCircle, Check, FileCheck2, X } from 'lucide-react';
 import { CheckResult } from '../../types';
-import SuccessModal from './SuccessModal';
 import { Button } from '../ui/button';
 import { Segmented } from '../layout/page-kit';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
@@ -130,7 +129,6 @@ export function TemplateUploader({
   centered = false,
   className,
 }: TemplateUploaderProps) {
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [output, setOutput] = useState<Output>('results');
   const [phase, setPhase] = useState<Phase>('idle');
   const [current, setCurrent] = useState<File | null>(null);
@@ -226,12 +224,8 @@ export function TemplateUploader({
           const { results, customer_summary }: CheckResult = JSON.parse(text);
           checkerResponse({ results, customer_summary }, setPrevious);
           onUploadComplete?.();
-          if (results.issues.length === 0) {
-            setShowSuccessModal(true);
-          } else {
-            navigateToResults?.();
-          }
-          // A fresh check opens the results (or the all-clear popup), so it needs no toast. A reupload
+          navigateToResults?.();
+          // A fresh check opens the results, so it needs no toast. A reupload
           // updates the results in place behind a closing dialog, so confirm it.
           if (setPrevious) notify.success('Compared with your previous check');
         }
@@ -277,12 +271,6 @@ export function TemplateUploader({
 
   return (
     <div className={cn('w-full space-y-4', className)}>
-      <SuccessModal
-        open={showSuccessModal}
-        onClose={() => setShowSuccessModal(false)}
-        navigateToResults={navigateToResults}
-      />
-
       {busy && current ? (
         <div className="flex min-h-[13rem] flex-col justify-center rounded-xl border bg-card px-6 py-8" aria-live="polite">
           <div className="mx-auto w-full max-w-md">
