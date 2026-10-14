@@ -1,12 +1,14 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { BarChart3, Inbox } from 'lucide-react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Activity, BarChart3, Inbox, ListChecks } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../AuthContext';
 import { Skeleton } from '../ui/skeleton';
 import { TooltipProvider } from '../ui/tooltip';
-import { EmptyState, PageHeader, PageShell } from '../layout/page-kit';
+import { EmptyState, PageHeader, PageShell, StatusPill } from '../layout/page-kit';
 import { useOverview } from './useAnalytics';
-import { useAnalyticsUrlState } from './urlState';
+import { periodSearch, useAnalyticsUrlState, writeFilters } from './urlState';
 import { PeriodPicker } from './PeriodBar';
 import { Highlights } from './Highlights';
 import { KpiTiles } from './KpiTiles';
@@ -20,7 +22,7 @@ import { RunsTable } from './RunsTable';
 import { RunSheet } from './RunSheet';
 import { ErrorNote } from './parts';
 import { personLabel } from './format';
-import type { RunFilters, RunRow } from './types';
+import type { Overview, PeriodSelection, RunFilters, RunRow } from './types';
 
 /** A card outline with placeholder content, so loading looks like the page instead of grey slabs. */
 function SkeletonCard({ className, children }: { className?: string; children: React.ReactNode }) {
@@ -82,13 +84,56 @@ function SectionHeading({ title, description }: { title: string; description: st
   );
 }
 
-export function Analytics() {
-  const { period, setPeriod, filters, setFilters, issue: issueParam, setIssue } = useAnalyticsUrlState();
+/** The analytics pages, by path under /analytics. Admin pages are also guarded in App.tsx; the backend enforces it too. */
+export const ANALYTICS_PAGES: Record<string, { title: string; description: string; icon: LucideIcon; admin?: boolean }> = {
+  '': {
+    title: 'Analytics',
+    description: "How support uses the template checker, and what customers' templates get wrong.",
+    icon: BarChart3,
+  },
+  operations: {
+    title: 'Operations',
+    description: "How the checker is holding up, and who's using it.",
+    icon: Activity,
+    admin: true,
+  },
+  checks: {
+    title: 'All checks',
+    description: 'Every check in this period, newest first. Select one for details.',
+    icon: ListChecks,
+    admin: true,
+  },
+};
+
+export function analyticsPageKey(pathname: string): string {
+  return pathname.replace(/^\/analytics\/?/, '').split('/')[0];
+}
+
+type AnalyticsContext = {
+  overview: Overview;
+  period: PeriodSelection;
+  filters: RunFilters;
+  setFilters: (f: RunFilters) => void;
+  chipLabels: { issue?: string; agent?: string };
+  refresh: number;
+  setIssue: (validationType: string | null) => void;
+  selectRun: (run: RunRow) => void;
+  /** Open All checks with these filters (admins only). */
+  showRuns: (change: Partial<RunFilters>) => void;
+};
+
+const useAnalytics = () => useOutletContext<AnalyticsContext>();
+
+/** Header, period and the overview shared by every analytics page; the page itself renders in the outlet. */
+export function AnalyticsLayout() {
+  const { params, period, setPeriod, filters, setFilters, issue: issueParam, setIssue } = useAnalyticsUrlState();
   const { isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const page = ANALYTICS_PAGES[analyticsPageKey(pathname)] ?? ANALYTICS_PAGES[''];
   const [refresh, setRefresh] = useState(0);
   const { data: overview, loading, error } = useOverview(period, refresh);
   const [selectedRun, setSelectedRun] = useState<RunRow | null>(null);
-  const runsRef = useRef<HTMLDivElement>(null);
 
   const selectedIssue = useMemo(
     () => overview?.issues.find((i) => i.validation_type === issueParam) ?? null,
@@ -107,10 +152,12 @@ export function Analytics() {
 
   const showRuns = useCallback(
     (change: Partial<RunFilters>) => {
-      setFilters({ ...filters, ...change });
-      requestAnimationFrame(() => runsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      const next = new URLSearchParams(periodSearch(params));
+      writeFilters(next, { ...filters, ...change });
+      const search = next.toString();
+      navigate(`/analytics/checks${search ? `?${search}` : ''}`);
     },
-    [filters, setFilters]
+    [params, filters, navigate]
   );
 
   const isEmpty = overview && overview.current.runs === 0 && overview.previous.runs === 0;
@@ -119,9 +166,10 @@ export function Analytics() {
     <TooltipProvider delayDuration={200}>
       <PageShell className="max-w-6xl">
         <PageHeader
-          icon={BarChart3}
-          title="Analytics"
-          description="How support uses the template checker, and what customers' templates get wrong."
+          icon={page.icon}
+          title={page.title}
+          badge={page.admin ? <StatusPill>Admin only</StatusPill> : undefined}
+          description={page.description}
           actions={<PeriodPicker period={period} onChange={setPeriod} />}
         />
 
@@ -130,7 +178,6 @@ export function Analytics() {
 
         {overview && (
           <div className={cn('transition-opacity', loading && 'opacity-60')} aria-busy={loading}>
-
             {error && (
               <div className="mb-4">
                 <ErrorNote message={`Couldn't refresh: ${error}`} onRetry={() => setRefresh((r) => r + 1)} />
@@ -146,56 +193,21 @@ export function Analytics() {
                 />
               </div>
             ) : (
-              <>
-                <Highlights
-                  overview={overview}
-                  onSelectIssue={(i) => setIssue(i.validation_type)}
-                  onShowFailures={isAdmin ? () => showRuns({ status: 'failed' }) : undefined}
-                />
-
-                <KpiTiles overview={overview} />
-
-                <div className="mt-6">
-                  <UsageChart overview={overview} />
-                </div>
-
-                <SectionHeading title="Findings" description="Which checks fire, how often, and whether that's changing" />
-                <div className="grid gap-6 lg:grid-cols-3">
-                  <div className="min-w-0 lg:col-span-2">
-                    <TopIssues overview={overview} onSelect={(i) => setIssue(i.validation_type)} />
-                  </div>
-                  <Categories overview={overview} />
-                </div>
-
-                {/* Operations (who uses it, what crashed) and the run list are admin only; the backend enforces it too. */}
-                {isAdmin && (
-                  <>
-                    <SectionHeading title="Operations" description="How the checker is holding up, and who's using it" />
-                    <div className="grid gap-6 lg:grid-cols-5">
-                      <div className="min-w-0 lg:col-span-3">
-                        <Reliability overview={overview} onSelectRun={setSelectedRun} />
-                      </div>
-                      <div className="min-w-0 lg:col-span-2">
-                        <Team overview={overview} onSelect={(user) => showRuns({ userId: user.user_id ?? undefined })} />
-                      </div>
-                    </div>
-                  </>
-                )}
-              </>
-            )}
-
-            {isAdmin && (
-              <div ref={runsRef} className="scroll-mt-6">
-                <SectionHeading title="All checks" description="Every check in this period, newest first. Select one for details." />
-                <RunsTable
-                  period={period}
-                  filters={filters}
-                  onFiltersChange={setFilters}
-                  labels={chipLabels}
-                  refresh={refresh}
-                  onSelectRun={setSelectedRun}
-                />
-              </div>
+              <Outlet
+                context={
+                  {
+                    overview,
+                    period,
+                    filters,
+                    setFilters,
+                    chipLabels,
+                    refresh,
+                    setIssue,
+                    selectRun: setSelectedRun,
+                    showRuns,
+                  } satisfies AnalyticsContext
+                }
+              />
             )}
 
             <IssueSheet
@@ -205,12 +217,7 @@ export function Analytics() {
               refresh={refresh}
               onClose={() => setIssue(null)}
               onShowRuns={
-                isAdmin
-                  ? (issue) => {
-                      setIssue(null);
-                      showRuns({ validationType: issue.validation_type, status: undefined });
-                    }
-                  : undefined
+                isAdmin ? (issue) => showRuns({ validationType: issue.validation_type, status: undefined }) : undefined
               }
             />
             <RunSheet
@@ -232,4 +239,61 @@ export function Analytics() {
   );
 }
 
-export default Analytics;
+/** What's worth a look, usage and findings. Everyone sees this page. */
+export function AnalyticsOverview() {
+  const { overview, setIssue, showRuns } = useAnalytics();
+  const { isAdmin } = useAuth();
+  return (
+    <>
+      <Highlights
+        overview={overview}
+        onSelectIssue={(i) => setIssue(i.validation_type)}
+        onShowFailures={isAdmin ? () => showRuns({ status: 'failed' }) : undefined}
+      />
+
+      <KpiTiles overview={overview} />
+
+      <div className="mt-6">
+        <UsageChart overview={overview} />
+      </div>
+
+      <SectionHeading title="Findings" description="Which checks fire, how often, and whether that's changing" />
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="min-w-0 lg:col-span-2">
+          <TopIssues overview={overview} onSelect={(i) => setIssue(i.validation_type)} />
+        </div>
+        <Categories overview={overview} />
+      </div>
+    </>
+  );
+}
+
+/** Reliability and who's using the checker (admin only). */
+export function AnalyticsOperations() {
+  const { overview, selectRun, showRuns } = useAnalytics();
+  return (
+    <div className="grid gap-6 lg:grid-cols-5">
+      <div className="min-w-0 lg:col-span-3">
+        <Reliability overview={overview} onSelectRun={selectRun} />
+      </div>
+      <div className="min-w-0 lg:col-span-2">
+        <Team overview={overview} onSelect={(user) => showRuns({ userId: user.user_id ?? undefined })} />
+      </div>
+    </div>
+  );
+}
+
+/** Every check in the period (admin only). */
+export function AnalyticsChecks() {
+  const { period, filters, setFilters, chipLabels, refresh, selectRun } = useAnalytics();
+  return (
+    <RunsTable
+      period={period}
+      filters={filters}
+      onFiltersChange={setFilters}
+      labels={chipLabels}
+      refresh={refresh}
+      onSelectRun={selectRun}
+    />
+  );
+}

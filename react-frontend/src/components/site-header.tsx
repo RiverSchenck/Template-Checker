@@ -5,6 +5,7 @@ import { Separator } from './ui/separator';
 import { SidebarTrigger } from './ui/sidebar';
 import ReuploadButton from './File Upload/ReuploadButton';
 import { CheckResult } from '../types';
+import { ANALYTICS_PAGES, analyticsPageKey } from './Analytics/Analytics';
 
 function getPageTitle(pathname: string, templateName?: string | null): React.ReactNode {
   if (pathname === '/' || pathname === '') return 'Check Template';
@@ -20,7 +21,17 @@ function getPageTitle(pathname: string, templateName?: string | null): React.Rea
     }
     return 'Results';
   }
-  if (pathname.startsWith('/analytics')) return 'Analytics';
+  if (pathname.startsWith('/analytics')) {
+    const key = analyticsPageKey(pathname);
+    if (!key || !ANALYTICS_PAGES[key]) return 'Analytics';
+    return (
+      <>
+        Analytics
+        <ChevronRight className="mx-1 h-3.5 w-3.5 shrink-0 opacity-60" aria-hidden />
+        {ANALYTICS_PAGES[key].title}
+      </>
+    );
+  }
   return 'Template Checker';
 }
 

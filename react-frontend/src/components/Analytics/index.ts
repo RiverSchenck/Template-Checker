@@ -1,1 +1,1 @@
-export { default as Analytics } from './Analytics';
+export { AnalyticsLayout, AnalyticsOverview, AnalyticsOperations, AnalyticsChecks } from './Analytics';

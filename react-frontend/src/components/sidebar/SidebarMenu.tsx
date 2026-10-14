@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
+  Activity,
   CloudUpload,
   FileCheck,
   BarChart3,
+  LayoutDashboard,
+  ListChecks,
   Users,
   Inbox,
   KeyRound,
@@ -41,6 +44,7 @@ import FrontifyLogo from '../../assets/frontifyLogo.svg';
 import FrontifyNook from '../../assets/frontifyNook.svg';
 import { useAuth } from '../AuthContext';
 import { baseURL, getAuthHeaders } from '../Analytics/api';
+import { periodSearch } from '../Analytics/urlState';
 
 export interface SidebarMenuProps {
   checkerResults: CheckResult | null;
@@ -49,6 +53,8 @@ export interface SidebarMenuProps {
 function pathnameToItemId(pathname: string, hash: string): string {
   if (pathname === '/' || pathname === '') return 'upload-template';
   if (pathname.startsWith('/results')) return 'results';
+  if (pathname.startsWith('/analytics/operations')) return 'analytics-operations';
+  if (pathname.startsWith('/analytics/checks')) return 'analytics-checks';
   if (pathname.startsWith('/analytics')) return 'analytics';
   if (pathname.startsWith('/admin/access-requests')) return 'admin-access-requests';
   if (pathname.startsWith('/admin/summary-feedback')) return 'admin-summary-feedback';
@@ -92,6 +98,9 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
   const avatarUrl = currentUser?.avatar_url ?? null;
   const avatarLetter = (displayName || '?').charAt(0).toUpperCase();
   const isCollapsed = sidebarState === 'collapsed';
+  // Moving between analytics pages keeps the chosen dates.
+  const toAnalytics = (path: string) =>
+    navigate(path + (location.pathname.startsWith('/analytics') ? periodSearch(new URLSearchParams(location.search)) : ''));
 
   const [avatarError, setAvatarError] = useState(false);
   useEffect(() => {
@@ -156,12 +165,43 @@ export default function SidebarMenuComponent({ checkerResults }: SidebarMenuProp
               <SidebarMenuItem>
                 <SidebarMenuButton
                   tooltip="Analytics"
-                  isActive={activeId === 'analytics'}
-                  onClick={() => navigate('/analytics')}
+                  isActive={activeId === 'analytics' && !isAdmin}
+                  onClick={() => toAnalytics('/analytics')}
                 >
                   <BarChart3 className="h-4 w-4" />
                   <span>Analytics</span>
                 </SidebarMenuButton>
+                {/* Admins get the admin-only analytics pages under a labelled divider. */}
+                {isAdmin && !loadingRole && (
+                  <SidebarMenuSub>
+                    {[
+                      { id: 'analytics', path: '/analytics', label: 'Overview', icon: LayoutDashboard },
+                      { id: 'analytics-operations', path: '/analytics/operations', label: 'Operations', icon: Activity, admin: true },
+                      { id: 'analytics-checks', path: '/analytics/checks', label: 'All checks', icon: ListChecks },
+                    ].map((item) => (
+                      <React.Fragment key={item.id}>
+                        {item.admin && (
+                          <li className="px-2 pb-0.5 pt-2 text-[11px] font-medium uppercase tracking-wide text-sidebar-foreground/50">
+                            Admin
+                          </li>
+                        )}
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton
+                            isActive={activeId === item.id}
+                            onClick={(e: React.MouseEvent) => {
+                              e.preventDefault();
+                              toAnalytics(item.path);
+                            }}
+                            href={item.path}
+                          >
+                            <item.icon className="h-4 w-4" />
+                            <span>{item.label}</span>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      </React.Fragment>
+                    ))}
+                  </SidebarMenuSub>
+                )}
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
