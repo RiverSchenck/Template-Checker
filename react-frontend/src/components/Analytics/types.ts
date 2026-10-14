@@ -123,3 +123,84 @@ export interface RunFilters {
   validationType?: string;
   search?: string;
 }
+
+/** Headline numbers for API-key requests in one period (migrations/014). Durations cover successful requests. */
+export interface ApiPeriodStats {
+  requests: number;
+  succeeded: number;
+  client_errors: number;
+  server_errors: number;
+  /** Requests with a well-formed key that wasn't valid (unknown, expired or revoked). */
+  invalid_key: number;
+  active_keys: number;
+  active_users: number;
+  p50_duration_ms: number | null;
+  p95_duration_ms: number | null;
+}
+
+export interface ApiTimeseriesPoint {
+  bucket: string;
+  succeeded: number;
+  client_errors: number;
+  server_errors: number;
+}
+
+export interface ApiEndpointSummary {
+  endpoint: string;
+  requests: number;
+  errors: number;
+  p95_duration_ms: number | null;
+  last_request_at: string;
+}
+
+export interface ApiKeySummary {
+  key_id: string;
+  name: string;
+  key_prefix: string;
+  expires_at: string | null;
+  revoked_at: string | null;
+  user_id: string | null;
+  display_name: string | null;
+  email: string | null;
+  avatar_url: string | null;
+  requests: number;
+  errors: number;
+  last_request_at: string;
+}
+
+export interface ApiErrorSummary {
+  /** error.code from the response, or http_<status> when there was none. */
+  error_code: string;
+  status_code: number;
+  requests: number;
+}
+
+export interface ApiFailure {
+  id: string;
+  created_at: string;
+  method: string;
+  endpoint: string;
+  status_code: number;
+  error_code: string | null;
+  duration_ms: number | null;
+  run_id: string | null;
+  request_id: string | null;
+  /** Null when the key wasn't valid. */
+  key_name: string | null;
+  key_prefix: string | null;
+  display_name: string | null;
+  email: string | null;
+}
+
+/** GET /analytics/api (admin only). */
+export interface ApiUsage {
+  current: ApiPeriodStats;
+  previous: ApiPeriodStats;
+  /** When API requests were first recorded; null before any. */
+  data_since: string | null;
+  timeseries: ApiTimeseriesPoint[];
+  endpoints: ApiEndpointSummary[];
+  keys: ApiKeySummary[];
+  errors: ApiErrorSummary[];
+  recent_failures: ApiFailure[];
+}

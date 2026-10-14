@@ -42,6 +42,11 @@ def _log_run(**kwargs) -> Optional[str]:
 class CheckFailed(Exception):
     """The checker crashed. The failure is already logged (server log and analytics); callers return a 500."""
 
+    def __init__(self, run_id: Optional[str] = None):
+        super().__init__()
+        self.run_id = run_id
+        """The analytics run id of the failed run, or None if logging is off or failed."""
+
 
 @dataclass(frozen=True)
 class CheckOutcome:
@@ -100,14 +105,14 @@ def run_check(file_path: str, workspace: Workspace, source_type: str = 'api', us
         )
     except Exception as e:
         current_app.logger.exception('Template check failed')
-        _log_run(
+        failed_run_id = _log_run(
             **run_info,
             duration_ms=int((time.time() - start_time) * 1000),
             status='failed',
             stopped_at_stage=_state_name(tracker.stage),
             error_message=f'{type(e).__name__}: {e}',
         )
-        raise CheckFailed() from e
+        raise CheckFailed(failed_run_id) from e
     return CheckOutcome(results, completed, stopped_at_stage, run_id, summary, outcome.idml_folder)
 
 

@@ -4,11 +4,14 @@ Keys look like `tc_<43 url-safe chars>`. Only a SHA-256 hash is stored; the plai
 Keys are long and random, so a plain (unsalted) hash is enough and allows an indexed lookup.
 """
 import hashlib
+import logging
 import re
 import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
+
+from flask import g
 
 from .analytics_api import get_supabase_client, parse_timestamp
 
@@ -99,7 +102,8 @@ def revoke_key(key_id: str) -> None:
 
 
 def resolve_key(key: str) -> Optional[dict[str, Any]]:
-    """Return the owning users row for a valid, unrevoked, unexpired key; otherwise None. Updates last_used_at."""
+    """Return the owning users row for a valid, unrevoked, unexpired key; otherwise None. Updates last_used_at,
+    and records the key's id on `g.api_key_id` for the request log."""
     # Reject malformed keys before touching the database, so junk tokens can't drive unauthenticated queries.
     if not KEY_PATTERN.fullmatch(key):
         return None
@@ -122,6 +126,17 @@ def resolve_key(key: str) -> Optional[dict[str, Any]]:
         if not is_active(row, now) or not user:
             return None
         supabase.table('api_keys').update({'last_used_at': now.isoformat()}).eq('id', row['id']).execute()
+        g.api_key_id = str(row['id'])
         return dict(user)
     except Exception:
         return None
+
+
+def log_request(row: dict[str, Any]) -> None:
+    """Record one API-key request in api_requests (admin analytics). Never raises: logging must not fail a request."""
+    try:
+        supabase = get_supabase_client()
+        if supabase:
+            supabase.table('api_requests').insert(row).execute()
+    except Exception:
+        logging.getLogger(__name__).exception('Failed to log API request')

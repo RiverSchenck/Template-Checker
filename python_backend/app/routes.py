@@ -13,7 +13,7 @@ from .utils import CheckFailed, upload_file, run_check
 from .analytics import first_error_message, get_app_version
 from .customer_summary import display_template_name, summary_payload
 from .analytics_api import (
-    AnalyticsQueryError, analytics_period, export_runs_csv, get_issue_detail, get_overview, get_runs,
+    AnalyticsQueryError, analytics_period, export_runs_csv, get_api_usage, get_issue_detail, get_overview, get_runs,
     get_supabase_client, run_filters,
 )
 from . import users as user_helpers
@@ -137,6 +137,9 @@ def require_auth(f=None, *, allow_api_key=False):
             token = auth_header[7:] if auth_header.startswith('Bearer ') else auth_header
 
             if allow_api_key and api_keys.looks_like_api_key(token):
+                # Well-formed keys are logged to api_requests once answered (log_api_request); malformed ones never
+                # touch the database.
+                g.api_key_request = bool(api_keys.KEY_PATTERN.fullmatch(token))
                 user_row = api_keys.resolve_key(token)
                 if not user_row:
                     return _auth_error('Invalid, expired or revoked API key')
@@ -158,6 +161,37 @@ def require_auth(f=None, *, allow_api_key=False):
         return decorated_function
 
     return decorator(f) if f else decorator
+
+
+@main.before_request
+def start_request_timer():
+    g.request_started = time.monotonic()
+
+
+@main.after_request
+def log_api_request(response):
+    """Record every request made with a well-formed API key (valid or not) in api_requests, for the admin API usage page:
+    which key and endpoint, the status and error code, how long it took, and the run it started."""
+    if not g.get('api_key_request'):
+        return response
+    error_code = None
+    if response.status_code >= 400 and response.is_json:
+        error_code = ((response.get_json(silent=True) or {}).get('error') or {}).get('code')
+    user = g.get('api_key_user') or {}
+    started = g.get('request_started')
+    api_keys.log_request({
+        'key_id': g.get('api_key_id'),
+        'user_id': str(user['id']) if user.get('id') else None,
+        'method': request.method,
+        'endpoint': request.url_rule.rule if request.url_rule else request.path,
+        'status_code': response.status_code,
+        'error_code': error_code,
+        'duration_ms': int((time.monotonic() - started) * 1000) if started else None,
+        'request_bytes': request.content_length,
+        'run_id': g.get('run_id'),
+        'request_id': g.get('request_id'),
+    })
+    return response
 
 
 def _current_user_id():
@@ -930,9 +964,11 @@ def _run_and_respond(respond, previews: bool = False):
         try:
             # Page previews are most of a run's time; only rendered when shown (plan D6).
             outcome = run_check(upload_result['path'], workspace, source_type, user_id=run_user_id, previews=previews)
-        except CheckFailed:
+        except CheckFailed as failed:
+            g.run_id = failed.run_id
             return api_error(
                 500, 'check_failed', 'The template couldn\'t be checked. Try again, or contact us with the request ID.')
+        g.run_id = outcome.run_id
         return respond(outcome, workspace)
 
 
@@ -1087,6 +1123,14 @@ def analytics_overview():
 def analytics_issue_detail(validation_type):
     """Drill-down for one issue type: trend and the identifiers it hit most."""
     return _analytics_response(lambda: get_issue_detail(validation_type, _analytics_period()))
+
+
+@main.route('/analytics/api', methods=['GET'])
+@require_auth
+@require_admin
+def analytics_api_usage():
+    """How the API is used in the requested period (admin only): requests by key, endpoint and error."""
+    return _analytics_response(lambda: get_api_usage(_analytics_period()))
 
 
 @main.route('/analytics/runs', methods=['GET'])

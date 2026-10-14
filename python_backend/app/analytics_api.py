@@ -187,6 +187,16 @@ def get_overview(period: Dict[str, Any]) -> Dict[str, Any]:
     return overview
 
 
+def get_api_usage(period: Dict[str, Any]) -> Dict[str, Any]:
+    """API-key requests: headline numbers (with the previous period), time series, endpoints, keys and errors."""
+    return _rpc('analytics_api_usage', {
+        'p_start': period['start'],
+        'p_end': period['end'],
+        'p_bucket': period['bucket'],
+        'p_tz': period['tz'],
+    })
+
+
 def get_issue_detail(validation_type: str, period: Dict[str, Any]) -> Dict[str, Any]:
     """One issue type: how often it hit over time and which identifiers (fonts, styles, ...) it hit most."""
     if not _VALIDATION_TYPE_RE.match(validation_type or ''):
