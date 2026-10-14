@@ -60,15 +60,15 @@ def make_result(**overrides):
 def test_lists_blockers_with_why_where_and_how_without_internal_ids():
     text = build_customer_summary(make_result()).review_text
 
-    assert ('We checked “Sample” and found 3 issues in the InDesign file that are likely causing the problems in '
-            'Frontify, plus 1 that may change how it looks.') in text
-    assert 'Likely causing the problems\n\n1. Kerning isn’t set to Metrics\nFrontify spaces letters' in text
+    assert ('Our review of “Sample” found 3 likely causes of the problems in Frontify and 1 possible contributing '
+            'factor. The recommended changes are below.') in text
+    assert 'Likely causes\n\n1. Kerning isn’t set to Metrics\nFrontify spaces letters' in text
     assert 'Where: paragraph styles “Headline” and “Body”, used on pages 1–3' in text
     assert '• In the paragraph style, go to Basic Character Formats and set Kerning to Metrics.' in text
     assert 'Where: the text frame “AI-generated” (page 1, turn on No Line Breaks)' in text
     assert '\nLearn more\n' in text
     # Numbering continues across groups so the customer can refer to an item by number.
-    assert 'May change how it looks\n\n4. Paragraph Composer used' in text
+    assert 'Possible contributing factors\n\n4. Paragraph Composer used' in text
     assert 'upload it to Frontify' in text
     assert not re.search(r'\bf[1-5]\b|KERNING|story1', text)
 
@@ -81,9 +81,9 @@ def test_lists_the_same_frame_on_several_pages_once_and_drops_the_file_extension
         text_boxes={f'f-{p}': {'content': 'AI-generated', 'page_id': p} for p in ('p1', 'p2', 'p3')},
     )).review_text
 
-    assert 'We checked “Sample” and found one issue in the InDesign file that is likely causing' in text
+    assert 'Our review of “Sample” found 1 likely cause of the problems in Frontify.' in text
     assert 'Where: the text frame “AI-generated” (pages 1–3)' in text
-    assert 'Likely causing the problems' not in text  # a single group needs no heading
+    assert 'Likely causes\n' not in text  # a single group needs no heading
 
 
 def test_names_frames_on_the_same_page_once_and_puts_checker_details_in_plain_words():
@@ -124,8 +124,8 @@ def test_covers_warning_only_templates_and_lists_infos_as_worth_a_check():
                 issue('EMPTY_TEXT_FRAME', 'info', frame('f5'), item_id='f5', bounds=bounds('p1', 80))],
     )).review_text
 
-    assert ('We checked “Sample” and didn’t find anything that should stop it from working in Frontify, but one issue '
-            'may make it look different') in text
+    assert ('Our review of “Sample” found 1 possible contributing factor to the problems in Frontify. '
+            'The recommended changes are below.') in text
     assert 'Worth a quick check (often fine as is)\n\n2. Empty text frame' in text
     assert 'Once that’s done, package the document again' in text
 
@@ -134,7 +134,7 @@ def test_nothing_found_is_a_single_intro():
     summary = build_customer_summary({'template_name': 'Clean.zip'})
 
     assert [s.key for s in summary.sections] == ['intro']
-    assert summary.review_text == ('We checked “Clean” and didn’t find anything in the InDesign file that would cause '
+    assert summary.review_text == ('Our review of “Clean” found nothing in the InDesign file that is likely to cause '
                                    'problems in Frontify.')
     assert summary.counts == {'errors': 0, 'warnings': 0, 'infos': 0}
 
@@ -142,7 +142,7 @@ def test_nothing_found_is_a_single_intro():
 def test_html_for_intercom_escapes_text_and_links_help_articles():
     html = build_customer_summary(make_result(template_name='A <b> & “quotes”')).html
 
-    assert '<p><strong>Likely causing the problems</strong></p>' in html
+    assert '<p><strong>Likely causes</strong></p>' in html
     assert '<p><strong>1. Kerning isn’t set to Metrics</strong><br>Frontify spaces letters' in html
     assert '<ul><li>In the paragraph style, go to Basic Character Formats and set Kerning to Metrics.</li></ul>' in html
     assert '<a href="https://help/kerning">Learn more</a>' in html

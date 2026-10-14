@@ -65,12 +65,12 @@ curl -X POST https://template-checker-test.fly.dev/v1/checks/summary \
 
 ```json
 {
-  "summary_version": "2026-10-12",
+  "summary_version": "2026-10-14",
   "run_id": "6f1c2b9e-…",
   "template_name": "Brochure",
   "counts": { "blockers": 4, "warnings": 3, "infos": 0 },
-  "html": "<p>We checked “Brochure” and found 4 issues…</p><p><strong>Likely causing the problems</strong></p>…",
-  "text": "We checked “Brochure” and found 4 issues…\n\nLikely causing the problems\n\n1. Text frame has no paragraph style\n…"
+  "html": "<p>Our review of “Brochure” found 4 likely causes of the problems in Frontify and 3 possible contributing factors…</p><p><strong>Likely causes</strong></p>…",
+  "text": "Our review of “Brochure” found 4 likely causes of the problems in Frontify and 3 possible contributing factors…\n\nLikely causes\n\n1. Text frame has no paragraph style\n…"
 }
 ```
 
@@ -79,7 +79,7 @@ curl -X POST https://template-checker-test.fly.dev/v1/checks/summary \
 | `summary_version` | Version of the summary wording. Changes whenever the copy or structure changes. |
 | `run_id` | The check's id in Template Checker analytics. `null` if analytics was unavailable; the summary is still valid. |
 | `template_name` | The template's name, without the file extension. |
-| `counts` | Distinct issues by severity: `blockers` (likely causing the problems), `warnings` (may change how it looks), `infos` (worth a check). |
+| `counts` | Distinct issues by severity: `blockers` (likely causes), `warnings` (possible contributing factors), `infos` (worth a check). |
 | `html` | The message as HTML. Uses only `<p>`, `<br>`, `<strong>`, `<ul>`, `<li>` and `<a>`, which most rich-text editors keep when pasted. |
 | `text` | The same message as plain text, with links written out (`Learn more: https://…`). |
 
