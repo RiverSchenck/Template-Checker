@@ -1,7 +1,7 @@
 """Issue projection: a checker result reduced to the issues it reports, comparable across code versions.
 
 Every behaviour PR proves its effect with this: the issues added and removed per package must be exactly the
-ones it set out to change (docs/PLAN-v2-refactor.md §0.2, §6.6). Results v1 and v2 project onto the same tuples,
+ones it set out to change (docs/archive/PLAN-v2-refactor.md §0.2, §6.6). Results v1 and v2 project onto the same tuples,
 so goldens of either version compare with the current output (plan PR 5.2 proved v1 goldens == v2 output this way).
 
     python -m testing.golden.projection                      # stored goldens -> current code

@@ -152,7 +152,7 @@ the checker doesn't mention today. Found while planning PR 0.3 of the v2 refacto
 code; worth confirming with a test import.
 
 The checker keeps checking this content as text, as planned: the coverage fixes B1–B4 in
-[PLAN-v2-refactor.md](PLAN-v2-refactor.md). Notes and pending deletions are skipped; footnotes and table cells are
+[PLAN-v2-refactor.md](archive/PLAN-v2-refactor.md). Notes and pending deletions are skipped; footnotes and table cells are
 checked. These checks would be added on top of that:
 
 | Content | In Frontify | Possible check | Why |
