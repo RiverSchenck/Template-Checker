@@ -55,7 +55,9 @@ const EXPIRY_OPTIONS = [
   { days: 90, label: '90 days' },
   { days: 180, label: '6 months' },
   { days: 365, label: '1 year' },
-];
+].map((o) => ({ value: String(o.days), label: o.label }));
+/** Admins can also create keys that never expire. */
+const NEVER = 'never';
 
 /** Keys expiring within this window get flagged. */
 const EXPIRING_SOON_DAYS = 14;
@@ -171,7 +173,7 @@ function KeysSkeleton({ rows }: { rows: number }) {
 }
 
 export function ApiKeys() {
-  const { session } = useAuth();
+  const { session, isAdmin } = useAuth();
   const token = session?.access_token;
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
@@ -246,7 +248,7 @@ export function ApiKeys() {
       const res = await fetch(`${baseURL}/api-keys`, {
         method: 'POST',
         headers: { ...getAuthHeaders(token), 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim(), expires_in_days: Number(expiryDays) }),
+        body: JSON.stringify({ name: name.trim(), expires_in_days: expiryDays === NEVER ? null : Number(expiryDays) }),
       });
       if (!res.ok) {
         setCreateError(await responseError(res, "Couldn't create the key. Try again."));
@@ -299,6 +301,7 @@ export function ApiKeys() {
   const loadFailed = loadError && keys.length === 0;
   const visibleKeys = filter === 'active' ? keys.filter((k) => k.active) : keys;
   const expiryDate = new Date(Date.now() + Number(expiryDays) * DAY_MS);
+  const expiryOptions = isAdmin ? [...EXPIRY_OPTIONS, { value: NEVER, label: 'Never' }] : EXPIRY_OPTIONS;
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -548,16 +551,16 @@ export function ApiKeys() {
                   </div>
                   <fieldset className="grid gap-2" disabled={creating}>
                     <legend className="mb-2 text-sm font-medium leading-none">Expiration</legend>
-                    <div role="radiogroup" className="grid grid-cols-4 gap-2">
-                      {EXPIRY_OPTIONS.map((o) => {
-                        const selected = expiryDays === String(o.days);
+                    <div role="radiogroup" className={cn('grid gap-2', isAdmin ? 'grid-cols-5' : 'grid-cols-4')}>
+                      {expiryOptions.map((o) => {
+                        const selected = expiryDays === o.value;
                         return (
                           <button
-                            key={o.days}
+                            key={o.value}
                             type="button"
                             role="radio"
                             aria-checked={selected}
-                            onClick={() => setExpiryDays(String(o.days))}
+                            onClick={() => setExpiryDays(o.value)}
                             className={cn(
                               'rounded-lg border px-2 py-2.5 text-center text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                               selected
@@ -572,7 +575,9 @@ export function ApiKeys() {
                     </div>
                     <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Clock className="h-3.5 w-3.5" />
-                      Expires on {expiryDate.toLocaleDateString(undefined, { dateStyle: 'long' })}
+                      {expiryDays === NEVER
+                        ? 'Never expires. Revoke it when it is no longer needed.'
+                        : `Expires on ${expiryDate.toLocaleDateString(undefined, { dateStyle: 'long' })}`}
                     </p>
                   </fieldset>
                   {createError && <p className="text-sm text-destructive">{createError}</p>}
