@@ -58,7 +58,7 @@ curl -X POST https://template-checker-test.fly.dev/v1/checks/summary \
 
 ```json
 {
-  "summary_version": "2026-10-14",
+  "summary_version": "2026-10-15",
   "run_id": "6f1c2b9e-…",
   "template_name": "Brochure",
   "counts": { "blockers": 4, "warnings": 3, "infos": 0 },

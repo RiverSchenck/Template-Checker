@@ -2,7 +2,7 @@
 from .summary import CustomerSummary
 
 # Bump when the wording or structure changes, so a stored or forwarded summary can be traced to the copy it used.
-SUMMARY_VERSION = '2026-10-14'
+SUMMARY_VERSION = '2026-10-15'
 
 
 def summary_payload(summary: CustomerSummary, *, include_sections: bool) -> dict:
