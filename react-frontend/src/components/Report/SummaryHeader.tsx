@@ -8,6 +8,7 @@ import { cn } from '../../lib/utils';
 import { severityStyles } from './pages/PageCanvas';
 import { SEVERITIES, SEVERITY_INFO, type Report } from './buildReport';
 import { displayTemplateName } from './customerSummary';
+import { InfoTip } from '../Analytics/parts';
 
 type SummaryHeaderProps = {
   report: Report;
@@ -142,40 +143,41 @@ function SummaryHeader({
           const problems = report.problemCounts[severity];
           const empty = places === 0;
           return (
-            <Tooltip key={severity}>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => !empty && onJumpTo(severity)}
-                  aria-disabled={empty}
-                  className={cn(
-                    'flex flex-col gap-1 px-4 py-3 text-left transition-colors focus-visible:relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
-                    i > 0 && 'border-t border-border sm:border-l sm:border-t-0',
-                    empty ? 'cursor-default' : 'hover:bg-[color-mix(in_oklab,var(--muted)_50%,transparent)]'
-                  )}
-                >
-                  <span className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1.5">
-                      <span
-                        className={cn('h-1.5 w-1.5 rounded-full', empty ? 'bg-muted-foreground' : severityStyles[severity].dot)}
-                        aria-hidden
-                      />
-                      {SEVERITY_INFO[severity].title}
-                    </span>
-                    {previousCounts && <Delta now={places} before={previousCounts[severity]} />}
+            <div
+              key={severity}
+              className={cn('relative flex flex-col gap-1 px-4 py-3', i > 0 && 'border-t border-border sm:border-l sm:border-t-0')}
+            >
+              {/* The whole tile jumps to its issues; the (i) sits above it, so it isn't nested in this button. */}
+              <button
+                type="button"
+                onClick={() => !empty && onJumpTo(severity)}
+                aria-disabled={empty}
+                aria-label={`Show ${SEVERITY_INFO[severity].title.toLowerCase()}`}
+                className={cn(
+                  'absolute inset-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
+                  empty ? 'cursor-default' : 'hover:bg-[color-mix(in_oklab,var(--muted)_50%,transparent)]'
+                )}
+              />
+              <span className="pointer-events-none relative flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <span
+                    className={cn('h-1.5 w-1.5 rounded-full', empty ? 'bg-muted-foreground' : severityStyles[severity].dot)}
+                    aria-hidden
+                  />
+                  {SEVERITY_INFO[severity].title}
+                  <span className="pointer-events-auto">
+                    <InfoTip label={`About ${SEVERITY_INFO[severity].title}`}>{SEVERITY_INFO[severity].description}</InfoTip>
                   </span>
-                  <span className="flex items-baseline gap-2">
-                    <span className={cn('text-xl font-semibold tabular-nums leading-7', empty ? 'text-muted-foreground' : 'text-foreground')}>
-                      {places}
-                    </span>
-                    {!empty && <span className="text-xs text-muted-foreground">in {plural(problems, 'problem')}</span>}
-                  </span>
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-xs">
-                {SEVERITY_INFO[severity].description}
-              </TooltipContent>
-            </Tooltip>
+                </span>
+                {previousCounts && <Delta now={places} before={previousCounts[severity]} />}
+              </span>
+              <span className="pointer-events-none relative flex items-baseline gap-2">
+                <span className={cn('text-xl font-semibold tabular-nums leading-7', empty ? 'text-muted-foreground' : 'text-foreground')}>
+                  {places}
+                </span>
+                {!empty && <span className="text-xs text-muted-foreground">in {plural(problems, 'problem')}</span>}
+              </span>
+            </div>
           );
         })}
       </div>
