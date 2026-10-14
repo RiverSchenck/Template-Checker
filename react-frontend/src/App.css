@@ -12,12 +12,3 @@ body {
   background-color: var(--background);
 }
 
-/* Learn More links */
-.custom-link {
-  color: #9A7EFE;
-}
-
-.custom-link:hover {
-  color: #7C57FF;
-}
-

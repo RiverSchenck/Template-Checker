@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, useOutletContext, Navigate } from 'react-router-dom';
 import { Toaster } from './components/ui/sonner';
 import FileUploadPage from './components/File Upload/FileUpload';
-import ValidationList from './components/Validation List/ValidationList';
+import ReportView from './components/Report/ReportView';
 import { AnalyticsApi, AnalyticsChecks, AnalyticsLayout, AnalyticsOperations, AnalyticsOverview } from './components/Analytics';
 import AuthCallback from './components/AuthCallback';
 import ProtectedLayout, { type ProtectedLayoutOutletContext } from './components/ProtectedLayout';
@@ -30,20 +30,21 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function ValidationListWrapper() {
+function ResultsPage() {
   const ctx = useOutletContext<ProtectedLayoutOutletContext>();
   if (!ctx.checkerResults) {
     return (
-      <div style={{ padding: 24, textAlign: 'center', color: '#666' }}>
+      <div className="p-6 text-center text-sm text-muted-foreground">
         Run a check first to see results, or go back to Check Template.
       </div>
     );
   }
   return (
-    <ValidationList
-      jsonResponse={ctx.checkerResults}
-      previousJsonResponse={ctx.previousCheckerResults ?? null}
-    />
+    <div className="h-full w-full min-w-0 overflow-x-hidden">
+      <div className="mx-auto w-full max-w-[1400px] px-4 pt-3 sm:px-[3%]">
+        <ReportView result={ctx.checkerResults} previous={ctx.previousCheckerResults ?? null} />
+      </div>
+    </div>
   );
 }
 
@@ -55,7 +56,7 @@ export default function App() {
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/" element={<ProtectedLayout />}>
           <Route index element={<FileUploadWrapper />} />
-          <Route path="results" element={<ValidationListWrapper />} />
+          <Route path="results" element={<ResultsPage />} />
           <Route path="analytics" element={<AnalyticsLayout />}>
             <Route index element={<AnalyticsOverview />} />
             <Route path="operations" element={<AdminGuard><AnalyticsOperations /></AdminGuard>} />
