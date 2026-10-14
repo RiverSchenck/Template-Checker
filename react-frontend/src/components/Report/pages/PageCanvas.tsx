@@ -97,12 +97,20 @@ function PageCanvas({
   selectedLabel,
 }: PageCanvasProps) {
   const outlines = !page.preview || showOutlines;
-  const style = (b: { x: number; y: number; width: number; height: number }, outset = 0) => ({
-    left: `calc(${pct(b.x, page.width)} - ${outset}px)`,
-    top: `calc(${pct(b.y, page.height)} - ${outset}px)`,
-    width: `calc(${pct(b.width, page.width)} + ${outset * 2}px)`,
-    height: `calc(${pct(b.height, page.height)} + ${outset * 2}px)`,
-  });
+  const style = (b: { x: number; y: number; width: number; height: number }, outset = 0) => {
+    // Grow the box past the frame, except on sides at the page edge: the page clips anything outside it, and a frame
+    // that fills the page would lose its whole border.
+    const left = b.x > 0 ? outset : 0;
+    const top = b.y > 0 ? outset : 0;
+    const right = b.x + b.width < page.width ? outset : 0;
+    const bottom = b.y + b.height < page.height ? outset : 0;
+    return {
+      left: `calc(${pct(b.x, page.width)} - ${left}px)`,
+      top: `calc(${pct(b.y, page.height)} - ${top}px)`,
+      width: `calc(${pct(b.width, page.width)} + ${left + right}px)`,
+      height: `calc(${pct(b.height, page.height)} + ${top + bottom}px)`,
+    };
+  };
 
   return (
     <div
@@ -128,6 +136,8 @@ function PageCanvas({
         const styles = severityStyles[marker.severity];
         const labelBelow = box.y < page.height * 0.1;
         const labelRight = box.x > page.width * 0.55;
+        // No room above or below (the frame fills the page's height): put the label inside the box.
+        const labelInside = labelBelow && box.y + box.height > page.height * 0.9;
         return (
           <button
             key={marker.key}
@@ -151,8 +161,12 @@ function PageCanvas({
                 className={cn(
                   'pointer-events-none absolute flex max-w-[20rem] items-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[11px] font-medium leading-tight shadow',
                   styles.badge,
-                  labelRight ? 'right-[-3px]' : 'left-[-3px]',
-                  labelBelow ? 'top-[calc(100%+4px)]' : 'bottom-[calc(100%+4px)]',
+                  labelInside
+                    ? cn('top-1', labelRight ? 'right-1' : 'left-1')
+                    : cn(
+                        labelRight ? 'right-[-3px]' : 'left-[-3px]',
+                        labelBelow ? 'top-[calc(100%+4px)]' : 'bottom-[calc(100%+4px)]'
+                      ),
                   !selected && 'opacity-90'
                 )}
               >
