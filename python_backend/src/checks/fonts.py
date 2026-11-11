@@ -12,12 +12,16 @@ from src.results.results import Results
 def _missing_styles(doc: Document, font: FontFamily) -> Tuple[bool, List[str]]:
     """Whether a used family has no file in Document Fonts at all, and the styles the text uses (FontStyle
     names, 'Regular' when unset; for a family only paragraph styles name, theirs) that have no file. Styles are matched on PostScript name, which is what
-    Frontify loads fonts by (the FontName in InDesign's AdobeFnt*.lst index). A style without a PostScript
-    name in Fonts.xml counts as present when its family is."""
+    Frontify loads fonts by (the FontName in InDesign's AdobeFnt*.lst index). The family name isn't compared:
+    InDesign can name a family differently from its files (e.g. 'DW Pangea (OTF)' for files named 'DW Pangea'
+    when a TrueType version is installed too), and Frontify still finds them. A family has a file when one of
+    its PostScript names, or its name, matches one; a style without a PostScript name in Fonts.xml counts as
+    present when its family is."""
     used = sorted(doc.faces_used_with(font.name))
-    if font.name not in [packaged.family for packaged in doc.packaged_fonts]:
-        return True, used
     postscript_names = {packaged.postscript_name for packaged in doc.packaged_fonts if packaged.postscript_name}
+    if font.name not in [packaged.family for packaged in doc.packaged_fonts] \
+            and not any(face.postscript in postscript_names for face in font.faces.values()):
+        return True, used
     return False, [style for style in used
                    if style in font.faces and font.faces[style].postscript
                    and font.faces[style].postscript not in postscript_names]

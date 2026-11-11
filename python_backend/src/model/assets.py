@@ -88,7 +88,7 @@ class FontCatalog:
         self.families: Tuple[FontFamily, ...] = tuple(families)
         self._by_name: Dict[str, FontFamily] = {}
         for family in self.families:
-            self._by_name.setdefault(family.name, family)  # the first one wins, like a search through the list
+            self._by_name.setdefault(family.name, family)  # load_font_catalog merges same-named families
 
     def family(self, name: Optional[str]) -> Optional[FontFamily]:
         return self._by_name.get(name) if name else None
@@ -100,11 +100,17 @@ def _typekit(value: Optional[str]) -> Optional[str]:
 
 
 def load_font_catalog(path: str) -> FontCatalog:
-    families = []
+    """Families with the same name are merged, a later face replacing an earlier one of the same style, as
+    Frontify does (utility/Idml/Fonts.php). InDesign writes one name twice when, for example, a TrueType and
+    an OpenType CFF version of a family are both installed."""
+    merged: Dict[str, FontFamily] = {}
     for element in safe_xml.parse(path).getroot().iter('FontFamily'):
+        name = element.get('Name')
         fonts = element.findall('.//Font')
-        faces = {font.get('FontStyleName'): Face(font.get('PostScriptName') or None, _typekit(font.get('TypekitID')))
-                 for font in fonts if font.get('FontStyleName')}
-        families.append(FontFamily(element.get('Name'), faces,
-                                   any(font.get('NumDesignAxes') is not None for font in fonts)))
-    return FontCatalog(families)
+        earlier = merged.get(name)
+        faces = dict(earlier.faces) if earlier else {}
+        faces.update({font.get('FontStyleName'): Face(font.get('PostScriptName') or None, _typekit(font.get('TypekitID')))
+                      for font in fonts if font.get('FontStyleName')})
+        variable = bool(earlier and earlier.variable) or any(font.get('NumDesignAxes') is not None for font in fonts)
+        merged[name] = FontFamily(name, faces, variable)
+    return FontCatalog(merged.values())
