@@ -13,7 +13,7 @@ def _missing_styles(doc: Document, font: FontFamily) -> Tuple[bool, List[str]]:
     """Whether a used family has no file in Document Fonts at all, and the styles the text uses (FontStyle
     names, 'Regular' when unset; for a family only paragraph styles name, theirs) that have no file. Styles are matched on PostScript name, which is what
     Frontify loads fonts by (the FontName in InDesign's AdobeFnt*.lst index). The family name isn't compared:
-    InDesign can name a family differently from its files (e.g. 'DW Pangea (OTF)' for files named 'DW Pangea'
+    InDesign can name a family differently from its files (e.g. 'Acme Sans (OTF)' for files named 'Acme Sans'
     when a TrueType version is installed too), and Frontify still finds them. A family has a file when one of
     its PostScript names, or its name, matches one; a style without a PostScript name in Fonts.xml counts as
     present when its family is."""
